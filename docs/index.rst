@@ -1,15 +1,15 @@
-.. raw:: html
+OpenZFS index
+=============
 
-   <p align="center">[[/img/480px-Open-ZFS-Secondary-Logo-Colour-halfsize.png|alt=openzfs]]</p>
-
-Welcome to the OpenZFS GitHub wiki. This wiki provides documentation for
+Welcome to the OpenZFS. This resource provides documentation for
 users and developers working with (or contributing to) the OpenZFS
 project. New users or system administrators should refer to the
 documentation for their favorite platform to get started.
 
 +----------------------+----------------------+----------------------+
-| [[Getting Started]]  | [[Project and        | [[Developer          |
-|                      | Community]]          | Resources]]          |
+| :doc:`Getting Started| :doc:`Project and    | :doc:`Developer      |
+| <./Getting           | Community <./Project | Resources <Developer |
+| Started/index>`      | and Community>`      | Resources/index>`    |
 +======================+======================+======================+
 | How to get started   | About the project    | Technical            |
 | with OpenZFS on your | and how to           | documentation        |
@@ -17,3 +17,8 @@ documentation for their favorite platform to get started.
 |                      |                      | OpenZFS              |
 |                      |                      | implementation       |
 +----------------------+----------------------+----------------------+
+
+
+Table of Contents:
+------------------
+.. include:: _TableOfContents.rst
