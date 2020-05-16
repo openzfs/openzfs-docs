@@ -1,8 +1,15 @@
+dRAID Howto
+===========
+
+.. note::
+   This page a describes *work in progress* functionality, which is not yet
+   merged in master branch.
+
 Introduction
-============
+------------
 
 raidz vs draid
---------------
+~~~~~~~~~~~~~~
 
 ZFS users are most likely very familiar with raidz already, so a
 comparison with draid would help. The illustrations below are
@@ -46,7 +53,7 @@ scope of this simple introduction here. If interested, please refer to
 the recommended readings in the next section.
 
 Recommended Reading
--------------------
+~~~~~~~~~~~~~~~~~~~
 
 Parity declustering (the fancy term for shuffling drives) has been an
 active research topic, and many papers have been published in this area.
@@ -56,7 +63,7 @@ good paper to begin. The dRAID vdev driver uses a shuffling algorithm
 loosely based on the mechanism described in this paper.
 
 Using dRAID
-===========
+-----------
 
 First get the code `here <https://github.com/openzfs/zfs/pull/10102>`__,
 build zfs with *configure --enable-debug*, and install. Then load the
@@ -67,7 +74,7 @@ performance.
 -  zfs_vdev_async_write_min_active=4
 
 Create a dRAID vdev
--------------------
+~~~~~~~~~~~~~~~~~~~
 
 Similar to raidz vdev a dRAID vdev can be created using the
 ``zpool create`` command:
@@ -119,8 +126,8 @@ Now the dRAID vdev is online and ready for IO:
            L51              ONLINE       0     0     0
            L52              ONLINE       0     0     0
        spares
-         s0-draid2:4g:2s-0  AVAIL   
-         s1-draid2:4g:2s-0  AVAIL   
+         s0-draid2:4g:2s-0  AVAIL
+         s1-draid2:4g:2s-0  AVAIL
 
    errors: No known data errors
 
@@ -138,7 +145,7 @@ You can do IO to/from it, scrub it, fail a child drive and it'd operate
 in degraded mode.
 
 Rebuild to distributed spare
-----------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 When there's a failed/offline child drive, the dRAID vdev supports a
 completely new mechanism to reconstruct lost data/parity, in addition to
@@ -163,7 +170,7 @@ called rebuild is used instead of resilver:
    action: Online the device using 'zpool online' or replace the device with
            'zpool replace'.
      scan: rebuilt 2.00G in 0h0m5s with 0 errors on Fri Feb 24 20:37:06 2017
-   config: 
+   config:
 
            NAME                STATE     READ WRITE CKSUM
            tank                DEGRADED     0     0     0
@@ -224,7 +231,7 @@ to do IO:
 ::
 
    # zpool offline tank sdj
-   # zpool status 
+   # zpool status
     state: DEGRADED
    status: One or more devices has been taken offline by the administrator.
            Sufficient replicas exist for the pool to continue functioning in a
@@ -382,7 +389,7 @@ which is essentially a *resilver*:
                sds             ONLINE       0     0     0
                sdt             ONLINE       0     0     0
            spares
-             %draid1-0-s0      AVAIL   
+             %draid1-0-s0      AVAIL
              %draid1-0-s1      INUSE     currently in use
 
 Note that the scan status now says *"resilvered"*. Also, the state of
@@ -397,15 +404,14 @@ The rebuild process is able to avoid unnecessary work, but the resilver
 process by default will not. The rebalance (which is essentially
 resilver) can speed up a lot by setting module option
 *zfs_no_resilver_skip* to 0. This feature is turned off by default
-because of issue
-`https://github.com/zfsonlinux/zfs/issues/5806 <https://github.com/zfsonlinux/zfs/issues/5806>`__.
+because of issue :issue:`5806`.
 
 Troubleshooting
-===============
+---------------
 
 Please report bugs to `the dRAID
 PR <https://github.com/zfsonlinux/zfs/pull/10102>`__, as long as the
 code is not merged upstream.
 
-.. |raidz1| image:: https://cloud.githubusercontent.com/assets/6722662/23642396/9790e432-02b7-11e7-8198-ae9f17c61d85.png
-.. |draid1| image:: https://cloud.githubusercontent.com/assets/6722662/23642395/9783ef8e-02b7-11e7-8d7e-31d1053ee4ff.png
+.. |raidz1| image:: /_static/img/draid_raidz.png
+.. |draid1| image:: /_static/img/draid_draid.png
