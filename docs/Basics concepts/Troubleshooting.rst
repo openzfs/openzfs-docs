@@ -1,5 +1,8 @@
-DRAFT
-=====
+Troubleshooting
+===============
+
+.. todo::
+   This page is a draft.
 
 This page contains tips for troubleshooting ZFS on Linux and what info
 developers might want for bug triage.
@@ -100,8 +103,3 @@ cause an ``ereport.io`` during a read from the disk that results in an
 reflected by the error counters observed in ``zpool status`` If you see
 checksum or read/write errors in ``zpool status`` then there should be
 one or more corresponding ereports in the ``zpool events`` output.
-
-.. _draft-1:
-
-DRAFT
-=====
