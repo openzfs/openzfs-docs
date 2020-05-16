@@ -1,3 +1,9 @@
+Ubuntu 18.04 Root on ZFS
+========================
+
+.. contents:: Table of Contents
+   :local:
+
 Caution
 ~~~~~~~
 
@@ -618,12 +624,12 @@ or whether ``zfs-import-scan.service`` is enabled.
        DefaultDependencies=no
        Before=zfs-import-scan.service
        Before=zfs-import-cache.service
-       
+
        [Service]
        Type=oneshot
        RemainAfterExit=yes
        ExecStart=/sbin/zpool import -N -o cachefile=none bpool
-       
+
        [Install]
        WantedBy=zfs-import.target
 

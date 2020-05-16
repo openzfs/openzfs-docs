@@ -1,7 +1,13 @@
+Ubuntu 16.04 Root on ZFS
+========================
+
+.. contents:: Table of Contents
+   :local:
+
 Newer release available
 ~~~~~~~~~~~~~~~~~~~~~~~
 
--  See [[Ubuntu 18.04 Root on ZFS]] for new installs.
+-  See :doc:`Ubuntu 18.04 Root on ZFS <./Ubuntu 18.04 Root on ZFS>` for new installs.
 
 Caution
 ~~~~~~~

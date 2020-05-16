@@ -1,5 +1,8 @@
+Debian GNU Linux initrd documentation
+=====================================
+
 Supported boot parameters
-=========================
+*************************
 
 -  rollback=<on|yes|1> Do a rollback of specified snapshot.
 -  zfs_debug=<on|yes|1> Debug the initrd script
@@ -21,7 +24,7 @@ filesystem, is that there are a lot of different ways too boot ZFS out
 there, and I wanted to make sure I supported them all.
 
 Pool imports
-============
+************
 
 Import using /dev/disk/by-\*
 ----------------------------
@@ -47,7 +50,7 @@ If that ALSO fails, it will try one more time, without any -d or -c
 options.
 
 Booting
-=======
+*******
 
 Booting from snapshot:
 ----------------------

@@ -1,3 +1,14 @@
+Debian Stretch Root on ZFS
+==========================
+
+.. contents:: Table of Contents
+   :local:
+
+Newer release available
+~~~~~~~~~~~~~~~~~~~~~~~
+
+-  See :doc:`Debian Buster Root on ZFS <./Debian Buster Root on ZFS>` for new installs.
+
 Caution
 ~~~~~~~
 
@@ -8,8 +19,8 @@ Caution
 System Requirements
 ~~~~~~~~~~~~~~~~~~~
 
--  `64-bit Debian GNU/Linux Buster Live CD w/ GUI (e.g. gnome
-   iso) <https://cdimage.debian.org/mirror/cdimage/release/current-live/amd64/iso-hybrid/>`__
+-  `64-bit Debian GNU/Linux Stretch Live
+   CD <http://cdimage.debian.org/debian-cd/current-live/amd64/iso-hybrid/>`__
 -  `A 64-bit kernel is strongly
    encouraged. <https://github.com/zfsonlinux/zfs/wiki/FAQ#32-bit-vs-64-bit-systems>`__
 -  Installing on a drive which presents 4KiB logical sectors (a “4Kn”
@@ -50,9 +61,9 @@ support pull requests. However, you can clone the wiki using git.
 Encryption
 ----------
 
-This guide supports three different encryption options: unencrypted,
-LUKS (full-disk encryption), and ZFS native encryption. With any option,
-all ZFS features are fully available.
+This guide supports two different encryption options: unencrypted and
+LUKS (full-disk encryption). ZFS native encryption has not yet been
+released. With either option, all ZFS features are fully available.
 
 Unencrypted does not encrypt anything, of course. With no encryption
 happening, this option naturally has the best performance.
@@ -63,15 +74,6 @@ initrd. The system cannot boot without the passphrase being entered at
 the console. Performance is good, but LUKS sits underneath ZFS, so if
 multiple disks (mirror or raidz topologies) are used, the data has to be
 encrypted once per disk.
-
-ZFS native encryption encrypts the data and most metadata in the root
-pool. It does not encrypt dataset or snapshot names or properties. The
-boot pool is not encrypted at all, but it only contains the bootloader,
-kernel, and initrd. (Unless you put a password in ``/etc/fstab``, the
-initrd is unlikely to contain sensitive data.) The system cannot boot
-without the passphrase being entered at the console. Performance is
-good. As the encryption happens in ZFS, even if multiple disks (mirror
-or raidz topologies) are used, the data only has to be encrypted once.
 
 Step 1: Prepare The Install Environment
 ---------------------------------------
@@ -88,9 +90,9 @@ be convenient.
 
 ::
 
-   sudo apt update
-   sudo apt install --yes openssh-server
-   sudo systemctl restart ssh
+   $ sudo apt update
+   $ sudo apt install --yes openssh-server
+   $ sudo systemctl restart ssh
 
 **Hint:** You can find your IP address with
 ``ip addr show scope global | grep inet``. Then, from your main machine,
@@ -100,39 +102,67 @@ connect with ``ssh user@IP``.
 
 ::
 
-   sudo -i
+   $ sudo -i
 
 1.4 Setup and update the repositories:
 
 ::
 
-   echo deb http://deb.debian.org/debian buster contrib >> /etc/apt/sources.list
-   echo deb http://deb.debian.org/debian buster-backports main contrib >> /etc/apt/sources.list
-   apt update
+   # echo deb http://deb.debian.org/debian stretch contrib >> /etc/apt/sources.list
+   # echo deb http://deb.debian.org/debian stretch-backports main contrib >> /etc/apt/sources.list
+   # apt update
 
 1.5 Install ZFS in the Live CD environment:
 
 ::
 
-   apt install --yes debootstrap gdisk dkms dpkg-dev linux-headers-$(uname -r)
-   apt install --yes -t buster-backports --no-install-recommends zfs-dkms
-   modprobe zfs
-   apt install --yes -t buster-backports zfsutils-linux
+   # apt install --yes debootstrap gdisk dkms dpkg-dev linux-headers-$(uname -r)
+   # apt install --yes -t stretch-backports zfs-dkms
+   # modprobe zfs
 
 -  The dkms dependency is installed manually just so it comes from
-   buster and not buster-backports. This is not critical.
--  We need to get the module built and loaded before installing
-   zfsutils-linux or `zfs-mount.service will fail to
-   start <https://github.com/zfsonlinux/zfs/issues/9599>`__.
+   stretch and not stretch-backports. This is not critical.
 
 Step 2: Disk Formatting
 -----------------------
 
-2.1 Set a variable with the disk name:
+2.1 If you are re-using a disk, clear it as necessary:
 
 ::
 
-   DISK=/dev/disk/by-id/scsi-SATA_disk1
+   If the disk was previously used in an MD array, zero the superblock:
+   # apt install --yes mdadm
+   # mdadm --zero-superblock --force /dev/disk/by-id/scsi-SATA_disk1
+
+   Clear the partition table:
+   # sgdisk --zap-all /dev/disk/by-id/scsi-SATA_disk1
+
+2.2 Partition your disk(s):
+
+::
+
+   Run this if you need legacy (BIOS) booting:
+   # sgdisk -a1 -n1:24K:+1000K -t1:EF02 /dev/disk/by-id/scsi-SATA_disk1
+
+   Run this for UEFI booting (for use now or in the future):
+   # sgdisk     -n2:1M:+512M   -t2:EF00 /dev/disk/by-id/scsi-SATA_disk1
+
+   Run this for the boot pool:
+   # sgdisk     -n3:0:+1G      -t3:BF01 /dev/disk/by-id/scsi-SATA_disk1
+
+Choose one of the following options:
+
+2.2a Unencrypted:
+
+::
+
+   # sgdisk     -n4:0:0        -t4:BF01 /dev/disk/by-id/scsi-SATA_disk1
+
+2.2b LUKS:
+
+::
+
+   # sgdisk     -n4:0:0        -t4:8300 /dev/disk/by-id/scsi-SATA_disk1
 
 Always use the long ``/dev/disk/by-id/*`` aliases with ZFS. Using the
 ``/dev/sd*`` device nodes directly can cause sporadic import failures,
@@ -145,84 +175,31 @@ especially on systems that have more than one storage pool.
    missing from ``/dev/disk/by-id``, use ``/dev/vda`` if you are using
    KVM with virtio; otherwise, read the
    `troubleshooting <#troubleshooting>`__ section.
+-  If you are creating a mirror or raidz topology, repeat the
+   partitioning commands for all the disks which will be part of the
+   pool.
 
-2.2 If you are re-using a disk, clear it as necessary:
-
-If the disk was previously used in an MD array, zero the superblock:
-
-::
-
-   apt install --yes mdadm
-   mdadm --zero-superblock --force $DISK
-
-Clear the partition table:
+2.3 Create the boot pool:
 
 ::
 
-   sgdisk --zap-all $DISK
-
-2.3 Partition your disk(s):
-
-Run this if you need legacy (BIOS) booting:
-
-::
-
-   sgdisk -a1 -n1:24K:+1000K -t1:EF02 $DISK
-
-Run this for UEFI booting (for use now or in the future):
-
-::
-
-   sgdisk     -n2:1M:+512M   -t2:EF00 $DISK
-
-Run this for the boot pool:
-
-::
-
-   sgdisk     -n3:0:+1G      -t3:BF01 $DISK
-
-Choose one of the following options:
-
-2.3a Unencrypted or ZFS native encryption:
-
-::
-
-   sgdisk     -n4:0:0        -t4:BF01 $DISK
-
-2.3b LUKS:
-
-::
-
-   sgdisk     -n4:0:0        -t4:8300 $DISK
-
-If you are creating a mirror or raidz topology, repeat the partitioning
-commands for all the disks which will be part of the pool.
-
-2.4 Create the boot pool:
-
-::
-
-   zpool create -o ashift=12 -d \
-       -o feature@async_destroy=enabled \
-       -o feature@bookmarks=enabled \
-       -o feature@embedded_data=enabled \
-       -o feature@empty_bpobj=enabled \
-       -o feature@enabled_txg=enabled \
-       -o feature@extensible_dataset=enabled \
-       -o feature@filesystem_limits=enabled \
-       -o feature@hole_birth=enabled \
-       -o feature@large_blocks=enabled \
-       -o feature@lz4_compress=enabled \
-       -o feature@spacemap_histogram=enabled \
-       -o feature@userobj_accounting=enabled \
-       -o feature@zpool_checkpoint=enabled \
-       -o feature@spacemap_v2=enabled \
-       -o feature@project_quota=enabled \
-       -o feature@resilver_defer=enabled \
-       -o feature@allocation_classes=enabled \
-       -O acltype=posixacl -O canmount=off -O compression=lz4 -O devices=off \
-       -O normalization=formD -O relatime=on -O xattr=sa \
-       -O mountpoint=/ -R /mnt bpool ${DISK}-part3
+   # zpool create -o ashift=12 -d \
+         -o feature@async_destroy=enabled \
+         -o feature@bookmarks=enabled \
+         -o feature@embedded_data=enabled \
+         -o feature@empty_bpobj=enabled \
+         -o feature@enabled_txg=enabled \
+         -o feature@extensible_dataset=enabled \
+         -o feature@filesystem_limits=enabled \
+         -o feature@hole_birth=enabled \
+         -o feature@large_blocks=enabled \
+         -o feature@lz4_compress=enabled \
+         -o feature@spacemap_histogram=enabled \
+         -o feature@userobj_accounting=enabled \
+         -O acltype=posixacl -O canmount=off -O compression=lz4 -O devices=off \
+         -O normalization=formD -O relatime=on -O xattr=sa \
+         -O mountpoint=/ -R /mnt \
+         bpool /dev/disk/by-id/scsi-SATA_disk1-part3
 
 You should not need to customize any of the options for the boot pool.
 
@@ -243,40 +220,33 @@ read-only compatible features are "supported" by GRUB.
 -  The pool name is arbitrary. If changed, the new name must be used
    consistently. The ``bpool`` convention originated in this HOWTO.
 
-2.5 Create the root pool:
+2.4 Create the root pool:
 
 Choose one of the following options:
 
-2.5a Unencrypted:
+2.4a Unencrypted:
 
 ::
 
-   zpool create -o ashift=12 \
-       -O acltype=posixacl -O canmount=off -O compression=lz4 \
-       -O dnodesize=auto -O normalization=formD -O relatime=on -O xattr=sa \
-       -O mountpoint=/ -R /mnt rpool ${DISK}-part4
+   # zpool create -o ashift=12 \
+         -O acltype=posixacl -O canmount=off -O compression=lz4 \
+         -O dnodesize=auto -O normalization=formD -O relatime=on -O xattr=sa \
+         -O mountpoint=/ -R /mnt \
+         rpool /dev/disk/by-id/scsi-SATA_disk1-part4
 
-2.5b LUKS:
-
-::
-
-   apt install --yes cryptsetup
-   cryptsetup luksFormat -c aes-xts-plain64 -s 512 -h sha256 ${DISK}-part4
-   cryptsetup luksOpen ${DISK}-part4 luks1
-   zpool create -o ashift=12 \
-       -O acltype=posixacl -O canmount=off -O compression=lz4 \
-       -O dnodesize=auto -O normalization=formD -O relatime=on -O xattr=sa \
-       -O mountpoint=/ -R /mnt rpool /dev/mapper/luks1
-
-2.5c ZFS native encryption:
+2.4b LUKS:
 
 ::
 
-   zpool create -o ashift=12 \
-       -O acltype=posixacl -O canmount=off -O compression=lz4 \
-       -O dnodesize=auto -O normalization=formD -O relatime=on -O xattr=sa \
-       -O encryption=aes-256-gcm -O keylocation=prompt -O keyformat=passphrase \
-       -O mountpoint=/ -R /mnt rpool ${DISK}-part4
+   # apt install --yes cryptsetup
+   # cryptsetup luksFormat -c aes-xts-plain64 -s 512 -h sha256 \
+         /dev/disk/by-id/scsi-SATA_disk1-part4
+   # cryptsetup luksOpen /dev/disk/by-id/scsi-SATA_disk1-part4 luks1
+   # zpool create -o ashift=12 \
+         -O acltype=posixacl -O canmount=off -O compression=lz4 \
+         -O dnodesize=auto -O normalization=formD -O relatime=on -O xattr=sa \
+         -O mountpoint=/ -R /mnt \
+         rpool /dev/mapper/luks1
 
 -  The use of ``ashift=12`` is recommended here because many drives
    today have 4KiB (or larger) physical sectors, even though they
@@ -325,13 +295,6 @@ Choose one of the following options:
 -  For LUKS, the key size chosen is 512 bits. However, XTS mode requires
    two keys, so the LUKS key is split in half. Thus, ``-s 512`` means
    AES-256.
--  ZFS native encryption uses ``aes-256-ccm`` by default. `AES-GCM seems
-   to be generally preferred over
-   AES-CCM <https://crypto.stackexchange.com/questions/6842/how-to-choose-between-aes-ccm-and-aes-gcm-for-storage-volume-encryption>`__,
-   `is faster
-   now <https://github.com/zfsonlinux/zfs/pull/9749#issuecomment-569132997>`__,
-   and `will be even faster in the
-   future <https://github.com/zfsonlinux/zfs/pull/9749>`__.
 -  Your passphrase will likely be the weakest link. Choose wisely. See
    `section 5 of the cryptsetup
    FAQ <https://gitlab.com/cryptsetup/cryptsetup/wikis/FrequentlyAskedQuestions#5-security-aspects>`__
@@ -356,8 +319,8 @@ Step 3: System Installation
 
 ::
 
-   zfs create -o canmount=off -o mountpoint=none rpool/ROOT
-   zfs create -o canmount=off -o mountpoint=none bpool/BOOT
+   # zfs create -o canmount=off -o mountpoint=none rpool/ROOT
+   # zfs create -o canmount=off -o mountpoint=none bpool/BOOT
 
 On Solaris systems, the root filesystem is cloned and the suffix is
 incremented for major system changes through ``pkg image-update`` or
@@ -369,11 +332,11 @@ manually created clones.
 
 ::
 
-   zfs create -o canmount=noauto -o mountpoint=/ rpool/ROOT/debian
-   zfs mount rpool/ROOT/debian
+   # zfs create -o canmount=noauto -o mountpoint=/ rpool/ROOT/debian
+   # zfs mount rpool/ROOT/debian
 
-   zfs create -o canmount=noauto -o mountpoint=/boot bpool/BOOT/debian
-   zfs mount bpool/BOOT/debian
+   # zfs create -o canmount=noauto -o mountpoint=/boot bpool/BOOT/debian
+   # zfs mount bpool/BOOT/debian
 
 With ZFS, it is not normally necessary to use a mount command (either
 ``mount`` or ``zfs mount``). This situation is an exception because of
@@ -383,93 +346,55 @@ With ZFS, it is not normally necessary to use a mount command (either
 
 ::
 
-   zfs create                                 rpool/home
-   zfs create -o mountpoint=/root             rpool/home/root
-   zfs create -o canmount=off                 rpool/var
-   zfs create -o canmount=off                 rpool/var/lib
-   zfs create                                 rpool/var/log
-   zfs create                                 rpool/var/spool
+   # zfs create                                 rpool/home
+   # zfs create -o mountpoint=/root             rpool/home/root
+   # zfs create -o canmount=off                 rpool/var
+   # zfs create -o canmount=off                 rpool/var/lib
+   # zfs create                                 rpool/var/log
+   # zfs create                                 rpool/var/spool
 
-The datasets below are optional, depending on your preferences and/or
-software choices.
+   The datasets below are optional, depending on your preferences and/or
+   software choices:
 
-If you wish to exclude these from snapshots:
+   If you wish to exclude these from snapshots:
+   # zfs create -o com.sun:auto-snapshot=false  rpool/var/cache
+   # zfs create -o com.sun:auto-snapshot=false  rpool/var/tmp
+   # chmod 1777 /mnt/var/tmp
 
-::
+   If you use /opt on this system:
+   # zfs create                                 rpool/opt
 
-   zfs create -o com.sun:auto-snapshot=false  rpool/var/cache
-   zfs create -o com.sun:auto-snapshot=false  rpool/var/tmp
-   chmod 1777 /mnt/var/tmp
+   If you use /srv on this system:
+   # zfs create                                 rpool/srv
 
-If you use /opt on this system:
+   If you use /usr/local on this system:
+   # zfs create -o canmount=off                 rpool/usr
+   # zfs create                                 rpool/usr/local
 
-::
+   If this system will have games installed:
+   # zfs create                                 rpool/var/games
 
-   zfs create                                 rpool/opt
+   If this system will store local email in /var/mail:
+   # zfs create                                 rpool/var/mail
 
-If you use /srv on this system:
+   If this system will use Snap packages:
+   # zfs create                                 rpool/var/snap
 
-::
+   If you use /var/www on this system:
+   # zfs create                                 rpool/var/www
 
-   zfs create                                 rpool/srv
+   If this system will use GNOME:
+   # zfs create                                 rpool/var/lib/AccountsService
 
-If you use /usr/local on this system:
+   If this system will use Docker (which manages its own datasets & snapshots):
+   # zfs create -o com.sun:auto-snapshot=false  rpool/var/lib/docker
 
-::
+   If this system will use NFS (locking):
+   # zfs create -o com.sun:auto-snapshot=false  rpool/var/lib/nfs
 
-   zfs create -o canmount=off                 rpool/usr
-   zfs create                                 rpool/usr/local
-
-If this system will have games installed:
-
-::
-
-   zfs create                                 rpool/var/games
-
-If this system will store local email in /var/mail:
-
-::
-
-   zfs create                                 rpool/var/mail
-
-If this system will use Snap packages:
-
-::
-
-   zfs create                                 rpool/var/snap
-
-If you use /var/www on this system:
-
-::
-
-   zfs create                                 rpool/var/www
-
-If this system will use GNOME:
-
-::
-
-   zfs create                                 rpool/var/lib/AccountsService
-
-If this system will use Docker (which manages its own datasets &
-snapshots):
-
-::
-
-   zfs create -o com.sun:auto-snapshot=false  rpool/var/lib/docker
-
-If this system will use NFS (locking):
-
-::
-
-   zfs create -o com.sun:auto-snapshot=false  rpool/var/lib/nfs
-
-A tmpfs is recommended later, but if you want a separate dataset for
-/tmp:
-
-::
-
-   zfs create -o com.sun:auto-snapshot=false  rpool/tmp
-   chmod 1777 /mnt/tmp
+   A tmpfs is recommended later, but if you want a separate dataset for /tmp:
+   # zfs create -o com.sun:auto-snapshot=false  rpool/tmp
+   # chmod 1777 /mnt/tmp
 
 The primary goal of this dataset layout is to separate the OS from user
 data. This allows the root filesystem to be rolled back without rolling
@@ -489,8 +414,8 @@ you can use a tmpfs (RAM filesystem) later.
 
 ::
 
-   debootstrap buster /mnt
-   zfs set devices=off rpool
+   # debootstrap stretch /mnt
+   # zfs set devices=off rpool
 
 The ``debootstrap`` command leaves the new system in an unconfigured
 state. An alternative to using ``debootstrap`` is to copy the entirety
@@ -504,9 +429,9 @@ hostname).
 
 ::
 
-   echo HOSTNAME > /mnt/etc/hostname
+   # echo HOSTNAME > /mnt/etc/hostname
 
-   vi /mnt/etc/hosts
+   # vi /mnt/etc/hosts
    Add a line:
    127.0.1.1       HOSTNAME
    or if the system has a real name in DNS:
@@ -516,17 +441,12 @@ hostname).
 
 4.2 Configure the network interface:
 
-Find the interface name:
-
 ::
 
-   ip addr show
+   Find the interface name:
+   # ip addr show
 
-Adjust NAME below to match your interface name:
-
-::
-
-   vi /mnt/etc/network/interfaces.d/NAME
+   # vi /mnt/etc/network/interfaces.d/NAME
    auto NAME
    iface NAME inet dhcp
 
@@ -536,17 +456,17 @@ Customize this file if the system is not a DHCP client.
 
 ::
 
-   vi /mnt/etc/apt/sources.list
-   deb http://deb.debian.org/debian buster main contrib
-   deb-src http://deb.debian.org/debian buster main contrib
+   # vi /mnt/etc/apt/sources.list
+   deb http://deb.debian.org/debian stretch main contrib
+   deb-src http://deb.debian.org/debian stretch main contrib
 
-   vi /mnt/etc/apt/sources.list.d/buster-backports.list
-   deb http://deb.debian.org/debian buster-backports main contrib
-   deb-src http://deb.debian.org/debian buster-backports main contrib
+   # vi /mnt/etc/apt/sources.list.d/stretch-backports.list
+   deb http://deb.debian.org/debian stretch-backports main contrib
+   deb-src http://deb.debian.org/debian stretch-backports main contrib
 
-   vi /mnt/etc/apt/preferences.d/90_zfs
-   Package: libnvpair1linux libuutil1linux libzfs2linux libzfslinux-dev libzpool2linux python3-pyzfs pyzfs-doc spl spl-dkms zfs-dkms zfs-dracut zfs-initramfs zfs-test zfsutils-linux zfsutils-linux-dev zfs-zed
-   Pin: release n=buster-backports
+   # vi /mnt/etc/apt/preferences.d/90_zfs
+   Package: libnvpair1linux libuutil1linux libzfs2linux libzpool2linux spl-dkms zfs-dkms zfs-test zfsutils-linux zfsutils-linux-dev zfs-zed
+   Pin: release n=stretch-backports
    Pin-Priority: 990
 
 4.4 Bind the virtual filesystems from the LiveCD environment to the new
@@ -554,10 +474,10 @@ system and ``chroot`` into it:
 
 ::
 
-   mount --rbind /dev  /mnt/dev
-   mount --rbind /proc /mnt/proc
-   mount --rbind /sys  /mnt/sys
-   chroot /mnt /usr/bin/env DISK=$DISK bash --login
+   # mount --rbind /dev  /mnt/dev
+   # mount --rbind /proc /mnt/proc
+   # mount --rbind /sys  /mnt/sys
+   # chroot /mnt /bin/bash --login
 
 **Note:** This is using ``--rbind``, not ``--bind``.
 
@@ -565,34 +485,35 @@ system and ``chroot`` into it:
 
 ::
 
-   ln -s /proc/self/mounts /etc/mtab
-   apt update
+   # ln -s /proc/self/mounts /etc/mtab
+   # apt update
 
-   apt install --yes locales
-   dpkg-reconfigure locales
+   # apt install --yes locales
+   # dpkg-reconfigure locales
 
 Even if you prefer a non-English system language, always ensure that
 ``en_US.UTF-8`` is available.
 
 ::
 
-   dpkg-reconfigure tzdata
+   # dpkg-reconfigure tzdata
 
 4.6 Install ZFS in the chroot environment for the new system:
 
 ::
 
-   apt install --yes dpkg-dev linux-headers-amd64 linux-image-amd64
-   apt install --yes zfs-initramfs
+   # apt install --yes dpkg-dev linux-headers-amd64 linux-image-amd64
+   # apt install --yes zfs-initramfs
 
 4.7 For LUKS installs only, setup crypttab:
 
 ::
 
-   apt install --yes cryptsetup
+   # apt install --yes cryptsetup
 
-   echo luks1 UUID=$(blkid -s UUID -o value ${DISK}-part4) none \
-       luks,discard,initramfs > /etc/crypttab
+   # echo luks1 UUID=$(blkid -s UUID -o value \
+         /dev/disk/by-id/scsi-SATA_disk1-part4) none \
+         luks,discard,initramfs > /etc/crypttab
 
 -  The use of ``initramfs`` is a work-around for `cryptsetup does not
    support
@@ -609,7 +530,7 @@ Choose one of the following options:
 
 ::
 
-   apt install --yes grub-pc
+   # apt install --yes grub-pc
 
 Install GRUB to the disk(s), not the partition(s).
 
@@ -617,13 +538,14 @@ Install GRUB to the disk(s), not the partition(s).
 
 ::
 
-   apt install dosfstools
-   mkdosfs -F 32 -s 1 -n EFI ${DISK}-part2
-   mkdir /boot/efi
-   echo PARTUUID=$(blkid -s PARTUUID -o value ${DISK}-part2) \
-       /boot/efi vfat nofail,x-systemd.device-timeout=1 0 1 >> /etc/fstab
-   mount /boot/efi
-   apt install --yes grub-efi-amd64 shim-signed
+   # apt install dosfstools
+   # mkdosfs -F 32 -s 1 -n EFI /dev/disk/by-id/scsi-SATA_disk1-part2
+   # mkdir /boot/efi
+   # echo PARTUUID=$(blkid -s PARTUUID -o value \
+         /dev/disk/by-id/scsi-SATA_disk1-part2) \
+         /boot/efi vfat nofail,x-systemd.device-timeout=1 0 1 >> /etc/fstab
+   # mount /boot/efi
+   # apt install --yes grub-efi-amd64 shim
 
 -  The ``-s 1`` for ``mkdosfs`` is only necessary for drives which
    present 4 KiB logical sectors (“4Kn” drives) to meet the minimum
@@ -638,7 +560,7 @@ later.
 
 ::
 
-   passwd
+   # passwd
 
 4.10 Enable importing bpool
 
@@ -648,23 +570,21 @@ or whether ``zfs-import-scan.service`` is enabled.
 
 ::
 
-       vi /etc/systemd/system/zfs-import-bpool.service
+       # vi /etc/systemd/system/zfs-import-bpool.service
        [Unit]
        DefaultDependencies=no
        Before=zfs-import-scan.service
        Before=zfs-import-cache.service
-       
+
        [Service]
        Type=oneshot
        RemainAfterExit=yes
        ExecStart=/sbin/zpool import -N -o cachefile=none bpool
-       
+
        [Install]
        WantedBy=zfs-import.target
 
-::
-
-   systemctl enable zfs-import-bpool.service
+       # systemctl enable zfs-import-bpool.service
 
 4.11 Optional (but recommended): Mount a tmpfs to /tmp
 
@@ -674,8 +594,8 @@ tmpfs (RAM filesystem) by enabling the ``tmp.mount`` unit.
 
 ::
 
-   cp /usr/share/systemd/tmp.mount /etc/systemd/system/
-   systemctl enable tmp.mount
+   # cp /usr/share/systemd/tmp.mount /etc/systemd/system/
+   # systemctl enable tmp.mount
 
 4.12 Optional (but kindly requested): Install popcon
 
@@ -685,7 +605,7 @@ long-term attention from the distro.
 
 ::
 
-   apt install --yes popularity-contest
+   # apt install --yes popularity-contest
 
 Choose Yes at the prompt.
 
@@ -696,13 +616,15 @@ Step 5: GRUB Installation
 
 ::
 
-   grub-probe /boot
+   # grub-probe /boot
+   zfs
 
 5.2 Refresh the initrd files:
 
 ::
 
-   update-initramfs -u -k all
+   # update-initramfs -u -k all
+   update-initramfs: Generating /boot/initrd.img-4.9.0-8-amd64
 
 **Note:** When using LUKS, this will print "WARNING could not determine
 root device from /etc/fstab". This is because `cryptsetup does not
@@ -713,14 +635,14 @@ ZFS <https://bugs.launchpad.net/ubuntu/+source/cryptsetup/+bug/1612906>`__.
 
 ::
 
-   vi /etc/default/grub
+   # vi /etc/default/grub
    Set: GRUB_CMDLINE_LINUX="root=ZFS=rpool/ROOT/debian"
 
 5.4 Optional (but highly recommended): Make debugging GRUB easier:
 
 ::
 
-   vi /etc/default/grub
+   # vi /etc/default/grub
    Remove quiet from: GRUB_CMDLINE_LINUX_DEFAULT
    Uncomment: GRUB_TERMINAL=console
    Save and quit.
@@ -732,7 +654,11 @@ working, you can undo these changes, if desired.
 
 ::
 
-   update-grub
+   # update-grub
+   Generating grub configuration file ...
+   Found linux image: /boot/vmlinuz-4.9.0-8-amd64
+   Found initrd image: /boot/initrd.img-4.9.0-8-amd64
+   done
 
 **Note:** Ignore errors from ``osprober``, if present.
 
@@ -742,8 +668,11 @@ working, you can undo these changes, if desired.
 
 ::
 
-   grub-install $DISK
+   # grub-install /dev/disk/by-id/scsi-SATA_disk1
+   Installing for i386-pc platform.
+   Installation finished. No error reported.
 
+Do not reboot the computer until you get exactly that result message.
 Note that you are installing GRUB to the whole disk, not a partition.
 
 If you are creating a mirror or raidz topology, repeat the
@@ -753,75 +682,62 @@ If you are creating a mirror or raidz topology, repeat the
 
 ::
 
-   grub-install --target=x86_64-efi --efi-directory=/boot/efi \
-       --bootloader-id=debian --recheck --no-floppy
-
-It is not necessary to specify the disk here. If you are creating a
-mirror or raidz topology, the additional disks will be handled later.
+   # grub-install --target=x86_64-efi --efi-directory=/boot/efi \
+         --bootloader-id=debian --recheck --no-floppy
 
 5.7 Verify that the ZFS module is installed:
 
 ::
 
-   ls /boot/grub/*/zfs.mod
+   # ls /boot/grub/*/zfs.mod
 
 5.8 Fix filesystem mount ordering
+
+`Until ZFS gains a systemd mount
+generator <https://github.com/zfsonlinux/zfs/issues/4898>`__, there are
+races between mounting filesystems and starting certain daemons. In
+practice, the issues (e.g.
+`#5754 <https://github.com/zfsonlinux/zfs/issues/5754>`__) seem to be
+with certain filesystems in ``/var``, specifically ``/var/log`` and
+``/var/tmp``. Setting these to use ``legacy`` mounting, and listing them
+in ``/etc/fstab`` makes systemd aware that these are separate
+mountpoints. In turn, ``rsyslog.service`` depends on ``var-log.mount``
+by way of ``local-fs.target`` and services using the ``PrivateTmp``
+feature of systemd automatically use ``After=var-tmp.mount``.
 
 Until there is support for mounting ``/boot`` in the initramfs, we also
 need to mount that, because it was marked ``canmount=noauto``. Also,
 with UEFI, we need to ensure it is mounted before its child filesystem
 ``/boot/efi``.
 
-We need to activate ``zfs-mount-generator``. This makes systemd aware of
-the separate mountpoints, which is important for things like
-``/var/log`` and ``/var/tmp``. In turn, ``rsyslog.service`` depends on
-``var-log.mount`` by way of ``local-fs.target`` and services using the
-``PrivateTmp`` feature of systemd automatically use
-``After=var-tmp.mount``.
-
-For UEFI booting, unmount /boot/efi first:
+``rpool`` is guaranteed to be imported by the initramfs, so there is no
+point in adding ``x-systemd.requires=zfs-import.target`` to those
+filesystems.
 
 ::
 
-   umount /boot/efi
+   For UEFI booting, unmount /boot/efi first:
+   # umount /boot/efi
 
-Everything else applies to both BIOS and UEFI booting:
+   Everything else applies to both BIOS and UEFI booting:
 
-::
+   # zfs set mountpoint=legacy bpool/BOOT/debian
+   # echo bpool/BOOT/debian /boot zfs \
+         nodev,relatime,x-systemd.requires=zfs-import-bpool.service 0 0 >> /etc/fstab
 
-   zfs set mountpoint=legacy bpool/BOOT/debian
-   echo bpool/BOOT/debian /boot zfs \
-       nodev,relatime,x-systemd.requires=zfs-import-bpool.service 0 0 >> /etc/fstab
+   # zfs set mountpoint=legacy rpool/var/log
+   # echo rpool/var/log /var/log zfs nodev,relatime 0 0 >> /etc/fstab
 
-   mkdir /etc/zfs/zfs-list.cache
-   touch /etc/zfs/zfs-list.cache/rpool
-   ln -s /usr/lib/zfs-linux/zed.d/history_event-zfs-list-cacher.sh /etc/zfs/zed.d
-   zed -F &
+   # zfs set mountpoint=legacy rpool/var/spool
+   # echo rpool/var/spool /var/spool zfs nodev,relatime 0 0 >> /etc/fstab
 
-Verify that zed updated the cache by making sure this is not empty:
+   If you created a /var/tmp dataset:
+   # zfs set mountpoint=legacy rpool/var/tmp
+   # echo rpool/var/tmp /var/tmp zfs nodev,relatime 0 0 >> /etc/fstab
 
-::
-
-   cat /etc/zfs/zfs-list.cache/rpool
-
-If it is empty, force a cache update and check again:
-
-::
-
-   zfs set canmount=noauto rpool/ROOT/debian
-
-Stop zed:
-
-::
-
-   fg
-   Press Ctrl-C.
-
-Fix the paths to eliminate /mnt:
-
-::
-
-   sed -Ei "s|/mnt/?|/|" /etc/zfs/zfs-list.cache/rpool
+   If you created a /tmp dataset:
+   # zfs set mountpoint=legacy rpool/tmp
+   # echo rpool/tmp /tmp zfs nodev,relatime 0 0 >> /etc/fstab
 
 Step 6: First Boot
 ------------------
@@ -830,8 +746,8 @@ Step 6: First Boot
 
 ::
 
-   zfs snapshot bpool/BOOT/debian@install
-   zfs snapshot rpool/ROOT/debian@install
+   # zfs snapshot bpool/BOOT/debian@install
+   # zfs snapshot rpool/ROOT/debian@install
 
 In the future, you will likely want to take snapshots before each
 upgrade, and remove old snapshots (including this one) at some point to
@@ -841,21 +757,21 @@ save space.
 
 ::
 
-   exit
+   # exit
 
 6.3 Run these commands in the LiveCD environment to unmount all
 filesystems:
 
 ::
 
-   mount | grep -v zfs | tac | awk '/\/mnt/ {print $3}' | xargs -i{} umount -lf {}
-   zpool export -a
+   # mount | grep -v zfs | tac | awk '/\/mnt/ {print $3}' | xargs -i{} umount -lf {}
+   # zpool export -a
 
 6.4 Reboot:
 
 ::
 
-   reboot
+   # reboot
 
 6.5 Wait for the newly installed system to boot normally. Login as root.
 
@@ -863,17 +779,17 @@ filesystems:
 
 ::
 
-   zfs create rpool/home/YOURUSERNAME
-   adduser YOURUSERNAME
-   cp -a /etc/skel/. /home/YOURUSERNAME
-   chown -R YOURUSERNAME:YOURUSERNAME /home/YOURUSERNAME
+   # zfs create rpool/home/YOURUSERNAME
+   # adduser YOURUSERNAME
+   # cp -a /etc/skel/.[!.]* /home/YOURUSERNAME
+   # chown -R YOURUSERNAME:YOURUSERNAME /home/YOURUSERNAME
 
 6.7 Add your user account to the default set of groups for an
 administrator:
 
 ::
 
-   usermod -a -G audio,cdrom,dip,floppy,netdev,plugdev,sudo,video YOURUSERNAME
+   # usermod -a -G audio,cdrom,dip,floppy,netdev,plugdev,sudo,video YOURUSERNAME
 
 6.8 Mirror GRUB
 
@@ -884,7 +800,7 @@ disks:
 
 ::
 
-   dpkg-reconfigure grub-pc
+   # dpkg-reconfigure grub-pc
    Hit enter until you get to the device selection screen.
    Select (using the space bar) all of the disks (not partitions) in your pool.
 
@@ -892,18 +808,15 @@ disks:
 
 ::
 
-   umount /boot/efi
+   # umount /boot/efi
 
-For the second and subsequent disks (increment debian-2 to -3, etc.):
+   For the second and subsequent disks (increment debian-2 to -3, etc.):
+   # dd if=/dev/disk/by-id/scsi-SATA_disk1-part2 \
+        of=/dev/disk/by-id/scsi-SATA_disk2-part2
+   # efibootmgr -c -g -d /dev/disk/by-id/scsi-SATA_disk2 \
+         -p 2 -L "debian-2" -l '\EFI\debian\grubx64.efi'
 
-::
-
-   dd if=/dev/disk/by-id/scsi-SATA_disk1-part2 \
-      of=/dev/disk/by-id/scsi-SATA_disk2-part2
-   efibootmgr -c -g -d /dev/disk/by-id/scsi-SATA_disk2 \
-       -p 2 -L "debian-2" -l '\EFI\debian\grubx64.efi'
-
-   mount /boot/efi
+   # mount /boot/efi
 
 Step 7: (Optional) Configure Swap
 ---------------------------------
@@ -917,10 +830,10 @@ available. This issue is currently being investigated in:
 
 ::
 
-   zfs create -V 4G -b $(getconf PAGESIZE) -o compression=zle \
-       -o logbias=throughput -o sync=always \
-       -o primarycache=metadata -o secondarycache=none \
-       -o com.sun:auto-snapshot=false rpool/swap
+   # zfs create -V 4G -b $(getconf PAGESIZE) -o compression=zle \
+         -o logbias=throughput -o sync=always \
+         -o primarycache=metadata -o secondarycache=none \
+         -o com.sun:auto-snapshot=false rpool/swap
 
 You can adjust the size (the ``4G`` part) to your needs.
 
@@ -938,9 +851,9 @@ files. Never use a short ``/dev/zdX`` device name.
 
 ::
 
-   mkswap -f /dev/zvol/rpool/swap
-   echo /dev/zvol/rpool/swap none swap discard 0 0 >> /etc/fstab
-   echo RESUME=none > /etc/initramfs-tools/conf.d/resume
+   # mkswap -f /dev/zvol/rpool/swap
+   # echo /dev/zvol/rpool/swap none swap discard 0 0 >> /etc/fstab
+   # echo RESUME=none > /etc/initramfs-tools/conf.d/resume
 
 The ``RESUME=none`` is necessary to disable resuming from hibernation.
 This does not work, as the zvol is not present (because the pool has not
@@ -952,7 +865,7 @@ zvol to appear.
 
 ::
 
-   swapon -av
+   # swapon -av
 
 Step 8: Full Software Installation
 ----------------------------------
@@ -961,13 +874,13 @@ Step 8: Full Software Installation
 
 ::
 
-   apt dist-upgrade --yes
+   # apt dist-upgrade --yes
 
 8.2 Install a regular set of software:
 
 ::
 
-   tasksel
+   # tasksel
 
 8.3 Optional: Disable log compression:
 
@@ -981,7 +894,7 @@ highly recommended):
 
 ::
 
-   for file in /etc/logrotate.d/* ; do
+   # for file in /etc/logrotate.d/* ; do
        if grep -Eq "(^|[^#y])compress" "$file" ; then
            sed -i -r "s/(^|[^#y])(compress)/\1#\2/" "$file"
        fi
@@ -991,7 +904,7 @@ highly recommended):
 
 ::
 
-   reboot
+   # reboot
 
 Step 9: Final Cleanup
 ~~~~~~~~~~~~~~~~~~~~~
@@ -1003,14 +916,14 @@ created. Ensure the system (including networking) works normally.
 
 ::
 
-   sudo zfs destroy bpool/BOOT/debian@install
-   sudo zfs destroy rpool/ROOT/debian@install
+   $ sudo zfs destroy bpool/BOOT/debian@install
+   $ sudo zfs destroy rpool/ROOT/debian@install
 
 9.3 Optional: Disable the root password
 
 ::
 
-   sudo usermod -p '*' root
+   $ sudo usermod -p '*' root
 
 9.4 Optional: Re-enable the graphical boot process:
 
@@ -1019,12 +932,12 @@ you are using LUKS, it makes the prompt look nicer.
 
 ::
 
-   sudo vi /etc/default/grub
+   $ sudo vi /etc/default/grub
    Add quiet to GRUB_CMDLINE_LINUX_DEFAULT
    Comment out GRUB_TERMINAL=console
    Save and quit.
 
-   sudo update-grub
+   $ sudo update-grub
 
 **Note:** Ignore errors from ``osprober``, if present.
 
@@ -1032,7 +945,7 @@ you are using LUKS, it makes the prompt look nicer.
 
 ::
 
-   sudo cryptsetup luksHeaderBackup /dev/disk/by-id/scsi-SATA_disk1-part4 \
+   $ sudo cryptsetup luksHeaderBackup /dev/disk/by-id/scsi-SATA_disk1-part4 \
        --header-backup-file luks1-header.dat
 
 Store that backup somewhere safe (e.g. cloud storage). It is protected
@@ -1050,35 +963,32 @@ Rescuing using a Live CD
 Go through `Step 1: Prepare The Install
 Environment <#step-1-prepare-the-install-environment>`__.
 
-For LUKS, first unlock the disk(s):
+This will automatically import your pool. Export it and re-import it to
+get the mounts right:
 
 ::
 
-   apt install --yes cryptsetup
-   cryptsetup luksOpen /dev/disk/by-id/scsi-SATA_disk1-part4 luks1
+   For LUKS, first unlock the disk(s):
+   # apt install --yes cryptsetup
+   # cryptsetup luksOpen /dev/disk/by-id/scsi-SATA_disk1-part4 luks1
    Repeat for additional disks, if this is a mirror or raidz topology.
 
-Mount everything correctly:
-
-::
-
-   zpool export -a
-   zpool import -N -R /mnt rpool
-   zpool import -N -R /mnt bpool
-   zfs load-key -a
-   zfs mount rpool/ROOT/debian
-   zfs mount -a
+   # zpool export -a
+   # zpool import -N -R /mnt rpool
+   # zpool import -N -R /mnt bpool
+   # zfs mount rpool/ROOT/debian
+   # zfs mount -a
 
 If needed, you can chroot into your installed environment:
 
 ::
 
-   mount --rbind /dev  /mnt/dev
-   mount --rbind /proc /mnt/proc
-   mount --rbind /sys  /mnt/sys
-   chroot /mnt /bin/bash --login
-   mount /boot
-   mount -a
+   # mount --rbind /dev  /mnt/dev
+   # mount --rbind /proc /mnt/proc
+   # mount --rbind /sys  /mnt/sys
+   # chroot /mnt /bin/bash --login
+   # mount /boot
+   # mount -a
 
 Do whatever you need to do to fix your system.
 
@@ -1086,10 +996,10 @@ When done, cleanup:
 
 ::
 
-   exit
-   mount | grep -v zfs | tac | awk '/\/mnt/ {print $3}' | xargs -i{} umount -lf {}
-   zpool export -a
-   reboot
+   # exit
+   # mount | grep -v zfs | tac | awk '/\/mnt/ {print $3}' | xargs -i{} umount -lf {}
+   # zpool export -a
+   # reboot
 
 MPT2SAS
 ~~~~~~~
@@ -1138,15 +1048,11 @@ this on the host:
 
 ::
 
-   sudo apt install ovmf
-
-   sudo vi /etc/libvirt/qemu.conf
+   $ sudo apt install ovmf
+   $ sudo vi /etc/libvirt/qemu.conf
    Uncomment these lines:
    nvram = [
       "/usr/share/OVMF/OVMF_CODE.fd:/usr/share/OVMF/OVMF_VARS.fd",
-      "/usr/share/OVMF/OVMF_CODE.secboot.fd:/usr/share/OVMF/OVMF_VARS.fd",
-      "/usr/share/AAVMF/AAVMF_CODE.fd:/usr/share/AAVMF/AAVMF_VARS.fd",
-      "/usr/share/AAVMF/AAVMF32_CODE.fd:/usr/share/AAVMF/AAVMF32_VARS.fd"
+      "/usr/share/AAVMF/AAVMF_CODE.fd:/usr/share/AAVMF/AAVMF_VARS.fd"
    ]
-
-   sudo systemctl restart libvirtd.service
+   $ sudo service libvirt-bin restart

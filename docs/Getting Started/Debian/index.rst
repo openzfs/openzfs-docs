@@ -1,4 +1,6 @@
-Offical ZFS on Linux
+Debian
+======
+
 `DKMS <https://en.wikipedia.org/wiki/Dynamic_Kernel_Module_Support>`__
 style packages are available from the `Debian GNU/Linux
 repository <https://tracker.debian.org/pkg/zfs-linux>`__ for the
@@ -9,11 +11,8 @@ new installations.
 **Debian Releases:** Stretch (oldstable), Buster (stable), and newer
 (testing, sid) **Architectures:** amd64
 
-Table of contents
-=================
-
--  `Installation <#installation>`__
--  `Related Links <#related-links>`__
+.. contents:: Table of Contents
+   :local:
 
 Installation
 ------------
@@ -21,9 +20,11 @@ Installation
 For Debian Buster, ZFS packages are included in the `contrib
 repository <https://packages.debian.org/source/buster/zfs-linux>`__.
 
-If you want to boot from ZFS, see [[Debian Buster Root on ZFS]] instead.
-For troubleshooting existing installations on Stretch, see [[Debian
-Stretch Root on ZFS]].
+If you want to boot from ZFS, see
+:doc:`Debian Buster Root on ZFS <./Debian Buster Root on ZFS>`
+instead.
+For troubleshooting existing installations on Stretch, see
+:doc:`Debian Stretch Root on ZFS <./Debian Stretch Root on ZFS>`.
 
 The `backports
 repository <https://backports.debian.org/Instructions/>`__ often
@@ -60,8 +61,17 @@ Install the zfs packages:
 
    # apt-get install zfs-dkms zfsutils-linux
 
-Related Links
--------------
+Root on ZFS
+-----------
+.. toctree::
+   :maxdepth: 1
+   :glob:
 
--  [[Debian GNU Linux initrd documentation]]
--  [[Debian Buster Root on ZFS]]
+   *Root on ZFS
+
+Related topics
+--------------
+.. toctree::
+   :maxdepth: 1
+
+   Debian GNU Linux initrd documentation
