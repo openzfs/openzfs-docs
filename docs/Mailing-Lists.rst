@@ -1,0 +1,31 @@
++----------------------+----------------------+----------------------+
+|                      | Description          | List Archive         |
+|             List     |                      |                      |
+|                      |                      |                      |
++======================+======================+======================+
+| `zfs-annou           | A low-traffic list   | `arch                |
+| nce@list.zfsonlinux. | for announcements    | ive <https://zfsonli |
+| org <https://zfsonli | such as new releases | nux.topicbox.com/gro |
+| nux.topicbox.com/gro |                      | ups/zfs-announce>`__ |
+| ups/zfs-announce>`__ |                      |                      |
++----------------------+----------------------+----------------------+
+| `zfs-dis             | A user discussion    | `arc                 |
+| cuss@list.zfsonlinux | list for issues      | hive <https://zfsonl |
+| .org <https://zfsonl | related to           | inux.topicbox.com/gr |
+| inux.topicbox.com/gr | functionality and    | oups/zfs-discuss>`__ |
+| oups/zfs-discuss>`__ | usability            |                      |
++----------------------+----------------------+----------------------+
+| `zfs                 | A development list   | `a                   |
+| -devel@list.zfsonlin | for developers to    | rchive <https://zfso |
+| ux.org <https://zfso | discuss technical    | nlinux.topicbox.com/ |
+| nlinux.topicbox.com/ | issues               | groups/zfs-devel>`__ |
+| groups/zfs-devel>`__ |                      |                      |
++----------------------+----------------------+----------------------+
+| `devel               | A                    | `archive <https://o  |
+| oper@open-zfs.org <h | platform-independent | penzfs.topicbox.com/ |
+| ttp://open-zfs.org/w | mailing list for ZFS | groups/developer>`__ |
+| iki/Mailing_list>`__ | developers to review |                      |
+|                      | ZFS code and         |                      |
+|                      | architecture changes |                      |
+|                      | from all platforms   |                      |
++----------------------+----------------------+----------------------+

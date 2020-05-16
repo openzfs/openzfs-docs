@@ -1,0 +1,2 @@
+Squash the Commits
+==================
