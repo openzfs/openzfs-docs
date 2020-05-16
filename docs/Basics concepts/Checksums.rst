@@ -71,8 +71,8 @@ The checksum algorithm for a dataset can be changed by setting the
 +-----------+-----------------+-----------------+-----------------+
 | sha512    | yes             | requires pool   | salted          |
 |           |                 | feature         | ``sha512``      |
-|           |                 | ``org.i         | currently not   |
-|           |                 | llumos:sha512`` | supported for   |
+|           |                 | ``org.          | currently not   |
+|           |                 | illumos:sha512``| supported for   |
 |           |                 |                 | any filesystem  |
 |           |                 |                 | on the boot     |
 |           |                 |                 | pools           |
