@@ -1,48 +1,8 @@
-Table Of Contents
------------------
+FAQ
+===
 
--  `What is ZFS on Linux <#what-is-zfs-on-linux>`__
--  `Hardware Requirements <#hardware-requirements>`__
--  `Do I have to use ECC memory for
-   ZFS? <#do-i-have-to-use-ecc-memory-for-zfs>`__
--  `Installation <#installation>`__
--  `Supported Architectures <#supported-architectures>`__
--  `Supported Kernels <#supported-kernels>`__
--  `32-bit vs 64-bit Systems <#32-bit-vs-64-bit-systems>`__
--  `Booting from ZFS <#booting-from-zfs>`__
--  `Selecting /dev/ names when creating a
-   pool <#selecting-dev-names-when-creating-a-pool>`__
--  `Setting up the /etc/zfs/vdev_id.conf
-   file <#setting-up-the-etczfsvdev_idconf-file>`__
--  `Changing /dev/ names on an existing
-   pool <#changing-dev-names-on-an-existing-pool>`__
--  `The /etc/zfs/zpool.cache file <#the-etczfszpoolcache-file>`__
--  `Generating a new /etc/zfs/zpool.cache
-   file <#generating-a-new-etczfszpoolcache-file>`__
--  `Sending and Receiving Streams <#sending-and-receiving-streams>`__
-
-   -  `hole_birth Bugs <#hole_birth-bugs>`__
-   -  `Sending Large Blocks <#sending-large-blocks>`__
-
--  `CEPH/ZFS <#cephzfs>`__
-
-   -  `ZFS Configuration <#zfs-configuration>`__
-   -  `CEPH Configuration (ceph.conf} <#ceph-configuration-cephconf>`__
-   -  `Other General Guidelines <#other-general-guidelines>`__
-
--  `Performance Considerations <#performance-considerations>`__
--  `Advanced Format Disks <#advanced-format-disks>`__
--  `ZVOL used space larger than
-   expected <#ZVOL-used-space-larger-than-expected>`__
--  `Using a zvol for a swap device <#using-a-zvol-for-a-swap-device>`__
--  `Using ZFS on Xen Hypervisor or Xen
-   Dom0 <#using-zfs-on-xen-hypervisor-or-xen-dom0>`__
--  `udisks2 creates /dev/mapper/ entries for
-   zvol <#udisks2-creating-devmapper-entries-for-zvol>`__
--  `Licensing <#licensing>`__
--  `Reporting a problem <#reporting-a-problem>`__
--  `Does ZFS on Linux have a Code of
-   Conduct? <#does-zfs-on-linux-have-a-code-of-conduct>`__
+.. contents:: Table of Contents
+   :local:
 
 What is ZFS on Linux
 --------------------
@@ -94,7 +54,7 @@ Installation
 ------------
 
 ZFS on Linux is available for all major Linux distributions. Refer to
-the [[getting started]] section of the wiki for links to installations
+the :doc:`getting started <../Getting Started/index>` section of the wiki for links to installations
 instructions for many popular distributions. If your distribution isn't
 listed you can always build ZFS on Linux from the latest official
 `tarball <https://github.com/zfsonlinux/zfs/releases>`__.
@@ -153,7 +113,9 @@ Booting from ZFS
 ----------------
 
 Booting from ZFS on Linux is possible and many people do it. There are
-excellent walk throughs available for [[Debian]], [[Ubuntu]] and
+excellent walk throughs available for
+:doc:`Debian <../Getting Started/Debian/index>`,
+:doc:`Ubuntu <../Getting Started/Ubuntu/index>`, and
 `Gentoo <https://github.com/pendor/gentoo-zfs-install/tree/master/install>`__.
 
 Selecting /dev/ names when creating a pool
@@ -424,7 +386,7 @@ will not match the source*.
 ZoL versions 0.6.5.8 and 0.7.0-rc1 (and above) default to ignoring the
 faulty metadata which causes this issue *on the sender side*.
 
-For more details, see the [[hole_birth FAQ]].
+For more details, see the :doc:`hole_birth FAQ <./FAQ hole birth>`.
 
 Sending Large Blocks
 ~~~~~~~~~~~~~~~~~~~~
