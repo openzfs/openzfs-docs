@@ -71,948 +71,943 @@ representation. To assist in quickly finding relevant information
 quickly, each module parameter has a "Tags" row with keywords for
 frequent searches.
 
-.. _tags-1:
-
-Tags
-----
-
 ABD
-^^^
+~~~
 
--  `zfs_abd_scatter_enabled <#zfs_abd_scatter_enabled>`__
--  `zfs_abd_scatter_max_order <#zfs_abd_scatter_max_order>`__
--  `zfs_compressed_arc_enabled <#zfs_compressed_arc_enabled>`__
+-  `zfs_abd_scatter_enabled <#zfs-abd-scatter-enabled>`__
+-  `zfs_abd_scatter_max_order <#zfs-abd-scatter-max-order>`__
+-  `zfs_compressed_arc_enabled <#zfs-compressed-arc-enabled>`__
 
 allocation
-^^^^^^^^^^
+~~~~~~~~~~
 
--  `dmu_object_alloc_chunk_shift <#dmu_object_alloc_chunk_shift>`__
--  `metaslab_aliquot <#metaslab_aliquot>`__
--  `metaslab_bias_enabled <#metaslab_bias_enabled>`__
--  `metaslab_debug_load <#metaslab_debug_load>`__
--  `metaslab_debug_unload <#metaslab_debug_unload>`__
--  `metaslab_force_ganging <#metaslab_force_ganging>`__
--  `metaslab_fragmentation_factor_enabled <#metaslab_fragmentation_factor_enabled>`__
--  `zfs_metaslab_fragmentation_threshold <#zfs_metaslab_fragmentation_threshold>`__
--  `metaslab_lba_weighting_enabled <#metaslab_lba_weighting_enabled>`__
--  `metaslab_preload_enabled <#metaslab_preload_enabled>`__
--  `zfs_metaslab_segment_weight_enabled <#zfs_metaslab_segment_weight_enabled>`__
--  `zfs_metaslab_switch_threshold <#zfs_metaslab_switch_threshold>`__
--  `metaslabs_per_vdev <#metaslabs_per_vdev>`__
--  `zfs_mg_fragmentation_threshold <#zfs_mg_fragmentation_threshold>`__
--  `zfs_mg_noalloc_threshold <#zfs_mg_noalloc_threshold>`__
--  `spa_asize_inflation <#spa_asize_inflation>`__
--  `spa_load_verify_data <#spa_load_verify_data>`__
--  `spa_slop_shift <#spa_slop_shift>`__
--  `zfs_vdev_default_ms_count <#zfs_vdev_default_ms_count>`__
+-  `dmu_object_alloc_chunk_shift <#dmu-object-alloc-chunk-shift>`__
+-  `metaslab_aliquot <#metaslab-aliquot>`__
+-  `metaslab_bias_enabled <#metaslab-bias-enabled>`__
+-  `metaslab_debug_load <#metaslab-debug-load>`__
+-  `metaslab_debug_unload <#metaslab-debug-unload>`__
+-  `metaslab_force_ganging <#metaslab-force-ganging>`__
+-  `metaslab_fragmentation_factor_enabled <#metaslab-fragmentation-factor-enabled>`__
+-  `zfs_metaslab_fragmentation_threshold <#zfs-metaslab-fragmentation-threshold>`__
+-  `metaslab_lba_weighting_enabled <#metaslab-lba-weighting-enabled>`__
+-  `metaslab_preload_enabled <#metaslab-preload-enabled>`__
+-  `zfs_metaslab_segment_weight_enabled <#zfs-metaslab-segment-weight-enabled>`__
+-  `zfs_metaslab_switch_threshold <#zfs-metaslab-switch-threshold>`__
+-  `metaslabs_per_vdev <#metaslabs-per-vdev>`__
+-  `zfs_mg_fragmentation_threshold <#zfs-mg-fragmentation-threshold>`__
+-  `zfs_mg_noalloc_threshold <#zfs-mg-noalloc-threshold>`__
+-  `spa_asize_inflation <#spa-asize-inflation>`__
+-  `spa_load_verify_data <#spa-load-verify-data>`__
+-  `spa_slop_shift <#spa-slop-shift>`__
+-  `zfs_vdev_default_ms_count <#zfs-vdev-default-ms-count>`__
 
 ARC
-^^^
+~~~
 
--  `zfs_abd_scatter_min_size <#zfs_abd_scatter_min_size>`__
--  `zfs_arc_average_blocksize <#zfs_arc_average_blocksize>`__
--  `zfs_arc_dnode_limit <#zfs_arc_dnode_limit>`__
--  `zfs_arc_dnode_limit_percent <#zfs_arc_dnode_limit_percent>`__
--  `zfs_arc_dnode_reduce_percent <#zfs_arc_dnode_reduce_percent>`__
--  `zfs_arc_evict_batch_limit <#zfs_arc_evict_batch_limit>`__
--  `zfs_arc_grow_retry <#zfs_arc_grow_retry>`__
--  `zfs_arc_lotsfree_percent <#zfs_arc_lotsfree_percent>`__
--  `zfs_arc_max <#zfs_arc_max>`__
--  `zfs_arc_meta_adjust_restarts <#zfs_arc_meta_adjust_restarts>`__
--  `zfs_arc_meta_limit <#zfs_arc_meta_limit>`__
--  `zfs_arc_meta_limit_percent <#zfs_arc_meta_limit_percent>`__
--  `zfs_arc_meta_min <#zfs_arc_meta_min>`__
--  `zfs_arc_meta_prune <#zfs_arc_meta_prune>`__
--  `zfs_arc_meta_strategy <#zfs_arc_meta_strategy>`__
--  `zfs_arc_min <#zfs_arc_min>`__
--  `zfs_arc_min_prefetch_lifespan <#zfs_arc_min_prefetch_lifespan>`__
--  `zfs_arc_min_prefetch_ms <#zfs_arc_min_prefetch_ms>`__
--  `zfs_arc_min_prescient_prefetch_ms <#zfs_arc_min_prescient_prefetch_ms>`__
--  `zfs_arc_overflow_shift <#zfs_arc_overflow_shift>`__
--  `zfs_arc_p_dampener_disable <#zfs_arc_p_dampener_disable>`__
--  `zfs_arc_p_min_shift <#zfs_arc_p_min_shift>`__
--  `zfs_arc_pc_percent <#zfs_arc_pc_percent>`__
--  `zfs_arc_shrink_shift <#zfs_arc_shrink_shift>`__
--  `zfs_arc_sys_free <#zfs_arc_sys_free>`__
--  `dbuf_cache_max_bytes <#dbuf_cache_max_bytes>`__
--  `dbuf_cache_shift <#dbuf_cache_shift>`__
--  `dbuf_metadata_cache_shift <#dbuf_metadata_cache_shift>`__
--  `zfs_disable_dup_eviction <#zfs_disable_dup_eviction>`__
--  `l2arc_feed_again <#l2arc_feed_again>`__
--  `l2arc_feed_min_ms <#l2arc_feed_min_ms>`__
--  `l2arc_feed_secs <#l2arc_feed_secs>`__
--  `l2arc_headroom <#l2arc_headroom>`__
--  `l2arc_headroom_boost <#l2arc_headroom_boost>`__
--  `l2arc_nocompress <#l2arc_nocompress>`__
--  `l2arc_noprefetch <#l2arc_noprefetch>`__
--  `l2arc_norw <#l2arc_norw>`__
--  `l2arc_write_boost <#l2arc_write_boost>`__
--  `l2arc_write_max <#l2arc_write_max>`__
--  `zfs_multilist_num_sublists <#zfs_multilist_num_sublists>`__
--  `spa_load_verify_shift <#spa_load_verify_shift>`__
+-  `zfs_abd_scatter_min_size <#zfs-abd-scatter-min-size>`__
+-  `zfs_arc_average_blocksize <#zfs-arc-average-blocksize>`__
+-  `zfs_arc_dnode_limit <#zfs-arc-dnode-limit>`__
+-  `zfs_arc_dnode_limit_percent <#zfs-arc-dnode-limit-percent>`__
+-  `zfs_arc_dnode_reduce_percent <#zfs-arc-dnode-reduce-percent>`__
+-  `zfs_arc_evict_batch_limit <#zfs-arc-evict-batch-limit>`__
+-  `zfs_arc_grow_retry <#zfs-arc-grow-retry>`__
+-  `zfs_arc_lotsfree_percent <#zfs-arc-lotsfree-percent>`__
+-  `zfs_arc_max <#zfs-arc-max>`__
+-  `zfs_arc_meta_adjust_restarts <#zfs-arc-meta-adjust-restarts>`__
+-  `zfs_arc_meta_limit <#zfs-arc-meta-limit>`__
+-  `zfs_arc_meta_limit_percent <#zfs-arc-meta-limit-percent>`__
+-  `zfs_arc_meta_min <#zfs-arc-meta-min>`__
+-  `zfs_arc_meta_prune <#zfs-arc-meta-prune>`__
+-  `zfs_arc_meta_strategy <#zfs-arc-meta-strategy>`__
+-  `zfs_arc_min <#zfs-arc-min>`__
+-  `zfs_arc_min_prefetch_lifespan <#zfs-arc-min-prefetch-lifespan>`__
+-  `zfs_arc_min_prefetch_ms <#zfs-arc-min-prefetch-ms>`__
+-  `zfs_arc_min_prescient_prefetch_ms <#zfs-arc-min-prescient-prefetch-ms>`__
+-  `zfs_arc_overflow_shift <#zfs-arc-overflow-shift>`__
+-  `zfs_arc_p_dampener_disable <#zfs-arc-p-dampener-disable>`__
+-  `zfs_arc_p_min_shift <#zfs-arc-p-min-shift>`__
+-  `zfs_arc_pc_percent <#zfs-arc-pc-percent>`__
+-  `zfs_arc_shrink_shift <#zfs-arc-shrink-shift>`__
+-  `zfs_arc_sys_free <#zfs-arc-sys-free>`__
+-  `dbuf_cache_max_bytes <#dbuf-cache-max-bytes>`__
+-  `dbuf_cache_shift <#dbuf-cache-shift>`__
+-  `dbuf_metadata_cache_shift <#dbuf-metadata-cache-shift>`__
+-  `zfs_disable_dup_eviction <#zfs-disable-dup-eviction>`__
+-  `l2arc_feed_again <#l2arc-feed-again>`__
+-  `l2arc_feed_min_ms <#l2arc-feed-min-ms>`__
+-  `l2arc_feed_secs <#l2arc-feed-secs>`__
+-  `l2arc_headroom <#l2arc-headroom>`__
+-  `l2arc_headroom_boost <#l2arc-headroom-boost>`__
+-  `l2arc_nocompress <#l2arc-nocompress>`__
+-  `l2arc_noprefetch <#l2arc-noprefetch>`__
+-  `l2arc_norw <#l2arc-norw>`__
+-  `l2arc_write_boost <#l2arc-write-boost>`__
+-  `l2arc_write_max <#l2arc-write-max>`__
+-  `zfs_multilist_num_sublists <#zfs-multilist-num-sublists>`__
+-  `spa_load_verify_shift <#spa-load-verify-shift>`__
 
 channel_programs
-^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~
 
--  `zfs_lua_max_instrlimit <#zfs_lua_max_instrlimit>`__
--  `zfs_lua_max_memlimit <#zfs_lua_max_memlimit>`__
+-  `zfs_lua_max_instrlimit <#zfs-lua-max-instrlimit>`__
+-  `zfs_lua_max_memlimit <#zfs-lua-max-memlimit>`__
 
 checkpoint
-^^^^^^^^^^
+~~~~~~~~~~
 
--  `zfs_spa_discard_memory_limit <#zfs_spa_discard_memory_limit>`__
+-  `zfs_spa_discard_memory_limit <#zfs-spa-discard-memory-limit>`__
 
 checksum
-^^^^^^^^
+~~~~~~~~
 
--  `zfs_checksums_per_second <#zfs_checksums_per_second>`__
--  `zfs_fletcher_4_impl <#zfs_fletcher_4_impl>`__
--  `zfs_nopwrite_enabled <#zfs_nopwrite_enabled>`__
--  `zfs_qat_checksum_disable <#zfs_qat_checksum_disable>`__
+-  `zfs_checksums_per_second <#zfs-checksums-per-second>`__
+-  `zfs_fletcher_4_impl <#zfs-fletcher-4-impl>`__
+-  `zfs_nopwrite_enabled <#zfs-nopwrite-enabled>`__
+-  `zfs_qat_checksum_disable <#zfs-qat-checksum-disable>`__
 
 compression
-^^^^^^^^^^^
+~~~~~~~~~~~
 
--  `zfs_compressed_arc_enabled <#zfs_compressed_arc_enabled>`__
--  `zfs_qat_compress_disable <#zfs_qat_compress_disable>`__
--  `zfs_qat_disable <#zfs_qat_disable>`__
+-  `zfs_compressed_arc_enabled <#zfs-compressed-arc-enabled>`__
+-  `zfs_qat_compress_disable <#zfs-qat-compress-disable>`__
+-  `zfs_qat_disable <#zfs-qat-disable>`__
 
 CPU
-^^^
+~~~
 
--  `zfs_fletcher_4_impl <#zfs_fletcher_4_impl>`__
--  `zfs_mdcomp_disable <#zfs_mdcomp_disable>`__
--  `spl_kmem_cache_kmem_threads <#spl_kmem_cache_kmem_threads>`__
--  `spl_kmem_cache_magazine_size <#spl_kmem_cache_magazine_size>`__
--  `spl_taskq_thread_bind <#spl_taskq_thread_bind>`__
--  `spl_taskq_thread_priority <#spl_taskq_thread_priority>`__
--  `spl_taskq_thread_sequential <#spl_taskq_thread_sequential>`__
--  `zfs_vdev_raidz_impl <#zfs_vdev_raidz_impl>`__
+-  `zfs_fletcher_4_impl <#zfs-fletcher-4-impl>`__
+-  `zfs_mdcomp_disable <#zfs-mdcomp-disable>`__
+-  `spl_kmem_cache_kmem_threads <#spl-kmem-cache-kmem-threads>`__
+-  `spl_kmem_cache_magazine_size <#spl-kmem-cache-magazine-size>`__
+-  `spl_taskq_thread_bind <#spl-taskq-thread-bind>`__
+-  `spl_taskq_thread_priority <#spl-taskq-thread-priority>`__
+-  `spl_taskq_thread_sequential <#spl-taskq-thread-sequential>`__
+-  `zfs_vdev_raidz_impl <#zfs-vdev-raidz-impl>`__
 
 dataset
-^^^^^^^
+~~~~~~~
 
--  `zfs_max_dataset_nesting <#zfs_max_dataset_nesting>`__
+-  `zfs_max_dataset_nesting <#zfs-max-dataset-nesting>`__
 
 dbuf_cache
-^^^^^^^^^^
+~~~~~~~~~~
 
--  `dbuf_cache_hiwater_pct <#dbuf_cache_hiwater_pct>`__
--  `dbuf_cache_lowater_pct <#dbuf_cache_lowater_pct>`__
--  `dbuf_cache_max_bytes <#dbuf_cache_max_bytes>`__
--  `dbuf_cache_max_bytes <#dbuf_cache_max_bytes>`__
--  `dbuf_cache_max_shift <#dbuf_cache_max_shift>`__
--  `dbuf_cache_shift <#dbuf_cache_shift>`__
--  `dbuf_metadata_cache_max_bytes <#dbuf_metadata_cache_max_bytes>`__
--  `dbuf_metadata_cache_shift <#dbuf_metadata_cache_shift>`__
+-  `dbuf_cache_hiwater_pct <#dbuf-cache-hiwater-pct>`__
+-  `dbuf_cache_lowater_pct <#dbuf-cache-lowater-pct>`__
+-  `dbuf_cache_max_bytes <#dbuf-cache-max-bytes>`__
+-  `dbuf_cache_max_bytes <#dbuf-cache-max-bytes>`__
+-  `dbuf_cache_max_shift <#dbuf-cache-max-shift>`__
+-  `dbuf_cache_shift <#dbuf-cache-shift>`__
+-  `dbuf_metadata_cache_max_bytes <#dbuf-metadata-cache-max-bytes>`__
+-  `dbuf_metadata_cache_shift <#dbuf-metadata-cache-shift>`__
 
 debug
-^^^^^
+~~~~~
 
--  `zfs_dbgmsg_enable <#zfs_dbgmsg_enable>`__
--  `zfs_dbgmsg_maxsize <#zfs_dbgmsg_maxsize>`__
--  `zfs_dbuf_state_index <#zfs_dbuf_state_index>`__
--  `zfs_deadman_checktime_ms <#zfs_deadman_checktime_ms>`__
--  `zfs_deadman_enabled <#zfs_deadman_enabled>`__
--  `zfs_deadman_failmode <#zfs_deadman_failmode>`__
--  `zfs_deadman_synctime_ms <#zfs_deadman_synctime_ms>`__
--  `zfs_deadman_ziotime_ms <#zfs_deadman_ziotime_ms>`__
--  `zfs_flags <#zfs_flags>`__
--  `zfs_free_leak_on_eio <#zfs_free_leak_on_eio>`__
--  `zfs_nopwrite_enabled <#zfs_nopwrite_enabled>`__
--  `zfs_object_mutex_size <#zfs_object_mutex_size>`__
--  `zfs_read_history <#zfs_read_history>`__
--  `zfs_read_history_hits <#zfs_read_history_hits>`__
--  `spl_panic_halt <#spl_panic_halt>`__
--  `zfs_txg_history <#zfs_txg_history>`__
--  `zfs_zevent_cols <#zfs_zevent_cols>`__
--  `zfs_zevent_console <#zfs_zevent_console>`__
--  `zfs_zevent_len_max <#zfs_zevent_len_max>`__
--  `zil_replay_disable <#zil_replay_disable>`__
--  `zio_deadman_log_all <#zio_deadman_log_all>`__
--  `zio_decompress_fail_fraction <#zio_decompress_fail_fraction>`__
--  `zio_delay_max <#zio_delay_max>`__
+-  `zfs_dbgmsg_enable <#zfs-dbgmsg-enable>`__
+-  `zfs_dbgmsg_maxsize <#zfs-dbgmsg-maxsize>`__
+-  `zfs_dbuf_state_index <#zfs-dbuf-state-index>`__
+-  `zfs_deadman_checktime_ms <#zfs-deadman-checktime-ms>`__
+-  `zfs_deadman_enabled <#zfs-deadman-enabled>`__
+-  `zfs_deadman_failmode <#zfs-deadman-failmode>`__
+-  `zfs_deadman_synctime_ms <#zfs-deadman-synctime-ms>`__
+-  `zfs_deadman_ziotime_ms <#zfs-deadman-ziotime-ms>`__
+-  `zfs_flags <#zfs-flags>`__
+-  `zfs_free_leak_on_eio <#zfs-free-leak-on-eio>`__
+-  `zfs_nopwrite_enabled <#zfs-nopwrite-enabled>`__
+-  `zfs_object_mutex_size <#zfs-object-mutex-size>`__
+-  `zfs_read_history <#zfs-read-history>`__
+-  `zfs_read_history_hits <#zfs-read-history-hits>`__
+-  `spl_panic_halt <#spl-panic-halt>`__
+-  `zfs_txg_history <#zfs-txg-history>`__
+-  `zfs_zevent_cols <#zfs-zevent-cols>`__
+-  `zfs_zevent_console <#zfs-zevent-console>`__
+-  `zfs_zevent_len_max <#zfs-zevent-len-max>`__
+-  `zil_replay_disable <#zil-replay-disable>`__
+-  `zio_deadman_log_all <#zio-deadman-log-all>`__
+-  `zio_decompress_fail_fraction <#zio-decompress-fail-fraction>`__
+-  `zio_delay_max <#zio-delay-max>`__
 
 dedup
-^^^^^
+~~~~~
 
--  `zfs_ddt_data_is_special <#zfs_ddt_data_is_special>`__
--  `zfs_disable_dup_eviction <#zfs_disable_dup_eviction>`__
+-  `zfs_ddt_data_is_special <#zfs-ddt-data-is-special>`__
+-  `zfs_disable_dup_eviction <#zfs-disable-dup-eviction>`__
 
 delay
-^^^^^
+~~~~~
 
--  `zfs_delays_per_second <#zfs_delays_per_second>`__
+-  `zfs_delays_per_second <#zfs-delays-per-second>`__
 
 delete
-^^^^^^
+~~~~~~
 
--  `zfs_async_block_max_blocks <#zfs_async_block_max_blocks>`__
--  `zfs_delete_blocks <#zfs_delete_blocks>`__
--  `zfs_free_bpobj_enabled <#zfs_free_bpobj_enabled>`__
--  `zfs_free_max_blocks <#zfs_free_max_blocks>`__
--  `zfs_free_min_time_ms <#zfs_free_min_time_ms>`__
--  `zfs_obsolete_min_time_ms <#zfs_obsolete_min_time_ms>`__
--  `zfs_per_txg_dirty_frees_percent <#zfs_per_txg_dirty_frees_percent>`__
+-  `zfs_async_block_max_blocks <#zfs-async-block-max-blocks>`__
+-  `zfs_delete_blocks <#zfs-delete-blocks>`__
+-  `zfs_free_bpobj_enabled <#zfs-free-bpobj-enabled>`__
+-  `zfs_free_max_blocks <#zfs-free-max-blocks>`__
+-  `zfs_free_min_time_ms <#zfs-free-min-time-ms>`__
+-  `zfs_obsolete_min_time_ms <#zfs-obsolete-min-time-ms>`__
+-  `zfs_per_txg_dirty_frees_percent <#zfs-per-txg-dirty-frees-percent>`__
 
 discard
-^^^^^^^
+~~~~~~~
 
--  `zvol_max_discard_blocks <#zvol_max_discard_blocks>`__
+-  `zvol_max_discard_blocks <#zvol-max-discard-blocks>`__
 
 disks
-^^^^^
+~~~~~
 
--  `zfs_nocacheflush <#zfs_nocacheflush>`__
--  `zil_nocacheflush <#zil_nocacheflush>`__
+-  `zfs_nocacheflush <#zfs-nocacheflush>`__
+-  `zil_nocacheflush <#zil-nocacheflush>`__
 
 DMU
-^^^
+~~~
 
--  `zfs_async_block_max_blocks <#zfs_async_block_max_blocks>`__
--  `dmu_object_alloc_chunk_shift <#dmu_object_alloc_chunk_shift>`__
--  `zfs_dmu_offset_next_sync <#zfs_dmu_offset_next_sync>`__
+-  `zfs_async_block_max_blocks <#zfs-async-block-max-blocks>`__
+-  `dmu_object_alloc_chunk_shift <#dmu-object-alloc-chunk-shift>`__
+-  `zfs_dmu_offset_next_sync <#zfs-dmu-offset-next-sync>`__
 
 encryption
-^^^^^^^^^^
+~~~~~~~~~~
 
--  `icp_aes_impl <#icp_aes_impl>`__
--  `icp_gcm_impl <#icp_gcm_impl>`__
--  `zfs_key_max_salt_uses <#zfs_key_max_salt_uses>`__
--  `zfs_qat_encrypt_disable <#zfs_qat_encrypt_disable>`__
+-  `icp_aes_impl <#icp-aes-impl>`__
+-  `icp_gcm_impl <#icp-gcm-impl>`__
+-  `zfs_key_max_salt_uses <#zfs-key-max-salt-uses>`__
+-  `zfs_qat_encrypt_disable <#zfs-qat-encrypt-disable>`__
 
 filesystem
-^^^^^^^^^^
+~~~~~~~~~~
 
--  `zfs_admin_snapshot <#zfs_admin_snapshot>`__
--  `zfs_delete_blocks <#zfs_delete_blocks>`__
--  `zfs_expire_snapshot <#zfs_expire_snapshot>`__
--  `zfs_free_max_blocks <#zfs_free_max_blocks>`__
--  `zfs_max_recordsize <#zfs_max_recordsize>`__
--  `zfs_read_chunk_size <#zfs_read_chunk_size>`__
+-  `zfs_admin_snapshot <#zfs-admin-snapshot>`__
+-  `zfs_delete_blocks <#zfs-delete-blocks>`__
+-  `zfs_expire_snapshot <#zfs-expire-snapshot>`__
+-  `zfs_free_max_blocks <#zfs-free-max-blocks>`__
+-  `zfs_max_recordsize <#zfs-max-recordsize>`__
+-  `zfs_read_chunk_size <#zfs-read-chunk-size>`__
 
 fragmentation
-^^^^^^^^^^^^^
+~~~~~~~~~~~~~
 
--  `zfs_metaslab_fragmentation_threshold <#zfs_metaslab_fragmentation_threshold>`__
--  `zfs_mg_fragmentation_threshold <#zfs_mg_fragmentation_threshold>`__
--  `zfs_mg_noalloc_threshold <#zfs_mg_noalloc_threshold>`__
+-  `zfs_metaslab_fragmentation_threshold <#zfs-metaslab-fragmentation-threshold>`__
+-  `zfs_mg_fragmentation_threshold <#zfs-mg-fragmentation-threshold>`__
+-  `zfs_mg_noalloc_threshold <#zfs-mg-noalloc-threshold>`__
 
 HDD
-^^^
+~~~
 
--  `metaslab_lba_weighting_enabled <#metaslab_lba_weighting_enabled>`__
--  `zfs_vdev_mirror_rotating_inc <#zfs_vdev_mirror_rotating_inc>`__
--  `zfs_vdev_mirror_rotating_seek_inc <#zfs_vdev_mirror_rotating_seek_inc>`__
--  `zfs_vdev_mirror_rotating_seek_offset <#zfs_vdev_mirror_rotating_seek_offset>`__
+-  `metaslab_lba_weighting_enabled <#metaslab-lba-weighting-enabled>`__
+-  `zfs_vdev_mirror_rotating_inc <#zfs-vdev-mirror-rotating-inc>`__
+-  `zfs_vdev_mirror_rotating_seek_inc <#zfs-vdev-mirror-rotating-seek-inc>`__
+-  `zfs_vdev_mirror_rotating_seek_offset <#zfs-vdev-mirror-rotating-seek-offset>`__
 
 hostid
-^^^^^^
+~~~~~~
 
--  `spl_hostid <#spl_hostid>`__
--  `spl_hostid_path <#spl_hostid_path>`__
+-  `spl_hostid <#spl-hostid>`__
+-  `spl_hostid_path <#spl-hostid-path>`__
 
 import
-^^^^^^
+~~~~~~
 
--  `zfs_autoimport_disable <#zfs_autoimport_disable>`__
--  `zfs_max_missing_tvds <#zfs_max_missing_tvds>`__
--  `zfs_multihost_fail_intervals <#zfs_multihost_fail_intervals>`__
--  `zfs_multihost_history <#zfs_multihost_history>`__
--  `zfs_multihost_import_intervals <#zfs_multihost_import_intervals>`__
--  `zfs_multihost_interval <#zfs_multihost_interval>`__
--  `zfs_recover <#zfs_recover>`__
--  `spa_config_path <#spa_config_path>`__
--  `spa_load_print_vdev_tree <#spa_load_print_vdev_tree>`__
--  `spa_load_verify_maxinflight <#spa_load_verify_maxinflight>`__
--  `spa_load_verify_metadata <#spa_load_verify_metadata>`__
--  `spa_load_verify_shift <#spa_load_verify_shift>`__
--  `zvol_inhibit_dev <#zvol_inhibit_dev>`__
+-  `zfs_autoimport_disable <#zfs-autoimport-disable>`__
+-  `zfs_max_missing_tvds <#zfs-max-missing-tvds>`__
+-  `zfs_multihost_fail_intervals <#zfs-multihost-fail-intervals>`__
+-  `zfs_multihost_history <#zfs-multihost-history>`__
+-  `zfs_multihost_import_intervals <#zfs-multihost-import-intervals>`__
+-  `zfs_multihost_interval <#zfs-multihost-interval>`__
+-  `zfs_recover <#zfs-recover>`__
+-  `spa_config_path <#spa-config-path>`__
+-  `spa_load_print_vdev_tree <#spa-load-print-vdev-tree>`__
+-  `spa_load_verify_maxinflight <#spa-load-verify-maxinflight>`__
+-  `spa_load_verify_metadata <#spa-load-verify-metadata>`__
+-  `spa_load_verify_shift <#spa-load-verify-shift>`__
+-  `zvol_inhibit_dev <#zvol-inhibit-dev>`__
 
 L2ARC
-^^^^^
+~~~~~
 
--  `l2arc_feed_again <#l2arc_feed_again>`__
--  `l2arc_feed_min_ms <#l2arc_feed_min_ms>`__
--  `l2arc_feed_secs <#l2arc_feed_secs>`__
--  `l2arc_headroom <#l2arc_headroom>`__
--  `l2arc_headroom_boost <#l2arc_headroom_boost>`__
--  `l2arc_nocompress <#l2arc_nocompress>`__
--  `l2arc_noprefetch <#l2arc_noprefetch>`__
--  `l2arc_norw <#l2arc_norw>`__
--  `l2arc_write_boost <#l2arc_write_boost>`__
--  `l2arc_write_max <#l2arc_write_max>`__
+-  `l2arc_feed_again <#l2arc-feed-again>`__
+-  `l2arc_feed_min_ms <#l2arc-feed-min-ms>`__
+-  `l2arc_feed_secs <#l2arc-feed-secs>`__
+-  `l2arc_headroom <#l2arc-headroom>`__
+-  `l2arc_headroom_boost <#l2arc-headroom-boost>`__
+-  `l2arc_nocompress <#l2arc-nocompress>`__
+-  `l2arc_noprefetch <#l2arc-noprefetch>`__
+-  `l2arc_norw <#l2arc-norw>`__
+-  `l2arc_write_boost <#l2arc-write-boost>`__
+-  `l2arc_write_max <#l2arc-write-max>`__
 
 memory
-^^^^^^
+~~~~~~
 
--  `zfs_abd_scatter_enabled <#zfs_abd_scatter_enabled>`__
--  `zfs_abd_scatter_max_order <#zfs_abd_scatter_max_order>`__
--  `zfs_arc_average_blocksize <#zfs_arc_average_blocksize>`__
--  `zfs_arc_grow_retry <#zfs_arc_grow_retry>`__
--  `zfs_arc_lotsfree_percent <#zfs_arc_lotsfree_percent>`__
--  `zfs_arc_max <#zfs_arc_max>`__
--  `zfs_arc_pc_percent <#zfs_arc_pc_percent>`__
--  `zfs_arc_shrink_shift <#zfs_arc_shrink_shift>`__
--  `zfs_arc_sys_free <#zfs_arc_sys_free>`__
--  `zfs_dedup_prefetch <#zfs_dedup_prefetch>`__
--  `zfs_max_recordsize <#zfs_max_recordsize>`__
--  `metaslab_debug_load <#metaslab_debug_load>`__
--  `metaslab_debug_unload <#metaslab_debug_unload>`__
--  `zfs_scan_mem_lim_fact <#zfs_scan_mem_lim_fact>`__
--  `zfs_scan_strict_mem_lim <#zfs_scan_strict_mem_lim>`__
--  `spl_kmem_alloc_max <#spl_kmem_alloc_max>`__
--  `spl_kmem_alloc_warn <#spl_kmem_alloc_warn>`__
--  `spl_kmem_cache_expire <#spl_kmem_cache_expire>`__
--  `spl_kmem_cache_kmem_limit <#spl_kmem_cache_kmem_limit>`__
--  `spl_kmem_cache_kmem_threads <#spl_kmem_cache_kmem_threads>`__
--  `spl_kmem_cache_magazine_size <#spl_kmem_cache_magazine_size>`__
--  `spl_kmem_cache_max_size <#spl_kmem_cache_max_size>`__
--  `spl_kmem_cache_obj_per_slab <#spl_kmem_cache_obj_per_slab>`__
--  `spl_kmem_cache_obj_per_slab_min <#spl_kmem_cache_obj_per_slab_min>`__
--  `spl_kmem_cache_reclaim <#spl_kmem_cache_reclaim>`__
--  `spl_kmem_cache_slab_limit <#spl_kmem_cache_slab_limit>`__
+-  `zfs_abd_scatter_enabled <#zfs-abd-scatter-enabled>`__
+-  `zfs_abd_scatter_max_order <#zfs-abd-scatter-max-order>`__
+-  `zfs_arc_average_blocksize <#zfs-arc-average-blocksize>`__
+-  `zfs_arc_grow_retry <#zfs-arc-grow-retry>`__
+-  `zfs_arc_lotsfree_percent <#zfs-arc-lotsfree-percent>`__
+-  `zfs_arc_max <#zfs-arc-max>`__
+-  `zfs_arc_pc_percent <#zfs-arc-pc-percent>`__
+-  `zfs_arc_shrink_shift <#zfs-arc-shrink-shift>`__
+-  `zfs_arc_sys_free <#zfs-arc-sys-free>`__
+-  `zfs_dedup_prefetch <#zfs-dedup-prefetch>`__
+-  `zfs_max_recordsize <#zfs-max-recordsize>`__
+-  `metaslab_debug_load <#metaslab-debug-load>`__
+-  `metaslab_debug_unload <#metaslab-debug-unload>`__
+-  `zfs_scan_mem_lim_fact <#zfs-scan-mem-lim-fact>`__
+-  `zfs_scan_strict_mem_lim <#zfs-scan-strict-mem-lim>`__
+-  `spl_kmem_alloc_max <#spl-kmem-alloc-max>`__
+-  `spl_kmem_alloc_warn <#spl-kmem-alloc-warn>`__
+-  `spl_kmem_cache_expire <#spl-kmem-cache-expire>`__
+-  `spl_kmem_cache_kmem_limit <#spl-kmem-cache-kmem-limit>`__
+-  `spl_kmem_cache_kmem_threads <#spl-kmem-cache-kmem-threads>`__
+-  `spl_kmem_cache_magazine_size <#spl-kmem-cache-magazine-size>`__
+-  `spl_kmem_cache_max_size <#spl-kmem-cache-max-size>`__
+-  `spl_kmem_cache_obj_per_slab <#spl-kmem-cache-obj-per-slab>`__
+-  `spl_kmem_cache_obj_per_slab_min <#spl-kmem-cache-obj-per-slab-min>`__
+-  `spl_kmem_cache_reclaim <#spl-kmem-cache-reclaim>`__
+-  `spl_kmem_cache_slab_limit <#spl-kmem-cache-slab-limit>`__
 
 metadata
-^^^^^^^^
+~~~~~~~~
 
--  `zfs_mdcomp_disable <#zfs_mdcomp_disable>`__
+-  `zfs_mdcomp_disable <#zfs-mdcomp-disable>`__
 
 metaslab
-^^^^^^^^
+~~~~~~~~
 
--  `metaslab_aliquot <#metaslab_aliquot>`__
--  `metaslab_bias_enabled <#metaslab_bias_enabled>`__
--  `metaslab_debug_load <#metaslab_debug_load>`__
--  `metaslab_debug_unload <#metaslab_debug_unload>`__
--  `metaslab_fragmentation_factor_enabled <#metaslab_fragmentation_factor_enabled>`__
--  `metaslab_lba_weighting_enabled <#metaslab_lba_weighting_enabled>`__
--  `metaslab_preload_enabled <#metaslab_preload_enabled>`__
--  `zfs_metaslab_segment_weight_enabled <#zfs_metaslab_segment_weight_enabled>`__
--  `zfs_metaslab_switch_threshold <#zfs_metaslab_switch_threshold>`__
--  `metaslabs_per_vdev <#metaslabs_per_vdev>`__
--  `zfs_vdev_min_ms_count <#zfs_vdev_min_ms_count>`__
--  `zfs_vdev_ms_count_limit <#zfs_vdev_ms_count_limit>`__
+-  `metaslab_aliquot <#metaslab-aliquot>`__
+-  `metaslab_bias_enabled <#metaslab-bias-enabled>`__
+-  `metaslab_debug_load <#metaslab-debug-load>`__
+-  `metaslab_debug_unload <#metaslab-debug-unload>`__
+-  `metaslab_fragmentation_factor_enabled <#metaslab-fragmentation-factor-enabled>`__
+-  `metaslab_lba_weighting_enabled <#metaslab-lba-weighting-enabled>`__
+-  `metaslab_preload_enabled <#metaslab-preload-enabled>`__
+-  `zfs_metaslab_segment_weight_enabled <#zfs-metaslab-segment-weight-enabled>`__
+-  `zfs_metaslab_switch_threshold <#zfs-metaslab-switch-threshold>`__
+-  `metaslabs_per_vdev <#metaslabs-per-vdev>`__
+-  `zfs_vdev_min_ms_count <#zfs-vdev-min-ms-count>`__
+-  `zfs_vdev_ms_count_limit <#zfs-vdev-ms-count-limit>`__
 
 mirror
-^^^^^^
+~~~~~~
 
--  `zfs_vdev_mirror_non_rotating_inc <#zfs_vdev_mirror_non_rotating_inc>`__
--  `zfs_vdev_mirror_non_rotating_seek_inc <#zfs_vdev_mirror_non_rotating_seek_inc>`__
--  `zfs_vdev_mirror_rotating_inc <#zfs_vdev_mirror_rotating_inc>`__
--  `zfs_vdev_mirror_rotating_seek_inc <#zfs_vdev_mirror_rotating_seek_inc>`__
--  `zfs_vdev_mirror_rotating_seek_offset <#zfs_vdev_mirror_rotating_seek_offset>`__
+-  `zfs_vdev_mirror_non_rotating_inc <#zfs-vdev-mirror-non-rotating-inc>`__
+-  `zfs_vdev_mirror_non_rotating_seek_inc <#zfs-vdev-mirror-non-rotating-seek-inc>`__
+-  `zfs_vdev_mirror_rotating_inc <#zfs-vdev-mirror-rotating-inc>`__
+-  `zfs_vdev_mirror_rotating_seek_inc <#zfs-vdev-mirror-rotating-seek-inc>`__
+-  `zfs_vdev_mirror_rotating_seek_offset <#zfs-vdev-mirror-rotating-seek-offset>`__
 
 MMP
-^^^
+~~~
 
--  `zfs_multihost_fail_intervals <#zfs_multihost_fail_intervals>`__
--  `zfs_multihost_history <#zfs_multihost_history>`__
--  `zfs_multihost_import_intervals <#zfs_multihost_import_intervals>`__
--  `zfs_multihost_interval <#zfs_multihost_interval>`__
--  `spl_hostid <#spl_hostid>`__
--  `spl_hostid_path <#spl_hostid_path>`__
+-  `zfs_multihost_fail_intervals <#zfs-multihost-fail-intervals>`__
+-  `zfs_multihost_history <#zfs-multihost-history>`__
+-  `zfs_multihost_import_intervals <#zfs-multihost-import-intervals>`__
+-  `zfs_multihost_interval <#zfs-multihost-interval>`__
+-  `spl_hostid <#spl-hostid>`__
+-  `spl_hostid_path <#spl-hostid-path>`__
 
 panic
-^^^^^
+~~~~~
 
--  `spl_panic_halt <#spl_panic_halt>`__
+-  `spl_panic_halt <#spl-panic-halt>`__
 
 prefetch
-^^^^^^^^
+~~~~~~~~
 
--  `zfs_arc_min_prefetch_ms <#zfs_arc_min_prefetch_ms>`__
--  `zfs_arc_min_prescient_prefetch_ms <#zfs_arc_min_prescient_prefetch_ms>`__
--  `zfs_dedup_prefetch <#zfs_dedup_prefetch>`__
--  `l2arc_noprefetch <#l2arc_noprefetch>`__
--  `zfs_no_scrub_prefetch <#zfs_no_scrub_prefetch>`__
--  `zfs_pd_bytes_max <#zfs_pd_bytes_max>`__
--  `zfs_prefetch_disable <#zfs_prefetch_disable>`__
--  `zfetch_array_rd_sz <#zfetch_array_rd_sz>`__
--  `zfetch_max_distance <#zfetch_max_distance>`__
--  `zfetch_max_streams <#zfetch_max_streams>`__
--  `zfetch_min_sec_reap <#zfetch_min_sec_reap>`__
--  `zvol_prefetch_bytes <#zvol_prefetch_bytes>`__
+-  `zfs_arc_min_prefetch_ms <#zfs-arc-min-prefetch-ms>`__
+-  `zfs_arc_min_prescient_prefetch_ms <#zfs-arc-min-prescient-prefetch-ms>`__
+-  `zfs_dedup_prefetch <#zfs-dedup-prefetch>`__
+-  `l2arc_noprefetch <#l2arc-noprefetch>`__
+-  `zfs_no_scrub_prefetch <#zfs-no-scrub-prefetch>`__
+-  `zfs_pd_bytes_max <#zfs-pd-bytes-max>`__
+-  `zfs_prefetch_disable <#zfs-prefetch-disable>`__
+-  `zfetch_array_rd_sz <#zfetch-array-rd-sz>`__
+-  `zfetch_max_distance <#zfetch-max-distance>`__
+-  `zfetch_max_streams <#zfetch-max-streams>`__
+-  `zfetch_min_sec_reap <#zfetch-min-sec-reap>`__
+-  `zvol_prefetch_bytes <#zvol-prefetch-bytes>`__
 
 QAT
-^^^
+~~~
 
--  `zfs_qat_checksum_disable <#zfs_qat_checksum_disable>`__
--  `zfs_qat_compress_disable <#zfs_qat_compress_disable>`__
--  `zfs_qat_disable <#zfs_qat_disable>`__
--  `zfs_qat_encrypt_disable <#zfs_qat_encrypt_disable>`__
+-  `zfs_qat_checksum_disable <#zfs-qat-checksum-disable>`__
+-  `zfs_qat_compress_disable <#zfs-qat-compress-disable>`__
+-  `zfs_qat_disable <#zfs-qat-disable>`__
+-  `zfs_qat_encrypt_disable <#zfs-qat-encrypt-disable>`__
 
 raidz
-^^^^^
+~~~~~
 
--  `zfs_vdev_raidz_impl <#zfs_vdev_raidz_impl>`__
+-  `zfs_vdev_raidz_impl <#zfs-vdev-raidz-impl>`__
 
 receive
-^^^^^^^
+~~~~~~~
 
--  `zfs_disable_ivset_guid_check <#zfs_disable_ivset_guid_check>`__
--  `zfs_recv_queue_length <#zfs_recv_queue_length>`__
+-  `zfs_disable_ivset_guid_check <#zfs-disable-ivset-guid-check>`__
+-  `zfs_recv_queue_length <#zfs-recv-queue-length>`__
 
 remove
-^^^^^^
+~~~~~~
 
--  `zfs_obsolete_min_time_ms <#zfs_obsolete_min_time_ms>`__
--  `zfs_remove_max_segment <#zfs_remove_max_segment>`__
+-  `zfs_obsolete_min_time_ms <#zfs-obsolete-min-time-ms>`__
+-  `zfs_remove_max_segment <#zfs-remove-max-segment>`__
 
 resilver
-^^^^^^^^
+~~~~~~~~
 
--  `zfs_resilver_delay <#zfs_resilver_delay>`__
--  `zfs_resilver_disable_defer <#zfs_resilver_disable_defer>`__
--  `zfs_resilver_min_time_ms <#zfs_resilver_min_time_ms>`__
--  `zfs_scan_checkpoint_intval <#zfs_scan_checkpoint_intval>`__
--  `zfs_scan_fill_weight <#zfs_scan_fill_weight>`__
--  `zfs_scan_idle <#zfs_scan_idle>`__
--  `zfs_scan_ignore_errors <#zfs_scan_ignore_errors>`__
--  `zfs_scan_issue_strategy <#zfs_scan_issue_strategy>`__
--  `zfs_scan_legacy <#zfs_scan_legacy>`__
--  `zfs_scan_max_ext_gap <#zfs_scan_max_ext_gap>`__
--  `zfs_scan_mem_lim_fact <#zfs_scan_mem_lim_fact>`__
--  `zfs_scan_mem_lim_soft_fact <#zfs_scan_mem_lim_soft_fact>`__
--  `zfs_scan_strict_mem_lim <#zfs_scan_strict_mem_lim>`__
--  `zfs_scan_suspend_progress <#zfs_scan_suspend_progress>`__
--  `zfs_scan_vdev_limit <#zfs_scan_vdev_limit>`__
--  `zfs_top_maxinflight <#zfs_top_maxinflight>`__
--  `zfs_vdev_scrub_max_active <#zfs_vdev_scrub_max_active>`__
--  `zfs_vdev_scrub_min_active <#zfs_vdev_scrub_min_active>`__
+-  `zfs_resilver_delay <#zfs-resilver-delay>`__
+-  `zfs_resilver_disable_defer <#zfs-resilver-disable-defer>`__
+-  `zfs_resilver_min_time_ms <#zfs-resilver-min-time-ms>`__
+-  `zfs_scan_checkpoint_intval <#zfs-scan-checkpoint-intval>`__
+-  `zfs_scan_fill_weight <#zfs-scan-fill-weight>`__
+-  `zfs_scan_idle <#zfs-scan-idle>`__
+-  `zfs_scan_ignore_errors <#zfs-scan-ignore-errors>`__
+-  `zfs_scan_issue_strategy <#zfs-scan-issue-strategy>`__
+-  `zfs_scan_legacy <#zfs-scan-legacy>`__
+-  `zfs_scan_max_ext_gap <#zfs-scan-max-ext-gap>`__
+-  `zfs_scan_mem_lim_fact <#zfs-scan-mem-lim-fact>`__
+-  `zfs_scan_mem_lim_soft_fact <#zfs-scan-mem-lim-soft-fact>`__
+-  `zfs_scan_strict_mem_lim <#zfs-scan-strict-mem-lim>`__
+-  `zfs_scan_suspend_progress <#zfs-scan-suspend-progress>`__
+-  `zfs_scan_vdev_limit <#zfs-scan-vdev-limit>`__
+-  `zfs_top_maxinflight <#zfs-top-maxinflight>`__
+-  `zfs_vdev_scrub_max_active <#zfs-vdev-scrub-max-active>`__
+-  `zfs_vdev_scrub_min_active <#zfs-vdev-scrub-min-active>`__
 
 scrub
-^^^^^
+~~~~~
 
--  `zfs_no_scrub_io <#zfs_no_scrub_io>`__
--  `zfs_no_scrub_prefetch <#zfs_no_scrub_prefetch>`__
--  `zfs_scan_checkpoint_intval <#zfs_scan_checkpoint_intval>`__
--  `zfs_scan_fill_weight <#zfs_scan_fill_weight>`__
--  `zfs_scan_idle <#zfs_scan_idle>`__
--  `zfs_scan_issue_strategy <#zfs_scan_issue_strategy>`__
--  `zfs_scan_legacy <#zfs_scan_legacy>`__
--  `zfs_scan_max_ext_gap <#zfs_scan_max_ext_gap>`__
--  `zfs_scan_mem_lim_fact <#zfs_scan_mem_lim_fact>`__
--  `zfs_scan_mem_lim_soft_fact <#zfs_scan_mem_lim_soft_fact>`__
--  `zfs_scan_min_time_ms <#zfs_scan_min_time_ms>`__
--  `zfs_scan_strict_mem_lim <#zfs_scan_strict_mem_lim>`__
--  `zfs_scan_suspend_progress <#zfs_scan_suspend_progress>`__
--  `zfs_scan_vdev_limit <#zfs_scan_vdev_limit>`__
--  `zfs_scrub_delay <#zfs_scrub_delay>`__
--  `zfs_scrub_min_time_ms <#zfs_scrub_min_time_ms>`__
--  `zfs_top_maxinflight <#zfs_top_maxinflight>`__
--  `zfs_vdev_scrub_max_active <#zfs_vdev_scrub_max_active>`__
--  `zfs_vdev_scrub_min_active <#zfs_vdev_scrub_min_active>`__
+-  `zfs_no_scrub_io <#zfs-no-scrub-io>`__
+-  `zfs_no_scrub_prefetch <#zfs-no-scrub-prefetch>`__
+-  `zfs_scan_checkpoint_intval <#zfs-scan-checkpoint-intval>`__
+-  `zfs_scan_fill_weight <#zfs-scan-fill-weight>`__
+-  `zfs_scan_idle <#zfs-scan-idle>`__
+-  `zfs_scan_issue_strategy <#zfs-scan-issue-strategy>`__
+-  `zfs_scan_legacy <#zfs-scan-legacy>`__
+-  `zfs_scan_max_ext_gap <#zfs-scan-max-ext-gap>`__
+-  `zfs_scan_mem_lim_fact <#zfs-scan-mem-lim-fact>`__
+-  `zfs_scan_mem_lim_soft_fact <#zfs-scan-mem-lim-soft-fact>`__
+-  `zfs_scan_min_time_ms <#zfs-scan-min-time-ms>`__
+-  `zfs_scan_strict_mem_lim <#zfs-scan-strict-mem-lim>`__
+-  `zfs_scan_suspend_progress <#zfs-scan-suspend-progress>`__
+-  `zfs_scan_vdev_limit <#zfs-scan-vdev-limit>`__
+-  `zfs_scrub_delay <#zfs-scrub-delay>`__
+-  `zfs_scrub_min_time_ms <#zfs-scrub-min-time-ms>`__
+-  `zfs_top_maxinflight <#zfs-top-maxinflight>`__
+-  `zfs_vdev_scrub_max_active <#zfs-vdev-scrub-max-active>`__
+-  `zfs_vdev_scrub_min_active <#zfs-vdev-scrub-min-active>`__
 
 send
-^^^^
+~~~~
 
--  `ignore_hole_birth <#ignore_hole_birth>`__
--  `zfs_override_estimate_recordsize <#zfs_override_estimate_recordsize>`__
--  `zfs_pd_bytes_max <#zfs_pd_bytes_max>`__
--  `zfs_send_corrupt_data <#zfs_send_corrupt_data>`__
--  `zfs_send_queue_length <#zfs_send_queue_length>`__
--  `zfs_send_unmodified_spill_blocks <#zfs_send_unmodified_spill_blocks>`__
+-  `ignore_hole_birth <#ignore-hole-birth>`__
+-  `zfs_override_estimate_recordsize <#zfs-override-estimate-recordsize>`__
+-  `zfs_pd_bytes_max <#zfs-pd-bytes-max>`__
+-  `zfs_send_corrupt_data <#zfs-send-corrupt-data>`__
+-  `zfs_send_queue_length <#zfs-send-queue-length>`__
+-  `zfs_send_unmodified_spill_blocks <#zfs-send-unmodified-spill-blocks>`__
 
 snapshot
-^^^^^^^^
+~~~~~~~~
 
--  `zfs_admin_snapshot <#zfs_admin_snapshot>`__
--  `zfs_expire_snapshot <#zfs_expire_snapshot>`__
+-  `zfs_admin_snapshot <#zfs-admin-snapshot>`__
+-  `zfs_expire_snapshot <#zfs-expire-snapshot>`__
 
 SPA
-^^^
+~~~
 
--  `spa_asize_inflation <#spa_asize_inflation>`__
--  `spa_load_print_vdev_tree <#spa_load_print_vdev_tree>`__
--  `spa_load_verify_data <#spa_load_verify_data>`__
--  `spa_load_verify_shift <#spa_load_verify_shift>`__
--  `spa_slop_shift <#spa_slop_shift>`__
--  `zfs_sync_pass_deferred_free <#zfs_sync_pass_deferred_free>`__
--  `zfs_sync_pass_dont_compress <#zfs_sync_pass_dont_compress>`__
--  `zfs_sync_pass_rewrite <#zfs_sync_pass_rewrite>`__
--  `zfs_sync_taskq_batch_pct <#zfs_sync_taskq_batch_pct>`__
--  `zfs_txg_timeout <#zfs_txg_timeout>`__
+-  `spa_asize_inflation <#spa-asize-inflation>`__
+-  `spa_load_print_vdev_tree <#spa-load-print-vdev-tree>`__
+-  `spa_load_verify_data <#spa-load-verify-data>`__
+-  `spa_load_verify_shift <#spa-load-verify-shift>`__
+-  `spa_slop_shift <#spa-slop-shift>`__
+-  `zfs_sync_pass_deferred_free <#zfs-sync-pass-deferred-free>`__
+-  `zfs_sync_pass_dont_compress <#zfs-sync-pass-dont-compress>`__
+-  `zfs_sync_pass_rewrite <#zfs-sync-pass-rewrite>`__
+-  `zfs_sync_taskq_batch_pct <#zfs-sync-taskq-batch-pct>`__
+-  `zfs_txg_timeout <#zfs-txg-timeout>`__
 
 special_vdev
-^^^^^^^^^^^^
+~~~~~~~~~~~~
 
--  `zfs_ddt_data_is_special <#zfs_ddt_data_is_special>`__
--  `zfs_special_class_metadata_reserve_pct <#zfs_special_class_metadata_reserve_pct>`__
--  `zfs_user_indirect_is_special <#zfs_user_indirect_is_special>`__
+-  `zfs_ddt_data_is_special <#zfs-ddt-data-is-special>`__
+-  `zfs_special_class_metadata_reserve_pct <#zfs-special-class-metadata-reserve-pct>`__
+-  `zfs_user_indirect_is_special <#zfs-user-indirect-is-special>`__
 
 SSD
-^^^
+~~~
 
--  `metaslab_lba_weighting_enabled <#metaslab_lba_weighting_enabled>`__
--  `zfs_vdev_mirror_non_rotating_inc <#zfs_vdev_mirror_non_rotating_inc>`__
--  `zfs_vdev_mirror_non_rotating_seek_inc <#zfs_vdev_mirror_non_rotating_seek_inc>`__
+-  `metaslab_lba_weighting_enabled <#metaslab-lba-weighting-enabled>`__
+-  `zfs_vdev_mirror_non_rotating_inc <#zfs-vdev-mirror-non-rotating-inc>`__
+-  `zfs_vdev_mirror_non_rotating_seek_inc <#zfs-vdev-mirror-non-rotating-seek-inc>`__
 
 taskq
-^^^^^
+~~~~~
 
--  `spl_max_show_tasks <#spl_max_show_tasks>`__
--  `spl_taskq_kick <#spl_taskq_kick>`__
--  `spl_taskq_thread_bind <#spl_taskq_thread_bind>`__
--  `spl_taskq_thread_dynamic <#spl_taskq_thread_dynamic>`__
--  `spl_taskq_thread_priority <#spl_taskq_thread_priority>`__
--  `spl_taskq_thread_sequential <#spl_taskq_thread_sequential>`__
--  `zfs_zil_clean_taskq_nthr_pct <#zfs_zil_clean_taskq_nthr_pct>`__
--  `zio_taskq_batch_pct <#zio_taskq_batch_pct>`__
+-  `spl_max_show_tasks <#spl-max-show-tasks>`__
+-  `spl_taskq_kick <#spl-taskq-kick>`__
+-  `spl_taskq_thread_bind <#spl-taskq-thread-bind>`__
+-  `spl_taskq_thread_dynamic <#spl-taskq-thread-dynamic>`__
+-  `spl_taskq_thread_priority <#spl-taskq-thread-priority>`__
+-  `spl_taskq_thread_sequential <#spl-taskq-thread-sequential>`__
+-  `zfs_zil_clean_taskq_nthr_pct <#zfs-zil-clean-taskq-nthr-pct>`__
+-  `zio_taskq_batch_pct <#zio-taskq-batch-pct>`__
 
 trim
-^^^^
+~~~~
 
--  `zfs_trim_extent_bytes_max <#zfs_trim_extent_bytes_max>`__
--  `zfs_trim_extent_bytes_min <#zfs_trim_extent_bytes_min>`__
--  `zfs_trim_metaslab_skip <#zfs_trim_metaslab_skip>`__
--  `zfs_trim_queue_limit <#zfs_trim_queue_limit>`__
--  `zfs_trim_txg_batch <#zfs_trim_txg_batch>`__
--  `zfs_vdev_aggregate_trim <#zfs_vdev_aggregate_trim>`__
+-  `zfs_trim_extent_bytes_max <#zfs-trim-extent-bytes-max>`__
+-  `zfs_trim_extent_bytes_min <#zfs-trim-extent-bytes-min>`__
+-  `zfs_trim_metaslab_skip <#zfs-trim-metaslab-skip>`__
+-  `zfs_trim_queue_limit <#zfs-trim-queue-limit>`__
+-  `zfs_trim_txg_batch <#zfs-trim-txg-batch>`__
+-  `zfs_vdev_aggregate_trim <#zfs-vdev-aggregate-trim>`__
 
 vdev
-^^^^
+~~~~
 
--  `zfs_checksum_events_per_second <#zfs_checksum_events_per_second>`__
--  `metaslab_aliquot <#metaslab_aliquot>`__
--  `metaslab_bias_enabled <#metaslab_bias_enabled>`__
--  `zfs_metaslab_fragmentation_threshold <#zfs_metaslab_fragmentation_threshold>`__
--  `metaslabs_per_vdev <#metaslabs_per_vdev>`__
--  `zfs_mg_fragmentation_threshold <#zfs_mg_fragmentation_threshold>`__
--  `zfs_mg_noalloc_threshold <#zfs_mg_noalloc_threshold>`__
--  `zfs_multihost_interval <#zfs_multihost_interval>`__
--  `zfs_scan_vdev_limit <#zfs_scan_vdev_limit>`__
--  `zfs_slow_io_events_per_second <#zfs_slow_io_events_per_second>`__
--  `zfs_vdev_aggregate_trim <#zfs_vdev_aggregate_trim>`__
--  `zfs_vdev_aggregation_limit <#zfs_vdev_aggregation_limit>`__
--  `zfs_vdev_aggregation_limit_non_rotating <#zfs_vdev_aggregation_limit_non_rotating>`__
--  `zfs_vdev_async_read_max_active <#zfs_vdev_async_read_max_active>`__
--  `zfs_vdev_async_read_min_active <#zfs_vdev_async_read_min_active>`__
--  `zfs_vdev_async_write_active_max_dirty_percent <#zfs_vdev_async_write_active_max_dirty_percent>`__
--  `zfs_vdev_async_write_active_min_dirty_percent <#zfs_vdev_async_write_active_min_dirty_percent>`__
--  `zfs_vdev_async_write_max_active <#zfs_vdev_async_write_max_active>`__
--  `zfs_vdev_async_write_min_active <#zfs_vdev_async_write_min_active>`__
--  `zfs_vdev_cache_bshift <#zfs_vdev_cache_bshift>`__
--  `zfs_vdev_cache_max <#zfs_vdev_cache_max>`__
--  `zfs_vdev_cache_size <#zfs_vdev_cache_size>`__
--  `zfs_vdev_initializing_max_active <#zfs_vdev_initializing_max_active>`__
--  `zfs_vdev_initializing_min_active <#zfs_vdev_initializing_min_active>`__
--  `zfs_vdev_max_active <#zfs_vdev_max_active>`__
--  `zfs_vdev_min_ms_count <#zfs_vdev_min_ms_count>`__
--  `zfs_vdev_mirror_non_rotating_inc <#zfs_vdev_mirror_non_rotating_inc>`__
--  `zfs_vdev_mirror_non_rotating_seek_inc <#zfs_vdev_mirror_non_rotating_seek_inc>`__
--  `zfs_vdev_mirror_rotating_inc <#zfs_vdev_mirror_rotating_inc>`__
--  `zfs_vdev_mirror_rotating_seek_inc <#zfs_vdev_mirror_rotating_seek_inc>`__
--  `zfs_vdev_mirror_rotating_seek_offset <#zfs_vdev_mirror_rotating_seek_offset>`__
--  `zfs_vdev_ms_count_limit <#zfs_vdev_ms_count_limit>`__
--  `zfs_vdev_queue_depth_pct <#zfs_vdev_queue_depth_pct>`__
--  `zfs_vdev_raidz_impl <#zfs_vdev_raidz_impl>`__
--  `zfs_vdev_read_gap_limit <#zfs_vdev_read_gap_limit>`__
--  `zfs_vdev_removal_max_active <#zfs_vdev_removal_max_active>`__
--  `zfs_vdev_removal_min_active <#zfs_vdev_removal_min_active>`__
--  `zfs_vdev_scheduler <#zfs_vdev_scheduler>`__
--  `zfs_vdev_scrub_max_active <#zfs_vdev_scrub_max_active>`__
--  `zfs_vdev_scrub_min_active <#zfs_vdev_scrub_min_active>`__
--  `zfs_vdev_sync_read_max_active <#zfs_vdev_sync_read_max_active>`__
--  `zfs_vdev_sync_read_min_active <#zfs_vdev_sync_read_min_active>`__
--  `zfs_vdev_sync_write_max_active <#zfs_vdev_sync_write_max_active>`__
--  `zfs_vdev_sync_write_min_active <#zfs_vdev_sync_write_min_active>`__
--  `zfs_vdev_trim_max_active <#zfs_vdev_trim_max_active>`__
--  `zfs_vdev_trim_min_active <#zfs_vdev_trim_min_active>`__
--  `vdev_validate_skip <#vdev_validate_skip>`__
--  `zfs_vdev_write_gap_limit <#zfs_vdev_write_gap_limit>`__
--  `zio_dva_throttle_enabled <#zio_dva_throttle_enabled>`__
--  `zio_slow_io_ms <#zio_slow_io_ms>`__
+-  `zfs_checksum_events_per_second <#zfs-checksum-events-per-second>`__
+-  `metaslab_aliquot <#metaslab-aliquot>`__
+-  `metaslab_bias_enabled <#metaslab-bias-enabled>`__
+-  `zfs_metaslab_fragmentation_threshold <#zfs-metaslab-fragmentation-threshold>`__
+-  `metaslabs_per_vdev <#metaslabs-per-vdev>`__
+-  `zfs_mg_fragmentation_threshold <#zfs-mg-fragmentation-threshold>`__
+-  `zfs_mg_noalloc_threshold <#zfs-mg-noalloc-threshold>`__
+-  `zfs_multihost_interval <#zfs-multihost-interval>`__
+-  `zfs_scan_vdev_limit <#zfs-scan-vdev-limit>`__
+-  `zfs_slow_io_events_per_second <#zfs-slow-io-events-per-second>`__
+-  `zfs_vdev_aggregate_trim <#zfs-vdev-aggregate-trim>`__
+-  `zfs_vdev_aggregation_limit <#zfs-vdev-aggregation-limit>`__
+-  `zfs_vdev_aggregation_limit_non_rotating <#zfs-vdev-aggregation-limit-non-rotating>`__
+-  `zfs_vdev_async_read_max_active <#zfs-vdev-async-read-max-active>`__
+-  `zfs_vdev_async_read_min_active <#zfs-vdev-async-read-min-active>`__
+-  `zfs_vdev_async_write_active_max_dirty_percent <#zfs-vdev-async-write-active-max-dirty-percent>`__
+-  `zfs_vdev_async_write_active_min_dirty_percent <#zfs-vdev-async-write-active-min-dirty-percent>`__
+-  `zfs_vdev_async_write_max_active <#zfs-vdev-async-write-max-active>`__
+-  `zfs_vdev_async_write_min_active <#zfs-vdev-async-write-min-active>`__
+-  `zfs_vdev_cache_bshift <#zfs-vdev-cache-bshift>`__
+-  `zfs_vdev_cache_max <#zfs-vdev-cache-max>`__
+-  `zfs_vdev_cache_size <#zfs-vdev-cache-size>`__
+-  `zfs_vdev_initializing_max_active <#zfs-vdev-initializing-max-active>`__
+-  `zfs_vdev_initializing_min_active <#zfs-vdev-initializing-min-active>`__
+-  `zfs_vdev_max_active <#zfs-vdev-max-active>`__
+-  `zfs_vdev_min_ms_count <#zfs-vdev-min-ms-count>`__
+-  `zfs_vdev_mirror_non_rotating_inc <#zfs-vdev-mirror-non-rotating-inc>`__
+-  `zfs_vdev_mirror_non_rotating_seek_inc <#zfs-vdev-mirror-non-rotating-seek-inc>`__
+-  `zfs_vdev_mirror_rotating_inc <#zfs-vdev-mirror-rotating-inc>`__
+-  `zfs_vdev_mirror_rotating_seek_inc <#zfs-vdev-mirror-rotating-seek-inc>`__
+-  `zfs_vdev_mirror_rotating_seek_offset <#zfs-vdev-mirror-rotating-seek-offset>`__
+-  `zfs_vdev_ms_count_limit <#zfs-vdev-ms-count-limit>`__
+-  `zfs_vdev_queue_depth_pct <#zfs-vdev-queue-depth-pct>`__
+-  `zfs_vdev_raidz_impl <#zfs-vdev-raidz-impl>`__
+-  `zfs_vdev_read_gap_limit <#zfs-vdev-read-gap-limit>`__
+-  `zfs_vdev_removal_max_active <#zfs-vdev-removal-max-active>`__
+-  `zfs_vdev_removal_min_active <#zfs-vdev-removal-min-active>`__
+-  `zfs_vdev_scheduler <#zfs-vdev-scheduler>`__
+-  `zfs_vdev_scrub_max_active <#zfs-vdev-scrub-max-active>`__
+-  `zfs_vdev_scrub_min_active <#zfs-vdev-scrub-min-active>`__
+-  `zfs_vdev_sync_read_max_active <#zfs-vdev-sync-read-max-active>`__
+-  `zfs_vdev_sync_read_min_active <#zfs-vdev-sync-read-min-active>`__
+-  `zfs_vdev_sync_write_max_active <#zfs-vdev-sync-write-max-active>`__
+-  `zfs_vdev_sync_write_min_active <#zfs-vdev-sync-write-min-active>`__
+-  `zfs_vdev_trim_max_active <#zfs-vdev-trim-max-active>`__
+-  `zfs_vdev_trim_min_active <#zfs-vdev-trim-min-active>`__
+-  `vdev_validate_skip <#vdev-validate-skip>`__
+-  `zfs_vdev_write_gap_limit <#zfs-vdev-write-gap-limit>`__
+-  `zio_dva_throttle_enabled <#zio-dva-throttle-enabled>`__
+-  `zio_slow_io_ms <#zio-slow-io-ms>`__
 
 vdev_cache
-^^^^^^^^^^
+~~~~~~~~~~
 
--  `zfs_vdev_cache_bshift <#zfs_vdev_cache_bshift>`__
--  `zfs_vdev_cache_max <#zfs_vdev_cache_max>`__
--  `zfs_vdev_cache_size <#zfs_vdev_cache_size>`__
+-  `zfs_vdev_cache_bshift <#zfs-vdev-cache-bshift>`__
+-  `zfs_vdev_cache_max <#zfs-vdev-cache-max>`__
+-  `zfs_vdev_cache_size <#zfs-vdev-cache-size>`__
 
 vdev_initialize
-^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~
 
--  `zfs_initialize_value <#zfs_initialize_value>`__
+-  `zfs_initialize_value <#zfs-initialize-value>`__
 
 vdev_removal
-^^^^^^^^^^^^
+~~~~~~~~~~~~
 
--  `zfs_condense_indirect_commit_entry_delay_ms <#zfs_condense_indirect_commit_entry_delay_ms>`__
--  `zfs_condense_indirect_vdevs_enable <#zfs_condense_indirect_vdevs_enable>`__
--  `zfs_condense_max_obsolete_bytes <#zfs_condense_max_obsolete_bytes>`__
--  `zfs_condense_min_mapping_bytes <#zfs_condense_min_mapping_bytes>`__
--  `zfs_reconstruct_indirect_combinations_max <#zfs_reconstruct_indirect_combinations_max>`__
--  `zfs_removal_ignore_errors <#zfs_removal_ignore_errors>`__
--  `zfs_removal_suspend_progress <#zfs_removal_suspend_progress>`__
--  `vdev_removal_max_span <#vdev_removal_max_span>`__
+-  `zfs_condense_indirect_commit_entry_delay_ms <#zfs-condense-indirect-commit-entry-delay-ms>`__
+-  `zfs_condense_indirect_vdevs_enable <#zfs-condense-indirect-vdevs-enable>`__
+-  `zfs_condense_max_obsolete_bytes <#zfs-condense-max-obsolete-bytes>`__
+-  `zfs_condense_min_mapping_bytes <#zfs-condense-min-mapping-bytes>`__
+-  `zfs_reconstruct_indirect_combinations_max <#zfs-reconstruct-indirect-combinations-max>`__
+-  `zfs_removal_ignore_errors <#zfs-removal-ignore-errors>`__
+-  `zfs_removal_suspend_progress <#zfs-removal-suspend-progress>`__
+-  `vdev_removal_max_span <#vdev-removal-max-span>`__
 
 volume
-^^^^^^
+~~~~~~
 
--  `zfs_max_recordsize <#zfs_max_recordsize>`__
--  `zvol_inhibit_dev <#zvol_inhibit_dev>`__
--  `zvol_major <#zvol_major>`__
--  `zvol_max_discard_blocks <#zvol_max_discard_blocks>`__
--  `zvol_prefetch_bytes <#zvol_prefetch_bytes>`__
--  `zvol_request_sync <#zvol_request_sync>`__
--  `zvol_threads <#zvol_threads>`__
--  `zvol_volmode <#zvol_volmode>`__
+-  `zfs_max_recordsize <#zfs-max-recordsize>`__
+-  `zvol_inhibit_dev <#zvol-inhibit-dev>`__
+-  `zvol_major <#zvol-major>`__
+-  `zvol_max_discard_blocks <#zvol-max-discard-blocks>`__
+-  `zvol_prefetch_bytes <#zvol-prefetch-bytes>`__
+-  `zvol_request_sync <#zvol-request-sync>`__
+-  `zvol_threads <#zvol-threads>`__
+-  `zvol_volmode <#zvol-volmode>`__
 
 write_throttle
-^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~
 
--  `zfs_delay_min_dirty_percent <#zfs_delay_min_dirty_percent>`__
--  `zfs_delay_scale <#zfs_delay_scale>`__
--  `zfs_dirty_data_max <#zfs_dirty_data_max>`__
--  `zfs_dirty_data_max_max <#zfs_dirty_data_max_max>`__
--  `zfs_dirty_data_max_max_percent <#zfs_dirty_data_max_max_percent>`__
--  `zfs_dirty_data_max_percent <#zfs_dirty_data_max_percent>`__
--  `zfs_dirty_data_sync <#zfs_dirty_data_sync>`__
--  `zfs_dirty_data_sync_percent <#zfs_dirty_data_sync_percent>`__
+-  `zfs_delay_min_dirty_percent <#zfs-delay-min-dirty-percent>`__
+-  `zfs_delay_scale <#zfs-delay-scale>`__
+-  `zfs_dirty_data_max <#zfs-dirty-data-max>`__
+-  `zfs_dirty_data_max_max <#zfs-dirty-data-max-max>`__
+-  `zfs_dirty_data_max_max_percent <#zfs-dirty-data-max-max-percent>`__
+-  `zfs_dirty_data_max_percent <#zfs-dirty-data-max-percent>`__
+-  `zfs_dirty_data_sync <#zfs-dirty-data-sync>`__
+-  `zfs_dirty_data_sync_percent <#zfs-dirty-data-sync-percent>`__
 
 zed
-^^^
+~~~
 
--  `zfs_checksums_per_second <#zfs_checksums_per_second>`__
--  `zfs_delays_per_second <#zfs_delays_per_second>`__
--  `zio_slow_io_ms <#zio_slow_io_ms>`__
+-  `zfs_checksums_per_second <#zfs-checksums-per-second>`__
+-  `zfs_delays_per_second <#zfs-delays-per-second>`__
+-  `zio_slow_io_ms <#zio-slow-io-ms>`__
 
 ZIL
-^^^
+~~~
 
--  `zfs_commit_timeout_pct <#zfs_commit_timeout_pct>`__
--  `zfs_immediate_write_sz <#zfs_immediate_write_sz>`__
--  `zfs_zil_clean_taskq_maxalloc <#zfs_zil_clean_taskq_maxalloc>`__
--  `zfs_zil_clean_taskq_minalloc <#zfs_zil_clean_taskq_minalloc>`__
--  `zfs_zil_clean_taskq_nthr_pct <#zfs_zil_clean_taskq_nthr_pct>`__
--  `zil_nocacheflush <#zil_nocacheflush>`__
--  `zil_replay_disable <#zil_replay_disable>`__
--  `zil_slog_bulk <#zil_slog_bulk>`__
+-  `zfs_commit_timeout_pct <#zfs-commit-timeout-pct>`__
+-  `zfs_immediate_write_sz <#zfs-immediate-write-sz>`__
+-  `zfs_zil_clean_taskq_maxalloc <#zfs-zil-clean-taskq-maxalloc>`__
+-  `zfs_zil_clean_taskq_minalloc <#zfs-zil-clean-taskq-minalloc>`__
+-  `zfs_zil_clean_taskq_nthr_pct <#zfs-zil-clean-taskq-nthr-pct>`__
+-  `zil_nocacheflush <#zil-nocacheflush>`__
+-  `zil_replay_disable <#zil-replay-disable>`__
+-  `zil_slog_bulk <#zil-slog-bulk>`__
 
 ZIO_scheduler
-^^^^^^^^^^^^^
+~~~~~~~~~~~~~
 
--  `zfs_dirty_data_sync <#zfs_dirty_data_sync>`__
--  `zfs_dirty_data_sync_percent <#zfs_dirty_data_sync_percent>`__
--  `zfs_resilver_delay <#zfs_resilver_delay>`__
--  `zfs_scan_idle <#zfs_scan_idle>`__
--  `zfs_scrub_delay <#zfs_scrub_delay>`__
--  `zfs_top_maxinflight <#zfs_top_maxinflight>`__
--  `zfs_txg_timeout <#zfs_txg_timeout>`__
--  `zfs_vdev_aggregate_trim <#zfs_vdev_aggregate_trim>`__
--  `zfs_vdev_aggregation_limit <#zfs_vdev_aggregation_limit>`__
--  `zfs_vdev_aggregation_limit_non_rotating <#zfs_vdev_aggregation_limit_non_rotating>`__
--  `zfs_vdev_async_read_max_active <#zfs_vdev_async_read_max_active>`__
--  `zfs_vdev_async_read_min_active <#zfs_vdev_async_read_min_active>`__
--  `zfs_vdev_async_write_active_max_dirty_percent <#zfs_vdev_async_write_active_max_dirty_percent>`__
--  `zfs_vdev_async_write_active_min_dirty_percent <#zfs_vdev_async_write_active_min_dirty_percent>`__
--  `zfs_vdev_async_write_max_active <#zfs_vdev_async_write_max_active>`__
--  `zfs_vdev_async_write_min_active <#zfs_vdev_async_write_min_active>`__
--  `zfs_vdev_initializing_max_active <#zfs_vdev_initializing_max_active>`__
--  `zfs_vdev_initializing_min_active <#zfs_vdev_initializing_min_active>`__
--  `zfs_vdev_max_active <#zfs_vdev_max_active>`__
--  `zfs_vdev_queue_depth_pct <#zfs_vdev_queue_depth_pct>`__
--  `zfs_vdev_read_gap_limit <#zfs_vdev_read_gap_limit>`__
--  `zfs_vdev_removal_max_active <#zfs_vdev_removal_max_active>`__
--  `zfs_vdev_removal_min_active <#zfs_vdev_removal_min_active>`__
--  `zfs_vdev_scheduler <#zfs_vdev_scheduler>`__
--  `zfs_vdev_scrub_max_active <#zfs_vdev_scrub_max_active>`__
--  `zfs_vdev_scrub_min_active <#zfs_vdev_scrub_min_active>`__
--  `zfs_vdev_sync_read_max_active <#zfs_vdev_sync_read_max_active>`__
--  `zfs_vdev_sync_read_min_active <#zfs_vdev_sync_read_min_active>`__
--  `zfs_vdev_sync_write_max_active <#zfs_vdev_sync_write_max_active>`__
--  `zfs_vdev_sync_write_min_active <#zfs_vdev_sync_write_min_active>`__
--  `zfs_vdev_trim_max_active <#zfs_vdev_trim_max_active>`__
--  `zfs_vdev_trim_min_active <#zfs_vdev_trim_min_active>`__
--  `zfs_vdev_write_gap_limit <#zfs_vdev_write_gap_limit>`__
--  `zio_dva_throttle_enabled <#zio_dva_throttle_enabled>`__
--  `zio_requeue_io_start_cut_in_line <#zio_requeue_io_start_cut_in_line>`__
--  `zio_taskq_batch_pct <#zio_taskq_batch_pct>`__
+-  `zfs_dirty_data_sync <#zfs-dirty-data-sync>`__
+-  `zfs_dirty_data_sync_percent <#zfs-dirty-data-sync-percent>`__
+-  `zfs_resilver_delay <#zfs-resilver-delay>`__
+-  `zfs_scan_idle <#zfs-scan-idle>`__
+-  `zfs_scrub_delay <#zfs-scrub-delay>`__
+-  `zfs_top_maxinflight <#zfs-top-maxinflight>`__
+-  `zfs_txg_timeout <#zfs-txg-timeout>`__
+-  `zfs_vdev_aggregate_trim <#zfs-vdev-aggregate-trim>`__
+-  `zfs_vdev_aggregation_limit <#zfs-vdev-aggregation-limit>`__
+-  `zfs_vdev_aggregation_limit_non_rotating <#zfs-vdev-aggregation-limit-non-rotating>`__
+-  `zfs_vdev_async_read_max_active <#zfs-vdev-async-read-max-active>`__
+-  `zfs_vdev_async_read_min_active <#zfs-vdev-async-read-min-active>`__
+-  `zfs_vdev_async_write_active_max_dirty_percent <#zfs-vdev-async-write-active-max-dirty-percent>`__
+-  `zfs_vdev_async_write_active_min_dirty_percent <#zfs-vdev-async-write-active-min-dirty-percent>`__
+-  `zfs_vdev_async_write_max_active <#zfs-vdev-async-write-max-active>`__
+-  `zfs_vdev_async_write_min_active <#zfs-vdev-async-write-min-active>`__
+-  `zfs_vdev_initializing_max_active <#zfs-vdev-initializing-max-active>`__
+-  `zfs_vdev_initializing_min_active <#zfs-vdev-initializing-min-active>`__
+-  `zfs_vdev_max_active <#zfs-vdev-max-active>`__
+-  `zfs_vdev_queue_depth_pct <#zfs-vdev-queue-depth-pct>`__
+-  `zfs_vdev_read_gap_limit <#zfs-vdev-read-gap-limit>`__
+-  `zfs_vdev_removal_max_active <#zfs-vdev-removal-max-active>`__
+-  `zfs_vdev_removal_min_active <#zfs-vdev-removal-min-active>`__
+-  `zfs_vdev_scheduler <#zfs-vdev-scheduler>`__
+-  `zfs_vdev_scrub_max_active <#zfs-vdev-scrub-max-active>`__
+-  `zfs_vdev_scrub_min_active <#zfs-vdev-scrub-min-active>`__
+-  `zfs_vdev_sync_read_max_active <#zfs-vdev-sync-read-max-active>`__
+-  `zfs_vdev_sync_read_min_active <#zfs-vdev-sync-read-min-active>`__
+-  `zfs_vdev_sync_write_max_active <#zfs-vdev-sync-write-max-active>`__
+-  `zfs_vdev_sync_write_min_active <#zfs-vdev-sync-write-min-active>`__
+-  `zfs_vdev_trim_max_active <#zfs-vdev-trim-max-active>`__
+-  `zfs_vdev_trim_min_active <#zfs-vdev-trim-min-active>`__
+-  `zfs_vdev_write_gap_limit <#zfs-vdev-write-gap-limit>`__
+-  `zio_dva_throttle_enabled <#zio-dva-throttle-enabled>`__
+-  `zio_requeue_io_start_cut_in_line <#zio-requeue-io-start-cut-in-line>`__
+-  `zio_taskq_batch_pct <#zio-taskq-batch-pct>`__
 
 Index
 -----
 
--  `zfs_abd_scatter_enabled <#zfs_abd_scatter_enabled>`__
--  `zfs_abd_scatter_max_order <#zfs_abd_scatter_max_order>`__
--  `zfs_abd_scatter_min_size <#zfs_abd_scatter_min_size>`__
--  `zfs_admin_snapshot <#zfs_admin_snapshot>`__
--  `zfs_arc_average_blocksize <#zfs_arc_average_blocksize>`__
--  `zfs_arc_dnode_limit <#zfs_arc_dnode_limit>`__
--  `zfs_arc_dnode_limit_percent <#zfs_arc_dnode_limit_percent>`__
--  `zfs_arc_dnode_reduce_percent <#zfs_arc_dnode_reduce_percent>`__
--  `zfs_arc_evict_batch_limit <#zfs_arc_evict_batch_limit>`__
--  `zfs_arc_grow_retry <#zfs_arc_grow_retry>`__
--  `zfs_arc_lotsfree_percent <#zfs_arc_lotsfree_percent>`__
--  `zfs_arc_max <#zfs_arc_max>`__
--  `zfs_arc_meta_adjust_restarts <#zfs_arc_meta_adjust_restarts>`__
--  `zfs_arc_meta_limit <#zfs_arc_meta_limit>`__
--  `zfs_arc_meta_limit_percent <#zfs_arc_meta_limit_percent>`__
--  `zfs_arc_meta_min <#zfs_arc_meta_min>`__
--  `zfs_arc_meta_prune <#zfs_arc_meta_prune>`__
--  `zfs_arc_meta_strategy <#zfs_arc_meta_strategy>`__
--  `zfs_arc_min <#zfs_arc_min>`__
--  `zfs_arc_min_prefetch_lifespan <#zfs_arc_min_prefetch_lifespan>`__
--  `zfs_arc_min_prefetch_ms <#zfs_arc_min_prefetch_ms>`__
--  `zfs_arc_min_prescient_prefetch_ms <#zfs_arc_min_prescient_prefetch_ms>`__
--  `zfs_arc_overflow_shift <#zfs_arc_overflow_shift>`__
--  `zfs_arc_p_dampener_disable <#zfs_arc_p_dampener_disable>`__
--  `zfs_arc_p_min_shift <#zfs_arc_p_min_shift>`__
--  `zfs_arc_pc_percent <#zfs_arc_pc_percent>`__
--  `zfs_arc_shrink_shift <#zfs_arc_shrink_shift>`__
--  `zfs_arc_sys_free <#zfs_arc_sys_free>`__
--  `zfs_async_block_max_blocks <#zfs_async_block_max_blocks>`__
--  `zfs_autoimport_disable <#zfs_autoimport_disable>`__
--  `zfs_checksum_events_per_second <#zfs_checksum_events_per_second>`__
--  `zfs_checksums_per_second <#zfs_checksums_per_second>`__
--  `zfs_commit_timeout_pct <#zfs_commit_timeout_pct>`__
--  `zfs_compressed_arc_enabled <#zfs_compressed_arc_enabled>`__
--  `zfs_condense_indirect_commit_entry_delay_ms <#zfs_condense_indirect_commit_entry_delay_ms>`__
--  `zfs_condense_indirect_vdevs_enable <#zfs_condense_indirect_vdevs_enable>`__
--  `zfs_condense_max_obsolete_bytes <#zfs_condense_max_obsolete_bytes>`__
--  `zfs_condense_min_mapping_bytes <#zfs_condense_min_mapping_bytes>`__
--  `zfs_dbgmsg_enable <#zfs_dbgmsg_enable>`__
--  `zfs_dbgmsg_maxsize <#zfs_dbgmsg_maxsize>`__
--  `dbuf_cache_hiwater_pct <#dbuf_cache_hiwater_pct>`__
--  `dbuf_cache_lowater_pct <#dbuf_cache_lowater_pct>`__
--  `dbuf_cache_max_bytes <#dbuf_cache_max_bytes>`__
--  `dbuf_cache_max_shift <#dbuf_cache_max_shift>`__
--  `dbuf_cache_shift <#dbuf_cache_shift>`__
--  `dbuf_metadata_cache_max_bytes <#dbuf_metadata_cache_max_bytes>`__
--  `dbuf_metadata_cache_shift <#dbuf_metadata_cache_shift>`__
--  `zfs_dbuf_state_index <#zfs_dbuf_state_index>`__
--  `zfs_ddt_data_is_special <#zfs_ddt_data_is_special>`__
--  `zfs_deadman_checktime_ms <#zfs_deadman_checktime_ms>`__
--  `zfs_deadman_enabled <#zfs_deadman_enabled>`__
--  `zfs_deadman_failmode <#zfs_deadman_failmode>`__
--  `zfs_deadman_synctime_ms <#zfs_deadman_synctime_ms>`__
--  `zfs_deadman_ziotime_ms <#zfs_deadman_ziotime_ms>`__
--  `zfs_dedup_prefetch <#zfs_dedup_prefetch>`__
--  `zfs_delay_min_dirty_percent <#zfs_delay_min_dirty_percent>`__
--  `zfs_delay_scale <#zfs_delay_scale>`__
--  `zfs_delays_per_second <#zfs_delays_per_second>`__
--  `zfs_delete_blocks <#zfs_delete_blocks>`__
--  `zfs_dirty_data_max <#zfs_dirty_data_max>`__
--  `zfs_dirty_data_max_max <#zfs_dirty_data_max_max>`__
--  `zfs_dirty_data_max_max_percent <#zfs_dirty_data_max_max_percent>`__
--  `zfs_dirty_data_max_percent <#zfs_dirty_data_max_percent>`__
--  `zfs_dirty_data_sync <#zfs_dirty_data_sync>`__
--  `zfs_dirty_data_sync_percent <#zfs_dirty_data_sync_percent>`__
--  `zfs_disable_dup_eviction <#zfs_disable_dup_eviction>`__
--  `zfs_disable_ivset_guid_check <#zfs_disable_ivset_guid_check>`__
--  `dmu_object_alloc_chunk_shift <#dmu_object_alloc_chunk_shift>`__
--  `zfs_dmu_offset_next_sync <#zfs_dmu_offset_next_sync>`__
--  `zfs_expire_snapshot <#zfs_expire_snapshot>`__
--  `zfs_flags <#zfs_flags>`__
--  `zfs_fletcher_4_impl <#zfs_fletcher_4_impl>`__
--  `zfs_free_bpobj_enabled <#zfs_free_bpobj_enabled>`__
--  `zfs_free_leak_on_eio <#zfs_free_leak_on_eio>`__
--  `zfs_free_max_blocks <#zfs_free_max_blocks>`__
--  `zfs_free_min_time_ms <#zfs_free_min_time_ms>`__
--  `icp_aes_impl <#icp_aes_impl>`__
--  `icp_gcm_impl <#icp_gcm_impl>`__
--  `ignore_hole_birth <#ignore_hole_birth>`__
--  `zfs_immediate_write_sz <#zfs_immediate_write_sz>`__
--  `zfs_initialize_value <#zfs_initialize_value>`__
--  `zfs_key_max_salt_uses <#zfs_key_max_salt_uses>`__
--  `l2arc_feed_again <#l2arc_feed_again>`__
--  `l2arc_feed_min_ms <#l2arc_feed_min_ms>`__
--  `l2arc_feed_secs <#l2arc_feed_secs>`__
--  `l2arc_headroom <#l2arc_headroom>`__
--  `l2arc_headroom_boost <#l2arc_headroom_boost>`__
--  `l2arc_nocompress <#l2arc_nocompress>`__
--  `l2arc_noprefetch <#l2arc_noprefetch>`__
--  `l2arc_norw <#l2arc_norw>`__
--  `l2arc_write_boost <#l2arc_write_boost>`__
--  `l2arc_write_max <#l2arc_write_max>`__
--  `zfs_lua_max_instrlimit <#zfs_lua_max_instrlimit>`__
--  `zfs_lua_max_memlimit <#zfs_lua_max_memlimit>`__
--  `zfs_max_dataset_nesting <#zfs_max_dataset_nesting>`__
--  `zfs_max_missing_tvds <#zfs_max_missing_tvds>`__
--  `zfs_max_recordsize <#zfs_max_recordsize>`__
--  `zfs_mdcomp_disable <#zfs_mdcomp_disable>`__
--  `metaslab_aliquot <#metaslab_aliquot>`__
--  `metaslab_bias_enabled <#metaslab_bias_enabled>`__
--  `metaslab_debug_load <#metaslab_debug_load>`__
--  `metaslab_debug_unload <#metaslab_debug_unload>`__
--  `metaslab_force_ganging <#metaslab_force_ganging>`__
--  `metaslab_fragmentation_factor_enabled <#metaslab_fragmentation_factor_enabled>`__
--  `zfs_metaslab_fragmentation_threshold <#zfs_metaslab_fragmentation_threshold>`__
--  `metaslab_lba_weighting_enabled <#metaslab_lba_weighting_enabled>`__
--  `metaslab_preload_enabled <#metaslab_preload_enabled>`__
--  `zfs_metaslab_segment_weight_enabled <#zfs_metaslab_segment_weight_enabled>`__
--  `zfs_metaslab_switch_threshold <#zfs_metaslab_switch_threshold>`__
--  `metaslabs_per_vdev <#metaslabs_per_vdev>`__
--  `zfs_mg_fragmentation_threshold <#zfs_mg_fragmentation_threshold>`__
--  `zfs_mg_noalloc_threshold <#zfs_mg_noalloc_threshold>`__
--  `zfs_multihost_fail_intervals <#zfs_multihost_fail_intervals>`__
--  `zfs_multihost_history <#zfs_multihost_history>`__
--  `zfs_multihost_import_intervals <#zfs_multihost_import_intervals>`__
--  `zfs_multihost_interval <#zfs_multihost_interval>`__
--  `zfs_multilist_num_sublists <#zfs_multilist_num_sublists>`__
--  `zfs_no_scrub_io <#zfs_no_scrub_io>`__
--  `zfs_no_scrub_prefetch <#zfs_no_scrub_prefetch>`__
--  `zfs_nocacheflush <#zfs_nocacheflush>`__
--  `zfs_nopwrite_enabled <#zfs_nopwrite_enabled>`__
--  `zfs_object_mutex_size <#zfs_object_mutex_size>`__
--  `zfs_obsolete_min_time_ms <#zfs_obsolete_min_time_ms>`__
--  `zfs_override_estimate_recordsize <#zfs_override_estimate_recordsize>`__
--  `zfs_pd_bytes_max <#zfs_pd_bytes_max>`__
--  `zfs_per_txg_dirty_frees_percent <#zfs_per_txg_dirty_frees_percent>`__
--  `zfs_prefetch_disable <#zfs_prefetch_disable>`__
--  `zfs_qat_checksum_disable <#zfs_qat_checksum_disable>`__
--  `zfs_qat_compress_disable <#zfs_qat_compress_disable>`__
--  `zfs_qat_disable <#zfs_qat_disable>`__
--  `zfs_qat_encrypt_disable <#zfs_qat_encrypt_disable>`__
--  `zfs_read_chunk_size <#zfs_read_chunk_size>`__
--  `zfs_read_history <#zfs_read_history>`__
--  `zfs_read_history_hits <#zfs_read_history_hits>`__
--  `zfs_reconstruct_indirect_combinations_max <#zfs_reconstruct_indirect_combinations_max>`__
--  `zfs_recover <#zfs_recover>`__
--  `zfs_recv_queue_length <#zfs_recv_queue_length>`__
--  `zfs_removal_ignore_errors <#zfs_removal_ignore_errors>`__
--  `zfs_removal_suspend_progress <#zfs_removal_suspend_progress>`__
--  `zfs_remove_max_segment <#zfs_remove_max_segment>`__
--  `zfs_resilver_delay <#zfs_resilver_delay>`__
--  `zfs_resilver_disable_defer <#zfs_resilver_disable_defer>`__
--  `zfs_resilver_min_time_ms <#zfs_resilver_min_time_ms>`__
--  `zfs_scan_checkpoint_intval <#zfs_scan_checkpoint_intval>`__
--  `zfs_scan_fill_weight <#zfs_scan_fill_weight>`__
--  `zfs_scan_idle <#zfs_scan_idle>`__
--  `zfs_scan_ignore_errors <#zfs_scan_ignore_errors>`__
--  `zfs_scan_issue_strategy <#zfs_scan_issue_strategy>`__
--  `zfs_scan_legacy <#zfs_scan_legacy>`__
--  `zfs_scan_max_ext_gap <#zfs_scan_max_ext_gap>`__
--  `zfs_scan_mem_lim_fact <#zfs_scan_mem_lim_fact>`__
--  `zfs_scan_mem_lim_soft_fact <#zfs_scan_mem_lim_soft_fact>`__
--  `zfs_scan_min_time_ms <#zfs_scan_min_time_ms>`__
--  `zfs_scan_strict_mem_lim <#zfs_scan_strict_mem_lim>`__
--  `zfs_scan_suspend_progress <#zfs_scan_suspend_progress>`__
--  `zfs_scan_vdev_limit <#zfs_scan_vdev_limit>`__
--  `zfs_scrub_delay <#zfs_scrub_delay>`__
--  `zfs_scrub_min_time_ms <#zfs_scrub_min_time_ms>`__
--  `zfs_send_corrupt_data <#zfs_send_corrupt_data>`__
--  `send_holes_without_birth_time <#send_holes_without_birth_time>`__
--  `zfs_send_queue_length <#zfs_send_queue_length>`__
--  `zfs_send_unmodified_spill_blocks <#zfs_send_unmodified_spill_blocks>`__
--  `zfs_slow_io_events_per_second <#zfs_slow_io_events_per_second>`__
--  `spa_asize_inflation <#spa_asize_inflation>`__
--  `spa_config_path <#spa_config_path>`__
--  `zfs_spa_discard_memory_limit <#zfs_spa_discard_memory_limit>`__
--  `spa_load_print_vdev_tree <#spa_load_print_vdev_tree>`__
--  `spa_load_verify_data <#spa_load_verify_data>`__
--  `spa_load_verify_maxinflight <#spa_load_verify_maxinflight>`__
--  `spa_load_verify_metadata <#spa_load_verify_metadata>`__
--  `spa_load_verify_shift <#spa_load_verify_shift>`__
--  `spa_slop_shift <#spa_slop_shift>`__
--  `zfs_special_class_metadata_reserve_pct <#zfs_special_class_metadata_reserve_pct>`__
--  `spl_hostid <#spl_hostid>`__
--  `spl_hostid_path <#spl_hostid_path>`__
--  `spl_kmem_alloc_max <#spl_kmem_alloc_max>`__
--  `spl_kmem_alloc_warn <#spl_kmem_alloc_warn>`__
--  `spl_kmem_cache_expire <#spl_kmem_cache_expire>`__
--  `spl_kmem_cache_kmem_limit <#spl_kmem_cache_kmem_limit>`__
--  `spl_kmem_cache_kmem_threads <#spl_kmem_cache_kmem_threads>`__
--  `spl_kmem_cache_magazine_size <#spl_kmem_cache_magazine_size>`__
--  `spl_kmem_cache_max_size <#spl_kmem_cache_max_size>`__
--  `spl_kmem_cache_obj_per_slab <#spl_kmem_cache_obj_per_slab>`__
--  `spl_kmem_cache_obj_per_slab_min <#spl_kmem_cache_obj_per_slab_min>`__
--  `spl_kmem_cache_reclaim <#spl_kmem_cache_reclaim>`__
--  `spl_kmem_cache_slab_limit <#spl_kmem_cache_slab_limit>`__
--  `spl_max_show_tasks <#spl_max_show_tasks>`__
--  `spl_panic_halt <#spl_panic_halt>`__
--  `spl_taskq_kick <#spl_taskq_kick>`__
--  `spl_taskq_thread_bind <#spl_taskq_thread_bind>`__
--  `spl_taskq_thread_dynamic <#spl_taskq_thread_dynamic>`__
--  `spl_taskq_thread_priority <#spl_taskq_thread_priority>`__
--  `spl_taskq_thread_sequential <#spl_taskq_thread_sequential>`__
--  `zfs_sync_pass_deferred_free <#zfs_sync_pass_deferred_free>`__
--  `zfs_sync_pass_dont_compress <#zfs_sync_pass_dont_compress>`__
--  `zfs_sync_pass_rewrite <#zfs_sync_pass_rewrite>`__
--  `zfs_sync_taskq_batch_pct <#zfs_sync_taskq_batch_pct>`__
--  `zfs_top_maxinflight <#zfs_top_maxinflight>`__
--  `zfs_trim_extent_bytes_max <#zfs_trim_extent_bytes_max>`__
--  `zfs_trim_extent_bytes_min <#zfs_trim_extent_bytes_min>`__
--  `zfs_trim_metaslab_skip <#zfs_trim_metaslab_skip>`__
--  `zfs_trim_queue_limit <#zfs_trim_queue_limit>`__
--  `zfs_trim_txg_batch <#zfs_trim_txg_batch>`__
--  `zfs_txg_history <#zfs_txg_history>`__
--  `zfs_txg_timeout <#zfs_txg_timeout>`__
--  `zfs_unlink_suspend_progress <#zfs_unlink_suspend_progress>`__
--  `zfs_user_indirect_is_special <#zfs_user_indirect_is_special>`__
--  `zfs_vdev_aggregate_trim <#zfs_vdev_aggregate_trim>`__
--  `zfs_vdev_aggregation_limit <#zfs_vdev_aggregation_limit>`__
--  `zfs_vdev_aggregation_limit_non_rotating <#zfs_vdev_aggregation_limit_non_rotating>`__
--  `zfs_vdev_async_read_max_active <#zfs_vdev_async_read_max_active>`__
--  `zfs_vdev_async_read_min_active <#zfs_vdev_async_read_min_active>`__
--  `zfs_vdev_async_write_active_max_dirty_percent <#zfs_vdev_async_write_active_max_dirty_percent>`__
--  `zfs_vdev_async_write_active_min_dirty_percent <#zfs_vdev_async_write_active_min_dirty_percent>`__
--  `zfs_vdev_async_write_max_active <#zfs_vdev_async_write_max_active>`__
--  `zfs_vdev_async_write_min_active <#zfs_vdev_async_write_min_active>`__
--  `zfs_vdev_cache_bshift <#zfs_vdev_cache_bshift>`__
--  `zfs_vdev_cache_max <#zfs_vdev_cache_max>`__
--  `zfs_vdev_cache_size <#zfs_vdev_cache_size>`__
--  `zfs_vdev_default_ms_count <#zfs_vdev_default_ms_count>`__
--  `zfs_vdev_initializing_max_active <#zfs_vdev_initializing_max_active>`__
--  `zfs_vdev_initializing_min_active <#zfs_vdev_initializing_min_active>`__
--  `zfs_vdev_max_active <#zfs_vdev_max_active>`__
--  `zfs_vdev_min_ms_count <#zfs_vdev_min_ms_count>`__
--  `zfs_vdev_mirror_non_rotating_inc <#zfs_vdev_mirror_non_rotating_inc>`__
--  `zfs_vdev_mirror_non_rotating_seek_inc <#zfs_vdev_mirror_non_rotating_seek_inc>`__
--  `zfs_vdev_mirror_rotating_inc <#zfs_vdev_mirror_rotating_inc>`__
--  `zfs_vdev_mirror_rotating_seek_inc <#zfs_vdev_mirror_rotating_seek_inc>`__
--  `zfs_vdev_mirror_rotating_seek_offset <#zfs_vdev_mirror_rotating_seek_offset>`__
--  `zfs_vdev_ms_count_limit <#zfs_vdev_ms_count_limit>`__
--  `zfs_vdev_queue_depth_pct <#zfs_vdev_queue_depth_pct>`__
--  `zfs_vdev_raidz_impl <#zfs_vdev_raidz_impl>`__
--  `zfs_vdev_read_gap_limit <#zfs_vdev_read_gap_limit>`__
--  `zfs_vdev_removal_max_active <#zfs_vdev_removal_max_active>`__
--  `vdev_removal_max_span <#vdev_removal_max_span>`__
--  `zfs_vdev_removal_min_active <#zfs_vdev_removal_min_active>`__
--  `zfs_vdev_scheduler <#zfs_vdev_scheduler>`__
--  `zfs_vdev_scrub_max_active <#zfs_vdev_scrub_max_active>`__
--  `zfs_vdev_scrub_min_active <#zfs_vdev_scrub_min_active>`__
--  `zfs_vdev_sync_read_max_active <#zfs_vdev_sync_read_max_active>`__
--  `zfs_vdev_sync_read_min_active <#zfs_vdev_sync_read_min_active>`__
--  `zfs_vdev_sync_write_max_active <#zfs_vdev_sync_write_max_active>`__
--  `zfs_vdev_sync_write_min_active <#zfs_vdev_sync_write_min_active>`__
--  `zfs_vdev_trim_max_active <#zfs_vdev_trim_max_active>`__
--  `zfs_vdev_trim_min_active <#zfs_vdev_trim_min_active>`__
--  `vdev_validate_skip <#vdev_validate_skip>`__
--  `zfs_vdev_write_gap_limit <#zfs_vdev_write_gap_limit>`__
--  `zfs_zevent_cols <#zfs_zevent_cols>`__
--  `zfs_zevent_console <#zfs_zevent_console>`__
--  `zfs_zevent_len_max <#zfs_zevent_len_max>`__
--  `zfetch_array_rd_sz <#zfetch_array_rd_sz>`__
--  `zfetch_max_distance <#zfetch_max_distance>`__
--  `zfetch_max_streams <#zfetch_max_streams>`__
--  `zfetch_min_sec_reap <#zfetch_min_sec_reap>`__
--  `zfs_zil_clean_taskq_maxalloc <#zfs_zil_clean_taskq_maxalloc>`__
--  `zfs_zil_clean_taskq_minalloc <#zfs_zil_clean_taskq_minalloc>`__
--  `zfs_zil_clean_taskq_nthr_pct <#zfs_zil_clean_taskq_nthr_pct>`__
--  `zil_nocacheflush <#zil_nocacheflush>`__
--  `zil_replay_disable <#zil_replay_disable>`__
--  `zil_slog_bulk <#zil_slog_bulk>`__
--  `zio_deadman_log_all <#zio_deadman_log_all>`__
--  `zio_decompress_fail_fraction <#zio_decompress_fail_fraction>`__
--  `zio_delay_max <#zio_delay_max>`__
--  `zio_dva_throttle_enabled <#zio_dva_throttle_enabled>`__
--  `zio_requeue_io_start_cut_in_line <#zio_requeue_io_start_cut_in_line>`__
--  `zio_slow_io_ms <#zio_slow_io_ms>`__
--  `zio_taskq_batch_pct <#zio_taskq_batch_pct>`__
--  `zvol_inhibit_dev <#zvol_inhibit_dev>`__
--  `zvol_major <#zvol_major>`__
--  `zvol_max_discard_blocks <#zvol_max_discard_blocks>`__
--  `zvol_prefetch_bytes <#zvol_prefetch_bytes>`__
--  `zvol_request_sync <#zvol_request_sync>`__
--  `zvol_threads <#zvol_threads>`__
--  `zvol_volmode <#zvol_volmode>`__
+-  `zfs_abd_scatter_enabled <#zfs-abd-scatter-enabled>`__
+-  `zfs_abd_scatter_max_order <#zfs-abd-scatter-max-order>`__
+-  `zfs_abd_scatter_min_size <#zfs-abd-scatter-min-size>`__
+-  `zfs_admin_snapshot <#zfs-admin-snapshot>`__
+-  `zfs_arc_average_blocksize <#zfs-arc-average-blocksize>`__
+-  `zfs_arc_dnode_limit <#zfs-arc-dnode-limit>`__
+-  `zfs_arc_dnode_limit_percent <#zfs-arc-dnode-limit-percent>`__
+-  `zfs_arc_dnode_reduce_percent <#zfs-arc-dnode-reduce-percent>`__
+-  `zfs_arc_evict_batch_limit <#zfs-arc-evict-batch-limit>`__
+-  `zfs_arc_grow_retry <#zfs-arc-grow-retry>`__
+-  `zfs_arc_lotsfree_percent <#zfs-arc-lotsfree-percent>`__
+-  `zfs_arc_max <#zfs-arc-max>`__
+-  `zfs_arc_meta_adjust_restarts <#zfs-arc-meta-adjust-restarts>`__
+-  `zfs_arc_meta_limit <#zfs-arc-meta-limit>`__
+-  `zfs_arc_meta_limit_percent <#zfs-arc-meta-limit-percent>`__
+-  `zfs_arc_meta_min <#zfs-arc-meta-min>`__
+-  `zfs_arc_meta_prune <#zfs-arc-meta-prune>`__
+-  `zfs_arc_meta_strategy <#zfs-arc-meta-strategy>`__
+-  `zfs_arc_min <#zfs-arc-min>`__
+-  `zfs_arc_min_prefetch_lifespan <#zfs-arc-min-prefetch-lifespan>`__
+-  `zfs_arc_min_prefetch_ms <#zfs-arc-min-prefetch-ms>`__
+-  `zfs_arc_min_prescient_prefetch_ms <#zfs-arc-min-prescient-prefetch-ms>`__
+-  `zfs_arc_overflow_shift <#zfs-arc-overflow-shift>`__
+-  `zfs_arc_p_dampener_disable <#zfs-arc-p-dampener-disable>`__
+-  `zfs_arc_p_min_shift <#zfs-arc-p-min-shift>`__
+-  `zfs_arc_pc_percent <#zfs-arc-pc-percent>`__
+-  `zfs_arc_shrink_shift <#zfs-arc-shrink-shift>`__
+-  `zfs_arc_sys_free <#zfs-arc-sys-free>`__
+-  `zfs_async_block_max_blocks <#zfs-async-block-max-blocks>`__
+-  `zfs_autoimport_disable <#zfs-autoimport-disable>`__
+-  `zfs_checksum_events_per_second <#zfs-checksum-events-per-second>`__
+-  `zfs_checksums_per_second <#zfs-checksums-per-second>`__
+-  `zfs_commit_timeout_pct <#zfs-commit-timeout-pct>`__
+-  `zfs_compressed_arc_enabled <#zfs-compressed-arc-enabled>`__
+-  `zfs_condense_indirect_commit_entry_delay_ms <#zfs-condense-indirect-commit-entry-delay-ms>`__
+-  `zfs_condense_indirect_vdevs_enable <#zfs-condense-indirect-vdevs-enable>`__
+-  `zfs_condense_max_obsolete_bytes <#zfs-condense-max-obsolete-bytes>`__
+-  `zfs_condense_min_mapping_bytes <#zfs-condense-min-mapping-bytes>`__
+-  `zfs_dbgmsg_enable <#zfs-dbgmsg-enable>`__
+-  `zfs_dbgmsg_maxsize <#zfs-dbgmsg-maxsize>`__
+-  `dbuf_cache_hiwater_pct <#dbuf-cache-hiwater-pct>`__
+-  `dbuf_cache_lowater_pct <#dbuf-cache-lowater-pct>`__
+-  `dbuf_cache_max_bytes <#dbuf-cache-max-bytes>`__
+-  `dbuf_cache_max_shift <#dbuf-cache-max-shift>`__
+-  `dbuf_cache_shift <#dbuf-cache-shift>`__
+-  `dbuf_metadata_cache_max_bytes <#dbuf-metadata-cache-max-bytes>`__
+-  `dbuf_metadata_cache_shift <#dbuf-metadata-cache-shift>`__
+-  `zfs_dbuf_state_index <#zfs-dbuf-state-index>`__
+-  `zfs_ddt_data_is_special <#zfs-ddt-data-is-special>`__
+-  `zfs_deadman_checktime_ms <#zfs-deadman-checktime-ms>`__
+-  `zfs_deadman_enabled <#zfs-deadman-enabled>`__
+-  `zfs_deadman_failmode <#zfs-deadman-failmode>`__
+-  `zfs_deadman_synctime_ms <#zfs-deadman-synctime-ms>`__
+-  `zfs_deadman_ziotime_ms <#zfs-deadman-ziotime-ms>`__
+-  `zfs_dedup_prefetch <#zfs-dedup-prefetch>`__
+-  `zfs_delay_min_dirty_percent <#zfs-delay-min-dirty-percent>`__
+-  `zfs_delay_scale <#zfs-delay-scale>`__
+-  `zfs_delays_per_second <#zfs-delays-per-second>`__
+-  `zfs_delete_blocks <#zfs-delete-blocks>`__
+-  `zfs_dirty_data_max <#zfs-dirty-data-max>`__
+-  `zfs_dirty_data_max_max <#zfs-dirty-data-max-max>`__
+-  `zfs_dirty_data_max_max_percent <#zfs-dirty-data-max-max-percent>`__
+-  `zfs_dirty_data_max_percent <#zfs-dirty-data-max-percent>`__
+-  `zfs_dirty_data_sync <#zfs-dirty-data-sync>`__
+-  `zfs_dirty_data_sync_percent <#zfs-dirty-data-sync-percent>`__
+-  `zfs_disable_dup_eviction <#zfs-disable-dup-eviction>`__
+-  `zfs_disable_ivset_guid_check <#zfs-disable-ivset-guid-check>`__
+-  `dmu_object_alloc_chunk_shift <#dmu-object-alloc-chunk-shift>`__
+-  `zfs_dmu_offset_next_sync <#zfs-dmu-offset-next-sync>`__
+-  `zfs_expire_snapshot <#zfs-expire-snapshot>`__
+-  `zfs_flags <#zfs-flags>`__
+-  `zfs_fletcher_4_impl <#zfs-fletcher-4-impl>`__
+-  `zfs_free_bpobj_enabled <#zfs-free-bpobj-enabled>`__
+-  `zfs_free_leak_on_eio <#zfs-free-leak-on-eio>`__
+-  `zfs_free_max_blocks <#zfs-free-max-blocks>`__
+-  `zfs_free_min_time_ms <#zfs-free-min-time-ms>`__
+-  `icp_aes_impl <#icp-aes-impl>`__
+-  `icp_gcm_impl <#icp-gcm-impl>`__
+-  `ignore_hole_birth <#ignore-hole-birth>`__
+-  `zfs_immediate_write_sz <#zfs-immediate-write-sz>`__
+-  `zfs_initialize_value <#zfs-initialize-value>`__
+-  `zfs_key_max_salt_uses <#zfs-key-max-salt-uses>`__
+-  `l2arc_feed_again <#l2arc-feed-again>`__
+-  `l2arc_feed_min_ms <#l2arc-feed-min-ms>`__
+-  `l2arc_feed_secs <#l2arc-feed-secs>`__
+-  `l2arc_headroom <#l2arc-headroom>`__
+-  `l2arc_headroom_boost <#l2arc-headroom-boost>`__
+-  `l2arc_nocompress <#l2arc-nocompress>`__
+-  `l2arc_noprefetch <#l2arc-noprefetch>`__
+-  `l2arc_norw <#l2arc-norw>`__
+-  `l2arc_write_boost <#l2arc-write-boost>`__
+-  `l2arc_write_max <#l2arc-write-max>`__
+-  `zfs_lua_max_instrlimit <#zfs-lua-max-instrlimit>`__
+-  `zfs_lua_max_memlimit <#zfs-lua-max-memlimit>`__
+-  `zfs_max_dataset_nesting <#zfs-max-dataset-nesting>`__
+-  `zfs_max_missing_tvds <#zfs-max-missing-tvds>`__
+-  `zfs_max_recordsize <#zfs-max-recordsize>`__
+-  `zfs_mdcomp_disable <#zfs-mdcomp-disable>`__
+-  `metaslab_aliquot <#metaslab-aliquot>`__
+-  `metaslab_bias_enabled <#metaslab-bias-enabled>`__
+-  `metaslab_debug_load <#metaslab-debug-load>`__
+-  `metaslab_debug_unload <#metaslab-debug-unload>`__
+-  `metaslab_force_ganging <#metaslab-force-ganging>`__
+-  `metaslab_fragmentation_factor_enabled <#metaslab-fragmentation-factor-enabled>`__
+-  `zfs_metaslab_fragmentation_threshold <#zfs-metaslab-fragmentation-threshold>`__
+-  `metaslab_lba_weighting_enabled <#metaslab-lba-weighting-enabled>`__
+-  `metaslab_preload_enabled <#metaslab-preload-enabled>`__
+-  `zfs_metaslab_segment_weight_enabled <#zfs-metaslab-segment-weight-enabled>`__
+-  `zfs_metaslab_switch_threshold <#zfs-metaslab-switch-threshold>`__
+-  `metaslabs_per_vdev <#metaslabs-per-vdev>`__
+-  `zfs_mg_fragmentation_threshold <#zfs-mg-fragmentation-threshold>`__
+-  `zfs_mg_noalloc_threshold <#zfs-mg-noalloc-threshold>`__
+-  `zfs_multihost_fail_intervals <#zfs-multihost-fail-intervals>`__
+-  `zfs_multihost_history <#zfs-multihost-history>`__
+-  `zfs_multihost_import_intervals <#zfs-multihost-import-intervals>`__
+-  `zfs_multihost_interval <#zfs-multihost-interval>`__
+-  `zfs_multilist_num_sublists <#zfs-multilist-num-sublists>`__
+-  `zfs_no_scrub_io <#zfs-no-scrub-io>`__
+-  `zfs_no_scrub_prefetch <#zfs-no-scrub-prefetch>`__
+-  `zfs_nocacheflush <#zfs-nocacheflush>`__
+-  `zfs_nopwrite_enabled <#zfs-nopwrite-enabled>`__
+-  `zfs_object_mutex_size <#zfs-object-mutex-size>`__
+-  `zfs_obsolete_min_time_ms <#zfs-obsolete-min-time-ms>`__
+-  `zfs_override_estimate_recordsize <#zfs-override-estimate-recordsize>`__
+-  `zfs_pd_bytes_max <#zfs-pd-bytes-max>`__
+-  `zfs_per_txg_dirty_frees_percent <#zfs-per-txg-dirty-frees-percent>`__
+-  `zfs_prefetch_disable <#zfs-prefetch-disable>`__
+-  `zfs_qat_checksum_disable <#zfs-qat-checksum-disable>`__
+-  `zfs_qat_compress_disable <#zfs-qat-compress-disable>`__
+-  `zfs_qat_disable <#zfs-qat-disable>`__
+-  `zfs_qat_encrypt_disable <#zfs-qat-encrypt-disable>`__
+-  `zfs_read_chunk_size <#zfs-read-chunk-size>`__
+-  `zfs_read_history <#zfs-read-history>`__
+-  `zfs_read_history_hits <#zfs-read-history-hits>`__
+-  `zfs_reconstruct_indirect_combinations_max <#zfs-reconstruct-indirect-combinations-max>`__
+-  `zfs_recover <#zfs-recover>`__
+-  `zfs_recv_queue_length <#zfs-recv-queue-length>`__
+-  `zfs_removal_ignore_errors <#zfs-removal-ignore-errors>`__
+-  `zfs_removal_suspend_progress <#zfs-removal-suspend-progress>`__
+-  `zfs_remove_max_segment <#zfs-remove-max-segment>`__
+-  `zfs_resilver_delay <#zfs-resilver-delay>`__
+-  `zfs_resilver_disable_defer <#zfs-resilver-disable-defer>`__
+-  `zfs_resilver_min_time_ms <#zfs-resilver-min-time-ms>`__
+-  `zfs_scan_checkpoint_intval <#zfs-scan-checkpoint-intval>`__
+-  `zfs_scan_fill_weight <#zfs-scan-fill-weight>`__
+-  `zfs_scan_idle <#zfs-scan-idle>`__
+-  `zfs_scan_ignore_errors <#zfs-scan-ignore-errors>`__
+-  `zfs_scan_issue_strategy <#zfs-scan-issue-strategy>`__
+-  `zfs_scan_legacy <#zfs-scan-legacy>`__
+-  `zfs_scan_max_ext_gap <#zfs-scan-max-ext-gap>`__
+-  `zfs_scan_mem_lim_fact <#zfs-scan-mem-lim-fact>`__
+-  `zfs_scan_mem_lim_soft_fact <#zfs-scan-mem-lim-soft-fact>`__
+-  `zfs_scan_min_time_ms <#zfs-scan-min-time-ms>`__
+-  `zfs_scan_strict_mem_lim <#zfs-scan-strict-mem-lim>`__
+-  `zfs_scan_suspend_progress <#zfs-scan-suspend-progress>`__
+-  `zfs_scan_vdev_limit <#zfs-scan-vdev-limit>`__
+-  `zfs_scrub_delay <#zfs-scrub-delay>`__
+-  `zfs_scrub_min_time_ms <#zfs-scrub-min-time-ms>`__
+-  `zfs_send_corrupt_data <#zfs-send-corrupt-data>`__
+-  `send_holes_without_birth_time <#send-holes-without-birth-time>`__
+-  `zfs_send_queue_length <#zfs-send-queue-length>`__
+-  `zfs_send_unmodified_spill_blocks <#zfs-send-unmodified-spill-blocks>`__
+-  `zfs_slow_io_events_per_second <#zfs-slow-io-events-per-second>`__
+-  `spa_asize_inflation <#spa-asize-inflation>`__
+-  `spa_config_path <#spa-config-path>`__
+-  `zfs_spa_discard_memory_limit <#zfs-spa-discard-memory-limit>`__
+-  `spa_load_print_vdev_tree <#spa-load-print-vdev-tree>`__
+-  `spa_load_verify_data <#spa-load-verify-data>`__
+-  `spa_load_verify_maxinflight <#spa-load-verify-maxinflight>`__
+-  `spa_load_verify_metadata <#spa-load-verify-metadata>`__
+-  `spa_load_verify_shift <#spa-load-verify-shift>`__
+-  `spa_slop_shift <#spa-slop-shift>`__
+-  `zfs_special_class_metadata_reserve_pct <#zfs-special-class-metadata-reserve-pct>`__
+-  `spl_hostid <#spl-hostid>`__
+-  `spl_hostid_path <#spl-hostid-path>`__
+-  `spl_kmem_alloc_max <#spl-kmem-alloc-max>`__
+-  `spl_kmem_alloc_warn <#spl-kmem-alloc-warn>`__
+-  `spl_kmem_cache_expire <#spl-kmem-cache-expire>`__
+-  `spl_kmem_cache_kmem_limit <#spl-kmem-cache-kmem-limit>`__
+-  `spl_kmem_cache_kmem_threads <#spl-kmem-cache-kmem-threads>`__
+-  `spl_kmem_cache_magazine_size <#spl-kmem-cache-magazine-size>`__
+-  `spl_kmem_cache_max_size <#spl-kmem-cache-max-size>`__
+-  `spl_kmem_cache_obj_per_slab <#spl-kmem-cache-obj-per-slab>`__
+-  `spl_kmem_cache_obj_per_slab_min <#spl-kmem-cache-obj-per-slab-min>`__
+-  `spl_kmem_cache_reclaim <#spl-kmem-cache-reclaim>`__
+-  `spl_kmem_cache_slab_limit <#spl-kmem-cache-slab-limit>`__
+-  `spl_max_show_tasks <#spl-max-show-tasks>`__
+-  `spl_panic_halt <#spl-panic-halt>`__
+-  `spl_taskq_kick <#spl-taskq-kick>`__
+-  `spl_taskq_thread_bind <#spl-taskq-thread-bind>`__
+-  `spl_taskq_thread_dynamic <#spl-taskq-thread-dynamic>`__
+-  `spl_taskq_thread_priority <#spl-taskq-thread-priority>`__
+-  `spl_taskq_thread_sequential <#spl-taskq-thread-sequential>`__
+-  `zfs_sync_pass_deferred_free <#zfs-sync-pass-deferred-free>`__
+-  `zfs_sync_pass_dont_compress <#zfs-sync-pass-dont-compress>`__
+-  `zfs_sync_pass_rewrite <#zfs-sync-pass-rewrite>`__
+-  `zfs_sync_taskq_batch_pct <#zfs-sync-taskq-batch-pct>`__
+-  `zfs_top_maxinflight <#zfs-top-maxinflight>`__
+-  `zfs_trim_extent_bytes_max <#zfs-trim-extent-bytes-max>`__
+-  `zfs_trim_extent_bytes_min <#zfs-trim-extent-bytes-min>`__
+-  `zfs_trim_metaslab_skip <#zfs-trim-metaslab-skip>`__
+-  `zfs_trim_queue_limit <#zfs-trim-queue-limit>`__
+-  `zfs_trim_txg_batch <#zfs-trim-txg-batch>`__
+-  `zfs_txg_history <#zfs-txg-history>`__
+-  `zfs_txg_timeout <#zfs-txg-timeout>`__
+-  `zfs_unlink_suspend_progress <#zfs-unlink-suspend-progress>`__
+-  `zfs_user_indirect_is_special <#zfs-user-indirect-is-special>`__
+-  `zfs_vdev_aggregate_trim <#zfs-vdev-aggregate-trim>`__
+-  `zfs_vdev_aggregation_limit <#zfs-vdev-aggregation-limit>`__
+-  `zfs_vdev_aggregation_limit_non_rotating <#zfs-vdev-aggregation-limit-non-rotating>`__
+-  `zfs_vdev_async_read_max_active <#zfs-vdev-async-read-max-active>`__
+-  `zfs_vdev_async_read_min_active <#zfs-vdev-async-read-min-active>`__
+-  `zfs_vdev_async_write_active_max_dirty_percent <#zfs-vdev-async-write-active-max-dirty-percent>`__
+-  `zfs_vdev_async_write_active_min_dirty_percent <#zfs-vdev-async-write-active-min-dirty-percent>`__
+-  `zfs_vdev_async_write_max_active <#zfs-vdev-async-write-max-active>`__
+-  `zfs_vdev_async_write_min_active <#zfs-vdev-async-write-min-active>`__
+-  `zfs_vdev_cache_bshift <#zfs-vdev-cache-bshift>`__
+-  `zfs_vdev_cache_max <#zfs-vdev-cache-max>`__
+-  `zfs_vdev_cache_size <#zfs-vdev-cache-size>`__
+-  `zfs_vdev_default_ms_count <#zfs-vdev-default-ms-count>`__
+-  `zfs_vdev_initializing_max_active <#zfs-vdev-initializing-max-active>`__
+-  `zfs_vdev_initializing_min_active <#zfs-vdev-initializing-min-active>`__
+-  `zfs_vdev_max_active <#zfs-vdev-max-active>`__
+-  `zfs_vdev_min_ms_count <#zfs-vdev-min-ms-count>`__
+-  `zfs_vdev_mirror_non_rotating_inc <#zfs-vdev-mirror-non-rotating-inc>`__
+-  `zfs_vdev_mirror_non_rotating_seek_inc <#zfs-vdev-mirror-non-rotating-seek-inc>`__
+-  `zfs_vdev_mirror_rotating_inc <#zfs-vdev-mirror-rotating-inc>`__
+-  `zfs_vdev_mirror_rotating_seek_inc <#zfs-vdev-mirror-rotating-seek-inc>`__
+-  `zfs_vdev_mirror_rotating_seek_offset <#zfs-vdev-mirror-rotating-seek-offset>`__
+-  `zfs_vdev_ms_count_limit <#zfs-vdev-ms-count-limit>`__
+-  `zfs_vdev_queue_depth_pct <#zfs-vdev-queue-depth-pct>`__
+-  `zfs_vdev_raidz_impl <#zfs-vdev-raidz-impl>`__
+-  `zfs_vdev_read_gap_limit <#zfs-vdev-read-gap-limit>`__
+-  `zfs_vdev_removal_max_active <#zfs-vdev-removal-max-active>`__
+-  `vdev_removal_max_span <#vdev-removal-max-span>`__
+-  `zfs_vdev_removal_min_active <#zfs-vdev-removal-min-active>`__
+-  `zfs_vdev_scheduler <#zfs-vdev-scheduler>`__
+-  `zfs_vdev_scrub_max_active <#zfs-vdev-scrub-max-active>`__
+-  `zfs_vdev_scrub_min_active <#zfs-vdev-scrub-min-active>`__
+-  `zfs_vdev_sync_read_max_active <#zfs-vdev-sync-read-max-active>`__
+-  `zfs_vdev_sync_read_min_active <#zfs-vdev-sync-read-min-active>`__
+-  `zfs_vdev_sync_write_max_active <#zfs-vdev-sync-write-max-active>`__
+-  `zfs_vdev_sync_write_min_active <#zfs-vdev-sync-write-min-active>`__
+-  `zfs_vdev_trim_max_active <#zfs-vdev-trim-max-active>`__
+-  `zfs_vdev_trim_min_active <#zfs-vdev-trim-min-active>`__
+-  `vdev_validate_skip <#vdev-validate-skip>`__
+-  `zfs_vdev_write_gap_limit <#zfs-vdev-write-gap-limit>`__
+-  `zfs_zevent_cols <#zfs-zevent-cols>`__
+-  `zfs_zevent_console <#zfs-zevent-console>`__
+-  `zfs_zevent_len_max <#zfs-zevent-len-max>`__
+-  `zfetch_array_rd_sz <#zfetch-array-rd-sz>`__
+-  `zfetch_max_distance <#zfetch-max-distance>`__
+-  `zfetch_max_streams <#zfetch-max-streams>`__
+-  `zfetch_min_sec_reap <#zfetch-min-sec-reap>`__
+-  `zfs_zil_clean_taskq_maxalloc <#zfs-zil-clean-taskq-maxalloc>`__
+-  `zfs_zil_clean_taskq_minalloc <#zfs-zil-clean-taskq-minalloc>`__
+-  `zfs_zil_clean_taskq_nthr_pct <#zfs-zil-clean-taskq-nthr-pct>`__
+-  `zil_nocacheflush <#zil-nocacheflush>`__
+-  `zil_replay_disable <#zil-replay-disable>`__
+-  `zil_slog_bulk <#zil-slog-bulk>`__
+-  `zio_deadman_log_all <#zio-deadman-log-all>`__
+-  `zio_decompress_fail_fraction <#zio-decompress-fail-fraction>`__
+-  `zio_delay_max <#zio-delay-max>`__
+-  `zio_dva_throttle_enabled <#zio-dva-throttle-enabled>`__
+-  `zio_requeue_io_start_cut_in_line <#zio-requeue-io-start-cut-in-line>`__
+-  `zio_slow_io_ms <#zio-slow-io-ms>`__
+-  `zio_taskq_batch_pct <#zio-taskq-batch-pct>`__
+-  `zvol_inhibit_dev <#zvol-inhibit-dev>`__
+-  `zvol_major <#zvol-major>`__
+-  `zvol_max_discard_blocks <#zvol-max-discard-blocks>`__
+-  `zvol_prefetch_bytes <#zvol-prefetch-bytes>`__
+-  `zvol_request_sync <#zvol-request-sync>`__
+-  `zvol_threads <#zvol-threads>`__
+-  `zvol_volmode <#zvol-volmode>`__
 
 .. _zfs-module-parameters-1:
 
-ZFS Module Parameters
-=====================
+Module Parameters
+---------------------
 
 ignore_hole_birth
 ~~~~~~~~~~~~~~~~~
@@ -1020,7 +1015,7 @@ ignore_hole_birth
 When set, the hole_birth optimization will not be used and all holes
 will always be sent by ``zfs send`` In the source code,
 ignore_hole_birth is an alias for and SysFS PARAMETER for
-`send_holes_without_birth_time <#send_holes_without_birth_time>`__.
+`send_holes_without_birth_time <#send-holes-without-birth-time>`__.
 
 +-------------------+-------------------------------------------------+
 | ignore_hole_birth | Notes                                           |
@@ -1072,7 +1067,7 @@ l2arc_feed_min_ms
 
 Minimum time period for aggressively feeding the L2ARC. The L2ARC feed
 thread wakes up once per second (see
-`l2arc_feed_secs <#l2arc_feed_secs>`__) to look for data to feed into
+`l2arc_feed_secs <#l2arc-feed-secs>`__) to look for data to feed into
 the L2ARC. ``l2arc_feed_min_ms`` only affects the turbo L2ARC cache
 warm-up and allows the aggressiveness to be adjusted.
 
@@ -1082,7 +1077,7 @@ warm-up and allows the aggressiveness to be adjusted.
 | Tags              | `ARC <#arc>`__, `L2ARC <#l2arc>`__              |
 +-------------------+-------------------------------------------------+
 | When to change    | If cache devices exist and                      |
-|                   | `l2arc_feed_again <#l2arc_feed_again>`__ and    |
+|                   | `l2arc_feed_again <#l2arc-feed-again>`__ and    |
 |                   | the feed is too aggressive, then this tunable   |
 |                   | can be adjusted to reduce the impact of the     |
 |                   | fill                                            |
@@ -1107,7 +1102,7 @@ Seconds between waking the L2ARC feed thread. One feed thread works for
 all cache devices in turn.
 
 If the pool that owns a cache device is imported readonly, then the feed
-thread is delayed 5 \* `l2arc_feed_secs <#l2arc_feed_secs>`__ before
+thread is delayed 5 \* `l2arc_feed_secs <#l2arc-feed-secs>`__ before
 moving onto the next cache device. If multiple pools are imported with
 cache devices and one pool with cache is imported readonly, the L2ARC
 feed rate to all caches can be slowed.
@@ -1129,7 +1124,7 @@ l2arc_headroom
 ~~~~~~~~~~~~~~
 
 How far through the ARC lists to search for L2ARC cacheable content,
-expressed as a multiplier of `l2arc_write_max <#l2arc_write_max>`__
+expressed as a multiplier of `l2arc_write_max <#l2arc-write-max>`__
 
 +-------------------+-------------------------------------------------+
 | l2arc_headroom    | Notes                                           |
@@ -1159,7 +1154,7 @@ expressed as a multiplier of `l2arc_write_max <#l2arc_write_max>`__
 l2arc_headroom_boost
 ~~~~~~~~~~~~~~~~~~~~
 
-Percentage scale for `l2arc_headroom <#l2arc_headroom>`__ when L2ARC
+Percentage scale for `l2arc_headroom <#l2arc-headroom>`__ when L2ARC
 contents are being successfully compressed before writing.
 
 +----------------------+----------------------------------------------+
@@ -1170,7 +1165,7 @@ contents are being successfully compressed before writing.
 | When to change       | If average compression efficiency is greater |
 |                      | than 2:1, then increasing                    |
 |                      | `l2a                                         |
-|                      | rc_headroom_boost <#l2arc_headroom_boost>`__ |
+|                      | rc_headroom_boost <#l2arc-headroom-boost>`__ |
 |                      | can increase the L2ARC feed rate             |
 +----------------------+----------------------------------------------+
 | Data Type            | uint64                                       |
@@ -1276,7 +1271,7 @@ l2arc_write_boost
 ~~~~~~~~~~~~~~~~~
 
 Until the ARC fills, increases the L2ARC fill rate
-`l2arc_write_max <#l2arc_write_max>`__ by ``l2arc_write_boost``.
+`l2arc_write_max <#l2arc-write-max>`__ by ``l2arc_write_boost``.
 
 +-------------------+-------------------------------------------------+
 | l2arc_write_boost | Notes                                           |
@@ -1303,10 +1298,10 @@ l2arc_write_max
 ~~~~~~~~~~~~~~~
 
 Maximum number of bytes to be written to each cache device for each
-L2ARC feed thread interval (see `l2arc_feed_secs <#l2arc_feed_secs>`__).
+L2ARC feed thread interval (see `l2arc_feed_secs <#l2arc-feed-secs>`__).
 The actual limit can be adjusted by
-`l2arc_write_boost <#l2arc_write_boost>`__. By default
-`l2arc_feed_secs <#l2arc_feed_secs>`__ is 1 second, delivering a maximum
+`l2arc_write_boost <#l2arc-write-boost>`__. By default
+`l2arc_feed_secs <#l2arc-feed-secs>`__ is 1 second, delivering a maximum
 write workload to cache devices of 8 MiB/sec.
 
 +-------------------+-------------------------------------------------+
@@ -1414,7 +1409,7 @@ free space fragmentation: when there is a lot of small free spaces, but
 few larger free spaces.
 
 If ``zfs_metaslab_segment_weight_enabled`` is enabled, then
-`metaslab_fragmentation_factor_enabled <#metaslab_fragmentation_factor_enabled>`__
+`metaslab_fragmentation_factor_enabled <#metaslab-fragmentation-factor-enabled>`__
 is ignored.
 
 +----------------------------------+----------------------------------+
@@ -1445,7 +1440,7 @@ zfs_metaslab_switch_threshold
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 When using segment-based metaslab selection (see
-`zfs_metaslab_segment_weight_enabled <#zfs_metaslab_segment_weight_enabled>`__),
+`zfs_metaslab_segment_weight_enabled <#zfs-metaslab-segment-weight-enabled>`__),
 continue allocating from the active metaslab until
 ``zfs_metaslab_switch_threshold`` worth of free space buckets have been
 exhausted.
@@ -1477,7 +1472,7 @@ metaslab_debug_load
 
 When enabled, all metaslabs are loaded into memory during pool import.
 Nominally, metaslab space map information is loaded and unloaded as
-needed (see `metaslab_debug_unload <#metaslab_debug_unload>`__)
+needed (see `metaslab_debug_unload <#metaslab-debug-unload>`__)
 
 It is difficult to predict how much RAM is required to store a space
 map. An empty or completely full metaslab has a small space map.
@@ -1515,7 +1510,7 @@ metaslab_debug_unload
 When enabled, prevents metaslab information from being dynamically
 unloaded from RAM. Nominally, metaslab space map information is loaded
 and unloaded as needed (see
-`metaslab_debug_load <#metaslab_debug_load>`__)
+`metaslab_debug_load <#metaslab-debug-load>`__)
 
 It is difficult to predict how much RAM is required to store a space
 map. An empty or completely full metaslab has a small space map.
@@ -1555,7 +1550,7 @@ metaslab_fragmentation_factor_enabled
 Enable use of the fragmentation metric in computing metaslab weights.
 
 In version v0.7.0, if
-`zfs_metaslab_segment_weight_enabled <#zfs_metaslab_segment_weight_enabled>`__
+`zfs_metaslab_segment_weight_enabled <#zfs-metaslab-segment-weight-enabled>`__
 is enabled, then ``metaslab_fragmentation_factor_enabled`` is ignored.
 
 +----------------------------------+----------------------------------+
@@ -1693,7 +1688,7 @@ if they are pool members. The path to the cache file is spa_config_path.
 For more information on ``zpool import`` and the ``-o cachefile`` and
 ``-d`` options, see the man page for zpool(8)
 
-See also `zfs_autoimport_disable <#zfs_autoimport_disable>`__
+See also `zfs_autoimport_disable <#zfs-autoimport-disable>`__
 
 +-------------------+-------------------------------------------------+
 | spa_config_path   | Notes                                           |
@@ -1764,7 +1759,7 @@ full traversal of all blocks in the pool for verification. If this
 parameter is set to 0, the traversal skips non-metadata blocks. It can
 be toggled once the import has started to stop or start the traversal of
 non-metadata blocks. See also
-`spa_load_verify_metadata <#spa_load_verify_metadata>`__.
+`spa_load_verify_metadata <#spa-load-verify-metadata>`__.
 
 +----------------------+----------------------------------------------+
 | spa_load_verify_data | Notes                                        |
@@ -1793,7 +1788,7 @@ An extreme rewind import (see ``zpool import -X``) normally performs a
 full traversal of all blocks in the pool for verification. If this
 parameter is set to 0, the traversal is not performed. It can be toggled
 once the import has started to stop or start the traversal. See
-`spa_load_verify_data <#spa_load_verify_data>`__
+`spa_load_verify_data <#spa-load-verify-data>`__
 
 +--------------------------+------------------------------------------+
 | spa_load_verify_metadata | Notes                                    |
@@ -1985,7 +1980,7 @@ zfs_arc_dnode_limit_percent
 Percentage of ARC metadata space that can be used for dnodes.
 
 The value calculated for ``zfs_arc_dnode_limit_percent`` can be
-overridden by `zfs_arc_dnode_limit <#zfs_arc_dnode_limit>`__.
+overridden by `zfs_arc_dnode_limit <#zfs-arc-dnode-limit>`__.
 
 +-----------------------------+---------------------------------------+
 | zfs_arc_dnode_limit_percent | Notes                                 |
@@ -2019,11 +2014,11 @@ When the number of bytes consumed by dnodes in the ARC exceeds
 space consumed by dnodes.
 
 The default value 0, indicates that a percent which is based on
-`zfs_arc_dnode_limit_percent <#zfs_arc_dnode_limit_percent>`__ of the
+`zfs_arc_dnode_limit_percent <#zfs-arc-dnode-limit-percent>`__ of the
 ARC meta buffers that may be used for dnodes.
 
 ``zfs_arc_dnode_limit`` is similar to
-`zfs_arc_meta_prune <#zfs_arc_meta_prune>`__ which serves a similar
+`zfs_arc_meta_prune <#zfs-arc-meta-prune>`__ which serves a similar
 purpose for metadata.
 
 +---------------------+-----------------------------------------------+
@@ -2045,7 +2040,7 @@ purpose for metadata.
 +---------------------+-----------------------------------------------+
 | Default             | 0 (uses                                       |
 |                     | `zfs_arc_dnode_lim                            |
-|                     | it_percent <#zfs_arc_dnode_limit_percent>`__) |
+|                     | it_percent <#zfs-arc-dnode-limit-percent>`__) |
 +---------------------+-----------------------------------------------+
 | Change              | Dynamic                                       |
 +---------------------+-----------------------------------------------+
@@ -2057,7 +2052,7 @@ zfs_arc_dnode_reduce_percent
 
 Percentage of ARC dnodes to try to evict in response to demand for
 non-metadata when the number of bytes consumed by dnodes exceeds
-`zfs_arc_dnode_limit <#zfs_arc_dnode_limit>`__.
+`zfs_arc_dnode_limit <#zfs-arc-dnode-limit>`__.
 
 +------------------------------+--------------------------------------+
 | zfs_arc_dnode_reduce_percent | Notes                                |
@@ -2071,7 +2066,7 @@ non-metadata when the number of bytes consumed by dnodes exceeds
 | Units                        | percent of size of dnode space used  |
 |                              | above                                |
 |                              | `zfs_arc_d                           |
-|                              | node_limit <#zfs_arc_dnode_limit>`__ |
+|                              | node_limit <#zfs-arc-dnode-limit>`__ |
 +------------------------------+--------------------------------------+
 | Range                        | 0 to 100                             |
 +------------------------------+--------------------------------------+
@@ -2221,7 +2216,7 @@ zfs_arc_meta_adjust_restarts
 
 The number of restart passes to make while scanning the ARC attempting
 the free buffers in order to stay below the
-`zfs_arc_meta_limit <#zfs_arc_meta_limit>`__.
+`zfs_arc_meta_limit <#zfs-arc-meta-limit>`__.
 
 ============================ =======================================
 zfs_arc_meta_adjust_restarts Notes
@@ -2240,7 +2235,7 @@ zfs_arc_meta_limit
 ~~~~~~~~~~~~~~~~~~
 
 Sets the maximum allowed size metadata buffers in the ARC. When
-`zfs_arc_meta_limit <#zfs_arc_meta_limit>`__ is reached metadata buffers
+`zfs_arc_meta_limit <#zfs-arc-meta-limit>`__ is reached metadata buffers
 are reclaimed, even if the overall ``c_max`` has not been reached.
 
 In version v0.7.0, with a default value = 0,
@@ -2280,7 +2275,7 @@ Sets the limit to ARC metadata, ``arc_meta_limit``, as a percentage of
 the maximum size target of the ARC, ``c_max``
 
 Prior to version v0.7.0, the
-`zfs_arc_meta_limit <#zfs_arc_meta_limit>`__ was used to set the limit
+`zfs_arc_meta_limit <#zfs-arc-meta-limit>`__ was used to set the limit
 as a fixed size. ``zfs_arc_meta_limit_percent`` provides a more
 convenient interface for setting the limit.
 
@@ -2722,7 +2717,7 @@ zfs_autoimport_disable
 ~~~~~~~~~~~~~~~~~~~~~~
 
 Disable reading zpool.cache file (see
-`spa_config_path <#spa_config_path>`__) when loading the zfs module.
+`spa_config_path <#spa-config-path>`__) when loading the zfs module.
 
 +------------------------+--------------------------------------------+
 | zfs_autoimport_disable | Notes                                      |
@@ -2774,7 +2769,7 @@ zfs_dbgmsg_enable
   of the log are in the ``/proc/spl/kstat/zfs/dbgmsg`` file.
 | Writing 0 to ``/proc/spl/kstat/zfs/dbgmsg`` file clears the log.
 
-See also `zfs_dbgmsg_maxsize <#zfs_dbgmsg_maxsize>`__
+See also `zfs_dbgmsg_maxsize <#zfs-dbgmsg-maxsize>`__
 
 ================= =================================================
 zfs_dbgmsg_enable Notes
@@ -2833,7 +2828,7 @@ zfs_deadman_enabled
 
 When a pool sync operation takes longer than zfs_deadman_synctime_ms
 milliseconds, a "slow spa_sync" message is logged to the debug log (see
-`zfs_dbgmsg_enable <#zfs_dbgmsg_enable>`__). If ``zfs_deadman_enabled``
+`zfs_dbgmsg_enable <#zfs-dbgmsg-enable>`__). If ``zfs_deadman_enabled``
 is set to 1, then all pending IO operations are also checked and if any
 haven't completed within zfs_deadman_synctime_ms milliseconds, a "SLOW
 IO" message is logged to the debug log and a "deadman" system event (see
@@ -2855,9 +2850,9 @@ zfs_deadman_checktime_ms
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 Once a pool sync operation has taken longer than
-`zfs_deadman_synctime_ms <#zfs_deadman_synctime_ms>`__ milliseconds,
+`zfs_deadman_synctime_ms <#zfs-deadman-synctime-ms>`__ milliseconds,
 continue to check for slow operations every
-`zfs_deadman_checktime_ms <#zfs_deadman_synctime_ms>`__ milliseconds.
+`zfs_deadman_checktime_ms <#zfs-deadman-synctime-ms>`__ milliseconds.
 
 ======================== =======================
 zfs_deadman_checktime_ms Notes
@@ -2877,9 +2872,9 @@ zfs_deadman_ziotime_ms
 
 When an individual I/O takes longer than ``zfs_deadman_ziotime_ms``
 milliseconds, then the operation is considered to be "hung". If
-`zfs_deadman_enabled <#zfs_deadman_enabled>`__ is set then the deadman
+`zfs_deadman_enabled <#zfs-deadman-enabled>`__ is set then the deadman
 behaviour is invoked as described by the
-`zfs_deadman_failmode <#zfs_deadman_failmode>`__ option.
+`zfs_deadman_failmode <#zfs-deadman-failmode>`__ option.
 
 ====================== ====================
 zfs_deadman_ziotime_ms Notes
@@ -2906,10 +2901,10 @@ The I/O deadman timer expiration time has two meanings
 In version v0.8.0, any I/O that has not completed in
 ``zfs_deadman_synctime_ms`` is considered "hung" resulting in one of
 three behaviors controlled by the
-`zfs_deadman_failmode <#zfs_deadman_failmode>`__ parameter.
+`zfs_deadman_failmode <#zfs-deadman-failmode>`__ parameter.
 
 ``zfs_deadman_synctime_ms`` takes effect if
-`zfs_deadman_enabled <#zfs_deadman_enabled>`__ = 1.
+`zfs_deadman_enabled <#zfs-deadman-enabled>`__ = 1.
 
 ======================= =======================
 zfs_deadman_synctime_ms Notes
@@ -3013,13 +3008,13 @@ zfs_delay_min_dirty_percent
 
 The ZFS write throttle begins to delay each transaction when the amount
 of dirty data reaches the threshold ``zfs_delay_min_dirty_percent`` of
-`zfs_dirty_data_max <#zfs_dirty_data_max>`__. This value should be >=
-`zfs_vdev_async_write_active_max_dirty_percent <#zfs_vdev_async_write_active_max_dirty_percent>`__.
+`zfs_dirty_data_max <#zfs-dirty-data-max>`__. This value should be >=
+`zfs_vdev_async_write_active_max_dirty_percent <#zfs-vdev-async-write-active-max-dirty-percent>`__.
 
 =========================== ====================================
 zfs_delay_min_dirty_percent Notes
 =========================== ====================================
-Tags                        `write_throttle <#write_throttle>`__
+Tags                        `write_throttle <#write-throttle>`__
 When to change              See section "ZFS TRANSACTION DELAY"
 Data Type                   int
 Units                       percent
@@ -3042,12 +3037,12 @@ The throttle will smoothly handle between 10x and 1/10th
 ``zfs_delay_scale``.
 
 Note: ``zfs_delay_scale`` \*
-`zfs_dirty_data_max <#zfs_dirty_data_max>`__ must be < 2^64.
+`zfs_dirty_data_max <#zfs-dirty-data-max>`__ must be < 2^64.
 
 ================= ====================================
 zfs_delay_scale   Notes
 ================= ====================================
-Tags              `write_throttle <#write_throttle>`__
+Tags              `write_throttle <#write-throttle>`__
 When to change    See section "ZFS TRANSACTION DELAY"
 Data Type         ulong
 Units             scalar (nanoseconds)
@@ -3065,12 +3060,12 @@ this limit is exceeded, new writes are delayed until space is freed by
 writes being committed to the pool.
 
 zfs_dirty_data_max takes precedence over
-`zfs_dirty_data_max_percent <#zfs_dirty_data_max_percent>`__.
+`zfs_dirty_data_max_percent <#zfs-dirty-data-max-percent>`__.
 
 +--------------------+------------------------------------------------+
 | zfs_dirty_data_max | Notes                                          |
 +====================+================================================+
-| Tags               | `write_throttle <#write_throttle>`__           |
+| Tags               | `write_throttle <#write-throttle>`__           |
 +--------------------+------------------------------------------------+
 | When to change     | See section "ZFS TRANSACTION DELAY"            |
 +--------------------+------------------------------------------------+
@@ -3080,7 +3075,7 @@ zfs_dirty_data_max takes precedence over
 +--------------------+------------------------------------------------+
 | Range              | 1 to                                           |
 |                    | `zfs_d                                         |
-|                    | irty_data_max_max <#zfs_dirty_data_max_max>`__ |
+|                    | irty_data_max_max <#zfs-dirty-data-max-max>`__ |
 +--------------------+------------------------------------------------+
 | Default            | 10% of physical RAM                            |
 +--------------------+------------------------------------------------+
@@ -3093,17 +3088,17 @@ zfs_dirty_data_max_percent
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``zfs_dirty_data_max_percent`` is an alternative method of specifying
-`zfs_dirty_data_max <#zfs_dirty_data_max>`__, the ZFS write throttle
+`zfs_dirty_data_max <#zfs-dirty-data-max>`__, the ZFS write throttle
 dirty space limit. Once this limit is exceeded, new writes are delayed
 until space is freed by writes being committed to the pool.
 
-`zfs_dirty_data_max <#zfs_dirty_data_max>`__ takes precedence over
+`zfs_dirty_data_max <#zfs-dirty-data-max>`__ takes precedence over
 ``zfs_dirty_data_max_percent``.
 
 +----------------------------+----------------------------------------+
 | zfs_dirty_data_max_percent | Notes                                  |
 +============================+========================================+
-| Tags                       | `write_throttle <#write_throttle>`__   |
+| Tags                       | `write_throttle <#write-throttle>`__   |
 +----------------------------+----------------------------------------+
 | When to change             | See section "ZFS TRANSACTION DELAY"    |
 +----------------------------+----------------------------------------+
@@ -3125,15 +3120,15 @@ zfs_dirty_data_max_max
 ~~~~~~~~~~~~~~~~~~~~~~
 
 ``zfs_dirty_data_max_max`` is the maximum allowable value of
-`zfs_dirty_data_max <#zfs_dirty_data_max>`__.
+`zfs_dirty_data_max <#zfs-dirty-data-max>`__.
 
 ``zfs_dirty_data_max_max`` takes precedence over
-`zfs_dirty_data_max_max_percent <#zfs_dirty_data_max_max_percent>`__.
+`zfs_dirty_data_max_max_percent <#zfs-dirty-data-max-max-percent>`__.
 
 ====================== ====================================
 zfs_dirty_data_max_max Notes
 ====================== ====================================
-Tags                   `write_throttle <#write_throttle>`__
+Tags                   `write_throttle <#write-throttle>`__
 When to change         See section "ZFS TRANSACTION DELAY"
 Data Type              ulong
 Units                  bytes
@@ -3147,16 +3142,16 @@ zfs_dirty_data_max_max_percent
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``zfs_dirty_data_max_max_percent`` an alternative to
-`zfs_dirty_data_max_max <#zfs_dirty_data_max_max>`__ for setting the
-maximum allowable value of `zfs_dirty_data_max <#zfs_dirty_data_max>`__
+`zfs_dirty_data_max_max <#zfs-dirty-data-max-max>`__ for setting the
+maximum allowable value of `zfs_dirty_data_max <#zfs-dirty-data-max>`__
 
-`zfs_dirty_data_max_max <#zfs_dirty_data_max_max>`__ takes precedence
+`zfs_dirty_data_max_max <#zfs-dirty-data-max-max>`__ takes precedence
 over ``zfs_dirty_data_max_max_percent``
 
 ============================== ====================================
 zfs_dirty_data_max_max_percent Notes
 ============================== ====================================
-Tags                           `write_throttle <#write_throttle>`__
+Tags                           `write_throttle <#write-throttle>`__
 When to change                 See section "ZFS TRANSACTION DELAY"
 Data Type                      int
 Units                          percent
@@ -3172,14 +3167,14 @@ zfs_dirty_data_sync
 When there is at least ``zfs_dirty_data_sync`` dirty data, a transaction
 group sync is started. This allows a transaction group sync to occur
 more frequently than the transaction group timeout interval (see
-`zfs_txg_timeout <#zfs_txg_timeout>`__) when there is dirty data to be
+`zfs_txg_timeout <#zfs-txg-timeout>`__) when there is dirty data to be
 written.
 
 +---------------------+-----------------------------------------------+
 | zfs_dirty_data_sync | Notes                                         |
 +=====================+===============================================+
-| Tags                | `write_throttle <#write_throttle>`__,         |
-|                     | `ZIO_scheduler <#ZIO_scheduler>`__            |
+| Tags                | `write_throttle <#write-throttle>`__,         |
+|                     | `ZIO_scheduler <#ZIO-scheduler>`__            |
 +---------------------+-----------------------------------------------+
 | When to change      | TBD                                           |
 +---------------------+-----------------------------------------------+
@@ -3201,17 +3196,17 @@ zfs_dirty_data_sync_percent
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 When there is at least ``zfs_dirty_data_sync_percent`` of
-`zfs_dirty_data_max <#zfs_dirty_data_max>`__ dirty data, a transaction
+`zfs_dirty_data_max <#zfs-dirty-data-max>`__ dirty data, a transaction
 group sync is started. This allows a transaction group sync to occur
 more frequently than the transaction group timeout interval (see
-`zfs_txg_timeout <#zfs_txg_timeout>`__) when there is dirty data to be
+`zfs_txg_timeout <#zfs-txg-timeout>`__) when there is dirty data to be
 written.
 
 +-----------------------------+---------------------------------------+
 | zfs_dirty_data_sync_percent | Notes                                 |
 +=============================+=======================================+
-| Tags                        | `write_throttle <#write_throttle>`__, |
-|                             | `ZIO_scheduler <#ZIO_scheduler>`__    |
+| Tags                        | `write_throttle <#write-throttle>`__, |
+|                             | `ZIO_scheduler <#ZIO-scheduler>`__    |
 +-----------------------------+---------------------------------------+
 | When to change              | TBD                                   |
 +-----------------------------+---------------------------------------+
@@ -3230,7 +3225,7 @@ written.
 +-----------------------------+---------------------------------------+
 | Versions Affected           | planned for v2, deprecates            |
 |                             | `zfs_dirt                             |
-|                             | y_data_sync <#zfs_dirty_data_sync>`__ |
+|                             | y_data_sync <#zfs-dirty-data-sync>`__ |
 +-----------------------------+---------------------------------------+
 
 zfs_fletcher_4_impl
@@ -3339,7 +3334,7 @@ Maximum asynchronous read I/Os active to each device.
 | zfs_vdev_async_read_max_active | Notes                              |
 +================================+====================================+
 | Tags                           | `vdev <#vdev>`__,                  |
-|                                | `ZIO_scheduler <#zio_scheduler>`__ |
+|                                | `ZIO_scheduler <#zio-scheduler>`__ |
 +--------------------------------+------------------------------------+
 | When to change                 | See `ZFS I/O                       |
 |                                | Scheduler <https://github.com/zfs  |
@@ -3351,7 +3346,7 @@ Maximum asynchronous read I/Os active to each device.
 +--------------------------------+------------------------------------+
 | Range                          | 1 to                               |
 |                                | `zfs_vdev_ma                       |
-|                                | x_active <#zfs_vdev_max_active>`__ |
+|                                | x_active <#zfs-vdev-max-active>`__ |
 +--------------------------------+------------------------------------+
 | Default                        | 3                                  |
 +--------------------------------+------------------------------------+
@@ -3369,7 +3364,7 @@ Minimum asynchronous read I/Os active to each device.
 | zfs_vdev_async_read_min_active | Notes                              |
 +================================+====================================+
 | Tags                           | `vdev <#vdev>`__,                  |
-|                                | `ZIO_scheduler <#zio_scheduler>`__ |
+|                                | `ZIO_scheduler <#zio-scheduler>`__ |
 +--------------------------------+------------------------------------+
 | When to change                 | See `ZFS I/O                       |
 |                                | Scheduler <https://github.com/zfs  |
@@ -3397,15 +3392,15 @@ zfs_vdev_async_write_active_max_dirty_percent
 
 When the amount of dirty data exceeds the threshold
 ``zfs_vdev_async_write_active_max_dirty_percent`` of
-`zfs_dirty_data_max <#zfs_dirty_data_max>`__ dirty data, then
-`zfs_vdev_async_write_max_active <#zfs_vdev_async_write_max_active>`__
+`zfs_dirty_data_max <#zfs-dirty-data-max>`__ dirty data, then
+`zfs_vdev_async_write_max_active <#zfs-vdev-async-write-max-active>`__
 is used to limit active async writes. If the dirty data is between
-`zfs_vdev_async_write_active_min_dirty_percent <#zfs_vdev_async_write_active_min_dirty_percent>`__
+`zfs_vdev_async_write_active_min_dirty_percent <#zfs-vdev-async-write-active-min-dirty-percent>`__
 and ``zfs_vdev_async_write_active_max_dirty_percent``, the active I/O
 limit is linearly interpolated between
-`zfs_vdev_async_write_min_active <#zfs_vdev_async_write_min_active>`__
+`zfs_vdev_async_write_min_active <#zfs-vdev-async-write-min-active>`__
 and
-`zfs_vdev_async_write_max_active <#zfs_vdev_async_write_max_active>`__
+`zfs_vdev_async_write_max_active <#zfs-vdev-async-write-max-active>`__
 
 +----------------------------------+----------------------------------+
 | zfs_vdev_asyn                    | Notes                            |
@@ -3413,7 +3408,7 @@ and
 +==================================+==================================+
 | Tags                             | `vdev <#vdev>`__,                |
 |                                  | `Z                               |
-|                                  | IO_scheduler <#zio_scheduler>`__ |
+|                                  | IO_scheduler <#zio-scheduler>`__ |
 +----------------------------------+----------------------------------+
 | When to change                   | See `ZFS I/O                     |
 |                                  | Sch                              |
@@ -3424,7 +3419,7 @@ and
 +----------------------------------+----------------------------------+
 | Units                            | percent of                       |
 |                                  | `zfs_dirty_d                     |
-|                                  | ata_max <#zfs_dirty_data_max>`__ |
+|                                  | ata_max <#zfs-dirty-data-max>`__ |
 +----------------------------------+----------------------------------+
 | Range                            | 0 to 100                         |
 +----------------------------------+----------------------------------+
@@ -3440,12 +3435,12 @@ zfs_vdev_async_write_active_min_dirty_percent
 
 If the amount of dirty data is between
 ``zfs_vdev_async_write_active_min_dirty_percent`` and
-`zfs_vdev_async_write_active_max_dirty_percent <#zfs_vdev_async_write_active_max_dirty_percent>`__
-of `zfs_dirty_data_max <#zfs_dirty_data_max>`__, the active I/O limit is
+`zfs_vdev_async_write_active_max_dirty_percent <#zfs-vdev-async-write-active-max-dirty-percent>`__
+of `zfs_dirty_data_max <#zfs-dirty-data-max>`__, the active I/O limit is
 linearly interpolated between
-`zfs_vdev_async_write_min_active <#zfs_vdev_async_write_min_active>`__
+`zfs_vdev_async_write_min_active <#zfs-vdev-async-write-min-active>`__
 and
-`zfs_vdev_async_write_max_active <#zfs_vdev_async_write_max_active>`__
+`zfs_vdev_async_write_max_active <#zfs-vdev-async-write-max-active>`__
 
 +----------------------------------+----------------------------------+
 | zfs_vdev_asyn                    | Notes                            |
@@ -3453,7 +3448,7 @@ and
 +==================================+==================================+
 | Tags                             | `vdev <#vdev>`__,                |
 |                                  | `Z                               |
-|                                  | IO_scheduler <#zio_scheduler>`__ |
+|                                  | IO_scheduler <#zio-scheduler>`__ |
 +----------------------------------+----------------------------------+
 | When to change                   | See `ZFS I/O                     |
 |                                  | Sch                              |
@@ -3489,7 +3484,7 @@ I/Os active to each device.
 +=================================+===================================+
 | Tags                            | `vdev <#vdev>`__,                 |
 |                                 | `                                 |
-|                                 | ZIO_scheduler <#zio_scheduler>`__ |
+|                                 | ZIO_scheduler <#zio-scheduler>`__ |
 +---------------------------------+-----------------------------------+
 | When to change                  | See `ZFS I/O                      |
 |                                 | S                                 |
@@ -3502,7 +3497,7 @@ I/Os active to each device.
 +---------------------------------+-----------------------------------+
 | Range                           | 1 to                              |
 |                                 | `zfs_vdev_max                     |
-|                                 | _active <#zfs_vdev_max_active>`__ |
+|                                 | _active <#zfs-vdev-max-active>`__ |
 +---------------------------------+-----------------------------------+
 | Default                         | 10                                |
 +---------------------------------+-----------------------------------+
@@ -3527,7 +3522,7 @@ further at a cost of further increasing latency.
 +=================================+===================================+
 | Tags                            | `vdev <#vdev>`__,                 |
 |                                 | `                                 |
-|                                 | ZIO_scheduler <#zio_scheduler>`__ |
+|                                 | ZIO_scheduler <#zio-scheduler>`__ |
 +---------------------------------+-----------------------------------+
 | When to change                  | See `ZFS I/O                      |
 |                                 | S                                 |
@@ -3567,7 +3562,7 @@ are queued in the intervening device driver layers.
 | zfs_vdev_max_active | Notes                                         |
 +=====================+===============================================+
 | Tags                | `vdev <#vdev>`__,                             |
-|                     | `ZIO_scheduler <#zio_scheduler>`__            |
+|                     | `ZIO_scheduler <#zio-scheduler>`__            |
 +---------------------+-----------------------------------------------+
 | When to change      | See `ZFS I/O                                  |
 |                     | Scheduler <https://git                        |
@@ -3596,7 +3591,7 @@ active to each device.
 | zfs_vdev_scrub_max_active | Notes                                   |
 +===========================+=========================================+
 | Tags                      | `vdev <#vdev>`__,                       |
-|                           | `ZIO_scheduler <#zio_scheduler>`__,     |
+|                           | `ZIO_scheduler <#zio-scheduler>`__,     |
 |                           | `scrub <#scrub>`__,                     |
 |                           | `resilver <#resilver>`__                |
 +---------------------------+-----------------------------------------+
@@ -3610,7 +3605,7 @@ active to each device.
 +---------------------------+-----------------------------------------+
 | Range                     | 1 to                                    |
 |                           | `zfs_vd                                 |
-|                           | ev_max_active <#zfs_vdev_max_active>`__ |
+|                           | ev_max_active <#zfs-vdev-max-active>`__ |
 +---------------------------+-----------------------------------------+
 | Default                   | 2                                       |
 +---------------------------+-----------------------------------------+
@@ -3629,7 +3624,7 @@ active to each device.
 | zfs_vdev_scrub_min_active | Notes                                   |
 +===========================+=========================================+
 | Tags                      | `vdev <#vdev>`__,                       |
-|                           | `ZIO_scheduler <#zio_scheduler>`__,     |
+|                           | `ZIO_scheduler <#zio-scheduler>`__,     |
 |                           | `scrub <#scrub>`__,                     |
 |                           | `resilver <#resilver>`__                |
 +---------------------------+-----------------------------------------+
@@ -3643,7 +3638,7 @@ active to each device.
 +---------------------------+-----------------------------------------+
 | Range                     | 1 to                                    |
 |                           | `zfs_vdev_scrub_max                     |
-|                           | _active <#zfs_vdev_scrub_max_active>`__ |
+|                           | _active <#zfs-vdev-scrub-max-active>`__ |
 +---------------------------+-----------------------------------------+
 | Default                   | 1                                       |
 +---------------------------+-----------------------------------------+
@@ -3661,7 +3656,7 @@ Maximum synchronous read I/Os active to each device.
 | zfs_vdev_sync_read_max_active | Notes                               |
 +===============================+=====================================+
 | Tags                          | `vdev <#vdev>`__,                   |
-|                               | `ZIO_scheduler <#zio_scheduler>`__  |
+|                               | `ZIO_scheduler <#zio-scheduler>`__  |
 +-------------------------------+-------------------------------------+
 | When to change                | See `ZFS I/O                        |
 |                               | Scheduler <https://github.com/zf    |
@@ -3673,7 +3668,7 @@ Maximum synchronous read I/Os active to each device.
 +-------------------------------+-------------------------------------+
 | Range                         | 1 to                                |
 |                               | `zfs_vdev_m                         |
-|                               | ax_active <#zfs_vdev_max_active>`__ |
+|                               | ax_active <#zfs-vdev-max-active>`__ |
 +-------------------------------+-------------------------------------+
 | Default                       | 10                                  |
 +-------------------------------+-------------------------------------+
@@ -3692,7 +3687,7 @@ active to each device.
 | zfs_vdev_sync_read_min_active | Notes                               |
 +===============================+=====================================+
 | Tags                          | `vdev <#vdev>`__,                   |
-|                               | `ZIO_scheduler <#zio_scheduler>`__  |
+|                               | `ZIO_scheduler <#zio-scheduler>`__  |
 +-------------------------------+-------------------------------------+
 | When to change                | See `ZFS I/O                        |
 |                               | Scheduler <https://github.com/zf    |
@@ -3704,7 +3699,7 @@ active to each device.
 +-------------------------------+-------------------------------------+
 | Range                         | 1 to                                |
 |                               | `zfs_vdev_sync_read_max_active      |
-|                               | <#zfs_vdev_sync_read_max_active>`__ |
+|                               | <#zfs-vdev-sync-read-max-active>`__ |
 +-------------------------------+-------------------------------------+
 | Default                       | 10                                  |
 +-------------------------------+-------------------------------------+
@@ -3723,7 +3718,7 @@ I/Os active to each device.
 | zfs_vdev_sync_write_max_active | Notes                              |
 +================================+====================================+
 | Tags                           | `vdev <#vdev>`__,                  |
-|                                | `ZIO_scheduler <#zio_scheduler>`__ |
+|                                | `ZIO_scheduler <#zio-scheduler>`__ |
 +--------------------------------+------------------------------------+
 | When to change                 | See `ZFS I/O                       |
 |                                | Scheduler <https://github.com/zfs  |
@@ -3735,7 +3730,7 @@ I/Os active to each device.
 +--------------------------------+------------------------------------+
 | Range                          | 1 to                               |
 |                                | `zfs_vdev_ma                       |
-|                                | x_active <#zfs_vdev_max_active>`__ |
+|                                | x_active <#zfs-vdev-max-active>`__ |
 +--------------------------------+------------------------------------+
 | Default                        | 10                                 |
 +--------------------------------+------------------------------------+
@@ -3754,7 +3749,7 @@ I/Os active to each device.
 | zfs_vdev_sync_write_min_active | Notes                              |
 +================================+====================================+
 | Tags                           | `vdev <#vdev>`__,                  |
-|                                | `ZIO_scheduler <#zio_scheduler>`__ |
+|                                | `ZIO_scheduler <#zio-scheduler>`__ |
 +--------------------------------+------------------------------------+
 | When to change                 | See `ZFS I/O                       |
 |                                | Scheduler <https://github.com/zfs  |
@@ -3780,23 +3775,23 @@ zfs_vdev_queue_depth_pct
 
 Maximum number of queued allocations per top-level vdev expressed as a
 percentage of
-`zfs_vdev_async_write_max_active <#zfs_vdev_async_write_max_active>`__.
+`zfs_vdev_async_write_max_active <#zfs-vdev-async-write-max-active>`__.
 This allows the system to detect devices that are more capable of
 handling allocations and to allocate more blocks to those devices. It
 also allows for dynamic allocation distribution when devices are
 imbalanced as fuller devices will tend to be slower than empty devices.
 Once the queue depth reaches (``zfs_vdev_queue_depth_pct`` \*
-`zfs_vdev_async_write_max_active <#zfs_vdev_async_write_max_active>`__ /
+`zfs_vdev_async_write_max_active <#zfs-vdev-async-write-max-active>`__ /
 100) then allocator will stop allocating blocks on that top-level device
 and switch to the next.
 
-See also `zio_dva_throttle_enabled <#zio_dva_throttle_enabled>`__
+See also `zio_dva_throttle_enabled <#zio-dva-throttle-enabled>`__
 
 +--------------------------+------------------------------------------+
 | zfs_vdev_queue_depth_pct | Notes                                    |
 +==========================+==========================================+
 | Tags                     | `vdev <#vdev>`__,                        |
-|                          | `ZIO_scheduler <#zio_scheduler>`__       |
+|                          | `ZIO_scheduler <#zio-scheduler>`__       |
 +--------------------------+------------------------------------------+
 | When to change           | See `ZFS I/O                             |
 |                          | Scheduler <https://github.c              |
@@ -3901,7 +3896,7 @@ zfs_flags
 ~~~~~~~~~
 
 Set additional debugging flags (see
-`zfs_dbgmsg_enable <#zfs_dbgmsg_enable>`__)
+`zfs_dbgmsg_enable <#zfs-dbgmsg-enable>`__)
 
 +------------+---------------------------+---------------------------+
 | flag value | symbolic name             | description               |
@@ -4144,12 +4139,12 @@ option.
 
 ``zfs_metaslab_fragmentation_threshold`` works at the metaslab level and
 each top-level vdev has approximately
-`metaslabs_per_vdev <#metaslabs_per_vdev>`__ metaslabs. See also
-`zfs_mg_fragmentation_threshold <#zfs_mg_fragmentation_threshold>`__
+`metaslabs_per_vdev <#metaslabs-per-vdev>`__ metaslabs. See also
+`zfs_mg_fragmentation_threshold <#zfs-mg-fragmentation-threshold>`__
 
 +----------------------------------+----------------------------------+
-| zfs_                             | Notes                            |
-| metaslab_fragmentation_threshold |                                  |
+| zfs_metaslab_fragmentation_thresh| Notes                            |
+| old                              |                                  |
 +==================================+==================================+
 | Tags                             | `allocation <#allocation>`__,    |
 |                                  | `fr                              |
@@ -4281,7 +4276,7 @@ uberblock.
 
 On import the multihost activity check waits a minimum amount of time
 determined by (``zfs_multihost_interval`` \*
-`zfs_multihost_import_intervals <#zfs_multihost_import_intervals>`__)
+`zfs_multihost_import_intervals <#zfs-multihost-import-intervals>`__)
 with a lower bound of 1 second. The activity check time may be further
 extended if the value of mmp delay found in the best uberblock indicates
 actual multihost updates happened at longer intervals than
@@ -4320,7 +4315,7 @@ zfs_multihost_import_intervals
 test on pool import for the multihost multimodifier protection (MMP)
 subsystem. The activity test can be expected to take a minimum time of
 (``zfs_multihost_import_interval``\ s \*
-`zfs_multihost_interval <#zfs_multihost_interval>`__ \* ``random(25%)``)
+`zfs_multihost_interval <#zfs-multihost-interval>`__ \* ``random(25%)``)
 milliseconds. The random period of up to 25% improves simultaneous
 import detection. For example, if two hosts are rebooted at the same
 time and automatically attempt to import the pool, then is is highly
@@ -4361,7 +4356,7 @@ a device.
 | If ``zfs_multihost_fail_intervals > 0`` then sequential multihost
   write failures will cause the pool to be suspended. This occurs when
   (``zfs_multihost_fail_intervals`` \*
-  `zfs_multihost_interval <#zfs_multihost_interval>`__) milliseconds
+  `zfs_multihost_interval <#zfs-multihost-interval>`__) milliseconds
   have passed since the last successful multihost write.
 | This guarantees the activity test will see multihost writes if the
   pool is attempted to be imported by another system.
@@ -4596,7 +4591,7 @@ zfs_per_txg_dirty_frees_percent
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``zfs_per_txg_dirty_frees_percent`` as a percentage of
-`zfs_dirty_data_max <#zfs_dirty_data_max>`__ controls the percentage of
+`zfs_dirty_data_max <#zfs-dirty-data-max>`__ controls the percentage of
 dirtied blocks from frees in one txg. After the threshold is crossed,
 additional dirty blocks from frees wait until the next txg. Thus, when
 deleting large files, filling consecutive txgs with deletes/frees, does
@@ -4604,7 +4599,7 @@ not throttle other, perhaps more important, writes.
 
 A side effect of this throttle can impact ``zfs receive`` workloads that
 contain a large number of frees and the
-`ignore_hole_birth <#ignore_hole_birth>`__ optimization is disabled. The
+`ignore_hole_birth <#ignore-hole-birth>`__ optimization is disabled. The
 symptom is that the receive workload causes an increase in the frequency
 of txg commits. The frequency of txg commits is observable via the
 ``otime`` column of ``/proc/spl/kstat/zfs/POOLNAME/txgs``. Since txg
@@ -4646,7 +4641,7 @@ zfs_prefetch_disable
 ``zfs_prefetch_disable`` controls the predictive prefetcher.
 
 Note that it leaves "prescient" prefetch (eg prefetch for ``zfs send``)
-intact (see `zfs_pd_bytes_max <#zfs_pd_bytes_max>`__)
+intact (see `zfs_pd_bytes_max <#zfs-pd-bytes-max>`__)
 
 +----------------------+----------------------------------------------+
 | zfs_prefetch_disable | Notes                                        |
@@ -4716,7 +4711,7 @@ Versions Affected all
 zfs_read_history_hits
 ~~~~~~~~~~~~~~~~~~~~~
 
-When `zfs_read_history <#zfs_read_history>`__\ ``> 0``,
+When `zfs_read_history <#zfs-read-history>`__\ ``> 0``,
 zfs_read_history_hits controls whether ARC hits are displayed in the
 read history file, ``/proc/spl/kstat/zfs/POOL_NAME/reads``
 
@@ -4779,15 +4774,15 @@ Resilvers are processed by the sync thread in syncing context. While
 resilvering, ZFS spends at least ``zfs_resilver_min_time_ms`` time
 working on a resilver between txg commits.
 
-The `zfs_txg_timeout <#zfs_txg_timeout>`__ tunable sets a nominal
+The `zfs_txg_timeout <#zfs-txg-timeout>`__ tunable sets a nominal
 timeout value for the txg commits. By default, this timeout is 5 seconds
 and the ``zfs_resilver_min_time_ms`` is 3 seconds. However, many
 variables contribute to changing the actual txg times. The measured txg
 interval is observed as the ``otime`` column (in nanoseconds) in the
 ``/proc/spl/kstat/zfs/POOL_NAME/txgs`` file.
 
-See also `zfs_txg_timeout <#zfs_txg_timeout>`__ and
-`zfs_scan_min_time_ms <#zfs_scan_min_time_ms>`__
+See also `zfs_txg_timeout <#zfs-txg-timeout>`__ and
+`zfs_scan_min_time_ms <#zfs-scan-min-time-ms>`__
 
 +--------------------------+------------------------------------------+
 | zfs_resilver_min_time_ms | Notes                                    |
@@ -4803,7 +4798,7 @@ See also `zfs_txg_timeout <#zfs_txg_timeout>`__ and
 | Units                    | milliseconds                             |
 +--------------------------+------------------------------------------+
 | Range                    | 1 to                                     |
-|                          | `zfs_txg_timeout <#zfs_txg_timeout>`__   |
+|                          | `zfs_txg_timeout <#zfs-txg-timeout>`__   |
 |                          | converted to milliseconds                |
 +--------------------------+------------------------------------------+
 | Default                  | 3,000                                    |
@@ -4820,8 +4815,8 @@ Scrubs are processed by the sync thread in syncing context. While
 scrubbing, ZFS spends at least ``zfs_scan_min_time_ms`` time working on
 a scrub between txg commits.
 
-See also `zfs_txg_timeout <#zfs_txg_timeout>`__ and
-`zfs_resilver_min_time_ms <#zfs_resilver_min_time_ms>`__
+See also `zfs_txg_timeout <#zfs-txg-timeout>`__ and
+`zfs_resilver_min_time_ms <#zfs-resilver-min-time-ms>`__
 
 +----------------------+----------------------------------------------+
 | zfs_scan_min_time_ms | Notes                                        |
@@ -4836,7 +4831,7 @@ See also `zfs_txg_timeout <#zfs_txg_timeout>`__ and
 +----------------------+----------------------------------------------+
 | Units                | milliseconds                                 |
 +----------------------+----------------------------------------------+
-| Range                | 1 to `zfs_txg_timeout <#zfs_txg_timeout>`__  |
+| Range                | 1 to `zfs_txg_timeout <#zfs-txg-timeout>`__  |
 |                      | converted to milliseconds                    |
 +----------------------+----------------------------------------------+
 | Default              | 1,000                                        |
@@ -4901,7 +4896,7 @@ while scrubbing or resilvering.
 +-------+-------------------------------------------------------------+
 | 1     | data is verified as sequentially as possible, given the     |
 |       | amount of memory reserved for scrubbing (see                |
-|       | `zfs_scan_mem_lim_fact <#zfs_scan_mem_lim_fact>`__). This   |
+|       | `zfs_scan_mem_lim_fact <#zfs-scan-mem-lim-fact>`__). This   |
 |       | can improve scrub performance if the pool's data is heavily |
 |       | fragmented.                                                 |
 +-------+-------------------------------------------------------------+
@@ -4991,7 +4986,7 @@ I/O sorting by sequential scan algorithm. When the limit is reached
 scanning metadata is stopped and data verification I/O is started. Data
 verification I/O continues until the memory used by the sorting
 algorithm drops below below
-`zfs_scan_mem_lim_soft_fact <#zfs_scan_mem_lim_soft_fact>`__
+`zfs_scan_mem_lim_soft_fact <#zfs-scan-mem-lim-soft-fact>`__
 
 Memory used by the sequential scan algorithm can be observed as the kmem
 sio_cache. This is visible from procfs as
@@ -5024,9 +5019,9 @@ zfs_scan_mem_lim_soft_fact
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``zfs_scan_mem_lim_soft_fact`` sets the fraction of the hard limit,
-`zfs_scan_mem_lim_fact <#zfs_scan_mem_lim_fact>`__, used to determined
+`zfs_scan_mem_lim_fact <#zfs-scan-mem-lim-fact>`__, used to determined
 the RAM soft limit for I/O sorting by the sequential scan algorithm.
-After `zfs_scan_mem_lim_fact <#zfs_scan_mem_lim_fact>`__ has been
+After `zfs_scan_mem_lim_fact <#zfs-scan-mem-lim-fact>`__ has been
 reached, metadata scanning is stopped until the RAM usage drops below
 ``zfs_scan_mem_lim_soft_fact``
 
@@ -5042,13 +5037,13 @@ reached, metadata scanning is stopped until the RAM usage drops below
 +----------------------------+----------------------------------------+
 | Units                      | divisor of (physical RAM /             |
 |                            | `zfs_scan_mem                          |
-|                            | _lim_fact <#zfs_scan_mem_lim_fact>`__) |
+|                            | _lim_fact <#zfs-scan-mem-lim-fact>`__) |
 +----------------------------+----------------------------------------+
 | Range                      | 1 to INT_MAX                           |
 +----------------------------+----------------------------------------+
 | Default                    | 20 (for default                        |
 |                            | `zfs_scan_mem                          |
-|                            | _lim_fact <#zfs_scan_mem_lim_fact>`__, |
+|                            | _lim_fact <#zfs-scan-mem-lim-fact>`__, |
 |                            | 0.25% of physical RAM)                 |
 +----------------------------+----------------------------------------+
 | Change                     | Dynamic                                |
@@ -5065,7 +5060,7 @@ concurrently issued at once for scrubs and resilvers per leaf vdev.
 leaf vdev queues full of I/Os while not overflowing the queues causing
 high latency resulting in long txg sync times. While
 ``zfs_scan_vdev_limit`` represents a bandwidth limit, the existing I/O
-limit of `zfs_vdev_scrub_max_active <#zfs_vdev_scrub_max_active>`__
+limit of `zfs_vdev_scrub_max_active <#zfs-vdev-scrub-max-active>`__
 remains in effect, too.
 
 +---------------------+-----------------------------------------------+
@@ -5253,18 +5248,18 @@ Many variables contribute to changing the actual txg times. txg commits
 can also take longer than ``zfs_txg_timeout`` if the ZFS write throttle
 is not properly tuned or the time to sync is otherwise delayed (eg slow
 device). Shorter txg commit intervals can occur due to
-`zfs_dirty_data_sync <#zfs_dirty_data_sync>`__ for write-intensive
+`zfs_dirty_data_sync <#zfs-dirty-data-sync>`__ for write-intensive
 workloads. The measured txg interval is observed as the ``otime`` column
 (in nanoseconds) in the ``/proc/spl/kstat/zfs/POOL_NAME/txgs`` file.
 
-See also `zfs_dirty_data_sync <#zfs_dirty_data_sync>`__ and
-`zfs_txg_history <#zfs_txg_history>`__
+See also `zfs_dirty_data_sync <#zfs-dirty-data-sync>`__ and
+`zfs_txg_history <#zfs-txg-history>`__
 
 +-------------------+-------------------------------------------------+
 | zfs_txg_timeout   | Notes                                           |
 +===================+=================================================+
 | Tags              | `SPA <#spa>`__,                                 |
-|                   | `ZIO_scheduler <#zio_scheduler>`__              |
+|                   | `ZIO_scheduler <#zio-scheduler>`__              |
 +-------------------+-------------------------------------------------+
 | When to change    | To optimize the work done by txg commit         |
 |                   | relative to the pool requirements. See also     |
@@ -5304,14 +5299,14 @@ HDDs, where ordering I/O operations for contiguous LBAs is a benefit.
 For random access devices, such as SSDs, aggregation might not improve
 performance relative to the CPU cycles needed to aggregate. For devices
 that represent themselves as having no rotation, the
-`zfs_vdev_aggregation_limit_non_rotating <#zfs_vdev_aggregation_limit_non_rotating>`__
+`zfs_vdev_aggregation_limit_non_rotating <#zfs-vdev-aggregation-limit-non-rotating>`__
 parameter is used instead of ``zfs_vdev_aggregation_limit``
 
 +----------------------------+----------------------------------------+
 | zfs_vdev_aggregation_limit | Notes                                  |
 +============================+========================================+
 | Tags                       | `vdev <#vdev>`__,                      |
-|                            | `ZIO_scheduler <#zio_scheduler>`__     |
+|                            | `ZIO_scheduler <#zio-scheduler>`__     |
 +----------------------------+----------------------------------------+
 | When to change             | If the workload does not benefit from  |
 |                            | aggregation, the                       |
@@ -5351,7 +5346,7 @@ some cases actually harmful. Thusit is disabled by setting the
 | zfs_vdev_cache_size | Notes                                         |
 +=====================+===============================================+
 | Tags                | `vdev <#vdev>`__,                             |
-|                     | `vdev_cache <#vdev_cache>`__                  |
+|                     | `vdev_cache <#vdev-cache>`__                  |
 +---------------------+-----------------------------------------------+
 | When to change      | Do not change                                 |
 +---------------------+-----------------------------------------------+
@@ -5376,18 +5371,18 @@ zfs_vdev_cache_bshift
 
 Note: with the current ZFS code, the vdev cache is not helpful and in
 some cases actually harmful. Thus it is disabled by setting the
-`zfs_vdev_cache_size <#zfs_vdev_cache_size>`__ to zero. This related
+`zfs_vdev_cache_size <#zfs-vdev-cache-size>`__ to zero. This related
 tunable is, by default, inoperative.
 
-All read I/Os smaller than `zfs_vdev_cache_max <#zfs_vdev_cache_max>`__
+All read I/Os smaller than `zfs_vdev_cache_max <#zfs-vdev-cache-max>`__
 are turned into (``1 << zfs_vdev_cache_bshift``) byte reads by the vdev
-cache. At most `zfs_vdev_cache_size <#zfs_vdev_cache_size>`__ bytes will
+cache. At most `zfs_vdev_cache_size <#zfs-vdev-cache-size>`__ bytes will
 be kept in each vdev's cache.
 
 ===================== ==============================================
 zfs_vdev_cache_bshift Notes
 ===================== ==============================================
-Tags                  `vdev <#vdev>`__, `vdev_cache <#vdev_cache>`__
+Tags                  `vdev <#vdev>`__, `vdev_cache <#vdev-cache>`__
 When to change        Do not change
 Data Type             int
 Units                 shift
@@ -5402,18 +5397,18 @@ zfs_vdev_cache_max
 
 Note: with the current ZFS code, the vdev cache is not helpful and in
 some cases actually harmful. Thus it is disabled by setting the
-`zfs_vdev_cache_size <#zfs_vdev_cache_size>`__ to zero. This related
+`zfs_vdev_cache_size <#zfs-vdev-cache-size>`__ to zero. This related
 tunable is, by default, inoperative.
 
 All read I/Os smaller than zfs_vdev_cache_max will be turned into
-(``1 <<``\ `zfs_vdev_cache_bshift <#zfs_vdev_cache_bshift>`__ byte reads
+(``1 <<``\ `zfs_vdev_cache_bshift <#zfs-vdev-cache-bshift>`__ byte reads
 by the vdev cache. At most ``zfs_vdev_cache_size`` bytes will be kept in
 each vdev's cache.
 
 ================== ==============================================
 zfs_vdev_cache_max Notes
 ================== ==============================================
-Tags               `vdev <#vdev>`__, `vdev_cache <#vdev_cache>`__
+Tags               `vdev <#vdev>`__, `vdev_cache <#vdev-cache>`__
 When to change     Do not change
 Data Type          int
 Units              bytes
@@ -5430,7 +5425,7 @@ The mirror read algorithm uses current load and an incremental weighting
 value to determine the vdev to service a read operation. Lower values
 determine the preferred vdev. The weighting value is
 ``zfs_vdev_mirror_rotating_inc`` for rotating media and
-`zfs_vdev_mirror_non_rotating_inc <#zfs_vdev_mirror_non_rotating_inc>`__
+`zfs_vdev_mirror_non_rotating_inc <#zfs-vdev-mirror-non-rotating-inc>`__
 for nonrotating media.
 
 Verify the rotational setting described by a block device in sysfs by
@@ -5466,7 +5461,7 @@ zfs_vdev_mirror_non_rotating_inc
 The mirror read algorithm uses current load and an incremental weighting
 value to determine the vdev to service a read operation. Lower values
 determine the preferred vdev. The weighting value is
-`zfs_vdev_mirror_rotating_inc <#zfs_vdev_mirror_rotating_inc>`__ for
+`zfs_vdev_mirror_rotating_inc <#zfs-vdev-mirror-rotating-inc>`__ for
 rotating media and ``zfs_vdev_mirror_non_rotating_inc`` for nonrotating
 media.
 
@@ -5499,7 +5494,7 @@ zfs_vdev_mirror_rotating_seek_inc
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 For rotating media in a mirror, if the next I/O offset is within
-`zfs_vdev_mirror_rotating_seek_offset <#zfs_vdev_mirror_rotating_seek_offset>`__
+`zfs_vdev_mirror_rotating_seek_offset <#zfs-vdev-mirror-rotating-seek-offset>`__
 then the weighting factor is incremented by
 (``zfs_vdev_mirror_rotating_seek_inc / 2``). Otherwise the weighting
 factor is increased by ``zfs_vdev_mirror_rotating_seek_inc``. This
@@ -5537,7 +5532,7 @@ zfs_vdev_mirror_rotating_seek_offset
 For rotating media in a mirror, if the next I/O offset is within
 ``zfs_vdev_mirror_rotating_seek_offset`` then the weighting factor is
 incremented by
-(`zfs_vdev_mirror_rotating_seek_inc <#zfs_vdev_mirror_rotating_seek_inc>`__\ ``/ 2``).
+(`zfs_vdev_mirror_rotating_seek_inc <#zfs-vdev-mirror-rotating-seek-inc>`__\ ``/ 2``).
 Otherwise the weighting factor is increased by
 ``zfs_vdev_mirror_rotating_seek_inc``. This algorithm prefers rotating
 media with lower seek distance.
@@ -5546,8 +5541,8 @@ Verify the rotational setting described by a block device in sysfs by
 observing ``/sys/block/DISK_NAME/queue/rotational``
 
 +----------------------------------+----------------------------------+
-| zfs_                             | Notes                            |
-| vdev_mirror_rotating_seek_offset |                                  |
+| zfs_vdev_mirror_rotating_seek_off| Notes                            |
+| set                              |                                  |
 +==================================+==================================+
 | Tags                             | `vdev <#vdev>`__,                |
 |                                  | `mirror <#mirror>`__,            |
@@ -5612,7 +5607,7 @@ gaps where the gap is less than ``zfs_vdev_read_gap_limit``
 | zfs_vdev_read_gap_limit | Notes                                     |
 +=========================+===========================================+
 | Tags                    | `vdev <#vdev>`__,                         |
-|                         | `ZIO_scheduler <#zio_scheduler>`__        |
+|                         | `ZIO_scheduler <#zio-scheduler>`__        |
 +-------------------------+-------------------------------------------+
 | When to change          | TBD                                       |
 +-------------------------+-------------------------------------------+
@@ -5640,7 +5635,7 @@ gaps where the gap is less than ``zfs_vdev_write_gap_limit``
 | zfs_vdev_write_gap_limit | Notes                                    |
 +==========================+==========================================+
 | Tags                     | `vdev <#vdev>`__,                        |
-|                          | `ZIO_scheduler <#zio_scheduler>`__       |
+|                          | `ZIO_scheduler <#zio-scheduler>`__       |
 +--------------------------+------------------------------------------+
 | When to change           | TBD                                      |
 +--------------------------+------------------------------------------+
@@ -5673,7 +5668,7 @@ to logs.
 | zfs_vdev_scheduler | Notes                                          |
 +====================+================================================+
 | Tags               | `vdev <#vdev>`__,                              |
-|                    | `ZIO_scheduler <#zio_scheduler>`__             |
+|                    | `ZIO_scheduler <#zio-scheduler>`__             |
 +--------------------+------------------------------------------------+
 | When to change     | since ZFS has its own I/O scheduler, using a   |
 |                    | simple scheduler can result in more consistent |
@@ -5815,7 +5810,7 @@ zfs_zil_clean_taskq_maxalloc
 During a SPA sync, intent log transaction groups (itxg) are cleaned. The
 cleaning work is dispatched to the DSL pool ZIL clean taskq
 (``dp_zil_clean_taskq``).
-`zfs_zil_clean_taskq_minalloc <#zfs_zil_clean_taskq_minalloc>`__ is the
+`zfs_zil_clean_taskq_minalloc <#zfs-zil-clean-taskq-minalloc>`__ is the
 minumum and ``zfs_zil_clean_taskq_maxalloc`` is the maximum number of
 cached taskq entries for ``dp_zil_clean_taskq``. The actual number of
 taskq entries dynamically varies between these values.
@@ -5842,7 +5837,7 @@ Ideally taskq entries are pre-allocated prior to being needed by
 | Units                        | ``dp_zil_clean_taskq`` taskq entries |
 +------------------------------+--------------------------------------+
 | Range                        | `zfs_zil_clean_taskq_minallo         |
-|                              | c <#zfs_zil_clean_taskq_minalloc>`__ |
+|                              | c <#zfs-zil-clean-taskq-minalloc>`__ |
 |                              | to ``INT_MAX``                       |
 +------------------------------+--------------------------------------+
 | Default                      | 1,048,576                            |
@@ -5860,7 +5855,7 @@ During a SPA sync, intent log transaction groups (itxg) are cleaned. The
 cleaning work is dispatched to the DSL pool ZIL clean taskq
 (``dp_zil_clean_taskq``). ``zfs_zil_clean_taskq_minalloc`` is the
 minumum and
-`zfs_zil_clean_taskq_maxalloc <#zfs_zil_clean_taskq_maxalloc>`__ is the
+`zfs_zil_clean_taskq_maxalloc <#zfs-zil-clean-taskq-maxalloc>`__ is the
 maximum number of cached taskq entries for ``dp_zil_clean_taskq``. The
 actual number of taskq entries dynamically varies between these values.
 
@@ -5883,7 +5878,7 @@ Ideally taskq entries are pre-allocated prior to being needed by
 +------------------------------+--------------------------------------+
 | Range                        | 1 to                                 |
 |                              | `zfs_zil_clean_taskq_maxallo         |
-|                              | c <#zfs_zil_clean_taskq_maxalloc>`__ |
+|                              | c <#zfs-zil-clean-taskq-maxalloc>`__ |
 +------------------------------+--------------------------------------+
 | Default                      | 1,024                                |
 +------------------------------+--------------------------------------+
@@ -5998,13 +5993,13 @@ zio_dva_throttle_enabled
 ``zio_dva_throttle_enabled`` controls throttling of block allocations in
 the ZFS I/O (ZIO) pipeline. When enabled, the maximum number of pending
 allocations per top-level vdev is limited by
-`zfs_vdev_queue_depth_pct <#zfs_vdev_queue_depth_pct>`__
+`zfs_vdev_queue_depth_pct <#zfs-vdev-queue-depth-pct>`__
 
 +--------------------------+------------------------------------------+
 | zio_dva_throttle_enabled | Notes                                    |
 +==========================+==========================================+
 | Tags                     | `vdev <#vdev>`__,                        |
-|                          | `ZIO_scheduler <#zio_scheduler>`__       |
+|                          | `ZIO_scheduler <#zio-scheduler>`__       |
 +--------------------------+------------------------------------------+
 | When to change           | Testing ZIO block allocation algorithms  |
 +--------------------------+------------------------------------------+
@@ -6030,7 +6025,7 @@ re-queued ZFS I/O (ZIO) in the ZIO pipeline by the ZIO taskq.
 | zio_requeue_io_start_cut_in_line | Notes                            |
 +==================================+==================================+
 | Tags                             | `Z                               |
-|                                  | IO_scheduler <#zio_scheduler>`__ |
+|                                  | IO_scheduler <#zio-scheduler>`__ |
 +----------------------------------+----------------------------------+
 | When to change                   | Do not change                    |
 +----------------------------------+----------------------------------+
@@ -6077,7 +6072,7 @@ therefore require recompiling the kernel module to adjust.
 | zio_taskq_batch_pct | Notes                                         |
 +=====================+===============================================+
 | Tags                | `taskq <#taskq>`__,                           |
-|                     | `ZIO_scheduler <#zio_scheduler>`__            |
+|                     | `ZIO_scheduler <#zio-scheduler>`__            |
 +---------------------+-----------------------------------------------+
 | When to change      | To tune parallelism in multiprocessor systems |
 +---------------------+-----------------------------------------------+
@@ -6228,7 +6223,7 @@ This effectively limits the queue depth to 1 for each I/O submitter.
 When set to 0 requests are handled asynchronously by the "zvol" thread
 pool.
 
-See also `zvol_threads <#zvol_threads>`__
+See also `zvol_threads <#zvol-threads>`__
 
 +-------------------+-------------------------------------------------+
 | zvol_request_sync | Notes                                           |
@@ -6261,7 +6256,7 @@ workload and available CPUs. If lock analysis shows high contention in
 the zvol taskq threads, then reducing the number of zvol_threads or
 workload queue depth can improve overall throughput.
 
-See also `zvol_request_sync <#zvol_request_sync>`__
+See also `zvol_request_sync <#zvol-request-sync>`__
 
 +-------------------+-------------------------------------------------+
 | zvol_threads      | Notes                                           |
@@ -6344,7 +6339,7 @@ is to enable QAT.
 +-------------------+-------------------------------------------------+
 | Versions Affected | v0.7, renamed to                                |
 |                   | `zfs_qat_                                       |
-|                   | compress_disable <#zfs_qat_compress_disable>`__ |
+|                   | compress_disable <#zfs-qat-compress-disable>`__ |
 |                   | in v0.8                                         |
 +-------------------+-------------------------------------------------+
 
@@ -6435,21 +6430,21 @@ dbuf_cache_hiwater_pct
 ~~~~~~~~~~~~~~~~~~~~~~
 
 The ``dbuf_cache_hiwater_pct`` and
-`dbuf_cache_lowater_pct <#dbuf_cache_lowater_pct>`__ define the
+`dbuf_cache_lowater_pct <#dbuf-cache-lowater-pct>`__ define the
 operating range for dbuf cache evict thread. The hiwater and lowater are
-percentages of the `dbuf_cache_max_bytes <#dbuf_cache_max_bytes>`__
+percentages of the `dbuf_cache_max_bytes <#dbuf-cache-max-bytes>`__
 value. When the dbuf cache grows above ((100% +
 ``dbuf_cache_hiwater_pct``) \*
-`dbuf_cache_max_bytes <#dbuf_cache_max_bytes>`__) then the dbuf cache
+`dbuf_cache_max_bytes <#dbuf-cache-max-bytes>`__) then the dbuf cache
 thread begins evicting. When the dbug cache falls below ((100% -
-`dbuf_cache_lowater_pct <#dbuf_cache_lowater_pct>`__) \*
-`dbuf_cache_max_bytes <#dbuf_cache_max_bytes>`__) then the dbuf cache
+`dbuf_cache_lowater_pct <#dbuf-cache-lowater-pct>`__) \*
+`dbuf_cache_max_bytes <#dbuf-cache-max-bytes>`__) then the dbuf cache
 thread stops evicting.
 
 ====================== =============================
 dbuf_cache_hiwater_pct Notes
 ====================== =============================
-Tags                   `dbuf_cache <#dbuf_cache>`__
+Tags                   `dbuf_cache <#dbuf-cache>`__
 When to change         Testing dbuf cache algorithms
 Data Type              uint
 Units                  percent
@@ -6464,19 +6459,19 @@ dbuf_cache_lowater_pct
 
 The dbuf_cache_hiwater_pct and dbuf_cache_lowater_pct define the
 operating range for dbuf cache evict thread. The hiwater and lowater are
-percentages of the `dbuf_cache_max_bytes <#dbuf_cache_max_bytes>`__
+percentages of the `dbuf_cache_max_bytes <#dbuf-cache-max-bytes>`__
 value. When the dbuf cache grows above ((100% +
-`dbuf_cache_hiwater_pct <#dbuf_cache_hiwater_pct>`__) \*
-`dbuf_cache_max_bytes <#dbuf_cache_max_bytes>`__) then the dbuf cache
+`dbuf_cache_hiwater_pct <#dbuf-cache-hiwater-pct>`__) \*
+`dbuf_cache_max_bytes <#dbuf-cache-max-bytes>`__) then the dbuf cache
 thread begins evicting. When the dbug cache falls below ((100% -
 ``dbuf_cache_lowater_pct``) \*
-`dbuf_cache_max_bytes <#dbuf_cache_max_bytes>`__) then the dbuf cache
+`dbuf_cache_max_bytes <#dbuf-cache-max-bytes>`__) then the dbuf cache
 thread stops evicting.
 
 ====================== =============================
 dbuf_cache_lowater_pct Notes
 ====================== =============================
-Tags                   `dbuf_cache <#dbuf_cache>`__
+Tags                   `dbuf_cache <#dbuf-cache>`__
 When to change         Testing dbuf cache algorithms
 Data Type              uint
 Units                  percent
@@ -6500,13 +6495,13 @@ eligible for ARC eviction.
 
 The size of the dbuf cache is set by ``dbuf_cache_max_bytes``. The
 actual size is dynamically adjusted to the minimum of current ARC target
-size (``c``) >> `dbuf_cache_max_shift <#dbuf_cache_max_shift>`__ and the
+size (``c``) >> `dbuf_cache_max_shift <#dbuf-cache-max-shift>`__ and the
 default ``dbuf_cache_max_bytes``
 
 ==================== =============================
 dbuf_cache_max_bytes Notes
 ==================== =============================
-Tags                 `dbuf_cache <#dbuf_cache>`__
+Tags                 `dbuf_cache <#dbuf-cache>`__
 When to change       Testing dbuf cache algorithms
 Data Type            ulong
 Units                bytes
@@ -6519,14 +6514,14 @@ Versions Affected    v0.7.0 and later
 dbuf_cache_max_shift
 ~~~~~~~~~~~~~~~~~~~~
 
-The `dbuf_cache_max_bytes <#dbuf_cache_max_bytes>`__ minimum is the
-lesser of `dbuf_cache_max_bytes <#dbuf_cache_max_bytes>`__ and the
+The `dbuf_cache_max_bytes <#dbuf-cache-max-bytes>`__ minimum is the
+lesser of `dbuf_cache_max_bytes <#dbuf-cache-max-bytes>`__ and the
 current ARC target size (``c``) >> ``dbuf_cache_max_shift``
 
 ==================== =============================
 dbuf_cache_max_shift Notes
 ==================== =============================
-Tags                 `dbuf_cache <#dbuf_cache>`__
+Tags                 `dbuf_cache <#dbuf-cache>`__
 When to change       Testing dbuf cache algorithms
 Data Type            int
 Units                shift
@@ -6574,7 +6569,7 @@ path.
 send_holes_without_birth_time
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Alias for `ignore_hole_birth <#ignore_hole_birth>`__
+Alias for `ignore_hole_birth <#ignore-hole-birth>`__
 
 zfs_abd_scatter_enabled
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -6621,7 +6616,7 @@ zfs_abd_scatter_max_order
 
 ``zfs_abd_scatter_max_order`` sets the maximum order for physical page
 allocation when ABD is enabled (see
-`zfs_abd_scatter_enabled <#zfs_abd_scatter_enabled>`__)
+`zfs_abd_scatter_enabled <#zfs-abd-scatter-enabled>`__)
 
 See also Buddy Memory Allocation in the Linux kernel documentation.
 
@@ -6870,7 +6865,7 @@ over and above the scan limits
 | zfs_top_maxinflight | Notes                                         |
 +=====================+===============================================+
 | Tags                | `resilver <#resilver>`__, `scrub <#scrub>`__, |
-|                     | `ZIO_scheduler <#zio_scheduler>`__            |
+|                     | `ZIO_scheduler <#zio-scheduler>`__            |
 +---------------------+-----------------------------------------------+
 | When to change      | for modern ZFS versions, the ZIO scheduler    |
 |                     | limits usually take precedence                |
@@ -6893,13 +6888,13 @@ zfs_resilver_delay
 
 ``zfs_resilver_delay`` sets a time-based delay for resilver I/Os. This
 delay is in addition to the ZIO scheduler's treatement of scrub
-workloads. See also `zfs_scan_idle <#zfs_scan_idle>`__
+workloads. See also `zfs_scan_idle <#zfs-scan-idle>`__
 
 +--------------------+------------------------------------------------+
 | zfs_resilver_delay | Notes                                          |
 +====================+================================================+
 | Tags               | `resilver <#resilver>`__,                      |
-|                    | `ZIO_scheduler <#zio_scheduler>`__             |
+|                    | `ZIO_scheduler <#zio-scheduler>`__             |
 +--------------------+------------------------------------------------+
 | When to change     | increasing can reduce impact of resilver       |
 |                    | workload on dynamic workloads                  |
@@ -6922,13 +6917,13 @@ zfs_scrub_delay
 
 ``zfs_scrub_delay`` sets a time-based delay for scrub I/Os. This delay
 is in addition to the ZIO scheduler's treatment of scrub workloads. See
-also `zfs_scan_idle <#zfs_scan_idle>`__
+also `zfs_scan_idle <#zfs-scan-idle>`__
 
 +-------------------+-------------------------------------------------+
 | zfs_scrub_delay   | Notes                                           |
 +===================+=================================================+
 | Tags              | `scrub <#scrub>`__,                             |
-|                   | `ZIO_scheduler <#zio_scheduler>`__              |
+|                   | `ZIO_scheduler <#zio-scheduler>`__              |
 +-------------------+-------------------------------------------------+
 | When to change    | increasing can reduce impact of scrub workload  |
 |                   | on dynamic workloads                            |
@@ -6950,14 +6945,14 @@ zfs_scan_idle
 ~~~~~~~~~~~~~
 
 When a non-scan I/O has occurred in the past ``zfs_scan_idle`` clock
-ticks, then `zfs_resilver_delay <#zfs_resilver_delay>`__ or
-`zfs_scrub_delay <#zfs_scrub_delay>`__ are enabled.
+ticks, then `zfs_resilver_delay <#zfs-resilver-delay>`__ or
+`zfs_scrub_delay <#zfs-scrub-delay>`__ are enabled.
 
 +-------------------+-------------------------------------------------+
 | zfs_scan_idle     | Notes                                           |
 +===================+=================================================+
 | Tags              | `resilver <#resilver>`__, `scrub <#scrub>`__,   |
-|                   | `ZIO_scheduler <#zio_scheduler>`__              |
+|                   | `ZIO_scheduler <#zio-scheduler>`__              |
 +-------------------+-------------------------------------------------+
 | When to change    | as part of a resilver/scrub tuning effort       |
 +-------------------+-------------------------------------------------+
@@ -7119,7 +7114,7 @@ while a value of '4' results in the fraction = 1/8.
 
 For large memory machines, pool import can consume large amounts of ARC:
 much larger than the value of maxinflight. This can result in
-`spa_load_verify_maxinflight <#spa_load_verify_maxinflight>`__ having a
+`spa_load_verify_maxinflight <#spa-load-verify-maxinflight>`__ having a
 value of 0 causing the system to hang. Setting ``spa_load_verify_shift``
 can reduce this limit and allow importing without hanging.
 
@@ -7225,9 +7220,9 @@ dbuf_metadata_cache_shift
 ``dbuf_metadata_cache_shift`` sets the size of the dbuf metadata cache
 as a fraction of ARC target size. This is an alternate method for
 setting dbuf metadata cache size than
-`dbuf_metadata_cache_max_bytes <#dbuf_metadata_cache_max_bytes>`__.
+`dbuf_metadata_cache_max_bytes <#dbuf-metadata-cache-max-bytes>`__.
 
-`dbuf_metadata_cache_max_bytes <#dbuf_metadata_cache_max_bytes>`__
+`dbuf_metadata_cache_max_bytes <#dbuf-metadata-cache-max-bytes>`__
 overrides ``dbuf_metadata_cache_shift``
 
 This value is a "shift" representing the fraction of ARC target size
@@ -7239,7 +7234,7 @@ while a value of '6' results in the fraction = 1/64.
 | dbuf_metadata_cache_shift | Notes                                   |
 +===========================+=========================================+
 | Tags                      | `ARC <#ARC>`__,                         |
-|                           | `dbuf_cache <#dbuf_cache>`__            |
+|                           | `dbuf_cache <#dbuf-cache>`__            |
 +---------------------------+-----------------------------------------+
 | When to change            |                                         |
 +---------------------------+-----------------------------------------+
@@ -7249,7 +7244,7 @@ while a value of '6' results in the fraction = 1/64.
 +---------------------------+-----------------------------------------+
 | Range                     | practical range is                      |
 |                           | (`                                      |
-|                           | dbuf_cache_shift <#dbuf_cache_shift>`__ |
+|                           | dbuf_cache_shift <#dbuf-cache-shift>`__ |
 |                           | + 1) to MAX_INT                         |
 +---------------------------+-----------------------------------------+
 | Default                   | 6                                       |
@@ -7265,15 +7260,15 @@ dbuf_metadata_cache_max_bytes
 ``dbuf_metadata_cache_max_bytes`` sets the size of the dbuf metadata
 cache as a number of bytes. This is an alternate method for setting dbuf
 metadata cache size than
-`dbuf_metadata_cache_shift <#dbuf_metadata_cache_shift>`__
+`dbuf_metadata_cache_shift <#dbuf-metadata-cache-shift>`__
 
-`dbuf_metadata_cache_max_bytes <#dbuf_metadata_cache_max_bytes>`__
+`dbuf_metadata_cache_max_bytes <#dbuf-metadata-cache-max-bytes>`__
 overrides ``dbuf_metadata_cache_shift``
 
 +-------------------------------+-------------------------------------+
 | dbuf_metadata_cache_max_bytes | Notes                               |
 +===============================+=====================================+
-| Tags                          | `dbuf_cache <#dbuf_cache>`__        |
+| Tags                          | `dbuf_cache <#dbuf-cache>`__        |
 +-------------------------------+-------------------------------------+
 | When to change                |                                     |
 +-------------------------------+-------------------------------------+
@@ -7283,7 +7278,7 @@ overrides ``dbuf_metadata_cache_shift``
 +-------------------------------+-------------------------------------+
 | Range                         | 0 = use                             |
 |                               | `dbuf_metadata_cache_sh             |
-|                               | ift <#dbuf_metadata_cache_shift>`__ |
+|                               | ift <#dbuf-metadata-cache-shift>`__ |
 |                               | to ARC ``c_max``                    |
 +-------------------------------+-------------------------------------+
 | Default                       | 0                                   |
@@ -7298,9 +7293,9 @@ dbuf_cache_shift
 
 ``dbuf_cache_shift`` sets the size of the dbuf cache as a fraction of
 ARC target size. This is an alternate method for setting dbuf cache size
-than `dbuf_cache_max_bytes <#dbuf_cache_max_bytes>`__.
+than `dbuf_cache_max_bytes <#dbuf-cache-max-bytes>`__.
 
-`dbuf_cache_max_bytes <#dbuf_cache_max_bytes>`__ overrides
+`dbuf_cache_max_bytes <#dbuf-cache-max-bytes>`__ overrides
 ``dbuf_cache_shift``
 
 This value is a "shift" representing the fraction of ARC target size
@@ -7320,7 +7315,7 @@ Performance tuning of dbuf cache can be monitored using:
 +-------------------+-------------------------------------------------+
 | dbuf_cache_shift  | Notes                                           |
 +===================+=================================================+
-| Tags              | `ARC <#ARC>`__, `dbuf_cache <#dbuf_cache>`__    |
+| Tags              | `ARC <#ARC>`__, `dbuf_cache <#dbuf-cache>`__    |
 +-------------------+-------------------------------------------------+
 | When to change    | to improve performance of read-intensive        |
 |                   | channel programs                                |
@@ -7345,7 +7340,7 @@ dbuf_cache_max_bytes
 
 ``dbuf_cache_max_bytes`` sets the size of the dbuf cache in bytes. This
 is an alternate method for setting dbuf cache size than
-`dbuf_cache_shift <#dbuf_cache_shift>`__
+`dbuf_cache_shift <#dbuf-cache-shift>`__
 
 Performance tuning of dbuf cache can be monitored using:
 
@@ -7359,7 +7354,7 @@ Performance tuning of dbuf cache can be monitored using:
 +----------------------+----------------------------------------------+
 | dbuf_cache_max_bytes | Notes                                        |
 +======================+==============================================+
-| Tags                 | `ARC <#ARC>`__, `dbuf_cache <#dbuf_cache>`__ |
+| Tags                 | `ARC <#ARC>`__, `dbuf_cache <#dbuf-cache>`__ |
 +----------------------+----------------------------------------------+
 | When to change       |                                              |
 +----------------------+----------------------------------------------+
@@ -7368,7 +7363,7 @@ Performance tuning of dbuf cache can be monitored using:
 | Units                | bytes                                        |
 +----------------------+----------------------------------------------+
 | Range                | 0 = use                                      |
-|                      | `dbuf_cache_shift <#dbuf_cache_shift>`__ to  |
+|                      | `dbuf_cache_shift <#dbuf-cache-shift>`__ to  |
 |                      | ARC ``c_max``                                |
 +----------------------+----------------------------------------------+
 | Default              | 0                                            |
@@ -7433,7 +7428,7 @@ as unnecessary data in a chunk of copied data.
 ===================== ================================
 vdev_removal_max_span Notes
 ===================== ================================
-Tags                  `vdev_removal <#vdev_removal>`__
+Tags                  `vdev_removal <#vdev-removal>`__
 When to change        TBD
 Data Type             int
 Units                 bytes
@@ -7457,7 +7452,7 @@ to removing the device.
 +---------------------------+-----------------------------------------+
 | zfs_removal_ignore_errors | Notes                                   |
 +===========================+=========================================+
-| Tags                      | `vdev_removal <#vdev_removal>`__        |
+| Tags                      | `vdev_removal <#vdev-removal>`__        |
 +---------------------------+-----------------------------------------+
 | When to change            | See description for caveat              |
 +---------------------------+-----------------------------------------+
@@ -7483,7 +7478,7 @@ ZFS code to incease test coverage.
 ============================ ======================================
 zfs_removal_suspend_progress Notes
 ============================ ======================================
-Tags                         `vdev_removal <#vdev_removal>`__
+Tags                         `vdev_removal <#vdev-removal>`__
 When to change               do not change
 Data Type                    boolean
 Range                        0 = do not suspend during vdev removal
@@ -7504,7 +7499,7 @@ the ZFS code to improve test coverage.
 | zfs_condens                      | Notes                            |
 | e_indirect_commit_entry_delay_ms |                                  |
 +==================================+==================================+
-| Tags                             | `vdev_removal <#vdev_removal>`__ |
+| Tags                             | `vdev_removal <#vdev-removal>`__ |
 +----------------------------------+----------------------------------+
 | When to change                   | do not change                    |
 +----------------------------------+----------------------------------+
@@ -7528,16 +7523,16 @@ During vdev removal, condensing process is an attempt to save memory by
 removing obsolete mappings. ``zfs_condense_indirect_vdevs_enable``
 enables condensing indirect vdev mappings. When set, ZFS attempts to
 condense indirect vdev mappings if the mapping uses more than
-`zfs_condense_min_mapping_bytes <#zfs_condense_min_mapping_bytes>`__
+`zfs_condense_min_mapping_bytes <#zfs-condense-min-mapping-bytes>`__
 bytes of memory and if the obsolete space map object uses more than
-`zfs_condense_max_obsolete_bytes <#zfs_condense_max_obsolete_bytes>`__
+`zfs_condense_max_obsolete_bytes <#zfs-condense-max-obsolete-bytes>`__
 bytes on disk.
 
 +----------------------------------+----------------------------------+
 | zf                               | Notes                            |
 | s_condense_indirect_vdevs_enable |                                  |
 +==================================+==================================+
-| Tags                             | `vdev_removal <#vdev_removal>`__ |
+| Tags                             | `vdev_removal <#vdev-removal>`__ |
 +----------------------------------+----------------------------------+
 | When to change                   | TBD                              |
 +----------------------------------+----------------------------------+
@@ -7565,12 +7560,12 @@ to a typical pool that the space consumed by the obsolete space map is
 minimal.
 
 See also
-`zfs_condense_indirect_vdevs_enable <#zfs_condense_indirect_vdevs_enable>`__
+`zfs_condense_indirect_vdevs_enable <#zfs-condense-indirect-vdevs-enable>`__
 
 =============================== ================================
 zfs_condense_max_obsolete_bytes Notes
 =============================== ================================
-Tags                            `vdev_removal <#vdev_removal>`__
+Tags                            `vdev_removal <#vdev-removal>`__
 When to change                  no not change
 Data Type                       ulong
 Units                           bytes
@@ -7589,12 +7584,12 @@ The condensing process will not continue unless a minimum of
 ``zfs_condense_min_mapping_bytes`` of memory can be freed.
 
 See also
-`zfs_condense_indirect_vdevs_enable <#zfs_condense_indirect_vdevs_enable>`__
+`zfs_condense_indirect_vdevs_enable <#zfs-condense-indirect-vdevs-enable>`__
 
 ============================== ================================
 zfs_condense_min_mapping_bytes Notes
 ============================== ================================
-Tags                           `vdev_removal <#vdev_removal>`__
+Tags                           `vdev_removal <#vdev-removal>`__
 When to change                 do not change
 Data Type                      ulong
 Units                          bytes
@@ -7615,7 +7610,7 @@ active to each device.
 +==================================+==================================+
 | Tags                             | `vdev <#vdev>`__,                |
 |                                  | `Z                               |
-|                                  | IO_scheduler <#zio_scheduler>`__ |
+|                                  | IO_scheduler <#zio-scheduler>`__ |
 +----------------------------------+----------------------------------+
 | When to change                   | See `ZFS I/O                     |
 |                                  | Sch                              |
@@ -7628,7 +7623,7 @@ active to each device.
 +----------------------------------+----------------------------------+
 | Range                            | 1 to                             |
 |                                  | `zfs_vdev_max_                   |
-|                                  | active <#zfs_vdev_max_active>`__ |
+|                                  | active <#zfs-vdev-max-active>`__ |
 +----------------------------------+----------------------------------+
 | Default                          | 1                                |
 +----------------------------------+----------------------------------+
@@ -7648,7 +7643,7 @@ active to each device.
 +==================================+==================================+
 | Tags                             | `vdev <#vdev>`__,                |
 |                                  | `Z                               |
-|                                  | IO_scheduler <#zio_scheduler>`__ |
+|                                  | IO_scheduler <#zio-scheduler>`__ |
 +----------------------------------+----------------------------------+
 | When to change                   | See `ZFS I/O                     |
 |                                  | Sch                              |
@@ -7681,7 +7676,7 @@ I/Os active to each device.
 | zfs_vdev_removal_max_active | Notes                                 |
 +=============================+=======================================+
 | Tags                        | `vdev <#vdev>`__,                     |
-|                             | `ZIO_scheduler <#zio_scheduler>`__    |
+|                             | `ZIO_scheduler <#zio-scheduler>`__    |
 +-----------------------------+---------------------------------------+
 | When to change              | See `ZFS I/O                          |
 |                             | Scheduler <https://github.com/        |
@@ -7693,7 +7688,7 @@ I/Os active to each device.
 +-----------------------------+---------------------------------------+
 | Range                       | 1 to                                  |
 |                             | `zfs_vdev                             |
-|                             | _max_active <#zfs_vdev_max_active>`__ |
+|                             | _max_active <#zfs-vdev-max-active>`__ |
 +-----------------------------+---------------------------------------+
 | Default                     | 2                                     |
 +-----------------------------+---------------------------------------+
@@ -7712,7 +7707,7 @@ I/Os active to each device.
 | zfs_vdev_removal_min_active | Notes                                 |
 +=============================+=======================================+
 | Tags                        | `vdev <#vdev>`__,                     |
-|                             | `ZIO_scheduler <#zio_scheduler>`__    |
+|                             | `ZIO_scheduler <#zio-scheduler>`__    |
 +-----------------------------+---------------------------------------+
 | When to change              | See `ZFS I/O                          |
 |                             | Scheduler <https://github.com/        |
@@ -7724,7 +7719,7 @@ I/Os active to each device.
 +-----------------------------+---------------------------------------+
 | Range                       | 1 to                                  |
 |                             | `zfs_vdev_removal_max_act             |
-|                             | ive <#zfs_vdev_removal_max_active>`__ |
+|                             | ive <#zfs-vdev-removal-max-active>`__ |
 +-----------------------------+---------------------------------------+
 | Default                     | 1                                     |
 +-----------------------------+---------------------------------------+
@@ -7743,7 +7738,7 @@ device.
 | zfs_vdev_trim_max_active | Notes                                    |
 +==========================+==========================================+
 | Tags                     | `vdev <#vdev>`__,                        |
-|                          | `ZIO_scheduler <#zio_scheduler>`__       |
+|                          | `ZIO_scheduler <#zio-scheduler>`__       |
 +--------------------------+------------------------------------------+
 | When to change           | See `ZFS I/O                             |
 |                          | Scheduler <https://github.c              |
@@ -7755,7 +7750,7 @@ device.
 +--------------------------+------------------------------------------+
 | Range                    | 1 to                                     |
 |                          | `zfs_v                                   |
-|                          | dev_max_active <#zfs_vdev_max_active>`__ |
+|                          | dev_max_active <#zfs-vdev-max-active>`__ |
 +--------------------------+------------------------------------------+
 | Default                  | 2                                        |
 +--------------------------+------------------------------------------+
@@ -7774,7 +7769,7 @@ device.
 | zfs_vdev_trim_min_active | Notes                                    |
 +==========================+==========================================+
 | Tags                     | `vdev <#vdev>`__,                        |
-|                          | `ZIO_scheduler <#zio_scheduler>`__       |
+|                          | `ZIO_scheduler <#zio-scheduler>`__       |
 +--------------------------+------------------------------------------+
 | When to change           | See `ZFS I/O                             |
 |                          | Scheduler <https://github.c              |
@@ -7786,7 +7781,7 @@ device.
 +--------------------------+------------------------------------------+
 | Range                    | 1 to                                     |
 |                          | `zfs_vdev_trim_m                         |
-|                          | ax_active <#zfs_vdev_trim_max_active>`__ |
+|                          | ax_active <#zfs-vdev-trim-max-active>`__ |
 +--------------------------+------------------------------------------+
 | Default                  | 1                                        |
 +--------------------------+------------------------------------------+
@@ -7804,7 +7799,7 @@ When initializing a vdev, ZFS writes patterns of
 +----------------------+----------------------------------------------+
 | zfs_initialize_value | Notes                                        |
 +======================+==============================================+
-| Tags                 | `vdev_initialize <#vdev_initialize>`__       |
+| Tags                 | `vdev_initialize <#vdev-initialize>`__       |
 +----------------------+----------------------------------------------+
 | When to change       | when debugging initialization code           |
 +----------------------+----------------------------------------------+
@@ -7827,7 +7822,7 @@ program to run.
 +------------------------+--------------------------------------------+
 | zfs_lua_max_instrlimit | Notes                                      |
 +========================+============================================+
-| Tags                   | `channel_programs <#channel_programs>`__   |
+| Tags                   | `channel_programs <#channel-programs>`__   |
 +------------------------+--------------------------------------------+
 | When to change         | to enforce a CPU usage limit on ZFS        |
 |                        | channel programs                           |
@@ -7854,8 +7849,8 @@ program.
 ==================== ========================================
 zfs_lua_max_memlimit Notes
 ==================== ========================================
-Tags                 `channel_programs <#channel_programs>`__
-When to change       
+Tags                 `channel_programs <#channel-programs>`__
+When to change
 Data Type            ulong
 Units                bytes
 Range                0 to MAX_ULONG
@@ -7905,7 +7900,7 @@ reside on a special top-level vdev.
 | zfs_ddt_data_is_special | Notes                                     |
 +=========================+===========================================+
 | Tags                    | `dedup <#dedup>`__,                       |
-|                         | `special_vdev <#special_vdev>`__          |
+|                         | `special_vdev <#special-vdev>`__          |
 +-------------------------+-------------------------------------------+
 | When to change          | when using a special top-level vdev and   |
 |                         | no dedup top-level vdev and it is desired |
@@ -7934,7 +7929,7 @@ special vdevs.
 +------------------------------+--------------------------------------+
 | zfs_user_indirect_is_special | Notes                                |
 +==============================+======================================+
-| Tags                         | `special_vdev <#special_vdev>`__     |
+| Tags                         | `special_vdev <#special-vdev>`__     |
 +------------------------------+--------------------------------------+
 | When to change               | to force user data indirect blocks   |
 |                              | to remain in the main pool top-level |
@@ -7970,7 +7965,7 @@ copy.
 | zfs_recon                        | Notes                            |
 | struct_indirect_combinations_max |                                  |
 +==================================+==================================+
-| Tags                             | `vdev_removal <#vdev_removal>`__ |
+| Tags                             | `vdev_removal <#vdev-removal>`__ |
 +----------------------------------+----------------------------------+
 | When to change                   | TBD                              |
 +----------------------------------+----------------------------------+
@@ -8048,7 +8043,7 @@ small blocks or dedup table from completely consuming a special vdev.
 ====================================== ================================
 zfs_special_class_metadata_reserve_pct Notes
 ====================================== ================================
-Tags                                   `special_vdev <#special_vdev>`__
+Tags                                   `special_vdev <#special-vdev>`__
 When to change                         TBD
 Data Type                              int
 Units                                  percent
@@ -8080,7 +8075,7 @@ Use ``zpool iostat -w`` to observe the latency of trim commands.
 | Units                     | bytes                                   |
 +---------------------------+-----------------------------------------+
 | Range                     | `zfs_trim_extent_by                     |
-|                           | tes_min <#zfs_trim_extent_bytes_min>`__ |
+|                           | tes_min <#zfs-trim-extent-bytes-min>`__ |
 |                           | to MAX_UINT                             |
 +---------------------------+-----------------------------------------+
 | Default                   | 134,217,728 (128 MiB)                   |
@@ -8162,8 +8157,8 @@ zfs_trim_queue_limit
 ~~~~~~~~~~~~~~~~~~~~
 
 ``zfs_trim_queue_limit`` sets the maximum queue depth for leaf vdevs.
-See also `zfs_vdev_trim_max_active <#zfs_vdev_trim_max_active>`__ and
-`zfs_trim_extent_bytes_max <#zfs_trim_extent_bytes_max>`__ Use
+See also `zfs_vdev_trim_max_active <#zfs-vdev-trim-max-active>`__ and
+`zfs_trim_extent_bytes_max <#zfs-trim-extent-bytes-max>`__ Use
 ``zpool iostat -q`` to observe trim queue depth.
 
 +----------------------+------------------------------------------------------+
@@ -8225,7 +8220,7 @@ already been aggregated by the metaslab.
 | zfs_vdev_aggregate_trim | Notes                                     |
 +=========================+===========================================+
 | Tags                    | `trim <#trim>`__, `vdev <#vdev>`__,       |
-|                         | `ZIO_scheduler <#zio_scheduler>`__        |
+|                         | `ZIO_scheduler <#zio-scheduler>`__        |
 +-------------------------+-------------------------------------------+
 | When to change          | when debugging trim code or trim          |
 |                         | performance issues                        |
@@ -8247,7 +8242,7 @@ zfs_vdev_aggregation_limit_non_rotating
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``zfs_vdev_aggregation_limit_non_rotating`` is the equivalent of
-`zfs_vdev_aggregation_limit <#zfs_vdev_aggregation_limit>`__ for devices
+`zfs_vdev_aggregation_limit <#zfs-vdev-aggregation-limit>`__ for devices
 which represent themselves as non-rotating to the Linux blkdev
 interfaces. Such devices have a value of 0 in
 ``/sys/block/DEVICE/queue/rotational`` and are expected to be SSDs.
@@ -8258,11 +8253,11 @@ interfaces. Such devices have a value of 0 in
 +==================================+==================================+
 | Tags                             | `vdev <#vdev>`__,                |
 |                                  | `Z                               |
-|                                  | IO_scheduler <#zio_scheduler>`__ |
+|                                  | IO_scheduler <#zio-scheduler>`__ |
 +----------------------------------+----------------------------------+
 | When to change                   | see                              |
 |                                  | `zfs_vdev_aggregation_limit      |
-|                                  | <#zfs_vdev_aggregation_limit>`__ |
+|                                  | <#zfs-vdev-aggregation-limit>`__ |
 +----------------------------------+----------------------------------+
 | Data Type                        | int                              |
 +----------------------------------+----------------------------------+
@@ -8288,8 +8283,8 @@ on-media state for devices where caches are volatile (eg HDDs).
 sent to devices by the ZIL after a log write has completed.
 
 The difference between ``zil_nocacheflush`` and
-`zfs_nocacheflush <#zfs_nocacheflush>`__ is ``zil_nocacheflush`` applies
-to ZIL writes while `zfs_nocacheflush <#zfs_nocacheflush>`__ disables
+`zfs_nocacheflush <#zfs-nocacheflush>`__ is ``zil_nocacheflush`` applies
+to ZIL writes while `zfs_nocacheflush <#zfs-nocacheflush>`__ disables
 barrier writes to the pool devices at the end of tranaction group syncs.
 
 WARNING: setting this can cause ZIL corruption on power loss if the
@@ -8325,7 +8320,7 @@ by developers to gain diagnostic information for hang conditions which
 don't involve a mutex or other locking primitive. Typically these are
 conditions where a thread in the zio pipeline is looping indefinitely.
 
-See also `zfs_dbgmsg_enable <#zfs_dbgmsg_enable>`__
+See also `zfs_dbgmsg_enable <#zfs-dbgmsg-enable>`__
 
 +---------------------+-----------------------------------------------+
 | zio_deadman_log_all | Notes                                         |
@@ -8439,7 +8434,7 @@ zfs_async_block_max_blocks
 ``zfs_async_block_max_blocks`` limits the number of blocks freed in a
 single transaction group commit. During deletes of large objects, such
 as snapshots, the number of freed blocks can cause the DMU to extend txg
-sync times well beyond `zfs_txg_timeout <#zfs_txg_timeout>`__.
+sync times well beyond `zfs_txg_timeout <#zfs-txg-timeout>`__.
 ``zfs_async_block_max_blocks`` is used to limit these effects.
 
 ========================== ====================================
@@ -8514,7 +8509,7 @@ zfs_obsolete_min_time_ms
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``zfs_obsolete_min_time_ms`` is similar to
-`zfs_free_min_time_ms <#zfs_free_min_time_ms>`__ and used for cleanup of
+`zfs_free_min_time_ms <#zfs-free-min-time-ms>`__ and used for cleanup of
 old indirection records for vdevs removed using the ``zpool remove``
 command.
 
@@ -8654,10 +8649,10 @@ syncs.
 zfs_scrub_min_time_ms Notes
 ===================== =================================================
 Tags                  `scrub <#scrub>`__
-When to change        
+When to change
 Data Type             int
 Units                 milliseconds
-Range                 1 to (`zfs_txg_timeout <#zfs_txg_timeout>`__ - 1)
+Range                 1 to (`zfs_txg_timeout <#zfs-txg-timeout>`__ - 1)
 Default               1,000
 Change                Dynamic
 Versions Affected     planned for v2
@@ -8702,7 +8697,7 @@ in a top-level vdev.
 +-----------------------+---------------------------------------------+
 | Range                 | 16 to                                       |
 |                       | `zfs_vdev_m                                 |
-|                       | s_count_limit <#zfs_vdev_ms_count_limit>`__ |
+|                       | s_count_limit <#zfs-vdev-ms-count-limit>`__ |
 +-----------------------+---------------------------------------------+
 | Default               | 16                                          |
 +-----------------------+---------------------------------------------+
@@ -8731,7 +8726,7 @@ of metaslabs per top-level vdev.
 | Units                   | metaslabs                                 |
 +-------------------------+-------------------------------------------+
 | Range                   | `zfs_vdev                                 |
-|                         | _min_ms_count <#zfs_vdev_min_ms_count>`__ |
+|                         | _min_ms_count <#zfs-vdev-min-ms-count>`__ |
 |                         | to 131,072                                |
 +-------------------------+-------------------------------------------+
 | Default                 | 131,072                                   |
@@ -8753,7 +8748,7 @@ spl_hostid
   ``spl_hostid`` can be used to uniquely identify a system. By default
   this value is set to zero which indicates the hostid is disabled. It
   can be explicitly enabled by placing a unique non-zero value in the
-  file shown in `spl_hostid_path <#spl_hostid_path>`__
+  file shown in `spl_hostid_path <#spl-hostid-path>`__
 
 +-------------------+-------------------------------------------------+
 | spl_hostid        | Notes                                           |
@@ -8926,7 +8921,7 @@ handle a wide range of object sizes.
 The ``spl_kmem_cache_kmem_limit`` value is used to determine this cutoff
 size. One quarter of the kernel's compiled PAGE_SIZE is used as the
 default value because
-`spl_kmem_cache_obj_per_slab <#spl_kmem_cache_obj_per_slab>`__ defaults
+`spl_kmem_cache_obj_per_slab <#spl-kmem-cache-obj-per-slab>`__ defaults
 to 16. With these default values, at most four contiguous pages are
 allocated.
 
@@ -8950,7 +8945,7 @@ spl_kmem_cache_max_size
 ``spl_kmem_cache_max_size`` is the maximum size of a kmem cache slab in
 MiB. This effectively limits the maximum cache object size to
 ``spl_kmem_cache_max_size`` /
-`spl_kmem_cache_obj_per_slab <#spl_kmem_cache_obj_per_slab>`__ Kmem
+`spl_kmem_cache_obj_per_slab <#spl-kmem-cache-obj-per-slab>`__ Kmem
 caches may not be created with object sized larger than this limit.
 
 ======================= =========================================
@@ -8995,7 +8990,7 @@ spl_kmem_cache_obj_per_slab_min
 
 ``spl_kmem_cache_obj_per_slab_min`` is the minimum number of objects
 allowed per slab. Normally slabs will contain
-`spl_kmem_cache_obj_per_slab <#spl_kmem_cache_obj_per_slab>`__ objects
+`spl_kmem_cache_obj_per_slab <#spl-kmem-cache-obj-per-slab>`__ objects
 but for caches that contain very large objects it's desirable to only
 have a few, or even just one, object per slab.
 
@@ -9194,8 +9189,8 @@ completion of outstanding tasks. Threads which are no longer needed are
 promptly destroyed. By default this behavior is enabled but it can be d.
 
 See also
-`zfs_zil_clean_taskq_nthr_pct <#zfs_zil_clean_taskq_nthr_pct>`__,
-`zio_taskq_batch_pct <#zio_taskq_batch_pct>`__
+`zfs_zil_clean_taskq_nthr_pct <#zfs-zil-clean-taskq-nthr-pct>`__,
+`zio_taskq_batch_pct <#zio-taskq-batch-pct>`__
 
 +--------------------------+------------------------------------------+
 | spl_taskq_thread_dynamic | Notes                                    |

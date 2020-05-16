@@ -1,5 +1,5 @@
 Async Writes
-~~~~~~~~~~~~
+============
 
 The number of concurrent operations issued for the async write I/O class
 follows a piece-wise linear function defined by a few adjustable points.

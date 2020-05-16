@@ -1,5 +1,5 @@
 ZFS Transaction Delay
-~~~~~~~~~~~~~~~~~~~~~
+=====================
 
 ZFS write operations are delayed when the backend storage isn't able to
 accommodate the rate of incoming writes. This delay process is known as
