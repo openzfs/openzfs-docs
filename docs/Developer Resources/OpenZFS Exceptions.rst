@@ -1,8 +1,12 @@
+OpenZFS Exceptions
+==================
+
 Commit exceptions used to explicitly reference a given Linux commit.
 These exceptions are useful for a variety of reasons.
 
-**This page is used to generate**\ `OpenZFS
-Tracking <http://build.zfsonlinux.org/openzfs-tracking.html>`__\ **page.**
+**This page is used to generate**
+`OpenZFS Tracking <http://build.zfsonlinux.org/openzfs-tracking.html>`__
+**page.**
 
 Format:
 ^^^^^^^

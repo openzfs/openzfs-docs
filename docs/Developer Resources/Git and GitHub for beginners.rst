@@ -8,7 +8,7 @@ Recommended reading: `ZFS on Linux
 CONTRIBUTING.md <https://github.com/zfsonlinux/zfs/blob/master/.github/CONTRIBUTING.md>`__
 
 First time setup
-================
+----------------
 
 If you've never used Git before, you'll need a little setup to start
 things off.
@@ -19,7 +19,7 @@ things off.
    git config --global user.email myemail@noreply.non
 
 Cloning the initial repository
-==============================
+------------------------------
 
 The easiest way to get started is to click the fork icon at the top of
 the main repository page. From there you need to download a copy of the
@@ -40,7 +40,7 @@ upstream repository as another remote (man git-remote):
    git remote add upstream https://github.com/zfsonlinux/zfs.git
 
 Preparing and making changes
-============================
+----------------------------
 
 In order to make changes it is recommended to make a branch, this lets
 you work on several unrelated changes at once. It is also not
@@ -61,7 +61,7 @@ Resources <https://github.com/zfsonlinux/zfs/wiki/Developer-Resources>`__,
 Resources <http://open-zfs.org/wiki/Developer_resources>`__
 
 Testing your patches before pushing
-===================================
+-----------------------------------
 
 Before committing and pushing, you may want to test your patches. There
 are several tests you can run against your branch such as style
@@ -85,7 +85,7 @@ Suite
 README <https://github.com/zfsonlinux/zfs/blob/master/tests/README.md>`__
 
 Committing your changes to be pushed
-====================================
+------------------------------------
 
 When you are done making changes to your branch there are a few more
 steps before you can make a pull request.
@@ -144,7 +144,7 @@ request for an existing issue as shown above. Save and exit the editor
 when you are done.
 
 Pushing and creating the pull request
-=====================================
+-------------------------------------
 
 Home stretch. You've made your change and made the commit. Now it's time
 to push it.
@@ -161,7 +161,7 @@ repository on GitHub and you should see a button for making a new pull
 request for your recently committed branch.
 
 Correcting issues with your pull request
-========================================
+----------------------------------------
 
 Sometimes things don't always go as planned and you may need to update
 your pull request with a correction to either your commit message, or
@@ -180,7 +180,7 @@ any build/test servers currently running and excessively pushing can
 cause delays in processing of all pull requests.
 
 Maintaining your repository
-===========================
+---------------------------
 
 When you wish to make changes in the future you will want to have an
 up-to-date copy of the upstream repository to make your changes on. Here
@@ -196,7 +196,7 @@ This will make sure you are on the master branch of the repository, grab
 the changes from upstream, then push them back to your repository.
 
 Final words
-===========
+-----------
 
 This is a very basic introduction to Git and GitHub, but should get you
 on your way to contributing to many open source projects. Not all

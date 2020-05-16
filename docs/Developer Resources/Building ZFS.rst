@@ -1,3 +1,6 @@
+Building ZFS
+============
+
 GitHub Repositories
 ~~~~~~~~~~~~~~~~~~~
 
@@ -72,7 +75,7 @@ depends on your requirements.
 
 The remainder of this page focuses on the **in-tree** option which is
 the recommended method of development for the majority of changes. See
-the [[custom-packages]] page for additional information on building
+the :doc:`custom packages <./Custom Packages>` page for additional information on building
 custom packages.
 
 Developing In-Tree
@@ -152,7 +155,7 @@ tradition autotools fashion.
 
 ::
 
-   make deb #example for Debian/Ubuntu 
+   make deb #example for Debian/Ubuntu
 
 Install
 ^^^^^^^

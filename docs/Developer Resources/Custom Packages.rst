@@ -1,3 +1,6 @@
+Custom Packages
+===============
+
 The following instructions assume you are building from an official
 `release tarball <https://github.com/zfsonlinux/zfs/releases/latest>`__
 (version 0.8.0 or newer) or directly from the `git
