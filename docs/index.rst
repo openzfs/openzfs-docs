@@ -9,7 +9,7 @@ documentation for their favorite platform to get started.
 +----------------------+----------------------+----------------------+
 | :doc:`Getting Started| :doc:`Project and    | :doc:`Developer      |
 | <./Getting           | Community <./Project | Resources <Developer |
-| Started/index>`      | and Community>`      | Resources/index>`    |
+| Started/index>`      | and Community/index>`| Resources/index>`    |
 +======================+======================+======================+
 | How to get started   | About the project    | Technical            |
 | with OpenZFS on your | and how to           | documentation        |

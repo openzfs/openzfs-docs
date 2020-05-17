@@ -10,8 +10,8 @@ downloading the maintainers public key.
 Maintainers
 -----------
 
-Release branch (spl/zfs-*-release)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Release branch (spl/zfs-\*-release)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 | **Maintainer:** `Ned Bass <https://github.com/nedbass>`__
 | **Download:**
