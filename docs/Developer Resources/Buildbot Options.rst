@@ -1,3 +1,6 @@
+Buildbot Options
+================
+
 There are a number of ways to control the ZFS Buildbot at a commit
 level. This page provides a summary of various options that the ZFS
 Buildbot supports and how it impacts testing. More detailed information
@@ -182,7 +185,7 @@ Build ZFS Only
 Configuring Tests with the TEST File
 ------------------------------------
 
-At the top level of the ZFS source tree, there is the ```TEST``
+At the top level of the ZFS source tree, there is the `TEST
 file <https://github.com/zfsonlinux/zfs/blob/master/TEST>`__ which
 contains variables that control if and how a specific test should run.
 Below is a list of each variable and a brief description of what each
