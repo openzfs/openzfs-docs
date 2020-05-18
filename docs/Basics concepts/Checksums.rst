@@ -31,68 +31,67 @@ The checksum algorithm for a dataset can be changed by setting the
 
    zfs set checksum=sha256 pool_name/dataset_name
 
-+-----------+-----------------+-----------------+-----------------+
-| Checksum  | Ok for dedup    | Compatible with | Notes           |
-|           | and nopwrite?   | other ZFS       |                 |
-|           |                 | i               |                 |
-|           |                 | mplementations? |                 |
-+===========+=================+=================+=================+
-| on        | see notes       | yes             | ``on`` is a     |
-|           |                 |                 | short hand for  |
-|           |                 |                 | ``fletcher4``   |
-|           |                 |                 | for non-deduped |
-|           |                 |                 | datasets and    |
-|           |                 |                 | ``sha256`` for  |
-|           |                 |                 | deduped         |
-|           |                 |                 | datasets        |
-+-----------+-----------------+-----------------+-----------------+
-| off       | no              | yes             | Do not do use   |
-|           |                 |                 | ``off``         |
-+-----------+-----------------+-----------------+-----------------+
-| fletcher2 | no              | yes             | Deprecated      |
-|           |                 |                 | implementation  |
-|           |                 |                 | of Fletcher     |
-|           |                 |                 | checksum, use   |
-|           |                 |                 | ``fletcher4``   |
-|           |                 |                 | instead         |
-+-----------+-----------------+-----------------+-----------------+
-| fletcher4 | no              | yes             | Fletcher        |
-|           |                 |                 | algorithm, also |
-|           |                 |                 | used for        |
-|           |                 |                 | ``zfs send``    |
-|           |                 |                 | streams         |
-+-----------+-----------------+-----------------+-----------------+
-| sha256    | yes             | yes             | Default for     |
-|           |                 |                 | deduped         |
-|           |                 |                 | datasets        |
-+-----------+-----------------+-----------------+-----------------+
-| noparity  | no              | yes             | Do not use      |
-|           |                 |                 | ``noparity``    |
-+-----------+-----------------+-----------------+-----------------+
-| sha512    | yes             | requires pool   | salted          |
-|           |                 | feature         | ``sha512``      |
-|           |                 | ``org.          | currently not   |
-|           |                 | illumos:sha512``| supported for   |
-|           |                 |                 | any filesystem  |
-|           |                 |                 | on the boot     |
-|           |                 |                 | pools           |
-+-----------+-----------------+-----------------+-----------------+
-| skein     | yes             | requires pool   | salted          |
-|           |                 | feature         | ``skein``       |
-|           |                 | ``org.          | currently not   |
-|           |                 | illumos:skein`` | supported for   |
-|           |                 |                 | any filesystem  |
-|           |                 |                 | on the boot     |
-|           |                 |                 | pools           |
-+-----------+-----------------+-----------------+-----------------+
-| edonr     | yes             | requires pool   | salted          |
-|           |                 | feature         | ``edonr``       |
-|           |                 | ``org.          | currently not   |
-|           |                 | illumos:edonr`` | supported for   |
-|           |                 |                 | any filesystem  |
-|           |                 |                 | on the boot     |
-|           |                 |                 | pools           |
-+-----------+-----------------+-----------------+-----------------+
++-----------+--------------+------------------------+-------------------------+
+| Checksum  | Ok for dedup | Compatible with        | Notes                   |
+|           | and nopwrite?| other ZFS              |                         |
+|           |              | implementations?       |                         |
++===========+==============+========================+=========================+
+| on        | see notes    | yes                    | ``on`` is a             |
+|           |              |                        | short hand for          |
+|           |              |                        | ``fletcher4``           |
+|           |              |                        | for non-deduped         |
+|           |              |                        | datasets and            |
+|           |              |                        | ``sha256`` for          |
+|           |              |                        | deduped                 |
+|           |              |                        | datasets                |
++-----------+--------------+------------------------+-------------------------+
+| off       | no           | yes                    | Do not do use           |
+|           |              |                        | ``off``                 |
++-----------+--------------+------------------------+-------------------------+
+| fletcher2 | no           | yes                    | Deprecated              |
+|           |              |                        | implementation          |
+|           |              |                        | of Fletcher             |
+|           |              |                        | checksum, use           |
+|           |              |                        | ``fletcher4``           |
+|           |              |                        | instead                 |
++-----------+--------------+------------------------+-------------------------+
+| fletcher4 | no           | yes                    | Fletcher                |
+|           |              |                        | algorithm, also         |
+|           |              |                        | used for                |
+|           |              |                        | ``zfs send``            |
+|           |              |                        | streams                 |
++-----------+--------------+------------------------+-------------------------+
+| sha256    | yes          | yes                    | Default for             |
+|           |              |                        | deduped                 |
+|           |              |                        | datasets                |
++-----------+--------------+------------------------+-------------------------+
+| noparity  | no           | yes                    | Do not use              |
+|           |              |                        | ``noparity``            |
++-----------+--------------+------------------------+-------------------------+
+| sha512    | yes          | requires pool          | salted                  |
+|           |              | feature                | ``sha512``              |
+|           |              | ``org.illumos:sha512`` | currently not           |
+|           |              |                        | supported for           |
+|           |              |                        | any filesystem          |
+|           |              |                        | on the boot             |
+|           |              |                        | pools                   |
++-----------+--------------+------------------------+-------------------------+
+| skein     | yes          | requires pool          | salted                  |
+|           |              | feature                | ``skein``               |
+|           |              | ``org.illumos:skein``  | currently not           |
+|           |              |                        | supported for           |
+|           |              |                        | any filesystem          |
+|           |              |                        | on the boot             |
+|           |              |                        | pools                   |
++-----------+--------------+------------------------+-------------------------+
+| edonr     | yes          | requires pool          | salted                  |
+|           |              | feature                | ``edonr``               |
+|           |              | ``org.illumos:edonr``  | currently not           |
+|           |              |                        | supported for           |
+|           |              |                        | any filesystem          |
+|           |              |                        | on the boot             |
+|           |              |                        | pools                   |
++-----------+--------------+------------------------+-------------------------+
 
 Checksum Accelerators
 ^^^^^^^^^^^^^^^^^^^^^
