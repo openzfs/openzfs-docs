@@ -1,0 +1,13 @@
+name: Pull Request Docs Check
+
+on: [pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: ammaraskar/sphinx-action@master
+      with:
+        pre-build-command: "apt-get update -y && apt-get install -y python3-pip && pip install -r docs/requirements.txt"
+        docs-folder: "docs/"
