@@ -22,7 +22,10 @@ distributions of ZFS.
    :caption: Contents:
    :glob:
 
-   *
+   Admin Documentation
+   FAQ
+   Mailing Lists
+   Signing Keys
    Issue Tracker <https://github.com/openzfs/zfs/issues>
    Releases <https://github.com/openzfs/zfs/releases>
    Roadmap <https://github.com/openzfs/zfs/milestones>

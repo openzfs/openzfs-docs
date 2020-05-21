@@ -1,3 +1,6 @@
+FAQ Hole birth
+==============
+
 Short explanation
 ~~~~~~~~~~~~~~~~~
 
