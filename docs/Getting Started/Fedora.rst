@@ -9,7 +9,7 @@ distribution which does not provide a stable kABI. These packages track
 the official ZFS on Linux tags and are updated as new versions are
 released. Packages are available for the following configurations:
 
-| **Fedora Releases:** 30, 31
+| **Fedora Releases:** 30, 31, 32
 | **Architectures:** x86_64
 
 To simplify installation a zfs-release package is provided which
@@ -69,4 +69,4 @@ testing repository can be installed as follows.
 
 ::
 
-   $ sudo dnf --enablerepo=zfs-testing install kernel-devel zfs 
+   $ sudo dnf --enablerepo=zfs-testing install kernel-devel zfs
