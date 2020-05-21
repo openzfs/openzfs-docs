@@ -95,6 +95,8 @@ html_theme_options = {
     'style_nav_header_background': '#29667e',
 }
 
+html_favicon = '_static/img/favicon.ico'
+
 html_logo = '_static/img/logo/logo_main.png'
 
 # Add any paths that contain custom static files (such as style sheets) here,
