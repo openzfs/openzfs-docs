@@ -152,7 +152,7 @@ options.
 .. code:: sh
 
    $ cd zfs
-   $ ./configure
+   $ ./configure --enable-systemd
    $ make -j1 deb-utils deb-kmod
    $ for file in *.deb; do sudo gdebi -q --non-interactive $file; done
 
@@ -167,7 +167,7 @@ Building deb-based DKMS and user packages can be done as follows:
 
    $ sudo apt-get install dkms
    $ cd zfs
-   $ ./configure
+   $ ./configure --enable-systemd
    $ make -j1 deb-utils deb-dkms
    $ for file in *.deb; do sudo gdebi -q --non-interactive $file; done
 
