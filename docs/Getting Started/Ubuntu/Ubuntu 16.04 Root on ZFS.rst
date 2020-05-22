@@ -5,19 +5,19 @@ Ubuntu 16.04 Root on ZFS
    :local:
 
 Newer release available
-~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------
 
 -  See :doc:`Ubuntu 18.04 Root on ZFS <./Ubuntu 18.04 Root on ZFS>` for new installs.
 
 Caution
-~~~~~~~
+-------
 
 -  This HOWTO uses a whole physical disk.
 -  Do not use these instructions for dual-booting.
 -  Backup your data. Any existing data will be lost.
 
 System Requirements
-~~~~~~~~~~~~~~~~~~~
+-------------------
 
 -  `64-bit Ubuntu 16.04.5 ("Xenial") Desktop
    CD <http://releases.ubuntu.com/16.04/ubuntu-16.04.5-desktop-amd64.iso>`__
@@ -824,7 +824,7 @@ highly recommended):
    # reboot
 
 Step 9: Final Cleanup
-~~~~~~~~~~~~~~~~~~~~~
+---------------------
 
 9.1 Wait for the system to boot normally. Login using the account you
 created. Ensure the system (including networking) works normally.

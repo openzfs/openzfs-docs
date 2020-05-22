@@ -5,14 +5,14 @@ Ubuntu 18.04 Root on ZFS
    :local:
 
 Caution
-~~~~~~~
+-------
 
 -  This HOWTO uses a whole physical disk.
 -  Do not use these instructions for dual-booting.
 -  Backup your data. Any existing data will be lost.
 
 System Requirements
-~~~~~~~~~~~~~~~~~~~
+-------------------
 
 -  `Ubuntu 18.04.3 ("Bionic") Desktop
    CD <http://releases.ubuntu.com/18.04.3/ubuntu-18.04.3-desktop-amd64.iso>`__
@@ -1000,7 +1000,7 @@ highly recommended):
    reboot
 
 Step 9: Final Cleanup
-~~~~~~~~~~~~~~~~~~~~~
+---------------------
 
 9.1 Wait for the system to boot normally. Login using the account you
 created. Ensure the system (including networking) works normally.

@@ -5,19 +5,19 @@ Debian Stretch Root on ZFS
    :local:
 
 Newer release available
-~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------
 
 -  See :doc:`Debian Buster Root on ZFS <./Debian Buster Root on ZFS>` for new installs.
 
 Caution
-~~~~~~~
+-------
 
 -  This HOWTO uses a whole physical disk.
 -  Do not use these instructions for dual-booting.
 -  Backup your data. Any existing data will be lost.
 
 System Requirements
-~~~~~~~~~~~~~~~~~~~
+-------------------
 
 -  `64-bit Debian GNU/Linux Stretch Live
    CD <http://cdimage.debian.org/debian-cd/current-live/amd64/iso-hybrid/>`__

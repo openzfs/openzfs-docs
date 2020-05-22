@@ -5,14 +5,14 @@ Debian Buster Root on ZFS
    :local:
 
 Caution
-~~~~~~~
+-------
 
 -  This HOWTO uses a whole physical disk.
 -  Do not use these instructions for dual-booting.
 -  Backup your data. Any existing data will be lost.
 
 System Requirements
-~~~~~~~~~~~~~~~~~~~
+-------------------
 
 -  `64-bit Debian GNU/Linux Buster Live CD w/ GUI (e.g. gnome
    iso) <https://cdimage.debian.org/mirror/cdimage/release/current-live/amd64/iso-hybrid/>`__
@@ -1016,7 +1016,7 @@ highly recommended):
    reboot
 
 Step 9: Final Cleanup
-~~~~~~~~~~~~~~~~~~~~~
+---------------------
 
 9.1 Wait for the system to boot normally. Login using the account you
 created. Ensure the system (including networking) works normally.
