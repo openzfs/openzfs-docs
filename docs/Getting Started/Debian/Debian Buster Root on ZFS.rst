@@ -42,16 +42,32 @@ mention @rlaager.
 Contributing
 ------------
 
-Edit permission on this wiki is restricted. Also, GitHub wikis do not
-support pull requests. However, you can clone the wiki using git.
+1) Fork and clone: https://github.com/openzfs/openzfs-docs
 
-1) ``git clone https://github.com/zfsonlinux/zfs.wiki.git``
-2) Make your changes.
-3) Use ``git diff > my-changes.patch`` to create a patch. (Advanced git
-   users may wish to ``git commit`` to a branch and
-   ``git format-patch``.)
-4) `File a new issue <https://github.com/zfsonlinux/zfs/issues/new>`__,
-   mention @rlaager, and attach the patch.
+2) Install the tools:
+
+::
+
+   # On Debian 11 / Ubuntu 20.04 or later:
+   sudo apt install python3-sphinx python3-sphinx-issues python3-sphinx-rtd-theme
+   # On earlier releases:
+   sudo apt install pip3
+   pip3 install -r requirements.txt
+   # Add ~/.local/bin to your $PATH, e.g. by adding this to ~/.bashrc:
+   PATH=$HOME/.local/bin:$PATH
+
+3) Make your changes.
+
+4) Test:
+
+::
+
+   cd docs
+   make html
+   sensible-browser _build/html/index.html
+
+5) ``git commit --signoff`` to a branch, ``git push``, and create a pull request.
+   Mention @rlaager.
 
 Encryption
 ----------

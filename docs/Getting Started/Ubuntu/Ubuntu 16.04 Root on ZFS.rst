@@ -44,6 +44,36 @@ have a bug report or feature request related to this HOWTO, please `file
 a new issue <https://github.com/zfsonlinux/zfs/issues/new>`__ and
 mention @rlaager.
 
+Contributing
+------------
+
+1) Fork and clone: https://github.com/openzfs/openzfs-docs
+
+2) Install the tools:
+
+::
+
+   # On Debian 11 / Ubuntu 20.04 or later:
+   sudo apt install python3-sphinx python3-sphinx-issues python3-sphinx-rtd-theme
+   # On earlier releases:
+   sudo apt install pip3
+   pip3 install -r requirements.txt
+   # Add ~/.local/bin to your $PATH, e.g. by adding this to ~/.bashrc:
+   PATH=$HOME/.local/bin:$PATH
+
+3) Make your changes.
+
+4) Test:
+
+::
+
+   cd docs
+   make html
+   sensible-browser _build/html/index.html
+
+5) ``git commit --signoff`` to a branch, ``git push``, and create a pull request.
+   Mention @rlaager.
+
 Encryption
 ----------
 
