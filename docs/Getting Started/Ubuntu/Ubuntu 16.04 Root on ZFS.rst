@@ -2,7 +2,7 @@ Ubuntu 16.04 Root on ZFS
 ========================
 
 .. contents:: Table of Contents
-   :local:
+  :local:
 
 Overview
 --------
@@ -10,26 +10,27 @@ Overview
 Newer release available
 ~~~~~~~~~~~~~~~~~~~~~~~
 
--  See :doc:`Ubuntu 18.04 Root on ZFS <./Ubuntu 18.04 Root on ZFS>` for new installs.
+- See :doc:`Ubuntu 18.04 Root on ZFS <./Ubuntu 18.04 Root on ZFS>` for new
+  installs.
 
 Caution
 ~~~~~~~
 
--  This HOWTO uses a whole physical disk.
--  Do not use these instructions for dual-booting.
--  Backup your data. Any existing data will be lost.
+- This HOWTO uses a whole physical disk.
+- Do not use these instructions for dual-booting.
+- Backup your data. Any existing data will be lost.
 
 System Requirements
 ~~~~~~~~~~~~~~~~~~~
 
--  `64-bit Ubuntu 16.04.5 ("Xenial") Desktop
-   CD <http://releases.ubuntu.com/16.04/ubuntu-16.04.5-desktop-amd64.iso>`__
-   (*not* the server image)
--  `A 64-bit kernel is strongly
-   encouraged. <https://github.com/zfsonlinux/zfs/wiki/FAQ#32-bit-vs-64-bit-systems>`__
--  A drive which presents 512B logical sectors. Installing on a drive
-   which presents 4KiB logical sectors (a “4Kn” drive) should work with
-   UEFI partitioning, but this has not been tested.
+- `64-bit Ubuntu 16.04.5 ("Xenial") Desktop
+  CD <http://releases.ubuntu.com/16.04/ubuntu-16.04.5-desktop-amd64.iso>`__
+  (*not* the server image)
+- `A 64-bit kernel is strongly
+  encouraged. <https://github.com/zfsonlinux/zfs/wiki/FAQ#32-bit-vs-64-bit-systems>`__
+- A drive which presents 512B logical sectors. Installing on a drive
+  which presents 4KiB logical sectors (a “4Kn” drive) should work with
+  UEFI partitioning, but this has not been tested.
 
 Computers that have less than 2 GiB of memory run ZFS slowly. 4 GiB of
 memory is recommended for normal performance in basic workloads. If you
@@ -50,32 +51,29 @@ mention @rlaager.
 Contributing
 ~~~~~~~~~~~~
 
-1) Fork and clone: https://github.com/openzfs/openzfs-docs
+1. Fork and clone: https://github.com/openzfs/openzfs-docs
 
-2) Install the tools:
+2. Install the tools::
 
-::
+    # On Debian 11 / Ubuntu 20.04 or later:
+    sudo apt install python3-sphinx python3-sphinx-issues python3-sphinx-rtd-theme
 
-   # On Debian 11 / Ubuntu 20.04 or later:
-   sudo apt install python3-sphinx python3-sphinx-issues python3-sphinx-rtd-theme
-   # On earlier releases:
-   sudo apt install pip3
-   pip3 install -r requirements.txt
-   # Add ~/.local/bin to your $PATH, e.g. by adding this to ~/.bashrc:
-   PATH=$HOME/.local/bin:$PATH
+    # On earlier releases:
+    sudo apt install pip3
+    pip3 install -r requirements.txt
+    # Add ~/.local/bin to your $PATH, e.g. by adding this to ~/.bashrc:
+    PATH=$HOME/.local/bin:$PATH
 
-3) Make your changes.
+3. Make your changes.
 
-4) Test:
+4. Test::
 
-::
+    cd docs
+    make html
+    sensible-browser _build/html/index.html
 
-   cd docs
-   make html
-   sensible-browser _build/html/index.html
-
-5) ``git commit --signoff`` to a branch, ``git push``, and create a pull request.
-   Mention @rlaager.
+5. ``git commit --signoff`` to a branch, ``git push``, and create a pull
+   request. Mention @rlaager.
 
 Encryption
 ~~~~~~~~~~
@@ -119,8 +117,8 @@ terminal (press Ctrl-Alt-T).
 
 ::
 
-   $ sudo apt-add-repository universe
-   $ sudo apt update
+  $ sudo apt-add-repository universe
+  $ sudo apt update
 
 1.3 Optional: Start the OpenSSH server in the Live CD environment:
 
@@ -129,9 +127,9 @@ be convenient.
 
 ::
 
-   $ passwd
-     There is no current password; hit enter at that prompt.
-   $ sudo apt --yes install openssh-server
+  $ passwd
+    There is no current password; hit enter at that prompt.
+  $ sudo apt --yes install openssh-server
 
 **Hint:** You can find your IP address with
 ``ip addr show scope global | grep inet``. Then, from your main machine,
@@ -141,13 +139,13 @@ connect with ``ssh ubuntu@IP``.
 
 ::
 
-   $ sudo -i
+  $ sudo -i
 
 1.5 Install ZFS in the Live CD environment:
 
 ::
 
-   # apt install --yes debootstrap gdisk zfs-initramfs
+  # apt install --yes debootstrap gdisk zfs-initramfs
 
 **Note:** You can ignore the two error lines about "AppStream". They are
 harmless.
@@ -159,22 +157,22 @@ Step 2: Disk Formatting
 
 ::
 
-   If the disk was previously used in an MD array, zero the superblock:
-   # apt install --yes mdadm
-   # mdadm --zero-superblock --force /dev/disk/by-id/scsi-SATA_disk1
+  If the disk was previously used in an MD array, zero the superblock:
+  # apt install --yes mdadm
+  # mdadm --zero-superblock --force /dev/disk/by-id/scsi-SATA_disk1
 
-   Clear the partition table:
-   # sgdisk --zap-all /dev/disk/by-id/scsi-SATA_disk1
+  Clear the partition table:
+  # sgdisk --zap-all /dev/disk/by-id/scsi-SATA_disk1
 
 2.2 Partition your disk:
 
 ::
 
-   Run this if you need legacy (BIOS) booting:
-   # sgdisk -a1 -n2:34:2047  -t2:EF02 /dev/disk/by-id/scsi-SATA_disk1
+  Run this if you need legacy (BIOS) booting:
+  # sgdisk -a1 -n2:34:2047  -t2:EF02 /dev/disk/by-id/scsi-SATA_disk1
 
-   Run this for UEFI booting (for use now or in the future):
-   # sgdisk     -n3:1M:+512M -t3:EF00 /dev/disk/by-id/scsi-SATA_disk1
+  Run this for UEFI booting (for use now or in the future):
+  # sgdisk     -n3:1M:+512M -t3:EF00 /dev/disk/by-id/scsi-SATA_disk1
 
 Choose one of the following options:
 
@@ -182,14 +180,14 @@ Choose one of the following options:
 
 ::
 
-   # sgdisk     -n1:0:0      -t1:BF01 /dev/disk/by-id/scsi-SATA_disk1
+  # sgdisk     -n1:0:0      -t1:BF01 /dev/disk/by-id/scsi-SATA_disk1
 
 2.2b LUKS:
 
 ::
 
-   # sgdisk     -n4:0:+512M  -t4:8300 /dev/disk/by-id/scsi-SATA_disk1
-   # sgdisk     -n1:0:0      -t1:8300 /dev/disk/by-id/scsi-SATA_disk1
+  # sgdisk     -n4:0:+512M  -t4:8300 /dev/disk/by-id/scsi-SATA_disk1
+  # sgdisk     -n1:0:0      -t1:8300 /dev/disk/by-id/scsi-SATA_disk1
 
 Always use the long ``/dev/disk/by-id/*`` aliases with ZFS. Using the
 ``/dev/sd*`` device nodes directly can cause sporadic import failures,
@@ -197,12 +195,12 @@ especially on systems that have more than one storage pool.
 
 **Hints:**
 
--  ``ls -la /dev/disk/by-id`` will list the aliases.
--  Are you doing this in a virtual machine? If your virtual disk is
-   missing from ``/dev/disk/by-id``, use ``/dev/vda`` if you are using
-   KVM with virtio; otherwise, read the
-   `troubleshooting <https://github.com/zfsonlinux/zfs/wiki/Ubuntu-16.04-Root-on-ZFS#troubleshooting>`__
-   section.
+- ``ls -la /dev/disk/by-id`` will list the aliases.
+- Are you doing this in a virtual machine? If your virtual disk is
+  missing from ``/dev/disk/by-id``, use ``/dev/vda`` if you are using
+  KVM with virtio; otherwise, read the
+  `troubleshooting <https://github.com/zfsonlinux/zfs/wiki/Ubuntu-16.04-Root-on-ZFS#troubleshooting>`__
+  section.
 
 2.3 Create the root pool:
 
@@ -212,61 +210,61 @@ Choose one of the following options:
 
 ::
 
-   # zpool create -o ashift=12 \
-         -O atime=off -O canmount=off -O compression=lz4 -O normalization=formD \
-         -O mountpoint=/ -R /mnt \
-         rpool /dev/disk/by-id/scsi-SATA_disk1-part1
+  # zpool create -o ashift=12 \
+        -O atime=off -O canmount=off -O compression=lz4 -O normalization=formD \
+        -O mountpoint=/ -R /mnt \
+        rpool /dev/disk/by-id/scsi-SATA_disk1-part1
 
 2.3b LUKS:
 
 ::
 
-   # cryptsetup luksFormat -c aes-xts-plain64 -s 256 -h sha256 \
-         /dev/disk/by-id/scsi-SATA_disk1-part1
-   # cryptsetup luksOpen /dev/disk/by-id/scsi-SATA_disk1-part1 luks1
-   # zpool create -o ashift=12 \
-         -O atime=off -O canmount=off -O compression=lz4 -O normalization=formD \
-         -O mountpoint=/ -R /mnt \
-         rpool /dev/mapper/luks1
+  # cryptsetup luksFormat -c aes-xts-plain64 -s 256 -h sha256 \
+        /dev/disk/by-id/scsi-SATA_disk1-part1
+  # cryptsetup luksOpen /dev/disk/by-id/scsi-SATA_disk1-part1 luks1
+  # zpool create -o ashift=12 \
+        -O atime=off -O canmount=off -O compression=lz4 -O normalization=formD \
+        -O mountpoint=/ -R /mnt \
+        rpool /dev/mapper/luks1
 
 **Notes:**
 
--  The use of ``ashift=12`` is recommended here because many drives
-   today have 4KiB (or larger) physical sectors, even though they
-   present 512B logical sectors. Also, a future replacement drive may
-   have 4KiB physical sectors (in which case ``ashift=12`` is desirable)
-   or 4KiB logical sectors (in which case ``ashift=12`` is required).
--  Setting ``normalization=formD`` eliminates some corner cases relating
-   to UTF-8 filename normalization. It also implies ``utf8only=on``,
-   which means that only UTF-8 filenames are allowed. If you care to
-   support non-UTF-8 filenames, do not use this option. For a discussion
-   of why requiring UTF-8 filenames may be a bad idea, see `The problems
-   with enforced UTF-8 only
-   filenames <http://utcc.utoronto.ca/~cks/space/blog/linux/ForcedUTF8Filenames>`__.
--  Make sure to include the ``-part1`` portion of the drive path. If you
-   forget that, you are specifying the whole disk, which ZFS will then
-   re-partition, and you will lose the bootloader partition(s).
--  For LUKS, the key size chosen is 256 bits. However, XTS mode requires
-   two keys, so the LUKS key is split in half. Thus, ``-s 256`` means
-   AES-128, which is the LUKS and Ubuntu default.
--  Your passphrase will likely be the weakest link. Choose wisely. See
-   `section 5 of the cryptsetup
-   FAQ <https://gitlab.com/cryptsetup/cryptsetup/wikis/FrequentlyAskedQuestions#5-security-aspects>`__
-   for guidance.
+- The use of ``ashift=12`` is recommended here because many drives
+  today have 4KiB (or larger) physical sectors, even though they
+  present 512B logical sectors. Also, a future replacement drive may
+  have 4KiB physical sectors (in which case ``ashift=12`` is desirable)
+  or 4KiB logical sectors (in which case ``ashift=12`` is required).
+- Setting ``normalization=formD`` eliminates some corner cases relating
+  to UTF-8 filename normalization. It also implies ``utf8only=on``,
+  which means that only UTF-8 filenames are allowed. If you care to
+  support non-UTF-8 filenames, do not use this option. For a discussion
+  of why requiring UTF-8 filenames may be a bad idea, see `The problems
+  with enforced UTF-8 only
+  filenames <http://utcc.utoronto.ca/~cks/space/blog/linux/ForcedUTF8Filenames>`__.
+- Make sure to include the ``-part1`` portion of the drive path. If you
+  forget that, you are specifying the whole disk, which ZFS will then
+  re-partition, and you will lose the bootloader partition(s).
+- For LUKS, the key size chosen is 256 bits. However, XTS mode requires
+  two keys, so the LUKS key is split in half. Thus, ``-s 256`` means
+  AES-128, which is the LUKS and Ubuntu default.
+- Your passphrase will likely be the weakest link. Choose wisely. See
+  `section 5 of the cryptsetup
+  FAQ <https://gitlab.com/cryptsetup/cryptsetup/wikis/FrequentlyAskedQuestions#5-security-aspects>`__
+  for guidance.
 
 **Hints:**
 
--  The root pool does not have to be a single disk; it can have a mirror
-   or raidz topology. In that case, repeat the partitioning commands for
-   all the disks which will be part of the pool. Then, create the pool
-   using
-   ``zpool create ... rpool mirror /dev/disk/by-id/scsi-SATA_disk1-part1 /dev/disk/by-id/scsi-SATA_disk2-part1``
-   (or replace ``mirror`` with ``raidz``, ``raidz2``, or ``raidz3`` and
-   list the partitions from additional disks).
--  The pool name is arbitrary. On systems that can automatically install
-   to ZFS, the root pool is named ``rpool`` by default. If you work with
-   multiple systems, it might be wise to use ``hostname``,
-   ``hostname0``, or ``hostname-1`` instead.
+- The root pool does not have to be a single disk; it can have a mirror
+  or raidz topology. In that case, repeat the partitioning commands for
+  all the disks which will be part of the pool. Then, create the pool
+  using
+  ``zpool create ... rpool mirror /dev/disk/by-id/scsi-SATA_disk1-part1 /dev/disk/by-id/scsi-SATA_disk2-part1``
+  (or replace ``mirror`` with ``raidz``, ``raidz2``, or ``raidz3`` and
+  list the partitions from additional disks).
+- The pool name is arbitrary. On systems that can automatically install
+  to ZFS, the root pool is named ``rpool`` by default. If you work with
+  multiple systems, it might be wise to use ``hostname``,
+  ``hostname0``, or ``hostname-1`` instead.
 
 Step 3: System Installation
 ---------------------------
@@ -275,7 +273,7 @@ Step 3: System Installation
 
 ::
 
-   # zfs create -o canmount=off -o mountpoint=none rpool/ROOT
+  # zfs create -o canmount=off -o mountpoint=none rpool/ROOT
 
 On Solaris systems, the root filesystem is cloned and the suffix is
 incremented for major system changes through ``pkg image-update`` or
@@ -288,8 +286,8 @@ system:
 
 ::
 
-   # zfs create -o canmount=noauto -o mountpoint=/ rpool/ROOT/ubuntu
-   # zfs mount rpool/ROOT/ubuntu
+  # zfs create -o canmount=noauto -o mountpoint=/ rpool/ROOT/ubuntu
+  # zfs mount rpool/ROOT/ubuntu
 
 With ZFS, it is not normally necessary to use a mount command (either
 ``mount`` or ``zfs mount``). This situation is an exception because of
@@ -299,26 +297,26 @@ With ZFS, it is not normally necessary to use a mount command (either
 
 ::
 
-   # zfs create                 -o setuid=off              rpool/home
-   # zfs create -o mountpoint=/root                        rpool/home/root
-   # zfs create -o canmount=off -o setuid=off  -o exec=off rpool/var
-   # zfs create -o com.sun:auto-snapshot=false             rpool/var/cache
-   # zfs create                                            rpool/var/log
-   # zfs create                                            rpool/var/spool
-   # zfs create -o com.sun:auto-snapshot=false -o exec=on  rpool/var/tmp
+  # zfs create                 -o setuid=off              rpool/home
+  # zfs create -o mountpoint=/root                        rpool/home/root
+  # zfs create -o canmount=off -o setuid=off  -o exec=off rpool/var
+  # zfs create -o com.sun:auto-snapshot=false             rpool/var/cache
+  # zfs create                                            rpool/var/log
+  # zfs create                                            rpool/var/spool
+  # zfs create -o com.sun:auto-snapshot=false -o exec=on  rpool/var/tmp
 
-   If you use /srv on this system:
-   # zfs create                                            rpool/srv
+  If you use /srv on this system:
+  # zfs create                                            rpool/srv
 
-   If this system will have games installed:
-   # zfs create                                            rpool/var/games
+  If this system will have games installed:
+  # zfs create                                            rpool/var/games
 
-   If this system will store local email in /var/mail:
-   # zfs create                                            rpool/var/mail
+  If this system will store local email in /var/mail:
+  # zfs create                                            rpool/var/mail
 
-   If this system will use NFS (locking):
-   # zfs create -o com.sun:auto-snapshot=false \
-                -o mountpoint=/var/lib/nfs                 rpool/var/nfs
+  If this system will use NFS (locking):
+  # zfs create -o com.sun:auto-snapshot=false \
+               -o mountpoint=/var/lib/nfs                 rpool/var/nfs
 
 The primary goal of this dataset layout is to separate the OS from user
 data. This allows the root filesystem to be rolled back without rolling
@@ -333,17 +331,17 @@ to exclude transient data.
 
 ::
 
-   # mke2fs -t ext2 /dev/disk/by-id/scsi-SATA_disk1-part4
-   # mkdir /mnt/boot
-   # mount /dev/disk/by-id/scsi-SATA_disk1-part4 /mnt/boot
+  # mke2fs -t ext2 /dev/disk/by-id/scsi-SATA_disk1-part4
+  # mkdir /mnt/boot
+  # mount /dev/disk/by-id/scsi-SATA_disk1-part4 /mnt/boot
 
 3.5 Install the minimal system:
 
 ::
 
-   # chmod 1777 /mnt/var/tmp
-   # debootstrap xenial /mnt
-   # zfs set devices=off rpool
+  # chmod 1777 /mnt/var/tmp
+  # debootstrap xenial /mnt
+  # zfs set devices=off rpool
 
 The ``debootstrap`` command leaves the new system in an unconfigured
 state. An alternative to using ``debootstrap`` is to copy the entirety
@@ -357,13 +355,13 @@ hostname).
 
 ::
 
-   # echo HOSTNAME > /mnt/etc/hostname
+  # echo HOSTNAME > /mnt/etc/hostname
 
-   # vi /mnt/etc/hosts
-   Add a line:
-   127.0.1.1       HOSTNAME
-   or if the system has a real name in DNS:
-   127.0.1.1       FQDN HOSTNAME
+  # vi /mnt/etc/hosts
+  Add a line:
+  127.0.1.1       HOSTNAME
+  or if the system has a real name in DNS:
+  127.0.1.1       FQDN HOSTNAME
 
 **Hint:** Use ``nano`` if you find ``vi`` confusing.
 
@@ -371,12 +369,12 @@ hostname).
 
 ::
 
-   Find the interface name:
-   # ip addr show
+  Find the interface name:
+  # ip addr show
 
-   # vi /mnt/etc/network/interfaces.d/NAME
-   auto NAME
-   iface NAME inet dhcp
+  # vi /mnt/etc/network/interfaces.d/NAME
+  auto NAME
+  iface NAME inet dhcp
 
 Customize this file if the system is not a DHCP client.
 
@@ -384,25 +382,25 @@ Customize this file if the system is not a DHCP client.
 
 ::
 
-   # vi /mnt/etc/apt/sources.list
-   deb http://archive.ubuntu.com/ubuntu xenial main universe
-   deb-src http://archive.ubuntu.com/ubuntu xenial main universe
+  # vi /mnt/etc/apt/sources.list
+  deb http://archive.ubuntu.com/ubuntu xenial main universe
+  deb-src http://archive.ubuntu.com/ubuntu xenial main universe
 
-   deb http://security.ubuntu.com/ubuntu xenial-security main universe
-   deb-src http://security.ubuntu.com/ubuntu xenial-security main universe
+  deb http://security.ubuntu.com/ubuntu xenial-security main universe
+  deb-src http://security.ubuntu.com/ubuntu xenial-security main universe
 
-   deb http://archive.ubuntu.com/ubuntu xenial-updates main universe
-   deb-src http://archive.ubuntu.com/ubuntu xenial-updates main universe
+  deb http://archive.ubuntu.com/ubuntu xenial-updates main universe
+  deb-src http://archive.ubuntu.com/ubuntu xenial-updates main universe
 
 4.4 Bind the virtual filesystems from the LiveCD environment to the new
 system and ``chroot`` into it:
 
 ::
 
-   # mount --rbind /dev  /mnt/dev
-   # mount --rbind /proc /mnt/proc
-   # mount --rbind /sys  /mnt/sys
-   # chroot /mnt /bin/bash --login
+  # mount --rbind /dev  /mnt/dev
+  # mount --rbind /proc /mnt/proc
+  # mount --rbind /sys  /mnt/sys
+  # chroot /mnt /bin/bash --login
 
 **Note:** This is using ``--rbind``, not ``--bind``.
 
@@ -410,59 +408,59 @@ system and ``chroot`` into it:
 
 ::
 
-   # locale-gen en_US.UTF-8
+  # locale-gen en_US.UTF-8
 
 Even if you prefer a non-English system language, always ensure that
 ``en_US.UTF-8`` is available.
 
 ::
 
-   # echo LANG=en_US.UTF-8 > /etc/default/locale
+  # echo LANG=en_US.UTF-8 > /etc/default/locale
 
-   # dpkg-reconfigure tzdata
+  # dpkg-reconfigure tzdata
 
-   # ln -s /proc/self/mounts /etc/mtab
-   # apt update
-   # apt install --yes ubuntu-minimal
+  # ln -s /proc/self/mounts /etc/mtab
+  # apt update
+  # apt install --yes ubuntu-minimal
 
-   If you prefer nano over vi, install it:
-   # apt install --yes nano
+  If you prefer nano over vi, install it:
+  # apt install --yes nano
 
 4.6 Install ZFS in the chroot environment for the new system:
 
 ::
 
-   # apt install --yes --no-install-recommends linux-image-generic
-   # apt install --yes zfs-initramfs
+  # apt install --yes --no-install-recommends linux-image-generic
+  # apt install --yes zfs-initramfs
 
 4.7 For LUKS installs only:
 
 ::
 
-   # echo UUID=$(blkid -s UUID -o value \
-         /dev/disk/by-id/scsi-SATA_disk1-part4) \
-         /boot ext2 defaults 0 2 >> /etc/fstab
+  # echo UUID=$(blkid -s UUID -o value \
+        /dev/disk/by-id/scsi-SATA_disk1-part4) \
+        /boot ext2 defaults 0 2 >> /etc/fstab
 
-   # apt install --yes cryptsetup
+  # apt install --yes cryptsetup
 
-   # echo luks1 UUID=$(blkid -s UUID -o value \
-         /dev/disk/by-id/scsi-SATA_disk1-part1) none \
-         luks,discard,initramfs > /etc/crypttab
+  # echo luks1 UUID=$(blkid -s UUID -o value \
+        /dev/disk/by-id/scsi-SATA_disk1-part1) none \
+        luks,discard,initramfs > /etc/crypttab
 
-   # vi /etc/udev/rules.d/99-local-crypt.rules
-   ENV{DM_NAME}!="", SYMLINK+="$env{DM_NAME}"
-   ENV{DM_NAME}!="", SYMLINK+="dm-name-$env{DM_NAME}"
+  # vi /etc/udev/rules.d/99-local-crypt.rules
+  ENV{DM_NAME}!="", SYMLINK+="$env{DM_NAME}"
+  ENV{DM_NAME}!="", SYMLINK+="dm-name-$env{DM_NAME}"
 
-   # ln -s /dev/mapper/luks1 /dev/luks1
+  # ln -s /dev/mapper/luks1 /dev/luks1
 
 **Notes:**
 
--  The use of ``initramfs`` is a work-around for `cryptsetup does not
-   support
-   ZFS <https://bugs.launchpad.net/ubuntu/+source/cryptsetup/+bug/1612906>`__.
--  The 99-local-crypt.rules file and symlink in /dev are a work-around
-   for `grub-probe assuming all devices are in
-   /dev <https://bugs.launchpad.net/ubuntu/+source/grub2/+bug/1527727>`__.
+- The use of ``initramfs`` is a work-around for `cryptsetup does not
+  support
+  ZFS <https://bugs.launchpad.net/ubuntu/+source/cryptsetup/+bug/1612906>`__.
+- The 99-local-crypt.rules file and symlink in /dev are a work-around
+  for `grub-probe assuming all devices are in
+  /dev <https://bugs.launchpad.net/ubuntu/+source/grub2/+bug/1527727>`__.
 
 4.8 Install GRUB
 
@@ -472,7 +470,7 @@ Choose one of the following options:
 
 ::
 
-   # apt install --yes grub-pc
+  # apt install --yes grub-pc
 
 Install GRUB to the disk(s), not the partition(s).
 
@@ -480,27 +478,27 @@ Install GRUB to the disk(s), not the partition(s).
 
 ::
 
-   # apt install dosfstools
-   # mkdosfs -F 32 -n EFI /dev/disk/by-id/scsi-SATA_disk1-part3
-   # mkdir /boot/efi
-   # echo PARTUUID=$(blkid -s PARTUUID -o value \
-         /dev/disk/by-id/scsi-SATA_disk1-part3) \
-         /boot/efi vfat nofail,x-systemd.device-timeout=1 0 1 >> /etc/fstab
-   # mount /boot/efi
-   # apt install --yes grub-efi-amd64
+  # apt install dosfstools
+  # mkdosfs -F 32 -n EFI /dev/disk/by-id/scsi-SATA_disk1-part3
+  # mkdir /boot/efi
+  # echo PARTUUID=$(blkid -s PARTUUID -o value \
+        /dev/disk/by-id/scsi-SATA_disk1-part3) \
+        /boot/efi vfat nofail,x-systemd.device-timeout=1 0 1 >> /etc/fstab
+  # mount /boot/efi
+  # apt install --yes grub-efi-amd64
 
 4.9 Setup system groups:
 
 ::
 
-   # addgroup --system lpadmin
-   # addgroup --system sambashare
+  # addgroup --system lpadmin
+  # addgroup --system sambashare
 
 4.10 Set a root password
 
 ::
 
-   # passwd
+  # passwd
 
 4.11 Fix filesystem mount ordering
 
@@ -518,12 +516,12 @@ feature of systemd automatically use ``After=var-tmp.mount``.
 
 ::
 
-   # zfs set mountpoint=legacy rpool/var/log
-   # zfs set mountpoint=legacy rpool/var/tmp
-   # cat >> /etc/fstab << EOF
-   rpool/var/log /var/log zfs defaults 0 0
-   rpool/var/tmp /var/tmp zfs defaults 0 0
-   EOF
+  # zfs set mountpoint=legacy rpool/var/log
+  # zfs set mountpoint=legacy rpool/var/tmp
+  # cat >> /etc/fstab << EOF
+  rpool/var/log /var/log zfs defaults 0 0
+  rpool/var/tmp /var/tmp zfs defaults 0 0
+  EOF
 
 Step 5: GRUB Installation
 -------------------------
@@ -532,8 +530,8 @@ Step 5: GRUB Installation
 
 ::
 
-   # grub-probe /
-   zfs
+  # grub-probe /
+  zfs
 
 **Note:** GRUB uses ``zpool status`` in order to determine the location
 of devices. `grub-probe assumes all devices are in
@@ -550,14 +548,14 @@ following:
 
 ::
 
-   # export ZPOOL_VDEV_NAME_PATH=YES
+  # export ZPOOL_VDEV_NAME_PATH=YES
 
 5.2 Refresh the initrd files:
 
 ::
 
-   # update-initramfs -c -k all
-   update-initramfs: Generating /boot/initrd.img-4.4.0-21-generic
+  # update-initramfs -c -k all
+  update-initramfs: Generating /boot/initrd.img-4.4.0-21-generic
 
 **Note:** When using LUKS, this will print "WARNING could not determine
 root device from /etc/fstab". This is because `cryptsetup does not
@@ -568,11 +566,11 @@ ZFS <https://bugs.launchpad.net/ubuntu/+source/cryptsetup/+bug/1612906>`__.
 
 ::
 
-   # vi /etc/default/grub
-   Comment out: GRUB_HIDDEN_TIMEOUT=0
-   Remove quiet and splash from: GRUB_CMDLINE_LINUX_DEFAULT
-   Uncomment: GRUB_TERMINAL=console
-   Save and quit.
+  # vi /etc/default/grub
+  Comment out: GRUB_HIDDEN_TIMEOUT=0
+  Remove quiet and splash from: GRUB_CMDLINE_LINUX_DEFAULT
+  Uncomment: GRUB_TERMINAL=console
+  Save and quit.
 
 Later, once the system has rebooted twice and you are sure everything is
 working, you can undo these changes, if desired.
@@ -581,11 +579,11 @@ working, you can undo these changes, if desired.
 
 ::
 
-   # update-grub
-   Generating grub configuration file ...
-   Found linux image: /boot/vmlinuz-4.4.0-21-generic
-   Found initrd image: /boot/initrd.img-4.4.0-21-generic
-   done
+  # update-grub
+  Generating grub configuration file ...
+  Found linux image: /boot/vmlinuz-4.4.0-21-generic
+  Found initrd image: /boot/initrd.img-4.4.0-21-generic
+  done
 
 5.5 Install the boot loader
 
@@ -593,9 +591,9 @@ working, you can undo these changes, if desired.
 
 ::
 
-   # grub-install /dev/disk/by-id/scsi-SATA_disk1
-   Installing for i386-pc platform.
-   Installation finished. No error reported.
+  # grub-install /dev/disk/by-id/scsi-SATA_disk1
+  Installing for i386-pc platform.
+  Installation finished. No error reported.
 
 Do not reboot the computer until you get exactly that result message.
 Note that you are installing GRUB to the whole disk, not a partition.
@@ -607,14 +605,14 @@ disk in the pool.
 
 ::
 
-   # grub-install --target=x86_64-efi --efi-directory=/boot/efi \
-         --bootloader-id=ubuntu --recheck --no-floppy
+  # grub-install --target=x86_64-efi --efi-directory=/boot/efi \
+        --bootloader-id=ubuntu --recheck --no-floppy
 
 5.6 Verify that the ZFS module is installed:
 
 ::
 
-   # ls /boot/grub/*/zfs.mod
+  # ls /boot/grub/*/zfs.mod
 
 Step 6: First Boot
 ------------------
@@ -623,7 +621,7 @@ Step 6: First Boot
 
 ::
 
-   # zfs snapshot rpool/ROOT/ubuntu@install
+  # zfs snapshot rpool/ROOT/ubuntu@install
 
 In the future, you will likely want to take snapshots before each
 upgrade, and remove old snapshots (including this one) at some point to
@@ -633,21 +631,21 @@ save space.
 
 ::
 
-   # exit
+  # exit
 
 6.3 Run these commands in the LiveCD environment to unmount all
 filesystems:
 
 ::
 
-   # mount | grep -v zfs | tac | awk '/\/mnt/ {print $3}' | xargs -i{} umount -lf {}
-   # zpool export rpool
+  # mount | grep -v zfs | tac | awk '/\/mnt/ {print $3}' | xargs -i{} umount -lf {}
+  # zpool export rpool
 
 6.4 Reboot:
 
 ::
 
-   # reboot
+  # reboot
 
 6.5 Wait for the newly installed system to boot normally. Login as root.
 
@@ -659,21 +657,21 @@ Choose one of the following options:
 
 ::
 
-   # zfs create rpool/home/YOURUSERNAME
-   # adduser YOURUSERNAME
-   # cp -a /etc/skel/.[!.]* /home/YOURUSERNAME
-   # chown -R YOURUSERNAME:YOURUSERNAME /home/YOURUSERNAME
+  # zfs create rpool/home/YOURUSERNAME
+  # adduser YOURUSERNAME
+  # cp -a /etc/skel/.[!.]* /home/YOURUSERNAME
+  # chown -R YOURUSERNAME:YOURUSERNAME /home/YOURUSERNAME
 
 6.6b eCryptfs:
 
 ::
 
-   # apt install ecryptfs-utils
+  # apt install ecryptfs-utils
 
-   # zfs create -o compression=off -o mountpoint=/home/.ecryptfs/YOURUSERNAME \
-         rpool/home/temp-YOURUSERNAME
-   # adduser --encrypt-home YOURUSERNAME
-   # zfs rename rpool/home/temp-YOURUSERNAME rpool/home/YOURUSERNAME
+  # zfs create -o compression=off -o mountpoint=/home/.ecryptfs/YOURUSERNAME \
+        rpool/home/temp-YOURUSERNAME
+  # adduser --encrypt-home YOURUSERNAME
+  # zfs rename rpool/home/temp-YOURUSERNAME rpool/home/YOURUSERNAME
 
 The temporary name for the dataset is required to work-around `a bug in
 ecryptfs-setup-private <https://bugs.launchpad.net/ubuntu/+source/ecryptfs-utils/+bug/1574174>`__.
@@ -692,7 +690,7 @@ administrator:
 
 ::
 
-   # usermod -a -G adm,cdrom,dip,lpadmin,plugdev,sambashare,sudo YOURUSERNAME
+  # usermod -a -G adm,cdrom,dip,lpadmin,plugdev,sambashare,sudo YOURUSERNAME
 
 6.8 Mirror GRUB
 
@@ -703,23 +701,23 @@ disks:
 
 ::
 
-   # dpkg-reconfigure grub-pc
-   Hit enter until you get to the device selection screen.
-   Select (using the space bar) all of the disks (not partitions) in your pool.
+  # dpkg-reconfigure grub-pc
+  Hit enter until you get to the device selection screen.
+  Select (using the space bar) all of the disks (not partitions) in your pool.
 
 6.8b UEFI
 
 ::
 
-   # umount /boot/efi
+  # umount /boot/efi
 
-   For the second and subsequent disks (increment ubuntu-2 to -3, etc.):
-   # dd if=/dev/disk/by-id/scsi-SATA_disk1-part3 \
-        of=/dev/disk/by-id/scsi-SATA_disk2-part3
-   # efibootmgr -c -g -d /dev/disk/by-id/scsi-SATA_disk2 \
-         -p 3 -L "ubuntu-2" -l '\EFI\Ubuntu\grubx64.efi'
+  For the second and subsequent disks (increment ubuntu-2 to -3, etc.):
+  # dd if=/dev/disk/by-id/scsi-SATA_disk1-part3 \
+       of=/dev/disk/by-id/scsi-SATA_disk2-part3
+  # efibootmgr -c -g -d /dev/disk/by-id/scsi-SATA_disk2 \
+        -p 3 -L "ubuntu-2" -l '\EFI\Ubuntu\grubx64.efi'
 
-   # mount /boot/efi
+  # mount /boot/efi
 
 Step 7: Configure Swap
 ----------------------
@@ -728,10 +726,10 @@ Step 7: Configure Swap
 
 ::
 
-   # zfs create -V 4G -b $(getconf PAGESIZE) -o compression=zle \
-         -o logbias=throughput -o sync=always \
-         -o primarycache=metadata -o secondarycache=none \
-         -o com.sun:auto-snapshot=false rpool/swap
+  # zfs create -V 4G -b $(getconf PAGESIZE) -o compression=zle \
+        -o logbias=throughput -o sync=always \
+        -o primarycache=metadata -o secondarycache=none \
+        -o com.sun:auto-snapshot=false rpool/swap
 
 You can adjust the size (the ``4G`` part) to your needs.
 
@@ -753,25 +751,25 @@ files. Never use a short ``/dev/zdX`` device name.
 
 ::
 
-   # mkswap -f /dev/zvol/rpool/swap
-   # echo /dev/zvol/rpool/swap none swap defaults 0 0 >> /etc/fstab
+  # mkswap -f /dev/zvol/rpool/swap
+  # echo /dev/zvol/rpool/swap none swap defaults 0 0 >> /etc/fstab
 
 7.2b eCryptfs:
 
 ::
 
-   # apt install cryptsetup
-   # echo cryptswap1 /dev/zvol/rpool/swap /dev/urandom \
-         swap,cipher=aes-xts-plain64:sha256,size=256 >> /etc/crypttab
-   # systemctl daemon-reload
-   # systemctl start systemd-cryptsetup@cryptswap1.service
-   # echo /dev/mapper/cryptswap1 none swap defaults 0 0 >> /etc/fstab
+  # apt install cryptsetup
+  # echo cryptswap1 /dev/zvol/rpool/swap /dev/urandom \
+        swap,cipher=aes-xts-plain64:sha256,size=256 >> /etc/crypttab
+  # systemctl daemon-reload
+  # systemctl start systemd-cryptsetup@cryptswap1.service
+  # echo /dev/mapper/cryptswap1 none swap defaults 0 0 >> /etc/fstab
 
 7.3 Enable the swap device:
 
 ::
 
-   # swapon -av
+  # swapon -av
 
 Step 8: Full Software Installation
 ----------------------------------
@@ -780,7 +778,7 @@ Step 8: Full Software Installation
 
 ::
 
-   # apt dist-upgrade --yes
+  # apt dist-upgrade --yes
 
 8.2 Install a regular set of software:
 
@@ -790,13 +788,13 @@ Choose one of the following options:
 
 ::
 
-   # apt install --yes ubuntu-standard
+  # apt install --yes ubuntu-standard
 
 8.2b Install a full GUI environment:
 
 ::
 
-   # apt install --yes ubuntu-desktop
+  # apt install --yes ubuntu-desktop
 
 **Hint**: If you are installing a full GUI environment, you will likely
 want to manage your network with NetworkManager. In that case,
@@ -814,17 +812,17 @@ highly recommended):
 
 ::
 
-   # for file in /etc/logrotate.d/* ; do
-       if grep -Eq "(^|[^#y])compress" "$file" ; then
-           sed -i -r "s/(^|[^#y])(compress)/\1#\2/" "$file"
-       fi
-   done
+  # for file in /etc/logrotate.d/* ; do
+      if grep -Eq "(^|[^#y])compress" "$file" ; then
+          sed -i -r "s/(^|[^#y])(compress)/\1#\2/" "$file"
+      fi
+  done
 
 8.4 Reboot:
 
 ::
 
-   # reboot
+  # reboot
 
 Step 9: Final Cleanup
 ---------------------
@@ -836,13 +834,13 @@ created. Ensure the system (including networking) works normally.
 
 ::
 
-   $ sudo zfs destroy rpool/ROOT/ubuntu@install
+  $ sudo zfs destroy rpool/ROOT/ubuntu@install
 
 9.3 Optional: Disable the root password
 
 ::
 
-   $ sudo usermod -p '*' root
+  $ sudo usermod -p '*' root
 
 9.4 Optional:
 
@@ -851,13 +849,13 @@ you are using LUKS, it makes the prompt look nicer.
 
 ::
 
-   $ sudo vi /etc/default/grub
-   Uncomment GRUB_HIDDEN_TIMEOUT=0
-   Add quiet and splash to GRUB_CMDLINE_LINUX_DEFAULT
-   Comment out GRUB_TERMINAL=console
-   Save and quit.
+  $ sudo vi /etc/default/grub
+  Uncomment GRUB_HIDDEN_TIMEOUT=0
+  Add quiet and splash to GRUB_CMDLINE_LINUX_DEFAULT
+  Comment out GRUB_TERMINAL=console
+  Save and quit.
 
-   $ sudo update-grub
+  $ sudo update-grub
 
 Troubleshooting
 ---------------
@@ -871,28 +869,28 @@ Become root and install the ZFS utilities:
 
 ::
 
-   $ sudo -i
-   # apt update
-   # apt install --yes zfsutils-linux
+  $ sudo -i
+  # apt update
+  # apt install --yes zfsutils-linux
 
 This will automatically import your pool. Export it and re-import it to
 get the mounts right:
 
 ::
 
-   # zpool export -a
-   # zpool import -N -R /mnt rpool
-   # zfs mount rpool/ROOT/ubuntu
-   # zfs mount -a
+  # zpool export -a
+  # zpool import -N -R /mnt rpool
+  # zfs mount rpool/ROOT/ubuntu
+  # zfs mount -a
 
 If needed, you can chroot into your installed environment:
 
 ::
 
-   # mount --rbind /dev  /mnt/dev
-   # mount --rbind /proc /mnt/proc
-   # mount --rbind /sys  /mnt/sys
-   # chroot /mnt /bin/bash --login
+  # mount --rbind /dev  /mnt/dev
+  # mount --rbind /proc /mnt/proc
+  # mount --rbind /sys  /mnt/sys
+  # chroot /mnt /bin/bash --login
 
 Do whatever you need to do to fix your system.
 
@@ -900,9 +898,9 @@ When done, cleanup:
 
 ::
 
-   # mount | grep -v zfs | tac | awk '/\/mnt/ {print $3}' | xargs -i{} umount -lf {}
-   # zpool export rpool
-   # reboot
+  # mount | grep -v zfs | tac | awk '/\/mnt/ {print $3}' | xargs -i{} umount -lf {}
+  # zpool export rpool
+  # reboot
 
 MPT2SAS
 ~~~~~~~
@@ -935,9 +933,9 @@ this error message.
 VMware
 ~~~~~~
 
--  Set ``disk.EnableUUID = "TRUE"`` in the vmx file or vsphere
-   configuration. Doing this ensures that ``/dev/disk`` aliases are
-   created in the guest.
+- Set ``disk.EnableUUID = "TRUE"`` in the vmx file or vsphere
+  configuration. Doing this ensures that ``/dev/disk`` aliases are
+  created in the guest.
 
 QEMU/KVM/XEN
 ~~~~~~~~~~~~
@@ -950,11 +948,11 @@ this on the host:
 
 ::
 
-   $ sudo apt install ovmf
-   $ sudo vi /etc/libvirt/qemu.conf
-   Uncomment these lines:
-   nvram = [
-      "/usr/share/OVMF/OVMF_CODE.fd:/usr/share/OVMF/OVMF_VARS.fd",
-      "/usr/share/AAVMF/AAVMF_CODE.fd:/usr/share/AAVMF/AAVMF_VARS.fd"
-   ]
-   $ sudo service libvirt-bin restart
+  $ sudo apt install ovmf
+  $ sudo vi /etc/libvirt/qemu.conf
+  Uncomment these lines:
+  nvram = [
+     "/usr/share/OVMF/OVMF_CODE.fd:/usr/share/OVMF/OVMF_VARS.fd",
+     "/usr/share/AAVMF/AAVMF_CODE.fd:/usr/share/AAVMF/AAVMF_VARS.fd"
+  ]
+  $ sudo service libvirt-bin restart
