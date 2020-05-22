@@ -108,6 +108,10 @@ html_context = {
     'css_files': [
         '_static/css/theme_overrides.css',  # override wide tables in RTD theme
         ],
+    'display_github': True,
+    'github_user': 'openzfs',
+    'github_repo': 'openzfs-docs',
+    'github_version': 'master/docs/'
      }
 
 # Custom sidebar templates, must be a dictionary that maps document names
