@@ -4,15 +4,18 @@ Ubuntu 18.04 Root on ZFS
 .. contents:: Table of Contents
    :local:
 
+Overview
+--------
+
 Caution
--------
+~~~~~~~
 
 -  This HOWTO uses a whole physical disk.
 -  Do not use these instructions for dual-booting.
 -  Backup your data. Any existing data will be lost.
 
 System Requirements
--------------------
+~~~~~~~~~~~~~~~~~~~
 
 -  `Ubuntu 18.04.3 ("Bionic") Desktop
    CD <http://releases.ubuntu.com/18.04.3/ubuntu-18.04.3-desktop-amd64.iso>`__
@@ -29,7 +32,7 @@ RAM <http://wiki.freebsd.org/ZFSTuningGuide#Deduplication>`__. Enabling
 deduplication is a permanent change that cannot be easily reverted.
 
 Support
--------
+~~~~~~~
 
 If you need help, reach out to the community using the `zfs-discuss
 mailing list <https://github.com/zfsonlinux/zfs/wiki/Mailing-Lists>`__
@@ -39,7 +42,7 @@ a new issue <https://github.com/zfsonlinux/zfs/issues/new>`__ and
 mention @rlaager.
 
 Contributing
-------------
+~~~~~~~~~~~~
 
 1) Fork and clone: https://github.com/openzfs/openzfs-docs
 
@@ -69,7 +72,7 @@ Contributing
    Mention @rlaager.
 
 Encryption
-----------
+~~~~~~~~~~
 
 This guide supports two different encryption options: unencrypted and
 LUKS (full-disk encryption). ZFS native encryption has not yet been
