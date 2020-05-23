@@ -12,14 +12,15 @@ released. Packages are available for the following configurations:
 | **Fedora Releases:** 30, 31, 32
 | **Architectures:** x86_64
 
-Take note that due to the release cycle of OpenZFS and Fedora adoption
-of new kernels in current distribution release, it may happen that you
-won't be able to build DKMS package on the most recent kernel update.
-For example, Fedora 32 was released with kernel 5.6 but it is expected
-that it will update to 5.7. OpenZFS was released with support for kernel
-5.6 but not for 5.7 and there will be no update right after 5.7 will hit
-Fedora repository so you have to take into account that you will have to
-pin your kernel version at some point.
+.. note::
+   Due to the release cycle of OpenZFS and Fedora adoption
+   of new kernels in current distribution release, it may happen that you
+   won't be able to build DKMS package on the most recent kernel update.
+   For example, Fedora 32 was released with kernel 5.6 but it is expected
+   that it will update to 5.7. OpenZFS was released with support for kernel
+   5.6 but not for 5.7 and there will be no update right after 5.7 will hit
+   Fedora repository so you have to take into account that you will have to
+   pin your kernel version at some point.
 
 To simplify installation a zfs-release package is provided which
 includes a zfs.repo configuration file and the ZFS on Linux public
