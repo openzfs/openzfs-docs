@@ -214,7 +214,7 @@ commands for all the disks which will be part of the pool.
       -o feature@zpool_checkpoint=enabled \
       -O acltype=posixacl -O canmount=off -O compression=lz4 -O devices=off \
       -O normalization=formD -O relatime=on -O xattr=sa \
-      -O mountpoint=/ -R /mnt bpool ${DISK}-part3
+      -O mountpoint=/boot -R /mnt bpool ${DISK}-part3
 
 You should not need to customize any of the options for the boot pool.
 
@@ -376,14 +376,15 @@ incremented for major system changes through ``pkg image-update`` or
 ``beadm``. Similar functionality has been implemented in Ubuntu 20.04 with the
 ``zsys`` tool, though its dataset layout is more complicated. Even without
 such a tool, the `rpool/ROOT` and `bpool/BOOT` containers can still be used
-for manually created clones.
+for manually created clones. That said, this HOWTO assumes a single filesystem
+for ``/boot`` for simplicity.
 
 3.2 Create filesystem datasets for the root and boot filesystems::
 
   zfs create -o canmount=noauto -o mountpoint=/ rpool/ROOT/debian
   zfs mount rpool/ROOT/debian
 
-  zfs create -o canmount=noauto -o mountpoint=/boot bpool/BOOT/debian
+  zfs create -o mountpoint=/boot bpool/BOOT/debian
   zfs mount bpool/BOOT/debian
 
 With ZFS, it is not normally necessary to use a mount command (either
@@ -733,11 +734,6 @@ mirror or raidz topology, the additional disks will be handled later.
 
 5.7 Fix filesystem mount ordering:
 
-Until there is support for mounting ``/boot`` in the initramfs, we also
-need to mount that, because it was marked ``canmount=noauto``. Also,
-with UEFI, we need to ensure it is mounted before its child filesystem
-``/boot/efi``.
-
 We need to activate ``zfs-mount-generator``. This makes systemd aware of
 the separate mountpoints, which is important for things like
 ``/var/log`` and ``/var/tmp``. In turn, ``rsyslog.service`` depends on
@@ -745,27 +741,22 @@ the separate mountpoints, which is important for things like
 ``PrivateTmp`` feature of systemd automatically use
 ``After=var-tmp.mount``.
 
-For UEFI booting, unmount /boot/efi first::
-
-  umount /boot/efi
-
-Everything else applies to both BIOS and UEFI booting::
-
-  zfs set mountpoint=legacy bpool/BOOT/debian
-  echo bpool/BOOT/debian /boot zfs \
-      nodev,relatime,x-systemd.requires=zfs-import-bpool.service 0 0 >> /etc/fstab
+::
 
   mkdir /etc/zfs/zfs-list.cache
+  touch /etc/zfs/zfs-list.cache/bpool
   touch /etc/zfs/zfs-list.cache/rpool
   ln -s /usr/lib/zfs-linux/zed.d/history_event-zfs-list-cacher.sh /etc/zfs/zed.d
   zed -F &
 
-Verify that ``zed`` updated the cache by making sure this is not empty::
+Verify that ``zed`` updated the cache by making sure these are not empty::
 
+  cat /etc/zfs/zfs-list.cache/bpool
   cat /etc/zfs/zfs-list.cache/rpool
 
-If it is empty, force a cache update and check again::
+If either is empty, force a cache update and check again::
 
+  zfs set canmount=on     bpool/BOOT/debian
   zfs set canmount=noauto rpool/ROOT/debian
 
 Stop ``zed``::
@@ -775,7 +766,7 @@ Stop ``zed``::
 
 Fix the paths to eliminate ``/mnt``::
 
-  sed -Ei "s|/mnt/?|/|" /etc/zfs/zfs-list.cache/rpool
+  sed -Ei "s|/mnt/?|/|" /etc/zfs/zfs-list.cache/*
 
 Step 6: First Boot
 ------------------
