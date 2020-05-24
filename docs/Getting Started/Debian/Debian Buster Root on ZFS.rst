@@ -548,6 +548,7 @@ Even if you prefer a non-English system language, always ensure that
 
   apt install --yes dpkg-dev linux-headers-amd64 linux-image-amd64
   apt install --yes zfs-initramfs
+  echo REMAKE_INITRD=yes > /etc/dkms/zfs.conf
 
 4.7 For LUKS installs only, setup crypttab::
 
