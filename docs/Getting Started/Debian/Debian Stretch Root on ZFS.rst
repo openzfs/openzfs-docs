@@ -43,7 +43,7 @@ Support
 
 If you need help, reach out to the community using the :doc:`zfs-discuss
 mailing list <../../Project and Community/Mailing Lists>` or IRC at
-`#zfsonlinux <irc://irc.freenode.net/#zfsonlinux>`__. on `freenode
+`#zfsonlinux <irc://irc.freenode.net/#zfsonlinux>`__ on `freenode
 <https://freenode.net/>`__. If you have a bug report or feature request
 related to this HOWTO, please `file a new issue and mention @rlaager
 <https://github.com/openzfs/openzfs-docs/issues/new?body=@rlaager,%20I%20have%20the%20following%20issue%20with%20the%20Debian%20Stretch%20Root%20on%20ZFS%20HOWTO:>`__.

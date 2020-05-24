@@ -1,13 +1,35 @@
 .. highlight:: sh
 
-Debian Buster Root on ZFS
-=========================
+Ubuntu 20.04 Root on ZFS
+========================
 
 .. contents:: Table of Contents
   :local:
 
 Overview
 --------
+
+Ubuntu Installer
+~~~~~~~~~~~~~~~~
+
+The Ubuntu installer has `support for root-on-ZFS
+<https://arstechnica.com/gadgets/2020/03/ubuntu-20-04s-zsys-adds-zfs-snapshots-to-package-management/>`__.
+This HOWTO produces nearly identical results as the Ubuntu installer because of
+`bidirectional collaboration
+<https://ubuntu.com/blog/enhancing-our-zfs-support-on-ubuntu-19-10-an-introduction>`__.
+
+If you want a single-disk, unencrypted, desktop install, use the installer. It
+is far easier and faster than doing everything by hand.
+
+If you want a ZFS native encrypted, desktop install, you can `trivially edit
+the installer
+<https://linsomniac.gitlab.io/post/2020-04-09-ubuntu-2004-encrypted-zfs/>`__.
+The ``-o recordsize=1M`` there is unrelated to encryption; omit that unless you
+understand it. `Hopefully the installer will gain encryption support in the
+future <https://bugs.launchpad.net/ubuntu/+source/ubiquity/+bug/1857398>`__.
+
+If you want to setup a mirror or raidz topology, use LUKS encryption, and/or
+install a server (no desktop GUI), use this HOWTO.
 
 Caution
 ~~~~~~~
@@ -19,10 +41,9 @@ Caution
 System Requirements
 ~~~~~~~~~~~~~~~~~~~
 
-- `64-bit Debian GNU/Linux Buster Live CD w/ GUI (e.g. gnome
-  iso) <https://cdimage.debian.org/mirror/cdimage/release/current-live/amd64/iso-hybrid/>`__
-- `A 64-bit kernel is strongly
-  encouraged. <https://github.com/zfsonlinux/zfs/wiki/FAQ#32-bit-vs-64-bit-systems>`__
+- `Ubuntu 20.04 (“Focal”) Desktop CD
+  <http://releases.ubuntu.com/18.04.3/ubuntu-18.04.3-desktop-amd64.iso>`__
+  (*not* any server images)
 - Installing on a drive which presents 4 KiB logical sectors (a “4Kn”
   drive) only works with UEFI booting. This not unique to ZFS. `GRUB
   does not and will not work on 4Kn with legacy (BIOS)
@@ -42,7 +63,7 @@ mailing list <../../Project and Community/Mailing Lists>` or IRC at
 `#zfsonlinux <irc://irc.freenode.net/#zfsonlinux>`__ on `freenode
 <https://freenode.net/>`__. If you have a bug report or feature request
 related to this HOWTO, please `file a new issue and mention @rlaager
-<https://github.com/openzfs/openzfs-docs/issues/new?body=@rlaager,%20I%20have%20the%20following%20issue%20with%20the%20Debian%20Buster%20Root%20on%20ZFS%20HOWTO:>`__.
+<https://github.com/openzfs/openzfs-docs/issues/new?body=@rlaager,%20I%20have%20the%20following%20issue%20with%20the%20Ubuntu%2020.04%20Root%20on%20ZFS%20HOWTO:>`__.
 
 Contributing
 ~~~~~~~~~~~~
@@ -99,46 +120,37 @@ encrypted once per disk.
 Step 1: Prepare The Install Environment
 ---------------------------------------
 
-1.1 Boot the Debian GNU/Linux Live CD. If prompted, login with the
-username ``user`` and password ``live``. Connect your system to the
-Internet as appropriate (e.g. join your WiFi network).
+1.1 Boot the Ubuntu Live CD. Select Try Ubuntu. Connect your system to
+the Internet as appropriate (e.g. join your WiFi network). Open a
+terminal (press Ctrl-Alt-T).
 
-1.2 Optional: Install and start the OpenSSH server in the Live CD
+1.2 Setup and update the repositories::
+
+  sudo apt-add-repository universe
+  sudo apt update
+
+1.3 Optional: Install and start the OpenSSH server in the Live CD
 environment:
 
 If you have a second system, using SSH to access the target system can
 be convenient::
 
-  sudo apt update
+  passwd
+  # There is no current password; hit enter at that prompt.
   sudo apt install --yes openssh-server
-  sudo systemctl restart ssh
 
 **Hint:** You can find your IP address with
 ``ip addr show scope global | grep inet``. Then, from your main machine,
-connect with ``ssh user@IP``.
+connect with ``ssh ubuntu@IP``.
 
-1.3 Become root::
+1.4 Become root::
 
   sudo -i
 
-1.4 Setup and update the repositories::
-
-  echo deb http://deb.debian.org/debian buster contrib >> /etc/apt/sources.list
-  echo deb http://deb.debian.org/debian buster-backports main contrib >> /etc/apt/sources.list
-  apt update
-
 1.5 Install ZFS in the Live CD environment::
 
-  apt install --yes debootstrap gdisk dkms dpkg-dev linux-headers-$(uname -r)
-  apt install --yes -t buster-backports --no-install-recommends zfs-dkms
-  modprobe zfs
-  apt install --yes -t buster-backports zfsutils-linux
-
-- The dkms dependency is installed manually just so it comes from
-  buster and not buster-backports. This is not critical.
-- We need to get the module built and loaded before installing
-  zfsutils-linux or `zfs-mount.service will fail to
-  start <https://github.com/zfsonlinux/zfs/issues/9599>`__.
+  apt install --yes debootstrap gdisk zfs-initramfs
+  systemctl stop zed
 
 Step 2: Disk Formatting
 -----------------------
@@ -170,34 +182,70 @@ Clear the partition table::
 
   sgdisk --zap-all $DISK
 
-2.3 Partition your disk(s):
+2.3 Create bootloader partition(s)::
 
-Run this if you need legacy (BIOS) booting::
+  sgdisk     -n1:1M:+512M   -t1:EF00 $DISK
 
-  sgdisk -a1 -n1:24K:+1000K -t1:EF02 $DISK
+**Note:** This partition is setup for UEFI support. For legacy (BIOS) booting,
+this will allow you to move the disk(s) to a new system/motherboard in the
+future without having to rebuild the pool (and restore your data from a
+backup). Additionally, this is used for `/boot/grub` in single-disk scenarios,
+as discussed below.
 
-Run this for UEFI booting (for use now or in the future)::
+For legacy (BIOS) booting::
 
-  sgdisk     -n2:1M:+512M   -t2:EF00 $DISK
+  sgdisk -a1 -n5:24K:+1000K -t5:EF02 $DISK
 
-Run this for the boot pool::
+**Note:** For simplicity and forward compatibility, this HOWTO uses GPT
+partition labels for both UEFI and legacy (BIOS) booting. The Ubuntu installer
+uses an MBR label for legacy (BIOS) booting.
 
-  sgdisk     -n3:0:+1G      -t3:BF01 $DISK
+2.4 Create a partition for swap:
+
+Previous versions of this HOWTO put swap on a zvol. `Ubuntu recommends against
+this configuration due to deadlocks.
+<https://bugs.launchpad.net/ubuntu/+source/zfs-linux/+bug/1847628>`__ There is
+`a bug report upstream <https://github.com/zfsonlinux/zfs/issues/7734>`__.
+
+Putting swap on a partition gives up the benefit of ZFS checksums (for your
+swap). That is probably the right trade-off given the reports of ZFS deadlocks
+with swap. If you are bothered by this, simply do not enable swap.
+
+Choose one of the following options if you want swap:
+
+2.4a For a single-disk install::
+
+  sgdisk     -n2:0:+500M    -t2:8200 $DISK
+
+2.4b For a mirror or raidz topology::
+
+  sgdisk     -n2:0:+500M    -t2:FD00 $DISK
+
+2.5 Create a boot pool partition::
+
+  sgdisk     -n3:0:+2G      -t3:BE00 $DISK
+
+The Ubuntu installer uses 5% of the disk space constrained to a minimum of
+500 MiB and a maximum of 2 GiB. `Making this too small (and 500 MiB might be
+too small) can result in an inability to upgrade the kernel.
+<https://medium.com/@andaag/how-i-moved-a-ext4-ubuntu-install-to-encrypted-zfs-62af1170d46c>`__
+
+2.6 Create a root pool partition:
 
 Choose one of the following options:
 
-2.3a Unencrypted or ZFS native encryption::
+2.6a Unencrypted or ZFS native encryption::
 
-  sgdisk     -n4:0:0        -t4:BF01 $DISK
+  sgdisk     -n4:0:0        -t4:BF00 $DISK
 
-2.3b LUKS::
+2.6b LUKS::
 
-  sgdisk     -n4:0:0        -t4:8300 $DISK
+  sgdisk     -n4:0:0        -t4:8309 $DISK
 
 If you are creating a mirror or raidz topology, repeat the partitioning
 commands for all the disks which will be part of the pool.
 
-2.4 Create the boot pool::
+2.7 Create the boot pool::
 
   zpool create -o ashift=12 -d \
       -o feature@async_destroy=enabled \
@@ -214,7 +262,7 @@ commands for all the disks which will be part of the pool.
       -o feature@zpool_checkpoint=enabled \
       -O acltype=posixacl -O canmount=off -O compression=lz4 -O devices=off \
       -O normalization=formD -O relatime=on -O xattr=sa \
-      -O mountpoint=/ -R /mnt bpool ${DISK}-part3
+      -O mountpoint=/boot -R /mnt bpool ${DISK}-part3
 
 You should not need to customize any of the options for the boot pool.
 
@@ -252,19 +300,22 @@ read-only compatible features are “supported” by GRUB.
 - As a read-only compatible feature, the ``userobj_accounting`` feature should
   be compatible in theory, but in practice, GRUB can fail with an “invalid
   dnode type” error. This feature does not matter for ``/boot`` anyway.
+- The ``zpool_checkpoint`` feature has been tested and is safe to use. The
+  Ubuntu installer does not use it. This HOWTO does, as the feature may be
+  desirable for the boot pool.
 
-2.5 Create the root pool:
+2.8 Create the root pool:
 
 Choose one of the following options:
 
-2.5a Unencrypted::
+2.8a Unencrypted::
 
   zpool create -o ashift=12 \
       -O acltype=posixacl -O canmount=off -O compression=lz4 \
       -O dnodesize=auto -O normalization=formD -O relatime=on -O xattr=sa \
       -O mountpoint=/ -R /mnt rpool ${DISK}-part4
 
-2.5b ZFS native encryption::
+2.8b ZFS native encryption::
 
   zpool create -o ashift=12 \
       -O acltype=posixacl -O canmount=off -O compression=lz4 \
@@ -272,9 +323,8 @@ Choose one of the following options:
       -O encryption=aes-256-gcm -O keylocation=prompt -O keyformat=passphrase \
       -O mountpoint=/ -R /mnt rpool ${DISK}-part4
 
-2.5c LUKS::
+2.8c LUKS::
 
-  apt install --yes cryptsetup
   cryptsetup luksFormat -c aes-xts-plain64 -s 512 -h sha256 ${DISK}-part4
   cryptsetup luksOpen ${DISK}-part4 luks1
   zpool create -o ashift=12 \
@@ -371,20 +421,19 @@ Step 3: System Installation
   zfs create -o canmount=off -o mountpoint=none rpool/ROOT
   zfs create -o canmount=off -o mountpoint=none bpool/BOOT
 
-On Solaris systems, the root filesystem is cloned and the suffix is
-incremented for major system changes through ``pkg image-update`` or
-``beadm``. Similar functionality has been implemented in Ubuntu 20.04 with the
-``zsys`` tool, though its dataset layout is more complicated. Even without
-such a tool, the `rpool/ROOT` and `bpool/BOOT` containers can still be used
-for manually created clones.
-
 3.2 Create filesystem datasets for the root and boot filesystems::
 
-  zfs create -o canmount=noauto -o mountpoint=/ rpool/ROOT/debian
-  zfs mount rpool/ROOT/debian
+  UUID=$(dd if=/dev/urandom of=/dev/stdout bs=1 count=100 2>/dev/null |
+      tr -dc 'a-z0-9' | cut -c-6)
 
-  zfs create -o canmount=noauto -o mountpoint=/boot bpool/BOOT/debian
-  zfs mount bpool/BOOT/debian
+  zfs create -o canmount=noauto -o mountpoint=/ \
+      -o com.ubuntu.zsys:bootfs=yes \
+      -o com.ubuntu.zsys:last-used=$(date +%s) rpool/ROOT/ubuntu_$UUID
+  zfs mount rpool/ROOT/ubuntu_$UUID
+
+  zfs create -o canmount=noauto -o mountpoint=/boot \
+      bpool/BOOT/ubuntu_$UUID
+  zfs mount bpool/BOOT/ubuntu_$UUID
 
 With ZFS, it is not normally necessary to use a mount command (either
 ``mount`` or ``zfs mount``). This situation is an exception because of
@@ -392,74 +441,45 @@ With ZFS, it is not normally necessary to use a mount command (either
 
 3.3 Create datasets::
 
-  zfs create                                 rpool/home
-  zfs create -o mountpoint=/root             rpool/home/root
-  zfs create -o canmount=off                 rpool/var
-  zfs create -o canmount=off                 rpool/var/lib
-  zfs create                                 rpool/var/log
-  zfs create                                 rpool/var/spool
+  zfs create -o com.ubuntu.zsys:bootfs=no \
+      rpool/ROOT/ubuntu_$UUID/srv
+  zfs create -o com.ubuntu.zsys:bootfs=no -o canmount=off \
+      rpool/ROOT/ubuntu_$UUID/usr
+  zfs create rpool/ROOT/ubuntu_$UUID/usr/local
+  zfs create -o com.ubuntu.zsys:bootfs=no -o canmount=off \
+      rpool/ROOT/ubuntu_$UUID/var
+  zfs create rpool/ROOT/ubuntu_$UUID/var/games
+  zfs create rpool/ROOT/ubuntu_$UUID/var/lib
+  zfs create rpool/ROOT/ubuntu_$UUID/var/lib/AccountServices
+  zfs create rpool/ROOT/ubuntu_$UUID/var/lib/apt
+  zfs create rpool/ROOT/ubuntu_$UUID/var/lib/dpkg
+  zfs create rpool/ROOT/ubuntu_$UUID/var/lib/NetworkManager
+  zfs create rpool/ROOT/ubuntu_$UUID/var/log
+  zfs create rpool/ROOT/ubuntu_$UUID/var/mail
+  zfs create rpool/ROOT/ubuntu_$UUID/var/snap
+  zfs create rpool/ROOT/ubuntu_$UUID/var/spool
+  zfs create rpool/ROOT/ubuntu_$UUID/var/www
 
-The datasets below are optional, depending on your preferences and/or
-software choices.
+  zfs create -o canmount=off -o mountpoint=/ \
+      rpool/USERDATA
+  zfs create -o com.ubuntu.zsys:bootfs-datasets=rpool/ROOT/ubuntu_$UUID \
+      -o canmount=on -o mountpoint=/root \
+      rpool/USERDATA/root_$UUID
 
-If you wish to exclude these from snapshots::
+For a mirror or raidz topology, create a dataset for ``/boot/grub``::
 
-  zfs create -o com.sun:auto-snapshot=false  rpool/var/cache
-  zfs create -o com.sun:auto-snapshot=false  rpool/var/tmp
-  chmod 1777 /mnt/var/tmp
-
-If you use /opt on this system::
-
-  zfs create                                 rpool/opt
-
-If you use /srv on this system::
-
-  zfs create                                 rpool/srv
-
-If you use /usr/local on this system::
-
-  zfs create -o canmount=off                 rpool/usr
-  zfs create                                 rpool/usr/local
-
-If this system will have games installed::
-
-  zfs create                                 rpool/var/games
-
-If this system will store local email in /var/mail::
-
-  zfs create                                 rpool/var/mail
-
-If this system will use Snap packages::
-
-  zfs create                                 rpool/var/snap
-
-If you use /var/www on this system::
-
-  zfs create                                 rpool/var/www
-
-If this system will use GNOME::
-
-  zfs create                                 rpool/var/lib/AccountsService
-
-If this system will use Docker (which manages its own datasets &
-snapshots)::
-
-  zfs create -o com.sun:auto-snapshot=false  rpool/var/lib/docker
-
-If this system will use NFS (locking)::
-
-  zfs create -o com.sun:auto-snapshot=false  rpool/var/lib/nfs
+  zfs create -o com.ubuntu.zsys:bootfs=no bpool/grub
 
 A tmpfs is recommended later, but if you want a separate dataset for
 ``/tmp``::
 
-  zfs create -o com.sun:auto-snapshot=false  rpool/tmp
+  zfs create -o com.ubuntu.zsys:bootfs=no \
+      rpool/ROOT/ubuntu_$UUID/tmp
   chmod 1777 /mnt/tmp
 
 The primary goal of this dataset layout is to separate the OS from user data.
 This allows the root filesystem to be rolled back without rolling back user
-data. The ``com.sun.auto-snapshot`` setting is used by some ZFS
-snapshot utilities to exclude transient data.
+data.
 
 If you do nothing extra, ``/tmp`` will be stored as part of the root
 filesystem. Alternatively, you can create a separate dataset for
@@ -470,8 +490,7 @@ you can use a tmpfs (RAM filesystem) later.
 
 3.4 Install the minimal system::
 
-  debootstrap buster /mnt
-  zfs set devices=off rpool
+  debootstrap focal /mnt
 
 The ``debootstrap`` command leaves the new system in an unconfigured
 state. An alternative to using ``debootstrap`` is to copy the entirety
@@ -504,12 +523,15 @@ Find the interface name::
 
 Adjust NAME below to match your interface name::
 
-  vi /mnt/etc/network/interfaces.d/NAME
+  vi /mnt/etc/netplan/01-netcfg.yaml
 
-.. code-block:: text
+.. code-block:: yaml
 
-  auto NAME
-  iface NAME inet dhcp
+  network:
+    version: 2
+    ethernets:
+      NAME:
+        dhcp4: true
 
 Customize this file if the system is not a DHCP client.
 
@@ -519,27 +541,10 @@ Customize this file if the system is not a DHCP client.
 
 .. code-block:: sourceslist
 
-  deb http://deb.debian.org/debian buster main contrib
-  deb-src http://deb.debian.org/debian buster main contrib
-
-::
-
-  vi /mnt/etc/apt/sources.list.d/buster-backports.list
-
-.. code-block:: sourceslist
-
-  deb http://deb.debian.org/debian buster-backports main contrib
-  deb-src http://deb.debian.org/debian buster-backports main contrib
-
-::
-
-  vi /mnt/etc/apt/preferences.d/90_zfs
-
-.. code-block:: control
-
-  Package: libnvpair1linux libuutil1linux libzfs2linux libzfslinux-dev libzpool2linux python3-pyzfs pyzfs-doc spl spl-dkms zfs-dkms zfs-dracut zfs-initramfs zfs-test zfsutils-linux zfsutils-linux-dev zfs-zed
-  Pin: release n=buster-backports
-  Pin-Priority: 990
+  deb http://archive.ubuntu.com/ubuntu focal main restricted universe multiverse
+  deb http://archive.ubuntu.com/ubuntu focal-updates main restricted universe multiverse
+  deb http://archive.ubuntu.com/ubuntu focal-backports main restricted universe multiverse
+  deb http://security.ubuntu.com/ubuntu focal-security main restricted universe multiverse
 
 4.4 Bind the virtual filesystems from the LiveCD environment to the new
 system and ``chroot`` into it::
@@ -547,16 +552,14 @@ system and ``chroot`` into it::
   mount --rbind /dev  /mnt/dev
   mount --rbind /proc /mnt/proc
   mount --rbind /sys  /mnt/sys
-  chroot /mnt /usr/bin/env DISK=$DISK bash --login
+  chroot /mnt /usr/bin/env DISK=$DISK UUID=$UUID bash --login
 
 **Note:** This is using ``--rbind``, not ``--bind``.
 
 4.5 Configure a basic system environment::
 
-  ln -s /proc/self/mounts /etc/mtab
   apt update
 
-  apt install --yes locales
   dpkg-reconfigure locales
 
 Even if you prefer a non-English system language, always ensure that
@@ -564,13 +567,11 @@ Even if you prefer a non-English system language, always ensure that
 
   dpkg-reconfigure tzdata
 
-4.6 Install ZFS in the chroot environment for the new system::
+If you prefer ``nano`` over ``vi``, install it::
 
-  apt install --yes dpkg-dev linux-headers-amd64 linux-image-amd64
-  apt install --yes zfs-initramfs
-  echo REMAKE_INITRD=yes > /etc/dkms/zfs.conf
+  apt install --yes nano
 
-4.7 For LUKS installs only, setup ``/etc/crypttab``::
+4.6 For LUKS installs only, setup ``/etc/crypttab``::
 
   apt install --yes cryptsetup
 
@@ -578,39 +579,66 @@ Even if you prefer a non-English system language, always ensure that
       luks,discard,initramfs > /etc/crypttab
 
 The use of ``initramfs`` is a work-around for `cryptsetup does not support ZFS
-<https://bugs.launchpad.net/ubuntu/+source/cryptsetup/+bug/1612906>`__.\
+<https://bugs.launchpad.net/ubuntu/+source/cryptsetup/+bug/1612906>`__.
 
 **Hint:** If you are creating a mirror or raidz topology, repeat the
 ``/etc/crypttab`` entries for ``luks2``, etc. adjusting for each disk.
 
-4.8 Install GRUB
+4.7 Create the EFI filesystem:
+
+Perform these steps for both UEFI and legacy (BIOS) booting::
+
+  apt install --yes dosfstools
+
+  mkdosfs -F 32 -s 1 -n EFI ${DISK}-part1
+  mkdir /boot/efi
+  echo UUID=$(blkid -s UUID -o value ${DISK}-part1) \
+      /boot/efi vfat umask=0022,fmask=0022,dmask=0022 0 1 >> /etc/fstab
+  mount /boot/efi
+
+For a mirror or raidz topology, repeat these steps for the additional disks,
+using ``/boot/efi2``, ``/boot/efi3``, etc.
+
+**Note:** The ``-s 1`` for ``mkdosfs`` is only necessary for drives which
+present 4 KiB logical sectors (“4Kn” drives) to meet the minimum cluster size
+(given the partition size of 512 MiB) for FAT32. It also works fine on drives
+which present 512 B sectors.
+
+4.8 Install GRUB/Linux/ZFS in the chroot environment for the new system:
+
+For a single-disk install only::
+
+  mkdir /boot/efi/grub /boot/grub
+  echo /boot/efi/grub /boot/grub none defaults,bind 0 0 >> /etc/fstab
+  mount /boot/grub
+
+**Note:** This puts `/boot/grub` on the EFI System Partition. This allows GRUB
+to write to it, which means that `/boot/grub/grubenv` and the `recordfail`
+feature works as expected: if the boot fails, the normally hidden GRUB menu
+will be shown on the next boot. For a mirror or raidz topology, we do not want
+GRUB writing to the EFI System Partition. This is becase we duplicate it at
+install without a mechanism to update the copies when the GRUB configuration
+changes (e.g. as the kernel is upgraded). Thus, we keep `/boot/grub` on the
+boot pool for the mirror or raidz topologies. This preserves correct
+mirroring/raidz behavior, at the expense of being able to write to
+`/boot/grub/grubenv` and thus the `recordfail` behavior.
 
 Choose one of the following options:
 
-4.8a Install GRUB for legacy (BIOS) booting::
+4.8a Install GRUB/Linux/ZFS for legacy (BIOS) booting::
 
-  apt install --yes grub-pc
+  apt install --yes grub-pc linux-image-generic zfs-initramfs zsys
 
 Select (using the space bar) all of the disks (not partitions) in your pool.
 
-4.8b Install GRUB for UEFI booting::
+4.8b Install GRUB/Linux/ZFS for UEFI booting::
 
-  apt install dosfstools
-  mkdosfs -F 32 -s 1 -n EFI ${DISK}-part2
-  mkdir /boot/efi
-  echo PARTUUID=$(blkid -s PARTUUID -o value ${DISK}-part2) \
-      /boot/efi vfat nofail,x-systemd.device-timeout=1 0 1 >> /etc/fstab
-  mount /boot/efi
-  apt install --yes grub-efi-amd64 shim-signed
+  apt install --yes \
+      grub-efi-amd64 grub-efi-amd64-signed linux-image-generic shim-signed \
+      zfs-initramfs zsys
 
-**Notes:**
-
-- The ``-s 1`` for ``mkdosfs`` is only necessary for drives which present
-  4 KiB logical sectors (“4Kn” drives) to meet the minimum cluster size
-  (given the partition size of 512 MiB) for FAT32. It also works fine on
-  drives which present 512 B sectors.
-- For a mirror or raidz topology, this step only installs GRUB on the
-  first disk. The other disk(s) will be handled later.
+**Note:** For a mirror or raidz topology, this step only installs GRUB on the
+first disk. The other disk(s) will be handled later.
 
 4.9 (Optional): Remove os-prober::
 
@@ -623,34 +651,47 @@ in dual-boot configurations.
 
   passwd
 
-4.11 Enable importing bpool
+4.11 Configure swap:
 
-This ensures that ``bpool`` is always imported, regardless of whether
-``/etc/zfs/zpool.cache`` exists, whether it is in the cachefile or not,
-or whether ``zfs-import-scan.service`` is enabled.
+Choose one of the following options if you want swap:
 
-::
+4.11a For an unencrypted single-disk install::
 
-      vi /etc/systemd/system/zfs-import-bpool.service
+  mkswap -f ${DISK}-part2
+  echo UUID=$(blkid -s UUID -o value ${DISK}-part2) \
+      none swap discard 0 0 >> /etc/fstab
+  swapon -a
 
-.. code-block:: ini
+4.11b For an unencrypted mirror or raidz topology::
 
-      [Unit]
-      DefaultDependencies=no
-      Before=zfs-import-scan.service
-      Before=zfs-import-cache.service
+  apt install --yes mdadm
+  # Adjust the level (ZFS raidz = MD raid5, raidz2 = raid6) and raid-devices
+  # if necessary and specify the actual devices.
+  mdadm --create /dev/md0 --metadata=1.2 --level=mirror --raid-devices=2 \
+      ${DISK1}-part2 ${DISK2}-part2
+  mkswap -f /dev/md0
+  echo UUID=$(blkid -s UUID -o value /dev/md0) \
+      none swap discard 0 0 >> /etc/fstab
+  swapon -a
 
-      [Service]
-      Type=oneshot
-      RemainAfterExit=yes
-      ExecStart=/sbin/zpool import -N -o cachefile=none bpool
+4.11c For an encrypted (LUKS or ZFS native encryption) single-disk install::
 
-      [Install]
-      WantedBy=zfs-import.target
+  apt install --yes cryptsetup
+  echo swap ${DISK}-part2 /dev/urandom \
+        swap,cipher=aes-xts-plain64:sha256,size=512 >> /etc/crypttab
+  echo /dev/mapper/swap none swap defaults 0 0 >> /etc/fstab
 
-::
+4.11d For an encrypted (LUKS or ZFS native encryption) mirror or raidz
+topology::
 
-  systemctl enable zfs-import-bpool.service
+  apt install --yes cryptsetup mdadm
+  # Adjust the level (ZFS raidz = MD raid5, raidz2 = raid6) and raid-devices
+  # if necessary and specify the actual devices.
+  mdadm --create /dev/md0 --metadata=1.2 --level=mirror --raid-devices=2 \
+      ${DISK1}-part2 ${DISK2}-part2
+  echo swap /dev/md0 /dev/urandom \
+        swap,cipher=aes-xts-plain64:sha256,size=512 >> /etc/crypttab
+  echo /dev/mapper/swap none swap defaults 0 0 >> /etc/fstab
 
 4.12 Optional (but recommended): Mount a tmpfs to ``/tmp``
 
@@ -663,17 +704,11 @@ tmpfs (RAM filesystem) by enabling the ``tmp.mount`` unit.
   cp /usr/share/systemd/tmp.mount /etc/systemd/system/
   systemctl enable tmp.mount
 
-4.13 Optional (but kindly requested): Install popcon
+4.13 Setup system groups::
 
-The ``popularity-contest`` package reports the list of packages install
-on your system. Showing that ZFS is popular may be helpful in terms of
-long-term attention from the distro.
-
-::
-
-  apt install --yes popularity-contest
-
-Choose Yes at the prompt.
+  addgroup --system lpadmin
+  addgroup --system lxd
+  addgroup --system sambashare
 
 Step 5: GRUB Installation
 -------------------------
@@ -691,15 +726,22 @@ root device from /etc/fstab”. This is because `cryptsetup does not
 support ZFS
 <https://bugs.launchpad.net/ubuntu/+source/cryptsetup/+bug/1612906>`__.
 
-5.3 Workaround GRUB's missing zpool-features support::
+5.3 Disable memory zeroing::
 
-  vi /etc/default/grub
-  # Set: GRUB_CMDLINE_LINUX="root=ZFS=rpool/ROOT/debian"
+    vi /etc/default/grub
+    # Add init_on_alloc=0 to: GRUB_CMDLINE_LINUX_DEFAULT
+    # Save and quit.
+
+This is to address `performance regressions
+<https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1862822>`__.
 
 5.4 Optional (but highly recommended): Make debugging GRUB easier::
 
   vi /etc/default/grub
-  # Remove quiet from: GRUB_CMDLINE_LINUX_DEFAULT
+  # Comment out: GRUB_TIMEOUT_STYLE=hidden
+  # Set: GRUB_TIMEOUT=5
+  # Below GRUB_TIMEOUT, add: GRUB_RECORDFAIL_TIMEOUT=5
+  # Remove quiet and splash from: GRUB_CMDLINE_LINUX_DEFAULT
   # Uncomment: GRUB_TERMINAL=console
   # Save and quit.
 
@@ -726,17 +768,17 @@ If you are creating a mirror or raidz topology, repeat the
 5.6b For UEFI booting, install GRUB::
 
   grub-install --target=x86_64-efi --efi-directory=/boot/efi \
-      --bootloader-id=debian --recheck --no-floppy
+      --bootloader-id=ubuntu --recheck --no-floppy
 
-It is not necessary to specify the disk here. If you are creating a
-mirror or raidz topology, the additional disks will be handled later.
+For a mirror or raidz topology, run this for the additional disk(s),
+incrementing the “2” to “3” and so on for both ``/boot/efi2`` and
+``ubuntu-2``::
+
+  cp -a /boot/efi/EFI /boot/efi2
+  grub-install --target=x86_64-efi --efi-directory=/boot/efi2 \
+      --bootloader-id=ubuntu-2 --recheck --no-floppy
 
 5.7 Fix filesystem mount ordering:
-
-Until there is support for mounting ``/boot`` in the initramfs, we also
-need to mount that, because it was marked ``canmount=noauto``. Also,
-with UEFI, we need to ensure it is mounted before its child filesystem
-``/boot/efi``.
 
 We need to activate ``zfs-mount-generator``. This makes systemd aware of
 the separate mountpoints, which is important for things like
@@ -745,28 +787,23 @@ the separate mountpoints, which is important for things like
 ``PrivateTmp`` feature of systemd automatically use
 ``After=var-tmp.mount``.
 
-For UEFI booting, unmount /boot/efi first::
-
-  umount /boot/efi
-
-Everything else applies to both BIOS and UEFI booting::
-
-  zfs set mountpoint=legacy bpool/BOOT/debian
-  echo bpool/BOOT/debian /boot zfs \
-      nodev,relatime,x-systemd.requires=zfs-import-bpool.service 0 0 >> /etc/fstab
+::
 
   mkdir /etc/zfs/zfs-list.cache
+  touch /etc/zfs/zfs-list.cache/bpool
   touch /etc/zfs/zfs-list.cache/rpool
   ln -s /usr/lib/zfs-linux/zed.d/history_event-zfs-list-cacher.sh /etc/zfs/zed.d
   zed -F &
 
-Verify that ``zed`` updated the cache by making sure this is not empty::
+Verify that ``zed`` updated the cache by making sure these are not empty::
 
+  cat /etc/zfs/zfs-list.cache/bpool
   cat /etc/zfs/zfs-list.cache/rpool
 
-If it is empty, force a cache update and check again::
+If either is empty, force a cache update and check again::
 
-  zfs set canmount=noauto rpool/ROOT/debian
+  zfs set canmount=noauto bpool/BOOT/ubuntu_$UUID
+  zfs set canmount=noauto rpool/ROOT/ubuntu_$UUID
 
 Stop ``zed``::
 
@@ -775,19 +812,18 @@ Stop ``zed``::
 
 Fix the paths to eliminate ``/mnt``::
 
-  sed -Ei "s|/mnt/?|/|" /etc/zfs/zfs-list.cache/rpool
+  sed -Ei "s|/mnt/?|/|" /etc/zfs/zfs-list.cache/*
 
 Step 6: First Boot
 ------------------
 
-6.1 Snapshot the initial installation::
+6.1 (Optional): Install SSH::
 
-  zfs snapshot bpool/BOOT/debian@install
-  zfs snapshot rpool/ROOT/debian@install
+  apt install --yes openssh-server
 
-In the future, you will likely want to take snapshots before each
-upgrade, and remove old snapshots (including this one) at some point to
-save space.
+If you want to login as root via SSH, set ``PermitRootLogin yes`` in
+``/etc/ssh/sshd_config``.  For security, undo this as soon as possible (i.e.
+once you have your regular user account setup).
 
 6.2 Exit from the ``chroot`` environment back to the LiveCD environment::
 
@@ -809,94 +845,52 @@ Wait for the newly installed system to boot normally. Login as root.
 
 Replace ``username`` with your desired username::
 
-  zfs create rpool/home/username
+  UUID=$(dd if=/dev/urandom of=/dev/stdout bs=1 count=100 2>/dev/null |
+      tr -dc 'a-z0-9' | cut -c-6)
+  ROOT_DS=$(zfs list -o name | awk '/ROOT\/ubuntu_/{print $1;exit}')
+  zfs create -o com.ubuntu.zsys:bootfs-datasets=$ROOT_DS \
+      -o canmount=on -o mountpoint=/home/username \
+      rpool/USERDATA/username_$UUID
   adduser username
 
   cp -a /etc/skel/. /home/username
   chown -R username:username /home/username
-  usermod -a -G audio,cdrom,dip,floppy,netdev,plugdev,sudo,video username
+  usermod -a -G adm,cdrom,dip,lpadmin,lxd,plugdev,sambashare,sudo username
 
-6.6 Mirror GRUB
-
-If you installed to multiple disks, install GRUB on the additional
-disks:
-
-6.6a For legacy (BIOS) booting::
-
-  dpkg-reconfigure grub-pc
-  Hit enter until you get to the device selection screen.
-  Select (using the space bar) all of the disks (not partitions) in your pool.
-
-6.6b For UEFI booting::
-
-  umount /boot/efi
-
-For the second and subsequent disks (increment debian-2 to -3, etc.)::
-
-  dd if=/dev/disk/by-id/scsi-SATA_disk1-part2 \
-     of=/dev/disk/by-id/scsi-SATA_disk2-part2
-  efibootmgr -c -g -d /dev/disk/by-id/scsi-SATA_disk2 \
-      -p 2 -L "debian-2" -l '\EFI\debian\grubx64.efi'
-
-  mount /boot/efi
-
-Step 7: (Optional) Configure Swap
----------------------------------
-
-**Caution**: On systems with extremely high memory pressure, using a
-zvol for swap can result in lockup, regardless of how much swap is still
-available. This issue is currently being investigated in:
-`https://github.com/zfsonlinux/zfs/issues/7734 <https://github.com/zfsonlinux/zfs/issues/7734>`__
-
-7.1 Create a volume dataset (zvol) for use as a swap device::
-
-  zfs create -V 4G -b $(getconf PAGESIZE) -o compression=zle \
-      -o logbias=throughput -o sync=always \
-      -o primarycache=metadata -o secondarycache=none \
-      -o com.sun:auto-snapshot=false rpool/swap
-
-You can adjust the size (the ``4G`` part) to your needs.
-
-The compression algorithm is set to ``zle`` because it is the cheapest
-available algorithm. As this guide recommends ``ashift=12`` (4 kiB
-blocks on disk), the common case of a 4 kiB page size means that no
-compression algorithm can reduce I/O. The exception is all-zero pages,
-which are dropped by ZFS; but some form of compression has to be enabled
-to get this behavior.
-
-7.2 Configure the swap device:
-
-**Caution**: Always use long ``/dev/zvol`` aliases in configuration
-files. Never use a short ``/dev/zdX`` device name.
-
-::
-
-  mkswap -f /dev/zvol/rpool/swap
-  echo /dev/zvol/rpool/swap none swap discard 0 0 >> /etc/fstab
-  echo RESUME=none > /etc/initramfs-tools/conf.d/resume
-
-The ``RESUME=none`` is necessary to disable resuming from hibernation.
-This does not work, as the zvol is not present (because the pool has not
-yet been imported) at the time the resume script runs. If it is not
-disabled, the boot process hangs for 30 seconds waiting for the swap
-zvol to appear.
-
-7.3 Enable the swap device::
-
-  swapon -av
-
-Step 8: Full Software Installation
+Step 7: Full Software Installation
 ----------------------------------
 
-8.1 Upgrade the minimal system::
+7.1 Upgrade the minimal system::
 
   apt dist-upgrade --yes
 
-8.2 Install a regular set of software::
+7.2 Install a regular set of software:
 
-  tasksel
+Choose one of the following options:
 
-8.3 Optional: Disable log compression:
+7.2a Install a command-line environment only::
+
+  apt install --yes ubuntu-standard
+
+7.2b Install a full GUI environment::
+
+  apt install --yes ubuntu-desktop
+  vi /etc/gdm3/custom.conf
+  # In the [daemon] section, add: InitialSetupEnable=false
+
+**Hint**: If you are installing a full GUI environment, you will likely
+want to manage your network with NetworkManager::
+
+  rm /mnt/etc/netplan/01-netcfg.yaml
+  vi /etc/netplan/01-network-manager-all.yaml
+
+.. code-block:: yaml
+
+  network:
+    version: 2
+    renderer: NetworkManager
+
+7.3 Optional: Disable log compression:
 
 As ``/var/log`` is already compressed by ZFS, logrotate’s compression is
 going to burn CPU and disk I/O for (in most cases) very little gain.
@@ -912,26 +906,21 @@ highly recommended)::
       fi
   done
 
-8.4 Reboot::
+7.4 Reboot::
 
   reboot
 
-Step 9: Final Cleanup
+Step 8: Final Cleanup
 ---------------------
 
-9.1 Wait for the system to boot normally. Login using the account you
+8.1 Wait for the system to boot normally. Login using the account you
 created. Ensure the system (including networking) works normally.
 
-9.2 Optional: Delete the snapshots of the initial installation::
-
-  sudo zfs destroy bpool/BOOT/debian@install
-  sudo zfs destroy rpool/ROOT/debian@install
-
-9.3 Optional: Disable the root password::
+8.2 Optional: Disable the root password::
 
   sudo usermod -p '*' root
 
-9.4 Optional: Re-enable the graphical boot process:
+8.3 Optional: Re-enable the graphical boot process:
 
 If you prefer the graphical boot process, you can re-enable it now. If
 you are using LUKS, it makes the prompt look nicer.
@@ -939,15 +928,16 @@ you are using LUKS, it makes the prompt look nicer.
 ::
 
   sudo vi /etc/default/grub
-  # Add quiet to GRUB_CMDLINE_LINUX_DEFAULT
-  # Comment out GRUB_TERMINAL=console
+  # Uncomment: GRUB_TIMEOUT_STYLE=hidden
+  # Add quiet and splash to: GRUB_CMDLINE_LINUX_DEFAULT
+  # Comment out: GRUB_TERMINAL=console
   # Save and quit.
 
   sudo update-grub
 
 **Note:** Ignore errors from ``osprober``, if present.
 
-9.5 Optional: For LUKS installs only, backup the LUKS header::
+8.4 Optional: For LUKS installs only, backup the LUKS header::
 
   sudo cryptsetup luksHeaderBackup /dev/disk/by-id/scsi-SATA_disk1-part4 \
       --header-backup-file luks1-header.dat
@@ -969,7 +959,6 @@ Environment <#step-1-prepare-the-install-environment>`__.
 
 For LUKS, first unlock the disk(s)::
 
-  apt install --yes cryptsetup
   cryptsetup luksOpen /dev/disk/by-id/scsi-SATA_disk1-part4 luks1
   # Repeat for additional disks, if this is a mirror or raidz topology.
 
@@ -978,8 +967,8 @@ Mount everything correctly::
   zpool export -a
   zpool import -N -R /mnt rpool
   zpool import -N -R /mnt bpool
-  zfs load-key -a
-  zfs mount rpool/ROOT/debian
+  # Replace “UUID” as appropriate; use zfs list to find it:
+  zfs mount rpool/ROOT/ubuntu_UUID
   zfs mount -a
 
 If needed, you can chroot into your installed environment::
@@ -1056,7 +1045,8 @@ Uncomment these lines:
      "/usr/share/OVMF/OVMF_CODE.fd:/usr/share/OVMF/OVMF_VARS.fd",
      "/usr/share/OVMF/OVMF_CODE.secboot.fd:/usr/share/OVMF/OVMF_VARS.fd",
      "/usr/share/AAVMF/AAVMF_CODE.fd:/usr/share/AAVMF/AAVMF_VARS.fd",
-     "/usr/share/AAVMF/AAVMF32_CODE.fd:/usr/share/AAVMF/AAVMF32_VARS.fd"
+     "/usr/share/AAVMF/AAVMF32_CODE.fd:/usr/share/AAVMF/AAVMF32_VARS.fd",
+     "/usr/share/OVMF/OVMF_CODE.ms.fd:/usr/share/OVMF/OVMF_VARS.ms.fd"
   ]
 
 ::

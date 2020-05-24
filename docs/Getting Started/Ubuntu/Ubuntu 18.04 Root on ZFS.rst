@@ -9,6 +9,12 @@ Ubuntu 18.04 Root on ZFS
 Overview
 --------
 
+Newer release available
+~~~~~~~~~~~~~~~~~~~~~~~
+
+- See :doc:`Ubuntu 20.04 Root on ZFS <./Ubuntu 20.04 Root on ZFS>` for new
+  installs.
+
 Caution
 ~~~~~~~
 
@@ -22,7 +28,7 @@ System Requirements
 - `Ubuntu 18.04.3 ("Bionic") Desktop
   CD <http://releases.ubuntu.com/18.04.3/ubuntu-18.04.3-desktop-amd64.iso>`__
   (*not* any server images)
-- Installing on a drive which presents 4KiB logical sectors (a “4Kn”
+- Installing on a drive which presents 4 KiB logical sectors (a “4Kn”
   drive) only works with UEFI booting. This not unique to ZFS. `GRUB
   does not and will not work on 4Kn with legacy (BIOS)
   booting. <http://savannah.gnu.org/bugs/?46700>`__
@@ -38,7 +44,7 @@ Support
 
 If you need help, reach out to the community using the :doc:`zfs-discuss
 mailing list <../../Project and Community/Mailing Lists>` or IRC at
-`#zfsonlinux <irc://irc.freenode.net/#zfsonlinux>`__. on `freenode
+`#zfsonlinux <irc://irc.freenode.net/#zfsonlinux>`__ on `freenode
 <https://freenode.net/>`__. If you have a bug report or feature request
 related to this HOWTO, please `file a new issue and mention @rlaager
 <https://github.com/openzfs/openzfs-docs/issues/new?body=@rlaager,%20I%20have%20the%20following%20issue%20with%20the%20Ubuntu%2018.04%20Root%20on%20ZFS%20HOWTO:>`__.
@@ -74,17 +80,16 @@ Encryption
 ~~~~~~~~~~
 
 This guide supports two different encryption options: unencrypted and
-LUKS (full-disk encryption). ZFS native encryption has not yet been
-released. With either option, all ZFS features are fully available.
+LUKS (full-disk encryption). With either option, all ZFS features are fully
+available. ZFS native encryption is not available in Ubuntu 18.04.
 
 Unencrypted does not encrypt anything, of course. With no encryption
 happening, this option naturally has the best performance.
 
-LUKS encrypts almost everything: the OS, swap, home directories, and
-anything else. The only unencrypted data is the bootloader, kernel, and
-initrd. The system cannot boot without the passphrase being entered at
-the console. Performance is good, but LUKS sits underneath ZFS, so if
-multiple disks (mirror or raidz topologies) are used, the data has to be
+LUKS encrypts almost everything. The only unencrypted data is the bootloader,
+kernel, and initrd. The system cannot boot without the passphrase being
+entered at the console. Performance is good, but LUKS sits underneath ZFS, so
+if multiple disks (mirror or raidz topologies) are used, the data has to be
 encrypted once per disk.
 
 Step 1: Prepare The Install Environment
@@ -192,7 +197,6 @@ commands for all the disks which will be part of the pool.
       -o feature@large_blocks=enabled \
       -o feature@lz4_compress=enabled \
       -o feature@spacemap_histogram=enabled \
-      -o feature@userobj_accounting=enabled \
       -O acltype=posixacl -O canmount=off -O compression=lz4 -O devices=off \
       -O normalization=formD -O relatime=on -O xattr=sa \
       -O mountpoint=/ -R /mnt bpool ${DISK}-part3
@@ -205,7 +209,7 @@ GRUB does not support all of the zpool features. See
 This step creates a separate boot pool for ``/boot`` with the features
 limited to only those that GRUB supports, allowing the root pool to use
 any/all features. Note that GRUB opens the pool read-only, so all
-read-only compatible features are "supported" by GRUB.
+read-only compatible features are “supported” by GRUB.
 
 **Hints:**
 
@@ -215,6 +219,12 @@ read-only compatible features are "supported" by GRUB.
   list the partitions from additional disks).
 - The pool name is arbitrary. If changed, the new name must be used
   consistently. The ``bpool`` convention originated in this HOWTO.
+
+**Feature Notes:**
+
+- As a read-only compatible feature, the ``userobj_accounting`` feature should
+  be compatible in theory, but in practice, GRUB can fail with an “invalid
+  dnode type” error. This feature does not matter for ``/boot`` anyway.
 
 2.5 Create the root pool:
 
@@ -236,14 +246,16 @@ Choose one of the following options:
       -O dnodesize=auto -O normalization=formD -O relatime=on -O xattr=sa \
       -O mountpoint=/ -R /mnt rpool /dev/mapper/luks1
 
+**Notes:**
+
 - The use of ``ashift=12`` is recommended here because many drives
-  today have 4KiB (or larger) physical sectors, even though they
-  present 512B logical sectors. Also, a future replacement drive may
-  have 4KiB physical sectors (in which case ``ashift=12`` is desirable)
-  or 4KiB logical sectors (in which case ``ashift=12`` is required).
+  today have 4 KiB (or larger) physical sectors, even though they
+  present 512 B logical sectors. Also, a future replacement drive may
+  have 4 KiB physical sectors (in which case ``ashift=12`` is desirable)
+  or 4 KiB logical sectors (in which case ``ashift=12`` is required).
 - Setting ``-O acltype=posixacl`` enables POSIX ACLs globally. If you
   do not want this, remove that option, but later add
-  ``-o acltype=posixacl`` (note: lowercase "o") to the ``zfs create``
+  ``-o acltype=posixacl`` (note: lowercase “o”) to the ``zfs create``
   for ``/var/log``, as `journald requires
   ACLs <https://askubuntu.com/questions/970886/journalctl-says-failed-to-search-journal-acl-operation-not-supported>`__
 - Setting ``normalization=formD`` eliminates some corner cases relating
@@ -253,11 +265,18 @@ Choose one of the following options:
   of why requiring UTF-8 filenames may be a bad idea, see `The problems
   with enforced UTF-8 only
   filenames <http://utcc.utoronto.ca/~cks/space/blog/linux/ForcedUTF8Filenames>`__.
+- ``recordsize`` is unset (leaving it at the default of 128 KiB). If you want to
+  tune it (e.g. ``-o recordsize=1M``), see `these
+  <https://jrs-s.net/2019/04/03/on-zfs-recordsize/>`__ `various
+  <http://blog.programster.org/zfs-record-size>`__ `blog
+  <https://utcc.utoronto.ca/~cks/space/blog/solaris/ZFSFileRecordsizeGrowth>`__
+  `posts
+  <https://utcc.utoronto.ca/~cks/space/blog/solaris/ZFSRecordsizeAndCompression>`__.
 - Setting ``relatime=on`` is a middle ground between classic POSIX
   ``atime`` behavior (with its significant performance impact) and
   ``atime=off`` (which provides the best performance by completely
   disabling atime updates). Since Linux 2.6.30, ``relatime`` has been
-  the default for other filesystems. See `RedHat's
+  the default for other filesystems. See `RedHat’s
   documentation <https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/power_management_guide/relatime>`__
   for further information.
 - Setting ``xattr=sa`` `vastly improves the performance of extended
@@ -310,9 +329,10 @@ Step 3: System Installation
 
 On Solaris systems, the root filesystem is cloned and the suffix is
 incremented for major system changes through ``pkg image-update`` or
-``beadm``. Similar functionality for APT is possible but currently
-unimplemented. Even without such a tool, it can still be used for
-manually created clones.
+``beadm``. Similar functionality has been implemented in Ubuntu 20.04 with the
+``zsys`` tool, though its dataset layout is more complicated. Even without
+such a tool, the `rpool/ROOT` and `bpool/BOOT` containers can still be used
+for manually created clones.
 
 3.2 Create filesystem datasets for the root and boot filesystems::
 
@@ -387,17 +407,15 @@ If this system will use NFS (locking)::
   zfs create -o com.sun:auto-snapshot=false  rpool/var/lib/nfs
 
 A tmpfs is recommended later, but if you want a separate dataset for
-/tmp::
+``/tmp``::
 
   zfs create -o com.sun:auto-snapshot=false  rpool/tmp
   chmod 1777 /mnt/tmp
 
-The primary goal of this dataset layout is to separate the OS from user
-data. This allows the root filesystem to be rolled back without rolling
-back user data such as logs (in ``/var/log``). This will be especially
-important if/when a ``beadm`` or similar utility is integrated. The
-``com.sun.auto-snapshot`` setting is used by some ZFS snapshot utilities
-to exclude transient data.
+The primary goal of this dataset layout is to separate the OS from user data.
+This allows the root filesystem to be rolled back without rolling back user
+data. The ``com.sun.auto-snapshot`` setting is used by some ZFS
+snapshot utilities to exclude transient data.
 
 If you do nothing extra, ``/tmp`` will be stored as part of the root
 filesystem. Alternatively, you can create a separate dataset for
@@ -418,8 +436,9 @@ of a working system into the new ZFS root.
 Step 4: System Configuration
 ----------------------------
 
-4.1 Configure the hostname (change ``HOSTNAME`` to the desired
-hostname)::
+4.1 Configure the hostname:
+
+Replace ``HOSTNAME`` with the desired hostname::
 
   echo HOSTNAME > /mnt/etc/hostname
   vi /mnt/etc/hosts
@@ -459,14 +478,10 @@ Customize this file if the system is not a DHCP client.
 
 .. code-block:: sourceslist
 
-  deb http://archive.ubuntu.com/ubuntu bionic main universe
-  deb-src http://archive.ubuntu.com/ubuntu bionic main universe
-
-  deb http://security.ubuntu.com/ubuntu bionic-security main universe
-  deb-src http://security.ubuntu.com/ubuntu bionic-security main universe
-
-  deb http://archive.ubuntu.com/ubuntu bionic-updates main universe
-  deb-src http://archive.ubuntu.com/ubuntu bionic-updates main universe
+  deb http://archive.ubuntu.com/ubuntu bionic main restricted universe multiverse
+  deb http://archive.ubuntu.com/ubuntu bionic-updates main restricted universe multiverse
+  deb http://archive.ubuntu.com/ubuntu bionic-backports main restricted universe multiverse
+  deb http://security.ubuntu.com/ubuntu bionic-security main restricted universe multiverse
 
 4.4 Bind the virtual filesystems from the LiveCD environment to the new
 system and ``chroot`` into it::
@@ -490,7 +505,7 @@ Even if you prefer a non-English system language, always ensure that
 
   dpkg-reconfigure tzdata
 
-If you prefer nano over vi, install it::
+If you prefer ``nano`` over ``vi``, install it::
 
   apt install --yes nano
 
@@ -502,16 +517,15 @@ If you prefer nano over vi, install it::
 **Hint:** For the HWE kernel, install ``linux-image-generic-hwe-18.04``
 instead of ``linux-image-generic``.
 
-4.7 For LUKS installs only, setup crypttab::
+4.7 For LUKS installs only, setup ``/etc/crypttab``::
 
   apt install --yes cryptsetup
 
   echo luks1 UUID=$(blkid -s UUID -o value ${DISK}-part4) none \
       luks,discard,initramfs > /etc/crypttab
 
-- The use of ``initramfs`` is a work-around for `cryptsetup does not
-  support
-  ZFS <https://bugs.launchpad.net/ubuntu/+source/cryptsetup/+bug/1612906>`__.
+The use of ``initramfs`` is a work-around for `cryptsetup does not support ZFS
+<https://bugs.launchpad.net/ubuntu/+source/cryptsetup/+bug/1612906>`__.
 
 **Hint:** If you are creating a mirror or raidz topology, repeat the
 ``/etc/crypttab`` entries for ``luks2``, etc. adjusting for each disk.
@@ -524,7 +538,7 @@ Choose one of the following options:
 
   apt install --yes grub-pc
 
-Install GRUB to the disk(s), not the partition(s).
+Select (using the space bar) all of the disks (not partitions) in your pool.
 
 4.8b Install GRUB for UEFI booting::
 
@@ -536,20 +550,27 @@ Install GRUB to the disk(s), not the partition(s).
   mount /boot/efi
   apt install --yes grub-efi-amd64-signed shim-signed
 
-- The ``-s 1`` for ``mkdosfs`` is only necessary for drives which
-  present 4 KiB logical sectors (“4Kn” drives) to meet the minimum
-  cluster size (given the partition size of 512 MiB) for FAT32. It also
-  works fine on drives which present 512 B sectors.
+**Notes:**
 
-**Note:** If you are creating a mirror or raidz topology, this step only
-installs GRUB on the first disk. The other disk(s) will be handled
-later.
+- The ``-s 1`` for ``mkdosfs`` is only necessary for drives which present
+  4 KiB logical sectors (“4Kn” drives) to meet the minimum cluster size
+  (given the partition size of 512 MiB) for FAT32. It also works fine on
+  drives which present 512 B sectors.
+- For a mirror or raidz topology, this step only installs GRUB on the
+  first disk. The other disk(s) will be handled later.
 
-4.9 Set a root password::
+4.9 (Optional): Remove os-prober::
+
+    dpkg --purge os-prober
+
+This avoids error messages from `update-grub`.  `os-prober` is only necessary
+in dual-boot configurations.
+
+4.10 Set a root password::
 
   passwd
 
-4.10 Enable importing bpool
+4.11 Enable importing bpool
 
 This ensures that ``bpool`` is always imported, regardless of whether
 ``/etc/zfs/zpool.cache`` exists, whether it is in the cachefile or not,
@@ -578,7 +599,7 @@ or whether ``zfs-import-scan.service`` is enabled.
 
   systemctl enable zfs-import-bpool.service
 
-4.11 Optional (but recommended): Mount a tmpfs to /tmp
+4.12 Optional (but recommended): Mount a tmpfs to ``/tmp``
 
 If you chose to create a ``/tmp`` dataset above, skip this step, as they
 are mutually exclusive choices. Otherwise, you can put ``/tmp`` on a
@@ -589,9 +610,7 @@ tmpfs (RAM filesystem) by enabling the ``tmp.mount`` unit.
   cp /usr/share/systemd/tmp.mount /etc/systemd/system/
   systemctl enable tmp.mount
 
-4.12 Setup system groups:
-
-::
+4.13 Setup system groups::
 
   addgroup --system lpadmin
   addgroup --system sambashare
@@ -605,12 +624,12 @@ Step 5: GRUB Installation
 
 5.2 Refresh the initrd files::
 
-  update-initramfs -u -k all
+  update-initramfs -c -k all
 
-**Note:** When using LUKS, this will print "WARNING could not determine
-root device from /etc/fstab". This is because `cryptsetup does not
-support
-ZFS <https://bugs.launchpad.net/ubuntu/+source/cryptsetup/+bug/1612906>`__.
+**Note:** When using LUKS, this will print “WARNING could not determine
+root device from /etc/fstab”. This is because `cryptsetup does not
+support ZFS
+<https://bugs.launchpad.net/ubuntu/+source/cryptsetup/+bug/1612906>`__.
 
 5.3 Workaround GRUB's missing zpool-features support::
 
@@ -636,7 +655,7 @@ working, you can undo these changes, if desired.
 
 **Note:** Ignore errors from ``osprober``, if present.
 
-5.6 Install the boot loader
+5.6 Install the boot loader:
 
 5.6a For legacy (BIOS) booting, install GRUB to the MBR::
 
@@ -655,11 +674,7 @@ If you are creating a mirror or raidz topology, repeat the
 It is not necessary to specify the disk here. If you are creating a
 mirror or raidz topology, the additional disks will be handled later.
 
-5.7 Verify that the ZFS module is installed::
-
-  ls /boot/grub/*/zfs.mod
-
-5.8 Fix filesystem mount ordering
+5.7 Fix filesystem mount ordering:
 
 `Until ZFS gains a systemd mount
 generator <https://github.com/zfsonlinux/zfs/issues/4898>`__, there are
@@ -734,32 +749,31 @@ filesystems::
 
   reboot
 
-6.5 Wait for the newly installed system to boot normally. Login as root.
+Wait for the newly installed system to boot normally. Login as root.
 
-6.6 Create a user account::
+6.5 Create a user account:
 
-  zfs create rpool/home/YOURUSERNAME
-  adduser YOURUSERNAME
-  cp -a /etc/skel/. /home/YOURUSERNAME
-  chown -R YOURUSERNAME:YOURUSERNAME /home/YOURUSERNAME
+Replace ``username`` with your desired username::
 
-6.7 Add your user account to the default set of groups for an
-administrator::
+  zfs create rpool/home/username
+  adduser username
 
-  usermod -a -G adm,cdrom,dip,lpadmin,plugdev,sambashare,sudo YOURUSERNAME
+  cp -a /etc/skel/. /home/username
+  chown -R username:username /home/username
+  usermod -a -G audio,cdrom,dip,floppy,netdev,plugdev,sudo,video username
 
-6.8 Mirror GRUB
+6.6 Mirror GRUB
 
 If you installed to multiple disks, install GRUB on the additional
 disks:
 
-6.8a For legacy (BIOS) booting::
+6.6a For legacy (BIOS) booting::
 
   dpkg-reconfigure grub-pc
   Hit enter until you get to the device selection screen.
   Select (using the space bar) all of the disks (not partitions) in your pool.
 
-6.8b For UEFI booting::
+6.6b For UEFI booting::
 
   umount /boot/efi
 
@@ -841,7 +855,8 @@ Choose one of the following options:
 **Hint**: If you are installing a full GUI environment, you will likely
 want to manage your network with NetworkManager::
 
-  vi /etc/netplan/01-netcfg.yaml
+  rm /mnt/etc/netplan/01-netcfg.yaml
+  vi /etc/netplan/01-network-manager-all.yaml
 
 .. code-block:: yaml
 
@@ -965,8 +980,8 @@ not hotplug pool members. See
 `https://github.com/zfsonlinux/zfs/issues/330 <https://github.com/zfsonlinux/zfs/issues/330>`__.
 
 Most LSI cards are perfectly compatible with ZoL. If your card has this
-glitch, try setting ZFS_INITRD_PRE_MOUNTROOT_SLEEP=X in
-/etc/default/zfs. The system will wait X seconds for all drives to
+glitch, try setting ``ZFS_INITRD_PRE_MOUNTROOT_SLEEP=X`` in
+``/etc/default/zfs``. The system will wait ``X`` seconds for all drives to
 appear before importing the pool.
 
 Areca
@@ -974,7 +989,7 @@ Areca
 
 Systems that require the ``arcsas`` blob driver should add it to the
 ``/etc/initramfs-tools/modules`` file and run
-``update-initramfs -u -k all``.
+``update-initramfs -c -k all``.
 
 Upgrade or downgrade the Areca driver if something like
 ``RIP: 0010:[<ffffffff8101b316>]  [<ffffffff8101b316>] native_read_tsc+0x6/0x20``
