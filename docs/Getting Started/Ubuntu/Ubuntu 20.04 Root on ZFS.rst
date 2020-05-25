@@ -25,7 +25,27 @@ If you want a ZFS native encrypted, desktop install, you can `trivially edit
 the installer
 <https://linsomniac.gitlab.io/post/2020-04-09-ubuntu-2004-encrypted-zfs/>`__.
 The ``-o recordsize=1M`` there is unrelated to encryption; omit that unless
-you understand it. `Hopefully the installer will gain encryption support in
+you understand it. Additionally, once the system is installed, you should
+switch to encrypted swap::
+
+  swapon -v
+  # Note the device, including the partition.
+
+  ls -l /dev/disk/by-id/
+  # Find the by-id name of the disk.
+
+  sudo swapoff -a
+  sudo vi /etc/fstab
+  # Remove the swap entry.
+
+  sudo apt install --yes cryptsetup
+
+  # Replace DISK-partN as appropriate from above:
+  echo swap /dev/disk/by-id/DISK-partN /dev/urandom \
+      swap,cipher=aes-xts-plain64:sha256,size=512 | sudo tee -a /etc/crypttab
+  echo /dev/mapper/swap none swap defaults 0 0 | sudo tee -a /etc/fstab
+
+`Hopefully the installer will gain encryption support in
 the future
 <https://bugs.launchpad.net/ubuntu/+source/ubiquity/+bug/1857398>`__.
 
