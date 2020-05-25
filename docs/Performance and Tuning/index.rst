@@ -1,4 +1,4 @@
-Performance and tuning
+Performance and Tuning
 ======================
 
 .. toctree::

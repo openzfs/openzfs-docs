@@ -5,6 +5,6 @@
    Getting Started/index
    Project and Community/index
    Developer Resources/index
-   Performance and tuning/index
+   Performance and Tuning/index
    Basic Concepts/index
    License
