@@ -47,9 +47,9 @@ related to this HOWTO, please `file a new issue and mention @rlaager
 Contributing
 ~~~~~~~~~~~~
 
-1. Fork and clone: https://github.com/openzfs/openzfs-docs
+#. Fork and clone: https://github.com/openzfs/openzfs-docs
 
-2. Install the tools::
+#. Install the tools::
 
     # On Debian 11 / Ubuntu 20.04 or later:
     sudo apt install python3-sphinx python3-sphinx-issues python3-sphinx-rtd-theme
@@ -60,15 +60,15 @@ Contributing
     # Add ~/.local/bin to your $PATH, e.g. by adding this to ~/.bashrc:
     PATH=$HOME/.local/bin:$PATH
 
-3. Make your changes.
+#. Make your changes.
 
-4. Test::
+#. Test::
 
     cd docs
     make html
     sensible-browser _build/html/index.html
 
-5. ``git commit --signoff`` to a branch, ``git push``, and create a pull
+#. ``git commit --signoff`` to a branch, ``git push``, and create a pull
    request. Mention @rlaager.
 
 Encryption
