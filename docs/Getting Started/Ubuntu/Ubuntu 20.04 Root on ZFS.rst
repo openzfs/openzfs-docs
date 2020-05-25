@@ -849,9 +849,8 @@ Step 6: First Boot
 
      apt install --yes openssh-server
 
-   If you want to login as root via SSH, set ``PermitRootLogin yes`` in
-   ``/etc/ssh/sshd_config``.  For security, undo this as soon as possible
-   (i.e. once you have your regular user account setup).
+     vi /etc/ssh/sshd_config
+     # Set: PermitRootLogin yes
 
 #. Exit from the ``chroot`` environment back to the LiveCD environment::
 
@@ -947,6 +946,15 @@ Step 8: Final Cleanup
 #. Optional: Disable the root password::
 
      sudo usermod -p '*' root
+
+#. Optional (but highly recommended): Disable root SSH logins:
+
+   If you installed SSH earlier, revert the temporary change::
+
+     vi /etc/ssh/sshd_config
+     # Remove: PermitRootLogin yes
+
+     systemctl restart ssh
 
 #. Optional: Re-enable the graphical boot process:
 
