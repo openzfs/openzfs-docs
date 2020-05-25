@@ -502,7 +502,6 @@ Step 3: System Installation
 #. Install the minimal system::
 
      debootstrap buster /mnt
-     zfs set devices=off rpool
 
    The ``debootstrap`` command leaves the new system in an unconfigured state.
    An alternative to using ``debootstrap`` is to copy the entirety of a
