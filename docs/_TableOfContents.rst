@@ -6,5 +6,5 @@
    Project and Community/index
    Developer Resources/index
    Performance and tuning/index
-   Basics concepts/index
+   Basic Concepts/index
    License

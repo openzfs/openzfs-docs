@@ -1,4 +1,4 @@
-Basic concepts
+Basic Concepts
 ==============
 
 .. toctree::
