@@ -194,11 +194,11 @@ Step 2: Disk Formatting
 
    - Unencrypted or ZFS native encryption::
 
-       sgdisk     -n4:0:0        -t4:BF01 $DISK
+       sgdisk     -n4:0:0        -t4:BF00 $DISK
 
    - LUKS::
 
-       sgdisk     -n4:0:0        -t4:8300 $DISK
+       sgdisk     -n4:0:0        -t4:8309 $DISK
 
    If you are creating a mirror or raidz topology, repeat the partitioning
    commands for all the disks which will be part of the pool.
