@@ -1,7 +1,7 @@
-OpenZFS index
-=============
+OpenZFS Documentation
+=====================
 
-Welcome to the OpenZFS. This resource provides documentation for
+Welcome to the OpenZFS Documentation. This resource provides documentation for
 users and developers working with (or contributing to) the OpenZFS
 project. New users or system administrators should refer to the
 documentation for their favorite platform to get started.
