@@ -446,9 +446,9 @@ Step 2: Disk Formatting
 
        zpool create \
            ... \
-           bpool mirror \
-           /dev/disk/by-id/scsi-SATA_disk1-part3 \
-           /dev/disk/by-id/scsi-SATA_disk2-part3
+           rpool mirror \
+           /dev/disk/by-id/scsi-SATA_disk1-part4 \
+           /dev/disk/by-id/scsi-SATA_disk2-part4
 
    - For raidz topologies, replace ``mirror`` in the above command with
      ``raidz``, ``raidz2``, or  ``raidz3`` and list the partitions from
