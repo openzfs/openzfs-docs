@@ -497,7 +497,7 @@ Step 3: System Installation
          rpool/ROOT/ubuntu_$UUID/var
      zfs create rpool/ROOT/ubuntu_$UUID/var/games
      zfs create rpool/ROOT/ubuntu_$UUID/var/lib
-     zfs create rpool/ROOT/ubuntu_$UUID/var/lib/AccountServices
+     zfs create rpool/ROOT/ubuntu_$UUID/var/lib/AccountsService
      zfs create rpool/ROOT/ubuntu_$UUID/var/lib/apt
      zfs create rpool/ROOT/ubuntu_$UUID/var/lib/dpkg
      zfs create rpool/ROOT/ubuntu_$UUID/var/lib/NetworkManager
