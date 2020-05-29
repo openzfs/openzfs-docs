@@ -1023,6 +1023,8 @@ Mount everything correctly::
   zpool export -a
   zpool import -N -R /mnt rpool
   zpool import -N -R /mnt bpool
+  # The following line is only needed for native encrypted rpools:
+  zfs load-key rpool
   # Replace “UUID” as appropriate; use zfs list to find it:
   zfs mount rpool/ROOT/ubuntu_UUID
   zfs mount -a
