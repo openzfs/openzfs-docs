@@ -12,20 +12,14 @@ Building Locally
 Install Prerequisites
 ~~~~~~~~~~~~~~~~~~~~~
 
-Debian 11 (“testing”) / Ubuntu 20.04 or later::
+::
 
-   sudo apt install python3-sphinx python3-sphinx-issues python3-sphinx-rtd-theme
-
-Debian 10 (”Buster”) and earlier::
-
+   # For Debian based distros
    sudo apt install pip3
-   pip3 install -r requirements.txt
-   # Add ~/.local/bin to your $PATH, e.g. by adding this to ~/.bashrc:
-   PATH=$HOME/.local/bin:$PATH
+   # For RPM-based distros
+   sudo yum install python3-pip
 
-Other distros::
-
-   pip install -r requirements.txt
+   pip3 install -r docs/requirements.txt
    # Add ~/.local/bin to your $PATH, e.g. by adding this to ~/.bashrc:
    PATH=$HOME/.local/bin:$PATH
 
