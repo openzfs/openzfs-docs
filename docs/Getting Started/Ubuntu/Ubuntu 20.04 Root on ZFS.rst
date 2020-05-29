@@ -1023,6 +1023,7 @@ Mount everything correctly::
   zpool export -a
   zpool import -N -R /mnt rpool
   zpool import -N -R /mnt bpool
+  zfs load-key -a
   # Replace “UUID” as appropriate; use zfs list to find it:
   zfs mount rpool/ROOT/ubuntu_UUID
   zfs mount -a
