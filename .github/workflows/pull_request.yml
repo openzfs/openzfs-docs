@@ -9,5 +9,5 @@ jobs:
     - uses: actions/checkout@v1
     - uses: ammaraskar/sphinx-action@master
       with:
-        pre-build-command: "apt-get update -y && apt-get install -y python3-pip && pip install -r docs/requirements.txt"
+        pre-build-command: "apt-get update -y && apt-get install -y git python3-pip && pip install -r docs/requirements.txt"
         docs-folder: "docs/"
