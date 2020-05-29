@@ -13,13 +13,13 @@ help:
 
 .PHONY: help Makefile
 
+# The 404 page can be served at any directory level, so its links must be
+# relative to the root.  Also, this command must be idempotent, as 404.html is
+# not rebuilt if it already exists and 404.rst was not changed.
 html: Makefile
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
-	# The 404 page can be served at any directory level, so its links must
-	# be relative to the root.  Also, this command must be idempotent, as
-	# 404.html is not rebuilt if it already exists and 404.rst was not
-	# changed.
-	@sed -Ei 's#(src|href)="([^/])#\1="/\2#' "$(BUILDDIR)/html/404.html"
+	@sed -E 's/(action|href|src)="([^\/#])/\1="\/\2/;s/\/http/http/' \
+		"$(BUILDDIR)/html/404.html"
 
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
