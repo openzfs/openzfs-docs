@@ -18,7 +18,7 @@ help:
 # not rebuilt if it already exists and 404.rst was not changed.
 html: Makefile
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
-	@sed -E 's/(action|href|src)="([^\/#])/\1="\/\2/;s/\/http/http/' \
+	@sed -Ei 's/(action|href|src)="([^\/#])/\1="\/\2/;s/\/http/http/' \
 		"$(BUILDDIR)/html/404.html"
 
 # Catch-all target: route all unknown targets to Sphinx using the new
