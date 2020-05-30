@@ -197,14 +197,26 @@ Step 2: Disk Formatting
 
 #. If you are re-using a disk, clear it as necessary:
 
-   If the disk was previously used in an MD array, zero the superblock::
+   If the disk was previously used in an MD array::
 
      apt install --yes mdadm
+
+     # See if one or more MD arrays are active:
+     cat /proc/mdstat
+     # If so, stop them (replace ``md0`` as required):
+     mdadm --stop /dev/md0
+
+     # For an array using the whole disk:
      mdadm --zero-superblock --force $DISK
+     # For an array using a partition (e.g. a swap partition per this HOWTO):
+     mdadm --zero-superblock --force ${DISK}-part2
 
    Clear the partition table::
 
      sgdisk --zap-all $DISK
+
+   If you get a message about the kernel still using the old partition table,
+   reboot and start over (except that you can skip this step).
 
 #. Create bootloader partition(s)::
 
