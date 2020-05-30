@@ -807,27 +807,29 @@ Step 5: GRUB Installation
 
 #. Install the boot loader:
 
-   #. For legacy (BIOS) booting, install GRUB to the MBR::
+   Choose one of the following options:
 
-        grub-install $DISK
+   - For legacy (BIOS) booting, install GRUB to the MBR::
 
-   Note that you are installing GRUB to the whole disk, not a partition.
+       grub-install $DISK
 
-   If you are creating a mirror or raidz topology, repeat the ``grub-install``
-   command for each disk in the pool.
+     Note that you are installing GRUB to the whole disk, not a partition.
 
-   #. For UEFI booting, install GRUB to the ESP::
+     If you are creating a mirror or raidz topology, repeat the
+     ``grub-install`` command for each disk in the pool.
 
-        grub-install --target=x86_64-efi --efi-directory=/boot/efi \
-            --bootloader-id=ubuntu --recheck --no-floppy
+   - For UEFI booting, install GRUB to the ESP::
 
-      For a mirror or raidz topology, run this for the additional disk(s),
-      incrementing the “2” to “3” and so on for both ``/boot/efi2`` and
-      ``ubuntu-2``::
+       grub-install --target=x86_64-efi --efi-directory=/boot/efi \
+           --bootloader-id=ubuntu --recheck --no-floppy
 
-        cp -a /boot/efi/EFI /boot/efi2
-        grub-install --target=x86_64-efi --efi-directory=/boot/efi2 \
-            --bootloader-id=ubuntu-2 --recheck --no-floppy
+     For a mirror or raidz topology, run this for the additional disk(s),
+     incrementing the “2” to “3” and so on for both ``/boot/efi2`` and
+     ``ubuntu-2``::
+
+       cp -a /boot/efi/EFI /boot/efi2
+       grub-install --target=x86_64-efi --efi-directory=/boot/efi2 \
+           --bootloader-id=ubuntu-2 --recheck --no-floppy
 
 #. Fix filesystem mount ordering:
 
