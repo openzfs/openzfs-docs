@@ -156,7 +156,7 @@ Step 1: Prepare The Install Environment
    convenient::
 
      passwd
-     # There is no current password; hit enter at that prompt.
+     # There is no current password.
      sudo apt install --yes openssh-server
 
    **Hint:** You can find your IP address with
