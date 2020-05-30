@@ -566,7 +566,7 @@ Step 3: System Installation
 
    For a mirror or raidz topology, create a dataset for ``/boot/grub``::
 
-     zfs create -o com.ubuntu.zsys:bootfs=no bpool/grub
+     zfs create bpool/BOOT/ubuntu_$UUID/grub
 
    A tmpfs is recommended later, but if you want a separate dataset for
    ``/tmp``::
