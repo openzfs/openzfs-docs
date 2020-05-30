@@ -210,7 +210,8 @@ Step 2: Disk Formatting
    booting, this will allow you to move the disk(s) to a new
    system/motherboard in the future without having to rebuild the pool (and
    restore your data from a backup). Additionally, this is used for
-   ``/boot/grub`` in single-disk scenarios, as discussed below.
+   ``/boot/grub`` in single-disk scenarios, as :ref:`discussed below
+   <boot-grub-esp>`.
 
    For legacy (BIOS) booting::
 
@@ -653,7 +654,9 @@ Step 4: System Configuration
    size (given the partition size of 512 MiB) for FAT32. It also works fine on
    drives which present 512 B sectors.
 
-#. Install GRUB/Linux/ZFS in the chroot environment for the new system:
+#. Put ``/boot/grub`` on the EFI System Partition:
+
+   .. _boot-grub-esp:
 
    For a single-disk install only::
 
@@ -661,8 +664,8 @@ Step 4: System Configuration
      echo /boot/efi/grub /boot/grub none defaults,bind 0 0 >> /etc/fstab
      mount /boot/grub
 
-   **Note:** This puts ``/boot/grub`` on the EFI System Partition. This allows
-   GRUB to write to it, which means that ``/boot/grub/grubenv`` and the
+   This allows GRUB to write to ``/boot/grub`` (since it is on a FAT-formatted
+   ESP instead of on ZFS), which means that ``/boot/grub/grubenv`` and the
    ``recordfail`` feature works as expected: if the boot fails, the normally
    hidden GRUB menu will be shown on the next boot. For a mirror or raidz
    topology, we do not want GRUB writing to the EFI System Partition. This is
@@ -672,6 +675,8 @@ Step 4: System Configuration
    This preserves correct mirroring/raidz behavior, at the expense of being
    able to write to ``/boot/grub/grubenv`` and thus the ``recordfail``
    behavior.
+
+#. Install GRUB/Linux/ZFS in the chroot environment for the new system:
 
    Choose one of the following options:
 
