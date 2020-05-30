@@ -6,6 +6,30 @@ Ubuntu 20.04 Root on ZFS
 .. contents:: Table of Contents
   :local:
 
+Errata
+------
+
+If you previously installed using this guide, please take note of this issue:
+
+AccountsService Not Mounted
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+| **Severity:** Normal
+| **Fixed:** 2020-05-28
+
+The HOWTO previously had a typo in AccountsService (where Accounts is plural) as AccountServices (where Services is plural). This means that AccountsService data will be written to the root filesystem. This is only harmful in the event of a rollback of the root filesystem that does not include a rollback of the user data. Fix as follows::
+
+  zfs list | grep Account
+  # If the s is on Accounts, you're good. If it's on Services, fix it:
+
+  mv /var/lib/AccountsService /var/lib/AccountsService-old
+  zfs list
+  # Replace the UUID twice below as appropriate:
+  zfs rename rpool/ROOT/ubuntu_UUID/var/lib/AccountServices \
+             rpool/ROOT/ubuntu_UUID/var/lib/AccountsService
+  mv /var/lib/AccountsService-old/* /var/lib/AccountsService
+  rmdir /var/lib/AccountsService-old
+
 Overview
 --------
 
