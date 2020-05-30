@@ -9,7 +9,73 @@ Ubuntu 20.04 Root on ZFS
 Errata
 ------
 
-If you previously installed using this guide, please take note of this issue:
+If you previously installed using this guide, please apply these fixes if
+applicable:
+
+/boot/grub Not Mounted
+~~~~~~~~~~~~~~~~~~~~~~
+
+| **Severity:** Grave
+| **Fixed:** 2020-05-30
+
+For a mirror or raidz topology, ``/boot/grub`` is on a separate dataset. This
+is now ``bpool/BOOT/ubuntu_UUID/grub``, but was previously ``bpool/grub``.
+Unfortunately, zsys sets ``canmount=off`` on ``bpool/grub``, so it is not
+mounted. As a result, updates the GRUB configuration will be written to the
+``/boot`` filesystem and not used by GRUB (because it is still looking in
+``bpool/grub``). Check for ``bpool/grub``::
+
+  zfs list bpool/grub
+
+If this says “dataset does not exist”, you are good. If it exists, fix it.
+
+Once you start this process, the system will be unbootable until you have
+completed it. Do not reboot until you have completed all of the steps.
+
+#. Rename the dataset::
+
+     rm -rf /boot/grub
+
+     zfs list -r bpool
+     # Replace UUID below:
+     zfs rename bpool/grub bpool/BOOT/ubuntu_UUID/grub
+     zfs inherit com.ubuntu.zsys:bootfs bpool/BOOT/ubuntu_UUID/grub
+     zfs set canmount=on bpool/BOOT/ubuntu_UUID/grub
+     zfs mount bpool/BOOT/ubuntu_UUID/grub
+
+#. Ensure that zed updated the cache to use ``bpool/BOOT/ubuntu_UUID/grub``::
+
+     grep grub /etc/zfs/zfs-list.cache/bpool
+
+#. Rebuild the initrd and reinstall GRUB::
+
+     update-initramfs -c -k all
+     update-grub
+     grub-install --target=x86_64-efi --efi-directory=/boot/efi \
+         --bootloader-id=ubuntu --recheck --no-floppy
+
+   Run this for the additional disk(s), incrementing the “2” to “3” and so on for
+   both ``/boot/efi2`` and ``ubuntu-2``::
+
+     cp -a /boot/efi/EFI /boot/efi2
+     grub-install --target=x86_64-efi --efi-directory=/boot/efi2 \
+         --bootloader-id=ubuntu-2 --recheck --no-floppy
+
+   Check that these have ``set prefix=($root)'/BOOT/ubuntu_UUID/grub@'``::
+
+     grep prefix= \
+         /boot/efi/EFI/ubuntu/grub.cfg \
+         /boot/efi2/EFI/ubuntu-2/grub.cfg
+
+#. If using encryption, patch a dependency loop::
+
+     sudo apt install --yes curl patch
+     curl https://launchpadlibrarian.net/478315221/2150-fix-systemd-dependency-loops.patch | \
+         sed "s|/etc|/lib|;s|\.in$||" | (cd / ; patch -p1)
+
+#. Disable grub-initrd-fallback.service::
+
+     systemctl mask grub-initrd-fallback.service
 
 AccountsService Not Mounted
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
