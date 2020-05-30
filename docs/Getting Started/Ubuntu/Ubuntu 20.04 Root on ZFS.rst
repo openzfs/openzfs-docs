@@ -902,6 +902,21 @@ Step 5: GRUB Installation
        grub-install --target=x86_64-efi --efi-directory=/boot/efi2 \
            --bootloader-id=ubuntu-2 --recheck --no-floppy
 
+#. Disable grub-initrd-fallback.service
+
+   For a mirror or raidz topology:
+
+     systemctl mask grub-initrd-fallback.service
+
+   This is the service for ``/boot/grub/grubenv`` which does not work on
+   mirrored or raidz topologies. Disabling this keeps it from blocking
+   subsequent mounts of ``/boot/grub`` if that mount ever fails.
+
+   Another option would be to set ``RequiresMountsFor=/boot/grub`` via a
+   drop-in unit, but that is more work to do here for no reason. Hopefully
+   `this bug <https://bugs.launchpad.net/ubuntu/+source/grub2/+bug/1881442>`__
+   will be fixed upstream.
+
 #. Fix filesystem mount ordering:
 
    We need to activate ``zfs-mount-generator``. This makes systemd aware of
