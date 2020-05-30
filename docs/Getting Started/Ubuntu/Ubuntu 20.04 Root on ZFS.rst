@@ -657,9 +657,14 @@ Step 4: System Configuration
 
      dpkg-reconfigure tzdata
 
-   If you prefer ``nano`` over ``vi``, install it::
+   Install your preferred text editor::
 
      apt install --yes nano
+     apt install --yes vim
+
+   Installing the full ``vim`` package fixes terminal problems that occur when
+   using the ``vim-tiny`` package (that is installed by ``debootstrap``) over
+   SSH.
 
 #. For LUKS installs only, setup ``/etc/crypttab``::
 
@@ -916,7 +921,7 @@ Step 6: First Boot
 
 #. Optional: Install SSH::
 
-     apt install --yes openssh-server vim
+     apt install --yes openssh-server
 
      vi /etc/ssh/sshd_config
      # Set: PermitRootLogin yes
