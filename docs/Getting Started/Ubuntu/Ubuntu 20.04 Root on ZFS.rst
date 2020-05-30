@@ -67,7 +67,10 @@ switch to encrypted swap::
   sudo vi /etc/fstab
   # Remove the swap entry.
 
-  sudo apt install --yes cryptsetup
+  sudo apt install --yes cryptsetup curl patch
+
+  curl https://launchpadlibrarian.net/478315221/2150-fix-systemd-dependency-loops.patch | \
+      sed "s|/etc|/lib|;s|\.in$||" | (cd / ; patch -p1)
 
   # Replace DISK-partN as appropriate from above:
   echo swap /dev/disk/by-id/DISK-partN /dev/urandom \
@@ -815,6 +818,19 @@ Step 4: System Configuration
      addgroup --system lpadmin
      addgroup --system lxd
      addgroup --system sambashare
+
+#. Patch a dependency loop:
+
+   For ZFS native encryption or LUKS::
+
+     sudo apt install --yes curl patch
+
+     curl https://launchpadlibrarian.net/478315221/2150-fix-systemd-dependency-loops.patch | \
+         sed "s|/etc|/lib|;s|\.in$||" | (cd / ; patch -p1)
+
+   This patch is from `Bug #1875577 Encrypted swap won't load on 20.04 with
+   zfs root
+   <https://bugs.launchpad.net/ubuntu/+source/cryptsetup/+bug/1612906>`__.
 
 Step 5: GRUB Installation
 -------------------------
