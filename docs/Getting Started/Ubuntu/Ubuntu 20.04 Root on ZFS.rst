@@ -244,6 +244,10 @@ Step 2: Disk Formatting
 
        sgdisk     -n2:0:+500M    -t2:FD00 $DISK
 
+   Adjust the swap swize to your needs.  If you wish to enable hiberation
+   (which only works for unencrypted installs), the swap partition must be
+   at least as large as the system's RAM.
+
 #. Create a boot pool partition::
 
      sgdisk     -n3:0:+2G      -t3:BE00 $DISK
