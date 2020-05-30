@@ -17,14 +17,19 @@ AccountsService Not Mounted
 | **Severity:** Normal
 | **Fixed:** 2020-05-28
 
-The HOWTO previously had a typo in AccountsService (where Accounts is plural) as AccountServices (where Services is plural). This means that AccountsService data will be written to the root filesystem. This is only harmful in the event of a rollback of the root filesystem that does not include a rollback of the user data. Fix as follows::
+The HOWTO previously had a typo in AccountsService (where Accounts is plural)
+as AccountServices (where Services is plural). This means that AccountsService
+data will be written to the root filesystem. This is only harmful in the event
+of a rollback of the root filesystem that does not include a rollback of the
+user data. Check it::
 
   zfs list | grep Account
-  # If the s is on Accounts, you're good. If it's on Services, fix it:
+
+If the “s” is on “Accounts”, you are good. If it is on “Services”, fix it::
 
   mv /var/lib/AccountsService /var/lib/AccountsService-old
-  zfs list
-  # Replace the UUID twice below as appropriate:
+  zfs list -r rpool
+  # Replace the UUID twice below:
   zfs rename rpool/ROOT/ubuntu_UUID/var/lib/AccountServices \
              rpool/ROOT/ubuntu_UUID/var/lib/AccountsService
   mv /var/lib/AccountsService-old/* /var/lib/AccountsService
@@ -246,7 +251,7 @@ Step 2: Disk Formatting
    booting, this will allow you to move the disk(s) to a new
    system/motherboard in the future without having to rebuild the pool (and
    restore your data from a backup). Additionally, this is used for
-   ``/boot/grub`` in single-disk scenarios, as :ref:`discussed below
+   ``/boot/grub`` in single-disk installs, as :ref:`discussed below
    <boot-grub-esp>`.
 
    For legacy (BIOS) booting::
@@ -745,7 +750,7 @@ Step 4: System Configuration
 
      dpkg --purge os-prober
 
-   This avoids error messages from `update-grub`.  `os-prober` is only
+   This avoids error messages from ``update-grub``.  ``os-prober`` is only
    necessary in dual-boot configurations.
 
 #. Set a root password::
