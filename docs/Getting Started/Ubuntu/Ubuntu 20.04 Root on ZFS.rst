@@ -958,7 +958,7 @@ Step 7: Full Software Installation
      **Hint**: If you are installing a full GUI environment, you will likely
      want to manage your network with NetworkManager::
 
-       rm /mnt/etc/netplan/01-netcfg.yaml
+       rm /etc/netplan/01-netcfg.yaml
        vi /etc/netplan/01-network-manager-all.yaml
 
      .. code-block:: yaml
