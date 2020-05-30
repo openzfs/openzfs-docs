@@ -23,11 +23,6 @@ The dependencies are available via pip::
    # Add ~/.local/bin to your $PATH, e.g. by adding this to ~/.bashrc:
    PATH=$HOME/.local/bin:$PATH
 
-Debian 11 (“testing”) / Ubuntu 20.04 or later have the dependencies packaged::
-
-   sudo apt install python3-sphinx python3-sphinx-issues \
-       python3-sphinx-rtd-theme
-
 Build
 ~~~~~
 

@@ -117,10 +117,6 @@ Contributing
 
 #. Install the tools::
 
-    # On Debian 11 / Ubuntu 20.04 or later:
-    sudo apt install python3-sphinx python3-sphinx-issues python3-sphinx-rtd-theme
-
-    # On earlier releases:
     sudo apt install pip3
     pip3 install -r requirements.txt
     # Add ~/.local/bin to your $PATH, e.g. by adding this to ~/.bashrc:
