@@ -157,7 +157,11 @@ Step 1: Prepare The Install Environment
 
      passwd
      # There is no current password.
-     sudo apt install --yes openssh-server
+     sudo apt install --yes openssh-server vim
+
+   Installing the full ``vim`` package fixes terminal problems that occur when
+   using the ``vim-tiny`` package (that ships in the Live CD environment) over
+   SSH.
 
    **Hint:** You can find your IP address with
    ``ip addr show scope global | grep inet``. Then, from your main machine,
@@ -880,7 +884,7 @@ Step 6: First Boot
 
 #. Optional: Install SSH::
 
-     apt install --yes openssh-server
+     apt install --yes openssh-server vim
 
      vi /etc/ssh/sshd_config
      # Set: PermitRootLogin yes
