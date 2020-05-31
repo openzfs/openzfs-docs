@@ -16,6 +16,7 @@ documentation <https://pthree.org/2012/04/17/install-zfs-on-debian-gnulinux/>`__
    Fedora
    FreeBSD <https://zfsonfreebsd.github.io/ZoF/>
    Gentoo <https://wiki.gentoo.org/wiki/ZFS>
+   NixOS <https://nixos.wiki/wiki/NixOS_on_ZFS>
    openSUSE <https://software.opensuse.org/package/zfs>
    RHEL and CentOS
    Ubuntu/index
