@@ -7,4 +7,5 @@
    Developer Resources/index
    Performance and Tuning/index
    Basic Concepts/index
+   man/index
    License
