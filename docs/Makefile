@@ -22,7 +22,7 @@ html: Makefile
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 # Gen man pages
-ZFS_GIT_REPO = git@github.com:openzfs/zfs.git
+ZFS_GIT_REPO = https://github.com/openzfs/zfs.git
 ZFS_GIT_DIR = ./_build/zfs
 
 .PHONY: man
