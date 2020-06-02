@@ -7,3 +7,6 @@ _build
 ehthumbs.db
 Icon?
 Thumbs.db
+
+# OpenZFS generated folders
+man
