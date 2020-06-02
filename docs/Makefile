@@ -20,3 +20,16 @@ html: Makefile
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
 %: Makefile
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+
+# Gen man pages
+ZFS_GIT_REPO = git@github.com:openzfs/zfs.git
+ZFS_GIT_DIR = ./_build/zfs
+
+.PHONY: man
+man:
+	if [ ! -d $(ZFS_GIT_DIR) ]; then \
+		git clone --depth=1 $(ZFS_GIT_REPO) ./_build/zfs ; \
+	else \
+		git -C $(ZFS_GIT_DIR) pull ; \
+	fi
+	../scripts/man_pages.py ./_build/zfs/man ./
