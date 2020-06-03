@@ -270,7 +270,7 @@ Step 2: Disk Formatting
      “invalid dnode type” error. This feature does not matter for ``/boot``
      anyway.
 
-#. Create the root pool (note that you might need to change the DISK depending on the options you choose:
+#. Create the root pool (note that you might need to change the DISK depending on the options you choose):
 
    Choose one of the following options:
 
@@ -721,7 +721,7 @@ Step 9: Final Cleanup
 #. Wait for the system to boot normally. Login using the account you
    created. Ensure the system (including networking) works normally.
 
-#. Optional: Delete the snapshots of the initial installation (omit the second one if you are not using GRUB)::
+#. Optional: Delete the snapshots of the initial installation (omit the first one if you are not using GRUB)::
 
      sudo zfs destroy bpool/BOOT/fedora@install
      sudo zfs destroy rpool/ROOT/fedora@install
