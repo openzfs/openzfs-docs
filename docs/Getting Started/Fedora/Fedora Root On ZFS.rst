@@ -588,7 +588,24 @@ Step 4: System Configuration
 .. note::
    GRUB installation is not yet supported by this guide. The above steps should have already installed systemd-boot.
 
-Step 6: First Boot
+Step 6: Fixing systemd-boot config
+----------------------------------
+
+.. note:: 
+   Note that dnf can sometimes mess up with configuring systemd-boot. Luckily this is very easy to fix
+
+#. Firstly, change directory to /boot/loader/entries using ``cd /boot/loader/entries``.
+
+#. Type ``ls``. You should see a bunch of files beginning with a random series of letters and numbers followed by a minus and then the kernel version or rescue (for example ``839fdb701b7c48d2b25ffc293bb7ee18-0-rescue.conf`` and ``839fdb701b7c48d2b25ffc293bb7ee18-5.7.0-0.rc3.1.fc33.x86_64.conf`` as examples)
+
+#. Open each file using the text editor of your choice and look for a field called options. Delete everything you see in that line and replace it with ``options root=ZFS=rpool/ROOT/fedora``
+
+.. note::
+   Be sure to change the rpool/ROOT/fedora if you named it differently
+
+#. Add any additional kernel options that you need and save and exit the file
+
+Step 7: First Boot
 ------------------
 #. Rebuild initramfs one last time for certainty::
 
@@ -644,7 +661,7 @@ Step 6: First Boot
 
 #. Mirror GRUB (not yet supported as GRUB is not yet supported)
 
-Step 7: Optional: Configure ZVol Swap
+Step 8: Optional: Configure ZVol Swap
 -------------------------------------
 
 **Caution**: On systems with extremely high memory pressure, using a
@@ -689,7 +706,7 @@ available. There is `a bug report upstream
 
      swapon -av
 
-Step 8: Last Minute Fixes
+Step 9: Last Minute Fixes
 -------------------------
 
 #. Upgrade the system (if you haven't already done it)::
@@ -715,8 +732,8 @@ Step 8: Last Minute Fixes
 
      reboot
 
-Step 9: Final Cleanup
----------------------
+Step 10: Final Cleanup
+----------------------
 
 #. Wait for the system to boot normally. Login using the account you
    created. Ensure the system (including networking) works normally.
@@ -816,3 +833,13 @@ VMware
 
 - Set ``disk.EnableUUID = "TRUE"`` in the vmx file or vsphere configuration.
   Doing this ensures that ``/dev/disk`` aliases are created in the guest.
+
+For GRUB Users
+~~~~~~~~~~~~~~
+
+- Grub users will need to set ZPOOL_VDEV_NAME_PATH=1 in environmental variables in order to use GRUB. Instructions on how to install using GRUB is not yet available.
+
+A Note On Kernel Updates
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Make sure to run Fixing systemd-boot config after kernel updates in case dnf messes up. 
