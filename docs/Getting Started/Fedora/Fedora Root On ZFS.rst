@@ -94,6 +94,9 @@ entered at the console. Performance is good, but LUKS sits underneath ZFS, so
 if multiple disks (mirror or raidz topologies) are used, the data has to be
 encrypted once per disk. Note that I (cheesycod) do not use LUKS and that you are using this at your own risk.
 
+.. note::
+    Fedora doesn't have debootstrap and the only equivalent in fedora (dnf --installroot) has weird issues when used with GNOME. As a workaround, we copy the LiveCD on to a new partition and then remove the LiveCD-specific packages after finishing the install
+
 Step 1: Prepare The Install Environment
 ---------------------------------------
 
@@ -653,7 +656,7 @@ Step 7: First Boot
 
 #. Remove stale packages::
 
-     dnf remove --allowerasing --best anaconda-core anaconda-gui anaconda-gui grub* os-prober
+     dnf remove --allowerasing --best anaconda-core anaconda-gui anaconda-widgets* grub* os-prober
 
    Removal of anaconda and grub/os-prober prevent issues such as the "Install Fedora" issue and dnf bootloader conflicts.
 
