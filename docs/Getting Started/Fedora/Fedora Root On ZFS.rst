@@ -42,8 +42,8 @@ If you need help, reach out to the community using the :doc:`zfs-discuss
 mailing list <../../Project and Community/Mailing Lists>` or IRC at
 `#zfsonlinux <irc://irc.freenode.net/#zfsonlinux>`__ on `freenode
 <https://freenode.net/>`__. If you have a bug report or feature request
-related to this HOWTO, please `file a new issue and mention @rlaager
-<https://github.com/openzfs/openzfs-docs/issues/new?body=@rlaager,%20I%20have%20the%20following%20issue%20with%20the%20Debian%20Buster%20Root%20on%20ZFS%20HOWTO:>`__.
+related to this HOWTO, please `file a new issue and mention @cheesycod
+<https://github.com/openzfs/openzfs-docs/issues/new?body=@cheesycod,%20I%20have%20the%20following%20issue%20with%20the%20Fedora%20Root%20on%20ZFS%20HOWTO:>`__.
 
 Contributing
 ~~~~~~~~~~~~
@@ -67,7 +67,7 @@ Contributing
     sensible-browser _build/html/index.html
 
 #. ``git commit --signoff`` to a branch, ``git push``, and create a pull
-   request. Mention @rlaager.
+   request. Mention @cheesycod.
 
 Encryption
 ~~~~~~~~~~
