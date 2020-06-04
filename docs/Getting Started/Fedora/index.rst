@@ -40,6 +40,18 @@ As of right now, the following configurations are supported:
        Key fingerprint = C93A FFFD 9F3F 7B03 C310  CEB6 A9D5 A1C0 F14A B620
        sub  2048R/99685629 2013-03-21
 
+The ZFS on Linux packages should be installed with ``dnf`` on Fedora.
+Note that it is important to make sure that the matching *kernel-devel*
+package is installed for the running kernel since DKMS requires it to
+build ZFS.
+
+.. code:: sh
+
+   $ sudo dnf install kernel-devel zfs
+
+If the Fedora provided *zfs-fuse* package is already installed on the
+system. Then the ``dnf swap`` command should be used to replace the
+existing fuse packages with the ZFS on Linux packages.
 Root on ZFS
 -----------
 .. toctree::
