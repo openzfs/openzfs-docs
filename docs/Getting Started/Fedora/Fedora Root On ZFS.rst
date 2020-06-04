@@ -560,14 +560,6 @@ Step 4: System Configuration
      - For a mirror or raidz topology, this step only installs GRUB on the
        first disk. The other disk(s) will be handled later.
 
-#. Remove stale packages::
-
-     dnf remove --allowerasing --best anaconda-core anaconda-gui anaconda-gui grub* os-prober
-
-   This avoids error messages from `update-grub`.  `os-prober` is only
-   necessary in dual-boot configurations.
-   Removal of anaconda and grub prevent issues such as the "Install Fedora" issue and dnf bootloader conflicts.
-
 #. Set a root password::
 
      passwd
@@ -643,7 +635,7 @@ Step 7: First Boot
 
      reboot
 
-   Wait for the newly installed system to boot normally (hopefully). You will/should automatically be logged in as liveuser.
+   Wait for the newly installed system to boot normally (hopefully). You will/should automatically be logged in as liveuser. Ignore any Install Fedora prompts you see for now. They will be removed when we remove the stale packages.
 
 #. Create a user account::
     
@@ -658,6 +650,13 @@ Step 7: First Boot
      9. Click liveuser and click Delete User
      10. Set auto-login for your user account if you want
      11. Reboot
+
+#. Remove stale packages::
+
+     dnf remove --allowerasing --best anaconda-core anaconda-gui anaconda-gui grub* os-prober
+
+   Removal of anaconda and grub/os-prober prevent issues such as the "Install Fedora" issue and dnf bootloader conflicts.
+
 
 #. Mirror GRUB (not yet supported as GRUB is not yet supported)
 
