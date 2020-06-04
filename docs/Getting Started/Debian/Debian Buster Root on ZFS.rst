@@ -51,7 +51,7 @@ Contributing
 
 #. Install the tools::
 
-    sudo apt install pip3 sensible-utils
+    sudo apt install pip3
     cd openzfs-docs/docs
     pip3 install -r requirements.txt
     # Add ~/.local/bin to your $PATH, e.g. by adding this to ~/.bashrc:
