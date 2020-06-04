@@ -52,7 +52,7 @@ Contributing
 
 #. Install the tools::
 
-    sudo dnf install python3-pip sensible-utils
+    sudo dnf install python3-pip
     cd openzfs-docs/docs
     pip3 install -r requirements.txt
     # Add ~/.local/bin to your $PATH, e.g. by adding this to ~/.bashrc:
