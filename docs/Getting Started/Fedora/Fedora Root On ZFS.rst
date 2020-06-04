@@ -842,4 +842,4 @@ For GRUB Users
 A Note On Kernel Updates
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Make sure to run Fixing systemd-boot config after kernel updates in case dnf messes up. 
+Make sure to run `Step 6: Fixing systemd-boot config <#step-6-fixing-systemd-boot-config>`__. after kernel updates in case dnf messes up. 
