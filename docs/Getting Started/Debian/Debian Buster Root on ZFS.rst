@@ -101,7 +101,7 @@ Step 1: Prepare The Install Environment
 
 #. Setup and update the repositories::
 
-     sudo vi /mnt/etc/apt/sources.list
+     sudo vi /etc/apt/sources.list
 
    .. code-block:: sourceslist
 
