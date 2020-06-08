@@ -50,7 +50,7 @@ build ZFS.
 
 If the Fedora provided *zfs-fuse* package is already installed on the
 system, you must use the ``dnf swap`` command to replace the
-existing fuse packages with the ZFS on Linux packages.
+existing FUSE packages with the ZFS on Linux packages.
 
 Root on ZFS
 -----------
