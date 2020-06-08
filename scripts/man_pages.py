@@ -44,7 +44,7 @@ man_section_name = 'Man Pages'
 
 build_dir = '_build/man'
 
-regex_template = ('<a(?P<href_place> )class=\"Xr\">%s'
+regex_template = ('<a(?P<href_place> )class=\"Xr\"(?P<title>.*?)>%s'
                   '\((?P<num>[1-9])\)<\/a>')
 final_regex = ('<a href="../\g<num>/\g<name>.\g<num>.html" class="Xr"'
                '>\g<name>(\g<num>)</a>')
