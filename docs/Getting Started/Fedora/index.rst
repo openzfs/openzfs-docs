@@ -51,7 +51,7 @@ build ZFS.
    $ sudo dnf install kernel-devel zfs
 
 If the Fedora provided *zfs-fuse* package is already installed on the
-system. Then the ``dnf swap`` command should be used to replace the
+system, you must use the ``dnf swap`` command to replace the
 existing fuse packages with the ZFS on Linux packages.
 
 Root on ZFS
