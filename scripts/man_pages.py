@@ -18,8 +18,14 @@
 #    under the License.
 
 import argparse
+import logging
 import os
+import re
 import subprocess
+import sys
+
+LOG = logging.getLogger()
+logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
 
 man_sections = {
@@ -38,6 +44,32 @@ man_section_name = 'Man Pages'
 
 build_dir = '_build/man'
 
+regex_template = ('<a(?P<href_place> )class=\"Xr\">%s'
+                  '\((?P<num>[1-9])\)<\/a>')
+final_regex = ('<a href="../\g<num>/\g<name>.\g<num>.html" class="Xr"'
+               '>\g<name>(\g<num>)</a>')
+
+
+def add_hyperlinks(out_dir, pages):
+    all_pages = []
+    for _section, section_pages in pages.items():
+        all_pages.extend([page.split('.')[0] for page in section_pages])
+    tmp_regex = '(?P<name>' + "|".join(all_pages) + ')'
+    html_regex = re.compile(regex_template % tmp_regex, flags=re.MULTILINE)
+
+    for section, pages in pages.items():
+        for page in pages:
+            file_path = os.path.join(
+                out_dir, build_dir, 'man' + section, page + '.html')
+            with open(file_path, "r") as f:
+                text = f.read()
+            new_text = re.sub(html_regex, final_regex, text)
+            if text != new_text:
+                with open(file_path, "w") as f:
+                    LOG.debug('Crosslinks detected in %s, generate',
+                              file_path)
+                    text = f.write(new_text)
+
 
 def run(in_dir, out_dir):
     pages = {num: [] for num in man_sections}
@@ -52,7 +84,7 @@ def run(in_dir, out_dir):
             for page in os.listdir(os.path.join(subdir, section)):
                 if not page.endswith(section_suffix):
                     continue
-                print(page)
+                LOG.debug('Generate %s page', page)
                 pages[section_num].append(page)
                 page_file = os.path.join(out_section_dir, page + '.html')
                 with open(page_file, "w") as f:
@@ -126,6 +158,7 @@ def run(in_dir, out_dir):
                                section_num=section_num,
                                name_sub="=" * len(page))
                 )
+    add_hyperlinks(out_dir, pages)
 
 
 def main():
