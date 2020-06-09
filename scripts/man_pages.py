@@ -53,7 +53,8 @@ final_regex = ('<a href="../\g<num>/\g<name>.\g<num>.html" class="Xr"'
 def add_hyperlinks(out_dir, pages):
     all_pages = []
     for _section, section_pages in pages.items():
-        all_pages.extend([page.split('.')[0] for page in section_pages])
+        all_pages.extend([
+            os.path.splitext(page)[0] for page in section_pages])
     tmp_regex = '(?P<name>' + "|".join(all_pages) + ')'
     html_regex = re.compile(regex_template % tmp_regex, flags=re.MULTILINE)
 
