@@ -563,7 +563,7 @@ ZVOL used space larger than expected
   the kernel to specify to zfs which blocks are unused.
 | Executing a ``fstrim`` command before a snapshot is taken will ensure
   a minimum snapshot size.
-| Adding the ``discard`` option for the mounted ZVOL in ``\etc\fstab``
+| Adding the ``discard`` option for the mounted ZVOL in ``/etc/fstab``
   effectively enables the Linux kernel to issue the trim commands
   continuously, without the need to execute fstrim on-demand.
 
