@@ -34,6 +34,9 @@ completed it. Do not reboot until you have completed all of the steps.
 
 #. Rename the dataset::
 
+     umount /boot/grub
+     # Ignore any error about it not being mounted.
+
      rm -rf /boot/grub
 
      zfs list -r bpool
