@@ -38,7 +38,7 @@
 
 /* Fix for Chrome */
 .man_container dl dt {
-	display: initial;
+	display: initial !important;
 	color: black !important;
 }
 
