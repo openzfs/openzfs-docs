@@ -22,17 +22,17 @@
 }
 
 /* OpenZFS styles */
-.head {
+.man_container .head {
 	max-width: 640px;
 	width: 100%;
 }
-.head .head-vol {
+.man_container .head .head-vol {
 	text-align: center;
 }
-.head .head-rtitle {
+.man_container .head .head-rtitle {
 	text-align: right;
 }
-.foot td {
+.man_container .foot td {
 	padding: 1em;
 }
 
