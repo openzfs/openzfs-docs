@@ -553,7 +553,7 @@ Step 4: System Configuration
         mount /boot
         bootctl install # Install systemd-boot to ESP
         sudo dnf reinstall kernel-core # Reinstall the kernel
-        sudo dnf reinstall zfs-dkms # Reinstall the ZFS kernel module
+        sudo dnf reinstall zfs-dkms zfs-dracut # Reinstall the ZFS kernel module and dracut module
 
       **Notes:**
 
