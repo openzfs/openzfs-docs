@@ -170,9 +170,7 @@ Step 2: Disk Formatting
 
      sgdisk --zap-all $DISK
 
-   If you get a message about the kernel still using the old partition table,
-   reboot and start over.
-
+   If you get a message about the kernel still using the old partition table of your HDD/SDD, reboot and start over. Note that this does not apply to other unrelated disks as we are running under a LiveCD and partprobe doesn't like that.
 
 #. Partition your disk(s):
 
