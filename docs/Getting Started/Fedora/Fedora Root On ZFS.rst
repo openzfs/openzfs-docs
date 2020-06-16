@@ -551,6 +551,7 @@ Step 4: System Configuration
         mount /boot
         bootctl install # Install systemd-boot to ESP
         sudo dnf reinstall kernel-core # Reinstall the kernel
+        sudo dnf reinstall zfs-dkms # Reinstall the ZFS kernel module
 
       **Notes:**
 
@@ -614,8 +615,8 @@ Step 7: First Boot
 
 #. Optional: Snapshot the initial installation (omit the last one if you are using systemd-boot)::
 
-     zfs snapshot bpool/BOOT/fedora@install
      zfs snapshot rpool/ROOT/fedora@install
+     zfs snapshot bpool/BOOT/fedora@install
 
    In the future, you will likely want to take snapshots before each
    upgrade, and remove old snapshots (including this one) at some point to
