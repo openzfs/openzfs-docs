@@ -171,7 +171,7 @@ Step 2: Disk Formatting
      sgdisk --zap-all $DISK
 
    If you get a message about the kernel still using the old partition table,
-   reboot and start over (except that you can skip this step).
+   reboot and start over.
 
 
 #. Partition your disk(s):
@@ -180,7 +180,7 @@ Step 2: Disk Formatting
 
      sgdisk -a1 -n1:24K:+1000K -t1:EF02 $DISK
 
-   Run this for UEFI booting (for use now or in the future). Note that you should increase the size of this to 1G if you are bot going to use a boot pool (systemd-boot)::
+   Run this for UEFI booting (for use now or in the future). Note that you should increase the size of this to 1G if you are not going to use a boot pool (systemd-boot)::
 
      sgdisk     -n2:1M:+512M   -t2:EF00 $DISK
 
@@ -468,7 +468,7 @@ Step 3: System Installation
 
 #. Copy the LiveCD to your HDD/SDD::
 
-     rsync -avxHASX / /sysroot/
+     rsync -avxHASX / /mnt/
    
    It is important to not forget the trailing /.
    This command copies the LiveCD to our new zfs datasets and this is the only way I have found to reliably install and boot Fedora Workstation
