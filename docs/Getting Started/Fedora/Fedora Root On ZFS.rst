@@ -129,6 +129,8 @@ Step 1: Prepare The Install Environment
 
 #. Next swap the zfs FUSE with the openZFS kernel module: ``dnf swap zfs-fuse zfs``
 
+#. Install the zfs dracut module (needed for booting): ``dnf install zfs-dracut``
+
 #. Finally ensure that the zfs kernel module is loaded by running ``sudo modprobe zfs``.
 
 Step 2: Disk Formatting
