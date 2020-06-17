@@ -14,5 +14,5 @@ Developer Resources
    OpenZFS Tracking <http://build.zfsonlinux.org/openzfs-tracking.html>
    OpenZFS Patches
    OpenZFS Exceptions
-   OpenZFS Documentation <http://open-zfs.org/wiki/Developer_resources>
+   OpenZFS Documentation <https://openzfs.org/wiki/Developer_resources>
    Git and GitHub for beginners
