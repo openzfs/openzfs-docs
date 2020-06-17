@@ -15,8 +15,8 @@ links below instead.
 Currently, due to Fedora's unstable fast-paced kernel ABI (kABI), only DKMS style packages can be provided.
 As of right now, the following configurations are supported:
   
-**Fedora Releases**: 31, 32
-**Architectures**: x86_64 (amd64)
+| **Fedora Releases**: 31, 32
+| **Architectures**: x86_64 (amd64)
 
 .. note::
    Due to the release cycle of OpenZFS and Fedora adoption of new kernels in current distribution release, it may happen that you won’t be able to build DKMS package on the most recent kernel update. For example, Fedora 32 was released with kernel 5.6 but it is expected that it will update to 5.7. OpenZFS was released with support for kernel 5.6 but not for 5.7 and there will be no update right after 5.7 will hit Fedora repository. This means that you have to take into account that you will have to either versionlock/pin your kernel and/or build ZFS On Linux from source code (not recommended for beginners). 
@@ -46,11 +46,21 @@ build ZFS.
 
 .. code:: sh
 
-   $ sudo dnf install kernel-devel zfs
+   $ sudo dnf install kernel-devel-$(uname -r) zfs
 
 If the Fedora provided *zfs-fuse* package is already installed on the
 system, you must use the ``dnf swap`` command to replace the
 existing FUSE packages with the ZFS on Linux packages.
+
+.. code:: sh
+
+   $ sudo dnf swap zfs-fuse zfs
+
+On Fedora, the zfs dracut module must be installed if you wish to use a Root on ZFS configuration.
+
+.. code:: sh
+
+   $ sudo dnf install zfs-dracut
 
 Root on ZFS
 -----------
