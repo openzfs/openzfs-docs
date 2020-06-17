@@ -27,7 +27,7 @@ System Requirements
   only works with UEFI booting. This not unique to ZFS. `GRUB does not and
   will not work on 4Kn with legacy (BIOS) booting.
   <http://savannah.gnu.org/bugs/?46700>`__
-- You MUST use a UEFI system for this guide as GRUB is not yet supported. To verify UEFI, go to /sys/firmware/efi/efivars and make sure it is not empty.
+- You MUST use a UEFI system for this guide as GRUB is not supported and will not be supported in the forseeable future. To verify that you are using UEFI, go to /sys/firmware/efi/efivars and make sure it is not empty.
 
 Computers that have less than 2 GiB of memory run ZFS slowly. 4 GiB of memory
 is recommended for normal performance in basic workloads. If you wish to use
@@ -136,7 +136,8 @@ Step 1: Prepare The Install Environment
 Step 2: Disk Formatting
 -----------------------
 .. note::
-   Note that if you want to use systemd-boot instead of GRUB, you should not create a boot pool. This only applies to systemd-boot users. Also note that GRUB is not yet supported (I have not yet gotten it to work correctly). For now, please use systemd-boot with Fedora. Also note that systemd-boot is easier than GRUB to setup with Fedora.
+   Note that if you want to use systemd-boot instead of GRUB, you should not create a boot pool. This only applies to systemd-boot users. Also note that GRUB is not supported and will not be supported in the forseeable future. Systemd-boot is much easier than GRUB to setup with Fedora.
+
 
 #. Set a variable with the disk name::
 
@@ -172,108 +173,37 @@ Step 2: Disk Formatting
 
      sgdisk --zap-all $DISK
 
-   If you get a message about the kernel still using the old partition table of your HDD/SDD, reboot and start over. Note that this does not apply to other unrelated disks as we are running under a LiveCD and partprobe doesn't like that.
+   If you get a message about the kernel still using the old partition table of your target disk, reboot and restart this section. Note that this does not apply to other unrelated disks as we are running under a LiveCD and partprobe doesn't like that.
 
 #. Partition your disk(s):
 
-   Run this if you need legacy (BIOS) booting::
+   Run this to create your ESP::
 
-     sgdisk -a1 -n1:24K:+1000K -t1:EF02 $DISK
+     sgdisk     -n1:1M:+512M   -t1:EF00 $DISK
 
-   Run this for UEFI booting (for use now or in the future). Note that you should increase the size of this to 1G if you are not going to use a boot pool (systemd-boot)::
+   (Optional, but recommended if you have high memory pressure): Create a swap partition::
 
-     sgdisk     -n2:1M:+512M   -t2:EF00 $DISK
+     sgdisk     -n2:0:+<size>G  -t2:8200 $DISK # Make sure you replace <size> with the size of your swap partition.
+     mkswap     $DISK-part2
+     swapon     $DISK-part2
 
-   Run this for the boot pool (if you are using GRUB, not yet supported on Fedora)::
+   .. note::
+      Creation of the swap partition shoud not be done if you plan on using ZFS for swap. Instead, please follow Step 8 instead
 
-     sgdisk     -n3:0:+1G      -t3:BF01 $DISK
-
-   (Optional, but recommended if you have high memory pressure): Create a swap partition (change the -n4 and -t4 if you are using systemd-boot)::
-
-     sgdisk     -n4:0:+<size>G  -t4:8200 $DISK # Make sure you replace <size> with the size of your swap partition.
-     mkswap     $DISK-part4
-     swapon     $DISK-part4
-   
    Choose one of the following options:
 
-   - Unencrypted or ZFS native encryption (change the -n4 and -t4 if you added a swap partition)::
+   - Unencrypted or ZFS native encryption (change the -n3 and -t3 to -n2 and -t3 respectively if you added a swap partition)::
 
-       sgdisk     -n4:0:0        -t4:BF00 $DISK
+       sgdisk     -n3:0:0        -t3:BF00 $DISK
 
-   - LUKS (same warning as with Unencrypted and ZFS native encryption)::
+   - LUKS (same warning as with Unencrypted and ZFS native encryption, change the -n3 and -t3 to -n2 and -t3 if you are not adding swap)::
 
-       sgdisk     -n4:0:0        -t4:8309 $DISK
+       sgdisk     -n3:0:0        -t3:8309 $DISK
 
    If you are creating a mirror or raidz topology, repeat the partitioning
    commands for all the disks which will be part of the pool.
 
-#. Create the boot pool (if you are using GRUB, not yet supported on Fedora)::
-
-     zpool create \
-         -o ashift=12 -d \
-         -o feature@async_destroy=enabled \
-         -o feature@bookmarks=enabled \
-         -o feature@embedded_data=enabled \
-         -o feature@empty_bpobj=enabled \
-         -o feature@enabled_txg=enabled \
-         -o feature@extensible_dataset=enabled \
-         -o feature@filesystem_limits=enabled \
-         -o feature@hole_birth=enabled \
-         -o feature@large_blocks=enabled \
-         -o feature@lz4_compress=enabled \
-         -o feature@spacemap_histogram=enabled \
-         -o feature@zpool_checkpoint=enabled \
-         -O acltype=posixacl -O canmount=off -O compression=lz4 \
-         -O devices=off -O normalization=formD -O relatime=on -O xattr=sa \
-         -O mountpoint=/boot -R /mnt \
-         bpool ${DISK}-part3
-
-   You should not need to customize any of the options for the boot pool.
-
-   GRUB does not support all of the zpool features. See ``spa_feature_names``
-   in `grub-core/fs/zfs/zfs.c
-   <http://git.savannah.gnu.org/cgit/grub.git/tree/grub-core/fs/zfs/zfs.c#n276>`__.
-   This step creates a separate boot pool for ``/boot`` with the features
-   limited to only those that GRUB supports, allowing the root pool to use
-   any/all features. Note that GRUB opens the pool read-only, so all
-   read-only compatible features are “supported” by GRUB.
-
-   **Hints:**
-
-   - If you are creating a mirror topology, create the pool using::
-
-       zpool create \
-           ... \
-           bpool mirror \
-           /dev/disk/by-id/scsi-SATA_disk1-part3 \
-           /dev/disk/by-id/scsi-SATA_disk2-part3
-
-   - For raidz topologies, replace ``mirror`` in the above command with
-     ``raidz``, ``raidz2``, or  ``raidz3`` and list the partitions from
-     additional disks.
-   - The pool name is arbitrary. If changed, the new name must be used
-     consistently. The ``bpool`` convention originated in this HOWTO.
-
-   **Feature Notes:**
-
-   - The ``allocation_classes`` feature should be safe to use. However, unless
-     one is using it (i.e. a ``special`` vdev), there is no point to enabling
-     it. It is extremely unlikely that someone would use this feature for a
-     boot pool. If one cares about speeding up the boot pool, it would make
-     more sense to put the whole pool on the faster disk rather than using it
-     as a ``special`` vdev.
-   - The ``project_quota`` feature has been tested and is safe to use. This
-     feature is extremely unlikely to matter for the boot pool.
-   - The ``resilver_defer`` should be safe but the boot pool is small enough
-     that it is unlikely to be necessary.
-   - The ``spacemap_v2`` feature has been tested and is safe to use. The boot
-     pool is small, so this does not matter in practice.
-   - As a read-only compatible feature, the ``userobj_accounting`` feature
-     should be compatible in theory, but in practice, GRUB can fail with an
-     “invalid dnode type” error. This feature does not matter for ``/boot``
-     anyway.
-
-#. Create the root pool (note that you might need to change the DISK depending on the options you choose):
+#. Create the root pool (change the disk to ${DISK}-part2 if you did):
 
    Choose one of the following options:
 
@@ -284,7 +214,7 @@ Step 2: Disk Formatting
            -O acltype=posixacl -O canmount=off -O compression=lz4 \
            -O dnodesize=auto -O normalization=formD -O relatime=on \
            -O xattr=sa -O mountpoint=/ -R /mnt \
-           rpool ${DISK}-part4
+           rpool ${DISK}-part3 # ${DISK}-part2 if swap partition was not created
 
    - ZFS native encryption::
 
@@ -295,13 +225,13 @@ Step 2: Disk Formatting
            -O acltype=posixacl -O canmount=off -O compression=lz4 \
            -O dnodesize=auto -O normalization=formD -O relatime=on \
            -O xattr=sa -O mountpoint=/ -R /mnt \
-           rpool ${DISK}-part4
+           rpool ${DISK}-part2 # ${DISK}-part2 if swap partition was not created
 
    - LUKS::
 
        apt install --yes cryptsetup
-       cryptsetup luksFormat -c aes-xts-plain64 -s 512 -h sha256 ${DISK}-part4
-       cryptsetup luksOpen ${DISK}-part4 luks1
+       cryptsetup luksFormat -c aes-xts-plain64 -s 512 -h sha256 ${DISK}-part3
+       cryptsetup luksOpen ${DISK}-part3 luks1 # ${DISK}-part2 in both commands if swap partition was not created
        zpool create \
            -o ashift=12 \
            -O acltype=posixacl -O canmount=off -O compression=lz4 \
@@ -378,7 +308,7 @@ Step 2: Disk Formatting
 
        zpool create \
            ... \
-           bpool mirror \
+           rpool mirror \
            /dev/disk/by-id/scsi-SATA_disk1-part3 \
            /dev/disk/by-id/scsi-SATA_disk2-part3
 
@@ -395,26 +325,18 @@ Step 2: Disk Formatting
 Step 3: System Installation
 ---------------------------
 
-#. Create filesystem datasets to act as containers (Again, omit the second line if you are using systemd-boot)::
+#. Create the filesystem datasets to act as containers::
 
      zfs create -o canmount=off -o mountpoint=none rpool/ROOT
-     zfs create -o canmount=off -o mountpoint=none bpool/BOOT
 
    On Solaris systems, the root filesystem is cloned and the suffix is
    incremented for major system changes through ``pkg image-update`` or
-   ``beadm``. Similar functionality has been implemented in Ubuntu 20.04 with
-   the ``zsys`` tool, though its dataset layout is more complicated. Even
-   without such a tool, the `rpool/ROOT` and `bpool/BOOT` containers can still
-   be used for manually created clones. That said, this HOWTO assumes a single
-   filesystem for ``/boot`` for simplicity.
+   ``beadm``. Similar functionality has not yet been implemented into Fedora and will most likely never be added to Fedora in the forseeable future due to licensing issues.
 
-#. Create filesystem datasets for the root and boot filesystems (again, omit the second two lines if you are using systemd-boot)::
+#. Create filesystem datasets for the root and boot filesystems::
 
      zfs create -o canmount=noauto -o mountpoint=/ rpool/ROOT/fedora
      zfs mount rpool/ROOT/fedora
-
-     zfs create -o mountpoint=/boot bpool/BOOT/fedora
-     zfs mount bpool/BOOT/fedora
 
    With ZFS, it is not normally necessary to use a mount command (either
    ``mount`` or ``zfs mount``). This situation is an exception because of
@@ -525,7 +447,7 @@ Step 4: System Configuration
 
 .. note::
 
-   Note that the ZFS install we did outside in the LiveCD persists here. Hence, it is not needed to maunally install zfs-release and zfs again.i
+   Note that the ZFS install we did outside in the LiveCD persists here. Hence, it is not needed to maunally install zfs-release, zfs-dracut and zfs again.
 
 #. For LUKS installs only, setup ``/etc/crypttab``::
 
@@ -553,7 +475,7 @@ Step 4: System Configuration
         mount /boot
         bootctl install # Install systemd-boot to ESP
         sudo dnf reinstall kernel-core # Reinstall the kernel
-        sudo dnf reinstall zfs-dkms zfs-dracut # Reinstall the ZFS kernel module and dracut module
+        sudo dnf reinstall zfs-dkms zfs-dracut # Reinstall the ZFS kernel module and dracut module as reinstalling the kernel somehow removes the ZFS kernel module
 
       **Notes:**
 
@@ -561,14 +483,10 @@ Step 4: System Configuration
         4 KiB logical sectors (“4Kn” drives) to meet the minimum cluster size
         (given the partition size of 512 MiB) for FAT32. It also works fine on
         drives which present 512 B sectors.
-     - For a mirror or raidz topology, this step only installs GRUB on the
-       first disk. The other disk(s) will be handled later.
 
 #. Set a root password::
 
      passwd
-
-#. Enable importing bpool (only needed when using GRUB, not yet supported)
 
 #. Optional (but recommended): Mount a tmpfs to ``/tmp``
 
@@ -582,7 +500,7 @@ Step 4: System Configuration
      systemctl enable tmp.mount
 
 .. note::
-   GRUB installation is not yet supported by this guide. The above steps should have already installed systemd-boot.
+   GRUB installation is not supported by this guide and will not be supported in the forseeable future. The above steps should have installed systemd-boot, an alternative to GRUB which provides the majority of GRUBS features. If you still wish to use GRUB, it might be possible to chainload systemd-boot using GRUB and boot your Fedora installation that way. Instructions on how to do this will not be provided and this has not been tested to work. You are welcome to make a PR for this however
 
 Step 6: Fixing systemd-boot config
 ----------------------------------
@@ -603,7 +521,7 @@ Step 6: Fixing systemd-boot config
 
 Step 7: First Boot
 ------------------
-#. Rebuild initramfs one last time for certainty::
+#. Rebuild initramfs to be certain that the ZFS dracut module will be loaded on boot to mount our ZFS pools::
 
      dracut --kver $(uname -r) --force --add-drivers "zfs"
 
@@ -611,14 +529,9 @@ Step 7: First Boot
 
    If you updated your kernel in this guide, you will need to change the $(uname -r) to your updated kernel version. You can find this in /lib/modules.
 
-#. Optional: Install SSH (not needed if already done in the beginning)::
-
-     dnf install --yes openssh-server
-
-#. Optional: Snapshot the initial installation (omit the last one if you are using systemd-boot)::
+#. Optional: Snapshot the initial installation::
 
      zfs snapshot rpool/ROOT/fedora@install
-     zfs snapshot bpool/BOOT/fedora@install
 
    In the future, you will likely want to take snapshots before each
    upgrade, and remove old snapshots (including this one) at some point to
@@ -659,18 +572,16 @@ Step 7: First Boot
 
      dnf remove --allowerasing --best anaconda-core anaconda-gui anaconda-widgets* grub* os-prober
 
-   Removal of anaconda and grub/os-prober prevent issues such as the "Install Fedora" issue and dnf bootloader conflicts.
+   Removal of anaconda and grub/os-prober prevent issues such as the "Install Fedora" issue and other such conflicts.
 
 
-#. Mirror GRUB (not yet supported as GRUB is not yet supported)
-
-Step 8: Optional: Configure ZVol Swap
--------------------------------------
+(Optional) Step 8: Configure ZVol Swap
+--------------------------------------
 
 **Caution**: On systems with extremely high memory pressure, using a
 zvol for swap can result in lockup, regardless of how much swap is still
 available. There is `a bug report upstream
-<https://github.com/zfsonlinux/zfs/issues/7734>`__. On such systems, it is wise to create a swap partition and use that. This should have been covered in Partitioning.
+<https://github.com/zfsonlinux/zfs/issues/7734>`__. On such systems, it is wise to create a swap partition and use that. This should have been covered in partitioning.
 
 #. Create a volume dataset (zvol) for use as a swap device::
 
@@ -741,14 +652,9 @@ Step 10: Final Cleanup
 #. Wait for the system to boot normally. Login using the account you
    created. Ensure the system (including networking) works normally.
 
-#. Optional: Delete the snapshots of the initial installation (omit the first one if you are not using GRUB)::
+#. Optional: Delete the snapshots of the initial installation::
 
-     sudo zfs destroy bpool/BOOT/fedora@install
      sudo zfs destroy rpool/ROOT/fedora@install
-
-#. Optional (but highly recommended): Disable the root password::
-
-     sudo usermod -p '*' root
 
 #. Optional: For LUKS installs only, backup the LUKS header::
 
@@ -780,7 +686,6 @@ Mount everything correctly::
 
   zpool export -a
   zpool import -N -R /mnt rpool
-  zpool import -N -R /mnt bpool
   zfs load-key -a
   zfs mount rpool/ROOT/fedora
   zfs mount -a
@@ -840,7 +745,7 @@ VMware
 For GRUB Users
 ~~~~~~~~~~~~~~
 
-- Grub users will need to set ZPOOL_VDEV_NAME_PATH=1 in environmental variables in order to use GRUB. Instructions on how to install using GRUB is not yet available.
+- If you still wish to use GRUB, you will need to set ZPOOL_VDEV_NAME_PATH=1 in environmental variables while installing and running grub-mkconfig. Instructions on how to install using GRUB will not be provided in the forseeable future. You can use the Ubuntu Root on ZFS guide as a reference on how to set that up however. PR's for GRUB support is welcome.
 
 A Note On Kernel Updates
 ~~~~~~~~~~~~~~~~~~~~~~~~
