@@ -8,7 +8,7 @@ What is ZFS on Linux
 --------------------
 
 The ZFS on Linux project is an implementation of
-`OpenZFS <http://open-zfs.org/wiki/Main_Page>`__ designed to work in a
+`OpenZFS <https://openzfs.org/wiki/Main_Page>`__ designed to work in a
 Linux environment. OpenZFS is an outstanding storage platform that
 encompasses the functionality of traditional filesystems, volume
 managers, and more, with consistent reliability, functionality and
@@ -700,4 +700,4 @@ Does ZFS on Linux have a Code of Conduct?
 -----------------------------------------
 
 Yes, the ZFS on Linux community has a code of conduct. See the `Code of
-Conduct <http://open-zfs.org/wiki/Code_of_Conduct>`__ for details.
+Conduct <https://openzfs.org/wiki/Code_of_Conduct>`__ for details.

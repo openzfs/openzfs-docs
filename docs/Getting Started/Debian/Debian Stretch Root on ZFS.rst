@@ -295,7 +295,7 @@ Choose one of the following options:
   they are required for a Samba Active Directory domain
   controller. <https://wiki.samba.org/index.php/Setting_up_a_Share_Using_Windows_ACLs>`__
   Note that ```xattr=sa`` is
-  Linux-specific. <http://open-zfs.org/wiki/Platform_code_differences>`__
+  Linux-specific. <https://openzfs.org/wiki/Platform_code_differences>`__
   If you move your ``xattr=sa`` pool to another OpenZFS implementation
   besides ZFS-on-Linux, extended attributes will not be readable
   (though your data will be). If portability of extended attributes is

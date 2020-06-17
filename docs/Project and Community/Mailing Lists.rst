@@ -26,7 +26,7 @@ Mailing Lists
 +----------------------+----------------------+----------------------+
 | `devel\              | A                    | `archive <https://o  |
 | oper@open-zfs.org <h | platform-independent | penzfs.topicbox.com/ |
-| ttp://open-zfs.org/w | mailing list for ZFS | groups/developer>`__ |
+| ttps://openzfs.org/w | mailing list for ZFS | groups/developer>`__ |
 | iki/Mailing_list>`__ | developers to review |                      |
 |                      | ZFS code and         |                      |
 |                      | architecture changes |                      |

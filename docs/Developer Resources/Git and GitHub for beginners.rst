@@ -58,7 +58,7 @@ SunOS <https://www.cis.upenn.edu/~lee/06cse480/data/cstyle.ms.pdf>`__,
 `ZFS on Linux Developer
 Resources <https://github.com/zfsonlinux/zfs/wiki/Developer-Resources>`__,
 `OpenZFS Developer
-Resources <http://open-zfs.org/wiki/Developer_resources>`__
+Resources <https://openzfs.org/wiki/Developer_resources>`__
 
 Testing your patches before pushing
 -----------------------------------
