@@ -1185,6 +1185,7 @@ Mount everything correctly::
   zfs load-key -a
   # Replace “UUID” as appropriate; use zfs list to find it:
   zfs mount rpool/ROOT/ubuntu_UUID
+  zfs mount bpool/BOOT/ubuntu_UUID
   zfs mount -a
 
 If needed, you can chroot into your installed environment::
@@ -1193,7 +1194,6 @@ If needed, you can chroot into your installed environment::
   mount --rbind /proc /mnt/proc
   mount --rbind /sys  /mnt/sys
   chroot /mnt /bin/bash --login
-  mount /boot
   mount -a
 
 Do whatever you need to do to fix your system.
