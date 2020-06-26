@@ -106,7 +106,7 @@ Step 1: Prepare The Install Environment
    .. code-block:: sourceslist
 
      deb http://deb.debian.org/debian buster main contrib
-     deb-src http://deb.debian.org/debian buster main contrib
+     deb http://deb.debian.org/debian buster-backports main contrib
 
    ::
 
