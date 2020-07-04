@@ -36,6 +36,8 @@ here.
   `http://download.zfsonlinux.org/epel/zfs-release.el8_0.noarch.rpm <http://download.zfsonlinux.org/epel/zfs-release.el8_0.noarch.rpm>`__
 | **EL8.1 Package:**
   `http://download.zfsonlinux.org/epel/zfs-release.el8_1.noarch.rpm <http://download.zfsonlinux.org/epel/zfs-release.el8_1.noarch.rpm>`__
+| **EL8.2 Package:**
+  `http://download.zfsonlinux.org/epel/zfs-release.el8_2.noarch.rpm <http://download.zfsonlinux.org/epel/zfs-release.el8_2.noarch.rpm>`__
 | **Note:** Starting with EL7.7 **zfs-0.8** will become the default,
   EL7.6 and older will continue to track the **zfs-0.7** point releases.
 

@@ -535,7 +535,7 @@ Step 2: Disk Formatting
      they are required for a Samba Active Directory domain controller.
      <https://wiki.samba.org/index.php/Setting_up_a_Share_Using_Windows_ACLs>`__
      Note that ``xattr=sa`` is `Linux-specific
-     <http://open-zfs.org/wiki/Platform_code_differences>`__. If you move your
+     <https://openzfs.org/wiki/Platform_code_differences>`__. If you move your
      ``xattr=sa`` pool to another OpenZFS implementation besides ZFS-on-Linux,
      extended attributes will not be readable (though your data will be). If
      portability of extended attributes is important to you, omit the
@@ -1185,6 +1185,7 @@ Mount everything correctly::
   zfs load-key -a
   # Replace “UUID” as appropriate; use zfs list to find it:
   zfs mount rpool/ROOT/ubuntu_UUID
+  zfs mount bpool/BOOT/ubuntu_UUID
   zfs mount -a
 
 If needed, you can chroot into your installed environment::
@@ -1193,7 +1194,6 @@ If needed, you can chroot into your installed environment::
   mount --rbind /proc /mnt/proc
   mount --rbind /sys  /mnt/sys
   chroot /mnt /bin/bash --login
-  mount /boot
   mount -a
 
 Do whatever you need to do to fix your system.
