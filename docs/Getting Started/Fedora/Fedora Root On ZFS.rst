@@ -421,7 +421,7 @@ Step 4: System Configuration
 
      127.0.1.1       FQDN HOSTNAME
 
-   **Hint:** Use ``nano`` or ``vim`` if you find vim to be confusing
+   **Hint:** Use ``nano`` or ``vim`` if you find vi to be confusing
 
    .. note::
        NetworkManager, in most cases, will work without any additional configuration.
