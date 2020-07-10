@@ -19,15 +19,22 @@ Caution
 System Requirements
 ~~~~~~~~~~~~~~~~~~~
 
-- `64-bit Fedora Workstation (spins are not yet tested yet)
+- `64-bit Fedora Workstation ISO.
   <https://getfedora.org/en/workstation/download/>`__
+  Note that spins have not been tested yet and we cannot guarantee that spins will work correctly.
 - `A 64-bit kernel is strongly encouraged.
   <https://openzfs.github.io/openzfs-docs/Project%20and%20Community/FAQ.html#bit-vs-64-bit-systems>`__
 - Installing on a drive which presents 4 KiB logical sectors (a “4Kn” drive)
   only works with UEFI booting. This not unique to ZFS. `GRUB does not and
   will not work on 4Kn with legacy (BIOS) booting.
   <http://savannah.gnu.org/bugs/?46700>`__
-- You MUST use a UEFI system for this guide as GRUB is not supported and will not be supported in the forseeable future. To verify that you are using UEFI, go to /sys/firmware/efi/efivars and make sure it is not empty.
+- You MUST use a UEFI system for this guide as GRUB is not supported and 
+  will not be supported in the forseeable future. To verify that you are using
+  UEFI, go to /sys/firmware/efi/efivars and make sure it is not empty. `It is 
+  also worth noting that Fedora plans to drop support for legacy (BIOS) booting 
+  support entirely in a future release.
+  <https://lists.fedoraproject.org/archives/list/devel@lists.fedoraproject.org/thread/QBANCA2UAJ5ZSMDVVARLIYAJE66TYTCD/>`__
+
 
 Computers that have less than 2 GiB of memory run ZFS slowly. 4 GiB of memory
 is recommended for normal performance in basic workloads. If you wish to use
@@ -92,10 +99,11 @@ LUKS encrypts almost everything. The only unencrypted data is the bootloader,
 kernel, and initrd. The system cannot boot without the passphrase being
 entered at the console. Performance is good, but LUKS sits underneath ZFS, so
 if multiple disks (mirror or raidz topologies) are used, the data has to be
-encrypted once per disk. Note that I (cheesycod) do not use LUKS and that you are using this at your own risk.
+encrypted once per disk. This manual describes LUKS configuration only as an example, it wasn't tested on everyday basis usage.
 
 .. note::
-    Fedora doesn't have debootstrap and the only equivalent in fedora (dnf --installroot) has weird issues when used with GNOME. As a workaround, we copy the LiveCD on to a new partition and then remove the LiveCD-specific packages after finishing the install
+    Fedora doesn't have debootstrap and the only equivalent in Fedora (dnf --installroot) has weird issues when used with Gnome and other such desktop environments (Cinammon). One such issue is that the boot fails and the system hangs at "Starting GNOME Display Manager" with a broken TTY. 
+    As a workaround, we copy the LiveCD on to a new partition and then remove the LiveCD-specific packages after finishing the install.
 
 Step 1: Prepare The Install Environment
 ---------------------------------------
@@ -375,7 +383,7 @@ Step 3: System Installation
      zfs create -o com.sun:auto-snapshot=false  rpool/tmp
      chmod 1777 /mnt/tmp
    
-   Note that the reason why we are not fully seperating everything like we did in Ubuntu is because dnf will fail to install or update certain packages if we create too many datasets.
+   Note that the reason why we are not fully seperating everything like we did in Ubuntu is because dnf will fail to install or update certain packages if we create too many datasets. An example of one such package is filesystem, which fails to install if other ZFS datasets are created.
 
    The primary goal of this dataset layout is to separate the OS from user
    data. This allows the root filesystem to be rolled back without rolling
@@ -403,33 +411,20 @@ Step 4: System Configuration
    Replace ``HOSTNAME`` with the desired hostname::
 
      echo HOSTNAME > /mnt/etc/hostname
-     vi /mnt/etc/hosts
+   
+   Edit /mnt/etc/hosts using the text editor of your choice. 
+   If the system does not have a real name in DNS, add this line::
 
-   .. code-block:: text
-
-     Add a line:
      127.0.1.1       HOSTNAME
-     or if the system has a real name in DNS:
+   
+   Otherwise, if the system has a real name in DNS, add this line::
+
      127.0.1.1       FQDN HOSTNAME
 
-   **Hint:** Use ``nano`` or ``vim`` if you find ``vi`` confusing.
+   **Hint:** Use ``nano`` or ``vim`` if you find vim to be confusing
 
-#. Configure the network interface:
-
-   Find the interface name::
-
-     ip addr show
-
-   Adjust ``NAME`` below to match your interface name::
-
-     vi /mnt/etc/network/interfaces.d/NAME
-
-   .. code-block:: text
-
-     auto NAME
-     iface NAME inet dhcp
-
-   Customize this file if the system is not a DHCP client.
+   .. note::
+       NetworkManager, in most cases, will work without any additional configuration.
 
 #. Bind the virtual filesystems from the LiveCD environment to the new
    system and ``chroot`` into it::
@@ -475,7 +470,7 @@ Step 4: System Configuration
         mount /boot
         bootctl install # Install systemd-boot to ESP
         sudo dnf reinstall kernel-core # Reinstall the kernel
-        sudo dnf reinstall zfs-dkms zfs-dracut # Reinstall the ZFS kernel module and dracut module as reinstalling the kernel somehow removes the ZFS kernel module
+        sudo dnf reinstall zfs-dkms zfs-dracut # Reinstall the ZFS kernel module and dracut module as reinstalling the kernel can remove the ZFS kernel module
 
       **Notes:**
 
@@ -718,7 +713,7 @@ Set a unique serial number on each virtual disk using libvirt or qemu
 To be able to use UEFI in guests (instead of only BIOS booting), run
 this on the host::
 
-  sudo apt install ovmf # or dnf install edk2-ovmf (if the host is Fedora)
+  sudo dnf install edk2-ovmf
   sudo vi /etc/libvirt/qemu.conf
 
 Uncomment these lines:
