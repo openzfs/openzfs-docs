@@ -211,7 +211,7 @@ Step 2: Disk Formatting
    If you are creating a mirror or raidz topology, repeat the partitioning
    commands for all the disks which will be part of the pool.
 
-#. Create the root pool (change the disk to ${DISK}-part2 if you did):
+#. Create the root pool (change the disk to ${DISK}-part2 if you added a swap partition in the previous step):
 
    Choose one of the following options:
 
