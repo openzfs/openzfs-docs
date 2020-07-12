@@ -237,7 +237,7 @@ Step 2: Disk Formatting
 
    - LUKS::
 
-       apt install --yes cryptsetup
+       dnf install cryptsetup
        cryptsetup luksFormat -c aes-xts-plain64 -s 512 -h sha256 ${DISK}-part3
        cryptsetup luksOpen ${DISK}-part3 luks1 # ${DISK}-part2 in both commands if swap partition was not created
        zpool create \
