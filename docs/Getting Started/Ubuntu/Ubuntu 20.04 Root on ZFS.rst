@@ -890,6 +890,9 @@ Step 4: System Configuration
 
 #. Patch a dependency loop:
 
+
+   If you chose to put ``/tmp`` on a tmtps you can skip this step.
+
    For ZFS native encryption or LUKS::
 
      sudo apt install --yes curl patch
