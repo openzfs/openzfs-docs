@@ -890,8 +890,7 @@ Step 4: System Configuration
 
 #. Patch a dependency loop:
 
-
-   If you chose to put ``/tmp`` on a tmtps you can skip this step.
+   If you chose to put ``/tmp`` on a tmpfs you can skip this step.
 
    For ZFS native encryption or LUKS::
 
