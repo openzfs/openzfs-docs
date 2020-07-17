@@ -57,8 +57,8 @@ completed it. Do not reboot until you have completed all of the steps.
      grub-install --target=x86_64-efi --efi-directory=/boot/efi \
          --bootloader-id=ubuntu --recheck --no-floppy
 
-   Run this for the additional disk(s), incrementing the “2” to “3” and so on for
-   both ``/boot/efi2`` and ``ubuntu-2``::
+   Run this for the additional disk(s), incrementing the “2” to “3” and so on
+   for both ``/boot/efi2`` and ``ubuntu-2``::
 
      cp -a /boot/efi/EFI /boot/efi2
      grub-install --target=x86_64-efi --efi-directory=/boot/efi2 \
