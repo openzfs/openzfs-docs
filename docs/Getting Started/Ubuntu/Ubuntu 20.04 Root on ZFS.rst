@@ -899,7 +899,7 @@ Step 4: System Configuration
 
    This patch is from `Bug #1875577 Encrypted swap won't load on 20.04 with
    zfs root
-   <https://bugs.launchpad.net/ubuntu/+source/cryptsetup/+bug/1612906>`__.
+   <https://bugs.launchpad.net/ubuntu/+source/zfs-linux/+bug/1875577>`__.
 
 Step 5: GRUB Installation
 -------------------------
