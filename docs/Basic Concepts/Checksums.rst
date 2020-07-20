@@ -84,13 +84,21 @@ The checksum algorithm for a dataset can be changed by setting the
 |           |              |                        | on the boot             |
 |           |              |                        | pools                   |
 +-----------+--------------+------------------------+-------------------------+
-| edonr     | no           | requires pool          | salted                  |
+| edonr     | see notes    | requires pool          | salted                  |
 |           |              | feature                | ``edonr``               |
 |           |              | ``org.illumos:edonr``  | currently not           |
 |           |              |                        | supported for           |
 |           |              |                        | any filesystem          |
 |           |              |                        | on the boot             |
 |           |              |                        | pools                   |
+|           |              |                        |                         |
+|           |              |                        | In an abundance of      |
+|           |              |                        | caution, Edon-R requires|
+|           |              |                        | verification when used  |
+|           |              |                        | with dedup, so it will  |
+|           |              |                        | automatically use       |
+|           |              |                        | ``verify``.             |
+|           |              |                        |                         |
 +-----------+--------------+------------------------+-------------------------+
 
 Checksum Accelerators
