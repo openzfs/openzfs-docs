@@ -84,7 +84,7 @@ The checksum algorithm for a dataset can be changed by setting the
 |           |              |                        | on the boot             |
 |           |              |                        | pools                   |
 +-----------+--------------+------------------------+-------------------------+
-| edonr     | yes          | requires pool          | salted                  |
+| edonr     | no           | requires pool          | salted                  |
 |           |              | feature                | ``edonr``               |
 |           |              | ``org.illumos:edonr``  | currently not           |
 |           |              |                        | supported for           |
