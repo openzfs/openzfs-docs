@@ -637,7 +637,7 @@ Step 4: System Configuration
         mount /boot/efi
         apt install --yes grub-efi-amd64 shim-signed
 
-      **Notes:**
+     **Notes:**
 
      - The ``-s 1`` for ``mkdosfs`` is only necessary for drives which present
         4 KiB logical sectors (“4Kn” drives) to meet the minimum cluster size
