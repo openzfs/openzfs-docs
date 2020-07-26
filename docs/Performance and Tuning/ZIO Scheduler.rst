@@ -3,8 +3,8 @@ ZFS I/O (ZIO) Scheduler
 
 ZFS issues I/O operations to leaf vdevs (usually devices) to satisfy and
 complete I/Os. The ZIO scheduler determines when and in what order those
-operations are issued. Operations into five I/O classes prioritized in
-the following order:
+operations are issued. Operations are divided into five I/O classes
+prioritized in the following order:
 
 +----------+-------------+-------------------------------------------+
 | Priority | I/O Class   | Description                               |
