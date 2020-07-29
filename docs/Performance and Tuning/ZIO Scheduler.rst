@@ -30,24 +30,19 @@ the per-queue maximums exceeds the aggregate maximum, then the number of
 active I/Os may reach zfs_vdev_max_active, in which case no further I/Os
 are issued regardless of whether all per-queue minimums have been met.
 
-+-------------+--------------------------+--------------------------+
-| I/O Class   | Min Active Parameter     | Max Active Parameter     |
-+=============+==========================+==========================+
-| sync read   | zfs_v                    | zfs_v                    |
-|             | dev_sync_read_min_active | dev_sync_read_max_active |
-+-------------+--------------------------+--------------------------+
-| sync write  | zfs_vd                   | zfs_vd                   |
-|             | ev_sync_write_min_active | ev_sync_write_max_active |
-+-------------+--------------------------+--------------------------+
-| async read  | zfs_vd                   | zfs_vd                   |
-|             | ev_async_read_min_active | ev_async_read_max_active |
-+-------------+--------------------------+--------------------------+
-| async write | zfs_vde                  | zfs_vde                  |
-|             | v_async_write_min_active | v_async_write_max_active |
-+-------------+--------------------------+--------------------------+
-| scrub read  | z                        | z                        |
-|             | fs_vdev_scrub_min_active | fs_vdev_scrub_max_active |
-+-------------+--------------------------+--------------------------+
++-------------+------------------------------------+------------------------------------+
+| I/O Class   | Min Active Parameter               | Max Active Parameter               |
++=============+====================================+====================================+
+| sync read   | ``zfs_vdev_sync_read_min_active``  | ``zfs_vdev_sync_read_max_active``  |
++-------------+------------------------------------+------------------------------------+
+| sync write  | ``zfs_vdev_sync_write_min_active`` | ``zfs_vdev_sync_write_max_active`` |
++-------------+------------------------------------+------------------------------------+
+| async read  | ``zfs_vdev_async_read_min_active`` | ``zfs_vdev_async_read_max_active`` |
++-------------+------------------------------------+------------------------------------+
+| async write | ``zfs_vdev_async_write_min_active``| ``zfs_vdev_async_write_max_active``|
++-------------+------------------------------------+------------------------------------+
+| scrub read  | ``zfs_vdev_scrub_min_active``      | ``zfs_vdev_scrub_max_active``      |
++-------------+------------------------------------+------------------------------------+
 
 For many physical devices, throughput increases with the number of
 concurrent operations, but latency typically suffers. Further, physical
