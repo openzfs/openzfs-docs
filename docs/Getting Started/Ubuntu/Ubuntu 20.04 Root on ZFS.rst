@@ -791,7 +791,7 @@ Step 4: System Configuration
    ``recordfail`` feature works as expected: if the boot fails, the normally
    hidden GRUB menu will be shown on the next boot. For a mirror or raidz
    topology, we do not want GRUB writing to the EFI System Partition. This is
-   becase we duplicate it at install without a mechanism to update the copies
+   because we duplicate it at install without a mechanism to update the copies
    when the GRUB configuration changes (e.g. as the kernel is upgraded). Thus,
    we keep ``/boot/grub`` on the boot pool for the mirror or raidz topologies.
    This preserves correct mirroring/raidz behavior, at the expense of being
