@@ -436,6 +436,8 @@ Step 4: System Configuration
 
    **Note:** This is using ``--rbind``, not ``--bind``.
 
+#. Make sure that the output of ``echo $DISK`` is not blank. If it is, set the DISK variable like what we did in Step 2
+
 #. Update the new system::
 
      dnf update
