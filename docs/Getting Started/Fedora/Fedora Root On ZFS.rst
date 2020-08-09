@@ -200,11 +200,11 @@ Step 2: Disk Formatting
 
    Choose one of the following options:
 
-   - Unencrypted or ZFS native encryption (change the -n3 and -t3 to -n2 and -t3 respectively if you added a swap partition)::
+   - Unencrypted or ZFS native encryption (change the -n3 and -t3 to -n2 and -t2 respectively if you added a swap partition)::
 
        sgdisk     -n3:0:0        -t3:BF00 $DISK
 
-   - LUKS (same warning as with Unencrypted and ZFS native encryption, change the -n3 and -t3 to -n2 and -t3 if you are not adding swap)::
+   - LUKS (same warning as with Unencrypted and ZFS native encryption, change the -n3 and -t3 to -n2 and -t2 if you are not adding swap)::
 
        sgdisk     -n3:0:0        -t3:8309 $DISK
 
@@ -233,7 +233,7 @@ Step 2: Disk Formatting
            -O acltype=posixacl -O canmount=off -O compression=lz4 \
            -O dnodesize=auto -O normalization=formD -O relatime=on \
            -O xattr=sa -O mountpoint=/ -R /mnt \
-           rpool ${DISK}-part2 # ${DISK}-part2 if swap partition was not created
+           rpool ${DISK}-part3 # ${DISK}-part2 if swap partition was not created
 
    - LUKS::
 
