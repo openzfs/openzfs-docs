@@ -442,13 +442,13 @@ Step 4: System Configuration
 
 .. note::
 
-   Note that the ZFS install we did outside in the LiveCD persists here. Hence, it is not needed to maunally install zfs-release, zfs-dracut and zfs again.
+   Note that the ZFS install we did outside in the LiveCD persists here. Hence, it is not needed to maunally install zfs-release, zfs-dracut and zfs again. Also note that cryptsetup is still extremely experimental and that the maintainer of this project does not use LUKS/cryptsetup whatsoever. Use at your own risk.
 
-#. For LUKS installs only, setup ``/etc/crypttab``::
+#. For LUKS installs only, setup ``/etc/crypttab``:: 
 
      dnf install cryptsetup
 
-     echo luks1 UUID=$(blkid -s UUID -o value ${DISK}-part4) none \
+     echo luks1 UUID=$(blkid -s UUID -o value ${DISK}-part3) none \
          luks,discard,initramfs > /etc/crypttab
 
    The use of ``initramfs`` is a work-around for `cryptsetup does not support
