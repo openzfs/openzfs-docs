@@ -432,6 +432,7 @@ Step 4: System Configuration
      mount --rbind /dev  /mnt/dev
      mount --rbind /proc /mnt/proc
      mount --rbind /sys  /mnt/sys
+     sudo mount -o bind /run /mnt/run     
      chroot /mnt /usr/bin/env DISK=$DISK bash --login
 
    **Note:** This is using ``--rbind``, not ``--bind``.
