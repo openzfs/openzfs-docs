@@ -464,8 +464,8 @@ Step 4: System Configuration
         rm -rvf /boot # Don't worry, we'll reinstall the kernel later
         mkdir boot # Create the boot folder
         dnf install dosfstools
-        mkdosfs -F 32 -s 1 -n EFI ${DISK}-part2 # Change this if needed
-        echo PARTUUID=$(blkid -s PARTUUID -o value ${DISK}-part2) \
+        mkdosfs -F 32 -s 1 -n EFI ${DISK}-part1 # You should not need to change this
+        echo PARTUUID=$(blkid -s PARTUUID -o value ${DISK}-part1) \
            /boot vfat nofail,x-systemd.device-timeout=1 0 1 >> /etc/fstab
         mount /boot
         bootctl install # Install systemd-boot to ESP
