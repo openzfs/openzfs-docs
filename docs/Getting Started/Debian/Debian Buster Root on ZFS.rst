@@ -52,7 +52,7 @@ Contributing
 #. Install the tools::
 
     sudo apt install pip3
-    pip3 install -r requirements.txt
+    pip3 install -r docs/requirements.txt
     # Add ~/.local/bin to your $PATH, e.g. by adding this to ~/.bashrc:
     PATH=$HOME/.local/bin:$PATH
 
