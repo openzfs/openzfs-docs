@@ -187,11 +187,11 @@ Step 2: Disk Formatting
 
    Run this to create your ESP::
 
-     sgdisk     -n1:1M:+512M   -t1:EF00 $DISK
+     sgdisk     -n0:1M:+1G   -t0:EF00 $DISK
 
    (Optional, but recommended if you have high memory pressure): Create a swap partition::
 
-     sgdisk     -n2:0:+<size>G  -t2:8200 $DISK # Make sure you replace <size> with the size of your swap partition.
+     sgdisk     -n0:0:+<size>G  -t0:8200 $DISK # Make sure you replace <size> with the size of your swap partition.
      mkswap     $DISK-part2
      swapon     $DISK-part2
 
@@ -200,13 +200,13 @@ Step 2: Disk Formatting
 
    Choose one of the following options:
 
-   - Unencrypted or ZFS native encryption (change the -n3 and -t3 to -n2 and -t2 respectively if you added a swap partition)::
+   - Unencrypted or ZFS native encryption::
 
-       sgdisk     -n3:0:0        -t3:BF00 $DISK
+       sgdisk     -n0:0:0        -t0:BF00 $DISK
 
    - LUKS (same warning as with Unencrypted and ZFS native encryption, change the -n3 and -t3 to -n2 and -t2 if you are not adding swap)::
 
-       sgdisk     -n3:0:0        -t3:8309 $DISK
+       sgdisk     -n0:0:0        -t0:8309 $DISK
 
    If you are creating a mirror or raidz topology, repeat the partitioning
    commands for all the disks which will be part of the pool.
@@ -222,7 +222,7 @@ Step 2: Disk Formatting
            -O acltype=posixacl -O canmount=off -O compression=lz4 \
            -O dnodesize=auto -O normalization=formD -O relatime=on \
            -O xattr=sa -O mountpoint=/ -R /mnt \
-           rpool ${DISK}-part3 # ${DISK}-part2 if swap partition was not created
+           rpool ${DISK}-part3 # change -part3 to -part2 if a swap partition was not made during partitioning
 
    - ZFS native encryption::
 
@@ -233,13 +233,13 @@ Step 2: Disk Formatting
            -O acltype=posixacl -O canmount=off -O compression=lz4 \
            -O dnodesize=auto -O normalization=formD -O relatime=on \
            -O xattr=sa -O mountpoint=/ -R /mnt \
-           rpool ${DISK}-part3 # ${DISK}-part2 if swap partition was not created
+           rpool ${DISK}-part3 # change -part3 to -part2 if swap partition was not made during partitioning
 
    - LUKS::
 
        dnf install cryptsetup
-       cryptsetup luksFormat -c aes-xts-plain64 -s 512 -h sha256 ${DISK}-part3
-       cryptsetup luksOpen ${DISK}-part3 luks1 # ${DISK}-part2 in both commands if swap partition was not created
+       cryptsetup luksFormat -c aes-xts-plain64 -s 512 -h sha256 ${DISK}-part3 # change -part 3 to -part2 if swap partition was not made during partitioning
+       cryptsetup luksOpen ${DISK}-part3 luks1 # change -part3 to -part2 if swap partition was not made during partitioning
        zpool create \
            -o ashift=12 \
            -O acltype=posixacl -O canmount=off -O compression=lz4 \
@@ -353,7 +353,6 @@ Step 3: System Installation
 #. Create datasets::
 
      zfs create                                 rpool/home
-     zfs create -o mountpoint=/root             rpool/home/root
      zfs create -o canmount=off                 rpool/var
      zfs create -o canmount=off                 rpool/var/lib
      zfs create                                 rpool/var/log
@@ -383,7 +382,7 @@ Step 3: System Installation
      zfs create -o com.sun:auto-snapshot=false  rpool/tmp
      chmod 1777 /mnt/tmp
    
-   Note that the reason why we are not fully seperating everything like we did in Ubuntu is because dnf will fail to install or update certain packages if we create too many datasets. An example of one such package is filesystem, which fails to install if other ZFS datasets are created.
+   Note that the reason why we are not fully seperating everything like we did in Ubuntu is because dnf will fail to install or update certain packages if we create too many datasets. An example of one such package is filesystem, which fails to install if other ZFS datasets are created. Another reason why is to make it easier to repair broken systems using the dracut emergency shell
 
    The primary goal of this dataset layout is to separate the OS from user
    data. This allows the root filesystem to be rolled back without rolling
