@@ -507,7 +507,7 @@ improve.
    tuning can only be set when block devices are first added to a pool,
    such as when the pool is first created or when a new vdev is added to
    the pool. This tuning parameter can result in a decrease of capacity
-   for RAIDZ configuratons.
+   for RAIDZ configurations.
 
 Advanced Format Disks
 ---------------------

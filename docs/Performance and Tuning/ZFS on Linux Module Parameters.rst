@@ -2,7 +2,7 @@ ZFS on Linux Module Parameters
 ==============================
 
 Most of the ZFS kernel module parameters are accessible in the SysFS
-``/sys/module/zfs/paramaters`` directory. Current value can be observed
+``/sys/module/zfs/parameters`` directory. Current value can be observed
 by
 
 .. code:: shell
@@ -1667,7 +1667,7 @@ result in more even, free-space-based allocation.
 +--------------------------------+------------------------------------+
 | Change                         | Dynamic                            |
 +--------------------------------+------------------------------------+
-| Verfication                    | The rotational setting described   |
+| Verification                   | The rotational setting described   |
 |                                | by a block device in sysfs by      |
 |                                | observing                          |
 |                                | ``/sys/                            |
@@ -2460,7 +2460,7 @@ zfs_arc_min_prescient_prefetch_ms
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Minimum time "prescient prefetched" blocks are locked in the ARC. These
-blocks are meant to be prefetched fairly aggresively ahead of the code
+blocks are meant to be prefetched fairly aggressively ahead of the code
 that may use them.
 
 A value of 0 represents the default of 6 seconds. However, once changed,
@@ -4497,7 +4497,7 @@ To ensure on-media consistency, keep cache flush enabled.
 +-------------------+-------------------------------------------------+
 | When to change    | If the storage device has nonvolatile cache,    |
 |                   | then disabling cache flush can save the cost of |
-|                   | occasional cache flush comamnds                 |
+|                   | occasional cache flush commands                 |
 +-------------------+-------------------------------------------------+
 | Data Type         | boolean                                         |
 +-------------------+-------------------------------------------------+
@@ -5360,7 +5360,7 @@ some cases actually harmful. Thusit is disabled by setting the
 +---------------------+-----------------------------------------------+
 | Change              | Dynamic                                       |
 +---------------------+-----------------------------------------------+
-| Verification        | vdev cache statistics are availabe in the     |
+| Verification        | vdev cache statistics are available in the    |
 |                     | ``/proc/spl/kstat/zfs/vdev_cache_stats`` file |
 +---------------------+-----------------------------------------------+
 | Versions Affected   | all                                           |
@@ -5811,7 +5811,7 @@ During a SPA sync, intent log transaction groups (itxg) are cleaned. The
 cleaning work is dispatched to the DSL pool ZIL clean taskq
 (``dp_zil_clean_taskq``).
 `zfs_zil_clean_taskq_minalloc <#zfs-zil-clean-taskq-minalloc>`__ is the
-minumum and ``zfs_zil_clean_taskq_maxalloc`` is the maximum number of
+minimum and ``zfs_zil_clean_taskq_maxalloc`` is the maximum number of
 cached taskq entries for ``dp_zil_clean_taskq``. The actual number of
 taskq entries dynamically varies between these values.
 
@@ -5854,7 +5854,7 @@ zfs_zil_clean_taskq_minalloc
 During a SPA sync, intent log transaction groups (itxg) are cleaned. The
 cleaning work is dispatched to the DSL pool ZIL clean taskq
 (``dp_zil_clean_taskq``). ``zfs_zil_clean_taskq_minalloc`` is the
-minumum and
+minimum and
 `zfs_zil_clean_taskq_maxalloc <#zfs-zil-clean-taskq-maxalloc>`__ is the
 maximum number of cached taskq entries for ``dp_zil_clean_taskq``. The
 actual number of taskq entries dynamically varies between these values.
@@ -6887,7 +6887,7 @@ zfs_resilver_delay
 ~~~~~~~~~~~~~~~~~~
 
 ``zfs_resilver_delay`` sets a time-based delay for resilver I/Os. This
-delay is in addition to the ZIO scheduler's treatement of scrub
+delay is in addition to the ZIO scheduler's treatment of scrub
 workloads. See also `zfs_scan_idle <#zfs-scan-idle>`__
 
 +--------------------+------------------------------------------------+
@@ -7492,7 +7492,7 @@ zfs_condense_indirect_commit_entry_delay_ms
 
 During vdev removal, the vdev indirection layer sleeps for
 ``zfs_condense_indirect_commit_entry_delay_ms`` milliseconds during
-mapping geenration. This parameter is used during automated testing of
+mapping generation. This parameter is used during automated testing of
 the ZFS code to improve test coverage.
 
 +----------------------------------+----------------------------------+
@@ -8142,9 +8142,9 @@ zfs_trim_metaslab_skip
 +------------------------+--------------------------------------------+
 | Data Type              | boolean                                    |
 +------------------------+--------------------------------------------+
-| Range                  | 0=do not skip unitialized metaslabs during |
-|                        | trim, 1=skip unitialized metaslabs during  |
-|                        | trim                                       |
+| Range                  | 0=do not skip uninitialized metaslabs      |
+|                        | during trim, 1=skip uninitialized          |
+|                        | metaslabs during trim                      |
 +------------------------+--------------------------------------------+
 | Default                | 0                                          |
 +------------------------+--------------------------------------------+
@@ -8285,7 +8285,7 @@ sent to devices by the ZIL after a log write has completed.
 The difference between ``zil_nocacheflush`` and
 `zfs_nocacheflush <#zfs-nocacheflush>`__ is ``zil_nocacheflush`` applies
 to ZIL writes while `zfs_nocacheflush <#zfs-nocacheflush>`__ disables
-barrier writes to the pool devices at the end of tranaction group syncs.
+barrier writes to the pool devices at the end of transaction group syncs.
 
 WARNING: setting this can cause ZIL corruption on power loss if the
 device has a volatile write cache.
@@ -8297,7 +8297,7 @@ device has a volatile write cache.
 +-------------------+-------------------------------------------------+
 | When to change    | If the storage device has nonvolatile cache,    |
 |                   | then disabling cache flush can save the cost of |
-|                   | occasional cache flush comamnds                 |
+|                   | occasional cache flush commands                 |
 +-------------------+-------------------------------------------------+
 | Data Type         | boolean                                         |
 +-------------------+-------------------------------------------------+
@@ -8740,7 +8740,7 @@ of metaslabs per top-level vdev.
 spl_hostid
 ~~~~~~~~~~
 
-| ``spl_hostid`` is a unique system id number. It orginated in Sun's
+| ``spl_hostid`` is a unique system id number. It originated in Sun's
   products where most systems had a unique id assigned at the factory.
   This assignment does not exist in modern hardware.
 | In ZFS, the hostid is stored in the vdev label and can be used to

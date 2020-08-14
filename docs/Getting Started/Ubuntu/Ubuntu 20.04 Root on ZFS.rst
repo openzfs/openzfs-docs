@@ -57,8 +57,8 @@ completed it. Do not reboot until you have completed all of the steps.
      grub-install --target=x86_64-efi --efi-directory=/boot/efi \
          --bootloader-id=ubuntu --recheck --no-floppy
 
-   Run this for the additional disk(s), incrementing the “2” to “3” and so on for
-   both ``/boot/efi2`` and ``ubuntu-2``::
+   Run this for the additional disk(s), incrementing the “2” to “3” and so on
+   for both ``/boot/efi2`` and ``ubuntu-2``::
 
      cp -a /boot/efi/EFI /boot/efi2
      grub-install --target=x86_64-efi --efi-directory=/boot/efi2 \
@@ -195,7 +195,7 @@ Contributing
 #. Install the tools::
 
     sudo apt install pip3
-    pip3 install -r requirements.txt
+    pip3 install -r docs/requirements.txt
     # Add ~/.local/bin to your $PATH, e.g. by adding this to ~/.bashrc:
     PATH=$HOME/.local/bin:$PATH
 
@@ -791,7 +791,7 @@ Step 4: System Configuration
    ``recordfail`` feature works as expected: if the boot fails, the normally
    hidden GRUB menu will be shown on the next boot. For a mirror or raidz
    topology, we do not want GRUB writing to the EFI System Partition. This is
-   becase we duplicate it at install without a mechanism to update the copies
+   because we duplicate it at install without a mechanism to update the copies
    when the GRUB configuration changes (e.g. as the kernel is upgraded). Thus,
    we keep ``/boot/grub`` on the boot pool for the mirror or raidz topologies.
    This preserves correct mirroring/raidz behavior, at the expense of being
@@ -899,7 +899,7 @@ Step 4: System Configuration
 
    This patch is from `Bug #1875577 Encrypted swap won't load on 20.04 with
    zfs root
-   <https://bugs.launchpad.net/ubuntu/+source/cryptsetup/+bug/1612906>`__.
+   <https://bugs.launchpad.net/ubuntu/+source/zfs-linux/+bug/1875577>`__.
 
 Step 5: GRUB Installation
 -------------------------
