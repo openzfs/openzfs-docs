@@ -639,6 +639,10 @@ Step 9: Last Minute Fixes
          fi
      done
 
+#. (Optional, but highly recommended) Enable systemd-boot timeout menu in case latest kernel fails to boot::
+
+     sed -i 's/#timeout.*/timeout 10/' /boot/loader/loader.conf
+
 #. Reboot::
 
      reboot
