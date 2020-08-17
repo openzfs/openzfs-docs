@@ -483,6 +483,7 @@ Step 4: System Configuration
 
       **Notes:**
 
+     - Use ``SYSTEMD_RELAX_XBOOTLDR_CHECKS=1 bootctl install --esp-path=/boot --boot-path=/boot`` instead of ``bootctl install`` if ``bootctl install`` fails.
      - The ``-s 1`` for ``mkdosfs`` is only necessary for drives which present
         4 KiB logical sectors (“4Kn” drives) to meet the minimum cluster size
         (given the partition size of 512 MiB) for FAT32. It also works fine on
