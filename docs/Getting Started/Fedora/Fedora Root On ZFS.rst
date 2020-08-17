@@ -193,7 +193,7 @@ Step 2: Disk Formatting
 
    (Optional, but recommended if you have high memory pressure): Create a swap partition::
 
-     sgdisk     -n0:0:+<size>G  -t0:8200 $DISK # Make sure you replace <size> with the size of your swap partition.
+     sgdisk     -n0:0:+<size>G  -t0:8200 -c 0:swap $DISK # Make sure you replace <size> with the size of your swap partition.
      mkswap     $DISK-part2
      swapon     $DISK-part2
 
@@ -204,11 +204,11 @@ Step 2: Disk Formatting
 
    - Unencrypted or ZFS native encryption::
 
-       sgdisk     -n0:0:0        -t0:BF00 $DISK
+       sgdisk     -n0:0:0        -t0:BF00 -c 0:root $DISK
 
    - LUKS (same warning as with Unencrypted and ZFS native encryption, change the -n3 and -t3 to -n2 and -t2 if you are not adding swap)::
 
-       sgdisk     -n0:0:0        -t0:8309 $DISK
+       sgdisk     -n0:0:0        -t0:8309 -c 0:root $DISK
 
    If you are creating a mirror or raidz topology, repeat the partitioning
    commands for all the disks which will be part of the pool.
@@ -475,7 +475,7 @@ Step 4: System Configuration
         dnf install dosfstools
         mkdosfs -F 32 -s 1 -n EFI ${DISK}-part1 # You should not need to change this
         echo PARTUUID=$(blkid -s PARTUUID -o value ${DISK}-part1) \
-           /boot vfat nofail,x-systemd.device-timeout=1 0 1 >> /etc/fstab
+           /boot vfat umask=0777,shortname=lower,context=system_u:object_r:boot_t:s0,nofail,x-systemd.device-timeout=1 0 1 >> /etc/fstab
         mount /boot
         bootctl install # Install systemd-boot to ESP
         sudo dnf reinstall kernel-core # Reinstall the kernel
@@ -674,6 +674,8 @@ Step 10: Final Cleanup
 
    **Hint:** If you created a mirror or raidz topology, repeat this for each
    LUKS volume (``luks2``, etc.).
+
+#. Optional: If you want your boot partition synced between your disks, check out https://github.com/gregory-lee-bartholomew/bootsync
 
 Troubleshooting
 ---------------
