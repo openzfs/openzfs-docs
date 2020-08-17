@@ -462,6 +462,7 @@ Step 4: System Configuration
    ``/etc/crypttab`` entries for ``luks2``, etc. adjusting for each disk.
 
 #. Remove GRUB2 as it can cause problems in the future::
+
         rpm --nodeps -ve $(rpm -qa | grep "^grub2-") os-prober
         echo 'exclude=grub2-*,os-prober' >> /etc/dnf/dnf.conf
         rm -rf /boot
