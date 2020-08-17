@@ -139,7 +139,9 @@ Step 1: Prepare The Install Environment
 
 #. Install the zfs dracut module (needed for booting): ``dnf install zfs-dracut``
 
-#. Finally ensure that the zfs kernel module is loaded by running ``sudo modprobe zfs``.
+#. Ensure that the zfs kernel module is loaded by running ``sudo modprobe zfs``.
+
+#. Define the hostid by running ``dd if=/dev/random of=/etc/hostid bs=1 count=4``. If you are curious to know your own hostid, you can run ``hostid | perl -e '$/=\2; $,="."; $\="\n"; print map { eval "0x$_" } (<>)[1,0,3,2];'``
 
 Step 2: Disk Formatting
 -----------------------
@@ -187,7 +189,7 @@ Step 2: Disk Formatting
 
    Run this to create your ESP::
 
-     sgdisk     -n0:1M:+1G   -t0:EF00 $DISK
+     sgdisk     -n0:1M:+1G   -t0:EF00 -c 0:boot $DISK
 
    (Optional, but recommended if you have high memory pressure): Create a swap partition::
 
@@ -459,7 +461,12 @@ Step 4: System Configuration
    **Hint:** If you are creating a mirror or raidz topology, repeat the
    ``/etc/crypttab`` entries for ``luks2``, etc. adjusting for each disk.
 
-#. Install GRUB (note that this is not yet supported by this guide, use systemd-boot for now instead)
+#. Remove GRUB2 as it can cause problems in the future::
+        rpm --nodeps -ve $(rpm -qa | grep "^grub2-") os-prober
+        echo 'exclude=grub2-*,os-prober' >> /etc/dnf/dnf.conf
+        rm -rf /boot
+        uuidgen | tr -d '-' > /etc/machine-id
+        mkdir -p /boot/$(</etc/machine-id)
 
 #. Install systemd-boot::
 
@@ -567,7 +574,7 @@ Step 7: First Boot
 
 #. Remove stale packages::
 
-     dnf remove --allowerasing --best anaconda-core anaconda-gui anaconda-widgets* grub* os-prober
+     dnf remove --allowerasing --best anaconda-core anaconda-gui anaconda-widgets*
 
    Removal of anaconda and grub/os-prober prevent issues such as the "Install Fedora" issue and other such conflicts.
 
