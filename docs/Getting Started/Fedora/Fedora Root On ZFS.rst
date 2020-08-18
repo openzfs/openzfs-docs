@@ -204,11 +204,11 @@ Step 2: Disk Formatting
 
    - Unencrypted or ZFS native encryption::
 
-       sgdisk     -n0:0:0        -t0:BF00 -c 0:root $DISK
+       sgdisk     -n3:0:0        -t3:BF00 -c 0:root $DISK
 
    - LUKS (same warning as with Unencrypted and ZFS native encryption, change the -n3 and -t3 to -n2 and -t2 if you are not adding swap)::
 
-       sgdisk     -n0:0:0        -t0:8309 -c 0:root $DISK
+       sgdisk     -n3:0:0        -t3:8309 -c 0:root $DISK
 
    If you are creating a mirror or raidz topology, repeat the partitioning
    commands for all the disks which will be part of the pool.
@@ -224,7 +224,7 @@ Step 2: Disk Formatting
            -O acltype=posixacl -O canmount=off -O compression=lz4 \
            -O dnodesize=auto -O normalization=formD -O relatime=on \
            -O xattr=sa -O mountpoint=/ -R /mnt \
-           rpool ${DISK}-part3 # change -part3 to -part2 if a swap partition was not made during partitioning
+           rpool ${DISK}-part3
 
    - ZFS native encryption::
 
@@ -235,13 +235,13 @@ Step 2: Disk Formatting
            -O acltype=posixacl -O canmount=off -O compression=lz4 \
            -O dnodesize=auto -O normalization=formD -O relatime=on \
            -O xattr=sa -O mountpoint=/ -R /mnt \
-           rpool ${DISK}-part3 # change -part3 to -part2 if swap partition was not made during partitioning
+           rpool ${DISK}-part3
 
    - LUKS::
 
        dnf install cryptsetup
        cryptsetup luksFormat -c aes-xts-plain64 -s 512 -h sha256 ${DISK}-part3 # change -part 3 to -part2 if swap partition was not made during partitioning
-       cryptsetup luksOpen ${DISK}-part3 luks1 # change -part3 to -part2 if swap partition was not made during partitioning
+       cryptsetup luksOpen ${DISK}-part3 luks1
        zpool create \
            -o ashift=12 \
            -O acltype=posixacl -O canmount=off -O compression=lz4 \
@@ -475,7 +475,11 @@ Step 4: System Configuration
         mkdir boot # Create the boot folder
         dnf install dosfstools
         mkdosfs -F 32 -s 1 -n EFI ${DISK}-part1 # You should not need to change this
+        # If you want to use partition UUID's (more stable, but longer to type and slightly harder to debug)
         echo PARTUUID=$(blkid -s PARTUUID -o value ${DISK}-part1) \
+           /boot vfat umask=0777,shortname=lower,context=system_u:object_r:boot_t:s0,nofail,x-systemd.device-timeout=1 0 1 >> /etc/fstab
+        # If you want to use partition LABEL's (less stable, but shorter to type and slightly easier to debug)
+        echo PARTLABEL=boot \
            /boot vfat umask=0777,shortname=lower,context=system_u:object_r:boot_t:s0,nofail,x-systemd.device-timeout=1 0 1 >> /etc/fstab
         mount /boot
         bootctl install # Install systemd-boot to ESP
