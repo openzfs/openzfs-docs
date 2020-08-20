@@ -465,7 +465,6 @@ Step 4: System Configuration
 
         rpm --nodeps -ve $(rpm -qa | grep "^grub2-") os-prober
         echo 'exclude=grub2-*,os-prober' >> /etc/dnf/dnf.conf
-        rm -rf /boot
 
 #. Install systemd-boot::
 
