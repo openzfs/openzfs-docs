@@ -482,6 +482,7 @@ Step 4: System Configuration
         uuidgen | tr -d '-' > /etc/machine-id
         mkdir -p /boot/$(</etc/machine-id)
         bootctl install # Install systemd-boot to ESP
+        echo 'root=ZFS=rpool/ROOT/fedora' > /etc/kernel/cmdline
         sudo dnf reinstall kernel-core # Reinstall the kernel
         sudo dnf reinstall zfs-dkms zfs-dracut # Reinstall the ZFS kernel module and dracut module as reinstalling the kernel can remove the ZFS kernel module
 
@@ -511,24 +512,7 @@ Step 4: System Configuration
 .. note::
    GRUB installation is not supported by this guide and will not be supported in the forseeable future. The above steps should have installed systemd-boot, an alternative to GRUB which provides the majority of GRUBS features. If you still wish to use GRUB, it might be possible to chainload systemd-boot using GRUB and boot your Fedora installation that way. Instructions on how to do this will not be provided and this has not been tested to work. You are welcome to make a PR for this however
 
-Step 6: Fixing systemd-boot config
-----------------------------------
-
-.. note:: 
-   Note that dnf can sometimes mess up with configuring systemd-boot. Luckily this is very easy to fix
-
-#. Firstly, change directory to /boot/loader/entries using ``cd /boot/loader/entries``.
-
-#. Type ``ls``. You should see a bunch of files beginning with a random series of letters and numbers followed by a minus and then the kernel version or rescue (for example ``839fdb701b7c48d2b25ffc293bb7ee18-0-rescue.conf`` and ``839fdb701b7c48d2b25ffc293bb7ee18-5.7.0-0.rc3.1.fc33.x86_64.conf`` as examples)
-
-#. Open each file using the text editor of your choice and look for a field called options. Delete everything you see in that line and replace it with ``options root=ZFS=rpool/ROOT/fedora``
-
-.. note::
-   Be sure to change the rpool/ROOT/fedora if you named it differently
-
-#. Add any additional kernel options that you need and save and exit the file
-
-Step 7: First Boot
+Step 6: First Boot
 ------------------
 #. Rebuild initramfs to be certain that the ZFS dracut module will be loaded on boot to mount our ZFS pools::
 
@@ -584,7 +568,7 @@ Step 7: First Boot
    Removal of anaconda and grub/os-prober prevent issues such as the "Install Fedora" issue and other such conflicts.
 
 
-(Optional) Step 8: Configure ZVol Swap
+(Optional) Step 7: Configure ZVol Swap
 --------------------------------------
 
 **Caution**: On systems with extremely high memory pressure, using a
@@ -629,7 +613,7 @@ available. There is `a bug report upstream
 
      swapon -av
 
-Step 9: Last Minute Fixes
+Step 8: Last Minute Fixes
 -------------------------
 
 #. Upgrade the system (if you haven't already done it)::
@@ -659,7 +643,7 @@ Step 9: Last Minute Fixes
 
      reboot
 
-Step 10: Final Cleanup
+Step 9: Final Cleanup
 ----------------------
 
 #. Wait for the system to boot normally. Login using the account you
