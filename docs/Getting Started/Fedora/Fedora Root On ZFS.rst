@@ -466,8 +466,6 @@ Step 4: System Configuration
         rpm --nodeps -ve $(rpm -qa | grep "^grub2-") os-prober
         echo 'exclude=grub2-*,os-prober' >> /etc/dnf/dnf.conf
         rm -rf /boot
-        uuidgen | tr -d '-' > /etc/machine-id
-        mkdir -p /boot/$(</etc/machine-id)
 
 #. Install systemd-boot::
 
@@ -482,6 +480,8 @@ Step 4: System Configuration
         echo PARTLABEL=boot \
            /boot vfat umask=0777,shortname=lower,context=system_u:object_r:boot_t:s0,nofail,x-systemd.device-timeout=1 0 1 >> /etc/fstab
         mount /boot
+        uuidgen | tr -d '-' > /etc/machine-id
+        mkdir -p /boot/$(</etc/machine-id)
         bootctl install # Install systemd-boot to ESP
         sudo dnf reinstall kernel-core # Reinstall the kernel
         sudo dnf reinstall zfs-dkms zfs-dracut # Reinstall the ZFS kernel module and dracut module as reinstalling the kernel can remove the ZFS kernel module
