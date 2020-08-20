@@ -442,7 +442,7 @@ Step 4: System Configuration
 
 #. Update the new system::
 
-     dnf update
+     dnf update --exclude=kernel* # Note: the --exclude=kernel* is optional in the majority of cases. You can remove it if you are OK with ZFS potentially (rarely) breaking due to a kernel update.
 
 .. note::
 
