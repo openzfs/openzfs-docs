@@ -629,9 +629,9 @@ Step 8: Last Minute Fixes
 
      sed -i 's/#timeout.*/timeout 10/' /boot/loader/loader.conf
 
-#. Ensure that zfs-mount.service is enabled::
+#. Ensure that zfs-target is enabled::
 
-     systemctl enable zfs-mount.service
+     systemctl enable zfs.target
 
 #. Reboot::
 
