@@ -189,11 +189,11 @@ Step 2: Disk Formatting
 
    Run this to create your ESP::
 
-     sgdisk     -n0:1M:+1G   -t0:EF00 -c 0:boot $DISK
+     sgdisk     -n0:1M:+1G   -t0:EF00 $DISK
 
    (Optional, but recommended if you have high memory pressure): Create a swap partition::
 
-     sgdisk     -n0:0:+<size>G  -t0:8200 -c 0:swap $DISK # Make sure you replace <size> with the size of your swap partition.
+     sgdisk     -n0:0:+<size>G  -t0:8200 $DISK # Make sure you replace <size> with the size of your swap partition.
      mkswap     $DISK-part2
      swapon     $DISK-part2
 
@@ -204,11 +204,11 @@ Step 2: Disk Formatting
 
    - Unencrypted or ZFS native encryption::
 
-       sgdisk     -n3:0:0        -t3:BF00 -c 0:root $DISK
+       sgdisk     -n3:0:0        -t3:BF00 $DISK
 
    - LUKS (same warning as with Unencrypted and ZFS native encryption, change the -n3 and -t3 to -n2 and -t2 if you are not adding swap)::
 
-       sgdisk     -n3:0:0        -t3:8309 -c 0:root $DISK
+       sgdisk     -n3:0:0        -t3:8309 $DISK
 
    If you are creating a mirror or raidz topology, repeat the partitioning
    commands for all the disks which will be part of the pool.
@@ -442,7 +442,7 @@ Step 4: System Configuration
 
 #. Update the new system::
 
-     dnf update
+     dnf update --exclude=kernel* # Note: the --exclude=kernel* is optional in the majority of cases. You can remove it if you are OK with ZFS potentially (rarely) breaking due to a kernel update.
 
 .. note::
 
@@ -465,9 +465,6 @@ Step 4: System Configuration
 
         rpm --nodeps -ve $(rpm -qa | grep "^grub2-") os-prober
         echo 'exclude=grub2-*,os-prober' >> /etc/dnf/dnf.conf
-        rm -rf /boot
-        uuidgen | tr -d '-' > /etc/machine-id
-        mkdir -p /boot/$(</etc/machine-id)
 
 #. Install systemd-boot::
 
@@ -478,13 +475,13 @@ Step 4: System Configuration
         # If you want to use partition UUID's (more stable, but longer to type and slightly harder to debug)
         echo PARTUUID=$(blkid -s PARTUUID -o value ${DISK}-part1) \
            /boot vfat umask=0777,shortname=lower,context=system_u:object_r:boot_t:s0,nofail,x-systemd.device-timeout=1 0 1 >> /etc/fstab
-        # If you want to use partition LABEL's (less stable, but shorter to type and slightly easier to debug)
-        echo PARTLABEL=boot \
-           /boot vfat umask=0777,shortname=lower,context=system_u:object_r:boot_t:s0,nofail,x-systemd.device-timeout=1 0 1 >> /etc/fstab
         mount /boot
+        uuidgen | tr -d '-' > /etc/machine-id
+        mkdir -p /boot/$(</etc/machine-id)
         bootctl install # Install systemd-boot to ESP
-        sudo dnf reinstall kernel-core # Reinstall the kernel
-        sudo dnf reinstall zfs-dkms zfs-dracut # Reinstall the ZFS kernel module and dracut module as reinstalling the kernel can remove the ZFS kernel module
+        echo 'root=ZFS=rpool/ROOT/fedora' > /etc/kernel/cmdline
+        kernel-install add $(uname -r) /lib/modules/$(uname -r)/vmlinuz # Reinstall the kernel
+        dracut --kver $(uname -r) --force --add-drivers "zfs" # Rebuild initramfs just in case
 
       **Notes:**
 
@@ -512,32 +509,8 @@ Step 4: System Configuration
 .. note::
    GRUB installation is not supported by this guide and will not be supported in the forseeable future. The above steps should have installed systemd-boot, an alternative to GRUB which provides the majority of GRUBS features. If you still wish to use GRUB, it might be possible to chainload systemd-boot using GRUB and boot your Fedora installation that way. Instructions on how to do this will not be provided and this has not been tested to work. You are welcome to make a PR for this however
 
-Step 6: Fixing systemd-boot config
-----------------------------------
-
-.. note:: 
-   Note that dnf can sometimes mess up with configuring systemd-boot. Luckily this is very easy to fix
-
-#. Firstly, change directory to /boot/loader/entries using ``cd /boot/loader/entries``.
-
-#. Type ``ls``. You should see a bunch of files beginning with a random series of letters and numbers followed by a minus and then the kernel version or rescue (for example ``839fdb701b7c48d2b25ffc293bb7ee18-0-rescue.conf`` and ``839fdb701b7c48d2b25ffc293bb7ee18-5.7.0-0.rc3.1.fc33.x86_64.conf`` as examples)
-
-#. Open each file using the text editor of your choice and look for a field called options. Delete everything you see in that line and replace it with ``options root=ZFS=rpool/ROOT/fedora``
-
-.. note::
-   Be sure to change the rpool/ROOT/fedora if you named it differently
-
-#. Add any additional kernel options that you need and save and exit the file
-
-Step 7: First Boot
+Step 6: First Boot
 ------------------
-#. Rebuild initramfs to be certain that the ZFS dracut module will be loaded on boot to mount our ZFS pools::
-
-     dracut --kver $(uname -r) --force --add-drivers "zfs"
-
-.. note::
-
-   If you updated your kernel in this guide, you will need to change the $(uname -r) to your updated kernel version. You can find this in /lib/modules.
 
 #. Optional: Snapshot the initial installation::
 
@@ -585,7 +558,7 @@ Step 7: First Boot
    Removal of anaconda and grub/os-prober prevent issues such as the "Install Fedora" issue and other such conflicts.
 
 
-(Optional) Step 8: Configure ZVol Swap
+(Optional) Step 7: Configure ZVol Swap
 --------------------------------------
 
 **Caution**: On systems with extremely high memory pressure, using a
@@ -630,7 +603,7 @@ available. There is `a bug report upstream
 
      swapon -av
 
-Step 9: Last Minute Fixes
+Step 8: Last Minute Fixes
 -------------------------
 
 #. Upgrade the system (if you haven't already done it)::
@@ -664,7 +637,7 @@ Step 9: Last Minute Fixes
 
      reboot
 
-Step 10: Final Cleanup
+Step 9: Final Cleanup
 ----------------------
 
 #. Wait for the system to boot normally. Login using the account you
