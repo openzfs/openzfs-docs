@@ -483,8 +483,8 @@ Step 4: System Configuration
         mkdir -p /boot/$(</etc/machine-id)
         bootctl install # Install systemd-boot to ESP
         echo 'root=ZFS=rpool/ROOT/fedora' > /etc/kernel/cmdline
-        sudo dnf reinstall kernel-core # Reinstall the kernel
-        sudo dnf reinstall zfs-dkms zfs-dracut # Reinstall the ZFS kernel module and dracut module as reinstalling the kernel can remove the ZFS kernel module
+        kernel-install add $(uname -r) /lib/modules/$(uname -r)/vmlinuz # Reinstall the kernel
+        dracut --kver $(uname -r) --force --add-drivers "zfs" # Rebuild initramfs
 
       **Notes:**
 
@@ -514,13 +514,6 @@ Step 4: System Configuration
 
 Step 6: First Boot
 ------------------
-#. Rebuild initramfs to be certain that the ZFS dracut module will be loaded on boot to mount our ZFS pools::
-
-     dracut --kver $(uname -r) --force --add-drivers "zfs"
-
-.. note::
-
-   If you updated your kernel in this guide, you will need to change the $(uname -r) to your updated kernel version. You can find this in /lib/modules.
 
 #. Optional: Snapshot the initial installation::
 
