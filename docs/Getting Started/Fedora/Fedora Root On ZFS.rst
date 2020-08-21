@@ -189,11 +189,11 @@ Step 2: Disk Formatting
 
    Run this to create your ESP::
 
-     sgdisk     -n0:1M:+1G   -t0:EF00 -c 0:boot $DISK
+     sgdisk     -n0:1M:+1G   -t0:EF00 $DISK
 
    (Optional, but recommended if you have high memory pressure): Create a swap partition::
 
-     sgdisk     -n0:0:+<size>G  -t0:8200 -c 0:swap $DISK # Make sure you replace <size> with the size of your swap partition.
+     sgdisk     -n0:0:+<size>G  -t0:8200 $DISK # Make sure you replace <size> with the size of your swap partition.
      mkswap     $DISK-part2
      swapon     $DISK-part2
 
@@ -204,11 +204,11 @@ Step 2: Disk Formatting
 
    - Unencrypted or ZFS native encryption::
 
-       sgdisk     -n3:0:0        -t3:BF00 -c 0:root $DISK
+       sgdisk     -n3:0:0        -t3:BF00 $DISK
 
    - LUKS (same warning as with Unencrypted and ZFS native encryption, change the -n3 and -t3 to -n2 and -t2 if you are not adding swap)::
 
-       sgdisk     -n3:0:0        -t3:8309 -c 0:root $DISK
+       sgdisk     -n3:0:0        -t3:8309 $DISK
 
    If you are creating a mirror or raidz topology, repeat the partitioning
    commands for all the disks which will be part of the pool.
@@ -474,9 +474,6 @@ Step 4: System Configuration
         mkdosfs -F 32 -s 1 -n EFI ${DISK}-part1 # You should not need to change this
         # If you want to use partition UUID's (more stable, but longer to type and slightly harder to debug)
         echo PARTUUID=$(blkid -s PARTUUID -o value ${DISK}-part1) \
-           /boot vfat umask=0777,shortname=lower,context=system_u:object_r:boot_t:s0,nofail,x-systemd.device-timeout=1 0 1 >> /etc/fstab
-        # If you want to use partition LABEL's (less stable, but shorter to type and slightly easier to debug)
-        echo PARTLABEL=boot \
            /boot vfat umask=0777,shortname=lower,context=system_u:object_r:boot_t:s0,nofail,x-systemd.device-timeout=1 0 1 >> /etc/fstab
         mount /boot
         uuidgen | tr -d '-' > /etc/machine-id
