@@ -484,7 +484,7 @@ Step 4: System Configuration
         bootctl install # Install systemd-boot to ESP
         echo 'root=ZFS=rpool/ROOT/fedora' > /etc/kernel/cmdline
         kernel-install add $(uname -r) /lib/modules/$(uname -r)/vmlinuz # Reinstall the kernel
-        dracut --kver $(uname -r) --force --add-drivers "zfs" # Rebuild initramfs
+        dracut --kver $(uname -r) --force --add-drivers "zfs" # Rebuild initramfs just in case
 
       **Notes:**
 
