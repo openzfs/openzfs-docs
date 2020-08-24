@@ -877,7 +877,7 @@ Step 7: Optional: Configure Swap
 
 **Caution**: On systems with extremely high memory pressure, using a
 zvol for swap can result in lockup, regardless of how much swap is still
-available. There is `a bug report upstrea
+available. There is `a bug report upstream
 <https://github.com/zfsonlinux/zfs/issues/7734>`__.
 
 #. Create a volume dataset (zvol) for use as a swap device::
