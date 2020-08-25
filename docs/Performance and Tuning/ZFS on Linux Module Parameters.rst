@@ -138,6 +138,7 @@ ARC
 -  `l2arc_feed_secs <#l2arc-feed-secs>`__
 -  `l2arc_headroom <#l2arc-headroom>`__
 -  `l2arc_headroom_boost <#l2arc-headroom-boost>`__
+-  `l2arc_meta_percent <#l2arc-meta-percent>`__
 -  `l2arc_nocompress <#l2arc-nocompress>`__
 -  `l2arc_noprefetch <#l2arc-noprefetch>`__
 -  `l2arc_norw <#l2arc-norw>`__
@@ -332,6 +333,7 @@ L2ARC
 -  `l2arc_feed_secs <#l2arc-feed-secs>`__
 -  `l2arc_headroom <#l2arc-headroom>`__
 -  `l2arc_headroom_boost <#l2arc-headroom-boost>`__
+-  `l2arc_meta_percent <#l2arc-meta-percent>`__
 -  `l2arc_nocompress <#l2arc-nocompress>`__
 -  `l2arc_noprefetch <#l2arc-noprefetch>`__
 -  `l2arc_norw <#l2arc-norw>`__
@@ -816,6 +818,7 @@ Index
 -  `l2arc_feed_secs <#l2arc-feed-secs>`__
 -  `l2arc_headroom <#l2arc-headroom>`__
 -  `l2arc_headroom_boost <#l2arc-headroom-boost>`__
+-  `l2arc_meta_percent <#l2arc-meta-percent>`__
 -  `l2arc_nocompress <#l2arc-nocompress>`__
 -  `l2arc_noprefetch <#l2arc-noprefetch>`__
 -  `l2arc_norw <#l2arc-norw>`__
@@ -1207,6 +1210,32 @@ legacy behavior of writing decompressed data to cache devices.
 +-------------------+-------------------------------------------------+
 | Versions Affected | deprecated in v0.7.0 by new compressed ARC      |
 |                   | design                                          |
++-------------------+-------------------------------------------------+
+
+l2arc_meta_percent
+~~~~~~~~~~~~~~~~~~
+
+Percent of ARC size allowed for L2ARC-only headers.
+Since L2ARC buffers are not evicted on memory pressure, too large amount of
+headers on system with irrationaly large L2ARC can render it slow or unusable.
+This parameter limits L2ARC writes and rebuild to achieve it.
+
++-------------------+-------------------------------------------------+
+| l2arc_nocompress  | Notes                                           |
++===================+=================================================+
+| Tags              | `ARC <#arc>`__, `L2ARC <#l2arc>`__              |
++-------------------+-------------------------------------------------+
+| When to change    | When workload really require enormous L2ARC.    |
++-------------------+-------------------------------------------------+
+| Data Type         | int                                             |
++-------------------+-------------------------------------------------+
+| Range             | 0 to 100                                        |
++-------------------+-------------------------------------------------+
+| Default           | 33                                              |
++-------------------+-------------------------------------------------+
+| Change            | Dynamic                                         |
++-------------------+-------------------------------------------------+
+| Versions Affected | v2.0 and later                                  |
 +-------------------+-------------------------------------------------+
 
 l2arc_noprefetch
