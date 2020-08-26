@@ -8,4 +8,5 @@
    Performance and Tuning/index
    Basic Concepts/index
    man/index
+   msg/index
    License
