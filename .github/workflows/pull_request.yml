@@ -6,7 +6,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
     - name: Prepare
       run: |
         sudo apt-get update -y
@@ -19,3 +19,7 @@ jobs:
       with:
         pre-build-command: "apt-get update -y && apt-get install -y git"
         docs-folder: "docs/"
+    - uses: actions/upload-artifact@v2
+      with:
+        name: DocumentationHTML
+        path: docs/_build/html/
