@@ -32,3 +32,9 @@ Mailing Lists
 |                      | architecture changes |                      |
 |                      | from all platforms   |                      |
 +----------------------+----------------------+----------------------+
+| `discuss\            | A user discussion    | `archive             |
+| @open-zfs            | list for issues      | <https://zfsonl      |
+| .org <https://zfsonl | related to           | inux.topicbox.com/gr |
+| inux.topicbox.com/gr | functionality and    | oups/discuss>`__     |
+| oups/zfsdiscuss>`__  | usability on FreeBSD |                      |
++----------------------+----------------------+----------------------+
