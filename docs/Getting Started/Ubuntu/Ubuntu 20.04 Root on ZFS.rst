@@ -153,6 +153,12 @@ the future
 If you want to setup a mirror or raidz topology, use LUKS encryption, and/or
 install a server (no desktop GUI), use this HOWTO.
 
+Raspberry Pi
+~~~~~~~~~~~~
+
+If you are looking to install on a Raspberry Pi, see
+:doc:`Ubuntu 20.04 Root on ZFS for Raspberry Pi`.
+
 Caution
 ~~~~~~~
 
