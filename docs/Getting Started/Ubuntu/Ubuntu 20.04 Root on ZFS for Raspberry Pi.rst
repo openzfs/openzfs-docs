@@ -157,20 +157,26 @@ be deleted.
 
      DISK=/dev/mmcblk0
 
-#. Clear the disk::
+#. Clear old ZFS labels::
 
-     sudo dd if=/dev/zero of=${DISK} bs=1M status=progress
+     sudo zpool labelclear -f ${DISK}
+
+   If a ZFS label still exists from a previous system/attempt, expanding the
+   pool will result in an unbootable system.
+
+   **Hint:** If you do not already have the ZFS utilities installed, you can
+   install them with: ``sudo apt install zfsutils-linux``  Alternatively, you
+   can zero the entire SD card with:
+   ``sudo dd if=/dev/zero of=${DISK} bs=1M status=progress``
+
+#. Delete existing partitions::
+
+     echo "label: dos" | sudo sfdisk ${DISK}
      sudo partprobe
      ls ${DISK}*
-     # Make sure there are no partitions, just the file for the disk itself.
 
-   **WARNING:**: You must follow this step if the disk was previously used.
-   If a filesystem with the ``writable`` label from the Ubuntu image is still
-   present in partition 2, the system will not boot initially.  If a ZFS label
-   still exists from a previous system/attempt, expanding the pool will result
-   in an unbootable system.
-
-   The ``No space left on device`` error from ``dd`` is expected.
+   Make sure there are no partitions, just the file for the disk itself.  This
+   step is not strictly necessary; it exists to catch problems.
 
 #. Create the partitions::
 
@@ -184,6 +190,13 @@ be deleted.
 #. Copy the bootloader data::
 
      sudo dd if=${IMG}p1 of=${DISK}p1 bs=1M
+
+#. Clear old label(s) from partition 2::
+
+     sudo wipefs ${DISK}p2
+
+   If a filesystem with the ``writable`` label from the Ubuntu image is still
+   present in partition 2, the system will not boot initially.
 
 #. Copy the root filesystem data::
 
