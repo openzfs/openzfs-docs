@@ -18,7 +18,7 @@ Caution
 System Requirements
 ~~~~~~~~~~~~~~~~~~~
 
-- A Raspberry Pi 4B+. (If you are looking to install on a regular PC, see
+- A Raspberry Pi 4 B. (If you are looking to install on a regular PC, see
   :doc:`Ubuntu 20.04 Root on ZFS`.)
 - `Ubuntu Server 20.04.1 (“Focal”) for Raspberry Pi 4
   <https://cdimage.ubuntu.com/releases/20.04.1/release/ubuntu-20.04.1-preinstalled-server-arm64+raspi.img.xz>`__
@@ -32,9 +32,9 @@ System Requirements
 amounts of RAM <http://wiki.freebsd.org/ZFSTuningGuide#Deduplication>`__.
 Enabling deduplication is a permanent change that cannot be easily reverted.
 
-The Raspberry Pi 3B+ would probably work (as it is 64-bit, though it has less
-RAM), but has not been tested.  Please report your results (good or bad) using
-the issue link below.
+A Raspberry Pi 3 B/B+ would probably work (as the Pi 3 is 64-bit, though it
+has less RAM), but has not been tested.  Please report your results (good or
+bad) using the issue link below.
 
 Support
 ~~~~~~~
