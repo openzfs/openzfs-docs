@@ -494,11 +494,10 @@ system and ``chroot`` into it::
   ln -s /proc/self/mounts /etc/mtab
   apt update
 
-  dpkg-reconfigure locales
-
 Even if you prefer a non-English system language, always ensure that
 ``en_US.UTF-8`` is available::
 
+  dpkg-reconfigure locales
   dpkg-reconfigure tzdata
 
 If you prefer ``nano`` over ``vi``, install it::

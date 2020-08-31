@@ -727,11 +727,10 @@ Step 4: System Configuration
 
      apt update
 
-     dpkg-reconfigure locales
-
    Even if you prefer a non-English system language, always ensure that
    ``en_US.UTF-8`` is available::
 
+     dpkg-reconfigure locales
      dpkg-reconfigure tzdata
 
    Install your preferred text editor::
