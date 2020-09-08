@@ -419,7 +419,6 @@ Step 3: System Installation
      zfs mount rpool/ROOT/debian
 
      zfs create -o mountpoint=/boot bpool/BOOT/debian
-     zfs mount bpool/BOOT/debian
 
    With ZFS, it is not normally necessary to use a mount command (either
    ``mount`` or ``zfs mount``). This situation is an exception because of
