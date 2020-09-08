@@ -123,8 +123,9 @@ If you want a ZFS native encrypted, desktop install, you can `trivially edit
 the installer
 <https://linsomniac.gitlab.io/post/2020-04-09-ubuntu-2004-encrypted-zfs/>`__.
 The ``-o recordsize=1M`` there is unrelated to encryption; omit that unless
-you understand it. Additionally, once the system is installed, you should
-switch to encrypted swap::
+you understand it. Make sure to use a password that is at least 8 characters
+or this hack will crash the installer. Additionally, once the system is
+installed, you should switch to encrypted swap::
 
   swapon -v
   # Note the device, including the partition.
