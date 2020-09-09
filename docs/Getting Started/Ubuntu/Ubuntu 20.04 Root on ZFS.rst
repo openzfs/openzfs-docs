@@ -326,20 +326,18 @@ Step 2: Disk Formatting
 
      sgdisk     -n1:1M:+512M   -t1:EF00 $DISK
 
-   **Note:** This partition is setup for UEFI support. For legacy (BIOS)
-   booting, this will allow you to move the disk(s) to a new
-   system/motherboard in the future without having to rebuild the pool (and
-   restore your data from a backup). Additionally, this is used for
-   ``/boot/grub`` in single-disk installs, as :ref:`discussed below
-   <boot-grub-esp>`.
-
-   For legacy (BIOS) booting::
-
+     # For legacy (BIOS) booting:
      sgdisk -a1 -n5:24K:+1000K -t5:EF02 $DISK
 
-   **Note:** For simplicity and forward compatibility, this HOWTO uses GPT
-   partition labels for both UEFI and legacy (BIOS) booting. The Ubuntu
-   installer uses an MBR label for legacy (BIOS) booting.
+   **Note:** While the Ubuntu installer uses an MBR label for legacy (BIOS)
+   booting, this HOWTO uses GPT partition labels for both UEFI and legacy
+   (BIOS) booting. This is simpler than having two options.  It is also
+   provides forward compatibility (future proofing).  In other words, for
+   legacy (BIOS) booting, this will allow you to move the disk(s) to a new
+   system/motherboard in the future without having to rebuild the pool (and
+   restore your data from a backup). The ESP is created in both cases for
+   similar reasons.  Additionally, the ESP is used for ``/boot/grub`` in
+   single-disk installs, as :ref:`discussed below <boot-grub-esp>`.
 
 #. Create a partition for swap:
 
