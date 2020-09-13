@@ -1,6 +1,9 @@
 Hardware
 ********
 
+.. contents:: Table of Contents
+  :local:
+
 Introduction
 ============
 
