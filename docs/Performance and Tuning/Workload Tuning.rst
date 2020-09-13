@@ -1,3 +1,6 @@
+Workload Tuning
+===============
+
 Below are tips for various workloads.
 
 .. _basic_concepts:
@@ -36,7 +39,7 @@ providing a superior hit rate.
 
 In addition, a dedicated cache device (typically a SSD) can be added to
 the pool, with
-``zpool add``\ *``poolname``*\ ``cache``\ *``devicename``*. The cache
+``zpool add POOLNAME cache DEVICENAME``. The cache
 device is managed by the L2ARC, which scans entries that are next to be
 evicted and writes them to the cache device. The data stored in ARC and
 L2ARC can be controlled via the ``primarycache`` and ``secondarycache``
@@ -90,7 +93,7 @@ respective methods are as follows:
    on FreeBSD; see for example `FreeBSD on 4K sector
    drives <http://web.archive.org/web/20151022020605/http://ivoras.sharanet.org/blog/tree/2011-01-01.freebsd-on-4k-sector-drives.html>`__
    (2011-01-01)
--  `ashift= <https://openzfs.github.io/openzfs-docs/Project%20and%20Community/FAQ.html#advanced-format-disks-o>`__
+-  `ashift= <https://openzfs.github.io/openzfs-docs/Project%20and%20Community/FAQ.html#advanced-format-disks>`__
    on ZFS on Linux
 -  -o ashift= also works with both MacZFS (pool version 8) and ZFS-OSX
    (pool version 5000).
@@ -102,7 +105,7 @@ syntax <http://www.listbox.com/member/archive/182191/2013/07/search/YXNoaWZ0/sor
 that will rely on the actual sector sizes has been discussed as a cross
 platform replacement and will likely be implemented in the future.
 
-In addition, `Richard Yao <User:Ryao>`__ has contributed a `database of
+In addition, there is a `database of
 drives known to misreport sector
 sizes <https://github.com/openzfs/zfs/blob/master/cmd/zpool/os/linux/zpool_vdev_os.c#L98>`__
 to the ZFS on Linux project. It is used to automatically adjust ashift
@@ -133,9 +136,9 @@ The following compression algorithms are available:
 -  LZ4
 
    -  New algorithm added after feature flags were created. It is
-      significantly superior to LZJB in all metrics tested. It is new
-      default compression algorithm (compression=on) in
-      OpenZFS\ `1 <https://github.com/illumos/illumos-gate/commit/db1741f555ec79def5e9846e6bfd132248514ffe>`__.
+      significantly superior to LZJB in all metrics tested. It is `new
+      default compression algorithm <https://github.com/illumos/illumos-gate/commit/db1741f555ec79def5e9846e6bfd132248514ffe>`__
+      (compression=on) in OpenZFS.
       It is available on all platforms have as of 2020.
 
 -  LZJB
@@ -159,7 +162,7 @@ The following compression algorithms are available:
 If you want to use compression and are uncertain which to use, use LZ4.
 It averages a 2.1:1 compression ratio while gzip-1 averages 2.7:1, but
 gzip is much slower. Both figures are obtained from `testing by the LZ4
-project <https://code.google.com/p/lz4/>`__ on the Silesia corpus. The
+project <https://github.com/lz4/lz4>`__ on the Silesia corpus. The
 greater compression ratio of gzip is usually only worthwhile for rarely
 accessed data.
 
@@ -265,8 +268,8 @@ Metaslab Allocator
 
 ZFS top level vdevs are divided into metaslabs from which blocks can be
 independently allocated so allow for concurrent IOs to perform
-allocations without blocking one another. At present, there is a
-regression\ `2 <https://github.com/zfsonlinux/zfs/pull/3643>`__ on the
+allocations without blocking one another. At present, `there is a
+regression <https://github.com/zfsonlinux/zfs/pull/3643>`__ on the
 Linux and Mac OS X ports that causes serialization to occur.
 
 By default, the selection of a metaslab is biased toward lower LBAs to
@@ -280,8 +283,8 @@ The metaslab allocator will allocate blocks on a first-fit basis when a
 metaslab has more than or equal to 4 percent free space and a best-fit
 basis when a metaslab has less than 4 percent free space. The former is
 much faster than the latter, but it is not possible to tell when this
-behavior occurs from the pool's free space. However, the command \`zdb
--mmm $POOLNAME\` will provide this information.
+behavior occurs from the pool's free space. However, the command ``zdb
+-mmm $POOLNAME`` will provide this information.
 
 .. _pool_geometry:
 
@@ -371,8 +374,7 @@ Free Space
 
 Keep pool free space above 10% to avoid many metaslabs from reaching the
 4% free space threshold to switch from first-fit to best-fit allocation
-strategies. When the threshold is hit, the `metaslab
-allocator <Performance_tuning#Metaslab_Allocator>`__ becomes very CPU
+strategies. When the threshold is hit, the :ref:`metaslab_allocator` becomes very CPU
 intensive in an attempt to protect itself from fragmentation. This
 reduces IOPS, especially as more metaslabs reach the 4% threshold.
 
@@ -405,13 +407,12 @@ Note that larger record sizes will increase compression ratios on
 compressible data by allowing compression algorithms to process more
 data at a time.
 
-.. _nvme_low_level_formatting:
+.. _nvme_low_level_formatting_link:
 
 NVMe low level formatting
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-See
-`Hardware#NVMe_low_level_formatting <Hardware#NVMe_low_level_formatting>`__.
+See :ref:`nvme_low_level_formatting`.
 
 .. _pool_geometry_1:
 
@@ -430,17 +431,16 @@ If your workload involves fsync or O_SYNC and your pool is backed by
 mechanical storage, consider adding one or more SLOG devices. Pools that
 have multiple SLOG devices will distribute ZIL operations across them.
 The best choice for SLOG device(s) are likely Optane / 3D XPoint SSDs.
-See
-`Hardware#Optane_.2F_3D_XPoint_SSDs <Hardware#Optane_.2F_3D_XPoint_SSDs>`__
+See :ref:`optane_3d_xpoint_ssds`
 for a description of them. If an Optane / 3D XPoint SSD is an option,
 the rest of this section on synchronous I/O need not be read. If Optane
 / 3D XPoint SSDs is not an option, see
-`Hardware#NAND_Flash_SSDs <Hardware#NAND_Flash_SSDs>`__ for suggestions
+:ref:`nand_flash_ssds` for suggestions
 for NAND flash SSDs and also read the information below.
 
 To ensure maximum ZIL performance on NAND flash SSD-based SLOG devices,
 you should also overprovison spare area to increase
-IOPS\ `3 <http://www.anandtech.com/show/6489/playing-with-op>`__. Only
+IOPS [#ssd_iops]_. Only
 about 4GB is needed, so the rest can be left as overprovisioned storage.
 The choice of 4GB is somewhat arbitrary. Most systems do not write
 anything close to 4GB to ZIL between transaction group commits, so
@@ -495,15 +495,15 @@ Whole disks
 
 Whole disks should be given to ZFS rather than partitions. If you must
 use a partition, make certain that the partition is properly aligned to
-avoid read-modify-write overhead. See the section on `Alignment
-Shift <Performance_tuning#Alignment_Shift_.28ashift.29>`__ for a
-description of proper alignment. Also, see the section on `Whole Disks
-versus Partitions <Performance_tuning#Whole_Disks_versus_Partitions>`__
+avoid read-modify-write overhead. See the section on
+:ref:`Alignment Shift (ashift) <alignment_shift_ashift>`
+for a description of proper alignment. Also, see the section on
+:ref:`Whole Disks versus Partitions <whole_disks_versus_partitions>`
 for a description of changes in ZFS behavior when operating on a
 partition.
 
 Single disk RAID 0 arrays from RAID controllers are not equivalent to
-whole disks. The `Hardware <Hardware#Hardware_RAID_controllers>`__ page
+whole disks. The :ref:`hardware_raid_controllers` page
 explains in detail.
 
 .. _bit_torrent:
@@ -539,7 +539,7 @@ and are subject to significant sequential read workloads after creation.
 Database workloads
 ------------------
 
-Setting redundant_metadata=mostly can increase IOPS by at least a few
+Setting ``redundant_metadata=mostly`` can increase IOPS by at least a few
 percentage points by eliminating redundant metadata at the lowest level
 of the indirect block tree. This comes with the caveat that data loss
 will occur if a metadata block pointing to data blocks is corrupted and
@@ -553,18 +553,18 @@ InnoDB
 ^^^^^^
 
 Make separate datasets for InnoDB's data files and log files. Set
-recordsize=16K on InnoDB's data files to avoid expensive partial record
+``recordsize=16K`` on InnoDB's data files to avoid expensive partial record
 writes and leave recordsize=128K on the log files. Set
-primarycache=metadata on both to prefer InnoDB's
-caching.\ `4 <https://www.patpro.net/blog/index.php/2014/03/09/2617-mysql-on-zfs-on-freebsd/>`__
-Set logbias=throughput on the data to stop ZIL from writing twice.
+``primarycache=metadata`` on both to prefer InnoDB's
+caching [#mysql_basic]_.
+Set ``logbias=throughput`` on the data to stop ZIL from writing twice.
 
-Set skip-innodb_doublewrite in my.cnf to prevent innodb from writing
+Set ``skip-innodb_doublewrite`` in my.cnf to prevent innodb from writing
 twice. The double writes are a data integrity feature meant to protect
 against corruption from partially-written records, but those are not
-possible on ZFS. It should be noted that Percona’s
-blog\ `5 <https://www.percona.com/blog/2014/05/23/improve-innodb-performance-write-bound-loads/>`__
-had advocated using an ext4 configuration where double writes were
+possible on ZFS. It should be noted that `Percona’s
+blog had advocated <https://www.percona.com/blog/2014/05/23/improve-innodb-performance-write-bound-loads/>`__
+using an ext4 configuration where double writes were
 turned off for a performance gain, but later recanted it because it
 caused data corruption. Following a well timed power failure, an in
 place filesystem such as ext4 can have half of a 8KB record be old while
@@ -578,15 +578,15 @@ off for better performance.
 
 On Linux, the driver's AIO implementation is a compatibility shim that
 just barely passes the POSIX standard. InnoDB performance suffers when
-using its default AIO codepath. Set innodb_use_native_aio=0 and
-innodb_use_atomic_writes=0 in my.cnf to disable AIO. Both of these
+using its default AIO codepath. Set ``innodb_use_native_aio=0`` and
+``innodb_use_atomic_writes=0`` in my.cnf to disable AIO. Both of these
 settings must be disabled to disable AIO.
 
 PostgreSQL
 ~~~~~~~~~~
 
-Make separate datasets for PostgreSQL's data and WAL. Set recordsize=8K
-on both to avoid expensive partial record writes. Set logbias=throughput
+Make separate datasets for PostgreSQL's data and WAL. Set ``recordsize=8K``
+on both to avoid expensive partial record writes. Set ``logbias=throughput``
 on PostgreSQL's data to avoid writing twice.
 
 SQLite
@@ -594,12 +594,12 @@ SQLite
 
 Make a separate dataset for the database. Set the recordsize to 64K. Set
 the SQLite page size to 65536
-bytes\ `6 <https://www.sqlite.org/pragma.html#pragma_page_size>`__.
+bytes [#sqlite_ps]_.
 
 Note that SQLite databases typically are not exercised enough to merit
 special tuning, but this will provide it. Note the side effect on cache
 size mentioned at
-SQLite.org\ `7 <https://www.sqlite.org/pgszchng2016.html>`__.
+SQLite.org [#sqlite_ps_change]_.
 
 .. _file_servers:
 
@@ -609,7 +609,7 @@ File servers
 Create a dedicated dataset for files being served.
 
 See
-`Performance_tuning#Sequential_workloads <Performance_tuning#Sequential_workloads>`__
+:ref:`Sequential workloads <sequential_workloads>`
 for configuration recommendations.
 
 .. _sequential_workloads:
@@ -619,12 +619,12 @@ Sequential workloads
 
 Set recordsize=1M on datasets that are subject to sequential workloads.
 Read
-`Performance_tuning#Larger_record_sizes <Performance_tuning#Larger_record_sizes>`__
+:ref:`Larger record sizes <larger_record_sizes>`
 for documentation on things that should be known before setting 1M
 record sizes.
 
-Set compression=lz4 as per the general recommendation for `LZ4
-compression <Performance_tuning#LZ4_compression>`__.
+Set compression=lz4 as per the general recommendation for :ref:`LZ4
+compression <lz4_compression>`.
 
 .. _video_games_directories:
 
@@ -637,7 +637,7 @@ the game download application to place games there. Specific information
 on how to configure various ones is below.
 
 See
-`Performance_tuning#Sequential_workloads <Performance_tuning#Sequential_workloads>`__
+:ref:`Sequential workloads <sequential_workloads>`
 for configuration recommendations before installing games.
 
 Note that the performance gains from this tuning are likely to be small
@@ -683,3 +683,10 @@ QEMU / KVM / Xen
 ~~~~~~~~~~~~~~~~
 
 AIO should be used to maximize IOPS when using files for guest storage.
+
+.. rubric:: Footnotes
+
+.. [#ssd_iops] <http://www.anandtech.com/show/6489/playing-with-op>
+.. [#mysql_basic] <https://www.patpro.net/blog/index.php/2014/03/09/2617-mysql-on-zfs-on-freebsd/>
+.. [#sqlite_ps] <https://www.sqlite.org/pragma.html#pragma_page_size>
+.. [#sqlite_ps_change] <https://www.sqlite.org/pgszchng2016.html>
