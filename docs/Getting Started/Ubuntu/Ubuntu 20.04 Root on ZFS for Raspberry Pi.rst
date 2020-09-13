@@ -39,8 +39,7 @@ bad) using the issue link below.
 Support
 ~~~~~~~
 
-If you need help, reach out to the community using the :doc:`zfs-discuss
-mailing list <../../Project and Community/Mailing Lists>` or IRC at
+If you need help, reach out to the community using the :ref:`mailing_lists` or IRC at
 `#zfsonlinux <irc://irc.freenode.net/#zfsonlinux>`__ on `freenode
 <https://freenode.net/>`__. If you have a bug report or feature request
 related to this HOWTO, please `file a new issue and mention @rlaager
