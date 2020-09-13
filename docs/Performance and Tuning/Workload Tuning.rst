@@ -3,6 +3,9 @@ Workload Tuning
 
 Below are tips for various workloads.
 
+.. contents:: Table of Contents
+  :local:
+
 .. _basic_concepts:
 
 Basic concepts
