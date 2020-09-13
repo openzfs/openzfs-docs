@@ -1,3 +1,6 @@
+Hardware
+********
+
 Introduction
 ============
 
@@ -196,8 +199,7 @@ not be as reliable as it would be on its own.
       misreports its sector size. Such drives are typically NAND-flash
       based solid state drives and older SATA drives from the advanced
       format (4K sector size) transition before Windows XP EoL occurred.
-      This can be `manually
-      corrected <Performance_tuning#Alignment_Shift_.28ashift.29>`__ at
+      This can be :ref:`manually corrected <alignment_shift_ashift>` at
       vdev creation.
    -  It is possible for the RAID header to cause misalignment of sector
       writes on RAID 1 by starting the array within a sector on an
@@ -387,8 +389,8 @@ requires command queuing. Almost all drives manufactured within the past
    system BIOS.
 
 Each Open ZFS system has different methods for checking whether command
-queuing is supported. On Linux, \`hdparm -I /path/to/device \| grep
-Queue\` is used. On FreeBSD, \`camcontrol identify $DEVICE\` is used.
+queuing is supported. On Linux, ``hdparm -I /path/to/device \| grep
+Queue`` is used. On FreeBSD, ``camcontrol identify $DEVICE`` is used.
 
 .. _nand_flash_ssds:
 
@@ -425,13 +427,13 @@ NVMe drives should be
 to use 4096-byte sectors without metadata prior to being given to ZFS
 for best performance unless they indicate that 512-byte sectors are as
 performant as 4096-byte sectors, although this is unlikely. Lower
-numbers in the Rel_Perf of Supported LBA Sizes from \`smartctl -a
-/dev/$device_namespace\` (for example \`smartctl -a /dev/nvme1n1`)
+numbers in the Rel_Perf of Supported LBA Sizes from ``smartctl -a
+/dev/$device_namespace`` (for example ``smartctl -a /dev/nvme1n1``)
 indicate higher performance low level formats, with 0 being the best.
 The current formatting will be marked by a plus sign under the format
 Fmt.
 
-You may format a drive using \`nvme format /dev/nvme1n1 -l $ID`. The $ID
+You may format a drive using ``nvme format /dev/nvme1n1 -l $ID``. The $ID
 corresponds to the Id field value from the Supported LBA Sizes SMART
 information.
 
@@ -453,12 +455,12 @@ the drive firmware is not available for review, the traditional
 conclusion was that all drives that lack hardware features to avoid
 power failure events cannot be trusted, which was found to be the case
 multiple times in the
-past\ `1 <http://lkcl.net/reports/ssd_analysis.html>`__\ `2 <https://www.usenix.org/system/files/conference/fast13/fast13-final80.pdf>`__\ `3 <http://blog.nordeus.com/dev-ops/power-failure-testing-with-ssds.htm>`__.
+past [#ssd_analysis]_ [#ssd_analysis2]_ [#ssd_analysis3]_.
 Discussion of power failures bricking NAND flash SSDs appears to have
 vanished from literature following the year 2015. SSD manufacturers now
 claim that firmware power loss protection is robust enough to provide
-equivalent protection to hardware power loss protection. Kingston is one
-example\ `4 <https://www.kingston.com/us/solutions/servers-data-centers/ssd-power-loss-protection>`__.
+equivalent protection to hardware power loss protection. `Kingston is one
+example <https://www.kingston.com/us/solutions/servers-data-centers/ssd-power-loss-protection>`__.
 Firmware power loss protection is used to guarantee the protection of
 flushed data and the drives’ own metadata, which is all that filesystems
 such as ZFS need.
@@ -577,8 +579,8 @@ follows:
 -  Intel 320
 
    -  Early reports claimed that the 330 and 335 had power failure
-      protection too, but they do
-      not.\ `5 <http://blog.nordeus.com/dev-ops/power-failure-testing-with-ssds.htm>`__
+      protection too, `but they do
+      not <http://blog.nordeus.com/dev-ops/power-failure-testing-with-ssds.htm>`__.
 
 -  Intel 710
 -  Intel 730
@@ -594,8 +596,8 @@ follows:
 -  Samsung 845DC Evo
 -  Samsung 845DC Pro
 
-   -  High sustained write
-      IOPS\ `6 <http://www.anandtech.com/show/8319/samsung-ssd-845dc-evopro-preview-exploring-worstcase-iops/5>`__
+   -  `High sustained write
+      IOPS <http://www.anandtech.com/show/8319/samsung-ssd-845dc-evopro-preview-exploring-worstcase-iops/5>`__
 
 -  Toshiba HK4E/HK3E2
 -  Toshiba HK4R/HK3R2/HK3R
@@ -621,7 +623,7 @@ protects flushed data is sufficient for ZFS to ensure that data remains
 safe.
 
 Anyone who believes an unlisted drive to provide adequate power failure
-protection may contact the `OpenZFS mailing list <mailing_list>`__ with
+protection may contact the :ref:`mailing_lists` with
 a request for inclusion and substantiation for the claim that power
 failure protection is provided. Examples of substantiation include
 pictures of drive internals showing the presence of capacitors,
@@ -640,7 +642,7 @@ Flash pages
 The smallest unit on a NAND chip that can be written is a flash page.
 The first NAND-flash SSDs on the market had 4096-byte pages. Further
 complicating matters is that the the page size has been doubled twice
-since then. NAND flash SSDs \*should\* report these pages as being
+since then. NAND flash SSDs **should** report these pages as being
 sectors, but so far, all of them incorrectly report 512-byte sectors for
 Windows XP compatibility. The consequence is that we have a similar
 situation to what we had with early advanced format hard drives.
@@ -695,8 +697,8 @@ need to run TRIM on them. However, they cost more per GB than NAND flash
 (as of 2020). The enterprise models make excellent SLOG devices. Here is
 a list of models that are known to perform well:
 
--  Intel DC
-   P4800X\ `7 <https://www.servethehome.com/intel-optane-hands-on-real-world-benchmark-and-test-results/>`__
+-  `Intel DC
+   P4800X <https://www.servethehome.com/intel-optane-hands-on-real-world-benchmark-and-test-results/>`__
 
    -  This gives basically the highest performance you can get as of
       June 2020.
@@ -793,5 +795,13 @@ UPS batteries
 The lead acid batteries in UPS units generally need to be replaced
 regularly to ensure that they provide power during power outages. For
 home systems, this is every 3 to 5 years, although this varies with
-temperature\ `8 <https://www.apc.com/us/en/faqs/FA158934/>`__. For
+temperature [#ups_temp]_. For
 enterprise systems, contact your vendor.
+
+
+.. rubric:: Footnotes
+
+.. [#ssd_analysis] <http://lkcl.net/reports/ssd_analysis.html>
+.. [#ssd_analysis2] <https://www.usenix.org/system/files/conference/fast13/fast13-final80.pdf>
+.. [#ssd_analysis3] <http://blog.nordeus.com/dev-ops/power-failure-testing-with-ssds.htm>
+.. [#ups_temp] <https://www.apc.com/us/en/faqs/FA158934/>
