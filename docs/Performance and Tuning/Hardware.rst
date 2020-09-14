@@ -668,9 +668,7 @@ non-existent.
 ATA TRIM / SCSI UNMAP
 ---------------------
 
-At this time, only the FreeBSD port has support for sending block
-discard commands to vdevs to generate appropriate ATA TRIM and/or SCSI
-UNMAP commands. It should be noted that this is a separate case from
+It should be noted that this is a separate case from
 discard on zvols or hole punching on filesystems. Those work regardless
 of whether ATA TRIM / SCSI UNMAP is sent to the actual block devices.
 
