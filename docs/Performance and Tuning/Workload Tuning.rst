@@ -328,8 +328,7 @@ not changed and will remain as-is. Today, most vendors ship drives with
 write cache enabled by default.
 
 On Linux, the Linux IO elevator is largely redundant given that ZFS has
-its own IO elevator, so ZFS will set the IO elevator to noop to avoid
-unnecessary CPU overhead.
+its own IO elevator.
 
 ZFS will also create a GPT partition table own partitions when given a
 whole disk under illumos on x86/amd64 and on Linux. This is mainly to
