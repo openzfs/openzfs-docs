@@ -128,7 +128,7 @@ things to note:
    -  This configuration is typically not tested.
    -  The disks could be unrecognized.
 
--  Support for SATA port multipliers is inconsistent across Open ZFS
+-  Support for SATA port multipliers is inconsistent across OpenZFS
    platforms
 
    -  Linux drivers generally support them.
@@ -152,7 +152,7 @@ Controllers
 
 The ideal storage controller for ZFS has the following attributes:
 
--  Driver support on major Open ZFS platforms
+-  Driver support on major OpenZFS platforms
 
    -  Stability is important.
 
@@ -391,7 +391,7 @@ requires command queuing. Almost all drives manufactured within the past
 -  SATA drives operating under IDE emulation that was configured in the
    system BIOS.
 
-Each Open ZFS system has different methods for checking whether command
+Each OpenZFS system has different methods for checking whether command
 queuing is supported. On Linux, ``hdparm -I /path/to/device \| grep
 Queue`` is used. On FreeBSD, ``camcontrol identify $DEVICE`` is used.
 
@@ -654,7 +654,7 @@ As of 2014, most NAND-flash SSDs on the market have 8192-byte page
 sizes. However, models using 128-Gbit NAND from certain manufacturers
 have a 16384-byte page size. Maximum performance requires that vdevs be
 created with correct ashift values (13 for 8192-byte and 14 for
-16384-byte). However, not all Open ZFS platforms support this. The Linux
+16384-byte). However, not all OpenZFS platforms support this. The Linux
 port supports ashift=13, while others are limited to ashift=12
 (4096-byte).
 
