@@ -70,7 +70,7 @@ Testing Repositories
 --------------------
 
 In addition to the primary *zfs* repository a *zfs-testing* repository
-is available. This repository, which is disabled by default, contains
+is available for Fedora 31 or older. This repository, which is disabled by default, contains
 the latest version of ZFS on Linux which is under active development.
 These packages are made available in order to get feedback from users
 regarding the functionality and stability of upcoming releases. These
