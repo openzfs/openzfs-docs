@@ -404,7 +404,6 @@ Step 2: Disk Formatting
          -o feature@large_blocks=enabled \
          -o feature@lz4_compress=enabled \
          -o feature@spacemap_histogram=enabled \
-         -o feature@zpool_checkpoint=enabled \
          -O acltype=posixacl -O canmount=off -O compression=lz4 \
          -O devices=off -O normalization=formD -O relatime=on -O xattr=sa \
          -O mountpoint=/boot -R /mnt \
@@ -454,9 +453,6 @@ Step 2: Disk Formatting
      should be compatible in theory, but in practice, GRUB can fail with an
      “invalid dnode type” error. This feature does not matter for ``/boot``
      anyway.
-   - The ``zpool_checkpoint`` feature has been tested and is safe to use. The
-     Ubuntu installer does not use it. This HOWTO does, as the feature may be
-     desirable for the boot pool.
 
 #. Create the root pool:
 
