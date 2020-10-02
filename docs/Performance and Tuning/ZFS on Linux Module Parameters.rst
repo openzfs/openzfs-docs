@@ -45,9 +45,10 @@ See the man page for *modprobe.d* for more information.
 zfs-module-parameters Manual Page
 ---------------------------------
 
-The *zfs-module-parameters(5)* man page contains brief descriptions of
+The `zfs-module-parameters(5) <../man/5/zfs-module-parameters.5.html>`_
+man page contains brief descriptions of
 the module parameters. Alas, man pages are not as suitable for quick
-reference as wiki pages. This wiki page is intended to be a better
+reference as documentation pages. This page is intended to be a better
 cross-reference and capture some of the wisdom of ZFS developers and
 practitioners.
 
