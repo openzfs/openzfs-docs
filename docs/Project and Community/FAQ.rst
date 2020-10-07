@@ -4,12 +4,10 @@ FAQ
 .. contents:: Table of Contents
    :local:
 
-What is ZFS on Linux
---------------------
+What is OpenZFS
+---------------
 
-The ZFS on Linux project is an implementation of
-`OpenZFS <https://openzfs.org/wiki/Main_Page>`__ designed to work in a
-Linux environment. OpenZFS is an outstanding storage platform that
+OpenZFS is an outstanding storage platform that
 encompasses the functionality of traditional filesystems, volume
 managers, and more, with consistent reliability, functionality and
 performance across all distributions. Additional information about
@@ -53,23 +51,23 @@ requires.
 Installation
 ------------
 
-ZFS on Linux is available for all major Linux distributions. Refer to
-the :doc:`getting started <../Getting Started/index>` section of the wiki for links to installations
-instructions for many popular distributions. If your distribution isn't
-listed you can always build ZFS on Linux from the latest official
-`tarball <https://github.com/zfsonlinux/zfs/releases>`__.
+OpenZFS is available for FreeBSD and all major Linux distributions. Refer to
+the :doc:`getting started <../Getting Started/index>` section of the wiki for
+links to installations instructions. If your distribution/OS isn't
+listed you can always build OpenZFS from the latest official
+`tarball <https://github.com/openzfs/zfs/releases>`__.
 
 Supported Architectures
 -----------------------
 
-ZFS on Linux is regularly compiled for the following architectures:
-x86_64, x86, aarch64, arm, ppc64, ppc.
+OpenZFS is regularly compiled for the following architectures:
+aarch64, arm, ppc, ppc64, x86, x86_64.
 
-Supported Kernels
------------------
+Supported Linux Kernels
+-----------------------
 
-The `notes <https://github.com/zfsonlinux/zfs/releases>`__ for a given
-ZFS on Linux release will include a range of supported kernels. Point
+The `notes <https://github.com/openzfs/zfs/releases>`__ for a given
+OpenZFS release will include a range of supported kernels. Point
 releases will be tagged as needed in order to support the *stable*
 kernel available from `kernel.org <https://www.kernel.org/>`__. The
 oldest supported kernel is 2.6.32 due to its prominence in Enterprise
@@ -80,11 +78,11 @@ Linux distributions.
 32-bit vs 64-bit Systems
 ------------------------
 
-You are **strongly** encouraged to use a 64-bit kernel. ZFS on Linux
-will build for 32-bit kernels but you may encounter stability problems.
+You are **strongly** encouraged to use a 64-bit kernel. OpenZFS
+will build for 32-bit systems but you may encounter stability problems.
 
 ZFS was originally developed for the Solaris kernel which differs from
-the Linux kernel in several significant ways. Perhaps most importantly
+some OpenZFS platforms in several significant ways. Perhaps most importantly
 for ZFS it is common practice in the Solaris kernel to make heavy use of
 the virtual address space. However, use of the virtual address space is
 strongly discouraged in the Linux kernel. This is particularly true on
@@ -118,8 +116,10 @@ excellent walk throughs available for
 :doc:`Ubuntu <../Getting Started/Ubuntu/index>`, and
 `Gentoo <https://github.com/pendor/gentoo-zfs-install/tree/master/install>`__.
 
-Selecting /dev/ names when creating a pool
-------------------------------------------
+On FreeBSD 13+ booting from ZFS is supported out of the box.
+
+Selecting /dev/ names when creating a pool (Linux)
+--------------------------------------------------
 
 There are different /dev/ names that can be used when creating a ZFS
 pool. Each option has advantages and drawbacks, the right choice for
@@ -485,10 +485,7 @@ Performance Considerations
 --------------------------
 
 To achieve good performance with your pool there are some easy best
-practices you should follow. Additionally, it should be made clear that
-the ZFS on Linux implementation has not yet been optimized for
-performance. As the project matures we can expect performance to
-improve.
+practices you should follow.
 
 -  **Evenly balance your disk across controllers:** Often the limiting
    factor for performance is not the disk but the controller. By
@@ -559,16 +556,17 @@ ZVOL used space larger than expected
   snapshot the zvol, as the space referenced by the snapshots will
   contain the unused blocks.
 
-| This issue can be prevented, by using the ``fstrim`` command to allow
+| This issue can be prevented, by issuing the so-called trim
+  (for ex. ``fstrim`` command on Linux) to allow
   the kernel to specify to zfs which blocks are unused.
-| Executing a ``fstrim`` command before a snapshot is taken will ensure
+| Issuing a trim before a snapshot is taken will ensure
   a minimum snapshot size.
-| Adding the ``discard`` option for the mounted ZVOL in ``/etc/fstab``
-  effectively enables the Linux kernel to issue the trim commands
+| For Linux adding the ``discard`` option for the mounted ZVOL in ``/etc/fstab``
+  effectively enables the kernel to issue the trim commands
   continuously, without the need to execute fstrim on-demand.
 
-Using a zvol for a swap device
-------------------------------
+Using a zvol for a swap device on Linux
+---------------------------------------
 
 You may use a zvol as a swap device but you'll need to configure it
 appropriately.
@@ -594,12 +592,12 @@ please send your logs
        -o primarycache=metadata \
        -o com.sun:auto-snapshot=false rpool/swap
 
-Using ZFS on Xen Hypervisor or Xen Dom0
----------------------------------------
+Using ZFS on Xen Hypervisor or Xen Dom0 (Linux)
+-----------------------------------------------
 
 It is usually recommended to keep virtual machine storage and hypervisor
 pools, quite separate. Although few people have managed to successfully
-deploy and run ZFS on Linux using the same machine configured as Dom0.
+deploy and run OpenZFS using the same machine configured as Dom0.
 There are few caveats:
 
 -  Set a fair amount of memory in grub.conf, dedicated to Dom0.
@@ -616,8 +614,8 @@ There are few caveats:
    one <https://github.com/zfsonlinux/zfs/issues/1067>`__ related to
    ballooning
 
-udisks2 creating /dev/mapper/ entries for zvol
-----------------------------------------------
+udisks2 creating /dev/mapper/ entries for zvol (Linux)
+------------------------------------------------------
 
 To prevent udisks2 from creating /dev/mapper entries that must be
 manually removed or maintained during zvol remove / rename, create a
@@ -696,8 +694,8 @@ to get it resolved. They may ask for information like:
 
 -  Stack traces which may be logged to ``dmesg``.
 
-Does ZFS on Linux have a Code of Conduct?
------------------------------------------
+Does OpenZFS have a Code of Conduct?
+------------------------------------
 
-Yes, the ZFS on Linux community has a code of conduct. See the `Code of
+Yes, the OpenZFS community has a code of conduct. See the `Code of
 Conduct <https://openzfs.org/wiki/Code_of_Conduct>`__ for details.
