@@ -73,7 +73,7 @@ Daemon (zed) is a userland daemon that listens for these events and
 processes them. zed is extensible so you can write shell scripts or
 other programs that subscribe to events and take action. For example,
 the script usually installed at ``/etc/zfs/zed.d/all-syslog.sh`` writes
-a formatted event message to ``syslog.`` See the man page for ``zed(8)``
+a formatted event message to ``syslog``. See the man page for ``zed(8)``
 for more information.
 
 A history of events is also available via the ``zpool events`` command.
