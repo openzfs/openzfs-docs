@@ -5,24 +5,24 @@ GitHub Repositories
 ~~~~~~~~~~~~~~~~~~~
 
 The official source for ZFS on Linux is maintained at GitHub by the
-`zfsonlinux <https://github.com/zfsonlinux/>`__ organization. The
-project consists of two primary git repositories named
-`spl <https://github.com/zfsonlinux/spl>`__ and
-`zfs <https://github.com/zfsonlinux/zfs>`__, both are required to build
-ZFS on Linux.
+`openzfs <https://github.com/openzfs/>`__ organization. The project
+consists of two primary git repositories named `spl
+<https://github.com/openzfs/spl>`__ and `zfs
+<https://github.com/openzfs/zfs>`__, both are required to build ZFS on
+Linux.
 
 **NOTE:** The SPL was merged in to the
-`zfs <https://github.com/zfsonlinux/zfs>`__ repository, the last major
+`zfs <https://github.com/openzfs/zfs>`__ repository, the last major
 release with a separate SPL is ``0.7``.
 
 -  **SPL**: The SPL is thin shim layer which is responsible for
    implementing the fundamental interfaces required by OpenZFS. It's
    this layer which allows OpenZFS to be used across multiple platforms.
 
--  **ZFS**: The ZFS repository contains a copy of the upstream OpenZFS
-   code which has been adapted and extended for Linux. The vast majority
-   of the core OpenZFS code is self-contained and can be used without
-   modification.
+- **ZFS**: The ZFS repository contains a copy of the upstream OpenZFS
+   code which has been adapted and extended for Linux and FreeBSD. The
+   vast majority of the core OpenZFS code is self-contained and can be
+   used without modification.
 
 Installing Dependencies
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -93,18 +93,18 @@ numbers or matching release branches. Avoid using mismatched versions,
 this can result build failures due to interface changes.
 
 **NOTE:** SPL was merged in to the
-`zfs <https://github.com/zfsonlinux/zfs>`__ repository, last release
+`zfs <https://github.com/openzfs/zfs>`__ repository, last release
 with separate SPL is ``0.7``.
 
 ::
 
-   git clone https://github.com/zfsonlinux/zfs
+   git clone https://github.com/openzfs/zfs
 
 If you need 0.7 release or older:
 
 ::
 
-   git clone https://github.com/zfsonlinux/spl
+   git clone https://github.com/openzfs/spl
 
 Configure and Build
 ^^^^^^^^^^^^^^^^^^^
@@ -235,7 +235,7 @@ directory designed to aid developers working with in-tree builds.
    Suite. Three loopback devices are created on top of sparse files
    located in ``/var/tmp/`` and used for the regression test. Detailed
    directions for the ZFS Test Suite can be found in the
-   `README <https://github.com/zfsonlinux/zfs/tree/master/tests>`__
+   `README <https://github.com/openzfs/zfs/tree/master/tests>`__
    located in the top-level tests directory.
 
 ::
