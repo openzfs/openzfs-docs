@@ -5,24 +5,23 @@ GitHub Repositories
 ~~~~~~~~~~~~~~~~~~~
 
 The official source for ZFS on Linux is maintained at GitHub by the
-`openzfs <https://github.com/openzfs/>`__ organization. The project
-consists of two primary git repositories named `spl
-<https://github.com/openzfs/spl>`__ and `zfs
-<https://github.com/openzfs/zfs>`__, both are required to build ZFS on
-Linux.
+`openzfs <https://github.com/openzfs/>`__ organization. The primary
+git repository for the project is the `zfs
+<https://github.com/openzfs/zfs>`__ repository.
 
-**NOTE:** The SPL was merged in to the
-`zfs <https://github.com/openzfs/zfs>`__ repository, the last major
-release with a separate SPL is ``0.7``.
-
--  **SPL**: The SPL is thin shim layer which is responsible for
-   implementing the fundamental interfaces required by OpenZFS. It's
-   this layer which allows OpenZFS to be used across multiple platforms.
+There are two main components in this repository:
 
 - **ZFS**: The ZFS repository contains a copy of the upstream OpenZFS
    code which has been adapted and extended for Linux and FreeBSD. The
    vast majority of the core OpenZFS code is self-contained and can be
    used without modification.
+
+- **SPL**: The SPL is thin shim layer which is responsible for
+   implementing the fundamental interfaces required by OpenZFS. It's
+   this layer which allows OpenZFS to be used across multiple
+   platforms. SPL used to be maintained in a separate repository, but
+   was merged into the `zfs <https://github.com/openzfs/zfs>`__
+   repository in the ``0.8`` major release.
 
 Installing Dependencies
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -67,11 +66,11 @@ depends on your requirements.
    downside to using packages it is greatly increases the time required
    to build, install, and test a change.
 
--  **In-tree**: Development can be done entirely in the SPL and ZFS
-   source trees. This speeds up development by allowing developers to
-   rapidly iterate on a patch. When working in-tree developers can
-   leverage incremental builds, load/unload kernel modules, execute
-   utilities, and verify all their changes with the ZFS Test Suite.
+- **In-tree**: Development can be done entirely in the SPL/ZFS source
+   tree. This speeds up development by allowing developers to rapidly
+   iterate on a patch. When working in-tree developers can leverage
+   incremental builds, load/unload kernel modules, execute utilities,
+   and verify all their changes with the ZFS Test Suite.
 
 The remainder of this page focuses on the **in-tree** option which is
 the recommended method of development for the majority of changes. See
@@ -84,27 +83,16 @@ Developing In-Tree
 Clone from GitHub
 ^^^^^^^^^^^^^^^^^
 
-Start by cloning the SPL and ZFS repositories from GitHub. The
-repositories have a **master** branch for development and a series of
-**\*-release** branches for tagged releases. After checking out the
-repository your clone will default to the master branch. Tagged releases
-may be built by checking out spl/zfs-x.y.z tags with matching version
-numbers or matching release branches. Avoid using mismatched versions,
-this can result build failures due to interface changes.
-
-**NOTE:** SPL was merged in to the
-`zfs <https://github.com/openzfs/zfs>`__ repository, last release
-with separate SPL is ``0.7``.
+Start by cloning the ZFS repository from GitHub. The repository has a
+**master** branch for development and a series of **\*-release**
+branches for tagged releases. After checking out the repository your
+clone will default to the master branch. Tagged releases may be built
+by checking out zfs-x.y.z tags with matching version numbers or
+matching release branches.
 
 ::
 
    git clone https://github.com/openzfs/zfs
-
-If you need 0.7 release or older:
-
-::
-
-   git clone https://github.com/openzfs/spl
 
 Configure and Build
 ^^^^^^^^^^^^^^^^^^^
@@ -118,20 +106,9 @@ defects as early as possible and to keep them out of the tree.
 Developers should be comfortable frequently rebasing their work against
 the latest master branch.
 
-If you want to build 0.7 release or older, you should compile SPL first:
-
-::
-
-   cd ./spl
-   git checkout master
-   sh autogen.sh
-   ./configure
-   make -s -j$(nproc)
-
 In this example we'll use the master branch and walk through a stock
-**in-tree** build, so we don't need to build SPL separately. Start by
-checking out the desired branch then build the ZFS and SPL source in the
-tradition autotools fashion.
+**in-tree** build. Start by checking out the desired branch then build
+the ZFS and SPL source in the tradition autotools fashion.
 
 ::
 
@@ -147,9 +124,6 @@ tradition autotools fashion.
 | **tip:** ``--enable-debug`` can be set to enable all ASSERTs and
   additional correctness tests. This option is also supported when
   building ZFS.
-| **tip:** for version ``<=0.7`` ``--with-spl=PATH`` and
-  ``--with-spl-obj=PATH``, where ``PATH`` is a full path, can be passed
-  to configure if it is unable to locate the SPL.
 
 **Optional** Build packages
 
