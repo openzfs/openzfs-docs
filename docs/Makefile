@@ -33,3 +33,7 @@ man:
 		git -C $(ZFS_GIT_DIR) pull ; \
 	fi
 	../scripts/man_pages.py ./_build/zfs/man ./
+
+.PHONY: feature_matrix
+feature_matrix:
+	../scripts/compatibility_matrix.py ./_build/
