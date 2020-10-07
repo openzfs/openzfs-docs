@@ -4,7 +4,7 @@ Building ZFS
 GitHub Repositories
 ~~~~~~~~~~~~~~~~~~~
 
-The official source for ZFS on Linux is maintained at GitHub by the
+The official source for OpenZFS is maintained at GitHub by the
 `openzfs <https://github.com/openzfs/>`__ organization. The primary
 git repository for the project is the `zfs
 <https://github.com/openzfs/zfs>`__ repository.
@@ -57,7 +57,7 @@ The following dependencies should be installed to build the latest ZFS
 Build Options
 ~~~~~~~~~~~~~
 
-There are two options for building ZFS on Linux, the correct one largely
+There are two options for building OpenZFS; the correct one largely
 depends on your requirements.
 
 -  **Packages**: Often it can be useful to build custom packages from
