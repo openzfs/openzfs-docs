@@ -14,18 +14,13 @@
 # 2018-07-05: Created.
 # ????-??-??: Many things happened.
 # 2020-02-23: Applied patch by rlaager.
-# 2020-02-30: Show domain prefixes (via Vlad Bokov), partially apply patch by rlaager.
+# 2020-02-30: Show domain prefixes (via Vlad Bokov), partially apply patch by
+#   rlaager.
 # 2020-03-05: Patch by rlaager (allocation_classes, ZoL -> openzfs).
+# 2020-10-07: Rework by gmelikov for openzfs-docs
 
-from sys import argv
-
-if len(argv) == 1:
-    path = '.'
-elif len(argv) != 2:
-    print('Usage:', argv[0], 'path')
-    exit(1)
-else:
-    path = argv[1]
+import logging
+import sys
 
 from collections import defaultdict
 from urllib.request import urlopen
@@ -33,81 +28,119 @@ from datetime import datetime
 from re import sub as regex, findall
 from json import loads as dejson
 
+LOG = logging.getLogger()
+logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+
+if len(sys.argv) == 1:
+    path = '.'
+elif len(sys.argv) != 2:
+    print('Usage:', sys.argv[0], 'path')
+    exit(1)
+else:
+    path = sys.argv[1]
+
+
 def zfsonlinux():
-    sources = {'master':'https://raw.githubusercontent.com/openzfs/zfs/master/man/man5/zpool-features.5'}
+    sources = {'master': 'https://raw.githubusercontent.com/openzfs/zfs/'
+               'master/man/man5/zpool-features.5'}
     with urlopen('https://zfsonlinux.org') as web:
-        versions = findall(r'download/zfs-([0-9.]+)', web.read().decode('utf-8', 'ignore'))
+        versions = findall(r'download/zfs-([0-9.]+)',
+                           web.read().decode('utf-8', 'ignore'))
     for ver in set(versions):
-        sources[ver] = 'https://raw.githubusercontent.com/openzfs/zfs/zfs-{}/man/man5/zpool-features.5'.format(ver)
+        sources[ver] = ('https://raw.githubusercontent.com/openzfs/zfs/'
+                        'zfs-{}/man/man5/zpool-features.5'.format(ver))
     return sources
 
+
 def openzfsonosx():
-    sources = {'master': 'https://raw.githubusercontent.com/openzfsonosx/zfs/master/man/man5/zpool-features.5'}
+    sources = {'master': 'https://raw.githubusercontent.com/openzfsonosx/'
+               'zfs/master/man/man5/zpool-features.5'}
     with urlopen('https://api.github.com/repos/openzfsonosx/zfs/tags') as web:
         try:
             tags = dejson(web.read().decode('utf-8', 'ignore'))
-            tags = [ x['name'].lstrip('zfs-') for x in tags ]
+            tags = [x['name'].lstrip('zfs-') for x in tags]
             tags.sort()
             latest = tags[-1]
-            tags = [ tag for tag in tags if 'rc' not in tag ]
+            tags = [tag for tag in tags if 'rc' not in tag]
             if 'rc' not in latest:
                 tags = tags[-3:]
             else:
                 tags = tags[-2:] + [latest]
-        except:
+        except Exception:
             tags = []
     for ver in tags:
-        sources[ver] = 'https://raw.githubusercontent.com/openzfsonosx/zfs/zfs-{}/man/man5/zpool-features.5'.format(ver)
+        sources[ver] = ('https://raw.githubusercontent.com/openzfsonosx/zfs/'
+                        'zfs-{}/man/man5/zpool-features.5'.format(ver))
     return sources
 
+
 def freebsd():
-    sources = {'head': 'https://svnweb.freebsd.org/base/head/cddl/contrib/opensolaris/cmd/zpool/zpool-features.7?view=co'}
+    sources = {'head': 'https://svnweb.freebsd.org/base/head/cddl/contrib/'
+               'opensolaris/cmd/zpool/zpool-features.7?view=co'}
     with urlopen('https://www.freebsd.org/releases/') as web:
-        versions = findall(r'/releases/([0-9.]+?)R', web.read().decode('utf-8', 'ignore'))
+        versions = findall(r'/releases/([0-9.]+?)R',
+                           web.read().decode('utf-8', 'ignore'))
     with urlopen('https://svnweb.freebsd.org/base/release/') as web:
         data = web.read().decode('utf-8', 'ignore')
     actualversions = []
     for ver in set(versions):
-        found = list(sorted(findall( 
+        found = list(sorted(findall(
             r'/base/release/(' + ver.replace('.', '\\.') + r'[0-9.]*)',
             data
             )))
         if found:
             actualversions.append(found[-1])
     for ver in actualversions:
-        sources[ver] = 'https://svnweb.freebsd.org/base/release/{}/cddl/contrib/opensolaris/cmd/zpool/zpool-features.7?view=co'.format(ver)
+        sources[ver] = ('https://svnweb.freebsd.org/base/release/{}/cddl/'
+                        'contrib/opensolaris/cmd/zpool/zpool-features.7'
+                        '?view=co'.format(ver))
     return sources
+
 
 def omniosce():
-    sources = {'master': 'https://raw.githubusercontent.com/omniosorg/illumos-omnios/master/usr/src/man/man5/zpool-features.5'}
+    sources = {'master': 'https://raw.githubusercontent.com/omniosorg/'
+               'illumos-omnios/master/usr/src/man/man5/zpool-features.5'}
     with urlopen('https://omniosce.org/releasenotes.html') as web:
-        versions = findall(r'omnios-build/blob/(r[0-9]+)', web.read().decode('utf-8', 'ignore'))
+        versions = findall(r'omnios-build/blob/(r[0-9]+)',
+                           web.read().decode('utf-8', 'ignore'))
     versions.sort()
     versions = versions[-2:]
     for ver in versions:
-        sources[ver] = 'https://raw.githubusercontent.com/omniosorg/illumos-omnios/{}/usr/src/man/man5/zpool-features.5'.format(ver)
+        sources[ver] = ('https://raw.githubusercontent.com/omniosorg/'
+                        'illumos-omnios/{}/usr/src/man/man5/'
+                        'zpool-features.5'.format(ver))
     return sources
+
 
 def joyent():
-    sources = {'master': 'https://raw.githubusercontent.com/joyent/illumos-joyent/master/usr/src/man/man5/zpool-features.5'}
+    sources = {'master': 'https://raw.githubusercontent.com/joyent/'
+               'illumos-joyent/master/usr/src/man/man5/zpool-features.5'}
     with urlopen('https://github.com/joyent/illumos-joyent') as web:
-        versions = findall(r'data-name="release-([0-9]+)"', web.read().decode('utf-8', 'ignore'))
+        versions = findall(r'data-name="release-([0-9]+)"',
+                           web.read().decode('utf-8', 'ignore'))
     versions.sort()
     versions = versions[-2:]
     for ver in versions:
-        sources[ver] = 'https://raw.githubusercontent.com/joyent/illumos-joyent/release-{}/usr/src/man/man5/zpool-features.5'.format(ver)
+        sources[ver] = ('https://raw.githubusercontent.com/joyent/illumos-'
+                        'joyent/release-{}/usr/src/man/man5/'
+                        'zpool-features.5'.format(ver))
     return sources
 
+
 def netbsd():
-    url = 'http://cvsweb.netbsd.org/bsdweb.cgi/~checkout~/src/external/cddl/osnet/dist/cmd/zpool/zpool-features.7?content-type=text/plain&only_with_tag={}'
-    sources = { 'main': url.format('MAIN') }
+    url = ('http://cvsweb.netbsd.org/bsdweb.cgi/~checkout~/src/external/'
+           'cddl/osnet/dist/cmd/zpool/zpool-features.7'
+           '?content-type=text/plain&only_with_tag={}')
+    sources = {'main': url.format('MAIN')}
     with urlopen('https://netbsd.org/releases/') as web:
-        tags = findall(r'href="formal-.+?/NetBSD-(.+?)\.html', web.read().decode('utf-8', 'ignore'))
-    tags = [ (v, 'netbsd-' + v.replace('.', '-') + '-RELEASE') for v in tags ]
+        tags = findall(r'href="formal-.+?/NetBSD-(.+?)\.html',
+                       web.read().decode('utf-8', 'ignore'))
+    tags = [(v, 'netbsd-' + v.replace('.', '-') + '-RELEASE') for v in tags]
     for ver, tag in tags:
         if int(ver.split('.')[0]) >= 9:
             sources[ver] = url.format(tag)
     return sources
+
 
 sources = {
         'OpenZFS on Linux': zfsonlinux(),
@@ -117,18 +150,21 @@ sources = {
         'Joyent': joyent(),
         'NetBSD': netbsd(),
         'Illumos': {
-            'master': 'https://raw.githubusercontent.com/illumos/illumos-gate/master/usr/src/man/man5/zpool-features.5',
+            'master': 'https://raw.githubusercontent.com/illumos/illumos-gate/'
+                      'master/usr/src/man/man5/zpool-features.5',
             },
-#        'OpenZFS on Windows': {
-#            'master': 'https://raw.githubusercontent.com/openzfsonwindows/ZFSin/master/ZFSin/zfs/man/man5/zpool-features.5',
-#            },
+        # 'OpenZFS on Windows': {
+        #    'master': 'https://raw.githubusercontent.com/openzfsonwindows/ZFSin/master/ZFSin/zfs/man/man5/zpool-features.5',
+        #    },
         }
 
 features = defaultdict(list)
 readonly = dict()
 
 for name, sub in sources.items():
+    LOG.debug('Work on %s...', name)
     for ver, url in sub.items():
+        LOG.debug('Get %s...', url)
         with urlopen(url) as c:
             if c.getcode() != 200:
                 continue
@@ -152,7 +188,7 @@ for name, sub in sources.items():
 
 header = list(sorted(sources.keys()))
 header = list(zip(header, (sorted(sources[name],
-    key=lambda x: regex(r'[^0-9]', '', x) or x) for name in header)))
+              key=lambda x: regex(r'[^0-9]', '', x) or x) for name in header)))
 header.append(('Sortix', ('current',)))
 
 html = open(path + '/zfs.html', 'w')
@@ -181,7 +217,8 @@ html.write('<tr><th scope="col" rowspan="2">Feature Flag</th>')
 html.write('<th scole="col" rowspan="2">Read-Only<br />Compatible</th>')
 
 for name, vers in header:
-    html.write('<th scope="col" colspan="' + str(len(vers)) + '">' + name + '</th>')
+    html.write('<th scope="col" colspan="' + str(len(vers)) + '">'
+               + name + '</th>')
 html.write('</tr>\n<tr>')
 for _, vers in header:
     for ver in vers:
