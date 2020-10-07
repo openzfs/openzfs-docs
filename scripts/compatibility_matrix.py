@@ -213,11 +213,12 @@ table{border-collapse: collapse}
 th,td{padding:0.2em 0.4em;border:1px solid #aaa;background-color:#f9f9f9}
 th{background-color:#eaecf0}
 .l{display:inline-block;text-align:right;min-width:''' + str(d_len) + '''ex;color:#777}
-.r{display:inline-block;text-align:left;min-width:''' + str(f_len) + '''ex}</style>
+.r{display:inline-block;text-align:left;min-width:''' + str(f_len) + '''ex}
+.feature_col{min-width: ''' + str(f_len + d_len + 1) + '''ch;}</style>
 ''')
 
 html.write('<table>\n')
-html.write('<tr><th scope="col" rowspan="2">Feature Flag</th>')
+html.write('<tr><th scope="col" class="feature_col" rowspan="2">Feature Flag</th>')
 html.write('<th scole="col" rowspan="2">Read-Only<br />Compatible</th>')
 
 for name, vers in header:
