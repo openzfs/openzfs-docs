@@ -40,9 +40,10 @@ else:
     path = sys.argv[1]
 
 
-def zfsonlinux():
+def openzfs():
     sources = {'master': 'https://raw.githubusercontent.com/openzfs/zfs/'
                'master/man/man5/zpool-features.5'}
+    # TODO(gmelikov): use git tags from OpenZFS repo
     with urlopen('https://zfsonlinux.org') as web:
         versions = findall(r'download/zfs-([0-9.]+)',
                            web.read().decode('utf-8', 'ignore'))
@@ -74,9 +75,9 @@ def openzfsonosx():
     return sources
 
 
-def freebsd():
-    sources = {'head': 'https://svnweb.freebsd.org/base/head/cddl/contrib/'
-               'opensolaris/cmd/zpool/zpool-features.7?view=co'}
+def freebsd_pre_openzfs():
+    # TODO(gmelikov): add FreeBSD HEAD (OpenZFS version)?
+    sources = {}
     with urlopen('https://www.freebsd.org/releases/') as web:
         versions = findall(r'/releases/([0-9.]+?)R',
                            web.read().decode('utf-8', 'ignore'))
@@ -141,10 +142,10 @@ def netbsd():
             sources[ver] = url.format(tag)
     return sources
 
-
+openzfs_key = 'OpenZFS<br>(Linux, FreeBSD 13+)'
 sources = {
-        'OpenZFS on Linux': zfsonlinux(),
-        'FreeBSD': freebsd(),
+        openzfs_key: openzfs(),
+        'FreeBSD pre OpenZFS': freebsd_pre_openzfs(),
         'OpenZFS on OS X': openzfsonosx(),
         'OmniOS CE': omniosce(),
         'Joyent': joyent(),
@@ -186,12 +187,15 @@ for name, sub in sources.items():
             elif line.startswith('READ\\-ONLY COMPATIBLE'):
                 readonly[guid] = (line.split()[-1] == 'yes')
 
-header = list(sorted(sources.keys()))
+os_sources = sources.copy()
+os_sources.pop(openzfs_key)
+header = list(sorted(os_sources.keys()))
+header.insert(0, openzfs_key)
 header = list(zip(header, (sorted(sources[name],
               key=lambda x: regex(r'[^0-9]', '', x) or x) for name in header)))
-header.append(('Sortix', ('current',)))
+# TODO(gmelikov): add Sortix?
 
-html = open(path + '/zfs.html', 'w')
+html = open(path + '/zfs_feature_matrix.html', 'w')
 
 f_len, d_len = zip(*features.keys())
 f_len, d_len = max(map(len, f_len)), max(map(len, d_len)) + 1
@@ -242,6 +246,6 @@ for (feature, domain), names in sorted(features.items()):
 html.write('</table>\n')
 
 now = datetime.now().isoformat() + 'Z'
-html.write('<p>This works by parsing manpages for feature flags, and is entirely dependent on good, accurate documentation.<br />Last updated on ' + now + ' using <a href="zfs.py">zfs.py</a>.</p>\n')
+html.write('<p>Table generates by parsing manpages for feature flags, and is entirely dependent on good, accurate documentation.<br />Last updated on ' + now + ' using <a href="https://github.com/openzfs/openzfs-docs/tree/master/scripts/compatibility_matrix.py">compatibility_matrix.py</a>.</p>\n')
 
 html.close()
