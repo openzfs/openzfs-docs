@@ -13,7 +13,7 @@ documentation <https://pthree.org/2012/04/17/install-zfs-on-debian-gnulinux/>`__
 
    ArchLinux <https://wiki.archlinux.org/index.php/ZFS>
    Debian/index
-   Fedora
+   Fedora/index
    FreeBSD <https://zfsonfreebsd.github.io/ZoF/>
    Gentoo <https://wiki.gentoo.org/wiki/ZFS>
    NixOS <https://nixos.wiki/wiki/NixOS_on_ZFS>

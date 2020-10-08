@@ -1,7 +1,7 @@
 .. highlight:: sh
 
-Debian Buster Root on ZFS
-=========================
+Fedora Root on ZFS
+==================
 
 .. contents:: Table of Contents
   :local:
@@ -19,14 +19,22 @@ Caution
 System Requirements
 ~~~~~~~~~~~~~~~~~~~
 
-- `64-bit Debian GNU/Linux Buster Live CD w/ GUI (e.g. gnome iso)
-  <https://cdimage.debian.org/mirror/cdimage/release/current-live/amd64/iso-hybrid/>`__
+- `64-bit Fedora Workstation ISO.
+  <https://getfedora.org/en/workstation/download/>`__
+  Note that spins have not been tested yet and we cannot guarantee that spins will work correctly.
 - `A 64-bit kernel is strongly encouraged.
-  <https://github.com/zfsonlinux/zfs/wiki/FAQ#32-bit-vs-64-bit-systems>`__
+  <https://openzfs.github.io/openzfs-docs/Project%20and%20Community/FAQ.html#bit-vs-64-bit-systems>`__
 - Installing on a drive which presents 4 KiB logical sectors (a “4Kn” drive)
   only works with UEFI booting. This not unique to ZFS. `GRUB does not and
   will not work on 4Kn with legacy (BIOS) booting.
   <http://savannah.gnu.org/bugs/?46700>`__
+- You MUST use a UEFI system for this guide as GRUB is not supported and 
+  will not be supported in the forseeable future. To verify that you are using
+  UEFI, go to /sys/firmware/efi/efivars and make sure it is not empty. `It is 
+  also worth noting that Fedora plans to drop support for legacy (BIOS) booting 
+  support entirely in a future release.
+  <https://lists.fedoraproject.org/archives/list/devel@lists.fedoraproject.org/thread/QBANCA2UAJ5ZSMDVVARLIYAJE66TYTCD/>`__
+
 
 Computers that have less than 2 GiB of memory run ZFS slowly. 4 GiB of memory
 is recommended for normal performance in basic workloads. If you wish to use
@@ -37,11 +45,12 @@ deduplication is a permanent change that cannot be easily reverted.
 Support
 ~~~~~~~
 
-If you need help, reach out to the community using the :ref:`mailing_lists` or IRC at
+If you need help, reach out to the community using the :doc:`zfs-discuss
+mailing list <../../Project and Community/Mailing Lists>` or IRC at
 `#zfsonlinux <irc://irc.freenode.net/#zfsonlinux>`__ on `freenode
 <https://freenode.net/>`__. If you have a bug report or feature request
-related to this HOWTO, please `file a new issue and mention @rlaager
-<https://github.com/openzfs/openzfs-docs/issues/new?body=@rlaager,%20I%20have%20the%20following%20issue%20with%20the%20Debian%20Buster%20Root%20on%20ZFS%20HOWTO:>`__.
+related to this HOWTO, please `file a new issue and mention @cheesycod
+<https://github.com/openzfs/openzfs-docs/issues/new?body=@cheesycod,%20I%20have%20the%20following%20issue%20with%20the%20Fedora%20Root%20on%20ZFS%20HOWTO:>`__.
 
 Contributing
 ~~~~~~~~~~~~
@@ -50,9 +59,9 @@ Contributing
 
 #. Install the tools::
 
-    sudo apt install pip3
-
-    pip3 install -r docs/requirements.txt
+    sudo dnf install python3-pip
+    cd openzfs-docs/docs
+    pip3 install -r requirements.txt
     # Add ~/.local/bin to your $PATH, e.g. by adding this to ~/.bashrc:
     PATH=$HOME/.local/bin:$PATH
 
@@ -65,7 +74,7 @@ Contributing
     sensible-browser _build/html/index.html
 
 #. ``git commit --signoff`` to a branch, ``git push``, and create a pull
-   request. Mention @rlaager.
+   request. Mention @cheesycod.
 
 Encryption
 ~~~~~~~~~~
@@ -90,60 +99,55 @@ LUKS encrypts almost everything. The only unencrypted data is the bootloader,
 kernel, and initrd. The system cannot boot without the passphrase being
 entered at the console. Performance is good, but LUKS sits underneath ZFS, so
 if multiple disks (mirror or raidz topologies) are used, the data has to be
-encrypted once per disk.
+encrypted once per disk. This manual describes LUKS configuration only as an example, it wasn't tested on everyday basis usage.
+
+.. note::
+    Fedora doesn't have debootstrap and the only equivalent in Fedora (dnf --installroot) has weird issues when used with Gnome and other such desktop environments (Cinammon). One such issue is that the boot fails and the system hangs at "Starting GNOME Display Manager" with a broken TTY. 
+    As a workaround, we copy the LiveCD on to a new partition and then remove the LiveCD-specific packages after finishing the install.
 
 Step 1: Prepare The Install Environment
 ---------------------------------------
 
-#. Boot the Debian GNU/Linux Live CD. If prompted, login with the username
-   ``user`` and password ``live``. Connect your system to the Internet as
-   appropriate (e.g. join your WiFi network). Open a terminal.
+#. Create a Fedora Workstation Live CD or USB. Note that you can do this through either Fedora Media Writer or using any other DVD or USB writing software.
 
-#. Setup and update the repositories::
+#. Boot the Fedora Workstation Live CD or USB that you made in Step 1.
 
-     sudo vi /etc/apt/sources.list
-
-   .. code-block:: sourceslist
-
-     deb http://deb.debian.org/debian buster main contrib
-     deb http://deb.debian.org/debian buster-backports main contrib
-
-   ::
-
-     sudo apt update
+#. Connect your system to the Internet as appropriate (e.g. join your WiFi network). Once you have connected to the internet, open a terminal.
 
 #. Optional: Install and start the OpenSSH server in the Live CD environment:
 
    If you have a second system, using SSH to access the target system can be
    convenient::
 
-     sudo apt install --yes openssh-server
-     sudo systemctl restart ssh
+     sudo dnf install openssh-server
+     sudo systemctl restart sshd
 
    **Hint:** You can find your IP address with
    ``ip addr show scope global | grep inet``. Then, from your main machine,
    connect with ``ssh user@IP``.
 
-#. Become root::
+#. Become root using ``sudo -i`` OR ``su root``
 
-     sudo -i
+.. note::
+   From here on out, all commands will assert that you are root unless previously specified
 
-#. Install ZFS in the Live CD environment::
+#. Install the zfs-release rpm. You can do this by running the following command: ``dnf install http://download.zfsonlinux.org/fedora/zfs-release$(rpm -E %dist).noarch.rpm``. It is also recommended to check the PGP keys to verify that the RPM has not been tampered.
 
-     apt install --yes debootstrap gdisk dkms dpkg-dev \
-         linux-headers-$(uname -r)
-     apt install --yes -t buster-backports --no-install-recommends zfs-dkms
-     modprobe zfs
-     apt install --yes -t buster-backports zfsutils-linux
+#. Install the kernel headers using ``dnf install kernel-devel-$(uname -r)``. Note that you may need to use Bodhi if the kernel your version of Fedora is using is too old.
 
-   - The dkms dependency is installed manually just so it comes from buster
-     and not buster-backports. This is not critical.
-   - We need to get the module built and loaded before installing
-     zfsutils-linux or `zfs-mount.service will fail to start
-     <https://github.com/zfsonlinux/zfs/issues/9599>`__.
+#. Next swap the zfs FUSE with the openZFS kernel module: ``dnf swap zfs-fuse zfs``
+
+#. Install the zfs dracut module (needed for booting): ``dnf install zfs-dracut``
+
+#. Ensure that the zfs kernel module is loaded by running ``sudo modprobe zfs``.
+
+#. Define the hostid by running ``dd if=/dev/random of=/etc/hostid bs=1 count=4``. If you are curious to know your own hostid, you can run ``hostid | perl -e '$/=\2; $,="."; $\="\n"; print map { eval "0x$_" } (<>)[1,0,3,2];'``
 
 Step 2: Disk Formatting
 -----------------------
+.. note::
+   Note that if you want to use systemd-boot instead of GRUB, you should not create a boot pool. This only applies to systemd-boot users. Also note that GRUB is not supported and will not be supported in the forseeable future. Systemd-boot is much easier than GRUB to setup with Fedora.
+
 
 #. Set a variable with the disk name::
 
@@ -165,8 +169,6 @@ Step 2: Disk Formatting
 
    If the disk was previously used in an MD array::
 
-     apt install --yes mdadm
-
      # See if one or more MD arrays are active:
      cat /proc/mdstat
      # If so, stop them (replace ``md0`` as required):
@@ -181,104 +183,37 @@ Step 2: Disk Formatting
 
      sgdisk --zap-all $DISK
 
-   If you get a message about the kernel still using the old partition table,
-   reboot and start over (except that you can skip this step).
-
+   If you get a message about the kernel still using the old partition table of your target disk, reboot and restart this section. Note that this does not apply to other unrelated disks as we are running under a LiveCD and partprobe doesn't like that.
 
 #. Partition your disk(s):
 
-   Run this if you need legacy (BIOS) booting::
+   Run this to create your ESP::
 
-     sgdisk -a1 -n1:24K:+1000K -t1:EF02 $DISK
+     sgdisk     -n0:1M:+1G   -t0:EF00 $DISK
 
-   Run this for UEFI booting (for use now or in the future)::
+   (Optional, but recommended if you have high memory pressure): Create a swap partition::
 
-     sgdisk     -n2:1M:+512M   -t2:EF00 $DISK
+     sgdisk     -n0:0:+<size>G  -t0:8200 $DISK # Make sure you replace <size> with the size of your swap partition.
+     mkswap     $DISK-part2
+     swapon     $DISK-part2
 
-   Run this for the boot pool::
-
-     sgdisk     -n3:0:+1G      -t3:BF01 $DISK
+   .. note::
+      Creation of the swap partition shoud not be done if you plan on using ZFS for swap. Instead, please follow Step 8 instead
 
    Choose one of the following options:
 
    - Unencrypted or ZFS native encryption::
 
-       sgdisk     -n4:0:0        -t4:BF00 $DISK
+       sgdisk     -n3:0:0        -t3:BF00 $DISK
 
-   - LUKS::
+   - LUKS (same warning as with Unencrypted and ZFS native encryption, change the -n3 and -t3 to -n2 and -t2 if you are not adding swap)::
 
-       sgdisk     -n4:0:0        -t4:8309 $DISK
+       sgdisk     -n3:0:0        -t3:8309 $DISK
 
    If you are creating a mirror or raidz topology, repeat the partitioning
    commands for all the disks which will be part of the pool.
 
-#. Create the boot pool::
-
-     zpool create \
-         -o ashift=12 -d \
-         -o feature@async_destroy=enabled \
-         -o feature@bookmarks=enabled \
-         -o feature@embedded_data=enabled \
-         -o feature@empty_bpobj=enabled \
-         -o feature@enabled_txg=enabled \
-         -o feature@extensible_dataset=enabled \
-         -o feature@filesystem_limits=enabled \
-         -o feature@hole_birth=enabled \
-         -o feature@large_blocks=enabled \
-         -o feature@lz4_compress=enabled \
-         -o feature@spacemap_histogram=enabled \
-         -o feature@zpool_checkpoint=enabled \
-         -O acltype=posixacl -O canmount=off -O compression=lz4 \
-         -O devices=off -O normalization=formD -O relatime=on -O xattr=sa \
-         -O mountpoint=/boot -R /mnt \
-         bpool ${DISK}-part3
-
-   You should not need to customize any of the options for the boot pool.
-
-   GRUB does not support all of the zpool features. See ``spa_feature_names``
-   in `grub-core/fs/zfs/zfs.c
-   <http://git.savannah.gnu.org/cgit/grub.git/tree/grub-core/fs/zfs/zfs.c#n276>`__.
-   This step creates a separate boot pool for ``/boot`` with the features
-   limited to only those that GRUB supports, allowing the root pool to use
-   any/all features. Note that GRUB opens the pool read-only, so all
-   read-only compatible features are “supported” by GRUB.
-
-   **Hints:**
-
-   - If you are creating a mirror topology, create the pool using::
-
-       zpool create \
-           ... \
-           bpool mirror \
-           /dev/disk/by-id/scsi-SATA_disk1-part3 \
-           /dev/disk/by-id/scsi-SATA_disk2-part3
-
-   - For raidz topologies, replace ``mirror`` in the above command with
-     ``raidz``, ``raidz2``, or  ``raidz3`` and list the partitions from
-     additional disks.
-   - The pool name is arbitrary. If changed, the new name must be used
-     consistently. The ``bpool`` convention originated in this HOWTO.
-
-   **Feature Notes:**
-
-   - The ``allocation_classes`` feature should be safe to use. However, unless
-     one is using it (i.e. a ``special`` vdev), there is no point to enabling
-     it. It is extremely unlikely that someone would use this feature for a
-     boot pool. If one cares about speeding up the boot pool, it would make
-     more sense to put the whole pool on the faster disk rather than using it
-     as a ``special`` vdev.
-   - The ``project_quota`` feature has been tested and is safe to use. This
-     feature is extremely unlikely to matter for the boot pool.
-   - The ``resilver_defer`` should be safe but the boot pool is small enough
-     that it is unlikely to be necessary.
-   - The ``spacemap_v2`` feature has been tested and is safe to use. The boot
-     pool is small, so this does not matter in practice.
-   - As a read-only compatible feature, the ``userobj_accounting`` feature
-     should be compatible in theory, but in practice, GRUB can fail with an
-     “invalid dnode type” error. This feature does not matter for ``/boot``
-     anyway.
-
-#. Create the root pool:
+#. Create the root pool (change the disk to ${DISK}-part2 if you added a swap partition in the previous step):
 
    Choose one of the following options:
 
@@ -289,7 +224,7 @@ Step 2: Disk Formatting
            -O acltype=posixacl -O canmount=off -O compression=lz4 \
            -O dnodesize=auto -O normalization=formD -O relatime=on \
            -O xattr=sa -O mountpoint=/ -R /mnt \
-           rpool ${DISK}-part4
+           rpool ${DISK}-part3
 
    - ZFS native encryption::
 
@@ -300,13 +235,13 @@ Step 2: Disk Formatting
            -O acltype=posixacl -O canmount=off -O compression=lz4 \
            -O dnodesize=auto -O normalization=formD -O relatime=on \
            -O xattr=sa -O mountpoint=/ -R /mnt \
-           rpool ${DISK}-part4
+           rpool ${DISK}-part3
 
    - LUKS::
 
-       apt install --yes cryptsetup
-       cryptsetup luksFormat -c aes-xts-plain64 -s 512 -h sha256 ${DISK}-part4
-       cryptsetup luksOpen ${DISK}-part4 luks1
+       dnf install cryptsetup
+       cryptsetup luksFormat -c aes-xts-plain64 -s 512 -h sha256 ${DISK}-part3 # change -part 3 to -part2 if swap partition was not made during partitioning
+       cryptsetup luksOpen ${DISK}-part3 luks1
        zpool create \
            -o ashift=12 \
            -O acltype=posixacl -O canmount=off -O compression=lz4 \
@@ -358,7 +293,7 @@ Step 2: Disk Formatting
      they are required for a Samba Active Directory domain controller.
      <https://wiki.samba.org/index.php/Setting_up_a_Share_Using_Windows_ACLs>`__
      Note that ``xattr=sa`` is `Linux-specific
-     <https://openzfs.org/wiki/Platform_code_differences>`__. If you move your
+     <http://open-zfs.org/wiki/Platform_code_differences>`__. If you move your
      ``xattr=sa`` pool to another OpenZFS implementation besides ZFS-on-Linux,
      extended attributes will not be readable (though your data will be). If
      portability of extended attributes is important to you, omit the
@@ -384,8 +319,8 @@ Step 2: Disk Formatting
        zpool create \
            ... \
            rpool mirror \
-           /dev/disk/by-id/scsi-SATA_disk1-part4 \
-           /dev/disk/by-id/scsi-SATA_disk2-part4
+           /dev/disk/by-id/scsi-SATA_disk1-part3 \
+           /dev/disk/by-id/scsi-SATA_disk2-part3
 
    - For raidz topologies, replace ``mirror`` in the above command with
      ``raidz``, ``raidz2``, or  ``raidz3`` and list the partitions from
@@ -400,25 +335,18 @@ Step 2: Disk Formatting
 Step 3: System Installation
 ---------------------------
 
-#. Create filesystem datasets to act as containers::
+#. Create the filesystem datasets to act as containers::
 
      zfs create -o canmount=off -o mountpoint=none rpool/ROOT
-     zfs create -o canmount=off -o mountpoint=none bpool/BOOT
 
    On Solaris systems, the root filesystem is cloned and the suffix is
    incremented for major system changes through ``pkg image-update`` or
-   ``beadm``. Similar functionality has been implemented in Ubuntu 20.04 with
-   the ``zsys`` tool, though its dataset layout is more complicated. Even
-   without such a tool, the `rpool/ROOT` and `bpool/BOOT` containers can still
-   be used for manually created clones. That said, this HOWTO assumes a single
-   filesystem for ``/boot`` for simplicity.
+   ``beadm``. Similar functionality has not yet been implemented into Fedora and will most likely never be added to Fedora in the forseeable future due to licensing issues.
 
 #. Create filesystem datasets for the root and boot filesystems::
 
-     zfs create -o canmount=noauto -o mountpoint=/ rpool/ROOT/debian
-     zfs mount rpool/ROOT/debian
-
-     zfs create -o mountpoint=/boot bpool/BOOT/debian
+     zfs create -o canmount=noauto -o mountpoint=/ rpool/ROOT/fedora
+     zfs mount rpool/ROOT/fedora
 
    With ZFS, it is not normally necessary to use a mount command (either
    ``mount`` or ``zfs mount``). This situation is an exception because of
@@ -427,7 +355,6 @@ Step 3: System Installation
 #. Create datasets::
 
      zfs create                                 rpool/home
-     zfs create -o mountpoint=/root             rpool/home/root
      zfs create -o canmount=off                 rpool/var
      zfs create -o canmount=off                 rpool/var/lib
      zfs create                                 rpool/var/log
@@ -441,39 +368,6 @@ Step 3: System Installation
      zfs create -o com.sun:auto-snapshot=false  rpool/var/cache
      zfs create -o com.sun:auto-snapshot=false  rpool/var/tmp
      chmod 1777 /mnt/var/tmp
-
-   If you use /opt on this system::
-
-     zfs create                                 rpool/opt
-
-   If you use /srv on this system::
-
-     zfs create                                 rpool/srv
-
-   If you use /usr/local on this system::
-
-     zfs create -o canmount=off                 rpool/usr
-     zfs create                                 rpool/usr/local
-
-   If this system will have games installed::
-
-     zfs create                                 rpool/var/games
-
-   If this system will store local email in /var/mail::
-
-     zfs create                                 rpool/var/mail
-
-   If this system will use Snap packages::
-
-     zfs create                                 rpool/var/snap
-
-   If you use /var/www on this system::
-
-     zfs create                                 rpool/var/www
-
-   If this system will use GNOME::
-
-     zfs create                                 rpool/var/lib/AccountsService
 
    If this system will use Docker (which manages its own datasets &
    snapshots)::
@@ -489,6 +383,8 @@ Step 3: System Installation
 
      zfs create -o com.sun:auto-snapshot=false  rpool/tmp
      chmod 1777 /mnt/tmp
+   
+   Note that the reason why we are not fully seperating everything like we did in Ubuntu is because dnf will fail to install or update certain packages if we create too many datasets. An example of one such package is filesystem, which fails to install if other ZFS datasets are created. Another reason why is to make it easier to repair broken systems using the dracut emergency shell
 
    The primary goal of this dataset layout is to separate the OS from user
    data. This allows the root filesystem to be rolled back without rolling
@@ -501,13 +397,12 @@ Step 3: System Installation
    to limit the maximum space used. Otherwise, you can use a tmpfs (RAM
    filesystem) later.
 
-#. Install the minimal system::
+#. Copy the LiveCD to your HDD/SDD::
 
-     debootstrap buster /mnt
-
-   The ``debootstrap`` command leaves the new system in an unconfigured state.
-   An alternative to using ``debootstrap`` is to copy the entirety of a
-   working system into the new ZFS root.
+     rsync -avxHASX / /mnt/
+   
+   It is important to not forget the trailing /.
+   This command copies the LiveCD to our new zfs datasets and this is the only way I have found to reliably install and boot Fedora Workstation
 
 Step 4: System Configuration
 ----------------------------
@@ -517,61 +412,20 @@ Step 4: System Configuration
    Replace ``HOSTNAME`` with the desired hostname::
 
      echo HOSTNAME > /mnt/etc/hostname
-     vi /mnt/etc/hosts
+   
+   Edit /mnt/etc/hosts using the text editor of your choice. 
+   If the system does not have a real name in DNS, add this line::
 
-   .. code-block:: text
-
-     Add a line:
      127.0.1.1       HOSTNAME
-     or if the system has a real name in DNS:
+   
+   Otherwise, if the system has a real name in DNS, add this line::
+
      127.0.1.1       FQDN HOSTNAME
 
-   **Hint:** Use ``nano`` if you find ``vi`` confusing.
+   **Hint:** Use ``nano`` or ``vim`` if you find vi to be confusing
 
-#. Configure the network interface:
-
-   Find the interface name::
-
-     ip addr show
-
-   Adjust ``NAME`` below to match your interface name::
-
-     vi /mnt/etc/network/interfaces.d/NAME
-
-   .. code-block:: text
-
-     auto NAME
-     iface NAME inet dhcp
-
-   Customize this file if the system is not a DHCP client.
-
-#. Configure the package sources::
-
-     vi /mnt/etc/apt/sources.list
-
-   .. code-block:: sourceslist
-
-     deb http://deb.debian.org/debian buster main contrib
-     deb-src http://deb.debian.org/debian buster main contrib
-
-   ::
-
-     vi /mnt/etc/apt/sources.list.d/buster-backports.list
-
-   .. code-block:: sourceslist
-
-     deb http://deb.debian.org/debian buster-backports main contrib
-     deb-src http://deb.debian.org/debian buster-backports main contrib
-
-   ::
-
-     vi /mnt/etc/apt/preferences.d/90_zfs
-
-   .. code-block:: control
-
-     Package: libnvpair1linux libuutil1linux libzfs2linux libzfslinux-dev libzpool2linux python3-pyzfs pyzfs-doc spl spl-dkms zfs-dkms zfs-dracut zfs-initramfs zfs-test zfsutils-linux zfsutils-linux-dev zfs-zed
-     Pin: release n=buster-backports
-     Pin-Priority: 990
+   .. note::
+       NetworkManager, in most cases, will work without any additional configuration.
 
 #. Bind the virtual filesystems from the LiveCD environment to the new
    system and ``chroot`` into it::
@@ -579,33 +433,26 @@ Step 4: System Configuration
      mount --rbind /dev  /mnt/dev
      mount --rbind /proc /mnt/proc
      mount --rbind /sys  /mnt/sys
+     sudo mount -o bind /run /mnt/run     
      chroot /mnt /usr/bin/env DISK=$DISK bash --login
 
    **Note:** This is using ``--rbind``, not ``--bind``.
 
-#. Configure a basic system environment::
+#. Make sure that the output of ``echo $DISK`` is not blank. If it is, set the DISK variable like what we did in Step 2
 
-     ln -s /proc/self/mounts /etc/mtab
-     apt update
+#. Update the new system::
 
-   Even if you prefer a non-English system language, always ensure that
-   ``en_US.UTF-8`` is available::
+     dnf update --exclude=kernel* # Note: the --exclude=kernel* is optional in the majority of cases. You can remove it if you are OK with ZFS potentially (rarely) breaking due to a kernel update.
 
-     apt install --yes locales
-     dpkg-reconfigure locales
-     dpkg-reconfigure tzdata
+.. note::
 
-#. Install ZFS in the chroot environment for the new system::
+   Note that the ZFS install we did outside in the LiveCD persists here. Hence, it is not needed to maunally install zfs-release, zfs-dracut and zfs again. Also note that cryptsetup is still extremely experimental and that the maintainer of this project does not use LUKS/cryptsetup whatsoever. Use at your own risk.
 
-     apt install --yes dpkg-dev linux-headers-amd64 linux-image-amd64
-     apt install --yes zfs-initramfs
-     echo REMAKE_INITRD=yes > /etc/dkms/zfs.conf
+#. For LUKS installs only, setup ``/etc/crypttab``:: 
 
-#. For LUKS installs only, setup ``/etc/crypttab``::
+     dnf install cryptsetup
 
-     apt install --yes cryptsetup
-
-     echo luks1 UUID=$(blkid -s UUID -o value ${DISK}-part4) none \
+     echo luks1 UUID=$(blkid -s UUID -o value ${DISK}-part3) none \
          luks,discard,initramfs > /etc/crypttab
 
    The use of ``initramfs`` is a work-around for `cryptsetup does not support
@@ -614,75 +461,39 @@ Step 4: System Configuration
    **Hint:** If you are creating a mirror or raidz topology, repeat the
    ``/etc/crypttab`` entries for ``luks2``, etc. adjusting for each disk.
 
-#. Install GRUB
+#. Remove GRUB2 as it can cause problems in the future::
 
-   Choose one of the following options:
+        rpm --nodeps -ve $(rpm -qa | grep "^grub2-") os-prober
+        echo 'exclude=grub2-*,os-prober' >> /etc/dnf/dnf.conf
 
-   - Install GRUB for legacy (BIOS) booting::
+#. Install systemd-boot::
 
-       apt install --yes grub-pc
+        rm -rvf /boot # Don't worry, we'll reinstall the kernel later
+        mkdir boot # Create the boot folder
+        dnf install dosfstools
+        mkdosfs -F 32 -s 1 -n EFI ${DISK}-part1 # You should not need to change this
+        # If you want to use partition UUID's (more stable, but longer to type and slightly harder to debug)
+        echo PARTUUID=$(blkid -s PARTUUID -o value ${DISK}-part1) \
+           /boot vfat umask=0777,shortname=lower,context=system_u:object_r:boot_t:s0,nofail,x-systemd.device-timeout=1 0 1 >> /etc/fstab
+        mount /boot
+        uuidgen | tr -d '-' > /etc/machine-id
+        mkdir -p /boot/$(</etc/machine-id)
+        bootctl install # Install systemd-boot to ESP
+        echo 'root=ZFS=rpool/ROOT/fedora' > /etc/kernel/cmdline
+        kernel-install add $(uname -r) /lib/modules/$(uname -r)/vmlinuz # Reinstall the kernel
+        dracut --kver $(uname -r) --force --add-drivers "zfs" # Rebuild initramfs just in case
 
-     Select (using the space bar) all of the disks (not partitions) in your
-     pool.
+      **Notes:**
 
-   - Install GRUB for UEFI booting::
-
-        apt install dosfstools
-        mkdosfs -F 32 -s 1 -n EFI ${DISK}-part2
-        mkdir /boot/efi
-        echo PARTUUID=$(blkid -s PARTUUID -o value ${DISK}-part2) \
-           /boot/efi vfat nofail,x-systemd.device-timeout=1 0 1 >> /etc/fstab
-        mount /boot/efi
-        apt install --yes grub-efi-amd64 shim-signed
-
-     **Notes:**
-
+     - Use ``SYSTEMD_RELAX_XBOOTLDR_CHECKS=1 bootctl install --esp-path=/boot --boot-path=/boot`` instead of ``bootctl install`` if ``bootctl install`` fails.
      - The ``-s 1`` for ``mkdosfs`` is only necessary for drives which present
         4 KiB logical sectors (“4Kn” drives) to meet the minimum cluster size
         (given the partition size of 512 MiB) for FAT32. It also works fine on
         drives which present 512 B sectors.
-     - For a mirror or raidz topology, this step only installs GRUB on the
-       first disk. The other disk(s) will be handled later.
-
-#. Optional: Remove os-prober::
-
-     dpkg --purge os-prober
-
-   This avoids error messages from `update-grub`.  `os-prober` is only
-   necessary in dual-boot configurations.
 
 #. Set a root password::
 
      passwd
-
-#. Enable importing bpool
-
-   This ensures that ``bpool`` is always imported, regardless of whether
-   ``/etc/zfs/zpool.cache`` exists, whether it is in the cachefile or not,
-   or whether ``zfs-import-scan.service`` is enabled.
-
-   ::
-
-         vi /etc/systemd/system/zfs-import-bpool.service
-
-   .. code-block:: ini
-
-         [Unit]
-         DefaultDependencies=no
-         Before=zfs-import-scan.service
-         Before=zfs-import-cache.service
-
-         [Service]
-         Type=oneshot
-         RemainAfterExit=yes
-         ExecStart=/sbin/zpool import -N -o cachefile=none bpool
-
-         [Install]
-         WantedBy=zfs-import.target
-
-   ::
-
-     systemctl enable zfs-import-bpool.service
 
 #. Optional (but recommended): Mount a tmpfs to ``/tmp``
 
@@ -695,123 +506,15 @@ Step 4: System Configuration
      cp /usr/share/systemd/tmp.mount /etc/systemd/system/
      systemctl enable tmp.mount
 
-#. Optional (but kindly requested): Install popcon
-
-   The ``popularity-contest`` package reports the list of packages install
-   on your system. Showing that ZFS is popular may be helpful in terms of
-   long-term attention from the distro.
-
-   ::
-
-     apt install --yes popularity-contest
-
-   Choose Yes at the prompt.
-
-Step 5: GRUB Installation
--------------------------
-
-#. Verify that the ZFS boot filesystem is recognized::
-
-     grub-probe /boot
-
-#. Refresh the initrd files::
-
-     update-initramfs -c -k all
-
-   **Note:** When using LUKS, this will print “WARNING could not determine
-   root device from /etc/fstab”. This is because `cryptsetup does not
-   support ZFS
-   <https://bugs.launchpad.net/ubuntu/+source/cryptsetup/+bug/1612906>`__.
-
-#. Workaround GRUB's missing zpool-features support::
-
-     vi /etc/default/grub
-     # Set: GRUB_CMDLINE_LINUX="root=ZFS=rpool/ROOT/debian"
-
-#. Optional (but highly recommended): Make debugging GRUB easier::
-
-     vi /etc/default/grub
-     # Remove quiet from: GRUB_CMDLINE_LINUX_DEFAULT
-     # Uncomment: GRUB_TERMINAL=console
-     # Save and quit.
-
-   Later, once the system has rebooted twice and you are sure everything is
-   working, you can undo these changes, if desired.
-
-#. Update the boot configuration::
-
-     update-grub
-
-   **Note:** Ignore errors from ``osprober``, if present.
-
-#. Install the boot loader:
-
-   #. For legacy (BIOS) booting, install GRUB to the MBR::
-
-        grub-install $DISK
-
-   Note that you are installing GRUB to the whole disk, not a partition.
-
-   If you are creating a mirror or raidz topology, repeat the ``grub-install``
-   command for each disk in the pool.
-
-   #. For UEFI booting, install GRUB to the ESP::
-
-        grub-install --target=x86_64-efi --efi-directory=/boot/efi \
-            --bootloader-id=debian --recheck --no-floppy
-
-      It is not necessary to specify the disk here. If you are creating a
-      mirror or raidz topology, the additional disks will be handled later.
-
-#. Fix filesystem mount ordering:
-
-   We need to activate ``zfs-mount-generator``. This makes systemd aware of
-   the separate mountpoints, which is important for things like ``/var/log``
-   and ``/var/tmp``. In turn, ``rsyslog.service`` depends on ``var-log.mount``
-   by way of ``local-fs.target`` and services using the ``PrivateTmp`` feature
-   of systemd automatically use ``After=var-tmp.mount``.
-
-   ::
-
-     mkdir /etc/zfs/zfs-list.cache
-     touch /etc/zfs/zfs-list.cache/bpool
-     touch /etc/zfs/zfs-list.cache/rpool
-     ln -s /usr/lib/zfs-linux/zed.d/history_event-zfs-list-cacher.sh /etc/zfs/zed.d
-     zed -F &
-
-   Verify that ``zed`` updated the cache by making sure these are not empty::
-
-     cat /etc/zfs/zfs-list.cache/bpool
-     cat /etc/zfs/zfs-list.cache/rpool
-
-   If either is empty, force a cache update and check again::
-
-     zfs set canmount=on     bpool/BOOT/debian
-     zfs set canmount=noauto rpool/ROOT/debian
-
-   Stop ``zed``::
-
-     fg
-     Press Ctrl-C.
-
-   Fix the paths to eliminate ``/mnt``::
-
-     sed -Ei "s|/mnt/?|/|" /etc/zfs/zfs-list.cache/*
+.. note::
+   GRUB installation is not supported by this guide and will not be supported in the forseeable future. The above steps should have installed systemd-boot, an alternative to GRUB which provides the majority of GRUBS features. If you still wish to use GRUB, it might be possible to chainload systemd-boot using GRUB and boot your Fedora installation that way. Instructions on how to do this will not be provided and this has not been tested to work. You are welcome to make a PR for this however
 
 Step 6: First Boot
 ------------------
 
-#. Optional: Install SSH::
-
-     apt install --yes openssh-server
-
-     vi /etc/ssh/sshd_config
-     # Set: PermitRootLogin yes
-
 #. Optional: Snapshot the initial installation::
 
-     zfs snapshot bpool/BOOT/debian@install
-     zfs snapshot rpool/ROOT/debian@install
+     zfs snapshot rpool/ROOT/fedora@install
 
    In the future, you will likely want to take snapshots before each
    upgrade, and remove old snapshots (including this one) at some point to
@@ -832,51 +535,36 @@ Step 6: First Boot
 
      reboot
 
-   Wait for the newly installed system to boot normally. Login as root.
+   Wait for the newly installed system to boot normally (hopefully). You will/should automatically be logged in as liveuser. Ignore any Install Fedora prompts you see for now. They will be removed when we remove the stale packages.
 
-#. Create a user account:
+#. Create a user account::
+    
+     1. Open GNOME Settings and navigate to User Accounts
+     2. Click Unlock
+     3. Click the Add User button
+     4. Type in your user information. Make sure this user is an Administrator.
+     5. Sign out of liveuser
+     6. Login using your new user account
+     7. Open GNOME settings again and navigate to User Accounts
+     8. Click Unlock
+     9. Click liveuser and click Delete User
+     10. Set auto-login for your user account if you want
+     11. Reboot
 
-   Replace ``username`` with your desired username::
+#. Remove stale packages::
 
-     zfs create rpool/home/username
-     adduser username
+     dnf remove --allowerasing --best anaconda-core anaconda-gui anaconda-widgets*
 
-     cp -a /etc/skel/. /home/username
-     chown -R username:username /home/username
-     usermod -a -G audio,cdrom,dip,floppy,netdev,plugdev,sudo,video username
+   Removal of anaconda and grub/os-prober prevent issues such as the "Install Fedora" issue and other such conflicts.
 
-#. Mirror GRUB
 
-   If you installed to multiple disks, install GRUB on the additional
-   disks.
-
-   - For legacy (BIOS) booting::
-
-       dpkg-reconfigure grub-pc
-
-     Hit enter until you get to the device selection screen.
-     Select (using the space bar) all of the disks (not partitions) in your pool.
-
-   - For UEFI booting::
-
-       umount /boot/efi
-
-     For the second and subsequent disks (increment debian-2 to -3, etc.)::
-
-       dd if=/dev/disk/by-id/scsi-SATA_disk1-part2 \
-          of=/dev/disk/by-id/scsi-SATA_disk2-part2
-       efibootmgr -c -g -d /dev/disk/by-id/scsi-SATA_disk2 \
-           -p 2 -L "debian-2" -l '\EFI\debian\grubx64.efi'
-
-       mount /boot/efi
-
-Step 7: Optional: Configure Swap
----------------------------------
+(Optional) Step 7: Configure ZVol Swap
+--------------------------------------
 
 **Caution**: On systems with extremely high memory pressure, using a
 zvol for swap can result in lockup, regardless of how much swap is still
 available. There is `a bug report upstream
-<https://github.com/zfsonlinux/zfs/issues/7734>`__.
+<https://github.com/zfsonlinux/zfs/issues/7734>`__. On such systems, it is wise to create a swap partition and use that. This should have been covered in partitioning.
 
 #. Create a volume dataset (zvol) for use as a swap device::
 
@@ -901,9 +589,9 @@ available. There is `a bug report upstream
 
    ::
 
-     mkswap -f /dev/zvol/rpool/swap
-     echo /dev/zvol/rpool/swap none swap discard 0 0 >> /etc/fstab
-     echo RESUME=none > /etc/initramfs-tools/conf.d/resume
+     mkswap -f /dev/zvol/rpool/swap # Omit this if you already did it in partitioning with a swap partition
+     echo /dev/zvol/rpool/swap none swap discard 0 0 >> /etc/fstab # Change this to your swap partition if you are using a swap partition
+     echo RESUME=none > /etc/initramfs-tools/conf.d/resume # Omit this if you are using a swap partition and not a zvol.
 
    The ``RESUME=none`` is necessary to disable resuming from hibernation.
    This does not work, as the zvol is not present (because the pool has not
@@ -915,16 +603,12 @@ available. There is `a bug report upstream
 
      swapon -av
 
-Step 8: Full Software Installation
-----------------------------------
+Step 8: Last Minute Fixes
+-------------------------
 
-#. Upgrade the minimal system::
+#. Upgrade the system (if you haven't already done it)::
 
-     apt dist-upgrade --yes
-
-#. Install a regular set of software:
-
-     tasksel
+     dnf update
 
 #. Optional: Disable log compression:
 
@@ -941,49 +625,27 @@ Step 8: Full Software Installation
          fi
      done
 
+#. (Optional, but highly recommended) Enable systemd-boot timeout menu in case latest kernel fails to boot::
+
+     sed -i 's/#timeout.*/timeout 10/' /boot/loader/loader.conf
+
+#. Ensure that zfs-target is enabled::
+
+     systemctl enable zfs.target
+
 #. Reboot::
 
      reboot
 
 Step 9: Final Cleanup
----------------------
+----------------------
 
 #. Wait for the system to boot normally. Login using the account you
    created. Ensure the system (including networking) works normally.
 
 #. Optional: Delete the snapshots of the initial installation::
 
-     sudo zfs destroy bpool/BOOT/debian@install
-     sudo zfs destroy rpool/ROOT/debian@install
-
-#. Optional: Disable the root password::
-
-     sudo usermod -p '*' root
-
-#. Optional (but highly recommended): Disable root SSH logins:
-
-   If you installed SSH earlier, revert the temporary change::
-
-     vi /etc/ssh/sshd_config
-     # Remove: PermitRootLogin yes
-
-     systemctl restart ssh
-
-#. Optional: Re-enable the graphical boot process:
-
-   If you prefer the graphical boot process, you can re-enable it now. If
-   you are using LUKS, it makes the prompt look nicer.
-
-   ::
-
-     sudo vi /etc/default/grub
-     # Add quiet to GRUB_CMDLINE_LINUX_DEFAULT
-     # Comment out GRUB_TERMINAL=console
-     # Save and quit.
-
-     sudo update-grub
-
-   **Note:** Ignore errors from ``osprober``, if present.
+     sudo zfs destroy rpool/ROOT/fedora@install
 
 #. Optional: For LUKS installs only, backup the LUKS header::
 
@@ -996,6 +658,8 @@ Step 9: Final Cleanup
    **Hint:** If you created a mirror or raidz topology, repeat this for each
    LUKS volume (``luks2``, etc.).
 
+#. Optional: If you want your boot partition synced between your disks, check out https://github.com/gregory-lee-bartholomew/bootsync
+
 Troubleshooting
 ---------------
 
@@ -1007,7 +671,7 @@ Go through `Step 1: Prepare The Install Environment
 
 For LUKS, first unlock the disk(s)::
 
-  apt install --yes cryptsetup
+  dnf install cryptsetup
   cryptsetup luksOpen /dev/disk/by-id/scsi-SATA_disk1-part4 luks1
   # Repeat for additional disks, if this is a mirror or raidz topology.
 
@@ -1015,9 +679,8 @@ Mount everything correctly::
 
   zpool export -a
   zpool import -N -R /mnt rpool
-  zpool import -N -R /mnt bpool
   zfs load-key -a
-  zfs mount rpool/ROOT/debian
+  zfs mount rpool/ROOT/fedora
   zfs mount -a
 
 If needed, you can chroot into your installed environment::
@@ -1039,34 +702,6 @@ When done, cleanup::
   zpool export -a
   reboot
 
-Areca
-~~~~~
-
-Systems that require the ``arcsas`` blob driver should add it to the
-``/etc/initramfs-tools/modules`` file and run ``update-initramfs -c -k all``.
-
-Upgrade or downgrade the Areca driver if something like
-``RIP: 0010:[<ffffffff8101b316>]  [<ffffffff8101b316>] native_read_tsc+0x6/0x20``
-appears anywhere in kernel log. ZoL is unstable on systems that emit this
-error message.
-
-MPT2SAS
-~~~~~~~
-
-Most problem reports for this tutorial involve ``mpt2sas`` hardware that does
-slow asynchronous drive initialization, like some IBM M1015 or OEM-branded
-cards that have been flashed to the reference LSI firmware.
-
-The basic problem is that disks on these controllers are not visible to the
-Linux kernel until after the regular system is started, and ZoL does not
-hotplug pool members. See `https://github.com/zfsonlinux/zfs/issues/330
-<https://github.com/zfsonlinux/zfs/issues/330>`__.
-
-Most LSI cards are perfectly compatible with ZoL. If your card has this
-glitch, try setting ``ZFS_INITRD_PRE_MOUNTROOT_SLEEP=X`` in
-``/etc/default/zfs``. The system will wait ``X`` seconds for all drives to
-appear before importing the pool.
-
 QEMU/KVM/XEN
 ~~~~~~~~~~~~
 
@@ -1076,7 +711,7 @@ Set a unique serial number on each virtual disk using libvirt or qemu
 To be able to use UEFI in guests (instead of only BIOS booting), run
 this on the host::
 
-  sudo apt install ovmf
+  sudo dnf install edk2-ovmf
   sudo vi /etc/libvirt/qemu.conf
 
 Uncomment these lines:
@@ -1099,3 +734,13 @@ VMware
 
 - Set ``disk.EnableUUID = "TRUE"`` in the vmx file or vsphere configuration.
   Doing this ensures that ``/dev/disk`` aliases are created in the guest.
+
+For GRUB Users
+~~~~~~~~~~~~~~
+
+- If you still wish to use GRUB, you will need to set ZPOOL_VDEV_NAME_PATH=1 in environmental variables while installing and running grub-mkconfig. Instructions on how to install using GRUB will not be provided in the forseeable future. You can use the Ubuntu Root on ZFS guide as a reference on how to set that up however. PR's for GRUB support is welcome.
+
+A Note On Kernel Updates
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Make sure to run `Step 6: Fixing systemd-boot config <#step-6-fixing-systemd-boot-config>`__. after kernel updates in case dnf messes up. 
