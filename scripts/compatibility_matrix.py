@@ -2,22 +2,7 @@
 
 # License: CC0 https://creativecommons.org/share-your-work/public-domain/cc0/
 
-# A messy script that figures out ZFS features. It's very messy, sorry. I am
-# not responsible if this script eats your laundry.
-#
-# This uses manpages, because I'm lazy. If your manpages are wrong, you have a
-# bug.
-#
-# If the script is wrong, or could be improved, feel free to contact me on
-# freenode, and tell me why it's wrong. My nick is zgrep.
-#
-# 2018-07-05: Created.
-# ????-??-??: Many things happened.
-# 2020-02-23: Applied patch by rlaager.
-# 2020-02-30: Show domain prefixes (via Vlad Bokov), partially apply patch by
-#   rlaager.
-# 2020-03-05: Patch by rlaager (allocation_classes, ZoL -> openzfs).
-# 2020-10-07: Rework by gmelikov for openzfs-docs
+# Generate cross-OS ZFS features matrix support by parsing man pages.
 
 import logging
 import sys
@@ -77,6 +62,8 @@ def openzfsonosx():
 
 def freebsd_pre_openzfs():
     # TODO(gmelikov): add FreeBSD HEAD (OpenZFS version)?
+    #   There could be some lag between OpenZFS upstream and the FreeBSD,
+    #   or even Linux implementations.
     sources = {}
     with urlopen('https://www.freebsd.org/releases/') as web:
         versions = findall(r'/releases/([0-9.]+?)R',
@@ -193,7 +180,6 @@ header = list(sorted(os_sources.keys()))
 header.insert(0, openzfs_key)
 header = list(zip(header, (sorted(sources[name],
               key=lambda x: regex(r'[^0-9]', '', x) or x) for name in header)))
-# TODO(gmelikov): add Sortix?
 
 html = open(path + '/zfs_feature_matrix.html', 'w')
 
