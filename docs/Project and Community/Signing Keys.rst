@@ -47,7 +47,7 @@ First import the public key listed above in to your key ring.
    gpg: Total number processed: 1
    gpg:              unchanged: 1
 
-After the pubic key is imported the signature of a git tag can be
+After the public key is imported the signature of a git tag can be
 verified as shown.
 
 ::
