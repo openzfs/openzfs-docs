@@ -31,12 +31,12 @@ verify the authenticity of the ZFS on Linux public key using the
 fingerprint listed here.
 
 | **Location:** /etc/pki/rpm-gpg/RPM-GPG-KEY-zfsonlinux
-| **Fedora 30 Package:**
-  `http://download.zfsonlinux.org/fedora/zfs-release.fc30.noarch.rpm <http://download.zfsonlinux.org/fedora/zfs-release.fc30.noarch.rpm>`__
 | **Fedora 31 Package:**
   `http://download.zfsonlinux.org/fedora/zfs-release.fc31.noarch.rpm <http://download.zfsonlinux.org/fedora/zfs-release.fc31.noarch.rpm>`__
 | **Fedora 32 Package:**
   `http://download.zfsonlinux.org/fedora/zfs-release.fc32.noarch.rpm <http://download.zfsonlinux.org/fedora/zfs-release.fc32.noarch.rpm>`__
+| **Fedora 33 Package:**
+  `http://download.zfsonlinux.org/fedora/zfs-release.fc32.noarch.rpm <http://download.zfsonlinux.org/fedora/zfs-release.fc33.noarch.rpm>`__
 | **Download from:**
   `pgp.mit.edu <http://pgp.mit.edu/pks/lookup?search=0xF14AB620&op=index&fingerprint=on>`__
 | **Fingerprint:** C93A FFFD 9F3F 7B03 C310 CEB6 A9D5 A1C0 F14A B620
