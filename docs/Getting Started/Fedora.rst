@@ -36,7 +36,7 @@ fingerprint listed here.
 | **Fedora 32 Package:**
   `http://download.zfsonlinux.org/fedora/zfs-release.fc32.noarch.rpm <http://download.zfsonlinux.org/fedora/zfs-release.fc32.noarch.rpm>`__
 | **Fedora 33 Package:**
-  `http://download.zfsonlinux.org/fedora/zfs-release.fc32.noarch.rpm <http://download.zfsonlinux.org/fedora/zfs-release.fc33.noarch.rpm>`__
+  `http://download.zfsonlinux.org/fedora/zfs-release.fc33.noarch.rpm <http://download.zfsonlinux.org/fedora/zfs-release.fc33.noarch.rpm>`__
 | **Download from:**
   `pgp.mit.edu <http://pgp.mit.edu/pks/lookup?search=0xF14AB620&op=index&fingerprint=on>`__
 | **Fingerprint:** C93A FFFD 9F3F 7B03 C310 CEB6 A9D5 A1C0 F14A B620
