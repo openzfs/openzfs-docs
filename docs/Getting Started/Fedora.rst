@@ -9,7 +9,7 @@ distribution which does not provide a stable kABI. These packages track
 the official ZFS on Linux tags and are updated as new versions are
 released. Packages are available for the following configurations:
 
-| **Fedora Releases:** 30, 31, 32
+| **Fedora Releases:** 31, 32, 33
 | **Architectures:** x86_64
 
 .. note::
