@@ -106,7 +106,7 @@ be deleted.
 #. Download and unpack the official image::
 
     curl -O https://cdimage.ubuntu.com/releases/20.04.1/release/ubuntu-20.04.1-preinstalled-server-arm64+raspi.img.xz
-    xd -d ubuntu-20.04.1-preinstalled-server-arm64+raspi.img.xz
+    xz -d ubuntu-20.04.1-preinstalled-server-arm64+raspi.img.xz
 
     # or combine them to decompress as you download:
     curl https://cdimage.ubuntu.com/releases/20.04.1/release/ubuntu-20.04.1-preinstalled-server-arm64+raspi.img.xz | \
