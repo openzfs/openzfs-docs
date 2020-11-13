@@ -32,6 +32,8 @@ here.
   `http://download.zfsonlinux.org/epel/zfs-release.el7_7.noarch.rpm <http://download.zfsonlinux.org/epel/zfs-release.el7_7.noarch.rpm>`__
 | **EL7.8 Package:**
   `http://download.zfsonlinux.org/epel/zfs-release.el7_8.noarch.rpm <http://download.zfsonlinux.org/epel/zfs-release.el7_8.noarch.rpm>`__
+| **EL7.9 Package:**
+  `http://download.zfsonlinux.org/epel/zfs-release.el7_9.noarch.rpm <http://download.zfsonlinux.org/epel/zfs-release.el7_9.noarch.rpm>`__
 | **EL8.0 Package:**
   `http://download.zfsonlinux.org/epel/zfs-release.el8_0.noarch.rpm <http://download.zfsonlinux.org/epel/zfs-release.el8_0.noarch.rpm>`__
 | **EL8.1 Package:**
