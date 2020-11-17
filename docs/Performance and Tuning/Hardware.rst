@@ -773,7 +773,7 @@ specification therefore require higher end UPS units for protection to
 ensure that the transfer time does not exceed the hold-up time. A
 hold-up time below the transfer time during a transfer to battery power
 can cause undefined behavior should the PWR_OK signal not become
-deasserted to force the machine to poser off.
+deasserted to force the machine to power off.
 
 If in doubt, use a double conversion UPS unit. Double conversion UPS
 units always run off the battery, such that the transfer time is 0. This
