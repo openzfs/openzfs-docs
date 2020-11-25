@@ -1,5 +1,5 @@
-ZFS on Linux Module Parameters
-==============================
+Module Parameters
+=================
 
 Most of the ZFS kernel module parameters are accessible in the SysFS
 ``/sys/module/zfs/parameters`` directory. Current value can be observed
@@ -140,9 +140,13 @@ ARC
 -  `l2arc_headroom <#l2arc-headroom>`__
 -  `l2arc_headroom_boost <#l2arc-headroom-boost>`__
 -  `l2arc_meta_percent <#l2arc-meta-percent>`__
+-  `l2arc_mfuonly <#l2arc-mfuonly>`__
 -  `l2arc_nocompress <#l2arc-nocompress>`__
 -  `l2arc_noprefetch <#l2arc-noprefetch>`__
 -  `l2arc_norw <#l2arc-norw>`__
+-  `l2arc_rebuild_blocks_min_l2size <#l2arc-rebuild-blocks-min-l2size>`__
+-  `l2arc_rebuild_enabled <#l2arc-rebuild-enabled>`__
+-  `l2arc_trim_ahead <#l2arc-trim-ahead>`__
 -  `l2arc_write_boost <#l2arc-write-boost>`__
 -  `l2arc_write_max <#l2arc-write-max>`__
 -  `zfs_multilist_num_sublists <#zfs-multilist-num-sublists>`__
@@ -335,9 +339,13 @@ L2ARC
 -  `l2arc_headroom <#l2arc-headroom>`__
 -  `l2arc_headroom_boost <#l2arc-headroom-boost>`__
 -  `l2arc_meta_percent <#l2arc-meta-percent>`__
+-  `l2arc_mfuonly <#l2arc-mfuonly>`__
 -  `l2arc_nocompress <#l2arc-nocompress>`__
 -  `l2arc_noprefetch <#l2arc-noprefetch>`__
 -  `l2arc_norw <#l2arc-norw>`__
+-  `l2arc_rebuild_blocks_min_l2size <#l2arc-rebuild-blocks-min-l2size>`__
+-  `l2arc_rebuild_enabled <#l2arc-rebuild-enabled>`__
+-  `l2arc_trim_ahead <#l2arc-trim-ahead>`__
 -  `l2arc_write_boost <#l2arc-write-boost>`__
 -  `l2arc_write_max <#l2arc-write-max>`__
 
@@ -820,9 +828,13 @@ Index
 -  `l2arc_headroom <#l2arc-headroom>`__
 -  `l2arc_headroom_boost <#l2arc-headroom-boost>`__
 -  `l2arc_meta_percent <#l2arc-meta-percent>`__
+-  `l2arc_mfuonly <#l2arc-mfuonly>`__
 -  `l2arc_nocompress <#l2arc-nocompress>`__
 -  `l2arc_noprefetch <#l2arc-noprefetch>`__
 -  `l2arc_norw <#l2arc-norw>`__
+-  `l2arc_rebuild_blocks_min_l2size <#l2arc-rebuild-blocks-min-l2size>`__
+-  `l2arc_rebuild_enabled <#l2arc-rebuild-enabled>`__
+-  `l2arc_trim_ahead <#l2arc-trim-ahead>`__
 -  `l2arc_write_boost <#l2arc-write-boost>`__
 -  `l2arc_write_max <#l2arc-write-max>`__
 -  `zfs_lua_max_instrlimit <#zfs-lua-max-instrlimit>`__
@@ -1239,6 +1251,34 @@ This parameter limits L2ARC writes and rebuild to achieve it.
 | Versions Affected | v2.0 and later                                  |
 +-------------------+-------------------------------------------------+
 
+l2arc_mfuonly
+~~~~~~~~~~~~~
+
+Controls whether only MFU metadata and data are cached from ARC into L2ARC.
+This may be desirable to avoid wasting space on L2ARC when reading/writing
+large amounts of data that are not expected to be accessed more than once.
+By default both MRU and MFU data and metadata are cached in the L2ARC.
+
++-------------------+-------------------------------------------------+
+| l2arc_mfuonly     | Notes                                           |
++===================+=================================================+
+| Tags              | `ARC <#arc>`__, `L2ARC <#l2arc>`__              |
++-------------------+-------------------------------------------------+
+| When to change    | When accessing a large amount of data only      |
+|                   | once.                                           |
++-------------------+-------------------------------------------------+
+| Data Type         | boolean                                         |
++-------------------+-------------------------------------------------+
+| Range             | 0=store MRU and MFU blocks in cache device,     |
+|                   | 1=store MFU blocks in cache device              |
++-------------------+-------------------------------------------------+
+| Default           | 0                                               |
++-------------------+-------------------------------------------------+
+| Change            | Dynamic                                         |
++-------------------+-------------------------------------------------+
+| Versions Affected | v2.0 and later                                  |
++-------------------+-------------------------------------------------+
+
 l2arc_noprefetch
 ~~~~~~~~~~~~~~~~
 
@@ -1295,6 +1335,95 @@ Disables writing to cache devices while they are being read.
 | Change            | Dynamic                                         |
 +-------------------+-------------------------------------------------+
 | Versions Affected | all                                             |
++-------------------+-------------------------------------------------+
+
+l2arc_rebuild_blocks_min_l2size
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The minimum required size (in bytes) of an L2ARC device in order to
+write log blocks in it. The log blocks are used upon importing the pool
+to rebuild the persistent L2ARC.  For L2ARC devices less than 1GB the
+overhead involved offsets most of benefit so log blocks are not written
+for cache devices smaller than this.
+
++---------------------------------+-----------------------------------+
+| l2arc_rebuild_blocks_min_l2size | Notes                             |
++=================================+===================================+
+| Tags                            | `ARC <#arc>`__,                   |
+|                                 | `L2ARC <#l2arc>`__                |
++---------------------------------+-----------------------------------+
+| When to change                  | The cache device is small and     |
+|                                 | the pool is frequently imported.  |
++---------------------------------+-----------------------------------+
+| Data Type                       | bytes                             |
++---------------------------------+-----------------------------------+
+| Range                           | 0 to UINT64_MAX                   |
++---------------------------------+-----------------------------------+
+| Default                         | 1,073,741,824                     |
++---------------------------------+-----------------------------------+
+| Change                          | Dynamic                           |
++---------------------------------+-----------------------------------+
+| Versions Affected               | v2.0 and later                    |
++---------------------------------+-----------------------------------+
+
+l2arc_rebuild_enabled
+~~~~~~~~~~~~~~~~~~~~~
+
+Rebuild the persistent L2ARC when importing a pool.
+
++-----------------------+---------------------------------------------+
+| l2arc_rebuild_enabled | Notes                                       |
++=======================+=============================================+
+| Tags                  | `ARC <#arc>`__, `L2ARC <#l2arc>`__          |
++-----------------------+---------------------------------------------+
+| When to change        | If there are problems importing a pool or   |
+|                       | attaching an L2ARC device.                  |
++-----------------------+---------------------------------------------+
+| Data Type             | boolean                                     |
++-----------------------+---------------------------------------------+
+| Range                 | 0=disable persistent L2ARC rebuild,         |
+|                       | 1=enable persistent L2ARC rebuild           |
++-----------------------+---------------------------------------------+
+| Default               | 1                                           |
++-----------------------+---------------------------------------------+
+| Change                | Dynamic                                     |
++-----------------------+---------------------------------------------+
+| Versions Affected     | v2.0 and later                              |
++-----------------------+---------------------------------------------+
+
+l2arc_trim_ahead
+~~~~~~~~~~~~~~~~
+
+Once the cache device has been filled TRIM ahead of the current write size
+``l2arc_write_max`` on L2ARC devices by this percentage.  This can speed
+up future writes depending on the performance characteristics of the
+cache device.
+
+When set to 100% TRIM twice the space required to accommodate upcoming
+writes.  A minimum of 64MB will be trimmed.  If set it enables TRIM of
+the whole L2ARC device when it is added to a pool.  By default, this
+option is disabled since it can put significant stress on the underlying
+storage devices.
+
++-------------------+-------------------------------------------------+
+| l2arc_trim_ahead  | Notes                                           |
++===================+=================================================+
+| Tags              | `ARC <#arc>`__, `L2ARC <#l2arc>`__              |
++-------------------+-------------------------------------------------+
+| When to change    | Consider setting for cache devices which        |
+|                   | effeciently handle TRIM commands.               |
++-------------------+-------------------------------------------------+
+| Data Type         | ulong                                           |
++-------------------+-------------------------------------------------+
+| Units             | percent of l2arc_write_max                      |
++-------------------+-------------------------------------------------+
+| Range             | 0 to 100                                        |
++-------------------+-------------------------------------------------+
+| Default           | 0                                               |
++-------------------+-------------------------------------------------+
+| Change            | Dynamic                                         |
++-------------------+-------------------------------------------------+
+| Versions Affected | v2.0 and later                                  |
 +-------------------+-------------------------------------------------+
 
 l2arc_write_boost
@@ -8925,7 +9054,7 @@ Data Type             bitmask
 Range                 0x01 - Aging (illumos), 0x02 - Low memory (Linux)
 Default               0x02
 Change                Dynamic
-Versions Affected     v0.6.1
+Versions Affected     v0.6.1 to v0.8.x
 ===================== =================================================
 
 spl_kmem_cache_kmem_limit
@@ -8966,7 +9095,7 @@ Units                     pages
 Range                     TBD
 Default                   PAGE_SIZE / 4
 Change                    Dynamic
-Versions Affected         v0.7.0
+Versions Affected         v0.7.0 to v0.8.x
 ========================= ====================
 
 spl_kmem_cache_max_size
@@ -9012,7 +9141,7 @@ Units                       kmem cache objects
 Range                       TBD
 Default                     8
 Change                      Dynamic
-Versions Affected           v0.7.0
+Versions Affected           v0.7.0 to v0.8.x
 =========================== ====================
 
 spl_kmem_cache_obj_per_slab_min
