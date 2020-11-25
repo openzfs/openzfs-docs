@@ -1,34 +1,28 @@
 Fedora
 ======
 
-Only
-`DKMS <https://en.wikipedia.org/wiki/Dynamic_Kernel_Module_Support>`__
-style packages can be provided for Fedora from the official
-zfsonlinux.org repository. This is because Fedora is a fast moving
-distribution which does not provide a stable kABI. These packages track
-the official ZFS on Linux tags and are updated as new versions are
-released. Packages are available for the following configurations:
+Only `DKMS`_ style packages can be provided for Fedora from the official
+OpenZFS repository. This is because Fedora is a fast moving distribution
+which does not provide a stable kABI. These packages track the official
+OpenZFS tags and are updated as new versions are released. Packages are
+available for the following configurations:
 
 | **Fedora Releases:** 31, 32, 33
 | **Architectures:** x86_64
 
 .. note::
-   Due to the release cycle of OpenZFS and Fedora adoption
-   of new kernels in current distribution release, it may happen that you
-   won't be able to build DKMS package on the most recent kernel update.
-   For example, Fedora 32 was released with kernel 5.6 but it is expected
-   that it will update to 5.7. OpenZFS was released with support for kernel
-   5.6 but not for 5.7 and there will be no update right after 5.7 will hit
-   Fedora repository so you have to take into account that you will have to
-   pin your kernel version at some point.
+   Due to the release cycle of OpenZFS and Fedora's rapid adoption of new
+   kernels it may happen that you won't be able to build DKMS packages for
+   the most recent kernel update. If the `latest OpenZFS release`_ does
+   not yet support the installed Fedora kernel you will have to pin your
+   kernel to an earlier supported version.
 
-To simplify installation a zfs-release package is provided which
-includes a zfs.repo configuration file and the ZFS on Linux public
-signing key. All official ZFS on Linux packages are signed using this
-key, and by default both yum and dnf will verify a package's signature
-before allowing it be to installed. Users are strongly encouraged to
-verify the authenticity of the ZFS on Linux public key using the
-fingerprint listed here.
+To simplify installation a *zfs-release* package is provided which includes
+a zfs.repo configuration file and public signing key. All official
+OpenZFS packages are signed using this key, and by default dnf will verify a
+package's signature before allowing it be to installed. Users are strongly
+encouraged to verify the authenticity of the ZFS on Linux public key using
+the fingerprint listed here.
 
 | **Location:** /etc/pki/rpm-gpg/RPM-GPG-KEY-zfsonlinux
 | **Fedora 31 Package:**
@@ -49,14 +43,13 @@ fingerprint listed here.
        Key fingerprint = C93A FFFD 9F3F 7B03 C310  CEB6 A9D5 A1C0 F14A B620
        sub  2048R/99685629 2013-03-21
 
-The ZFS on Linux packages should be installed with ``dnf`` on Fedora.
-Note that it is important to make sure that the matching *kernel-devel*
-package is installed for the running kernel since DKMS requires it to
-build ZFS.
+The OpenZFS packages should be installed with ``dnf`` on Fedora.  Note that
+it is important to make sure that the matching *kernel-devel* package is
+installed for the running kernel since DKMS requires it to build ZFS.
 
 .. code:: sh
 
-   $ sudo dnf install kernel-devel zfs
+   $ sudo dnf install zfs
 
 If the Fedora provided *zfs-fuse* package is already installed on the
 system. Then the ``dnf swap`` command should be used to replace the
@@ -66,17 +59,29 @@ existing fuse packages with the ZFS on Linux packages.
 
    $ sudo dnf swap zfs-fuse zfs
 
+By default the OpenZFS kernel modules are automatically loaded when a ZFS
+pool is detected. If you would prefer to always load the modules at boot
+time you must create an ``/etc/modules-load.d/zfs.conf`` file.
+
+.. code:: sh
+
+   $ sudo sh -c "echo zfs >/etc/modules-load.d/zfs.conf"
+
 Testing Repositories
 --------------------
 
 In addition to the primary *zfs* repository a *zfs-testing* repository
 is available. This repository, which is disabled by default, contains
-the latest version of ZFS on Linux which is under active development.
-These packages are made available in order to get feedback from users
-regarding the functionality and stability of upcoming releases. These
-packages **should not** be used on production systems. Packages from the
-testing repository can be installed as follows.
+the latest version of OpenZFS which is under active development. These
+packages are made available in order to get feedback from users regarding
+the functionality and stability of upcoming releases. These packages
+**should not** be used on production systems. Packages from the testing
+repository can be installed as follows.
 
 ::
 
-   $ sudo dnf --enablerepo=zfs-testing install kernel-devel zfs
+   $ sudo dnf config-manager --enable zfs-testing
+   $ sudo dnf install zfs
+
+.. _DKMS: https://en.wikipedia.org/wiki/Dynamic_Kernel_Module_Support
+.. _latest OpenZFS release: https://github.com/openzfs/zfs/releases/latest
