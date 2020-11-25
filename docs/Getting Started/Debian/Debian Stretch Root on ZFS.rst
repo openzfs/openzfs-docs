@@ -471,6 +471,10 @@ Customize this file if the system is not a DHCP client.
   # vi /mnt/etc/apt/sources.list
   deb http://deb.debian.org/debian stretch main contrib
   deb-src http://deb.debian.org/debian stretch main contrib
+  deb http://security.debian.org/debian-security stretch/updates main contrib
+  deb-src http://security.debian.org/debian-security stretch/updates main contrib
+  deb http://deb.debian.org/debian stretch-updates main contrib
+  deb-src http://deb.debian.org/debian stretch-updates main contrib
 
   # vi /mnt/etc/apt/sources.list.d/stretch-backports.list
   deb http://deb.debian.org/debian stretch-backports main contrib

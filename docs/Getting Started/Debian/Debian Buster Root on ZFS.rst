@@ -553,6 +553,12 @@ Step 4: System Configuration
      deb http://deb.debian.org/debian buster main contrib
      deb-src http://deb.debian.org/debian buster main contrib
 
+     deb http://security.debian.org/debian-security buster/updates main contrib
+     deb-src http://security.debian.org/debian-security buster/updates main contrib
+
+     deb http://deb.debian.org/debian buster-updates main contrib
+     deb-src http://deb.debian.org/debian buster-updates main contrib
+
    ::
 
      vi /mnt/etc/apt/sources.list.d/buster-backports.list
