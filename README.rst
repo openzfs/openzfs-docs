@@ -15,7 +15,7 @@ Install Prerequisites
 The dependencies are available via pip::
 
    # For Debian based distros
-   sudo apt install pip3
+   sudo apt install python3-pip
    # For RPM-based distros
    sudo yum install python3-pip
 
