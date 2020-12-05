@@ -767,8 +767,8 @@ Step 4: System Configuration
          /boot/efi vfat defaults 0 0 >> /etc/fstab
      mount /boot/efi
 
-   For a mirror or raidz topology, repeat these steps for the additional
-   disks, using ``/boot/efi2``, ``/boot/efi3``, etc.
+   For a mirror or raidz topology, repeat the `mkdosfs` for the additional
+   disks, but do not repeat the other commands.
 
    **Note:** The ``-s 1`` for ``mkdosfs`` is only necessary for drives which
    present 4 KiB logical sectors (“4Kn” drives) to meet the minimum cluster
@@ -815,7 +815,9 @@ Step 4: System Configuration
            shim-signed zfs-initramfs zsys
 
      **Note:** For a mirror or raidz topology, this step only installs GRUB
-     on the first disk. The other disk(s) will be handled later.
+     on the first disk. The other disk(s) will be handled later.  For some
+     reason, grub-efi-amd64 does not prompt for ``install_devices`` here, but
+     does after a reboot.
 
 #. Optional: Remove os-prober::
 
@@ -961,14 +963,6 @@ Step 5: GRUB Installation
        grub-install --target=x86_64-efi --efi-directory=/boot/efi \
            --bootloader-id=ubuntu --recheck --no-floppy
 
-     For a mirror or raidz topology, run this for the additional disk(s),
-     incrementing the “2” to “3” and so on for both ``/boot/efi2`` and
-     ``ubuntu-2``::
-
-       cp -a /boot/efi/EFI /boot/efi2
-       grub-install --target=x86_64-efi --efi-directory=/boot/efi2 \
-           --bootloader-id=ubuntu-2 --recheck --no-floppy
-
 #. Disable grub-initrd-fallback.service
 
    For a mirror or raidz topology:
@@ -1045,6 +1039,15 @@ Step 6: First Boot
      reboot
 
    Wait for the newly installed system to boot normally. Login as root.
+
+#. Install GRUB to additional disks:
+
+   For a UEFI mirror or raidz topology only::
+
+     dpkg-reconfigure grub-efi-amd64
+
+     Select (using the space bar) all of the ESP partitions (partition 1 on
+     each of the pool disks).
 
 #. Create a user account:
 
