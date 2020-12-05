@@ -731,8 +731,7 @@ Step 4: System Configuration
    Even if you prefer a non-English system language, always ensure that
    ``en_US.UTF-8`` is available::
 
-     dpkg-reconfigure locales
-     dpkg-reconfigure tzdata
+     dpkg-reconfigure locales tzdata keyboard-configuration console-setup
 
    Install your preferred text editor::
 

@@ -592,13 +592,12 @@ Step 4: System Configuration
 
      ln -s /proc/self/mounts /etc/mtab
      apt update
+     apt install --yes console-setup locales
 
    Even if you prefer a non-English system language, always ensure that
    ``en_US.UTF-8`` is available::
 
-     apt install --yes locales
-     dpkg-reconfigure locales
-     dpkg-reconfigure tzdata
+     dpkg-reconfigure locales tzdata keyboard-configuration console-setup
 
 #. Install ZFS in the chroot environment for the new system::
 
