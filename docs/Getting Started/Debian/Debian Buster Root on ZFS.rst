@@ -609,8 +609,8 @@ Step 4: System Configuration
 
      apt install --yes cryptsetup
 
-     echo luks1 UUID=$(blkid -s UUID -o value ${DISK}-part4) none \
-         luks,discard,initramfs > /etc/crypttab
+     echo luks1 /dev/disk/by-uuid/$(blkid -s UUID -o value ${DISK}-part4) \
+         none luks,discard,initramfs > /etc/crypttab
 
    The use of ``initramfs`` is a work-around for `cryptsetup does not support
    ZFS <https://bugs.launchpad.net/ubuntu/+source/cryptsetup/+bug/1612906>`__.
@@ -634,7 +634,7 @@ Step 4: System Configuration
         apt install dosfstools
         mkdosfs -F 32 -s 1 -n EFI ${DISK}-part2
         mkdir /boot/efi
-        echo UUID=$(blkid -s UUID -o value ${DISK}-part2) \
+        echo /dev/disk/by-uuid/$(blkid -s UUID -o value ${DISK}-part2) \
            /boot/efi vfat nofail,x-systemd.device-timeout=1 0 1 >> /etc/fstab
         mount /boot/efi
         apt install --yes grub-efi-amd64 shim-signed

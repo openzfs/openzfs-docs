@@ -746,8 +746,8 @@ Step 4: System Configuration
 
      apt install --yes cryptsetup
 
-     echo luks1 UUID=$(blkid -s UUID -o value ${DISK}-part4) none \
-         luks,discard,initramfs > /etc/crypttab
+     echo luks1 /dev/disk/by-uuid/$(blkid -s UUID -o value ${DISK}-part4) \
+         none luks,discard,initramfs > /etc/crypttab
 
    The use of ``initramfs`` is a work-around for `cryptsetup does not support
    ZFS <https://bugs.launchpad.net/ubuntu/+source/cryptsetup/+bug/1612906>`__.
@@ -763,7 +763,7 @@ Step 4: System Configuration
 
      mkdosfs -F 32 -s 1 -n EFI ${DISK}-part1
      mkdir /boot/efi
-     echo UUID=$(blkid -s UUID -o value ${DISK}-part1) \
+     echo /dev/disk/by-uuid/$(blkid -s UUID -o value ${DISK}-part1) \
          /boot/efi vfat umask=0022,fmask=0022,dmask=0022 0 1 >> /etc/fstab
      mount /boot/efi
 
@@ -835,7 +835,7 @@ Step 4: System Configuration
    - For an unencrypted single-disk install::
 
        mkswap -f ${DISK}-part2
-       echo UUID=$(blkid -s UUID -o value ${DISK}-part2) \
+       echo /dev/disk/by-uuid/$(blkid -s UUID -o value ${DISK}-part2) \
            none swap discard 0 0 >> /etc/fstab
        swapon -a
 
@@ -847,9 +847,8 @@ Step 4: System Configuration
        mdadm --create /dev/md0 --metadata=1.2 --level=mirror \
            --raid-devices=2 ${DISK1}-part2 ${DISK2}-part2
        mkswap -f /dev/md0
-       echo UUID=$(blkid -s UUID -o value /dev/md0) \
+       echo /dev/disk/by-uuid/$(blkid -s UUID -o value /dev/md0) \
            none swap discard 0 0 >> /etc/fstab
-       swapon -a
 
    - For an encrypted (LUKS or ZFS native encryption) single-disk install::
 
