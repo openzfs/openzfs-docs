@@ -594,18 +594,11 @@ Step 3: System Installation
      UUID=$(dd if=/dev/urandom of=/dev/stdout bs=1 count=100 2>/dev/null |
          tr -dc 'a-z0-9' | cut -c-6)
 
-     zfs create -o canmount=noauto -o mountpoint=/ \
+     zfs create -o mountpoint=/ \
          -o com.ubuntu.zsys:bootfs=yes \
          -o com.ubuntu.zsys:last-used=$(date +%s) rpool/ROOT/ubuntu_$UUID
-     zfs mount rpool/ROOT/ubuntu_$UUID
 
-     zfs create -o canmount=noauto -o mountpoint=/boot \
-         bpool/BOOT/ubuntu_$UUID
-     zfs mount bpool/BOOT/ubuntu_$UUID
-
-   With ZFS, it is not normally necessary to use a mount command (either
-   ``mount`` or ``zfs mount``). This situation is an exception because of
-   ``canmount=noauto``.
+     zfs create -o mountpoint=/boot bpool/BOOT/ubuntu_$UUID
 
 #. Create datasets::
 
