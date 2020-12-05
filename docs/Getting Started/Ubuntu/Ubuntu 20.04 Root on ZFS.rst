@@ -764,7 +764,7 @@ Step 4: System Configuration
      mkdosfs -F 32 -s 1 -n EFI ${DISK}-part1
      mkdir /boot/efi
      echo /dev/disk/by-uuid/$(blkid -s UUID -o value ${DISK}-part1) \
-         /boot/efi vfat umask=0022,fmask=0022,dmask=0022 0 1 >> /etc/fstab
+         /boot/efi vfat defaults 0 0 >> /etc/fstab
      mount /boot/efi
 
    For a mirror or raidz topology, repeat these steps for the additional
