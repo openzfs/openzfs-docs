@@ -634,7 +634,7 @@ Step 4: System Configuration
         apt install dosfstools
         mkdosfs -F 32 -s 1 -n EFI ${DISK}-part2
         mkdir /boot/efi
-        echo PARTUUID=$(blkid -s PARTUUID -o value ${DISK}-part2) \
+        echo UUID=$(blkid -s UUID -o value ${DISK}-part2) \
            /boot/efi vfat nofail,x-systemd.device-timeout=1 0 1 >> /etc/fstab
         mount /boot/efi
         apt install --yes grub-efi-amd64 shim-signed
