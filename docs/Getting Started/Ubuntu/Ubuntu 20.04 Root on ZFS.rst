@@ -15,70 +15,52 @@ applicable:
 /boot/grub Not Mounted
 ~~~~~~~~~~~~~~~~~~~~~~
 
-| **Severity:** Grave
-| **Fixed:** 2020-05-30
+| **Severity:** Normal (previously Grave)
+| **Fixed:** 2020-12-05 (previously 2020-05-30)
 
 For a mirror or raidz topology, ``/boot/grub`` is on a separate dataset. This
-is now ``bpool/BOOT/ubuntu_UUID/grub``, but was previously ``bpool/grub``.
-Unfortunately, zsys sets ``canmount=off`` on ``bpool/grub``, so it is not
-mounted. As a result, updates the GRUB configuration will be written to the
-``/boot`` filesystem and not used by GRUB (because it is still looking in
-``bpool/grub``). Check for ``bpool/grub``::
+was originally ``bpool/grub``, then changed on 2020-05-30 to
+``bpool/BOOT/ubuntu_UUID/grub`` to work-around zsys setting ``canmount=off``
+which would result in ``/boot/grub`` not mounting.  This work-around lead to
+`issues with snapshot restores
+<https://github.com/openzfs/openzfs-docs/issues/55>`__.  The underlying `zsys
+issue <https://github.com/ubuntu/zsys/issues/164>`__ was fixed and backported
+to 20.04, so it is now back to being ``bpool/grub``.
 
-  zfs list bpool/grub
+* If you never applied the 2020-05-30 errata fix, then ``/boot/grub`` is
+  probably not mounting.  Check that::
 
-If this says “dataset does not exist”, you are good. If it exists, fix it.
+    mount | grep /boot/grub
 
-Once you start this process, the system will be unbootable until you have
-completed it. Do not reboot until you have completed all of the steps.
+  If it is mounted, everything is fine. Stop. Otherwise::
 
-#. Rename the dataset::
+    zfs set canmount=on bpool/boot/grub
+    update-initramfs -c -k all
+    update-grub
 
-     umount /boot/grub
-     # Ignore any error about it not being mounted.
+    grub-install --target=x86_64-efi --efi-directory=/boot/efi \
+        --bootloader-id=ubuntu --recheck --no-floppy
 
-     rm -rf /boot/grub
+  Run this for the additional disk(s), incrementing the “2” to “3” and so on
+  for both ``/boot/efi2`` and ``ubuntu-2``::
 
-     zfs list -r bpool
-     # Replace UUID below:
-     zfs rename bpool/grub bpool/BOOT/ubuntu_UUID/grub
-     zfs inherit com.ubuntu.zsys:bootfs bpool/BOOT/ubuntu_UUID/grub
-     zfs set canmount=on bpool/BOOT/ubuntu_UUID/grub
-     zfs mount bpool/BOOT/ubuntu_UUID/grub
+    cp -a /boot/efi/EFI /boot/efi2
+    grub-install --target=x86_64-efi --efi-directory=/boot/efi2 \
+        --bootloader-id=ubuntu-2 --recheck --no-floppy
 
-#. Ensure that zed updated the cache to use ``bpool/BOOT/ubuntu_UUID/grub``::
+  Check that these have ``set prefix=($root)'/BOOT/ubuntu_UUID/grub@'``::
 
-     grep grub /etc/zfs/zfs-list.cache/bpool
+    grep prefix= \
+        /boot/efi/EFI/ubuntu/grub.cfg \
+        /boot/efi2/EFI/ubuntu-2/grub.cfg
 
-#. Rebuild the initrd and reinstall GRUB::
+* If you applied the 2020-05-30 errata fix, then you should revert the dataset
+  rename::
 
-     update-initramfs -c -k all
-     update-grub
-     grub-install --target=x86_64-efi --efi-directory=/boot/efi \
-         --bootloader-id=ubuntu --recheck --no-floppy
-
-   Run this for the additional disk(s), incrementing the “2” to “3” and so on
-   for both ``/boot/efi2`` and ``ubuntu-2``::
-
-     cp -a /boot/efi/EFI /boot/efi2
-     grub-install --target=x86_64-efi --efi-directory=/boot/efi2 \
-         --bootloader-id=ubuntu-2 --recheck --no-floppy
-
-   Check that these have ``set prefix=($root)'/BOOT/ubuntu_UUID/grub@'``::
-
-     grep prefix= \
-         /boot/efi/EFI/ubuntu/grub.cfg \
-         /boot/efi2/EFI/ubuntu-2/grub.cfg
-
-#. If using encryption, patch a dependency loop::
-
-     sudo apt install --yes curl patch
-     curl https://launchpadlibrarian.net/478315221/2150-fix-systemd-dependency-loops.patch | \
-         sed "s|/etc|/lib|;s|\.in$||" | (cd / ; patch -p1)
-
-#. Disable grub-initrd-fallback.service::
-
-     systemctl mask grub-initrd-fallback.service
+    umount /boot/grub
+    zfs rename bpool/BOOT/ubuntu_UUID/grub bpool/grub
+    zfs set com.ubuntu.zsys:bootfs=no bpool/grub
+    zfs mount bpool/grub
 
 AccountsService Not Mounted
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -629,7 +611,7 @@ Step 3: System Installation
 
    For a mirror or raidz topology, create a dataset for ``/boot/grub``::
 
-     zfs create bpool/BOOT/ubuntu_$UUID/grub
+     zfs create -o com.ubuntu.zsys:bootfs=no bpool/grub
 
    A tmpfs is recommended later, but if you want a separate dataset for
    ``/tmp``::
