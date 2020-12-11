@@ -51,7 +51,7 @@ And for RHEL/CentOS 8 and newer:
        sub  2048R/99685629 2013-03-21
 
 After installing the *zfs-release* package and verifying the public key
-users can opt to install ether the DKMS or kABI-tracking kmod style packages.
+users can opt to install either the DKMS or kABI-tracking kmod style packages.
 DKMS packages are recommended for users running a non-distribution kernel or
 for users who wish to apply local customizations to OpenZFS.  For most users
 the kABI-tracking kmod packages are recommended in order to avoid needing to
