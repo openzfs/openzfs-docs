@@ -926,7 +926,7 @@ Step 8: Full Software Installation
 
      apt dist-upgrade --yes
 
-#. Install a regular set of software:
+#. Install a regular set of software::
 
      tasksel
 
