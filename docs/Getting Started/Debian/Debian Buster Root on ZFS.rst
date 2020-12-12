@@ -51,7 +51,9 @@ Contributing
 #. Install the tools::
 
     sudo apt install python3-pip
+
     pip3 install -r docs/requirements.txt
+
     # Add ~/.local/bin to your $PATH, e.g. by adding this to ~/.bashrc:
     PATH=$HOME/.local/bin:$PATH
 
@@ -117,6 +119,7 @@ Step 1: Prepare The Install Environment
    convenient::
 
      sudo apt install --yes openssh-server
+
      sudo systemctl restart ssh
 
    **Hint:** You can find your IP address with
@@ -131,7 +134,9 @@ Step 1: Prepare The Install Environment
 
      apt install --yes debootstrap gdisk dkms dpkg-dev \
          linux-headers-$(uname -r)
+
      apt install --yes -t buster-backports --no-install-recommends zfs-dkms
+
      modprobe zfs
      apt install --yes -t buster-backports zfsutils-linux
 
@@ -304,6 +309,7 @@ Step 2: Disk Formatting
    - LUKS::
 
        apt install --yes cryptsetup
+
        cryptsetup luksFormat -c aes-xts-plain64 -s 512 -h sha256 ${DISK}-part4
        cryptsetup luksOpen ${DISK}-part4 luks1
        zpool create \
@@ -592,6 +598,7 @@ Step 4: System Configuration
 
      ln -s /proc/self/mounts /etc/mtab
      apt update
+
      apt install --yes console-setup locales
 
    Even if you prefer a non-English system language, always ensure that
@@ -602,7 +609,9 @@ Step 4: System Configuration
 #. Install ZFS in the chroot environment for the new system::
 
      apt install --yes dpkg-dev linux-headers-amd64 linux-image-amd64
+
      apt install --yes zfs-initramfs
+
      echo REMAKE_INITRD=yes > /etc/dkms/zfs.conf
 
 #. For LUKS installs only, setup ``/etc/crypttab``::
@@ -632,6 +641,7 @@ Step 4: System Configuration
    - Install GRUB for UEFI booting::
 
         apt install dosfstools
+
         mkdosfs -F 32 -s 1 -n EFI ${DISK}-part2
         mkdir /boot/efi
         echo /dev/disk/by-uuid/$(blkid -s UUID -o value ${DISK}-part2) \
@@ -1012,6 +1022,7 @@ Go through `Step 1: Prepare The Install Environment
 For LUKS, first unlock the disk(s)::
 
   apt install --yes cryptsetup
+
   cryptsetup luksOpen /dev/disk/by-id/scsi-SATA_disk1-part4 luks1
   # Repeat for additional disks, if this is a mirror or raidz topology.
 

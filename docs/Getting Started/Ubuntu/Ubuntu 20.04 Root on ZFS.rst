@@ -183,7 +183,9 @@ Contributing
 #. Install the tools::
 
     sudo apt install python3-pip
+
     pip3 install -r docs/requirements.txt
+
     # Add ~/.local/bin to your $PATH, e.g. by adding this to ~/.bashrc:
     PATH=$HOME/.local/bin:$PATH
 
@@ -258,6 +260,7 @@ Step 1: Prepare The Install Environment
 #. Install ZFS in the Live CD environment::
 
      apt install --yes debootstrap gdisk zfs-initramfs
+
      systemctl stop zed
 
 Step 2: Disk Formatting
@@ -710,6 +713,7 @@ Step 4: System Configuration
    Install your preferred text editor::
 
      apt install --yes nano
+
      apt install --yes vim
 
    Installing the full ``vim`` package fixes terminal problems that occur when
@@ -818,6 +822,7 @@ Step 4: System Configuration
    - For an unencrypted mirror or raidz topology::
 
        apt install --yes mdadm
+
        # Adjust the level (ZFS raidz = MD raid5, raidz2 = raid6) and
        # raid-devices if necessary and specify the actual devices.
        mdadm --create /dev/md0 --metadata=1.2 --level=mirror \
@@ -829,6 +834,7 @@ Step 4: System Configuration
    - For an encrypted (LUKS or ZFS native encryption) single-disk install::
 
        apt install --yes cryptsetup
+
        echo swap ${DISK}-part2 /dev/urandom \
              swap,cipher=aes-xts-plain64:sha256,size=512 >> /etc/crypttab
        echo /dev/mapper/swap none swap defaults 0 0 >> /etc/fstab
@@ -837,6 +843,7 @@ Step 4: System Configuration
      topology::
 
        apt install --yes cryptsetup mdadm
+
        # Adjust the level (ZFS raidz = MD raid5, raidz2 = raid6) and
        # raid-devices if necessary and specify the actual devices.
        mdadm --create /dev/md0 --metadata=1.2 --level=mirror \

@@ -53,7 +53,9 @@ Contributing
 #. Install the tools::
 
     sudo apt install python3-pip
+
     pip3 install -r docs/requirements.txt
+
     # Add ~/.local/bin to your $PATH, e.g. by adding this to ~/.bashrc:
     PATH=$HOME/.local/bin:$PATH
 
@@ -232,6 +234,7 @@ Step 2: Setup ZFS
 #. Install ZFS::
 
      apt update
+
      apt install pv zfs-initramfs
 
    **Note:** Since this is the first boot, you may get ``Waiting for cache
