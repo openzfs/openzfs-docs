@@ -355,7 +355,7 @@ Step 3: System Installation
 
 #. Create a filesystem dataset for the root filesystem::
 
-     UUID=$(dd if=/dev/urandom of=/dev/stdout bs=1 count=100 2>/dev/null |
+     UUID=$(dd if=/dev/urandom bs=1 count=100 2>/dev/null |
          tr -dc 'a-z0-9' | cut -c-6)
 
      zfs create -o canmount=noauto -o mountpoint=/ \
@@ -594,7 +594,7 @@ Step 5: First Boot
 
    Replace ``username`` with your desired username::
 
-     UUID=$(dd if=/dev/urandom of=/dev/stdout bs=1 count=100 2>/dev/null |
+     UUID=$(dd if=/dev/urandom bs=1 count=100 2>/dev/null |
          tr -dc 'a-z0-9' | cut -c-6)
      ROOT_DS=$(zfs list -o name | awk '/ROOT\/ubuntu_/{print $1;exit}')
      zfs create -o com.ubuntu.zsys:bootfs-datasets=$ROOT_DS \
