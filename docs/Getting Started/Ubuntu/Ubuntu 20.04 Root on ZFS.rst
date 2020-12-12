@@ -232,7 +232,6 @@ Step 1: Prepare The Install Environment
 
 #. Setup and update the repositories::
 
-     sudo apt-add-repository universe
      sudo apt update
 
 #. Optional: Install and start the OpenSSH server in the Live CD environment:
