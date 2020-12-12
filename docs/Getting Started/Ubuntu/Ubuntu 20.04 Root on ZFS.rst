@@ -939,7 +939,7 @@ Step 5: GRUB Installation
 
 #. Disable grub-initrd-fallback.service
 
-   For a mirror or raidz topology:
+   For a mirror or raidz topology::
 
      systemctl mask grub-initrd-fallback.service
 
