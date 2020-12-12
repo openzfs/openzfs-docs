@@ -138,7 +138,7 @@ be deleted.
 
    with the following contents:
 
-   .. code-block::
+   .. code-block:: sh
 
      cat << EOF
      label: dos
