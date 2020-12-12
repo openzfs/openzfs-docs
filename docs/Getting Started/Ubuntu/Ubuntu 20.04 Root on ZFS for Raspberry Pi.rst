@@ -657,8 +657,6 @@ Step 6: Full Software Installation
 #. Optional: Install a full GUI environment::
 
      apt install --yes ubuntu-desktop
-     vi /etc/gdm3/custom.conf
-     # In the [daemon] section, add: InitialSetupEnable=false
 
    **Hint**: If you are installing a full GUI environment, you will likely
    want to remove cloud-init as discussed above but manage your network with

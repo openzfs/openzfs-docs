@@ -1057,8 +1057,6 @@ Step 7: Full Software Installation
    - Install a full GUI environment::
 
        apt install --yes ubuntu-desktop
-       vi /etc/gdm3/custom.conf
-       # In the [daemon] section, add: InitialSetupEnable=false
 
      **Hint**: If you are installing a full GUI environment, you will likely
      want to manage your network with NetworkManager::
