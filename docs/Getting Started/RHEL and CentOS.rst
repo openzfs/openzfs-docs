@@ -162,4 +162,5 @@ And for RHEL/CentOS 8 and newer:
 .. _el7_8: http://download.zfsonlinux.org/epel/zfs-release.el7_8.noarch.rpm
 .. _el8_0: http://download.zfsonlinux.org/epel/zfs-release.el8_0.noarch.rpm
 .. _el8_1: http://download.zfsonlinux.org/epel/zfs-release.el8_1.noarch.rpm
+.. _el8_2: http://download.zfsonlinux.org/epel/zfs-release.el8_2.noarch.rpm
 .. _EPEL repository: https://fedoraproject.org/wiki/EPEL
