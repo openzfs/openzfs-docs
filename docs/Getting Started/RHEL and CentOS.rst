@@ -23,8 +23,8 @@ the fingerprint listed here.
 | **EL7.9 Package:**
   `http://download.zfsonlinux.org/epel/zfs-release.el7_9.noarch.rpm <http://download.zfsonlinux.org/epel/zfs-release.el7_9.noarch.rpm>`__ (zfs-0.8.x)
 | **EL8.2 Package:**
-  `http://download.zfsonlinux.org/epel/zfs-release.el8_2.noarch.rpm <http://download.zfsonlinux.org/epel/zfs-release.el8_2.noarch.rpm>`__ (zfs-0.8.x)
-| **Archived Repositories:** `el7_5`_, `el7_6`_, `el7_7`_, `el7_8`_, `el8_0`_, `el8_1`_
+  `http://download.zfsonlinux.org/epel/zfs-release.el8_3.noarch.rpm <http://download.zfsonlinux.org/epel/zfs-release.el8_3.noarch.rpm>`__ (zfs-0.8.x)
+| **Archived Repositories:** `el7_5`_, `el7_6`_, `el7_7`_, `el7_8`_, `el8_0`_, `el8_1`_, `el8_2`_
 
 | **Download from:**
   `pgp.mit.edu <http://pgp.mit.edu/pks/lookup?search=0xF14AB620&op=index&fingerprint=on>`__
