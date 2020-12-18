@@ -797,9 +797,9 @@ Step 4: System Configuration
      reason, grub-efi-amd64 does not prompt for ``install_devices`` here, but
      does after a reboot.
 
-#. Optional: Remove os-prober::
+#. Optional: Remove os-prober:
 
-     apt --purge os-prober
+     apt remove --purge os-prober
 
    This avoids error messages from ``update-grub``.  ``os-prober`` is only
    necessary in dual-boot configurations.
