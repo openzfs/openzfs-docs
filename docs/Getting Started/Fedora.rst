@@ -25,19 +25,16 @@ encouraged to verify the authenticity of the ZFS on Linux public key using
 the fingerprint listed here.
 
 | **Location:** /etc/pki/rpm-gpg/RPM-GPG-KEY-zfsonlinux
-| **Fedora 31 Package:**
-  `http://download.zfsonlinux.org/fedora/zfs-release.fc31.noarch.rpm <http://download.zfsonlinux.org/fedora/zfs-release.fc31.noarch.rpm>`__
-| **Fedora 32 Package:**
-  `http://download.zfsonlinux.org/fedora/zfs-release.fc32.noarch.rpm <http://download.zfsonlinux.org/fedora/zfs-release.fc32.noarch.rpm>`__
-| **Fedora 33 Package:**
-  `http://download.zfsonlinux.org/fedora/zfs-release.fc33.noarch.rpm <http://download.zfsonlinux.org/fedora/zfs-release.fc33.noarch.rpm>`__
+| **Fedora 31 Package:** `zfs-release.fc31.noarch.rpm`_
+| **Fedora 32 Package:** `zfs-release.fc32.noarch.rpm`_
+| **Fedora 33 Package:** `zfs-release.fc33.noarch.rpm`_
 | **Download from:**
-  `pgp.mit.edu <http://pgp.mit.edu/pks/lookup?search=0xF14AB620&op=index&fingerprint=on>`__
+  `pgp.mit.edu <https://pgp.mit.edu/pks/lookup?search=0xF14AB620&op=index&fingerprint=on>`__
 | **Fingerprint:** C93A FFFD 9F3F 7B03 C310 CEB6 A9D5 A1C0 F14A B620
 
 .. code:: sh
 
-   $ sudo dnf install http://download.zfsonlinux.org/fedora/zfs-release$(rpm -E %dist).noarch.rpm
+   $ sudo dnf install https://zfsonlinux.org/fedora/zfs-release$(rpm -E %dist).noarch.rpm
    $ gpg --quiet --with-fingerprint /etc/pki/rpm-gpg/RPM-GPG-KEY-zfsonlinux
    pub  2048R/F14AB620 2013-03-21 ZFS on Linux <zfs@zfsonlinux.org>
        Key fingerprint = C93A FFFD 9F3F 7B03 C310  CEB6 A9D5 A1C0 F14A B620
@@ -85,3 +82,6 @@ repository can be installed as follows.
 
 .. _DKMS: https://en.wikipedia.org/wiki/Dynamic_Kernel_Module_Support
 .. _latest OpenZFS release: https://github.com/openzfs/zfs/releases/latest
+.. _zfs-release.fc31.noarch.rpm: https://zfsonlinux.org/fedora/zfs-release.fc31.noarch.rpm
+.. _zfs-release.fc32.noarch.rpm: https://zfsonlinux.org/fedora/zfs-release.fc32.noarch.rpm
+.. _zfs-release.fc33.noarch.rpm: https://zfsonlinux.org/fedora/zfs-release.fc33.noarch.rpm

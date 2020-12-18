@@ -18,23 +18,20 @@ encouraged to verify the authenticity of the ZFS on Linux public key using
 the fingerprint listed here.
 
 | **Location:** /etc/pki/rpm-gpg/RPM-GPG-KEY-zfsonlinux
-| **EL6 Package:**
-  `http://download.zfsonlinux.org/epel/zfs-release.el6.noarch.rpm <http://download.zfsonlinux.org/epel/zfs-release.el6.noarch.rpm>`__ (zfs-0.8.x)
-| **EL7.9 Package:**
-  `http://download.zfsonlinux.org/epel/zfs-release.el7_9.noarch.rpm <http://download.zfsonlinux.org/epel/zfs-release.el7_9.noarch.rpm>`__ (zfs-0.8.x)
-| **EL8.3 Package:**
-  `http://download.zfsonlinux.org/epel/zfs-release.el8_3.noarch.rpm <http://download.zfsonlinux.org/epel/zfs-release.el8_3.noarch.rpm>`__ (zfs-0.8.x)
+| **EL6 Package:** `zfs-release.el6.noarch.rpm`_ (zfs-0.8.x)
+| **EL7.9 Package:** `zfs-release.el7_9.noarch.rpm`_ (zfs-0.8.x)
+| **EL8.3 Package:** `zfs-release.el8_3.noarch.rpm`_ (zfs-0.8.x)
 | **Archived Repositories:** `el7_5`_, `el7_6`_, `el7_7`_, `el7_8`_, `el8_0`_, `el8_1`_, `el8_2`_
 
 | **Download from:**
-  `pgp.mit.edu <http://pgp.mit.edu/pks/lookup?search=0xF14AB620&op=index&fingerprint=on>`__
+  `pgp.mit.edu <https://pgp.mit.edu/pks/lookup?search=0xF14AB620&op=index&fingerprint=on>`__
 | **Fingerprint:** C93A FFFD 9F3F 7B03 C310 CEB6 A9D5 A1C0 F14A B620
 
 For RHEL/CentOS versions 6 and 7 run:
 
 .. code:: sh
 
-   $ sudo yum install http://download.zfsonlinux.org/epel/zfs-release.<dist>.noarch.rpm
+   $ sudo yum install https://zfsonlinux.org/epel/zfs-release.<dist>.noarch.rpm
    $ gpg --quiet --with-fingerprint /etc/pki/rpm-gpg/RPM-GPG-KEY-zfsonlinux
    pub  2048R/F14AB620 2013-03-21 ZFS on Linux <zfs@zfsonlinux.org>
        Key fingerprint = C93A FFFD 9F3F 7B03 C310  CEB6 A9D5 A1C0 F14A B620
@@ -44,7 +41,7 @@ And for RHEL/CentOS 8 and newer:
 
 .. code:: sh
 
-   $ sudo dnf install http://download.zfsonlinux.org/epel/zfs-release.<dist>.noarch.rpm
+   $ sudo dnf install https://zfsonlinux.org/epel/zfs-release.<dist>.noarch.rpm
    $ gpg --quiet --with-fingerprint /etc/pki/rpm-gpg/RPM-GPG-KEY-zfsonlinux
    pub  2048R/F14AB620 2013-03-21 ZFS on Linux <zfs@zfsonlinux.org>
        Key fingerprint = C93A FFFD 9F3F 7B03 C310  CEB6 A9D5 A1C0 F14A B620
@@ -156,11 +153,15 @@ And for RHEL/CentOS 8 and newer:
 
 .. _kABI-tracking kmod: https://elrepoproject.blogspot.com/2016/02/kabi-tracking-kmod-packages.html
 .. _DKMS: https://en.wikipedia.org/wiki/Dynamic_Kernel_Module_Support
-.. _el7_5: http://download.zfsonlinux.org/epel/zfs-release.el7_5.noarch.rpm
-.. _el7_6: http://download.zfsonlinux.org/epel/zfs-release.el7_6.noarch.rpm
-.. _el7_7: http://download.zfsonlinux.org/epel/zfs-release.el7_7.noarch.rpm
-.. _el7_8: http://download.zfsonlinux.org/epel/zfs-release.el7_8.noarch.rpm
-.. _el8_0: http://download.zfsonlinux.org/epel/zfs-release.el8_0.noarch.rpm
-.. _el8_1: http://download.zfsonlinux.org/epel/zfs-release.el8_1.noarch.rpm
-.. _el8_2: http://download.zfsonlinux.org/epel/zfs-release.el8_2.noarch.rpm
+.. _zfs-release.el6.noarch.rpm: https://zfsonlinux.org/epel/zfs-release.el6.noarch.rpm
+.. _zfs-release.el7_9.noarch.rpm: https://zfsonlinux.org/epel/zfs-release.el7_9.noarch.rpm
+.. _zfs-release.el8_3.noarch.rpm: https://zfsonlinux.org/epel/zfs-release.el8_3.noarch.rpm
+.. _el7_5: https://zfsonlinux.org/epel/zfs-release.el7_5.noarch.rpm
+.. _el7_6: https://zfsonlinux.org/epel/zfs-release.el7_6.noarch.rpm
+.. _el7_7: https://zfsonlinux.org/epel/zfs-release.el7_7.noarch.rpm
+.. _el7_8: https://zfsonlinux.org/epel/zfs-release.el7_8.noarch.rpm
+.. _el8_0: https://zfsonlinux.org/epel/zfs-release.el8_0.noarch.rpm
+.. _el8_1: https://zfsonlinux.org/epel/zfs-release.el8_1.noarch.rpm
+.. _el8_2: https://zfsonlinux.org/epel/zfs-release.el8_2.noarch.rpm
+
 .. _EPEL repository: https://fedoraproject.org/wiki/EPEL
