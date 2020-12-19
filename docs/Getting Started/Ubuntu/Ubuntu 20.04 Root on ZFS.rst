@@ -799,7 +799,7 @@ Step 4: System Configuration
 
 #. Optional: Remove os-prober::
 
-     apt --purge os-prober
+     apt remove --purge os-prober
 
    This avoids error messages from ``update-grub``.  ``os-prober`` is only
    necessary in dual-boot configurations.

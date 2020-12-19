@@ -557,7 +557,7 @@ Select (using the space bar) all of the disks (not partitions) in your pool.
 
 4.9 (Optional): Remove os-prober::
 
-    apt --purge os-prober
+    apt remove --purge os-prober
 
 This avoids error messages from `update-grub`.  `os-prober` is only necessary
 in dual-boot configurations.
