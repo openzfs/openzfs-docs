@@ -103,15 +103,6 @@ def omniosce():
 def joyent():
     sources = {'master': 'https://raw.githubusercontent.com/joyent/'
                'illumos-joyent/master/usr/src/man/man5/zpool-features.5'}
-    with urlopen('https://github.com/joyent/illumos-joyent') as web:
-        versions = findall(r'data-name="release-([0-9]+)"',
-                           web.read().decode('utf-8', 'ignore'))
-    versions.sort()
-    versions = versions[-2:]
-    for ver in versions:
-        sources[ver] = ('https://raw.githubusercontent.com/joyent/illumos-'
-                        'joyent/release-{}/usr/src/man/man5/'
-                        'zpool-features.5'.format(ver))
     return sources
 
 
