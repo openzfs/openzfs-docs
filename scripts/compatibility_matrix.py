@@ -120,6 +120,23 @@ def netbsd():
             sources[ver] = url.format(tag)
     return sources
 
+
+def nexenta():
+    sources = {'master': 'https://raw.githubusercontent.com/Nexenta/'
+               'illumos-nexenta/master/usr/src/man/man5/zpool-features.5'}
+    with urlopen('https://github.com/Nexenta/illumos-nexenta') as web:
+        versions = findall(r'>release-([0-9.]+)</span>',
+                           web.read().decode('utf-8', 'ignore'))
+    versions.sort()
+    versions = versions[-2:]
+    versions.append("4.0.5-FP")
+    for ver in versions:
+        sources[ver] = ('https://raw.githubusercontent.com/Nexenta/illumos-'
+                        'nexenta/release-{}/usr/src/man/man5/'
+                        'zpool-features.5'.format(ver))
+    return sources
+
+
 openzfs_key = 'OpenZFS<br>(Linux, FreeBSD 13+)'
 sources = {
         openzfs_key: openzfs(),
@@ -128,6 +145,7 @@ sources = {
         'OmniOS CE': omniosce(),
         'Joyent': joyent(),
         'NetBSD': netbsd(),
+        'Nexenta': nexenta(),
         'Illumos': {
             'master': 'https://raw.githubusercontent.com/illumos/illumos-gate/'
                       'master/usr/src/man/man5/zpool-features.5',
@@ -160,10 +178,18 @@ for name, sub in sources.items():
                     guid = 'org.zfsonlinux:allocation_classes'
                 elif guid == 'org.open-zfs:large_block':
                     guid += 's'
+                elif guid == 'com.nexenta:cos_properties':
+                    # This is wrong in the documentation.  The actual code in
+                    # zfeature_common.c uses this name:
+                    guid = 'com.nexenta:class_of_storage'
                 domain, feature = guid.split(':', 1)
                 features[(feature, domain)].append((name, ver))
             elif line.startswith('READ\\-ONLY COMPATIBLE'):
                 readonly[guid] = (line.split()[-1] == 'yes')
+        # This is missing in the documentation, but is supported by the code:
+        # https://github.com/Nexenta/illumos-nexenta/blob/release-4.0.4-FP/usr/src/common/zfs/zfeature_common.c
+        if name == 'Nexenta' and ver.startswith('4.'):
+            features[('meta_devices', 'com.nexenta')].append((name, ver))
 
 os_sources = sources.copy()
 os_sources.pop(openzfs_key)
