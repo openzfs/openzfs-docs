@@ -137,7 +137,7 @@ def nexenta():
     return sources
 
 
-openzfs_key = 'OpenZFS<br>(Linux, FreeBSD 13+)'
+openzfs_key = 'OpenZFS (Linux, FreeBSD 13+)'
 sources = {
         openzfs_key: openzfs(),
         'FreeBSD pre OpenZFS': freebsd_pre_openzfs(),
@@ -213,29 +213,35 @@ html.write('''<!DOCTYPE html>
 .no{background-color:lightsalmon}
 abbr{text-decoration: none}
 table{border-collapse:collapse;display:block;overflow-x:scroll;overflow-y:hidden;}
+.name{max-width:19ch;}
 th,td{padding:0.2em 0.4em;border:1px solid #aaa;background-color:#f9f9f9}
+.line:hover{filter:brightness(115%);}
 th{background-color:#eaecf0}
 .l{display:inline-block;text-align:right;min-width:''' + str(d_len) + '''ex;color:#777}
 .r{display:inline-block;text-align:left;min-width:''' + str(f_len) + '''ex}
-.feature_col{min-width: ''' + str(f_len + d_len + 1) + '''ch;}</style>
+.feature_col{min-width: ''' + str(f_len + d_len + 1) + '''ch;}
+.rotate{text-align:center;vertical-align:middle;}
+.rotate span{writing-mode:vertical-rl;-webkit-writing-mode:vertical-rl;
+transform:scale(-1);}
+.rocol{min-width:2em;}</style>
 ''')
 
 html.write('<table>\n')
 html.write('<tr><th scope="col" class="feature_col" rowspan="2">Feature Flag</th>')
-html.write('<th scole="col" rowspan="2">Read-Only<br />Compatible</th>')
+html.write('<th class="rotate rocol" scole="col" rowspan="2"><span>Read-Only<br />Compatible</span></th>')
 
 for name, vers in header:
-    html.write('<th scope="col" colspan="' + str(len(vers)) + '">'
+    html.write('<th class="name" scope="col" colspan="' + str(len(vers)) + '">'
                + name + '</th>')
 html.write('</tr>\n<tr>')
 for _, vers in header:
     for ver in vers:
-        html.write('<td>' + ver + '</td>')
+        html.write('<td class="rotate"><span>' + ver + '</span></td>')
 html.write('</tr>\n')
 
 for (feature, domain), names in sorted(features.items()):
     guid = domain + ':' + feature
-    html.write(f'<tr><th scope="row"><span class="l">{domain}:</span><span class="r">{feature}</span></th>')
+    html.write(f'<tr class="line"><th scope="row"><span class="l">{domain}:</span><span class="r">{feature}</span></th>')
     if readonly[guid]:
         html.write('<td class="yes">yes</td>')
     else:
