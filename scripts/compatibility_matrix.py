@@ -207,23 +207,69 @@ html.write('''<!DOCTYPE html>
 <title>ZFS Feature Matrix</title>
 <meta charset="utf-8" /><meta name="referrer" content="never" />
 <link rel='shortcut icon' href='/favicon.ico' type='image/x-icon'>
-<style>body{font-family: "Helvetica", "Arial", sans-serif}
-.yes{background-color:lightgreen}
-.warn{background-color:yellow}
-.no{background-color:lightsalmon}
-abbr{text-decoration: none}
-table{border-collapse:collapse;display:block;overflow-x:scroll;overflow-y:hidden;}
-.name{max-width:19ch;}
-th,td{padding:0.2em 0.4em;border:1px solid #aaa;background-color:#f9f9f9}
-.line:hover{filter:brightness(115%);}
-th{background-color:#eaecf0}
-.l{display:inline-block;text-align:right;min-width:''' + str(d_len) + '''ex;color:#777}
-.r{display:inline-block;text-align:left;min-width:''' + str(f_len) + '''ex}
-.feature_col{min-width: ''' + str(f_len + d_len + 1) + '''ch;}
-.rotate{text-align:center;vertical-align:middle;}
-.rotate span{writing-mode:vertical-rl;-webkit-writing-mode:vertical-rl;
-transform:scale(-1);}
-.rocol{min-width:2em;}</style>
+<style>
+body {
+  font-family: "Helvetica", "Arial", sans-serif;
+}
+.yes {
+  background-color: lightgreen;
+}
+.warn {
+  background-color: yellow;
+}
+.no {
+  background-color: lightsalmon;
+}
+abbr {
+  text-decoration: none;
+}
+table {
+  border-collapse: collapse;
+  display: block;
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
+.name {
+  max-width: 19ch;
+}
+th,td {
+  padding: 0.2em 0.4em;
+  border: 1px solid #aaa;
+  background-color: #f9f9f9;
+}
+.line:hover {
+  filter: brightness(115%);
+}
+th {
+  background-color: #eaecf0;
+}
+.l {
+  display: inline-block;
+  text-align: right;
+  min-width: ''' + str(d_len) + '''ex;
+  color: #777;
+}
+.r {
+  display: inline-block;
+  text-align: left;
+  min-width: ''' + str(f_len) + '''ex;
+}
+.feature_col {
+  min-width: ''' + str(f_len + d_len + 1) + '''ch;
+}
+.rotate {
+  text-align: center;
+  vertical-align: middle;
+}
+.rotate span {
+  writing-mode: vertical-rl;
+  -webkit-writing-mode: vertical-rl;
+  transform: scale(-1);
+}
+.rocol {
+  min-width: 2em;
+}
+</style>
 ''')
 
 html.write('<table>\n')
