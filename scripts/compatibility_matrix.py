@@ -212,7 +212,7 @@ html.write('''<!DOCTYPE html>
 .warn{background-color:yellow}
 .no{background-color:lightsalmon}
 abbr{text-decoration: none}
-table{border-collapse: collapse}
+table{border-collapse:collapse;display:block;overflow-x:scroll;overflow-y:hidden;}
 th,td{padding:0.2em 0.4em;border:1px solid #aaa;background-color:#f9f9f9}
 th{background-color:#eaecf0}
 .l{display:inline-block;text-align:right;min-width:''' + str(d_len) + '''ex;color:#777}
