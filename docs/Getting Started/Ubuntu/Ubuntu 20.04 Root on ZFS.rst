@@ -697,6 +697,7 @@ Step 4: System Configuration
      mount --rbind /dev  /mnt/dev
      mount --rbind /proc /mnt/proc
      mount --rbind /sys  /mnt/sys
+     mount -t tmpfs tmpfs /mnt/run
      chroot /mnt /usr/bin/env DISK=$DISK UUID=$UUID bash --login
 
    **Note:** This is using ``--rbind``, not ``--bind``.
@@ -1173,6 +1174,7 @@ If needed, you can chroot into your installed environment::
   mount --rbind /dev  /mnt/dev
   mount --rbind /proc /mnt/proc
   mount --rbind /sys  /mnt/sys
+  mount -t tmpfs tmpfs /mnt/run
   chroot /mnt /bin/bash --login
   mount -a
 
