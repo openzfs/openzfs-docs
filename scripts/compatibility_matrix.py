@@ -32,6 +32,7 @@ def openzfs():
     with urlopen('https://zfsonlinux.org') as web:
         versions = findall(r'download/zfs-([0-9.]+)',
                            web.read().decode('utf-8', 'ignore'))
+    versions.append("0.6.5.11")
     for ver in set(versions):
         sources[ver] = ('https://raw.githubusercontent.com/openzfs/zfs/'
                         'zfs-{}/man/man5/zpool-features.5'.format(ver))
