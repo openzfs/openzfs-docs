@@ -268,7 +268,7 @@ th {
   transform: scale(-1);
 }
 .rocol {
-  min-width: 2em;
+  min-width: 3em;
 }
 </style>
 ''')
