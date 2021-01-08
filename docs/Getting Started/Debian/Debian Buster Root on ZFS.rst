@@ -489,6 +489,11 @@ Step 3: System Installation
 
      zfs create -o com.sun:auto-snapshot=false  rpool/var/lib/nfs
 
+   Mount a tmpfs at /run::
+
+     mkdir /mnt/run
+     mount -t tmpfs tmpfs /mnt/run
+
    A tmpfs is recommended later, but if you want a separate dataset for
    ``/tmp``::
 
@@ -1044,8 +1049,6 @@ If needed, you can chroot into your installed environment::
   mount --rbind /dev  /mnt/dev
   mount --rbind /proc /mnt/proc
   mount --rbind /sys  /mnt/sys
-  mount -t tmpfs tmpfs /mnt/run
-  mkdir /mnt/run/lock
   chroot /mnt /bin/bash --login
   mount /boot
   mount -a

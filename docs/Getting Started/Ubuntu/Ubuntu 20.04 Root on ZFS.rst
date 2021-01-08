@@ -615,6 +615,11 @@ Step 3: System Installation
 
      zfs create -o com.ubuntu.zsys:bootfs=no bpool/grub
 
+   Mount a tmpfs at /run::
+
+     mkdir /mnt/run
+     mount -t tmpfs tmpfs /mnt/run
+
    A tmpfs is recommended later, but if you want a separate dataset for
    ``/tmp``::
 
@@ -697,8 +702,6 @@ Step 4: System Configuration
      mount --rbind /dev  /mnt/dev
      mount --rbind /proc /mnt/proc
      mount --rbind /sys  /mnt/sys
-     mount -t tmpfs tmpfs /mnt/run
-     mkdir /mnt/run/lock
      chroot /mnt /usr/bin/env DISK=$DISK UUID=$UUID bash --login
 
    **Note:** This is using ``--rbind``, not ``--bind``.
