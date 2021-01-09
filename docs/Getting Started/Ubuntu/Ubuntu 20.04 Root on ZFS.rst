@@ -753,10 +753,21 @@ Step 4: System Configuration
    For a mirror or raidz topology, repeat the `mkdosfs` for the additional
    disks, but do not repeat the other commands.
 
-   **Note:** The ``-s 1`` for ``mkdosfs`` is only necessary for drives which
-   present 4 KiB logical sectors (“4Kn” drives) to meet the minimum cluster
-   size (given the partition size of 512 MiB) for FAT32. It also works fine on
-   drives which present 512 B sectors.
+   **Notes:**
+
+   - The ``-s 1`` for ``mkdosfs`` is only necessary for drives which present
+     4 KiB logical sectors (“4Kn” drives) to meet the minimum cluster size
+     (given the partition size of 512 MiB) for FAT32. It also works fine on
+     drives which present 512 B sectors.
+   - An alternate approach is to have ``/boot/efi`` automounted.  This
+     `reduces the risk of corruption of the ESP
+     <https://bugzilla.redhat.com/show_bug.cgi?id=1077984>`__.  To do so, add
+     it to ``/etc/fstab`` this way instead::
+
+       echo /dev/disk/by-uuid/$(blkid -s UUID -o value ${DISK}-part1) \
+           /boot/efi vfat \
+           x-systemd.idle-timeout=1min,x-systemd.automount,noauto \
+           0 1 >> /etc/fstab
 
 #. Put ``/boot/grub`` on the EFI System Partition:
 

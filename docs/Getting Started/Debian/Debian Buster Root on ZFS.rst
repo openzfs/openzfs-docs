@@ -650,8 +650,8 @@ Step 4: System Configuration
 
         mkdosfs -F 32 -s 1 -n EFI ${DISK}-part2
         mkdir /boot/efi
-        echo /dev/disk/by-uuid/$(blkid -s UUID -o value ${DISK}-part2) \
-           /boot/efi vfat nofail,x-systemd.device-timeout=1 0 1 >> /etc/fstab
+        echo /dev/disk/by-uuid/$(blkid -s UUID -o value ${DISK}-part1) \
+           /boot/efi vfat defaults 0 0 >> /etc/fstab
         mount /boot/efi
         apt install --yes grub-efi-amd64 shim-signed
 
@@ -661,6 +661,15 @@ Step 4: System Configuration
        4 KiB logical sectors (“4Kn” drives) to meet the minimum cluster size
        (given the partition size of 512 MiB) for FAT32. It also works fine on
        drives which present 512 B sectors.
+     - An alternate approach is to have ``/boot/efi`` automounted.  This
+       `reduces the risk of corruption of the ESP
+       <https://bugzilla.redhat.com/show_bug.cgi?id=1077984>`__.  To do so, add
+       it to ``/etc/fstab`` this way instead::
+
+         echo /dev/disk/by-uuid/$(blkid -s UUID -o value ${DISK}-part1) \
+             /boot/efi vfat \
+             x-systemd.idle-timeout=1min,x-systemd.automount,noauto \
+             0 1 >> /etc/fstab
      - For a mirror or raidz topology, this step only installs GRUB on the
        first disk. The other disk(s) will be handled later.
 
