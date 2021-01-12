@@ -11,7 +11,7 @@ documentation <https://pthree.org/2012/04/17/install-zfs-on-debian-gnulinux/>`__
    :maxdepth: 3
    :glob:
 
-   ArchLinux <https://wiki.archlinux.org/index.php/ZFS>
+   Arch Linux/index
    Debian/index
    Fedora
    FreeBSD
