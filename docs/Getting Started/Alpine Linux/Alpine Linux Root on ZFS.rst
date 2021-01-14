@@ -42,8 +42,8 @@ Contributing
 
 #. Enable community repo::
 
-   vi /etc/apk/repositories
-   # uncomment community line
+    vi /etc/apk/repositories
+    # uncomment community line
 
 #. Install the tools::
 
