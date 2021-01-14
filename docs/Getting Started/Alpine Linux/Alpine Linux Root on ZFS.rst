@@ -40,9 +40,14 @@ Contributing
 
 #. Fork and clone: https://github.com/openzfs/openzfs-docs
 
+#. Enable community repo::
+
+   vi /etc/apk/repositories
+   # uncomment community line
+
 #. Install the tools::
 
-    sudo apk add python-pip
+    sudo apk add py3-pip
 
     pip3 install -r docs/requirements.txt
 
