@@ -20,3 +20,4 @@ documentation <https://pthree.org/2012/04/17/install-zfs-on-debian-gnulinux/>`__
    openSUSE <https://software.opensuse.org/package/zfs>
    RHEL and CentOS
    Ubuntu/index
+   Void Linux/index
