@@ -650,7 +650,7 @@ Step 4: System Configuration
 
         mkdosfs -F 32 -s 1 -n EFI ${DISK}-part2
         mkdir /boot/efi
-        echo /dev/disk/by-uuid/$(blkid -s UUID -o value ${DISK}-part1) \
+        echo /dev/disk/by-uuid/$(blkid -s UUID -o value ${DISK}-part2) \
            /boot/efi vfat defaults 0 0 >> /etc/fstab
         mount /boot/efi
         apt install --yes grub-efi-amd64 shim-signed
@@ -666,7 +666,7 @@ Step 4: System Configuration
        <https://bugzilla.redhat.com/show_bug.cgi?id=1077984>`__.  To do so, add
        it to ``/etc/fstab`` this way instead::
 
-         echo /dev/disk/by-uuid/$(blkid -s UUID -o value ${DISK}-part1) \
+         echo /dev/disk/by-uuid/$(blkid -s UUID -o value ${DISK}-part2) \
              /boot/efi vfat \
              x-systemd.idle-timeout=1min,x-systemd.automount,noauto \
              0 1 >> /etc/fstab
