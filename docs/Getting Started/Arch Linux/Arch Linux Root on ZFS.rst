@@ -22,6 +22,16 @@ Caution
   will not work on 4Kn with legacy (BIOS) booting.
   <http://savannah.gnu.org/bugs/?46700>`__
 
+.. note::
+
+    Due to the release cycle of OpenZFS and the rapid adoption of new kernels
+    it may happen that you won’t be able to
+    build DKMS packages for the most recent kernel update.
+    If the `latest OpenZFS release <https://github.com/openzfs/zfs/releases/latest>`__
+    does not yet support the installed kernel,
+    `use an older live image <https://mirrors.dotsrc.org/archlinux/iso/>`__
+    before installation.
+
 Support
 ~~~~~~~
 
@@ -139,16 +149,6 @@ Prepare the Live Environment
 
    If this fails with ``unable to satisfy dependency``,
    install archzfs-dkms instead:
-
-   .. note::
-
-       Due to the release cycle of OpenZFS and the rapid adoption of new kernels
-       it may happen that you won’t be able to
-       build DKMS packages for the most recent kernel update.
-       If the `latest OpenZFS release <https://github.com/openzfs/zfs/releases/latest>`__
-       does not yet support the installed kernel,
-       `use an older live image <https://mirrors.dotsrc.org/archlinux/iso/>`__
-       before installation.
 
     #. Check the current kernel version with::
 
