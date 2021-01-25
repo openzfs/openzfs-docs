@@ -12,6 +12,16 @@ Installation
 If you want to use ZFS as your root filesystem, see the `Root on ZFS`_
 links below instead.
 
+.. note::
+
+   Due to the release cycle of OpenZFS and the rapid adoption of new kernels
+   it may happen that you won’t be able to
+   build DKMS packages for the most recent kernel update.
+   If the `latest OpenZFS release <https://github.com/openzfs/zfs/releases/latest>`__
+   does not yet support the installed kernel,
+   `downgrade kernel <https://wiki.archlinux.org/index.php/downgrading_packages>`__
+   before installation.
+
 ZFS packages are provided by the third-party 
 `archzfs repository <https://github.com/archzfs/archzfs>`__.
 You can use it as follows.
@@ -52,16 +62,6 @@ Install packages.
 
 * If kernel dependency fails, or if you use a custom kernel,
   install zfs-dkms
-
-.. note::
-
-   Due to the release cycle of OpenZFS and the rapid adoption of new kernels
-   it may happen that you won’t be able to
-   build DKMS packages for the most recent kernel update.
-   If the `latest OpenZFS release <https://github.com/openzfs/zfs/releases/latest>`__
-   does not yet support the installed kernel,
-   `downgrade kernel <https://wiki.archlinux.org/index.php/downgrading_packages>`__
-   before installation.
 
   ::
 
