@@ -22,16 +22,6 @@ Caution
   will not work on 4Kn with legacy (BIOS) booting.
   <http://savannah.gnu.org/bugs/?46700>`__
 
-.. note::
-
-    Due to the release cycle of OpenZFS and the rapid adoption of new kernels
-    it may happen that you won’t be able to
-    build DKMS packages for the most recent kernel update.
-    If the `latest OpenZFS release <https://github.com/openzfs/zfs/releases/latest>`__
-    does not yet support the installed kernel,
-    `use an older live image <https://mirrors.dotsrc.org/archlinux/iso/>`__
-    before installation.
-
 Support
 ~~~~~~~
 
@@ -86,15 +76,25 @@ or raidz topologies) are used, the data only has to be encrypted once.
 
 Preinstallation
 ----------------
+Download Arch Linux live image
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#. Choose a mirror
+
+    https://archlinux.org/mirrorlist/all/
+
+#. Download January 2021 build. `File a new issue and mention @ne9z
+   <https://github.com/openzfs/openzfs-docs/issues/new?body=@ne9z,%20Update%20Live%20Image%20Arch%20Linux%20Root%20on
+   %20ZFS%20HOWTO:>`__ if it's
+   no longer available.
+
+    https://mirrors.dotsrc.org/archlinux/iso/2021.01.01/archlinux-2021.01.01-x86_64.iso
+
+#. Write the image to a USB drive or an optical disc.
+
+#. Boot the target computer from the prepared live medium.
 
 Prepare the Live Environment
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-#. Download the latest Arch Linux Live Image
-   `from official website <https://archlinux.org/download/>`__
-   and write it to a USB drive or an optical disc.
-
-#. Boot the target computer from the prepared live medium.
 
 #. Connect to the internet.
    If the target computer aquires IP address with DHCP,
@@ -141,6 +141,19 @@ Prepare the Live Environment
     Server = https://mirror.in.themindsmaze.com/archzfs/$repo/$arch
     EOF
 
+#. Select mirror:
+
+   - Kill ``reflector``::
+
+      killall -9 reflector
+
+   - Edit the following files::
+
+       /etc/pacman.d/mirrorlist
+
+     Uncomment and move mirrors to
+     the beginning of the file.
+
 #. Install ZFS in the live environment::
 
     pacman -Sy --noconfirm archzfs-linux --ignore=linux
@@ -150,27 +163,25 @@ Prepare the Live Environment
    If this fails with ``unable to satisfy dependency``,
    install archzfs-dkms instead:
 
-    #. Check the current kernel version with::
+   - Check kernel variant::
 
-        live_kernel=$(uname -r)
+       LIVE_LINVAR=$(sed 's|.*linux|linux|' /proc/cmdline | awk '{ print $1 }')
 
-    #. Search  and install kernel headers::
+   - Check kernel version::
 
-        curl https://america.archive.pkgbuild.com/packages/l/linux-headers/ \
-          | grep ${live_kernel%%-*} \
-          | grep -v sig
-        # <a href="linux-headers-5.10.3-1-x86_64.pkg.tar.zst">
+       LIVE_LINVER=$(pacman -Qi ${LIVE_LINVAR} | grep Version | awk '{ print $3 }')
 
-        pacman -U \
-        https://america.archive.pkgbuild.com/packages/l/linux-headers/linux-headers-5.10.3-1-x86_64.pkg.tar.zst
+   - Install kernel headers::
 
-    #. Expand root filesystem::
+       pacman -U https://archive.archlinux.org/packages/l/${LIVE_LINVAR}-headers/${LIVE_LINVAR}-headers-${LIVE_LINVER}-x86_64.pkg.tar.zst
 
-        mount -o remount,size=1G /run/archiso/cowspace
+   - Expand root filesystem::
 
-    #. Install archzfs-dkms::
+       mount -o remount,size=1G /run/archiso/cowspace
 
-        pacman -S archzfs-dkms
+   - Install archzfs-dkms::
+
+       pacman -S archzfs-dkms
 
 #. Load kernel module::
 
@@ -553,13 +564,23 @@ Package Installation
 
 #. Install base packages::
 
-     pacstrap $INST_MNT base vi grub
+     pacstrap $INST_MNT base vi mandoc grub
+
+#. Check compatible kernel version::
+
+     INST_LINVER=$(pacman -Si zfs-${INST_LINVAR} \
+     | grep 'Depends On' \
+     | sed "s|.*${INST_LINVAR}=||" \
+     | awk '{ print $1 }')
+
+#. Install kernel::
+
+     pacstrap -U $INST_MNT \
+     https://archive.archlinux.org/packages/l/${INST_LINVAR}/${INST_LINVAR}-${INST_LINVER}-x86_64.pkg.tar.zst
+
+#. Install archzfs package::
+
      pacstrap $INST_MNT archzfs-$INST_LINVAR
-
-#. If archzfs package failed to install with mismatched kernel version::
-
-     pacstrap $INST_MNT $INST_LINVAR ${INST_LINVAR}-headers
-     pacstrap $INST_MNT archzfs-dkms
 
 #. If your computer has hardware that requires firmware to run::
 
@@ -569,18 +590,28 @@ Package Installation
 
      pacstrap $INST_MNT dosfstools efibootmgr
 
+#. Microcode:
+
+   - ``pacstrap $INST_MNT amd-ucode``
+   - ``pacstrap $INST_MNT intel-ucode``
+
+#. For other optional packages,
+   see `ArchWiki <https://wiki.archlinux.org/index.php/Installation_guide#Installation>`__.
+
 System Configuration
 --------------------
 
 #. Generate list of datasets for ``zfs-mount-generator`` to mount them at boot::
 
-    propfile=`mktemp`
-
-    cat /etc/zfs/zed.d/history_event-zfs-list-cacher.sh \
-     | sed ':a;N;$!ba;s|\\\n||g' \
-     | grep PROPS | grep name > $propfile
-
-    source $propfile
+    # tab-separated zfs properties
+    # see /etc/zfs/zed.d/history_event-zfs-list-cacher.sh
+    export \
+    PROPS="name,mountpoint,canmount,atime,relatime,devices,exec\
+    ,readonly,setuid,nbmand,encroot,keylocation\
+    ,org.openzfs.systemd:requires,org.openzfs.systemd:requires-mounts-for\
+    ,org.openzfs.systemd:before,org.openzfs.systemd:after\
+    ,org.openzfs.systemd:wanted-by,org.openzfs.systemd:required-by\
+    ,org.openzfs.systemd:nofail,org.openzfs.systemd:ignore"
 
     mkdir -p $INST_MNT/etc/zfs/zfs-list.cache
 
@@ -588,7 +619,6 @@ System Configuration
     > $INST_MNT/etc/zfs/zfs-list.cache/rpool_$INST_UUID
 
     sed -Ei "s|$INST_MNT/?|/|" $INST_MNT/etc/zfs/zfs-list.cache/*
-
 
 #. Generate fstab::
 
@@ -634,11 +664,12 @@ System Configuration
      EOF
 
    Customize this file if the system is not a DHCP client.
-
+   See `Network Configuration <https://wiki.archlinux.org/index.php/Network_configuration>`__.
 
 #. Timezone::
 
     ln -sf $INST_TZ $INST_MNT/etc/localtime
+    hwclock --systohc
 
 #. archzfs repository::
 
@@ -655,7 +686,7 @@ System Configuration
     echo "en_US.UTF-8 UTF-8" >> $INST_MNT/etc/locale.gen
     echo "LANG=en_US.UTF-8" >> $INST_MNT/etc/locale.conf
 
-   Other locales should be added after reboot, not here.
+   Other locales should be added after reboot.
 
 #. Chroot::
 
@@ -817,67 +848,76 @@ Finish Installation
 
 After Reboot
 ------------
-#. Mirror EFI system partition
+Mirror EFI System Partition
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#. Format redundant EFI partitions::
 
-   #. Format redundant EFI partitions::
+     mkfs.vfat -n EFI2 /dev/disk/by-id/target_disk2-part1
+     mkfs.vfat -n EFI3 /dev/disk/by-id/target_disk3-part1
 
-        mkfs.vfat -n EFI2 /dev/disk/by-id/target_disk2-part1
-        mkfs.vfat -n EFI3 /dev/disk/by-id/target_disk3-part1
+#. Create mountpoints::
 
-   #. Create mountpoints::
+     mkdir -p /boot/efis/{2,3}
 
-        mkdir -p /boot/efis/{2,3}
+#. Mount redundant EFI partitions::
 
-   #. Mount redundant EFI partitions::
+     mount -o umask=0022,fmask=0022,dmask=0022 /dev/disk/by-id/target_disk2-part1 /boot/efis/2
+     mount -o umask=0022,fmask=0022,dmask=0022 /dev/disk/by-id/target_disk3-part1 /boot/efis/3
 
-        mount -o umask=0022,fmask=0022,dmask=0022 /dev/disk/by-id/target_disk2-part1 /boot/efis/2
-        mount -o umask=0022,fmask=0022,dmask=0022 /dev/disk/by-id/target_disk3-part1 /boot/efis/3
+#. Add fstab entries::
 
-   #. Add fstab entries::
+     pacman -S --needed arch-install-scripts rsync
 
-        pacman -S --needed arch-install-scripts rsync
+     genfstab / | grep efis >> /etc/fstab
 
-        genfstab / | grep efis >> /etc/fstab
+#. Sync EFI system partition contents::
 
-   #. Sync EFI system partition contents::
+     for i in /boot/efis/*; do
+        /usr/bin/rsync -a /boot/efi/ $i/
+     done
 
-        for i in /boot/efis/*; do
-           /usr/bin/rsync -a /boot/efi/ $i/
-        done
+#. Add EFI boot entries::
 
-   #. Add EFI boot entries::
+    efibootmgr -cgd /dev/disk/by-id/target_disk2-part1 \
+       -p 1 -L "arch-2" -l "\EFI\arch\grubx64.efi"
+    efibootmgr -cgd /dev/disk/by-id/target_disk3-part1 \
+       -p 1 -L "arch-3" -l "\EFI\arch\grubx64.efi"
 
-       efibootmgr -cgd /dev/disk/by-id/target_disk2-part1 \
-          -p 1 -L "arch-2" -l "\EFI\arch\grubx64.efi"
-       efibootmgr -cgd /dev/disk/by-id/target_disk3-part1 \
-          -p 1 -L "arch-3" -l "\EFI\arch\grubx64.efi"
+#. Create a service to monitor and sync EFI partitions::
 
-   #. Create a service to monitor and sync EFI partitions::
+    tee /usr/lib/systemd/system/boot/efis-sync.path << EOF
+    [Unit]
+    Description=Monitor changes in EFI system partition
 
-       tee /usr/lib/systemd/system/boot/efis-sync.path << EOF
-       [Unit]
-       Description=Monitor changes in EFI system partition
+    [Path]
+    PathModified=/boot/efi/EFI/arch/
 
-       [Path]
-       PathModified=/boot/efi/EFI/arch/
+    [Install]
+    WantedBy=multi-user.target
+    EOF
 
-       [Install]
-       WantedBy=multi-user.target
-       EOF
+    tee /usr/lib/systemd/system/boot/efis-sync.service << EOF
+    [Unit]
+    Description=Sync EFI system partition contents to backups
 
-       tee /usr/lib/systemd/system/boot/efis-sync.service << EOF
-       [Unit]
-       Description=Sync EFI system partition contents to backups
+    [Service]
+    Type=oneshot
+    ExecStart=/usr/bin/bash -c 'for i in /boot/efis/*; do /usr/bin/rsync -a /boot/efi/ $i/; done'
+    EOF
 
-       [Service]
-       Type=oneshot
-       ExecStart=/usr/bin/bash -c 'for i in /boot/efis/*; do /usr/bin/rsync -a /boot/efi/ $i/; done'
-       EOF
+    systemctl enable --now efis-sync.path
 
-       systemctl enable --now efis-sync.path
+Boot Environment Manager
+~~~~~~~~~~~~~~~~~~~~~~~~
+Optional: install ``rozb3-pac`` pacman hook and ``bieaz`` from AUR to
+create boot environments.
 
-#. Optional: install ``rozb3-pac`` pacman hook and ``bieaz`` from AUR to
-   create boot environments.
+Post installation
+~~~~~~~~~~~~~~~~~
+For post installation recommendations,
+see `ArchWiki <https://wiki.archlinux.org/index.php/Installation_guide#Post-installation>`__.
+
+Remember to create separate datasets for individual users.
 
 Recovery
 --------

@@ -79,20 +79,31 @@ or raidz topologies) are used, the data only has to be encrypted once.
 
 Preinstallation
 ----------------
+Download Artix Linux live image
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+OpenRC is used throughout this guide.
+
+Other init systems, runit and s6, are also supported.
+Change the service commands to the equivalent commands.
+
+#. Choose a mirror:
+
+    https://artixlinux.org/download.php
+
+#. Download January 2021 build. `File a new issue and mention @ne9z
+   <https://github.com/openzfs/openzfs-docs/issues/new?body=@ne9z,%20Update%20Live%20Image%20Artix%20Linux%20Root%20on
+   %20ZFS%20HOWTO:>`__ if it's
+   no longer available.
+
+    https://eu-mirror.artixlinux.org/iso/artix-base-openrc-20210101-x86_64.iso
+
+#. Write the image to a USB drive or an optical disc.
+
+#. Boot the target computer from the prepared live medium.
+
 
 Prepare the Live Environment
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-#. Download the latest Artix Linux OpenRC Base Image
-   `from official website <https://iso.artixlinux.org/isos.php>`__
-   and write it to a USB drive or an optical disc.
-
-   OpenRC is used throughout this guide.
-
-   Other init systems, runit and s6, are also supported.
-   Change the service commands to the equivalent commands.
-
-#. Boot the target computer from the prepared live medium.
 
 #. Connect to the internet.
    If the target computer aquires IP address with DHCP,
@@ -146,15 +157,19 @@ Prepare the Live Environment
     Server = https://mirror.biocrafting.net/archlinux/archzfs/$repo/$arch
     Server = https://mirror.in.themindsmaze.com/archzfs/$repo/$arch
     EOF
+#. Select mirror:
+
+   - Edit the following files::
+
+       /etc/pacman.d/mirrorlist
+       /etc/pacman.d/mirrorlist-arch
+
+     Uncomment and move mirrors to
+     the beginning of the file.
 
 #. Install ZFS in the live environment::
 
      pacman -Sy --noconfirm gdisk dosfstools archzfs-dkms
-
-   Unlike Arch Live image,
-   Artix Live image ships with ``linux-headers``.
-   This makes building kernel module
-   possible within live environment.
 
 #. Load kernel module::
 
@@ -537,9 +552,75 @@ Package Installation
 
 #. Install base packages::
 
-     basestrap $INST_MNT base vi grub connman connman-openrc openrc
-     basestrap $INST_MNT $INST_LINVAR ${INST_LINVAR}-headers
-     basestrap $INST_MNT archzfs-dkms
+     basestrap $INST_MNT base vi mandoc grub connman connman-openrc openrc
+
+#. Install kernel headers and archzfs-dkms package:
+
+   Check kernel version::
+
+     pacman -Syi ${INST_LINVAR} \
+     | grep 'Version' \
+     | awk '{ print $3 }'
+     # 5.10.1.artix1-1
+
+   Check zfs-dkms package version::
+
+    DKMS_VER=$(pacman -Si zfs-dkms \
+    | grep 'Version' \
+    | awk '{ print $3 }' \
+    | sed 's|-.*||')
+
+   Visit OpenZFS release page::
+
+    curl https://github.com/openzfs/zfs/releases/zfs-${DKMS_VER} \
+    | grep Linux \
+    | grep compat \
+    | grep kernel
+    # Linux: compatible with 3.10 - 5.10 kernels
+
+   If the kernel is supported:
+
+   - Install archzfs-dkms::
+
+       basestrap $INST_MNT archzfs-dkms ${INST_LINVAR} ${INST_LINVAR}-headers
+
+   If the kernel is not yet supported, install an older kernel:
+
+   - Check build date::
+
+      DKMS_DATE=$(pacman -Syi zfs-dkms \
+      | grep 'Build Date' \
+      | sed 's/.*: //' \
+      | LC_ALL=C xargs -i{} date -d {}  +%Y/%m/%d)
+
+   - Check kernel version::
+
+      curl https://archive.artixlinux.org/repos/${DKMS_DATE}/system/os/x86_64/ \
+      | grep \"${INST_LINVAR}-'[0-9]' \
+      | grep -v sig
+      # <a href="linux-5.10.3.arch1-1-x86_64.pkg.tar.zst">
+
+   - Set kernel version in a variable::
+
+      # <a href="linux-5.10.3.arch1-1-x86_64.pkg.tar.zst">
+      INST_LINVER=5.10.3.arch1-1
+
+   - Install kernel and headers::
+
+       basestrap -U $INST_MNT \
+       https://archive.artixlinux.org/packages/l/${INST_LINVAR}/${INST_LINVAR}-${INST_LINVER}-x86_64.pkg.tar.zst
+       https://archive.artixlinux.org/packages/l/${INST_LINVAR}-headers/${INST_LINVAR}-headers-${INST_LINVER}-x86_64.pkg.tar.zst
+
+   - Install archzfs-dkms::
+
+       basestrap $INST_MNT archzfs-dkms
+
+#. Hold kernel package from updates::
+
+    sed -i 's/#.*HoldPkg/HoldPkg/' $INST_MNT/etc/pacman.conf
+    sed -i "/^HoldPkg/ s/$/ ${INST_LINVAR} ${INST_LINVAR}-headers/" $INST_MNT/etc/pacman.conf
+
+   Kernel must be manually updated, see kernel update section in Getting Started.
 
 #. If your computer has hardware that requires firmware to run::
 
@@ -552,7 +633,15 @@ Package Installation
 #. If a swap partition has been created::
 
      basestrap $INST_MNT cryptsetup
-     basestrap $INST_MNT cryptsetup-openrc # or other init
+     basestrap $INST_MNT cryptsetup-openrc
+
+#. Microcode:
+
+   - ``pacstrap $INST_MNT amd-ucode``
+   - ``pacstrap $INST_MNT intel-ucode``
+
+#. For other optional packages,
+   see `ArchWiki <https://wiki.archlinux.org/index.php/Installation_guide#Installation>`__.
 
 System Configuration
 --------------------
@@ -587,6 +676,7 @@ System Configuration
 #. Timezone::
 
     ln -sf $INST_TZ $INST_MNT/etc/localtime
+    hwclock --systohc
 
 #. archzfs repository::
 
@@ -603,7 +693,7 @@ System Configuration
     echo "en_US.UTF-8 UTF-8" >> $INST_MNT/etc/locale.gen
     echo "LANG=en_US.UTF-8" >> $INST_MNT/etc/locale.conf
 
-   Other locales should be added after reboot, not here.
+   Other locales should be added after reboot.
 
 #. Chroot::
 
@@ -778,43 +868,53 @@ Finish Installation
 
 After Reboot
 ------------
-#. Mirror EFI system partition
+Mirror EFI System Partition
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-   #. Format redundant EFI partitions::
+#. Format redundant EFI partitions::
 
-        mkfs.vfat -n EFI2 /dev/disk/by-id/target_disk2-part1
-        mkfs.vfat -n EFI3 /dev/disk/by-id/target_disk3-part1
+     mkfs.vfat -n EFI2 /dev/disk/by-id/target_disk2-part1
+     mkfs.vfat -n EFI3 /dev/disk/by-id/target_disk3-part1
 
-   #. Create mountpoints::
+#. Create mountpoints::
 
-        mkdir -p /boot/efis/{2,3}
+     mkdir -p /boot/efis/{2,3}
 
-   #. Mount redundant EFI partitions::
+#. Mount redundant EFI partitions::
 
-        mount -o umask=0022,fmask=0022,dmask=0022 /dev/disk/by-id/target_disk2-part1 /boot/efis/2
-        mount -o umask=0022,fmask=0022,dmask=0022 /dev/disk/by-id/target_disk3-part1 /boot/efis/3
+     mount -o umask=0022,fmask=0022,dmask=0022 /dev/disk/by-id/target_disk2-part1 /boot/efis/2
+     mount -o umask=0022,fmask=0022,dmask=0022 /dev/disk/by-id/target_disk3-part1 /boot/efis/3
 
-   #. Add fstab entries::
+#. Add fstab entries::
 
-        pacman -S --needed artools-base rsync
+     pacman -S --needed artools-base rsync
 
-        fstabgen / | grep efis >> /etc/fstab
+     fstabgen / | grep efis >> /etc/fstab
 
-   #. Sync EFI system partition contents::
+#. Sync EFI system partition contents::
 
-        for i in /boot/efis/*; do
-           /usr/bin/rsync -a /boot/efi/ $i/
-        done
+     for i in /boot/efis/*; do
+        /usr/bin/rsync -a /boot/efi/ $i/
+     done
 
-   #. Add EFI boot entries::
+#. Add EFI boot entries::
 
-       efibootmgr -cgd /dev/disk/by-id/target_disk2-part1 \
-          -p 1 -L "artix-2" -l "\EFI\arch\grubx64.efi"
-       efibootmgr -cgd /dev/disk/by-id/target_disk3-part1 \
-          -p 1 -L "artix-3" -l "\EFI\arch\grubx64.efi"
+    efibootmgr -cgd /dev/disk/by-id/target_disk2-part1 \
+       -p 1 -L "artix-2" -l "\EFI\arch\grubx64.efi"
+    efibootmgr -cgd /dev/disk/by-id/target_disk3-part1 \
+       -p 1 -L "artix-3" -l "\EFI\arch\grubx64.efi"
 
-#. Optional: install ``rozb3-pac`` pacman hook and ``bieaz`` from AUR to
+Boot Environment Manager
+~~~~~~~~~~~~~~~~~~~~~~~~
+Optional: install ``rozb3-pac`` pacman hook and ``bieaz`` from AUR to
    create boot environments.
+
+Post installation
+~~~~~~~~~~~~~~~~~
+For post installation recommendations,
+see `ArchWiki <https://wiki.archlinux.org/index.php/Installation_guide#Post-installation>`__.
+
+Remember to create separate datasets for individual users.
 
 Recovery
 --------

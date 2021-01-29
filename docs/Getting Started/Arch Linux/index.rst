@@ -12,17 +12,10 @@ Installation
 If you want to use ZFS as your root filesystem, see the `Root on ZFS`_
 links below instead.
 
-.. note::
+Add archzfs repo
+~~~~~~~~~~~~~~~~
 
-   Due to the release cycle of OpenZFS and the rapid adoption of new kernels
-   it may happen that you won’t be able to
-   build DKMS packages for the most recent kernel update.
-   If the `latest OpenZFS release <https://github.com/openzfs/zfs/releases/latest>`__
-   does not yet support the installed kernel,
-   `downgrade kernel <https://wiki.archlinux.org/index.php/downgrading_packages>`__
-   before installation.
-
-ZFS packages are provided by the third-party 
+ZFS packages are provided by the third-party
 `archzfs repository <https://github.com/archzfs/archzfs>`__.
 You can use it as follows.
 
@@ -46,26 +39,246 @@ Update pacman database::
 
   pacman -Sy
 
-Install packages.
+Prebuilt zfs package
+~~~~~~~~~~~~~~~~~~~~
 
-* Install prebuilt zfs package.
-  Kernel package version must match the zfs package version.
+This only applies to vanilla Arch Linux kernels.
+For other kernels, use `archzfs-dkms package`_.
 
-  - archzfs-linux
-  - archzfs-linux-lts
-  - archzfs-linux-zen
-  - archzfs-linux-hardened
+Check kernel variant::
 
-  ::
+ INST_LINVAR=$(sed 's|.*linux|linux|' /proc/cmdline | awk '{ print $1 }')
 
-     pacman -S archzfs-linux
+Install compatible package::
 
-* If kernel dependency fails, or if you use a custom kernel,
-  install zfs-dkms
+ pacman -Sy archzfs-${INST_LINVAR}
 
-  ::
+If kernel dependency failed, you can either:
 
-     pacman -S archzfs-dkms
+* Install `archzfs-dkms package`_, or
+
+* Downgrade kernel
+  to a compatible version:
+
+Downgrade to compatible kernel
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Check compatible kernel version::
+
+ INST_LINVER=$(pacman -Si zfs-${INST_LINVAR} \
+ | grep 'Depends On' \
+ | sed "s|.*${INST_LINVAR}=||" \
+ | awk '{ print $1 }')
+
+Install compatible kernel::
+
+ pacman -U \
+ https://archive.archlinux.org/packages/l/${INST_LINVAR}/${INST_LINVAR}-${INST_LINVER}-x86_64.pkg.tar.zst
+
+Install archzfs::
+
+ pacman -Sy archzfs-${INST_LINVAR}
+
+Ignore kernel update when dependency fails
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Sometimes archzfs prebuilt package might lag behind
+kernel updates::
+
+ pacman -Syu
+ # error: failed to prepare transaction (could not satisfy dependencies)
+ # :: installing linux-lts (5.4.93-2) breaks dependency 'linux-lts=5.4.92-1' required by zfs-linux-lts
+
+Temporarily ignore kernel update to upgrade other packages::
+
+ pacman -Syu --ignore=linux=lts
+
+archzfs-dkms package
+~~~~~~~~~~~~~~~~~~~~
+
+This package will dynamically build ZFS modules for
+supported kernels. Both Arch Linux and derivatives
+are supported.
+
+Check OpenZFS compatibility
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Check kernel version::
+
+  uname -r
+  # 5.4.92-1-lts
+
+Check newer archzfs-dkms package version::
+
+ DKMS_VER=$(pacman -Si zfs-dkms \
+ | grep 'Version' \
+ | awk '{ print $3 }' \
+ | sed 's|-.*||')
+
+Visit OpenZFS release page ::
+
+ curl https://github.com/openzfs/zfs/releases/zfs-${DKMS_VER} \
+ | grep Linux \
+ | grep compat \
+ | grep kernel
+ # Linux: compatible with 3.10 - 5.10 kernels
+
+If it's not supported, see `Install alternative kernel`_.
+Otherwise, continue to next step.
+
+Normal installation
+^^^^^^^^^^^^^^^^^^^
+
+Check kernel variant::
+
+  INST_LINVAR=$(sed 's|.*linux|linux|' /proc/cmdline | awk '{ print $1 }')
+
+Check kernel version::
+
+  INST_LINVER=$(pacman -Qi ${INST_LINVAR} | grep Version | awk '{ print $3 }')
+
+Install kernel headers::
+
+  pacman -U https://archive.archlinux.org/packages/l/${INST_LINVAR}-headers/${INST_LINVAR}-headers-${INST_LINVER}-x86_64.pkg.tar.zst
+  # for artix
+  pacman -U https://archive.artixlinux.org/packages/l/${INST_LINVAR}-headers/${INST_LINVAR}-headers-${INST_LINVER}-x86_64.pkg.tar.zst
+
+Install archzfs-dkms::
+
+  pacman -Sy archzfs-dkms
+
+Hold kernel package from updates::
+
+  sed -i 's/#.*HoldPkg/HoldPkg/' /etc/pacman.conf
+  sed -i "/^HoldPkg/ s/$/ ${INST_LINVAR} ${INST_LINVAR}-headers/" /etc/pacman.conf
+
+Kernel must be manually updated, see `Kernel update`_.
+
+Install alternative kernel
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+If the kernel is not yet supported, install a supported kernel:
+
+Choose kernel variant. Available variants are:
+
+* linux
+* linux-lts
+
+For Artix, replace ``archlinux.org`` with ``artixlinux.org``.
+
+::
+
+  INST_LINVAR=linux
+
+Check build date::
+
+  DKMS_DATE=$(pacman -Syi zfs-dkms \
+  | grep 'Build Date' \
+  | sed 's/.*: //' \
+  | LC_ALL=C xargs -i{} date -d {}  +%Y/%m/%d)
+
+Check kernel version::
+
+  curl https://archive.archlinux.org/repos/${DKMS_DATE}/core/os/x86_64/ \
+  | grep \"${INST_LINVAR}-'[0-9]' \
+  | grep -v sig
+  # <a href="linux-5.10.3.arch1-1-x86_64.pkg.tar.zst">
+
+Set kernel version in a variable::
+
+  # <a href="linux-5.10.3.arch1-1-x86_64.pkg.tar.zst">
+  INST_LINVER=5.10.3.arch1-1
+
+Install kernel and headers::
+
+  pacman -U \
+  https://archive.archlinux.org/packages/l/${INST_LINVAR}/${INST_LINVAR}-${INST_LINVER}-x86_64.pkg.tar.zst \
+  https://archive.archlinux.org/packages/l/${INST_LINVAR}-headers/${INST_LINVAR}-headers-${INST_LINVER}-x86_64.pkg.tar.zst
+
+Install archzfs-dkms::
+
+  pacman -Sy archzfs-dkms
+
+Hold kernel package from updates::
+
+  sed -i 's/#.*HoldPkg/HoldPkg/' /etc/pacman.conf
+  sed -i "/^HoldPkg/ s/$/ ${INST_LINVAR} ${INST_LINVAR}-headers/" /etc/pacman.conf
+
+Kernel must be manually updated, see `Kernel update`_.
+
+Kernel update
+^^^^^^^^^^^^^
+
+This applies to archzfs-dkms package.
+
+Check kernel variant::
+
+ INST_LINVAR=$(sed 's|.*linux|linux|' /proc/cmdline | awk '{ print $1 }')
+
+Check newer kernel version::
+
+ pacman -Syi $INST_LINVAR \
+ | grep 'Version' \
+ | awk '{ print $3 }'
+ # 5.10.1.1-1
+
+Check newer archzfs-dkms package version::
+
+ pacman -Si zfs-dkms \
+ | grep 'Version' \
+ | awk '{ print $3 }' \
+ | sed 's|-.*||'
+ # 2.0.1
+
+Visit OpenZFS release page https://github.com/openzfs/zfs/releases/zfs-2.0.1::
+
+ # Linux: compatible with 3.10 - 5.10 kernels
+
+If compatible, update kernel with::
+
+ pacman -S $INST_LINVAR $INST_LINVAR-headers archzfs-dkms
+
+Do not update if the kernel is not compatible
+with OpenZFS.
+
+Check Live Image Compatibility
+------------------------------
+#. Choose a mirror::
+
+    https://archlinux.org/mirrorlist/all/
+    https://gitea.artixlinux.org/packagesA/artix-mirrorlist/src/branch/master/trunk/mirrorlist
+
+#. Check the build date of the
+   latest Arch Linux live image::
+
+    https://mirrors.dotsrc.org/archlinux/iso/latest/
+    https://mirrors.dotsrc.org/artix-linux/iso/
+    # archlinux-2021.01.01-x86_64.iso
+
+#. Check the kernel version of the live image::
+
+    https://archive.archlinux.org/repos/2021/01/01/core/os/x86_64
+    https://archive.artixlinux.org/repos/2021/01/01/system/os/x86_64
+    # linux-5.10.3.arch1-1-x86_64.pkg.tar.zst
+
+#. Check latest archzfs package version::
+
+    https://archzfs.com/archzfs/x86_64/
+    # zfs-dkms-2.0.1-1-x86_64.pkg.tar.zst
+    # zfs-linux-2.0.1_5.10.10.arch1.1-1-x86_64.pkg.tar.zst
+
+#. Visit OpenZFS release page https://github.com/openzfs/zfs/releases/tag/zfs-2.0.1::
+
+     # Linux: compatible with 3.10 - 5.10 kernels
+
+   - If compatible, download the latest live image::
+
+      https://mirrors.dotsrc.org/archlinux/iso/latest/archlinux-2021.01.01-x86_64.iso
+      https://mirrors.dotsrc.org/artix-linux/iso/artix-base-openrc-20210101-x86_64.iso
+
+   - If not compatible, use an older live image and verify that it contains
+     a supported kernel using the above method::
+
+      https://mirrors.dotsrc.org/archlinux/iso/
+      https://iso.artixlinux.org/archived-isos.php
 
 Root on ZFS
 -----------
