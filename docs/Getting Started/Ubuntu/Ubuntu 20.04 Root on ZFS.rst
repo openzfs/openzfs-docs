@@ -998,8 +998,8 @@ Step 5: GRUB Installation
 
    If either is empty, force a cache update and check again::
 
-     zfs set canmount=noauto bpool/BOOT/ubuntu_$UUID
-     zfs set canmount=noauto rpool/ROOT/ubuntu_$UUID
+     zfs set canmount=on bpool/BOOT/ubuntu_$UUID
+     zfs set canmount=on rpool/ROOT/ubuntu_$UUID
 
    Stop ``zed``::
 
