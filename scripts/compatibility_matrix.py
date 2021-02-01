@@ -8,6 +8,7 @@ import logging
 import sys
 
 from collections import defaultdict
+from urllib.error import HTTPError
 from urllib.request import urlopen
 from datetime import datetime
 from re import sub as regex, findall
@@ -160,13 +161,20 @@ features = defaultdict(list)
 readonly = dict()
 
 for name, sub in sources.items():
+    found = {}
     LOG.debug('Work on %s...', name)
     for ver, url in sub.items():
         LOG.debug('Get %s...', url)
-        with urlopen(url) as c:
-            if c.getcode() != 200:
-                continue
-            man = c.read().decode('utf-8')
+        try:
+            with urlopen(url) as c:
+                if c.getcode() != 200:
+                    LOG.debug('Failed with HTTP code %d', c.getcode())
+                    continue
+                man = c.read().decode('utf-8')
+        except HTTPError:
+            LOG.debug('Failed with HTTPError')
+            continue
+        found[ver] = url
         for line in man.split('\n'):
             if line.startswith('.It '):
                 line = line[4:]
@@ -191,6 +199,7 @@ for name, sub in sources.items():
         # https://github.com/Nexenta/illumos-nexenta/blob/release-4.0.4-FP/usr/src/common/zfs/zfeature_common.c
         if name == 'Nexenta' and ver.startswith('4.'):
             features[('meta_devices', 'com.nexenta')].append((name, ver))
+    sources[name] = found
 
 os_sources = sources.copy()
 os_sources.pop(openzfs_key)
