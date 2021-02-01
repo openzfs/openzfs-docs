@@ -610,6 +610,7 @@ Step 3: System Installation
      zfs create -o com.ubuntu.zsys:bootfs-datasets=rpool/ROOT/ubuntu_$UUID \
          -o canmount=on -o mountpoint=/root \
          rpool/USERDATA/root_$UUID
+     chmod 700 /mnt/root
 
    For a mirror or raidz topology, create a dataset for ``/boot/grub``::
 

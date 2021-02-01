@@ -433,6 +433,7 @@ Step 3: System Installation
 
      zfs create                                 rpool/home
      zfs create -o mountpoint=/root             rpool/home/root
+     chmod 700 /mnt/root
      zfs create -o canmount=off                 rpool/var
      zfs create -o canmount=off                 rpool/var/lib
      zfs create                                 rpool/var/log
