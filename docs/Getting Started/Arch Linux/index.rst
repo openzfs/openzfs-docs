@@ -44,6 +44,8 @@ Prebuilt zfs package
 
 This only applies to vanilla Arch Linux kernels.
 For other kernels, use `archzfs-dkms package`_.
+You can also switch between DKMS and prebuilt
+packages with instructions on this page.
 
 Check kernel variant::
 
@@ -90,7 +92,7 @@ kernel updates::
 
 Temporarily ignore kernel update to upgrade other packages::
 
- pacman -Syu --ignore=linux=lts
+ pacman -Syu --ignore=linux-lts
 
 archzfs-dkms package
 ~~~~~~~~~~~~~~~~~~~~
@@ -117,9 +119,7 @@ Check newer archzfs-dkms package version::
 Visit OpenZFS release page ::
 
  curl https://github.com/openzfs/zfs/releases/zfs-${DKMS_VER} \
- | grep Linux \
- | grep compat \
- | grep kernel
+ | grep Linux
  # Linux: compatible with 3.10 - 5.10 kernels
 
 If it's not supported, see `Install alternative kernel`_.
@@ -148,8 +148,8 @@ Install archzfs-dkms::
 
 Hold kernel package from updates::
 
-  sed -i 's/#.*HoldPkg/HoldPkg/' /etc/pacman.conf
-  sed -i "/^HoldPkg/ s/$/ ${INST_LINVAR} ${INST_LINVAR}-headers/" /etc/pacman.conf
+  sed -i 's/#.*IgnorePkg/IgnorePkg/' /etc/pacman.conf
+  sed -i "/^IgnorePkg/ s/$/ ${INST_LINVAR} ${INST_LINVAR}-headers/" /etc/pacman.conf
 
 Kernel must be manually updated, see `Kernel update`_.
 
@@ -199,8 +199,8 @@ Install archzfs-dkms::
 
 Hold kernel package from updates::
 
-  sed -i 's/#.*HoldPkg/HoldPkg/' /etc/pacman.conf
-  sed -i "/^HoldPkg/ s/$/ ${INST_LINVAR} ${INST_LINVAR}-headers/" /etc/pacman.conf
+  sed -i 's/#IgnorePkg/IgnorePkg/' /etc/pacman.conf
+  sed -i "/^IgnorePkg/ s/$/ ${INST_LINVAR} ${INST_LINVAR}-headers/" /etc/pacman.conf
 
 Kernel must be manually updated, see `Kernel update`_.
 
@@ -222,14 +222,15 @@ Check newer kernel version::
 
 Check newer archzfs-dkms package version::
 
- pacman -Si zfs-dkms \
+ DKMS_VER=$(pacman -Si zfs-dkms \
  | grep 'Version' \
  | awk '{ print $3 }' \
- | sed 's|-.*||'
- # 2.0.1
+ | sed 's|-.*||')
 
-Visit OpenZFS release page https://github.com/openzfs/zfs/releases/zfs-2.0.1::
+Visit OpenZFS release page ::
 
+ curl https://github.com/openzfs/zfs/releases/zfs-${DKMS_VER} \
+ | grep Linux
  # Linux: compatible with 3.10 - 5.10 kernels
 
 If compatible, update kernel with::
