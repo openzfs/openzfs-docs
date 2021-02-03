@@ -82,12 +82,12 @@ Download Arch Linux live image
 
     https://archlinux.org/mirrorlist/all/
 
-#. Download January 2021 build. `File a new issue and mention @ne9z
+#. Download Feb 2021 build. `File a new issue and mention @ne9z
    <https://github.com/openzfs/openzfs-docs/issues/new?body=@ne9z,%20Update%20Live%20Image%20Arch%20Linux%20Root%20on
    %20ZFS%20HOWTO:>`__ if it's
    no longer available.
 
-    https://mirrors.dotsrc.org/archlinux/iso/2021.01.01/archlinux-2021.01.01-x86_64.iso
+    https://mirrors.dotsrc.org/archlinux/iso/2021.02.01/archlinux-2021.02.01-x86_64.iso
 
 #. Write the image to a USB drive or an optical disc.
 

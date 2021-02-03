@@ -573,9 +573,7 @@ Package Installation
    Visit OpenZFS release page::
 
     curl https://github.com/openzfs/zfs/releases/zfs-${DKMS_VER} \
-    | grep Linux \
-    | grep compat \
-    | grep kernel
+    | grep Linux
     # Linux: compatible with 3.10 - 5.10 kernels
 
    If the kernel is supported:
@@ -617,8 +615,8 @@ Package Installation
 
 #. Hold kernel package from updates::
 
-    sed -i 's/#.*HoldPkg/HoldPkg/' $INST_MNT/etc/pacman.conf
-    sed -i "/^HoldPkg/ s/$/ ${INST_LINVAR} ${INST_LINVAR}-headers/" $INST_MNT/etc/pacman.conf
+    sed -i 's/#IgnorePkg/IgnorePkg/' $INST_MNT/etc/pacman.conf
+    sed -i "/^IgnorePkg/ s/$/ ${INST_LINVAR} ${INST_LINVAR}-headers/" $INST_MNT/etc/pacman.conf
 
    Kernel must be manually updated, see kernel update section in Getting Started.
 
