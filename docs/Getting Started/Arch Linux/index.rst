@@ -240,6 +240,53 @@ If compatible, update kernel with::
 Do not update if the kernel is not compatible
 with OpenZFS.
 
+glibc version mismatch
+^^^^^^^^^^^^^^^^^^^^^^
+As of Feb 6th, 2021, latest glibc release is ``2.33``.
+glibc in Arch Linux repo is ``2.32``.
+
+When updating ``linux-lts (5.4.94-1 -> 5.4.95-1)``,
+``linux-lts-headers`` will depend on the unavailable glibc ``2.33``
+::
+
+ # /var/lib/dkms/zfs/2.0.2/build/config.log
+ 
+ configure:18576: checking whether modules can be built
+ configure:18746:
+             KBUILD_MODPOST_NOFINAL= KBUILD_MODPOST_WARN=
+             make modules -k -j4 -C /usr/lib/modules/5.4.95-1-lts/build
+             M=/var/lib/dkms/zfs/2.0.2/build/build/conftest >build/conftest/build.log 2>&1
+ configure:18749: $? = 2
+ configure:18752: test -f build/conftest/conftest.ko
+ configure:18755: $? = 1
+ configure:18764: result: no
+ configure:18767: error:
+         *** Unable to build an empty module.
+
+::
+
+ # /var/lib/dkms/zfs/2.0.2/build/build/conftest/build.log
+ 
+ make: Entering directory '/usr/lib/modules/5.4.95-1-lts/build'
+   CC [M]  /var/lib/dkms/zfs/2.0.2/build/build/conftest/conftest.o
+ scripts/basic/fixdep: /usr/lib/libc.so.6: version `GLIBC_2.33' not found (required by scripts/basic/fixdep)
+ make[1]: *** [scripts/Makefile.build:262: /var/lib/dkms/zfs/2.0.2/build/build/conftest/conftest.o] Error 1
+ make[1]: *** Deleting file '/var/lib/dkms/zfs/2.0.2/build/build/conftest/conftest.o'
+
+::
+
+ pacman -Qo /usr/lib/modules/5.4.95-1-lts/build/scripts/basic/fixdep
+ /usr/lib/modules/5.4.95-1-lts/build/scripts/basic/fixdep is owned by linux-lts-headers 5.4.95-1
+
+To solve the problem, rollback kernel update
+and postpone kernel updates
+until glibc ``2.33`` becomes available.
+
+::
+
+ cd /var/cache/pacman/pkg/
+ pacman -U linux-lts-5.4.94-1-x86_64.pkg.tar.zst linux-lts-headers-5.4.94-1-x86_64.pkg.tar.zst
+
 Check Live Image Compatibility
 ------------------------------
 #. Choose a mirror::
