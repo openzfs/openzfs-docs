@@ -253,6 +253,9 @@ Step 1: Prepare The Install Environment
    ``ip addr show scope global | grep inet``. Then, from your main machine,
    connect with ``ssh ubuntu@IP``.
 
+#. Disable Automounting
+     gsettings set org.gnome.desktop.media-handling automount false
+
 #. Become root::
 
      sudo -i
