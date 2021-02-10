@@ -253,6 +253,13 @@ Step 1: Prepare The Install Environment
    ``ip addr show scope global | grep inet``. Then, from your main machine,
    connect with ``ssh ubuntu@IP``.
 
+#. Disable automounting:
+
+   If the disk has been used before (with partitions at the same offsets),
+   previous filesystems (e.g. the ESP) will automount if not disabled::
+
+￼     gsettings set org.gnome.desktop.media-handling automount false
+
 #. Become root::
 
      sudo -i
