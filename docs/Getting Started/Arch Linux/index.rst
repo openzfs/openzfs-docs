@@ -247,31 +247,32 @@ glibc in Arch Linux repo is ``2.32``.
 
 When updating ``linux-lts (5.4.94-1 -> 5.4.95-1)``,
 ``linux-lts-headers`` will depend on the unavailable glibc ``2.33``
-::
 
- # /var/lib/dkms/zfs/2.0.2/build/config.log
- 
- configure:18576: checking whether modules can be built
- configure:18746:
-             KBUILD_MODPOST_NOFINAL= KBUILD_MODPOST_WARN=
-             make modules -k -j4 -C /usr/lib/modules/5.4.95-1-lts/build
-             M=/var/lib/dkms/zfs/2.0.2/build/build/conftest >build/conftest/build.log 2>&1
- configure:18749: $? = 2
- configure:18752: test -f build/conftest/conftest.ko
- configure:18755: $? = 1
- configure:18764: result: no
- configure:18767: error:
-         *** Unable to build an empty module.
+.. code-block:: none
 
-::
+   # /var/lib/dkms/zfs/2.0.2/build/config.log
 
- # /var/lib/dkms/zfs/2.0.2/build/build/conftest/build.log
- 
- make: Entering directory '/usr/lib/modules/5.4.95-1-lts/build'
-   CC [M]  /var/lib/dkms/zfs/2.0.2/build/build/conftest/conftest.o
- scripts/basic/fixdep: /usr/lib/libc.so.6: version `GLIBC_2.33' not found (required by scripts/basic/fixdep)
- make[1]: *** [scripts/Makefile.build:262: /var/lib/dkms/zfs/2.0.2/build/build/conftest/conftest.o] Error 1
- make[1]: *** Deleting file '/var/lib/dkms/zfs/2.0.2/build/build/conftest/conftest.o'
+   configure:18576: checking whether modules can be built
+   configure:18746:
+               KBUILD_MODPOST_NOFINAL= KBUILD_MODPOST_WARN=
+               make modules -k -j4 -C /usr/lib/modules/5.4.95-1-lts/build
+               M=/var/lib/dkms/zfs/2.0.2/build/build/conftest >build/conftest/build.log 2>&1
+   configure:18749: $? = 2
+   configure:18752: test -f build/conftest/conftest.ko
+   configure:18755: $? = 1
+   configure:18764: result: no
+   configure:18767: error:
+           *** Unable to build an empty module.
+
+.. code-block:: none
+
+   # /var/lib/dkms/zfs/2.0.2/build/build/conftest/build.log
+
+   make: Entering directory '/usr/lib/modules/5.4.95-1-lts/build'
+     CC [M]  /var/lib/dkms/zfs/2.0.2/build/build/conftest/conftest.o
+   scripts/basic/fixdep: /usr/lib/libc.so.6: version `GLIBC_2.33' not found (required by scripts/basic/fixdep)
+   make[1]: *** [scripts/Makefile.build:262: /var/lib/dkms/zfs/2.0.2/build/build/conftest/conftest.o] Error 1
+   make[1]: *** Deleting file '/var/lib/dkms/zfs/2.0.2/build/build/conftest/conftest.o'
 
 ::
 
@@ -289,41 +290,52 @@ until glibc ``2.33`` becomes available.
 
 Check Live Image Compatibility
 ------------------------------
-#. Choose a mirror::
+#. Choose a mirror:
+
+   .. code-block:: none
 
     https://archlinux.org/mirrorlist/all/
     https://gitea.artixlinux.org/packagesA/artix-mirrorlist/src/branch/master/trunk/mirrorlist
 
-#. Check the build date of the
-   latest Arch Linux live image::
+#. Check the build date of the latest Arch Linux live image:
+
+   .. code-block:: none
 
     https://mirrors.dotsrc.org/archlinux/iso/latest/
     https://mirrors.dotsrc.org/artix-linux/iso/
     # archlinux-2021.01.01-x86_64.iso
 
-#. Check the kernel version of the live image::
+#. Check the kernel version of the live image:
+
+   .. code-block:: none
 
     https://archive.archlinux.org/repos/2021/01/01/core/os/x86_64
     https://archive.artixlinux.org/repos/2021/01/01/system/os/x86_64
     # linux-5.10.3.arch1-1-x86_64.pkg.tar.zst
 
-#. Check latest archzfs package version::
+#. Check latest archzfs package version:
+
+   .. code-block:: none
 
     https://archzfs.com/archzfs/x86_64/
     # zfs-dkms-2.0.1-1-x86_64.pkg.tar.zst
     # zfs-linux-2.0.1_5.10.10.arch1.1-1-x86_64.pkg.tar.zst
 
-#. Visit OpenZFS release page https://github.com/openzfs/zfs/releases/tag/zfs-2.0.1::
+#. Visit OpenZFS release page: https://github.com/openzfs/zfs/releases/tag/zfs-2.0.1
 
-     # Linux: compatible with 3.10 - 5.10 kernels
+   Find the line like: "Linux: compatible with 3.10 - 5.10 kernels"
 
-   - If compatible, download the latest live image::
+   - If compatible, download the latest live image:
+
+     .. code-block:: none
 
       https://mirrors.dotsrc.org/archlinux/iso/latest/archlinux-2021.01.01-x86_64.iso
       https://mirrors.dotsrc.org/artix-linux/iso/artix-base-openrc-20210101-x86_64.iso
 
    - If not compatible, use an older live image and verify that it contains
-     a supported kernel using the above method::
+     a supported kernel using the above method:
+
+     .. code-block:: none
 
       https://mirrors.dotsrc.org/archlinux/iso/
       https://iso.artixlinux.org/archived-isos.php
