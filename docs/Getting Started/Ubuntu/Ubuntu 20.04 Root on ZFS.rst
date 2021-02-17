@@ -893,19 +893,6 @@ Step 4: System Configuration
      addgroup --system lxd
      addgroup --system sambashare
 
-#. Patch a dependency loop:
-
-   For ZFS native encryption or LUKS::
-
-     sudo apt install --yes curl patch
-
-     curl https://launchpadlibrarian.net/478315221/2150-fix-systemd-dependency-loops.patch | \
-         sed "s|/etc|/lib|;s|\.in$||" | (cd / ; sudo patch -p1)
-
-   This patch is from `Bug #1875577 Encrypted swap won't load on 20.04 with
-   zfs root
-   <https://bugs.launchpad.net/ubuntu/+source/zfs-linux/+bug/1875577>`__.
-
 Step 5: GRUB Installation
 -------------------------
 
