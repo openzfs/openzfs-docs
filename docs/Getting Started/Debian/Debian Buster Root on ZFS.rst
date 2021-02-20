@@ -131,7 +131,7 @@ Step 1: Prepare The Install Environment
    If the disk has been used before (with partitions at the same offsets),
    previous filesystems (e.g. the ESP) will automount if not disabled::
 
-￼    gsettings set org.gnome.desktop.media-handling automount false
+     gsettings set org.gnome.desktop.media-handling automount false
 
 #. Become root::
 
