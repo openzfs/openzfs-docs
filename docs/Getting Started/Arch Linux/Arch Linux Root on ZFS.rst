@@ -154,34 +154,27 @@ Prepare the Live Environment
      Uncomment and move mirrors to
      the beginning of the file.
 
-#. Install ZFS in the live environment::
+#. Install ZFS in the live environment:
 
-    pacman -Sy --noconfirm archzfs-linux --ignore=linux
+   Check kernel variant::
 
-   Ignore ``ERROR: specified kernel image does not exist``.
+    LIVE_LINVAR=$(sed 's|.*linux|linux|' /proc/cmdline | awk '{ print $1 }')
 
-   If this fails with ``unable to satisfy dependency``,
-   install archzfs-dkms instead:
+   Check kernel version::
 
-   - Check kernel variant::
+    LIVE_LINVER=$(pacman -Qi ${LIVE_LINVAR} | grep Version | awk '{ print $3 }')
 
-       LIVE_LINVAR=$(sed 's|.*linux|linux|' /proc/cmdline | awk '{ print $1 }')
+   Install kernel headers::
 
-   - Check kernel version::
+    pacman -U https://archive.archlinux.org/packages/l/${LIVE_LINVAR}-headers/${LIVE_LINVAR}-headers-${LIVE_LINVER}-x86_64.pkg.tar.zst
 
-       LIVE_LINVER=$(pacman -Qi ${LIVE_LINVAR} | grep Version | awk '{ print $3 }')
+   Expand root filesystem::
 
-   - Install kernel headers::
+    mount -o remount,size=1G /run/archiso/cowspace
 
-       pacman -U https://archive.archlinux.org/packages/l/${LIVE_LINVAR}-headers/${LIVE_LINVAR}-headers-${LIVE_LINVER}-x86_64.pkg.tar.zst
+   Install archzfs-dkms::
 
-   - Expand root filesystem::
-
-       mount -o remount,size=1G /run/archiso/cowspace
-
-   - Install archzfs-dkms::
-
-       pacman -S archzfs-dkms
+    pacman -S archzfs-dkms
 
 #. Load kernel module::
 
@@ -277,7 +270,7 @@ Format and Partition the Target Disks
    - If a separate swap partition is needed::
 
        sgdisk -n3:0:-8G -t3:BF00 $DISK
-       sgdisk -n4:0:0 -t4:8308 $DISK
+       sgdisk -n4:0:0   -t4:8308 $DISK
 
     Adjust the swap partition size to your needs.
 
@@ -302,7 +295,7 @@ Create Root and Boot Pools
     zpool create \
       ... \
       mirror \
-      /dev/disk/by-id/ata-disk1-part2
+      /dev/disk/by-id/ata-disk1-part2 \
       /dev/disk/by-id/ata-disk2-part2
 
    if needed, replace ``mirror`` with ``raidz1``, ``raidz2`` or ``raidz3``.
@@ -475,19 +468,6 @@ Create Datasets
      zfs create -o mountpoint=legacy -o canmount=noauto bpool_$INST_UUID/BOOT/default
      zfs create -o mountpoint=/      -o canmount=noauto rpool_$INST_UUID/ROOT/default
 
-   - ``canmount=noauto`` prevents ZFS from automatically
-     mounting datasets.
-
-   - Root dataset, specified with ``root=ZFS=rpool/ROOT/dataset`` at boot,
-     will be mounted regardless of other properties.
-
-   - Boot dataset is mounted with ``/etc/fstab``.
-     Its ``fstab`` entry will be updated upon the creation of
-     a new boot environment.
-
-   - ``zfs-mount-generator`` does not mount datasets
-     with ``canmount=noauto``.
-
 #. Mount root and boot filesystem datasets::
 
     zfs mount rpool_$INST_UUID/ROOT/default
@@ -580,7 +560,7 @@ Package Installation
 
 #. Install archzfs package::
 
-     pacstrap $INST_MNT archzfs-$INST_LINVAR
+     pacstrap $INST_MNT zfs-$INST_LINVAR
 
 #. If your computer has hardware that requires firmware to run::
 
@@ -690,8 +670,7 @@ System Configuration
 
 #. Chroot::
 
-    arch-chroot $INST_MNT /usr/bin/env  DISK=$DISK \
-      INST_UUID=$INST_UUID bash --login
+    arch-chroot $INST_MNT /usr/bin/env DISK=$DISK INST_UUID=$INST_UUID bash --login
 
 #. Apply locales::
 
@@ -703,8 +682,7 @@ System Configuration
 
 #. Enable ZFS services::
 
-    systemctl enable zfs-import-cache zfs-import.target \
-      zfs-mount zfs-zed zfs.target
+    systemctl enable zfs-import-cache zfs-import.target zfs-mount zfs-zed zfs.target
 
 #. Generate zpool.cache
 
@@ -753,44 +731,6 @@ A workaround is to replace the pool name detection with ``zdb``
 command::
 
  sed -i "s|rpool=.*|rpool=\`zdb -l \${GRUB_DEVICE} \| grep -E '[[:blank:]]name' \| cut -d\\\' -f 2\`|"  /etc/grub.d/10_linux
-
-**Notes:**
-
- In ``/etc/grub.d/10_linux``::
-
-   # rpool=`${grub_probe} --device ${GRUB_DEVICE} --target=fs_label 2>/dev/null || true`
-
- ``10_linux`` will return an empty result if the root pool has features
- not supported by GRUB.
-
- With this bug, the generated ``grub.cfg`` contains such lines::
-
-   root=ZFS=/ROOT/default # root pool name missing; unbootable
-
- Rendering the system unbootable.
-
- This will replace the faulty line in ``10_linux`` with::
-
-    # rpool=`zdb -l ${GRUB_DEVICE} | grep -E '[[:blank:]]name' | cut -d\' -f 2`
-
- Debian guide chose to hardcode ``root=ZFS=rpool/ROOT/default``
- in ``GRUB_CMDLINE_LINUX`` in ``/etc/default/grub``
- This is incompatible with the boot environment utility.
- The utility also uses this parameter to boot alternative
- root filesystem datasets.
-
- A boot environment entry::
-
-   # root=ZFS=rpool_UUID/ROOT/bootenv_after-sysupdate
-
- ``root=ZFS=pool/dataset`` is processed by
- the ZFS script in initramfs, used to
- tell the kernel the real root filesystem.
-
- ``zfs=bootfs`` kernel command line
- and ``zpool set bootfs=pool/dataset pool``
- is not used due to its inflexibility.
-
 
 GRUB Installation
 ~~~~~~~~~~~~~~~~~
