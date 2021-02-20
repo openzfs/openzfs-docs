@@ -133,8 +133,13 @@ Prepare the Live Environment
 
 #. Add archzfs repository::
 
-    tee -a /etc/pacman.conf <<-'EOF'
+    tee -a /etc/pacman.conf <<- 'EOF'
+  
     [archzfs]
+    Include = /etc/pacman.d/mirrorlist-archzfs
+  
+    EOF
+    tee -a /etc/pacman.d/mirrorlist-archzfs <<- 'EOF'
     Server = https://archzfs.com/$repo/$arch
     Server = https://mirror.sum7.eu/archlinux/archzfs/$repo/$arch
     Server = https://mirror.biocrafting.net/archlinux/archzfs/$repo/$arch
@@ -149,16 +154,20 @@ Prepare the Live Environment
 
    - Edit the following files::
 
-       /etc/pacman.d/mirrorlist
+       nano /etc/pacman.d/mirrorlist
 
      Uncomment and move mirrors to
      the beginning of the file.
+
+   - Update database::
+
+       pacman -Sy
 
 #. Install ZFS in the live environment:
 
    Check kernel variant::
 
-    LIVE_LINVAR=$(sed 's|.*linux|linux|' /proc/cmdline | awk '{ print $1 }')
+    LIVE_LINVAR=$(sed 's|.*linux|linux|' /proc/cmdline | sed 's|.img||g' | awk '{ print $1 }')
 
    Check kernel version::
 
@@ -170,11 +179,11 @@ Prepare the Live Environment
 
    Expand root filesystem::
 
-    mount -o remount,size=1G /run/archiso/cowspace
+    mount -o remount,size=2G /run/archiso/cowspace
 
-   Install archzfs-dkms::
+   Install zfs-dkms::
 
-    pacman -S archzfs-dkms
+    pacman -S zfs-dkms glibc
 
 #. Load kernel module::
 
@@ -653,8 +662,13 @@ System Configuration
 
 #. archzfs repository::
 
-    tee -a $INST_MNT/etc/pacman.conf <<-'EOF'
+    tee -a $INST_MNT/etc/pacman.conf <<- 'EOF'
+
     [archzfs]
+    Include = /etc/pacman.d/mirrorlist-archzfs
+
+    EOF
+    tee -a $INST_MNT/etc/pacman.d/mirrorlist-archzfs <<- 'EOF'
     Server = https://archzfs.com/$repo/$arch
     Server = https://mirror.sum7.eu/archlinux/archzfs/$repo/$arch
     Server = https://mirror.biocrafting.net/archlinux/archzfs/$repo/$arch

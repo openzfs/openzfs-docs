@@ -101,6 +101,7 @@ Change the service commands to the equivalent commands.
 
 #. Boot the target computer from the prepared live medium.
 
+#. At GRUB menu, select "From ISO: artix x86_64".
 
 Prepare the Live Environment
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -150,26 +151,36 @@ Prepare the Live Environment
 
 #. Add archzfs repository::
 
-    tee -a /etc/pacman.conf <<-'EOF'
+    tee -a /etc/pacman.conf <<- 'EOF'
+
     [archzfs]
+    Include = /etc/pacman.d/mirrorlist-archzfs
+
+    EOF
+    tee -a /etc/pacman.d/mirrorlist-archzfs <<- 'EOF'
     Server = https://archzfs.com/$repo/$arch
     Server = https://mirror.sum7.eu/archlinux/archzfs/$repo/$arch
     Server = https://mirror.biocrafting.net/archlinux/archzfs/$repo/$arch
     Server = https://mirror.in.themindsmaze.com/archzfs/$repo/$arch
     EOF
+
 #. Select mirror:
 
    - Edit the following files::
 
-       /etc/pacman.d/mirrorlist
-       /etc/pacman.d/mirrorlist-arch
+       nano /etc/pacman.d/mirrorlist
+       nano /etc/pacman.d/mirrorlist-arch
 
      Uncomment and move mirrors to
      the beginning of the file.
 
+   - Update database::
+
+       pacman -Sy
+
 #. Install ZFS and tools in the live environment::
 
-     pacman -Sy --noconfirm gdisk dosfstools archzfs-dkms
+     pacman -Sy --noconfirm gdisk dosfstools zfs-dkms glibc
 
 #. Load kernel module::
 
@@ -539,9 +550,9 @@ Package Installation
 
 #. Install base packages::
 
-     basestrap $INST_MNT base vi mandoc grub connman connman-openrc openrc
+     basestrap $INST_MNT base vi mandoc grub connman connman-openrc openrc elogind-openrc
 
-#. Install kernel headers and archzfs-dkms package:
+#. Install kernel headers and zfs-dkms package:
 
    Check kernel version::
 
@@ -559,10 +570,11 @@ Package Installation
     curl https://github.com/openzfs/zfs/releases/zfs-${DKMS_VER} \
     | grep Linux
     # Linux: compatible with 3.10 - 5.10 kernels
+    echo $INST_LINVER
 
    If the kernel is supported:
 
-   - Install archzfs-dkms::
+   - Install zfs-dkms::
 
        basestrap $INST_MNT zfs-dkms ${INST_LINVAR} ${INST_LINVAR}-headers
 
@@ -577,7 +589,7 @@ Package Installation
 
    - Check kernel version::
 
-      INST_LINVER=$(curl https://archive.artixlinux.org/repos/${DKMS_DATE}/core/os/x86_64/ \
+      INST_LINVER=$(curl https://archive.artixlinux.org/repos/${DKMS_DATE}/system/os/x86_64/ \
       | grep \"${INST_LINVAR}-'[0-9]' \
       | grep -v sig \
       | sed "s|.*$INST_LINVAR-||" \
@@ -586,10 +598,10 @@ Package Installation
    - Install kernel and headers::
 
        basestrap -U $INST_MNT \
-       https://archive.artixlinux.org/packages/l/${INST_LINVAR}/${INST_LINVAR}-${INST_LINVER}-x86_64.pkg.tar.zst
+       https://archive.artixlinux.org/packages/l/${INST_LINVAR}/${INST_LINVAR}-${INST_LINVER}-x86_64.pkg.tar.zst \
        https://archive.artixlinux.org/packages/l/${INST_LINVAR}-headers/${INST_LINVAR}-headers-${INST_LINVER}-x86_64.pkg.tar.zst
 
-   - Install archzfs-dkms::
+   - Install zfs-dkms::
 
        basestrap $INST_MNT zfs-dkms
 
@@ -658,8 +670,13 @@ System Configuration
 
 #. archzfs repository::
 
-    tee -a $INST_MNT/etc/pacman.conf <<-'EOF'
+    tee -a $INST_MNT/etc/pacman.conf <<- 'EOF'
+
     [archzfs]
+    Include = /etc/pacman.d/mirrorlist-archzfs
+
+    EOF
+    tee -a $INST_MNT/etc/pacman.d/mirrorlist-archzfs <<- 'EOF'
     Server = https://archzfs.com/$repo/$arch
     Server = https://mirror.sum7.eu/archlinux/archzfs/$repo/$arch
     Server = https://mirror.biocrafting.net/archlinux/archzfs/$repo/$arch
@@ -677,8 +694,8 @@ System Configuration
 
     artix-chroot $INST_MNT /usr/bin/env  DISK=$DISK INST_UUID=$INST_UUID bash --login
 
-#. If a swap partition has been created:
-   Enable cryptsetup services for crypt-swap::
+#. If a swap partition has been created,
+   enable cryptsetup services for crypt-swap::
 
     rc-update add device-mapper boot
     rc-update add dmcrypt boot
