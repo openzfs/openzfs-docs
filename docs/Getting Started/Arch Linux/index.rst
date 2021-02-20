@@ -28,7 +28,12 @@ Import archzfs GPG key::
 Add the archzfs repository::
 
   tee -a /etc/pacman.conf <<- 'EOF'
+  
   [archzfs]
+  Include = /etc/pacman.d/mirrorlist-archzfs
+  
+  EOF
+  tee -a /etc/pacman.d/mirrorlist-archzfs <<- 'EOF'
   Server = https://archzfs.com/$repo/$arch
   Server = https://mirror.sum7.eu/archlinux/archzfs/$repo/$arch
   Server = https://mirror.biocrafting.net/archlinux/archzfs/$repo/$arch
@@ -51,7 +56,7 @@ For other kernels or distros, use `archzfs-dkms package`_.
 
 Check kernel variant::
 
- INST_LINVAR=$(sed 's|.*linux|linux|' /proc/cmdline | awk '{ print $1 }')
+ INST_LINVAR=$(sed 's|.*linux|linux|' /proc/cmdline | sed 's|.img||g' | awk '{ print $1 }')
 
 Check compatible kernel version::
 
@@ -77,7 +82,7 @@ Check kernel compatibility
 
 Check kernel variant::
 
- INST_LINVAR=$(sed 's|.*linux|linux|' /proc/cmdline | awk '{ print $1 }')
+ INST_LINVAR=$(sed 's|.*linux|linux|' /proc/cmdline | sed 's|.img||g' | awk '{ print $1 }')
 
 Check kernel version::
 
