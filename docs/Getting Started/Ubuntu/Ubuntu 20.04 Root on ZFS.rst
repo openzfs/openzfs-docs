@@ -627,6 +627,7 @@ Step 3: System Installation
 
      mkdir /mnt/run
      mount -t tmpfs tmpfs /mnt/run
+     mkdir /mnt/run/lock
 
    A tmpfs is recommended later, but if you want a separate dataset for
    ``/tmp``::
@@ -1198,6 +1199,7 @@ If needed, you can chroot into your installed environment::
   mount --rbind /proc /mnt/proc
   mount --rbind /sys  /mnt/sys
   mount -t tmpfs tmpfs /mnt/run
+  mkdir /mnt/run/lock
   chroot /mnt /bin/bash --login
   mount -a
 
