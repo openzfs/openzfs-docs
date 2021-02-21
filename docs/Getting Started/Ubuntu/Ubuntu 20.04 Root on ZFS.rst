@@ -383,6 +383,7 @@ Step 2: Disk Formatting
 #. Create the boot pool::
 
      zpool create \
+         -o cachefile=/etc/zfs/zpool.cache \
          -o ashift=12 -o autotrim=on -d \
          -o feature@async_destroy=enabled \
          -o feature@bookmarks=enabled \
@@ -654,6 +655,11 @@ Step 3: System Installation
    The ``debootstrap`` command leaves the new system in an unconfigured state.
    An alternative to using ``debootstrap`` is to copy the entirety of a
    working system into the new ZFS root.
+
+#. Copy in zpool.cache::
+
+     mkdir /mnt/etc/zfs
+     cp /etc/zfs/zpool.cache /mnt/etc/zfs/
 
 Step 4: System Configuration
 ----------------------------
