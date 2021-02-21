@@ -942,7 +942,7 @@ Step 5: GRUB Installation
 
      vi /etc/default/grub
      # Add init_on_alloc=0 to: GRUB_CMDLINE_LINUX_DEFAULT
-     # Save and quit.
+     # Save and quit (or see the next step).
 
    This is to address `performance regressions
    <https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1862822>`__.
@@ -1024,6 +1024,9 @@ Step 5: GRUB Installation
 
      zfs set canmount=on bpool/BOOT/ubuntu_$UUID
      zfs set canmount=on rpool/ROOT/ubuntu_$UUID
+
+   If they are still empty, stop zed (as below), start zed (as above) and try
+   again.
 
    Stop ``zed``::
 

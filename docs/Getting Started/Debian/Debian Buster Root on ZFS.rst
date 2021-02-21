@@ -837,6 +837,9 @@ Step 5: GRUB Installation
      zfs set canmount=on     bpool/BOOT/debian
      zfs set canmount=noauto rpool/ROOT/debian
 
+   If they are still empty, stop zed (as below), start zed (as above) and try
+   again.
+
    Stop ``zed``::
 
      fg
