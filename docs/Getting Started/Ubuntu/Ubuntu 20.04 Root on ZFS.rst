@@ -817,10 +817,19 @@ Step 4: System Configuration
            grub-efi-amd64 grub-efi-amd64-signed linux-image-generic \
            shim-signed zfs-initramfs zsys
 
-     **Note:** For a mirror or raidz topology, this step only installs GRUB
-     on the first disk. The other disk(s) will be handled later.  For some
-     reason, grub-efi-amd64 does not prompt for ``install_devices`` here, but
-     does after a reboot.
+     **Notes:**
+
+     - Ignore the error messages saying ``Module zfs not found`` and
+       ``couldn't connect to zsys daemon``.  The first seems to occur due to a
+       version mismatch between the Live CD kernel and the chroot environment,
+       but this is irrelevant since the module is already loaded.  The second
+       may be caused by the first but either way is irrelevant since ``zed``
+       is started manually later.
+
+     - For a mirror or raidz topology, this step only installs GRUB on the
+       first disk. The other disk(s) will be handled later.  For some reason,
+       grub-efi-amd64 does not prompt for ``install_devices`` here, but does
+       after a reboot.
 
 #. Optional: Remove os-prober::
 
