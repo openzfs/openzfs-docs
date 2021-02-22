@@ -34,7 +34,7 @@ related to this HOWTO, please `file a new issue and mention @ne9z
 Contributing
 ~~~~~~~~~~~~
 
-#. Fork and clone: https://github.com/openzfs/openzfs-docs
+#. Fork and clone `this repo <https://github.com/openzfs/openzfs-docs>`__.
 
 #. Install the tools::
 
@@ -73,21 +73,36 @@ without the passphrase being entered at the console. Performance is
 good. As the encryption happens in ZFS, even if multiple disks (mirror
 or raidz topologies) are used, the data only has to be encrypted once.
 
-
 Preinstallation
 ----------------
 Download Arch Linux live image
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #. Choose a mirror
 
-    https://archlinux.org/mirrorlist/all/
+    `Mirrorlist <https://archlinux.org/mirrorlist/all/>`__
 
-#. Download Feb 2021 build. `File a new issue and mention @ne9z
+#. Download Feb 2021 build and signature. `File a new issue and mention @ne9z
    <https://github.com/openzfs/openzfs-docs/issues/new?body=@ne9z,%20Update%20Live%20Image%20Arch%20Linux%20Root%20on
    %20ZFS%20HOWTO:>`__ if it's
    no longer available.
 
-    https://mirrors.dotsrc.org/archlinux/iso/2021.02.01/archlinux-2021.02.01-x86_64.iso
+    - `ISO (US mirror) <https://mirrors.ocf.berkeley.edu/archlinux/iso/2021.02.01/archlinux-2021.02.01-x86_64.iso>`__
+    - `Signature <https://archlinux.org/iso/2021.02.01/archlinux-2021.02.01-x86_64.iso.sig>`__
+
+#. Check live image against signature::
+
+    gpg --auto-key-retrieve --verify archlinux-2021.02.01-x86_64.iso.sig
+
+   If the file is authentic, output should be the following::
+
+    gpg: Signature made Mon 01 Feb 2021 03:23:39 PM UTC
+    gpg:                using RSA key 4AA4767BBC9C4B1D18AE28B77F2D434B9741E8AC
+    gpg: Good signature from "Pierre Schmitz <pierre@archlinux.de>" [unknown]
+    ...
+    Primary key fingerprint: 4AA4 767B BC9C 4B1D 18AE  28B7 7F2D 434B 9741 E8AC
+
+   Ensure ``Good signature`` and last 8 digits are ``9741 E8AC``,
+   as listed on `Arch Linux Developers <https://archlinux.org/people/developers/#pierre>`__ page.
 
 #. Write the image to a USB drive or an optical disc.
 
@@ -127,24 +142,18 @@ Prepare the Live Environment
 
 #. Import keys of archzfs repository::
 
-    curl -O https://archzfs.com/archzfs.gpg
-    pacman-key -a archzfs.gpg
-    pacman-key --lsign-key DDF7DB817396A49B2A2723F7403BD972F75D9D76
+    curl -L https://archzfs.com/archzfs.gpg |  pacman-key -a -
+    curl -L https://git.io/JtQpl | xargs -i{} pacman-key --lsign-key {}
 
 #. Add archzfs repository::
 
     tee -a /etc/pacman.conf <<- 'EOF'
-  
+
     [archzfs]
     Include = /etc/pacman.d/mirrorlist-archzfs
-  
     EOF
-    tee -a /etc/pacman.d/mirrorlist-archzfs <<- 'EOF'
-    Server = https://archzfs.com/$repo/$arch
-    Server = https://mirror.sum7.eu/archlinux/archzfs/$repo/$arch
-    Server = https://mirror.biocrafting.net/archlinux/archzfs/$repo/$arch
-    Server = https://mirror.in.themindsmaze.com/archzfs/$repo/$arch
-    EOF
+    
+    curl -L https://git.io/JtQp4 > /etc/pacman.d/mirrorlist-archzfs
 
 #. Select mirror:
 
@@ -369,7 +378,7 @@ Create Root and Boot Pools
 
    - Unencrypted::
 
-      zpool create \
+       zpool create \
         -o ashift=12 \
         -O acltype=posixacl \
         -O canmount=off \
@@ -396,7 +405,7 @@ Create Root and Boot Pools
         -O xattr=sa \
         -O mountpoint=/ \
         -R $INST_MNT \
-        -O encryption=aes-256-gcm \
+        -O encryption=on \
         -O keylocation=prompt \
         -O keyformat=passphrase \
         rpool_$INST_UUID \
@@ -502,10 +511,6 @@ Create Datasets
 
 #. Optional user data datasets:
 
-   If you use /opt on this system::
-
-     zfs create -o canmount=on rpool_$INST_UUID/DATA/default/opt
-
    If this system will have games installed::
 
      zfs create -o canmount=on rpool_$INST_UUID/DATA/default/var/games
@@ -546,7 +551,6 @@ Format and Mount EFI System Partition
 
 If you are using a multi-disk setup, this step will only install
 bootloader to the first disk. Other disks will be handled later.
-
 
 Package Installation
 ~~~~~~~~~~~~~~~~~~~~
@@ -604,20 +608,20 @@ System Configuration
 
     mkdir -p $INST_MNT/etc/zfs/zfs-list.cache
 
-    zfs list -H -t filesystem -o $PROPS -r rpool_$INST_UUID \
-    > $INST_MNT/etc/zfs/zfs-list.cache/rpool_$INST_UUID
+    zfs list -H -t filesystem -o $PROPS -r rpool_$INST_UUID > $INST_MNT/etc/zfs/zfs-list.cache/rpool_$INST_UUID
 
     sed -Ei "s|$INST_MNT/?|/|" $INST_MNT/etc/zfs/zfs-list.cache/*
 
 #. Generate fstab::
 
-     echo bpool_$INST_UUID/BOOT/default /boot zfs rw,xattr,posixacl 0 0 >> $INST_MNT/etc/fstab
-     echo UUID=$(blkid -s UUID -o value ${DISK}-part1) /boot/efi vfat umask=0022,fmask=0022,dmask=0022 0 1 >> $INST_MNT/etc/fstab
+    echo bpool_$INST_UUID/BOOT/default /boot zfs rw,xattr,posixacl 0 0 >> $INST_MNT/etc/fstab
+    echo UUID=$(blkid -s UUID -o value ${DISK}-part1) /boot/efi vfat \
+    x-systemd.idle-timeout=1min,x-systemd.automount,noauto,umask=0022,fmask=0022,dmask=0022 0 1 >> $INST_MNT/etc/fstab
 
    If a swap partition has been created::
 
-       echo crypt-swap ${DISK}-part4 /dev/urandom swap,cipher=aes-cbc-essiv:sha256,size=256 >> $INST_MNT/etc/crypttab
-       echo /dev/mapper/crypt-swap none swap defaults 0 0 >> $INST_MNT/etc/fstab
+    echo crypt-swap ${DISK}-part4 /dev/urandom swap,cipher=aes-cbc-essiv:sha256,size=256 >> $INST_MNT/etc/crypttab
+    echo /dev/mapper/crypt-swap none swap defaults 0 0 >> $INST_MNT/etc/fstab
 
 #. Configure mkinitcpio::
 
@@ -660,21 +664,6 @@ System Configuration
     ln -sf $INST_TZ $INST_MNT/etc/localtime
     hwclock --systohc
 
-#. archzfs repository::
-
-    tee -a $INST_MNT/etc/pacman.conf <<- 'EOF'
-
-    [archzfs]
-    Include = /etc/pacman.d/mirrorlist-archzfs
-
-    EOF
-    tee -a $INST_MNT/etc/pacman.d/mirrorlist-archzfs <<- 'EOF'
-    Server = https://archzfs.com/$repo/$arch
-    Server = https://mirror.sum7.eu/archlinux/archzfs/$repo/$arch
-    Server = https://mirror.biocrafting.net/archlinux/archzfs/$repo/$arch
-    Server = https://mirror.in.themindsmaze.com/archzfs/$repo/$arch
-    EOF
-
 #. Locale::
 
     echo "en_US.UTF-8 UTF-8" >> $INST_MNT/etc/locale.gen
@@ -690,6 +679,21 @@ System Configuration
 
     locale-gen
 
+#. Import keys of archzfs repository::
+
+    curl -L https://archzfs.com/archzfs.gpg |  pacman-key -a -
+    curl -L https://git.io/JtQpl | xargs -i{} pacman-key --lsign-key {}
+
+#. Add archzfs repository::
+
+    tee -a /etc/pacman.conf <<- 'EOF'
+
+    [archzfs]
+    Include = /etc/pacman.d/mirrorlist-archzfs
+    EOF
+    
+    curl -L https://git.io/JtQp4 > /etc/pacman.d/mirrorlist-archzfs
+
 #. Enable networking::
 
     systemctl enable systemd-networkd systemd-resolved
@@ -701,7 +705,7 @@ System Configuration
 #. Generate zpool.cache
 
    Pools are imported by initramfs with the information stored in ``/etc/zfs/zpool.cache``.
-   This cache file will be embedded in ``initramfs``.
+   This cache file will be embedded in initramfs.
 
    ::
 
@@ -723,28 +727,33 @@ Currently GRUB has multiple compatibility problems with ZFS,
 especially with regards to newer ZFS features.
 Workarounds have to be applied.
 
-grub-probe fails to get canonical path of root partition
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+grub-probe fails to get canonical path
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+When persistent device names ``/dev/disk/by-id/*`` are used
+with ZFS, GRUB will fail to resolve the path of the boot pool
+device. Error::
+
+  # /usr/bin/grub-probe: error: failed to get canonical path of `/dev/virtio-pci-0000:06:00.0-part3'.
+
 Solution::
 
  echo 'export ZPOOL_VDEV_NAME_PATH=YES' >> /etc/profile
  source /etc/profile
 
-**Notes:**
-
- When persistent device names ``/dev/disk/by-id/*`` are used
- with ZFS, GRUB will fail to resolve the path of the boot pool
- device. Error::
-
-   # /usr/bin/grub-probe: error: failed to get canonical path of `/dev/virtio-pci-0000:06:00.0-part3'.
-
-Pool name missing if the pool has unsupported features
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Pool name missing
+~~~~~~~~~~~~~~~~~
 See `this bug report <https://savannah.gnu.org/bugs/?59614>`__.
+Root pool name is missing from ``root=ZFS=rpool/ROOT/default``
+in generated ``grub.cfg`` file.
+
 A workaround is to replace the pool name detection with ``zdb``
 command::
 
  sed -i "s|rpool=.*|rpool=\`zdb -l \${GRUB_DEVICE} \| grep -E '[[:blank:]]name' \| cut -d\\\' -f 2\`|"  /etc/grub.d/10_linux
+
+If you forgot to apply this workaround and
+followed this guide to use ``rpool_$INST_UUID`` and ``bpool_$INST_UUID``,
+``$INST_UUID`` can be found out with `Load grub.cfg in GRUB command line`_.
 
 GRUB Installation
 ~~~~~~~~~~~~~~~~~
@@ -768,7 +777,11 @@ GRUB Installation
     grub-install $DISK
 
   If this is a multi-disk setup,
-  install to other disks as well.
+  install to other disks as well::
+
+    for i in {target_disk2,target_disk3}; do
+      grub-install /dev/disk/by-id/$i
+    done
 
 Generate GRUB Boot Menu
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -804,38 +817,24 @@ After Reboot
 ------------
 Mirror EFI System Partition
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#. Format redundant EFI partitions::
 
-     mkfs.vfat -n EFI2 /dev/disk/by-id/target_disk2-part1
-     mkfs.vfat -n EFI3 /dev/disk/by-id/target_disk3-part1
+#. Check disk name::
 
-#. Create mountpoints::
+    ls -1 /dev/disk/by-id/ | grep -v '\-part[0-9]'
 
-     mkdir -p /boot/efis/{2,3}
+#. Mirror EFI ssystem partition::
 
-#. Mount redundant EFI partitions::
-
-     mount -o umask=0022,fmask=0022,dmask=0022 /dev/disk/by-id/target_disk2-part1 /boot/efis/2
-     mount -o umask=0022,fmask=0022,dmask=0022 /dev/disk/by-id/target_disk3-part1 /boot/efis/3
-
-#. Add fstab entries::
-
-     pacman -S --needed arch-install-scripts rsync
-
-     genfstab / | grep efis >> /etc/fstab
-
-#. Sync EFI system partition contents::
-
-     for i in /boot/efis/*; do
-        /usr/bin/rsync -a /boot/efi/ $i/
-     done
-
-#. Add EFI boot entries::
-
-    efibootmgr -cgd /dev/disk/by-id/target_disk2-part1 \
-       -p 1 -L "arch-2" -l "\EFI\arch\grubx64.efi"
-    efibootmgr -cgd /dev/disk/by-id/target_disk3-part1 \
-       -p 1 -L "arch-3" -l "\EFI\arch\grubx64.efi"
+    for i in {target_disk2,target_disk3}; do
+     mkfs.vfat /dev/disk/by-id/$i-part1
+     mkdir -p /boot/efis/$i
+     echo UUID=$(blkid -s UUID -o value /dev/disk/by-id/$i-part1) /boot/efis/$i vfat \
+     x-systemd.idle-timeout=1min,x-systemd.automount,noauto,umask=0022,fmask=0022,dmask=0022 \
+     0 1 >> /etc/fstab
+     mount /boot/efis/$i
+     cp -r /boot/efi/EFI/ /boot/efis/$i
+     efibootmgr -cgp 1 -l "\EFI\arch\grubx64.efi" \
+     -L "arch-$i" -d /dev/disk/by-id/$i-part1
+    done
 
 #. Create a service to monitor and sync EFI partitions::
 
@@ -856,15 +855,106 @@ Mirror EFI System Partition
 
     [Service]
     Type=oneshot
-    ExecStart=/usr/bin/bash -c 'for i in /boot/efis/*; do /usr/bin/rsync -a /boot/efi/ $i/; done'
+    ExecStart=/usr/bin/bash -c 'for i in /boot/efis/*; do /usr/bin/cp -r /boot/efi/EFI/ $i/; done'
     EOF
 
     systemctl enable --now efis-sync.path
 
+#. If EFI system partition failed, promote one backup
+   to ``/boot/efi`` by editing ``/etc/fstab``.
+
+Mirror BIOS boot sector
+~~~~~~~~~~~~~~~~~~~~~~~
+
+This need to be manually applied when GRUB is updated.
+
+#. Check disk name::
+
+    ls -1 /dev/disk/by-id/ | grep -v '\-part[0-9]'
+
+#. Install GRUB to every disk::
+
+    for i in {target_disk2,target_disk3}; do
+      grub-install /dev/disk/by-id/$i
+    done
+
+Change encryption method
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+By default the root pool is encrypted with a key file,
+created at installation.
+
+Password
+^^^^^^^^
+
+After installation, encryption by password can be enabled with::
+
+ zfs change-key -l -o keylocation=prompt -o keyformat=passphrase rpool_$INST_UUID
+
+See ``man 8 zfs-change-key``.
+If password is enabled, the system will require this password to boot.
+Password can be entered locally with keyboard or remotely with SSH.
+
+Supply password with SSH
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+#. Install mkinitcpio tools::
+
+    pacman -S mkinitcpio-netconf mkinitcpio-dropbear
+
+#. Store authorized keys in ``/etc/dropbear/root_key``::
+
+    vi /etc/dropbear/root_key
+
+   Note that dropbear only supports RSA keys.
+
+#. Edit mkinitcpio::
+
+    tee /etc/mkinitcpio.conf <<- 'EOF'
+    HOOKS=(base udev autodetect modconf block keyboard netconf dropbear zfsencryptssh zfs filesystems)
+    EOF
+
+#. Add ``ip=`` to kernel command line::
+
+    # example DHCP
+    echo 'GRUB_CMDLINE_LINUX="ip=::::::dhcp"' >> /etc/default/grub
+
+   Details for ``ip=`` can be found at
+   `here <https://www.kernel.org/doc/html/latest/admin-guide/nfs/nfsroot.html#kernel-command-line>`__.
+
+#. If using OpenSSH as SSH server, convert host keys to PEM format::
+
+    for i in {rsa,dsa,ecdsa,ed25519}; do
+    ssh-keygen -p -m PEM -f /etc/ssh/ssh_host_${i}_key -qN ""
+    done
+
+#. Regenerate initramfs::
+
+    mkinitcpio -P
+
+#. Update GRUB menu::
+
+    grub-mkconfig -o /boot/grub/grub.cfg
+
+Key file
+^^^^^^^^
+
+You can also set a new key file for root pool and
+store the key file on an external drive::
+
+  zfs change-key -l -o keylocation=file:///path/to/keyfile -o keyformat=raw rpool_$INST_UUID
+
 Boot Environment Manager
 ~~~~~~~~~~~~~~~~~~~~~~~~
-Optional: install ``rozb3-pac`` pacman hook and ``bieaz`` from AUR to
-create boot environments.
+
+Optional: install
+`rozb3-pac <https://gitlab.com/m_zhou/rozb3-pac/-/releases>`__
+pacman hook and
+`bieaz <https://gitlab.com/m_zhou/bieaz/-/releases>`__
+from AUR to create boot environments.
+
+Prebuilt packages are also available
+in the links above.
 
 Post installation
 ~~~~~~~~~~~~~~~~~
@@ -939,8 +1029,9 @@ Following are the steps to load the correct ``grub.cfg``,
 Rescue in Live Environment
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#. Repeat `Prepare the Live Environment
-   <#prepare-the-live-environment>`__.
+#. `Download Arch Linux live image <#download-arch-linux-live-image>`__.
+
+#. `Prepare the Live Environment <#prepare-the-live-environment>`__.
 
 #. Check the ``INST_UUID`` with ``zpool import``.
 
@@ -948,17 +1039,28 @@ Rescue in Live Environment
 
      INST_MNT=$(mktemp -d)
      INST_UUID=abc123
-     RPOOL_PWD='rootpool'
+
+#. If using other keyfile::
+
+    KEYFILE=/path/to/keyfile
 
 #. Import and unlock root and boot pool::
 
      zpool import -N -R $INST_MNT rpool_$INST_UUID
      zpool import -N -R $INST_MNT bpool_$INST_UUID
-     echo $RPOOL_PWD | zfs load-key rpool_$INST_UUID
+
+   If using password::
+
+     zfs load-key rpool_$INST_UUID
+
+   If using keyfile::
+
+     zfs load-key -L file://$KEYFILE rpool_$INST_UUID
 
 #. Find the current boot environment::
 
      zfs list
+     BE=default
 
 #. Mount boot and root filesystem::
 
