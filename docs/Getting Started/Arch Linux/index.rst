@@ -6,6 +6,15 @@ Arch Linux
 .. contents:: Table of Contents
   :local:
 
+Support
+-------
+
+If you need help, reach out to the community using the :ref:`mailing_lists` or IRC at
+`#zfsonlinux <irc://irc.freenode.net/#zfsonlinux>`__ on `freenode
+<https://freenode.net/>`__. If you have a bug report or feature request
+related to this HOWTO, please `file a new issue and mention @ne9z
+<https://github.com/openzfs/openzfs-docs/issues/new?body=@ne9z,%20I%20have%20the%20following%20issue%20with%20the%20Arch%20Linux%20ZFS%20HOWTO:>`__.
+
 Installation
 ------------
 
@@ -19,30 +28,37 @@ ZFS packages are provided by the third-party
 `archzfs repository <https://github.com/archzfs/archzfs>`__.
 You can use it as follows.
 
-Import archzfs GPG key::
+Import keys of archzfs repository::
 
-  curl -O https://archzfs.com/archzfs.gpg
-  pacman-key -a archzfs.gpg
-  pacman-key --lsign-key DDF7DB817396A49B2A2723F7403BD972F75D9D76
+ curl -L https://archzfs.com/archzfs.gpg |  pacman-key -a -
+ curl -L https://git.io/JtQpl | xargs -i{} pacman-key --lsign-key {}
 
-Add the archzfs repository::
+Add archzfs repository::
 
-  tee -a /etc/pacman.conf <<- 'EOF'
-  
-  [archzfs]
-  Include = /etc/pacman.d/mirrorlist-archzfs
-  
-  EOF
-  tee -a /etc/pacman.d/mirrorlist-archzfs <<- 'EOF'
-  Server = https://archzfs.com/$repo/$arch
-  Server = https://mirror.sum7.eu/archlinux/archzfs/$repo/$arch
-  Server = https://mirror.biocrafting.net/archlinux/archzfs/$repo/$arch
-  Server = https://mirror.in.themindsmaze.com/archzfs/$repo/$arch
-  EOF
+ tee -a /etc/pacman.conf <<- 'EOF'
+
+ [archzfs]
+ Include = /etc/pacman.d/mirrorlist-archzfs
+ EOF
+ 
+ curl -L https://git.io/JtQp4 > /etc/pacman.d/mirrorlist-archzfs
 
 Update pacman database::
 
   pacman -Sy
+
+testing repo
+^^^^^^^^^^^^
+Testing repo provides newer packages than stable repo,
+but may contain unknown bugs.
+Use at your own risk::
+
+ tee -a /etc/pacman.conf <<- 'EOF'
+ 
+ # uncomment if you really want to use testing
+ #[archzfs-testing]
+ #Include = /etc/pacman.d/mirrorlist-archzfs
+ EOF
 
 archzfs package
 ~~~~~~~~~~~~~~~
@@ -94,10 +110,13 @@ Check zfs-dkms package version::
 
 Visit OpenZFS release page ::
 
- curl https://github.com/openzfs/zfs/releases/zfs-${DKMS_VER} \
+ curl -L https://github.com/openzfs/zfs/raw/zfs-${DKMS_VER}/META \
  | grep Linux
- # Linux: compatible with 3.10 - 5.10 kernels
- echo $INST_LINVER
+ # Linux-Maximum: 5.10
+ # Linux-Minimum: 3.10
+ # compare with the output of the following command
+ echo ${INST_LINVER%%-*}
+ # 5.10.17 # supported
 
 If it's not supported, see `Install zfs-dkms compatible kernel`_.
 Otherwise, continue to next step.
@@ -135,7 +154,7 @@ Install kernels available when the package was built. Check build date::
   DKMS_DATE=$(pacman -Syi zfs-dkms \
   | grep 'Build Date' \
   | sed 's/.*: //' \
-  | LC_ALL=C xargs -i{} date -d {}  +%Y/%m/%d)
+  | LC_ALL=C xargs -i{} date -d {} -u +%Y/%m/%d)
 
 Check kernel version::
 
@@ -178,6 +197,25 @@ If compatible, update kernel and headers with::
 Do not update if the kernel is not compatible
 with OpenZFS.
 
+-git packages
+~~~~~~~~~~~~~
+
+Normal packages are built from
+`latest OpenZFS stable release <https://github.com/openzfs/zfs/releases/latest>`__
+which may not contain the newest features.
+
+``-git`` packages are directly built from
+`OpenZFS master branch <https://github.com/openzfs/zfs/commits/master>`__,
+which may contain unknown bugs.
+
+To use ``-git`` packages, attach ``-git`` suffix to package names, example::
+
+ # zfs-dkms
+ zfs-dkms-git
+
+ # zfs-${INST_LINVAR}
+ zfs-${INST_LINVAR}-git
+
 Check Live Image Compatibility
 ------------------------------
 Choose a mirror::
@@ -204,9 +242,12 @@ Check latest archzfs package version::
  # zfs-dkms-2.0.1-1-x86_64.pkg.tar.zst
  # zfs-linux-2.0.1_5.10.10.arch1.1-1-x86_64.pkg.tar.zst
 
-Visit OpenZFS release page https://github.com/openzfs/zfs/releases/tag/zfs-2.0.1::
+Visit OpenZFS release page::
 
-  # Linux: compatible with 3.10 - 5.10 kernels
+ curl -L https://github.com/openzfs/zfs/raw/zfs-2.0.1/META \
+ | grep Linux
+ # Linux-Maximum: 5.10
+ # Linux-Minimum: 3.10
 
 - If compatible, download the latest live image::
 
