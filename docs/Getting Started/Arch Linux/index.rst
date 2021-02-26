@@ -78,10 +78,15 @@ Check compatible kernel version::
 
  INST_LINVER=$(pacman -Si zfs-${INST_LINVAR} | grep 'Depends On' | sed "s|.*${INST_LINVAR}=||" | awk '{ print $1 }')
 
-Install compatible kernel::
+Install kernel. Download from archive if kernel is not available::
 
- pacman -U \
- https://archive.archlinux.org/packages/l/${INST_LINVAR}/${INST_LINVAR}-${INST_LINVER}-x86_64.pkg.tar.zst
+    if [ ${INST_LINVER} == \
+    $(pacman -Si ${INST_LINVAR} | grep Version | awk '{ print $3 }') ]; then
+     pacstrap $INST_MNT ${INST_LINVAR}
+    else
+     pacstrap -U $INST_MNT \
+     https://archive.archlinux.org/packages/l/${INST_LINVAR}/${INST_LINVAR}-${INST_LINVER}-x86_64.pkg.tar.zst
+    fi
 
 Install archzfs::
 
