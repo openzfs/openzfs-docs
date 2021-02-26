@@ -320,6 +320,7 @@ Create Root and Boot Pools
 
     zpool create \
         -o ashift=12 \
+        -o autotrim=on \
         -d -o feature@async_destroy=enabled \
         -o feature@bookmarks=enabled \
         -o feature@embedded_data=enabled \
@@ -372,12 +373,12 @@ Create Root and Boot Pools
      “invalid dnode type” error. This feature does not matter for ``/boot``
      anyway.
 
-#. Create root pool:
-
-   - Unencrypted::
+#. Create root pool::
 
        zpool create \
         -o ashift=12 \
+        -o autotrim=on \
+        -R $INST_MNT \
         -O acltype=posixacl \
         -O canmount=off \
         -O compression=zstd \
@@ -386,26 +387,6 @@ Create Root and Boot Pools
         -O relatime=on \
         -O xattr=sa \
         -O mountpoint=/ \
-        -R $INST_MNT \
-        rpool_$INST_UUID \
-        ${DISK}-part3
-
-   - Encrypted::
-
-       zpool create \
-        -o ashift=12 \
-        -O acltype=posixacl \
-        -O canmount=off \
-        -O compression=zstd \
-        -O dnodesize=auto \
-        -O normalization=formD \
-        -O relatime=on \
-        -O xattr=sa \
-        -O mountpoint=/ \
-        -R $INST_MNT \
-        -O encryption=on \
-        -O keylocation=prompt \
-        -O keyformat=passphrase \
         rpool_$INST_UUID \
         ${DISK}-part3
 
@@ -472,36 +453,81 @@ Create Root and Boot Pools
 
 Create Datasets
 ~~~~~~~~~~~~~~~~~~~~~~
+#. Create system boot container::
+
+    zfs create \
+     -o canmount=off \
+     -o mountpoint=/boot \
+     bpool_$INST_UUID/sys
+
+#. Create system root container:
+
+   Dataset encryption is set at creation and can not be altered later,
+   but encrypted dataset can be created inside an unencrypted parent dataset.
+
+   - Unencrypted::
+
+      zfs create \
+       -o canmount=off \
+       -o mountpoint=/ \
+       rpool_$INST_UUID/sys
+
+   - Encrypted:
+
+     #. Choose a strong password.
+
+        Once the password is compromised,
+        dataset and pool must be destroyed,
+        disk wiped and system rebuilt from scratch to protect confidentiality.
+        `Merely changing password is not enough <https://openzfs.github.io/openzfs-docs/man/8/zfs-change-key.8.html>`__.
+
+        Example: generate passphrase with `xkcdpass <https://github.com/redacted/XKCD-password-generator>`_::
+
+         pacman -S --noconfirm xkcdpass
+         xkcdpass -Vn 10 -w /usr/lib/python*/site-packages/xkcdpass/static/eff-long
+
+        Password can be supplied with SSH at boot time,
+        see `Supply password with SSH <#supply-password-with-ssh>`__.
+
+     #. Create dataset::
+
+          zfs create \
+           -o canmount=off \
+           -o mountpoint=/ \
+           -o encryption=on \
+           -o keylocation=prompt \
+           -o keyformat=passphrase \
+           rpool_$INST_UUID/sys
 
 #. Create container datasets::
 
-    zfs create -o canmount=off -o mountpoint=none bpool_$INST_UUID/BOOT
-    zfs create -o canmount=off -o mountpoint=none rpool_$INST_UUID/ROOT
-    zfs create -o canmount=off -o mountpoint=none rpool_$INST_UUID/DATA
+    zfs create -o canmount=off -o mountpoint=none bpool_$INST_UUID/sys/BOOT
+    zfs create -o canmount=off -o mountpoint=none rpool_$INST_UUID/sys/ROOT
+    zfs create -o canmount=off -o mountpoint=none rpool_$INST_UUID/sys/DATA
 
 #. Create root and boot filesystem datasets::
 
-     zfs create -o mountpoint=legacy -o canmount=noauto bpool_$INST_UUID/BOOT/default
-     zfs create -o mountpoint=/      -o canmount=noauto rpool_$INST_UUID/ROOT/default
+     zfs create -o mountpoint=legacy -o canmount=noauto bpool_$INST_UUID/sys/BOOT/default
+     zfs create -o mountpoint=/      -o canmount=noauto rpool_$INST_UUID/sys/ROOT/default
 
 #. Mount root and boot filesystem datasets::
 
-    zfs mount rpool_$INST_UUID/ROOT/default
+    zfs mount rpool_$INST_UUID/sys/ROOT/default
     mkdir $INST_MNT/boot
-    mount -t zfs bpool_$INST_UUID/BOOT/default $INST_MNT/boot
+    mount -t zfs bpool_$INST_UUID/sys/BOOT/default $INST_MNT/boot
 
 #. Create datasets to separate user data from root filesystem::
 
-    zfs create -o mountpoint=/ -o canmount=off rpool_$INST_UUID/DATA/default
+    zfs create -o mountpoint=/ -o canmount=off rpool_$INST_UUID/sys/DATA/default
 
     for i in {usr,var,var/lib};
     do
-        zfs create -o canmount=off rpool_$INST_UUID/DATA/default/$i
+        zfs create -o canmount=off rpool_$INST_UUID/sys/DATA/default/$i
     done
 
     for i in {home,root,srv,usr/local,var/log,var/spool,var/tmp};
     do
-        zfs create -o canmount=on rpool_$INST_UUID/DATA/default/$i
+        zfs create -o canmount=on rpool_$INST_UUID/sys/DATA/default/$i
     done
 
     chmod 750 $INST_MNT/root
@@ -511,32 +537,32 @@ Create Datasets
 
    If this system will have games installed::
 
-     zfs create -o canmount=on rpool_$INST_UUID/DATA/default/var/games
+     zfs create -o canmount=on rpool_$INST_UUID/sys/DATA/default/var/games
 
    If you use /var/www on this system::
 
-     zfs create -o canmount=on rpool_$INST_UUID/DATA/default/var/www
+     zfs create -o canmount=on rpool_$INST_UUID/sys/DATA/default/var/www
 
    If this system will use GNOME::
 
-     zfs create -o canmount=on rpool_$INST_UUID/DATA/default/var/lib/AccountsService
+     zfs create -o canmount=on rpool_$INST_UUID/sys/DATA/default/var/lib/AccountsService
 
    If this system will use Docker (which manages its own datasets &
    snapshots)::
 
-     zfs create -o canmount=on rpool_$INST_UUID/DATA/default/var/lib/docker
+     zfs create -o canmount=on rpool_$INST_UUID/sys/DATA/default/var/lib/docker
 
    If this system will use NFS (locking)::
 
-     zfs create -o canmount=on rpool_$INST_UUID/DATA/default/var/lib/nfs
+     zfs create -o canmount=on rpool_$INST_UUID/sys/DATA/default/var/lib/nfs
 
    If this system will use Linux Containers::
 
-     zfs create -o canmount=on rpool_$INST_UUID/DATA/default/var/lib/lxc
+     zfs create -o canmount=on rpool_$INST_UUID/sys/DATA/default/var/lib/lxc
 
    If this system will use libvirt::
 
-     zfs create -o canmount=on rpool_$INST_UUID/DATA/default/var/lib/libvirt
+     zfs create -o canmount=on rpool_$INST_UUID/sys/DATA/default/var/lib/libvirt
 
 Format and Mount EFI System Partition
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -549,7 +575,6 @@ Format and Mount EFI System Partition
 
 If you are using a multi-disk setup, this step will only install
 bootloader to the first disk. Other disks will be handled later.
-
 
 Package Installation
 ~~~~~~~~~~~~~~~~~~~~
@@ -621,23 +646,18 @@ Package Installation
 
    Kernel must be manually updated, see kernel update section in Getting Started.
 
-#. If your computer has hardware that requires firmware to run::
+#. Install firmware::
 
-     basestrap $INST_MNT linux-firmware
+     pacstrap $INST_MNT linux-firmware intel-ucode amd-ucode
 
 #. If you boot your computer with EFI::
 
-     basestrap $INST_MNT dosfstools efibootmgr
+     basestrap $INST_MNT efibootmgr
 
 #. If a swap partition has been created::
 
      basestrap $INST_MNT cryptsetup
      basestrap $INST_MNT cryptsetup-openrc
-
-#. Microcode:
-
-   - ``pacstrap $INST_MNT amd-ucode``
-   - ``pacstrap $INST_MNT intel-ucode``
 
 #. For other optional packages,
    see `ArchWiki <https://wiki.archlinux.org/index.php/Installation_guide#Installation>`__.
@@ -647,7 +667,7 @@ System Configuration
 
 #. Generate fstab::
 
-      echo bpool_$INST_UUID/BOOT/default /boot zfs rw,xattr,posixacl 0 0 >> $INST_MNT/etc/fstab
+      echo bpool_$INST_UUID/sys/BOOT/default /boot zfs rw,xattr,posixacl 0 0 >> $INST_MNT/etc/fstab
       echo UUID=$(blkid -s UUID -o value ${DISK}-part1) /boot/efi vfat umask=0022,fmask=0022,dmask=0022 0 1 >> $INST_MNT/etc/fstab
 
    ``tmpfs`` for ``/tmp`` is recommended::
@@ -822,6 +842,50 @@ Generate GRUB Boot Menu
 
    grub-mkconfig -o /boot/grub/grub.cfg
 
+Optional Configuration
+----------------------
+
+Supply password with SSH
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Optional:
+
+#. Install mkinitcpio tools::
+
+    pacman -S mkinitcpio-netconf mkinitcpio-dropbear openssh
+
+#. Store authorized keys in ``/etc/dropbear/root_key``::
+
+    vi /etc/dropbear/root_key
+
+   Note that dropbear only supports RSA keys.
+
+#. Edit mkinitcpio::
+
+    tee /etc/mkinitcpio.conf <<- 'EOF'
+    HOOKS=(base udev autodetect modconf block keyboard netconf dropbear zfsencryptssh zfs filesystems)
+    EOF
+
+#. Add ``ip=`` to kernel command line::
+
+    # example DHCP
+    echo 'GRUB_CMDLINE_LINUX="ip=::::::dhcp"' >> /etc/default/grub
+
+   Details for ``ip=`` can be found at
+   `here <https://www.kernel.org/doc/html/latest/admin-guide/nfs/nfsroot.html#kernel-command-line>`__.
+
+#. Generate host keys::
+
+    ssh-keygen -Am pem
+
+#. Regenerate initramfs::
+
+    mkinitcpio -P
+
+#. Update GRUB menu::
+
+    grub-mkconfig -o /boot/grub/grub.cfg
+
 Finish Installation
 -------------------
 
@@ -831,8 +895,8 @@ Finish Installation
 
 #. Take a snapshot of the clean installation for future use::
 
-    zfs snapshot -r rpool_$INST_UUID/ROOT/default@install
-    zfs snapshot -r bpool_$INST_UUID/BOOT/default@install
+    zfs snapshot -r rpool_$INST_UUID/sys/ROOT/default@install
+    zfs snapshot -r bpool_$INST_UUID/sys/BOOT/default@install
 
 #. Unmount EFI system partition::
 
@@ -893,72 +957,6 @@ This need to be manually applied when GRUB is updated.
       grub-install /dev/disk/by-id/$i
     done
 
-Change encryption method
-~~~~~~~~~~~~~~~~~~~~~~~~
-
-By default the root pool is encrypted with a key file,
-created at installation.
-
-Password
-^^^^^^^^
-
-After installation, encryption by password can be enabled with::
-
- zfs change-key -l -o keylocation=prompt -o keyformat=passphrase rpool_$INST_UUID
-
-See ``man 8 zfs-change-key``.
-If password is enabled, the system will require this password to boot.
-Password can be entered locally with keyboard or remotely with SSH.
-
-Supply password with SSH
-^^^^^^^^^^^^^^^^^^^^^^^^
-
-#. Install mkinitcpio tools::
-
-    pacman -S mkinitcpio-netconf mkinitcpio-dropbear
-
-#. Store authorized keys in ``/etc/dropbear/root_key``::
-
-    vi /etc/dropbear/root_key
-
-   Note that dropbear only supports RSA keys.
-
-#. Edit mkinitcpio::
-
-    tee /etc/mkinitcpio.conf <<- 'EOF'
-    HOOKS=(base udev autodetect modconf block keyboard netconf dropbear zfsencryptssh zfs filesystems)
-    EOF
-
-#. Add ``ip=`` to kernel command line::
-
-    # example DHCP
-    echo 'GRUB_CMDLINE_LINUX="ip=::::::dhcp"' >> /etc/default/grub
-
-   Details for ``ip=`` can be found at
-   `here <https://www.kernel.org/doc/html/latest/admin-guide/nfs/nfsroot.html#kernel-command-line>`__.
-
-#. If using OpenSSH as SSH server, convert host keys to PEM format::
-
-    for i in {rsa,dsa,ecdsa,ed25519}; do
-    ssh-keygen -p -m PEM -f /etc/ssh/ssh_host_${i}_key -qN ""
-    done
-
-#. Regenerate initramfs::
-
-    mkinitcpio -P
-
-#. Update GRUB menu::
-
-    grub-mkconfig -o /boot/grub/grub.cfg
-
-Key file
-^^^^^^^^
-
-You can also set a new key file for root pool and
-store the key file on an external drive::
-
-  zfs change-key -l -o keylocation=file:///path/to/keyfile -o keyformat=raw rpool_$INST_UUID
-
 Boot Environment Manager
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -984,62 +982,25 @@ Recovery
 Load grub.cfg in GRUB command line
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Boot environment menu is stored in ``/boot/grub.cfg``.
-But the absolute path of ``grub.cfg`` will
-change when you enter another boot environment,
-from ``bpool/BOOT/default/@/boot/grub.cfg`` to
-``bpool/BOOT/bootenv1/@/boot/grub.cfg``.
+#. Press ``c`` at GRUB menu.
 
-This absolute path is stored in the bootloader file:
-``grubx64.efi`` for EFI booting, or inside the first sector of the
-disk for BIOS booting.
+#. List available disks::
 
-GRUB will load the wrong ``grub.cfg`` if the bootloader
-file has not been updated upon entering another boot environment.
-Following are the steps to load the correct ``grub.cfg``,
+     grub > ls (hd # press tab after 'd'
+     Possible devices are:
 
-#. Enter GRUB command line
-
-   No additional steps if you are already in GRUB rescue.
-   Otherwise, press ``c`` at the GRUB menu.
-
-#. List available partitions::
-
-     grub > ls
-     (hd0) (hd0,gpt4) (hd0,gpt3) (hd0,gpt2) (hd0,gpt1) (hd1) (hd1,gpt5) ...
-
-   Boot pool is always ``(hdx,gpt2)``::
-
-     grub > ls (hd0, # press tab after comma
-     Possible partitions are:
-
-         Partition hd0,gpt1: Filesystem type fat - Label 'EFI', UUID ...
-         Partition hd0,gpt2: Filesystem type zfs - Label 'bpool' - Last modification time ...
-         Partition hd0,gpt3: No known filesystem detected ...
+     hd0 hd1
 
 #. List available boot environments::
 
-     grub > ls (hd0,gpt2) # press tab after bracket
-     Possible files are:
-
-     @/ BOOT/
-
-     grub > ls (hd0,gpt2)/BOOT # press tab after 'T'
+     grub > ls (hd0,gpt2)/sys/BOOT # press tab after 'T'
      Possible files are:
 
      @/ default/ pac-multm2/
 
-#. Load grub.cfg
+#. Load grub.cfg::
 
-   To load from ``default`` boot environment, append
-   ``default/@/grub/grub.cfg`` to the last ``ls`` command.
-
-   Then press ``home`` on the keyboard to move
-   cursor to the start of the line.
-
-   Change ``ls`` to ``configfile`` and press return::
-
-    grub > configfile (hd0,gpt2)/BOOT/default/@/grub/grub.cfg
+    grub > configfile (hd0,gpt2)/sys/BOOT/default@/grub/grub.cfg
 
 Rescue in Live Environment
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1055,10 +1016,6 @@ Rescue in Live Environment
      INST_MNT=$(mktemp -d)
      INST_UUID=abc123
 
-#. If using other keyfile::
-
-    KEYFILE=/path/to/keyfile
-
 #. Import and unlock root and boot pool::
 
      zpool import -N -R $INST_MNT rpool_$INST_UUID
@@ -1068,18 +1025,14 @@ Rescue in Live Environment
 
      zfs load-key rpool_$INST_UUID
 
-   If using keyfile::
-
-     zfs load-key -L file://$KEYFILE rpool_$INST_UUID
-
 #. Find the current boot environment::
 
      zfs list
      BE=default
 
-#. Mount boot and root filesystem::
+#. Mount root filesystem::
 
-     zfs mount rpool_$INST_UUID/ROOT/$BE
+     zfs mount rpool_$INST_UUID/sys/ROOT/$BE
 
 #. chroot into the system::
 
