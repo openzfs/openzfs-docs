@@ -15,7 +15,7 @@ Caution
 - This guide uses entire physical disks.
 - Multiple systems on one disk is not supported.
 - Target disk will be wiped. Back up your data before continuing.
-- The target system, virtual or physical, must have at least 4GB RAM,
+- The target system, virtual or physical, must have at least 2GB RAM,
   or the DKMS module might fail to build.
 - Installing on a drive which presents 4 KiB logical sectors (a “4Kn” drive)
   only works with UEFI booting. This not unique to ZFS. `GRUB does not and
@@ -84,17 +84,17 @@ Download Arch Linux live image
 
     `Mirrorlist <https://archlinux.org/mirrorlist/all/>`__
 
-#. Download Feb 2021 build and signature. `File a new issue and mention @ne9z
+#. Download March 2021 build and signature. `File a new issue and mention @ne9z
    <https://github.com/openzfs/openzfs-docs/issues/new?body=@ne9z,%20Update%20Live%20Image%20Arch%20Linux%20Root%20on
    %20ZFS%20HOWTO:>`__ if it's
    no longer available.
 
-    - `ISO (US mirror) <https://mirrors.ocf.berkeley.edu/archlinux/iso/2021.02.01/archlinux-2021.02.01-x86_64.iso>`__
-    - `Signature <https://archlinux.org/iso/2021.02.01/archlinux-2021.02.01-x86_64.iso.sig>`__
+    - `ISO (US mirror) <https://mirrors.ocf.berkeley.edu/archlinux/iso/2021.03.01/archlinux-2021.03.01-x86_64.iso>`__
+    - `Signature <https://archlinux.org/iso/2021.03.01/archlinux-2021.03.01-x86_64.iso.sig>`__
 
 #. Check live image against signature::
 
-    gpg --auto-key-retrieve --verify archlinux-2021.02.01-x86_64.iso.sig
+    gpg --auto-key-retrieve --verify archlinux-2021.03.01-x86_64.iso.sig
 
    If the file is authentic, output should be the following::
 
@@ -177,6 +177,10 @@ Prepare the Live Environment
 
 #. Install ZFS in the live environment:
 
+   Expand root filesystem::
+
+    mount -o remount,size=1G /run/archiso/cowspace
+
    Check kernel variant::
 
     LIVE_LINVAR=$(sed 's|.*linux|linux|' /proc/cmdline | sed 's|.img||g' | awk '{ print $1 }')
@@ -189,13 +193,9 @@ Prepare the Live Environment
 
     pacman -U https://archive.archlinux.org/packages/l/${LIVE_LINVAR}-headers/${LIVE_LINVAR}-headers-${LIVE_LINVER}-x86_64.pkg.tar.zst
 
-   Expand root filesystem::
-
-    mount -o remount,size=2G /run/archiso/cowspace
-
    Install zfs-dkms::
 
-    pacman -S zfs-dkms glibc
+    pacman -S --needed zfs-dkms glibc
 
 #. Load kernel module::
 
@@ -220,7 +220,7 @@ In this part, we will set some variables to configure the system.
 
    Store the host name in a variable::
 
-    INST_HOST='localhost'
+    INST_HOST='archonzfs'
 
 #. Kernel variant
 
@@ -451,13 +451,6 @@ Create Root and Boot Pools
    - Make sure to include the ``-part3`` portion of the drive path. If you
      forget that, you are specifying the whole disk, which ZFS will then
      re-partition, and you will lose the bootloader partition(s).
-   - ZFS native encryption `now
-     <https://github.com/openzfs/zfs/commit/31b160f0a6c673c8f926233af2ed6d5354808393>`__
-     defaults to ``aes-256-gcm``.
-   - Your passphrase will likely be the weakest link. Choose wisely. See
-     `section 5 of the cryptsetup FAQ
-     <https://gitlab.com/cryptsetup/cryptsetup/wikis/FrequentlyAskedQuestions#5-security-aspects>`__
-     for guidance.
 
 Create Datasets
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -484,18 +477,33 @@ Create Datasets
 
      #. Choose a strong password.
 
-        Once the password is compromised,
-        dataset and pool must be destroyed,
+        Due to the Copy-on-Write nature of ZFS,
+        `merely changing password is not enough <https://openzfs.github.io/openzfs-docs/man/8/zfs-change-key.8.html>`__
+        once the password is compromised.
+        Dataset and pool must be destroyed,
         disk wiped and system rebuilt from scratch to protect confidentiality.
-        `Merely changing password is not enough <https://openzfs.github.io/openzfs-docs/man/8/zfs-change-key.8.html>`__.
 
         Example: generate passphrase with `xkcdpass <https://github.com/redacted/XKCD-password-generator>`_::
 
          pacman -S --noconfirm xkcdpass
          xkcdpass -Vn 10 -w /usr/lib/python*/site-packages/xkcdpass/static/eff-long
 
-        Password can be supplied with SSH at boot time,
+        Root pool password can be supplied with SSH at boot time if boot pool is not encrypted,
         see `Supply password with SSH <#supply-password-with-ssh>`__.
+
+     #. Encrypt boot pool.
+
+        For mobile devices, it is strongly recommended to
+        `encrypt boot pool and enable Secure Boot <#encrypt-boot-pool-with-luks>`__
+        immediately after reboot to prevent attacks to initramfs. To quote
+        `cryptsetup faq <https://gitlab.com/cryptsetup/cryptsetup/-/wikis/FrequentlyAskedQuestions#2-setup>`__:
+
+          An attacker that wants to compromise your system will just
+          compromise the initrd or the kernel itself.
+
+        However, GRUB as of 2.04 requires interactively entering password,
+        you must phsically type in the passwords at boot time,
+        or else the computer will not boot.
 
      #. Create dataset::
 
@@ -720,6 +728,8 @@ System Configuration
 
     tee -a /etc/pacman.conf <<- 'EOF'
 
+    #[archzfs-testing]
+    #Include = /etc/pacman.d/mirrorlist-archzfs
     [archzfs]
     Include = /etc/pacman.d/mirrorlist-archzfs
     EOF
@@ -776,16 +786,16 @@ Pool name missing
 ~~~~~~~~~~~~~~~~~
 See `this bug report <https://savannah.gnu.org/bugs/?59614>`__.
 Root pool name is missing from ``root=ZFS=rpool/ROOT/default``
-in generated ``grub.cfg`` file.
+kernel cmdline in generated ``grub.cfg`` file.
 
 A workaround is to replace the pool name detection with ``zdb``
 command::
 
- sed -i "s|rpool=.*|rpool=\`zdb -l \${GRUB_DEVICE} \| grep -E '[[:blank:]]name' \| cut -d\\\' -f 2\`|"  /etc/grub.d/10_linux
+  sed -i "s|rpool=.*|rpool=\`zdb -l \${GRUB_DEVICE} \| grep -E '[[:blank:]]name' \| cut -d\\\' -f 2\`|"  /etc/grub.d/10_linux
 
-If you forgot to apply this workaround and
-followed this guide to use ``rpool_$INST_UUID`` and ``bpool_$INST_UUID``,
-``$INST_UUID`` can be found out with `Load grub.cfg in GRUB command line`_.
+If you forgot to apply this workaround, or GRUB package has been upgraded,
+initramfs will fail to find root filesystem on reboot, ending in kernel panic.
+Don't panic! See `here <#find-root-pool-name-in-grub>`__.
 
 GRUB Installation
 ~~~~~~~~~~~~~~~~~
@@ -987,6 +997,11 @@ Encrypted boot pool protects initramfs from
 malicious modification and supports hibernation
 to encrypted swap.
 
+#. Check value of ``$INST_UUID``::
+
+    findmnt -n --raw -o source /boot
+    INST_UUID=myUUID
+
 #. Create encryption keys::
 
     mkdir /etc/cryptkey.d/
@@ -1018,6 +1033,12 @@ to encrypted swap.
 #. Enter LUKS password::
 
     LUKS_PWD=rootpool
+
+#. Check disks::
+
+    cat /root/bpool_$INST_UUID-cmd
+
+   Disks are the last arguments of ``zpool create`` command.
 
 #. Create LUKS containers::
 
@@ -1064,7 +1085,6 @@ to encrypted swap.
            -O relatime=on \
            -O xattr=sa \
            -O mountpoint=/boot \
-           # remove -R $INST_MNT
            bpool_$INST_UUID \
            /dev/mapper/luks-bpool_$INST_UUID-$disk1-part2
 
@@ -1166,12 +1186,16 @@ a chain-of-trust can be established.
      
      It's possible to replace Microsoft's keys with your own,
      which enables you to gain the benefits of Secure Boot
-     without using either Shim. This can be a
+     without using Shim. This can be a
      useful approach if you want the benefits of Secure Boot
      but don't want to trust Microsoft or any of the others
      who distribute binaries signed with Microsoft's keys.
-
      See `here <https://www.rodsbooks.com/efi-bootloaders/controlling-sb.html>`__.
+
+     Note that enrolling your own key is risky and
+     might brick UEFI firmware, such as
+     `this instance <https://h30434.www3.hp.com/t5/Notebook-Operating-System-and-Recovery/Black-screen-after-enabling-secure-boot-and-installing/td-p/6754130>`__.
+     The original poster replaced the motherboard.
 
 #. Set up a service to monitor and sign ``grubx64.efi``,
    as in `mirrored ESP <#mirror-efi-system-partition>`__.
@@ -1301,6 +1325,41 @@ promote one backup to ``/boot/efi`` and reinstall GRUB with
 
 Recovery
 --------
+
+Find root pool name in GRUB
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#. At GRUB menu countdown, press ``c`` to enter commandline.
+
+#. Find current GRUB root::
+
+    grub > set
+    # unencrypted bpool
+    # root=hd0,gpt2
+    # encrypted bpool
+    # root=cryptouuid/UUID
+
+#. Find boot pool name::
+
+    # unencrypted bpool
+    grub > ls (hd0,gpt2)
+    # encrypted bpool
+    grub > ls (crypto0)
+    # Device hd0,gpt2: Filesystem type zfs - Label `bpool_$myUUID' ...
+
+#. Press Esc to go back to GRUB menu.
+
+#. With menu entry "Arch Linux" selected, press ``e``.
+
+#. Find ``linux`` line and add root pool name::
+
+    echo       'Loading Linux linux'
+    # broken
+    linux      /sys/BOOT/default@/vmlinuz-linux root=ZFS=/sys/ROOT/default rw
+    # fixed
+    linux      /sys/BOOT/default@/vmlinuz-linux root=ZFS=rpool_$myUUID/sys/ROOT/default rw
+
+#. Press Ctrl-x or F10 to boot. Apply the workaround afterwards.
 
 Load grub.cfg in GRUB command line
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

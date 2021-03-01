@@ -190,7 +190,7 @@ Prepare the Live Environment
 
 #. Install ZFS and tools in the live environment::
 
-     pacman -Sy --noconfirm gdisk dosfstools zfs-dkms glibc
+     pacman -Sy --noconfirm --needed gdisk dosfstools zfs-dkms glibc
 
 #. Load kernel module::
 
@@ -215,7 +215,7 @@ In this part, we will set some variables to configure the system.
 
    Store the host name in a variable::
 
-    INST_HOST='localhost'
+    INST_HOST='artixonzfs'
 
 #. Kernel variant
 
@@ -443,13 +443,6 @@ Create Root and Boot Pools
    - Make sure to include the ``-part3`` portion of the drive path. If you
      forget that, you are specifying the whole disk, which ZFS will then
      re-partition, and you will lose the bootloader partition(s).
-   - ZFS native encryption `now
-     <https://github.com/openzfs/zfs/commit/31b160f0a6c673c8f926233af2ed6d5354808393>`__
-     defaults to ``aes-256-gcm``.
-   - Your passphrase will likely be the weakest link. Choose wisely. See
-     `section 5 of the cryptsetup FAQ
-     <https://gitlab.com/cryptsetup/cryptsetup/wikis/FrequentlyAskedQuestions#5-security-aspects>`__
-     for guidance.
 
 Create Datasets
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -486,8 +479,20 @@ Create Datasets
          pacman -S --noconfirm xkcdpass
          xkcdpass -Vn 10 -w /usr/lib/python*/site-packages/xkcdpass/static/eff-long
 
-        Password can be supplied with SSH at boot time,
+        Root pool password can be supplied with SSH at boot time if boot pool is not encrypted,
         see `Supply password with SSH <#supply-password-with-ssh>`__.
+
+     #. Encrypt boot pool.
+
+        For mobile devices, it is strongly recommended to encrypt boot pool and enable Secure Boot
+        immediately after reboot to prevent attacks to initramfs. To quote
+        `cryptsetup faq <https://gitlab.com/cryptsetup/cryptsetup/-/wikis/FrequentlyAskedQuestions#2-setup>`__:
+
+          An attacker that wants to compromise your system will just
+          compromise the initrd or the kernel itself.
+
+        This HOWTO has not been ported to Artix.
+        Refer to Arch guide for details.
 
      #. Create dataset::
 
@@ -743,7 +748,8 @@ System Configuration
 #. Add archzfs repository::
 
     tee -a /etc/pacman.conf <<- 'EOF'
-
+    #[archzfs-testing]
+    #Include = /etc/pacman.d/mirrorlist-archzfs
     [archzfs]
     Include = /etc/pacman.d/mirrorlist-archzfs
     EOF
@@ -801,11 +807,11 @@ in generated ``grub.cfg`` file.
 A workaround is to replace the pool name detection with ``zdb``
 command::
 
- sed -i "s|rpool=.*|rpool=\`zdb -l \${GRUB_DEVICE} \| grep -E '[[:blank:]]name' \| cut -d\\\' -f 2\`|"  /etc/grub.d/10_linux
+  sed -i "s|rpool=.*|rpool=\`zdb -l \${GRUB_DEVICE} \| grep -E '[[:blank:]]name' \| cut -d\\\' -f 2\`|"  /etc/grub.d/10_linux
 
-If you forgot to apply this workaround and
-followed this guide to use ``rpool_$INST_UUID`` and ``bpool_$INST_UUID``,
-``$INST_UUID`` can be found out with `Load grub.cfg in GRUB command line`_.
+If you forgot to apply this workaround, or GRUB package has been upgraded,
+initramfs will fail to find root filesystem on reboot, ending in kernel panic.
+Don't panic! See `here <#find-root-pool-name-in-grub>`__.
 
 GRUB Installation
 ~~~~~~~~~~~~~~~~~
@@ -978,6 +984,41 @@ Remember to create separate datasets for individual users.
 
 Recovery
 --------
+
+Find root pool name in GRUB
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#. At GRUB menu countdown, press ``c`` to enter commandline.
+
+#. Find current GRUB root::
+
+    grub > set
+    # unencrypted bpool
+    # root=hd0,gpt2
+    # encrypted bpool
+    # root=cryptouuid/UUID
+
+#. Find boot pool name::
+
+    # unencrypted bpool
+    grub > ls (hd0,gpt2)
+    # encrypted bpool
+    grub > ls (crypto0)
+    # Device hd0,gpt2: Filesystem type zfs - Label `bpool_$myUUID' ...
+
+#. Press Esc to go back to GRUB menu.
+
+#. With menu entry "Arch Linux" selected, press ``e``.
+
+#. Find ``linux`` line and add root pool name::
+
+    echo       'Loading Linux linux'
+    # broken
+    linux      /sys/BOOT/default@/vmlinuz-linux root=ZFS=/sys/ROOT/default rw
+    # fixed
+    linux      /sys/BOOT/default@/vmlinuz-linux root=ZFS=rpool_$myUUID/sys/ROOT/default rw
+
+#. Press Ctrl-x or F10 to boot. Apply the workaround afterwards.
 
 Load grub.cfg in GRUB command line
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
