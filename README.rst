@@ -18,6 +18,8 @@ The dependencies are available via pip::
    sudo apt install python3-pip
    # For RPM-based distros
    sudo yum install python3-pip
+   # For openSUSE
+   sudo zypper in python3-pip
 
    pip3 install -r docs/requirements.txt
    # Add ~/.local/bin to your $PATH, e.g. by adding this to ~/.bashrc:
