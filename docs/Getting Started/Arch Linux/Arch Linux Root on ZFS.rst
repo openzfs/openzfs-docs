@@ -749,8 +749,6 @@ Optional Configuration
 
       vi /etc/dropbear/root_key
 
-     Note that dropbear only supports RSA keys.
-
   #. Edit mkinitcpio::
 
       tee /etc/mkinitcpio.conf <<- 'EOF'
@@ -768,6 +766,17 @@ Optional Configuration
   #. Generate host keys::
 
       ssh-keygen -Am pem
+
+  #. Manually convert ed25519 host key to dropbear
+     -readable format::
+
+      dropbearconvert openssh dropbear /etc/ssh/ssh_host_ed25519_key /etc/dropbear/dropbear_ed25519_host_key
+
+     `mkinitcpio-dropbear
+     <https://archlinux.org/packages/community/any/mkinitcpio-dropbear/>`__,
+     lacks support for converting ed25519 host key,
+     `see this pull request
+     <https://github.com/grazzolini/mkinitcpio-dropbear/pull/13>`__.
 
   #. Regenerate initrd::
 
