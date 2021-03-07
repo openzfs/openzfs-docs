@@ -15,10 +15,10 @@ Caution
 - This HOWTO uses a whole physical disk.
 - Do not use these instructions for dual-booting.
 - Backup your data. Any existing data will be lost.
-- This is not an openSUSE official HOWTO page. This document will be updated if Root on ZFS support of 
+- This is not an openSUSE official HOWTO page. This document will be updated if Root on ZFS support of
   openSUSE is added in the future.
-  Also, `openSUSE's default system installer Yast2 does not support zfs <https://forums.opensuse.org/showthread.php/510071-HOWTO-Install-ZFSonLinux-on-OpenSuse>`__. The method of setting up system 
-  with zypper without Yast2 used in this page is based on openSUSE installation methods written by the 
+  Also, `openSUSE's default system installer Yast2 does not support zfs <https://forums.opensuse.org/showthread.php/510071-HOWTO-Install-ZFSonLinux-on-OpenSuse>`__. The method of setting up system
+  with zypper without Yast2 used in this page is based on openSUSE installation methods written by the
   experience of the people in the community.
   For more information about this, please look at the external links.
 
@@ -121,7 +121,7 @@ Step 1: Prepare The Install Environment
    ``ip addr show scope global | grep inet``. Then, from your main machine,
    connect with ``ssh user@IP``.
 
-   
+
 #. Disable automounting:
 
    If the disk has been used before (with partitions at the same offsets),
@@ -526,17 +526,17 @@ Step 4. Install System
 ----------------------
 
 #. Add repositories into chrooting directory::
-     
+
      zypper --root /mnt ar http://download.opensuse.org/tumbleweed/repo/non-oss/ non-oss
      zypper --root /mnt ar http://download.opensuse.org/tumbleweed/repo/oss/ oss
 
 #. Generate repository indexes::
 
      zypper --root /mnt refresh
-     
-     
+
+
    You will get fingerprint exception, click a to say always trust and continue.::
-   
+
      New repository or package signing key received:
 
      Repository:       oss
@@ -546,14 +546,14 @@ Step 4. Install System
      Key Expires:      Thu May  2 11:37:40 2024
      Rpm Name:         gpg-pubkey-3dbdc284-53674dd4
 
-     Do you want to reject the key, trust temporarily, or trust always? [r/t/a/?] (r): 
+     Do you want to reject the key, trust temporarily, or trust always? [r/t/a/?] (r):
 
-  
+
 #. Install openSUSE Tumbleweed with zypper:
 
    If you install `base` pattern, zypper will install `busybox-grep` which is masks default kernel package.
-   Thats why I recommend you to install `enhanced_base` pattern, if you're new in openSUSE. But in `enhanced_base`, bloats 
-   can annoy you, while you want to use it openSUSE on server. So, you need to select 
+   Thats why I recommend you to install `enhanced_base` pattern, if you're new in openSUSE. But in `enhanced_base`, bloats
+   can annoy you, while you want to use it openSUSE on server. So, you need to select
 
    a. Install base packages of openSUSE Tumbleweed with zypper (Recommended for server)::
 
@@ -562,7 +562,7 @@ Step 4. Install System
 
    b. Install enhanced base of openSUSE Tumbleweed with zypper (Recommended for desktop)::
 
-       zypper --root /mnt install -t pattern enhanced_base   
+       zypper --root /mnt install -t pattern enhanced_base
 
 
 
@@ -578,7 +578,7 @@ Step 4. Install System
   .. note:: If your `/etc/resolv.conf` file is empty, proceed this command.
 
      echo "nameserver 8.8.4.4" | tee -a /mnt/etc/resolv.conf
-    
+
 
   It will make easier to configure network and other configurations for beginners.
 
@@ -602,9 +602,9 @@ Step 5: System Configuration
    .. code-block:: text
 
      127.0.1.1       HOSTNAME
-   
+
    or if the system has a real name in DNS:
-   
+
    .. code-block:: text
 
      127.0.1.1       FQDN HOSTNAME
@@ -613,14 +613,14 @@ Step 5: System Configuration
 
 #. Copy network information::
 
-     cp /etc/resolv.conf /mnt/etc 
+     cp /etc/resolv.conf /mnt/etc
 
    You will reconfigure network with yast2.
 
    .. note:: If your `/etc/resolv.conf` file is empty, proceed this command.
 
       echo "nameserver 8.8.4.4" | tee -a /mnt/etc/resolv.conf
-   
+
 #. Bind the virtual filesystems from the LiveCD environment to the new
    system and ``chroot`` into it::
 
@@ -658,9 +658,13 @@ Step 5: System Configuration
      localectl set-locale LANG=en_US.UTF-8
 
 
-#. Optional: Reinstallation for stability::
+#. Optional: Reinstallation for stability:
 
-   After installation it may need. Some packages may have minor errors. For that, do this if you wish. Since there is no command like dpkg-reconfigure in openSUSE,  [zypper install -f stated as a alternative for it](https://lists.opensuse.org/opensuse-factory/2009-07/msg00188.html) but it will reinstall packages.
+   After installation it may need. Some packages may have minor errors.
+   For that, do this if you wish. Since there is no command like
+   dpkg-reconfigure in openSUSE,  `zypper install -f stated as a alternative for
+   it <https://lists.opensuse.org/opensuse-factory/2009-07/msg00188.html>`__
+   but it will reinstall packages.
 
    .. code-block:: text
 
@@ -693,7 +697,7 @@ Step 5: System Configuration
    ``/etc/crypttab`` entries for ``luks2``, etc. adjusting for each disk.
 
 #. For LUKS installs only, fix cryptsetup naming for ZFS::
- 
+
      echo 'ENV{DM_NAME}!="", SYMLINK+="$env{DM_NAME}"
      ENV{DM_NAME}!="", SYMLINK+="dm-name-$env{DM_NAME}"' >> /etc/udev/rules.d/99-local-crypt.rules
 
@@ -706,7 +710,7 @@ Step 5: System Configuration
 
        zypper install grub2-x86_64-pc
 
-     If your processor is 32bit use `grub2-i386-pc` instead of x86_64 one. 
+     If your processor is 32bit use `grub2-i386-pc` instead of x86_64 one.
 
    - Install GRUB for UEFI booting::
 
@@ -760,7 +764,7 @@ Step 5: System Configuration
          ExecStart=/sbin/zpool import -N -o cachefile=none bpool
          # Work-around to preserve zpool cache:
          ExecStartPre=-/bin/mv /etc/zfs/zpool.cache /etc/zfs/preboot_zpool.cache
-         ExecStartPost=-/bin/mv /etc/zfs/preboot_zpool.cache /etc/zfs/zpool.cache 
+         ExecStartPost=-/bin/mv /etc/zfs/preboot_zpool.cache /etc/zfs/zpool.cache
 
          [Install]
          WantedBy=zfs-import.target
@@ -780,7 +784,7 @@ Step 5: System Configuration
      cp /usr/share/systemd/tmp.mount /etc/systemd/system/
      systemctl enable tmp.mount
 
-     
+
 Step 6: Kernel Installation
 ---------------------------
 
@@ -796,17 +800,17 @@ Step 6: Kernel Installation
 #. Refresh the initrd files::
 
      mkinitrd
-   
+
    **Note:** After some installations, LUKS partition cannot seen by dracut,
    this will print “Failure occured during following action:
-   configuring encrypted DM device X VOLUME_CRYPTSETUP_FAILED“. For fix this 
+   configuring encrypted DM device X VOLUME_CRYPTSETUP_FAILED“. For fix this
    issue you need to check cryptsetup installation. `See for more information <https://forums.opensuse.org/showthread.php/528938-installation-with-LUKS-cryptsetup-installer-gives-error-code-3034?p=2850404#post2850404>`__
    **Note:** Although we add the zfs config to the system module into `/etc/modules.d`, if it is not seen by dracut, we have to add it to dracut by force.
    `dracut --kver $(uname -r) --force --add-drivers "zfs"`
-   
-   
+
+
 Step 7: Grub2 Installation
---------------------------  
+--------------------------
 
 #. Verify that the ZFS boot filesystem is recognized::
 
@@ -821,7 +825,7 @@ Step 7: Grub2 Installation
 
    then go back to `grub2-probe` step.
 
-   
+
 #. Workaround GRUB's missing zpool-features support::
 
      vi /etc/default/grub
@@ -843,8 +847,8 @@ Step 7: Grub2 Installation
 
    **Note:** Ignore errors from ``osprober``, if present.
    **Note:** If you have had trouble with the grub2 installation, I suggest you use systemd-boot.
-   **Note:** If this command don't gives any output, use classic grub.cfg generation with following command
-     grub2-mkconfig -o /boot/grub2/grub.cfg  
+   **Note:** If this command don't gives any output, use classic grub.cfg generation with following command:
+   ``grub2-mkconfig -o /boot/grub2/grub.cfg``
 
 #. Install the boot loader:
 
@@ -869,11 +873,11 @@ Step 8: Systemd-Boot Installation
 ---------------------------------
 
 **Warning:** This will break your Yast2 Bootloader Configuration. Make sure that you
-are not able to fix the problem you are having with grub2. I decided to write this 
+are not able to fix the problem you are having with grub2. I decided to write this
 part because sometimes grub2 doesn't see the rpool pool in some cases.
 
 #. Install systemd-boot::
-    
+
      bootctl install
 
 #. Configure bootloader configuration::
@@ -882,8 +886,8 @@ part because sometimes grub2 doesn't see the rpool pool in some cases.
      default openSUSE_Tumbleweed.conf
      timeout 5
      console-mode auto
-     EOF 
-    
+     EOF
+
 #. Write Entries::
 
      tee -a /boot/efi/loader/entries/openSUSE_Tumbleweed.conf << EOF
@@ -899,9 +903,9 @@ part because sometimes grub2 doesn't see the rpool pool in some cases.
      cp /boot/{vmlinuz,initrd} /boot/efi/EFI/openSUSE
 
 #. Update systemd-boot variables::
-    
+
      bootctl update
-      
+
 Step 9: Filesystem Configuration
 --------------------------------
 
@@ -997,15 +1001,15 @@ Step 10: First Boot
 
    - For legacy (BIOS) booting::
      Check to be sure we using efi mode:
-     
+
      .. code-block:: text
-     
+
          efibootmgr -v
-     
+
      This must return a message contains `legacy_boot`
 
      Then reconfigure grub:
-    
+
      .. code-block:: text
 
          grub-install $DISK
@@ -1226,8 +1230,9 @@ VMware
 - Set ``disk.EnableUUID = "TRUE"`` in the vmx file or vsphere configuration.
   Doing this ensures that ``/dev/disk`` aliases are created in the guest.
 
-  
+
 External Links
 ~~~~~~~~~~~~~~
-* [OpenZFS on openSUSE](https://en.opensuse.org/OpenZFS)
-* [ZenLinux Blog - How to Setup an openSUSE chroot](https://blog.zenlinux.com/2011/02/how-to-setup-an-opensuse-chroot/comment-page-1/)
+* `OpenZFS on openSUSE <https://en.opensuse.org/OpenZFS>`__
+* `ZenLinux Blog - How to Setup an openSUSE chroot
+  <https://blog.zenlinux.com/2011/02/how-to-setup-an-opensuse-chroot/comment-page-1/>`__
