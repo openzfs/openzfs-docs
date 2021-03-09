@@ -81,9 +81,9 @@ For other kernels or Arch-based distros, use `archzfs-dkms package`_.
 
     if [ ${INST_LINVER} == \
     $(pacman -Si ${INST_LINVAR} | grep Version | awk '{ print $3 }') ]; then
-     pacstrap $INST_MNT ${INST_LINVAR}
+     pacman -S --noconfirm ${INST_LINVAR}
     else
-     pacstrap -U $INST_MNT \
+     pacman -U --noconfirm \
      https://archive.archlinux.org/packages/l/${INST_LINVAR}/${INST_LINVAR}-${INST_LINVER}-x86_64.pkg.tar.zst
     fi
 
