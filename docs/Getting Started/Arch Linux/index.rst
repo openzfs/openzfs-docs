@@ -15,6 +15,45 @@ If you need help, reach out to the community using the :ref:`mailing_lists` or I
 related to this HOWTO, please `file a new issue and mention @ne9z
 <https://github.com/openzfs/openzfs-docs/issues/new?body=@ne9z,%20I%20have%20the%20following%20issue%20with%20the%20Arch%20Linux%20ZFS%20HOWTO:>`__.
 
+Overview
+--------
+
+Due to license incompatibility,
+ZFS support is provided by out-of-tree kernel modules.
+
+Kernel modules are specific to each kernel package, i.e.,
+ZFS kernel module built for ``linux-5.11.1.arch1-1`` is incompatible
+with ``linux-5.11.2.arch1-1`` kernel.
+
+ZFS kernel modules can be obtained by
+
+- installing ``zfs-linux*``, which contains prebuilt ZFS kernel modules;
+- installing ``zfs-dkms`` and build ZFS kernel modules on-the-fly.
+
+``zfs-linux*`` packages are the easiest and
+most risk-free way to obtain ZFS support.
+However, they hard-depend on a specific kernel
+and will block kernel updates if the corresponding
+``zfs-linux*`` package is not available.
+
+``zfs-dkms`` package is the more versatile choice.
+After installation, Dynamic Kernel Module Support
+will automatically build ZFS kernel modules for installed
+kernels and not interfere with kernel updates.
+However, the modules are somewhat slow to build and more
+importantly, there will be little warning message when the
+build fails. Also, as ``zfs-dkms`` does not perform checks against
+kernel version, this must be done by user themselves for major kernel updates
+such as ``5.10 -> 5.11``.
+
+``zfs-linux*`` is recommended for users who are using stock kernels
+from official Arch Linux repo and can accept kernel update delays.
+Such delays should be no more than a few days.
+
+``zfs-dkms`` is required for experienced users who are using custom kernels or
+want to follow the latest kernel updates. This package is also required for derivative
+distros such as `Artix Linux <https://artixlinux.org>`__.
+
 Installation
 ------------
 
@@ -50,24 +89,15 @@ You can use it as follows.
 
      pacman -Sy
 
-testing repo
-^^^^^^^^^^^^
-Testing repo provides newer packages than stable repo,
-but may contain unknown bugs.
-Use at your own risk.
-
-To use testing repo, uncomment lines in
-``/etc/pacman.conf``.
-
-archzfs package
-~~~~~~~~~~~~~~~
+zfs-linux* package
+~~~~~~~~~~~~~~~~~~
 
 When using unmodified Arch Linux kernels,
-prebuilt ``archzfs`` packages are available.
-You can also switch between ``archzfs`` and ``zfs-dkms``
+prebuilt ``zfs-linux*`` packages are available.
+You can also switch between ``zfs-linux*`` and ``zfs-dkms``
 packages later.
 
-For other kernels or Arch-based distros, use `archzfs-dkms package`_.
+For other kernels or Arch-based distros, use zfs-dkms package.
 
 #. Check kernel variant::
 
@@ -81,21 +111,25 @@ For other kernels or Arch-based distros, use `archzfs-dkms package`_.
 
     if [ ${INST_LINVER} == \
     $(pacman -Si ${INST_LINVAR} | grep Version | awk '{ print $3 }') ]; then
-     pacman -S --noconfirm ${INST_LINVAR}
+     pacman -S --noconfirm --needed ${INST_LINVAR}
     else
-     pacman -U --noconfirm \
+     pacman -U --noconfirm --needed \
      https://archive.archlinux.org/packages/l/${INST_LINVAR}/${INST_LINVAR}-${INST_LINVER}-x86_64.pkg.tar.zst
     fi
 
-#. Install archzfs::
+#. Install zfs-linux*::
 
     pacman -Sy zfs-${INST_LINVAR}
 
-archzfs-dkms package
-~~~~~~~~~~~~~~~~~~~~
+#. Hold kernel package from updates::
 
-This package will dynamically build ZFS modules for
-supported kernels.
+     sed -i 's/#IgnorePkg/IgnorePkg/' /etc/pacman.conf
+     sed -i "/^IgnorePkg/ s/$/ ${INST_LINVAR} ${INST_LINVAR}-headers/" /etc/pacman.conf
+
+   Kernel will be upgraded when an update for ``zfs-linux*`` becomes available.
+
+zfs-dkms package
+~~~~~~~~~~~~~~~~
 
 Check kernel compatibility
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -201,25 +235,6 @@ Kernel update
    Do not update if the kernel is not compatible
    with OpenZFS.
 
--git packages
-~~~~~~~~~~~~~
-
-Normal packages are built from
-`latest OpenZFS stable release <https://github.com/openzfs/zfs/releases/latest>`__
-which may not contain the newest features.
-
-``-git`` packages are directly built from
-`OpenZFS master branch <https://github.com/openzfs/zfs/commits/master>`__,
-which may contain unknown bugs.
-
-To use ``-git`` packages, attach ``-git`` suffix to package names, example::
-
- # zfs-dkms
- zfs-dkms-git
-
- # zfs-${INST_LINVAR}
- zfs-${INST_LINVAR}-git
-
 Check Live Image Compatibility
 ------------------------------
 #. Choose a mirror::
@@ -240,7 +255,7 @@ Check Live Image Compatibility
     https://archive.artixlinux.org/repos/2021/01/01/system/os/x86_64
     # linux-5.10.3.arch1-1-x86_64.pkg.tar.zst
 
-#. Check latest archzfs package version::
+#. Check latest zfs-dkms package version::
 
     https://archzfs.com/archzfs/x86_64/
     # zfs-dkms-2.0.1-1-x86_64.pkg.tar.zst
