@@ -242,6 +242,10 @@ Preparations
 
     DISK=(/dev/disk/by-id/disk1 /dev/disk/by-id/disk2)
 
+   For single disk installation, use::
+
+    DISK=(/dev/disk/by-id/disk1)
+
 System Installation
 -------------------
 
@@ -252,7 +256,7 @@ System Installation
      # clear partition table
      sgdisk --zap-all $i
 
-     # EFI system partition
+     # EFI system partition; must be created
      sgdisk -n1:1M:+1G -t1:EF00 $i
 
      # Boot pool partition
@@ -265,7 +269,7 @@ System Installation
      # without swap (not recommended)
      #sgdisk -n3:0:0 -t3:BF00 $i
 
-     # with BIOS booting
+     # with BIOS booting; can co-exist with EFI
      sgdisk -a1 -n5:24K:+1000K -t5:EF02 $i
 
      done
@@ -428,7 +432,7 @@ System Installation
 
     zfs create \
      -o canmount=off \
-     -o mountpoint=/boot \
+     -o mountpoint=none \
      bpool_$INST_UUID/sys
 
 #. Create system root container:
@@ -440,7 +444,7 @@ System Installation
 
       zfs create \
        -o canmount=off \
-       -o mountpoint=/ \
+       -o mountpoint=none \
        rpool_$INST_UUID/sys
 
    - Encrypted:
@@ -472,7 +476,7 @@ System Installation
 
        zfs create \
         -o canmount=off \
-        -o mountpoint=/ \
+        -o mountpoint=none \
         -o encryption=on \
         -o keylocation=prompt \
         -o keyformat=passphrase \
@@ -680,6 +684,7 @@ System Configuration
 
     curl -L https://archzfs.com/archzfs.gpg |  pacman-key -a -
     curl -L https://git.io/JtQpl | xargs -i{} pacman-key --lsign-key {}
+    curl -L https://git.io/JtQp4 > /etc/pacman.d/mirrorlist-archzfs
 
 #. Add archzfs repository::
 
@@ -691,7 +696,12 @@ System Configuration
     Include = /etc/pacman.d/mirrorlist-archzfs
     EOF
 
-    curl -L https://git.io/JtQp4 > /etc/pacman.d/mirrorlist-archzfs
+#. Ignore kernel updates::
+
+    sed -i 's/#IgnorePkg/IgnorePkg/' /etc/pacman.conf
+    sed -i "/^IgnorePkg/ s/$/ ${INST_LINVAR} ${INST_LINVAR}-headers zfs-${INST_LINVAR} zfs-utils/" /etc/pacman.conf
+
+   Kernel will be manually updated, see Getting Started.
 
 #. Enable networking::
 
