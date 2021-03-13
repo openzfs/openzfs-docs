@@ -71,6 +71,7 @@ You can use it as follows.
 
     curl -L https://archzfs.com/archzfs.gpg |  pacman-key -a -
     curl -L https://git.io/JtQpl | xargs -i{} pacman-key --lsign-key {}
+    curl -L https://git.io/JtQp4 > /etc/pacman.d/mirrorlist-archzfs
 
 #. Add archzfs repository::
 
@@ -82,8 +83,6 @@ You can use it as follows.
     [archzfs]
     Include = /etc/pacman.d/mirrorlist-archzfs
     EOF
-
-    curl -L https://git.io/JtQp4 > /etc/pacman.d/mirrorlist-archzfs
 
 #. Update pacman database::
 
@@ -121,12 +120,15 @@ For other kernels or Arch-based distros, use zfs-dkms package.
 
     pacman -Sy zfs-${INST_LINVAR}
 
-#. Hold kernel package from updates::
+#. Ignore kernel updates::
 
      sed -i 's/#IgnorePkg/IgnorePkg/' /etc/pacman.conf
-     sed -i "/^IgnorePkg/ s/$/ ${INST_LINVAR} ${INST_LINVAR}-headers/" /etc/pacman.conf
+     sed -i "/^IgnorePkg/ s/$/ ${INST_LINVAR} ${INST_LINVAR}-headers zfs-${INST_LINVAR} zfs-utils/" /etc/pacman.conf
 
-   Kernel will be upgraded when an update for ``zfs-linux*`` becomes available.
+#. To update kernel, run::
+
+     INST_LINVAR=$(sed 's|.*linux|linux|' /proc/cmdline | sed 's|.img||g' | awk '{ print $1 }')
+     pacman -Sy --needed --noconfirm ${INST_LINVAR} ${INST_LINVAR}-headers zfs-${INST_LINVAR}
 
 zfs-dkms package
 ~~~~~~~~~~~~~~~~
