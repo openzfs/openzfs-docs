@@ -21,37 +21,44 @@ Overview
 Due to license incompatibility,
 ZFS support is provided by out-of-tree kernel modules.
 
-Kernel modules are specific to each kernel package, i.e.,
-ZFS kernel module built for ``linux-5.11.1.arch1-1`` is incompatible
-with ``linux-5.11.2.arch1-1`` kernel.
+ZFS kernel modules can be installed with:
 
-ZFS kernel modules can be obtained by
+- ``zfs-linux*``, provides prebuilt ZFS kernel modules
+- ``zfs-dkms``, provides Dynamic Kernel Module Service support
 
-- installing ``zfs-linux*``, which contains prebuilt ZFS kernel modules;
-- installing ``zfs-dkms`` and build ZFS kernel modules on-the-fly.
+zfs-linux*
+~~~~~~~~~~
+``zfs-linux*`` packages are the most
+risk-free way to obtain ZFS support.
 
-``zfs-linux*`` packages are the easiest and
-most risk-free way to obtain ZFS support.
-However, they hard-depend on a specific kernel
-and will block kernel updates if the corresponding
-``zfs-linux*`` package is not available.
+Prebuilt modules are kernel-specific, i.e.,
+module built for 5.11.1 is incompatible
+with 5.11.2. For this reason, ``zfs-linux*``
+depends on a particular kernel version.
+Example: if linux-5.11.2 is available, but
+``zfs-linux-5.11.2`` is not available, you can not
+upgrade to linux-5.11.2 until ``zfs-linux-5.11.2``
+came out.
 
+``zfs-linux*`` is recommended for users who are using stock kernels
+from official Arch Linux repo and can accept kernel update delays for
+up to a few days.
+
+zfs-dkms
+~~~~~~~~
 ``zfs-dkms`` package is the more versatile choice.
 After installation, Dynamic Kernel Module Support
 will automatically build ZFS kernel modules for installed
-kernels and not interfere with kernel updates.
-However, the modules are somewhat slow to build and more
-importantly, there will be little warning message when the
-build fails. Also, as ``zfs-dkms`` does not perform checks against
-kernel version, this must be done by user themselves for major kernel updates
-such as ``5.10 -> 5.11``.
+kernels and does not interfere with kernel updates.
 
-``zfs-linux*`` is recommended for users who are using stock kernels
-from official Arch Linux repo and can accept kernel update delays.
-Such delays should be no more than a few days.
+However, there are several disadvantages:
 
-``zfs-dkms`` is required for experienced users who are using custom kernels or
-want to follow the latest kernel updates. This package is also required for derivative
+- somewhat slow to build
+- little warning when DKMS build fails
+- does not check kernel compatibility, manual checks required
+
+``zfs-dkms`` is required for users who are using custom kernels or
+do not accept delays for kernel updates. This package is also required for derivative
 distros such as `Artix Linux <https://artixlinux.org>`__.
 
 Installation
@@ -79,7 +86,7 @@ You can use it as follows.
 
     #[archzfs-testing]
     #Include = /etc/pacman.d/mirrorlist-archzfs
- 
+
     [archzfs]
     Include = /etc/pacman.d/mirrorlist-archzfs
     EOF
@@ -123,7 +130,7 @@ For other kernels or Arch-based distros, use zfs-dkms package.
 #. Ignore kernel updates::
 
      sed -i 's/#IgnorePkg/IgnorePkg/' /etc/pacman.conf
-     sed -i "/^IgnorePkg/ s/$/ ${INST_LINVAR} ${INST_LINVAR}-headers zfs-${INST_LINVAR} zfs-utils/" /etc/pacman.conf
+     sed -i "/^IgnorePkg/ s/$/ ${INST_LINVAR} ${INST_LINVAR}-headers zfs-${INST_LINVAR}/" /etc/pacman.conf
 
 #. To update kernel, run::
 
@@ -133,9 +140,6 @@ For other kernels or Arch-based distros, use zfs-dkms package.
 zfs-dkms package
 ~~~~~~~~~~~~~~~~
 
-Check kernel compatibility
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-
 #. Check kernel variant::
 
     INST_LINVAR=$(sed 's|.*linux|linux|' /proc/cmdline | sed 's|.img||g' | awk '{ print $1 }')
@@ -143,6 +147,10 @@ Check kernel compatibility
 #. Check kernel version::
 
     INST_LINVER=$(pacman -Qi ${INST_LINVAR} | grep Version | awk '{ print $3 }')
+
+   If you are updating kernel, use the following command::
+
+    INST_LINVER=$(pacman -Syi ${INST_LINVAR} | grep Version | awk '{ print $3 }')
 
 #. Check zfs-dkms package version::
 
@@ -158,7 +166,7 @@ Check kernel compatibility
     echo ${INST_LINVER%%-*}
     # 5.10.17 # supported
 
-   If it's not supported, see `Install zfs-dkms compatible kernel`_.
+   If it's not supported, skip to **Install zfs-dkms compatible kernel**.
    Otherwise, continue to next step.
 
 #. Install kernel headers::
@@ -170,75 +178,76 @@ Check kernel compatibility
 
      pacman -Sy zfs-dkms
 
+   If you are updating kernel, use the following command::
+
+     pacman -Sy $INST_LINVAR $INST_LINVAR-headers zfs-dkms
+
 #. Ignore kernel package from updates::
 
      sed -i 's/#IgnorePkg/IgnorePkg/' /etc/pacman.conf
      sed -i "/^IgnorePkg/ s/$/ ${INST_LINVAR} ${INST_LINVAR}-headers/" /etc/pacman.conf
 
-Kernel must be manually updated, see `Kernel update`_.
+   To update kernel, go throught the above procedure
+   again.
 
-Install zfs-dkms compatible kernel
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#. Install zfs-dkms compatible kernel
 
-#. Choose kernel variant. Available variants are:
+   If the currently installed kernel is not
+   compatible with ZFS, a kernel downgrade
+   is needed.
 
-   * linux
-   * linux-lts
+   #. Choose kernel variant. Available variants are:
 
-   ::
+      * linux
+      * linux-lts
 
-     INST_LINVAR=linux
+      ::
 
-#. Install kernels available when the package was built. Check build date::
+        INST_LINVAR=linux
 
-     DKMS_DATE=$(pacman -Syi zfs-dkms \
-     | grep 'Build Date' \
-     | sed 's/.*: //' \
-     | LC_ALL=C xargs -i{} date -d {} -u +%Y/%m/%d)
+   #. Install kernels available when the package was built. Check build date::
 
-#. Check kernel version::
+        DKMS_DATE=$(pacman -Syi zfs-dkms \
+        | grep 'Build Date' \
+        | sed 's/.*: //' \
+        | LC_ALL=C xargs -i{} date -d {} -u +%Y/%m/%d)
 
-     INST_LINVER=$(curl https://archive.archlinux.org/repos/${DKMS_DATE}/core/os/x86_64/ \
-     | grep \"${INST_LINVAR}-'[0-9]' \
-     | grep -v sig \
-     | sed "s|.*$INST_LINVAR-||" \
-     | sed "s|-x86_64.*||")
+   #. Check kernel version::
 
-#. Install compatible kernel and headers::
+        INST_LINVER=$(curl https://archive.archlinux.org/repos/${DKMS_DATE}/core/os/x86_64/ \
+        | grep \"${INST_LINVAR}-'[0-9]' \
+        | grep -v sig \
+        | sed "s|.*$INST_LINVAR-||" \
+        | sed "s|-x86_64.*||")
 
-     pacman -U \
-     https://archive.archlinux.org/packages/l/${INST_LINVAR}/${INST_LINVAR}-${INST_LINVER}-x86_64.pkg.tar.zst \
-     https://archive.archlinux.org/packages/l/${INST_LINVAR}-headers/${INST_LINVAR}-headers-${INST_LINVER}-x86_64.pkg.tar.zst
+   #. Install compatible kernel and headers::
 
-#. Install zfs-dkms::
+        pacman -U \
+        https://archive.archlinux.org/packages/l/${INST_LINVAR}/${INST_LINVAR}-${INST_LINVER}-x86_64.pkg.tar.zst \
+        https://archive.archlinux.org/packages/l/${INST_LINVAR}-headers/${INST_LINVAR}-headers-${INST_LINVER}-x86_64.pkg.tar.zst
 
-     pacman -Sy zfs-dkms
+   #. Install zfs-dkms::
 
-#. Hold kernel package from updates::
+        pacman -Sy zfs-dkms
 
-     sed -i 's/#IgnorePkg/IgnorePkg/' /etc/pacman.conf
-     sed -i "/^IgnorePkg/ s/$/ ${INST_LINVAR} ${INST_LINVAR}-headers/" /etc/pacman.conf
+   #. Hold kernel package from updates::
 
-   Kernel must be manually updated, see `Kernel update`_.
+        sed -i 's/#IgnorePkg/IgnorePkg/' /etc/pacman.conf
+        sed -i "/^IgnorePkg/ s/$/ ${INST_LINVAR} ${INST_LINVAR}-headers/" /etc/pacman.conf
 
-Kernel update
-^^^^^^^^^^^^^
+      Kernel must be manually updated, see above.
 
-#. `Check kernel compatibility`_.
+Live Image
+----------
 
-#. Replace check kernel version with ``-Syi``::
+Latest live image might contain a kernel incompatible with
+ZFS. Check the compatibility with the following procedure.
 
-    INST_LINVER=$(pacman -Syi ${INST_LINVAR} | grep Version | awk '{ print $3 }')
+Alternatively, an unofficial Arch Linux live
+image with ZFS is available at
+`here <https://gitlab.com/m_zhou/archiso>`__.
+Use at your own discretion.
 
-#. If compatible, update kernel and headers with::
-
-    pacman -Sy $INST_LINVAR $INST_LINVAR-headers
-
-   Do not update if the kernel is not compatible
-   with OpenZFS.
-
-Check Live Image Compatibility
-------------------------------
 #. Choose a mirror::
 
     https://archlinux.org/mirrorlist/all/

@@ -699,7 +699,7 @@ System Configuration
 #. Ignore kernel updates::
 
     sed -i 's/#IgnorePkg/IgnorePkg/' /etc/pacman.conf
-    sed -i "/^IgnorePkg/ s/$/ ${INST_LINVAR} ${INST_LINVAR}-headers zfs-${INST_LINVAR} zfs-utils/" /etc/pacman.conf
+    sed -i "/^IgnorePkg/ s/$/ ${INST_LINVAR} ${INST_LINVAR}-headers zfs-${INST_LINVAR}/" /etc/pacman.conf
 
    Kernel will be manually updated, see Getting Started.
 
