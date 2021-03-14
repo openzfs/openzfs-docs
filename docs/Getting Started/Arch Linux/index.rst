@@ -130,12 +130,12 @@ For other kernels or Arch-based distros, use zfs-dkms package.
 #. Ignore kernel updates::
 
      sed -i 's/#IgnorePkg/IgnorePkg/' /etc/pacman.conf
-     sed -i "/^IgnorePkg/ s/$/ ${INST_LINVAR} ${INST_LINVAR}-headers zfs-${INST_LINVAR}/" /etc/pacman.conf
+     sed -i "/^IgnorePkg/ s/$/ ${INST_LINVAR} ${INST_LINVAR}-headers zfs-${INST_LINVAR} zfs-utils/" /etc/pacman.conf
 
 #. To update kernel, run::
 
      INST_LINVAR=$(sed 's|.*linux|linux|' /proc/cmdline | sed 's|.img||g' | awk '{ print $1 }')
-     pacman -Sy --needed --noconfirm ${INST_LINVAR} ${INST_LINVAR}-headers zfs-${INST_LINVAR}
+     pacman -Sy --needed --noconfirm ${INST_LINVAR} ${INST_LINVAR}-headers zfs-${INST_LINVAR} zfs-utils
 
 zfs-dkms package
 ~~~~~~~~~~~~~~~~
