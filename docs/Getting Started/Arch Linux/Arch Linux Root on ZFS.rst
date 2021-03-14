@@ -668,9 +668,9 @@ System Configuration
 
 #. Chroot::
 
-    for i in ${DISK[@]}; do printf "$i "; done
+    for i in ${DISK[@]}; do printf "$i "; done; printf '\n'
     # /dev/disk/by-id/disk1 /dev/disk/by-id/disk2
-    arch-chroot /mnt /usr/bin/env INST_UUID=$INST_UUID bash --login
+    arch-chroot /mnt /usr/bin/env INST_LINVAR=$INST_LINVAR INST_UUID=$INST_UUID bash --login
 
    Declare target disks::
 
@@ -699,7 +699,7 @@ System Configuration
 #. Ignore kernel updates::
 
     sed -i 's/#IgnorePkg/IgnorePkg/' /etc/pacman.conf
-    sed -i "/^IgnorePkg/ s/$/ ${INST_LINVAR} ${INST_LINVAR}-headers zfs-${INST_LINVAR}/" /etc/pacman.conf
+    sed -i "/^IgnorePkg/ s/$/ ${INST_LINVAR} ${INST_LINVAR}-headers zfs-${INST_LINVAR} zfs-utils/" /etc/pacman.conf
 
    Kernel will be manually updated, see Getting Started.
 
