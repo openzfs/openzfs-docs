@@ -1022,7 +1022,7 @@ Step 5: GRUB Installation
    If they are still empty, stop zed (as below), start zed (as above) and try
    again.
 
-   Stop ``zed``::
+   Once the files have data, stop ``zed``::
 
      fg
      Press Ctrl-C.
