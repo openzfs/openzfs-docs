@@ -782,7 +782,7 @@ filesystems:
 
 ::
 
-  # mount | grep -v zfs | tac | awk '/\/mnt/ {print $3}' | xargs -i{} umount -lf {}
+  # mount | grep zfs | tac | awk '/\/mnt/ {print $3}' | xargs -i{} umount -lf {}
   # zpool export -a
 
 6.4 Reboot:
@@ -1015,7 +1015,7 @@ When done, cleanup:
 ::
 
   # exit
-  # mount | grep -v zfs | tac | awk '/\/mnt/ {print $3}' | xargs -i{} umount -lf {}
+  # mount | grep zfs | tac | awk '/\/mnt/ {print $3}' | xargs -i{} umount -lf {}
   # zpool export -a
   # reboot
 

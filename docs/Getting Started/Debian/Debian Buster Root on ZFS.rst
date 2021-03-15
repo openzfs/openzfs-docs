@@ -866,7 +866,7 @@ Step 6: First Boot
 #. Run these commands in the LiveCD environment to unmount all
    filesystems::
 
-     mount | grep -v zfs | tac | awk '/\/mnt/ {print $3}' | \
+     mount | grep zfs | tac | awk '/\/mnt/ {print $3}' | \
          xargs -i{} umount -lf {}
      zpool export -a
 
@@ -1077,7 +1077,7 @@ Do whatever you need to do to fix your system.
 When done, cleanup::
 
   exit
-  mount | grep -v zfs | tac | awk '/\/mnt/ {print $3}' | \
+  mount | grep zfs | tac | awk '/\/mnt/ {print $3}' | \
       xargs -i{} umount -lf {}
   zpool export -a
   reboot

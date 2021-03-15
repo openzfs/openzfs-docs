@@ -738,7 +738,7 @@ save space.
 6.3 Run these commands in the LiveCD environment to unmount all
 filesystems::
 
-  mount | grep -v zfs | tac | awk '/\/mnt/ {print $3}' | xargs -i{} umount -lf {}
+  mount | grep zfs | tac | awk '/\/mnt/ {print $3}' | xargs -i{} umount -lf {}
   zpool export -a
 
 6.4 Reboot::
@@ -959,7 +959,7 @@ Do whatever you need to do to fix your system.
 When done, cleanup::
 
   exit
-  mount | grep -v zfs | tac | awk '/\/mnt/ {print $3}' | xargs -i{} umount -lf {}
+  mount | grep zfs | tac | awk '/\/mnt/ {print $3}' | xargs -i{} umount -lf {}
   zpool export -a
   reboot
 
