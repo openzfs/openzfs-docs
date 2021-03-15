@@ -814,7 +814,12 @@ Step 4: System Configuration
 
      **Notes:**
 
-     - Ignore the error messages saying ``Module zfs not found`` and
+     - Ignore any error messages saying ``ERROR: Couldn't resolve device`` and
+       ``WARNING: Couldn't determine root device``.  `cryptsetup does not
+       support ZFS
+       <https://bugs.launchpad.net/ubuntu/+source/cryptsetup/+bug/1612906>`__.
+
+     - Ignore any error messages saying ``Module zfs not found`` and
        ``couldn't connect to zsys daemon``.  The first seems to occur due to a
        version mismatch between the Live CD kernel and the chroot environment,
        but this is irrelevant since the module is already loaded.  The second
@@ -922,9 +927,9 @@ Step 5: GRUB Installation
 
      update-initramfs -c -k all
 
-   **Note:** When using LUKS, this will print “WARNING could not determine
-   root device from /etc/fstab”. This is because `cryptsetup does not
-   support ZFS
+   **Note:** Ignore any error messages saying ``ERROR: Couldn't resolve
+   device`` and ``WARNING: Couldn't determine root device``.  `cryptsetup
+   does not support ZFS
    <https://bugs.launchpad.net/ubuntu/+source/cryptsetup/+bug/1612906>`__.
 
 #. Disable memory zeroing::

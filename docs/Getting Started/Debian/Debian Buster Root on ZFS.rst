@@ -636,6 +636,11 @@ Step 4: System Configuration
 
      echo REMAKE_INITRD=yes > /etc/dkms/zfs.conf
 
+   **Note:** Ignore any error messages saying ``ERROR: Couldn't resolve
+   device`` and ``WARNING: Couldn't determine root device``.  `cryptsetup does
+   not support ZFS
+   <https://bugs.launchpad.net/ubuntu/+source/cryptsetup/+bug/1612906>`__.
+
 #. For LUKS installs only, setup ``/etc/crypttab``::
 
      apt install --yes cryptsetup
@@ -757,9 +762,9 @@ Step 5: GRUB Installation
 
      update-initramfs -c -k all
 
-   **Note:** When using LUKS, this will print “WARNING could not determine
-   root device from /etc/fstab”. This is because `cryptsetup does not
-   support ZFS
+   **Note:** Ignore any error messages saying ``ERROR: Couldn't resolve
+   device`` and ``WARNING: Couldn't determine root device``.  `cryptsetup
+   does not support ZFS
    <https://bugs.launchpad.net/ubuntu/+source/cryptsetup/+bug/1612906>`__.
 
 #. Workaround GRUB's missing zpool-features support::
