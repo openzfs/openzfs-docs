@@ -291,8 +291,8 @@ System Installation
         # mirror \
         ...
 
-#. When creating pools, for multi-disk installation, you can also use other topologies
-   such as ``raidz1``, ``raidz2`` and ``raidz3``.
+#. When creating pools, for multi-disk installation, other topologies
+   such as ``raidz1``, ``raidz2`` and ``raidz3`` are also available.
 
 #. Create boot pool::
 
@@ -468,9 +468,8 @@ System Installation
      encrypt boot pool and enable Secure Boot, as described in
      the optional configuration section. This will prevent attacks to
      initrd.
-     However, GRUB as of 2.04 requires interactively entering password,
-     you must phsically type in the passwords at boot time,
-     or else the computer will not boot.
+     However, GRUB as of 2.04 requires password to be interactively
+     typed in at boot time, or else the computer will not boot.
 
      Create dataset::
 
@@ -508,13 +507,12 @@ System Installation
         zfs create -o canmount=off rpool_$INST_UUID/sys/DATA/default/$i
     done
 
-    for i in {home,root,srv,usr/local,var/log,var/spool,var/tmp};
+    for i in {home,root,srv,usr/local,var/log,var/spool};
     do
         zfs create -o canmount=on rpool_$INST_UUID/sys/DATA/default/$i
     done
 
     chmod 750 /mnt/root
-    chmod 1777 /mnt/var/tmp
 
 #. Create optional user data datasets to omit data from rollback::
 
@@ -544,7 +542,7 @@ System Installation
 
 #. Install base packages::
 
-     pacstrap /mnt base vi mandoc grub
+     pacstrap /mnt base vi mandoc grub efibootmgr
 
 #. Check compatible kernel version::
 
@@ -571,15 +569,18 @@ System Installation
 
      pacstrap /mnt linux-firmware intel-ucode amd-ucode
 
-#. If you boot your computer with EFI::
-
-     pacstrap /mnt efibootmgr
-
 #. For other optional packages,
    see `ArchWiki <https://wiki.archlinux.org/index.php/Installation_guide#Installation>`__.
 
 System Configuration
 --------------------
+
+#. Set `mkinitcpio zfs hook scan path
+   <https://github.com/archzfs/archzfs/blob/master/src/zfs-utils/zfs-utils.initcpio.install>`__::
+
+    echo 'GRUB_CMDLINE_LINUX="zfs_import_dir=/dev/disk/by-id"' >> /mnt/etc/default/grub
+
+   If using ``/dev/disk/by-path``, set it here.
 
 #. Generate list of datasets for ``zfs-mount-generator`` to mount them at boot::
 
@@ -611,7 +612,7 @@ System Configuration
     echo UUID=$(blkid -s UUID -o value ${DISK[0]}-part1) /boot/efi vfat \
     x-systemd.idle-timeout=1min,x-systemd.automount,noauto,umask=0022,fmask=0022,dmask=0022 0 1 >> /mnt/etc/fstab
 
-   If a swap partition has been created::
+   Add swap. Skip if swap was not created::
 
     for i in ${DISK[@]}; do
      echo swap-${i##*/} ${i}-part4 /dev/urandom swap,cipher=aes-cbc-essiv:sha256,size=256,discard >> /mnt/etc/crypttab
@@ -709,17 +710,7 @@ System Configuration
 
 #. Enable ZFS services::
 
-    systemctl enable zfs-import-cache zfs-import.target zfs-mount zfs-zed zfs.target
-
-#. Generate zpool.cache
-
-   Pools are imported by initrd with the information stored in ``/etc/zfs/zpool.cache``.
-   This cache file will be embedded in initrd.
-
-   ::
-
-     zpool set cachefile=/etc/zfs/zpool.cache rpool_$INST_UUID
-     zpool set cachefile=/etc/zfs/zpool.cache bpool_$INST_UUID
+    systemctl enable zfs-import-scan.service zfs-import.target zfs-mount zfs-zed zfs.target
 
 #. Set root password::
 
@@ -731,6 +722,10 @@ System Configuration
 
 Optional Configuration
 ~~~~~~~~~~~~~~~~~~~~~~~
+
+- Skip to `bootloader <#bootloader>`__ section if
+  no optional configuration is needed.
+
 - Boot Environment Manager
 
   A boot environment is a dataset which contains a bootable
@@ -874,6 +869,29 @@ Optional Configuration
       -o keyformat=raw \
       rpool_$INST_UUID/sys
 
+  #. Import encrypted boot pool from ``/dev/mapper``::
+
+       tee /etc/systemd/system/zfs-import-bpool-mapper.service <<EOF
+       [Unit]
+       Description=Import encrypted boot pool
+       Documentation=man:zpool(8)
+       DefaultDependencies=no
+       Requires=systemd-udev-settle.service
+       After=cryptsetup.target
+       Before=boot.mount
+       ConditionPathIsDirectory=/sys/module/zfs
+
+       [Service]
+       Type=oneshot
+       RemainAfterExit=yes
+       ExecStart=/usr/bin/zpool import -aNd /dev/mapper
+
+       [Install]
+       WantedBy=zfs-import.target
+       EOF
+
+       systemctl enable zfs-import-bpool-mapper.service
+
   #. Remove ``zfsencryptssh`` hook.
      Encrypted boot pool is incompatible with
      password by SSH::
@@ -891,35 +909,6 @@ Optional Configuration
      set secure permissions for ``/boot``::
 
       chmod 700 /boot
-
-  #. Import boot pool after starting systemd::
-
-       tee /etc/systemd/system/zfs-bpool_$INST_UUID-import-cache.service <<EOF
-       [Unit]
-       Description=Import boot pool by cache file
-       Documentation=man:zpool(8)
-       DefaultDependencies=no
-       Requires=systemd-udev-settle.service
-       After=zfs-import-cache.service
-       After=zfs-import.target
-       Before=boot.mount
-       ConditionFileNotEmpty=/etc/zfs/zpool.cache
-       ConditionPathIsDirectory=/sys/module/zfs
-
-       [Service]
-       Type=oneshot
-       RemainAfterExit=yes
-       ExecStart=/usr/bin/zpool import -c /etc/zfs/zpool.cache -aN
-
-       [Install]
-       WantedBy=zfs-import.target
-       EOF
-
-       systemctl enable zfs-bpool_$INST_UUID-import-cache.service
-
-     initrd will still try to import boot pool
-     before mapping LUKS containers. This will fail
-     and delay boot for a few seconds.
 
   #. Enable GRUB cryptodisk::
 
@@ -954,6 +943,12 @@ Workarounds have to be applied.
     echo 'export ZPOOL_VDEV_NAME_PATH=YES' >> /etc/profile
     source /etc/profile
 
+   Note that ``sudo`` will not read ``/etc/profile`` and will
+   not pass variables in parent shell. Consider setting the following
+   in ``/etc/sudoers``::
+
+    Defaults env_keep += "ZPOOL_VDEV_NAME_PATH"
+
 #. Pool name missing
 
    See `this bug report <https://savannah.gnu.org/bugs/?59614>`__.
@@ -965,15 +960,12 @@ Workarounds have to be applied.
 
      sed -i "s|rpool=.*|rpool=\`zdb -l \${GRUB_DEVICE} \| grep -E '[[:blank:]]name' \| cut -d\\\' -f 2\`|"  /etc/grub.d/10_linux
 
-   If you forgot to apply this workaround, or GRUB package has been upgraded,
-   initrd will fail to find root filesystem on reboot, ending in kernel panic.
-
 Installation
 ~~~~~~~~~~~~~~~~~
 
 #. Install GRUB:
 
-   If you use EFI::
+   If using EFI::
 
     grub-install && grub-install --removable
 
@@ -988,7 +980,7 @@ Installation
     done
     mount /boot/efi
 
-   If you use BIOS booting::
+   If using BIOS booting::
 
     for i in ${DISK[@]}; do
      grub-install --target=i386-pc $i
