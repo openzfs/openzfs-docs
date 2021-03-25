@@ -43,7 +43,7 @@ other filesystem) will write the damaged data to disk and be unable to
 automatically detect the corruption.
 
 Unfortunately, ECC memory is not always supported by consumer grade
-hardware. And even when it is ECC memory will be more expensive. For
+hardware. And even when it is, ECC memory will be more expensive. For
 home users the additional safety brought by ECC memory might not justify
 the cost. It's up to you to determine what level of protection your data
 requires.
@@ -89,7 +89,7 @@ strongly discouraged in the Linux kernel. This is particularly true on
 32-bit architectures where the virtual address space is limited to 100M
 by default. Using the virtual address space on 64-bit Linux kernels is
 also discouraged but the address space is so much larger than physical
-memory it is less of an issue.
+memory that it is less of an issue.
 
 If you are bumping up against the virtual memory limit on a 32-bit
 system you will see the following message in your system logs. You can
@@ -138,10 +138,10 @@ you.
       distributions and are commonly used. However, because they are not
       persistent they should only be used with ZFS for development/test
       pools.
-   -  Benefits:This method is easy for a quick test, the names are
+   -  Benefits: This method is easy for a quick test, the names are
       short, and they will be available on all Linux distributions.
-   -  Drawbacks:The names are not persistent and will change depending
-      on what order they disks are detected in. Adding or removing
+   -  Drawbacks: The names are not persistent and will change depending
+      on what order the disks are detected in. Adding or removing
       hardware for your system can easily cause the names to change. You
       would then need to remove the zpool.cache file and re-import the
       pool using the new names.
@@ -157,7 +157,7 @@ you.
    -  Benefits: Nice for small systems with a single disk controller.
       Because the names are persistent and guaranteed not to change, it
       doesn't matter how the disks are attached to the system. You can
-      take them all out, randomly mixed them up on the desk, put them
+      take them all out, randomly mix them up on the desk, put them
       back anywhere in the system and your pool will still be
       automatically imported correctly.
    -  Drawbacks: Configuring redundancy groups based on physical
@@ -392,7 +392,7 @@ Sending Large Blocks
 ~~~~~~~~~~~~~~~~~~~~
 
 When sending incremental streams which contain large blocks (>128K) the
-``--large-block`` flag must be specified. Inconsist use of the flag
+``--large-block`` flag must be specified. Inconsistent use of the flag
 between incremental sends can result in files being incorrectly zeroed
 when they are received. Raw encrypted send/recvs automatically imply the
 ``--large-block`` flag and are therefore unaffected.
@@ -431,7 +431,7 @@ based on the underlying filesystem. As CEPH only officially
 supports/detects XFS and BTRFS, for all other filesystems it falls back
 to rather `limited "safe"
 values <https://github.com/ceph/ceph/blob/4fe7e2a458a1521839bc390c2e3233dd809ec3ac/src/common/config_opts.h#L1125-L1148>`__.
-On newer releases need for larger xattrs will prevent OSD's from even
+On newer releases, the need for larger xattrs will prevent OSD's from even
 starting.
 
 The officially recommended workaround (`see
@@ -465,12 +465,12 @@ Other General Guidelines
 -  Use a SLOG device, even with a separate CEPH journal device. For some
    workloads, skipping SLOG and setting ``logbias=throughput`` may be
    acceptable.
--  Use a high-quality SLOG/CEPH journal device, consumer based SSD, or
+-  Use a high-quality SLOG/CEPH journal device.  A consumer based SSD, or
    even NVMe WILL NOT DO (Samsung 830, 840, 850, etc) for a variety of
    reasons. CEPH will kill them quickly, on-top of the performance being
-   quite low in this use. Generally recommended are [Intel DC S3610,
+   quite low in this use. Generally recommended devices are [Intel DC S3610,
    S3700, S3710, P3600, P3700], or [Samsung SM853, SM863], or better.
--  If using an high quality SSD or NVMe device(as mentioned above), you
+-  If using a high quality SSD or NVMe device (as mentioned above), you
    CAN share SLOG and CEPH Journal to good results on single device. A
    ratio of 4 HDDs to 1 SSD (Intel DC S3710 200GB), with each SSD
    partitioned (remember to align!) to 4x10GB (for ZIL/SLOG) + 4x20GB
@@ -487,8 +487,8 @@ Performance Considerations
 To achieve good performance with your pool there are some easy best
 practices you should follow.
 
--  **Evenly balance your disk across controllers:** Often the limiting
-   factor for performance is not the disk but the controller. By
+-  **Evenly balance your disks across controllers:** Often the limiting
+   factor for performance is not the disks but the controller. By
    balancing your disks evenly across controllers you can often improve
    throughput.
 -  **Create your pool using whole disks:** When running zpool create use
