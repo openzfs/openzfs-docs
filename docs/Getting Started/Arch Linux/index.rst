@@ -152,23 +152,6 @@ zfs-dkms package
 
     INST_LINVER=$(pacman -Syi ${INST_LINVAR} | grep Version | awk '{ print $3 }')
 
-#. Check zfs-dkms package version::
-
-    DKMS_VER=$(pacman -Syi zfs-dkms | grep 'Version' | awk '{ print $3 }' | sed 's|-.*||')
-
-#. Visit OpenZFS release page ::
-
-    curl -L https://github.com/openzfs/zfs/raw/zfs-${DKMS_VER}/META \
-    | grep Linux
-    # Linux-Maximum: 5.10
-    # Linux-Minimum: 3.10
-    # compare with the output of the following command
-    echo ${INST_LINVER%%-*}
-    # 5.10.17 # supported
-
-   If it's not supported, skip to **Install zfs-dkms compatible kernel**.
-   Otherwise, continue to next step.
-
 #. Install kernel headers::
 
      pacman -U \
@@ -181,6 +164,21 @@ zfs-dkms package
    If you are updating kernel, use the following command::
 
      pacman -Sy $INST_LINVAR $INST_LINVAR-headers zfs-dkms
+
+   If pacman output contains the following error message,
+   then the kernel needs a downgrade, or you can try
+   ``zfs-dkms-git`` package::
+
+    (3/4) Install DKMS modules
+    ==> dkms install --no-depmod -m zfs -v 2.0.4 -k 5.12.0-rc5-1-git-00030-gd19cc4bfbff1
+    configure: error:
+    	*** None of the expected "capability" interfaces were detected.
+    	*** This may be because your kernel version is newer than what is
+    	*** supported, or you are using a patched custom kernel with
+    	*** incompatible modifications.
+    	***
+    	*** ZFS Version: zfs-2.0.4-1
+    	*** Compatible Kernels: 3.10 - 5.11
 
 #. Ignore kernel package from updates::
 
