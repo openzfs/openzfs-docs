@@ -166,8 +166,8 @@ zfs-dkms package
      pacman -Sy $INST_LINVAR $INST_LINVAR-headers zfs-dkms
 
    If pacman output contains the following error message,
-   then the kernel needs a downgrade, or you can try
-   ``zfs-dkms-git`` package::
+   then the kernel needs a `downgrade <#zfs-dkms-compatible-kernel>`__,
+   or you can try ``zfs-dkms-git`` package::
 
     (3/4) Install DKMS modules
     ==> dkms install --no-depmod -m zfs -v 2.0.4 -k 5.12.0-rc5-1-git-00030-gd19cc4bfbff1
@@ -188,52 +188,55 @@ zfs-dkms package
    To update kernel, go throught the above procedure
    again.
 
-#. Install zfs-dkms compatible kernel
+zfs-dkms compatible kernel
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-   If the currently installed kernel is not
-   compatible with ZFS, a kernel downgrade
-   is needed.
+If the installed kernel is not
+compatible with ZFS, a kernel downgrade
+is needed.
 
-   #. Choose kernel variant. Available variants are:
+#. Choose kernel variant. Available variants are:
 
-      * linux
-      * linux-lts
+   * linux
+   * linux-lts
+   * linux-zen
+   * linux-hardened
 
-      ::
+   ::
 
-        INST_LINVAR=linux
+     INST_LINVAR=linux
 
-   #. Install kernels available when the package was built. Check build date::
+#. Install kernels available when the package was built. Check build date::
 
-        DKMS_DATE=$(pacman -Syi zfs-dkms \
-        | grep 'Build Date' \
-        | sed 's/.*: //' \
-        | LC_ALL=C xargs -i{} date -d {} -u +%Y/%m/%d)
+     DKMS_DATE=$(pacman -Syi zfs-dkms \
+     | grep 'Build Date' \
+     | sed 's/.*: //' \
+     | LC_ALL=C xargs -i{} date -d {} -u +%Y/%m/%d)
 
-   #. Check kernel version::
+#. Check kernel version::
 
-        INST_LINVER=$(curl https://archive.archlinux.org/repos/${DKMS_DATE}/core/os/x86_64/ \
-        | grep \"${INST_LINVAR}-'[0-9]' \
-        | grep -v sig \
-        | sed "s|.*$INST_LINVAR-||" \
-        | sed "s|-x86_64.*||")
+     INST_LINVER=$(curl https://archive.archlinux.org/repos/${DKMS_DATE}/core/os/x86_64/ \
+     | grep \"${INST_LINVAR}-'[0-9]' \
+     | grep -v sig \
+     | sed "s|.*$INST_LINVAR-||" \
+     | sed "s|-x86_64.*||")
 
-   #. Install compatible kernel and headers::
+#. Install compatible kernel and headers::
 
-        pacman -U \
-        https://archive.archlinux.org/packages/l/${INST_LINVAR}/${INST_LINVAR}-${INST_LINVER}-x86_64.pkg.tar.zst \
-        https://archive.archlinux.org/packages/l/${INST_LINVAR}-headers/${INST_LINVAR}-headers-${INST_LINVER}-x86_64.pkg.tar.zst
+     pacman -U \
+     https://archive.archlinux.org/packages/l/${INST_LINVAR}/${INST_LINVAR}-${INST_LINVER}-x86_64.pkg.tar.zst \
+     https://archive.archlinux.org/packages/l/${INST_LINVAR}-headers/${INST_LINVAR}-headers-${INST_LINVER}-x86_64.pkg.tar.zst
 
-   #. Install zfs-dkms::
+#. Install zfs-dkms::
 
-        pacman -Sy zfs-dkms
+     pacman -Sy zfs-dkms
 
-   #. Hold kernel package from updates::
+#. Hold kernel package from updates::
 
-        sed -i 's/#IgnorePkg/IgnorePkg/' /etc/pacman.conf
-        sed -i "/^IgnorePkg/ s/$/ ${INST_LINVAR} ${INST_LINVAR}-headers/" /etc/pacman.conf
+     sed -i 's/#IgnorePkg/IgnorePkg/' /etc/pacman.conf
+     sed -i "/^IgnorePkg/ s/$/ ${INST_LINVAR} ${INST_LINVAR}-headers/" /etc/pacman.conf
 
-      Kernel must be manually updated, see above.
+   Kernel must be manually updated, see above.
 
 Live Image
 ----------

@@ -38,12 +38,12 @@ Contributing
 
 #. Install the tools::
 
-    sudo pacman -S python-pip
+    sudo pacman -S --needed python-pip make
 
     pip3 install -r docs/requirements.txt
 
     # Add ~/.local/bin to your $PATH, e.g. by adding this to ~/.bashrc:
-    PATH=$HOME/.local/bin:$PATH
+    [ -d $HOME/.local/bin ] && export PATH=$HOME/.local/bin:$PATH
 
 #. Make your changes.
 
@@ -73,35 +73,24 @@ without the passphrase being entered at the console. Performance is
 good. As the encryption happens in ZFS, even if multiple disks (mirror
 or raidz topologies) are used, the data only has to be encrypted once.
 
-Boot pool can be optionally encrypted with LUKS,
-Encrypted boot pool can protect initrd from tempering.
+Full disk encryption can be achieved by encrypting boot pool with LUKS,
+see below.
 
 Preparations
 ----------------
 #. Choose a mirror from `mirrorlist <https://archlinux.org/mirrorlist/all/>`__.
 
-#. Download March 2021 build and signature. `File a new issue and mention @ne9z
+#. Download 2021.05.01 build and signature. `File a new issue and mention @ne9z
    <https://github.com/openzfs/openzfs-docs/issues/new?body=@ne9z,%20Update%20Live%20Image%20Arch%20Linux%20Root%20on
    %20ZFS%20HOWTO:>`__ if it's
    no longer available.
 
-   - `ISO (US mirror) <https://mirrors.ocf.berkeley.edu/archlinux/iso/2021.03.01/archlinux-2021.03.01-x86_64.iso>`__
-   - `Signature <https://archlinux.org/iso/2021.03.01/archlinux-2021.03.01-x86_64.iso.sig>`__
+   - `ISO (US mirror) <https://mirrors.ocf.berkeley.edu/archlinux/iso/2021.05.01/archlinux-2021.05.01-x86_64.iso>`__
+   - `Signature <https://archlinux.org/iso/2021.05.01/archlinux-2021.05.01-x86_64.iso.sig>`__
 
 #. Check live image against signature::
 
-    gpg --auto-key-retrieve --verify archlinux-2021.03.01-x86_64.iso.sig
-
-   If the file is authentic, output should be the following::
-
-    gpg: Signature made Mon 01 Feb 2021 03:23:39 PM UTC
-    gpg:                using RSA key 4AA4767BBC9C4B1D18AE28B77F2D434B9741E8AC
-    gpg: Good signature from "Pierre Schmitz <pierre@archlinux.de>" [unknown]
-    ...
-    Primary key fingerprint: 4AA4 767B BC9C 4B1D 18AE  28B7 7F2D 434B 9741 E8AC
-
-   Ensure ``Good signature`` and last 8 digits are ``9741 E8AC``,
-   as listed on `Arch Linux Developers <https://archlinux.org/people/developers/#pierre>`__ page.
+    gpg --auto-key-retrieve --verify archlinux-2021.05.01-x86_64.iso.sig
 
 #. Write the image to a USB drive or an optical disc.
 
@@ -159,7 +148,7 @@ Preparations
 
    Edit the following files::
 
-       nano /etc/pacman.d/mirrorlist
+       vim /etc/pacman.d/mirrorlist
 
    Uncomment and move mirrors to
    the beginning of the file.
@@ -210,6 +199,12 @@ Preparations
 
     INST_HOST='archonzfs'
 
+   Set live system hostname, this will be used
+   in SSH keys and zpool::
+
+    hostnamectl set-hostname $INST_HOST
+    echo $INST_HOST > /etc/hostname
+
 #. Kernel variant
 
    Store the kernel variant in a variable.
@@ -224,6 +219,8 @@ Preparations
 
     INST_LINVAR='linux'
 
+   ``linux-hardened`` does not support hibernation.
+
 #. Unique pool suffix. ZFS expects pool names to be
    unique, therefore it's recommended to create
    pools with a unique suffix::
@@ -234,17 +231,29 @@ Preparations
 
    List available disks with::
 
-     ls -1d /dev/disk/by-id/* | grep -v part
+    fdisk -l /dev/disk/by-id/*
 
-   If the disk is not in the command output, use ``/dev/disk/by-path``.
+   If using virtio as disk bus, use
+   ``/dev/disk/by-path/*`` or ``/dev/vd*``.
 
    Declare disk array::
 
-    DISK=(/dev/disk/by-id/disk1 /dev/disk/by-id/disk2)
+    DISK=(/dev/disk/by-id/ata-FOO /dev/disk/by-id/nvme-BAR)
 
    For single disk installation, use::
 
     DISK=(/dev/disk/by-id/disk1)
+
+   Choose a primary disk. This disk will be used
+   for primary EFI partition and hibernation, default to
+   first disk in the array::
+
+    INST_PRIMARY_DISK=${DISK[0]}
+
+   If disk path contains colon ``:``, this disk
+   can not be used for hibernation. ``encrypt`` mkinitcpio
+   hook treats ``:`` as argument separator without a means to
+   escape this character.
 
 System Installation
 -------------------
@@ -264,7 +273,7 @@ System Installation
 
      # with swap
      sgdisk -n3:0:-8G -t3:BF00 $i
-     sgdisk -n4:0:0   -t4:8308 $i
+     sgdisk -n4:0:0   -t4:8200 $i
 
      # without swap (not recommended)
      #sgdisk -n3:0:0 -t3:BF00 $i
@@ -357,22 +366,22 @@ System Installation
 #. Create root pool::
 
        zpool create \
-        -o ashift=12 \
-        -o autotrim=on \
-        -R /mnt \
-        -O acltype=posixacl \
-        -O canmount=off \
-        -O compression=zstd \
-        -O dnodesize=auto \
-        -O normalization=formD \
-        -O relatime=on \
-        -O xattr=sa \
-        -O mountpoint=/ \
-        rpool_$INST_UUID \
-        mirror \
-       $(for i in ${DISK[@]}; do
-          printf "$i-part3 ";
-         done)
+           -o ashift=12 \
+           -o autotrim=on \
+           -R /mnt \
+           -O acltype=posixacl \
+           -O canmount=off \
+           -O compression=zstd \
+           -O dnodesize=auto \
+           -O normalization=formD \
+           -O relatime=on \
+           -O xattr=sa \
+           -O mountpoint=/ \
+           rpool_$INST_UUID \
+           mirror \
+          $(for i in ${DISK[@]}; do
+             printf "$i-part3 ";
+            done)
 
    **Notes:**
 
@@ -450,9 +459,9 @@ System Installation
    - Encrypted:
 
      Choose a strong password.
-     Due to the Copy-on-Write nature of ZFS,
-     `merely changing password is not enough <https://openzfs.github.io/openzfs-docs/man/8/zfs-change-key.8.html>`__
-     once the password is compromised.
+     As `zfs-change-key does not change master key <https://openzfs.github.io/openzfs-docs/man/8/zfs-change-key.8.html>`__,
+     merely changing password is not enough once the
+     password is compromised.
      Dataset and pool must be destroyed,
      disk wiped and system rebuilt from scratch to protect confidentiality.
      Example: generate passphrase with `xkcdpass <https://github.com/redacted/XKCD-password-generator>`_::
@@ -470,6 +479,9 @@ System Installation
      initrd.
      However, GRUB as of 2.04 requires password to be interactively
      typed in at boot time, or else the computer will not boot.
+
+     Full disk encryption can be achieved by encrypting
+     both root dataset and boot pool.
 
      Create dataset::
 
@@ -528,21 +540,25 @@ System Installation
      zfs create -o canmount=on rpool_$INST_UUID/sys/DATA/default/var/lib/lxc
      # for LibVirt
      zfs create -o canmount=on rpool_$INST_UUID/sys/DATA/default/var/lib/libvirt
+     ##other application
+     # zfs create -o canmount=on rpool_$INST_UUID/sys/DATA/default/var/lib/$name
+
+   Add other datasets when needed, such as PostgreSQL.
 
 #. Format and mount EFI system partitions::
 
     for i in ${DISK[@]}; do
      mkfs.vfat -n EFI ${i}-part1
-     mkdir -p /mnt/boot/efis/${i##*/}
-     mount -t vfat ${i}-part1 /mnt/boot/efis/${i##*/}
+     mkdir -p /mnt/boot/efis/${i##*/}-part1
+     mount -t vfat ${i}-part1 /mnt/boot/efis/${i##*/}-part1
     done
 
     mkdir -p /mnt/boot/efi
-    mount -t vfat ${DISK[0]}-part1 /mnt/boot/efi
+    mount -t vfat ${INST_PRIMARY_DISK}-part1 /mnt/boot/efi
 
 #. Install base packages::
 
-     pacstrap /mnt base vi mandoc grub efibootmgr
+     pacstrap /mnt base vi mandoc grub efibootmgr mkinitcpio
 
 #. Check compatible kernel version::
 
@@ -561,6 +577,8 @@ System Installation
      https://archive.archlinux.org/packages/l/${INST_LINVAR}/${INST_LINVAR}-${INST_LINVER}-x86_64.pkg.tar.zst
     fi
 
+   Ignore ``error: command failed to execute correctly``.
+
 #. Install archzfs package::
 
      pacstrap /mnt zfs-$INST_LINVAR
@@ -578,21 +596,16 @@ System Configuration
 #. Set `mkinitcpio zfs hook scan path
    <https://github.com/archzfs/archzfs/blob/master/src/zfs-utils/zfs-utils.initcpio.install>`__::
 
-    echo 'GRUB_CMDLINE_LINUX="zfs_import_dir=/dev/disk/by-id"' >> /mnt/etc/default/grub
-
-   If using ``/dev/disk/by-path``, set it here.
+    echo GRUB_CMDLINE_LINUX=\"zfs_import_dir=${INST_PRIMARY_DISK%/*}\" >> /mnt/etc/default/grub
 
 #. Generate list of datasets for ``zfs-mount-generator`` to mount them at boot::
 
     # tab-separated zfs properties
     # see /etc/zfs/zed.d/history_event-zfs-list-cacher.sh
+    # and zfs-mount-generator(8)
     export \
     PROPS="name,mountpoint,canmount,atime,relatime,devices,exec\
-    ,readonly,setuid,nbmand,encroot,keylocation\
-    ,org.openzfs.systemd:requires,org.openzfs.systemd:requires-mounts-for\
-    ,org.openzfs.systemd:before,org.openzfs.systemd:after\
-    ,org.openzfs.systemd:wanted-by,org.openzfs.systemd:required-by\
-    ,org.openzfs.systemd:nofail,org.openzfs.systemd:ignore"
+    ,readonly,setuid,nbmand,encroot,keylocation"
 
     mkdir -p /mnt/etc/zfs/zfs-list.cache
 
@@ -605,18 +618,22 @@ System Configuration
     echo bpool_$INST_UUID/sys/BOOT/default /boot zfs rw,xattr,posixacl 0 0 >> /mnt/etc/fstab
 
     for i in ${DISK[@]}; do
-       echo UUID=$(blkid -s UUID -o value ${i}-part1) /boot/efis/${i##*/} vfat \
+       echo UUID=$(blkid -s UUID -o value ${i}-part1) /boot/efis/${i##*/}-part1 vfat \
        x-systemd.idle-timeout=1min,x-systemd.automount,noauto,umask=0022,fmask=0022,dmask=0022 0 1 >> /mnt/etc/fstab
     done
 
-    echo UUID=$(blkid -s UUID -o value ${DISK[0]}-part1) /boot/efi vfat \
+    echo UUID=$(blkid -s UUID -o value ${INST_PRIMARY_DISK}-part1) /boot/efi vfat \
     x-systemd.idle-timeout=1min,x-systemd.automount,noauto,umask=0022,fmask=0022,dmask=0022 0 1 >> /mnt/etc/fstab
 
-   Add swap. Skip if swap was not created::
+   By default systemd will halt boot process if EFI system partition
+   fails to mount. The above options
+   tells systemd to only mount partitions on demand.
+
+   Add encrypted swap. Skip if swap was not created::
 
     for i in ${DISK[@]}; do
-     echo swap-${i##*/} ${i}-part4 /dev/urandom swap,cipher=aes-cbc-essiv:sha256,size=256,discard >> /mnt/etc/crypttab
-     echo /dev/mapper/swap-${i##*/} none swap defaults 0 0 >> /mnt/etc/fstab
+     echo ${i##*/}-part4-swap ${i}-part4 /dev/urandom swap,cipher=aes-cbc-essiv:sha256,size=256,discard >> /mnt/etc/crypttab
+     echo /dev/mapper/${i##*/}-part4-swap none swap defaults 0 0 >> /mnt/etc/fstab
     done
 
 #. Configure mkinitcpio::
@@ -631,34 +648,30 @@ System Configuration
 
     echo $INST_HOST > /mnt/etc/hostname
 
-#. Configure the network interface:
-
-   Find the interface name::
-
-     ip link
-
-   Store it in a variable::
-
-     INET=enp1s0
-
-   Create network configuration::
+#. Enable DHCP on all ethernet ports::
 
      tee /mnt/etc/systemd/network/20-default.network <<EOF
 
      [Match]
-     Name=$INET
+     Name=en*
+     Name=eth*
 
      [Network]
      DHCP=yes
      EOF
+     systemctl enable systemd-networkd systemd-resolved --root=/mnt
 
-   Customize this file if the system is not a DHCP client.
+   Customize this file if the system is not using wired DHCP network.
    See `Network Configuration <https://wiki.archlinux.org/index.php/Network_configuration>`__.
+
+   Alternatively, install a network manager such as
+   ``NetworkManager`` or ``ConnMan``.
 
 #. Timezone::
 
     ln -sf $INST_TZ /mnt/etc/localtime
     hwclock --systohc
+    systemctl enable systemd-timesyncd --root=/mnt
 
 #. Locale::
 
@@ -669,13 +682,16 @@ System Configuration
 
 #. Chroot::
 
-    for i in ${DISK[@]}; do printf "$i "; done; printf '\n'
-    # /dev/disk/by-id/disk1 /dev/disk/by-id/disk2
-    arch-chroot /mnt /usr/bin/env INST_LINVAR=$INST_LINVAR INST_UUID=$INST_UUID bash --login
+    echo "INST_PRIMARY_DISK=$INST_PRIMARY_DISK
+    INST_LINVAR=$INST_LINVAR
+    INST_UUID=$INST_UUID" > /mnt/root/chroot
+    echo DISK=\($(for i in ${DISK[@]}; do printf "$i "; done)\) >> /mnt/root/chroot
+    arch-chroot /mnt bash --login
 
-   Declare target disks::
+#. Source variables::
 
-    DISK=(/dev/disk/by-id/disk1 /dev/disk/by-id/disk2)
+    source /root/chroot
+    rm /root/chroot
 
 #. Apply locales::
 
@@ -704,10 +720,6 @@ System Configuration
 
    Kernel will be manually updated, see Getting Started.
 
-#. Enable networking::
-
-    systemctl enable systemd-networkd systemd-resolved
-
 #. Enable ZFS services::
 
     systemctl enable zfs-import-scan.service zfs-import.target zfs-mount zfs-zed zfs.target
@@ -716,224 +728,272 @@ System Configuration
 
      passwd
 
+Optional Configuration
+----------------------
+
+Skip to `bootloader <#bootloader>`__ section if
+no optional configuration is needed.
+
+Boot Environment Manager
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+A boot environment is a dataset which contains a bootable
+instance of an operating system. Within the context of this installation,
+boot environments can be created on-the-fly to preserve root file system
+states before pacman transactions.
+
+Install `rozb3-pac <https://gitlab.com/m_zhou/rozb3-pac/-/releases>`__
+pacman hook and
+`bieaz <https://gitlab.com/m_zhou/bieaz/-/releases>`__
+from AUR to create boot environments.
+Prebuilt packages are also available.
+
+Supply password with SSH
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+#. Install mkinitcpio tools::
+
+    pacman -S mkinitcpio-netconf mkinitcpio-dropbear openssh
+
+#. Store public keys in ``/etc/dropbear/root_key``::
+
+    vi /etc/dropbear/root_key
+
+#. Edit mkinitcpio::
+
+    tee /etc/mkinitcpio.conf <<- 'EOF'
+    HOOKS=(base udev autodetect modconf block keyboard netconf dropbear zfsencryptssh zfs filesystems)
+    EOF
+
+#. Add ``ip=`` to kernel command line::
+
+    # example DHCP
+    echo 'GRUB_CMDLINE_LINUX="ip=::::::dhcp"' >> /etc/default/grub
+
+   Details for ``ip=`` can be found at
+   `here <https://www.kernel.org/doc/html/latest/admin-guide/nfs/nfsroot.html#kernel-command-line>`__.
+
+#. Generate host keys::
+
+    ssh-keygen -Am pem
+
+#. Manually convert ed25519 host key to dropbear-readable format::
+
+    dropbearconvert openssh dropbear /etc/ssh/ssh_host_ed25519_key /etc/dropbear/dropbear_ed25519_host_key
+
+   `mkinitcpio-dropbear
+   <https://archlinux.org/packages/community/any/mkinitcpio-dropbear/>`__
+   lacks support for converting ed25519 host key,
+   `see this pull request
+   <https://github.com/grazzolini/mkinitcpio-dropbear/pull/13>`__.
+
+#. Regenerate initrd::
+
+    mkinitcpio -P
+
+Encrypted boot pool
+~~~~~~~~~~~~~~~~~~~
+
+If encryption is enabled earlier, boot pool can be optionally encrypted.
+
+This step will reformat ``${DISK[@]}-part2`` as LUKS container and rebuild
+boot pool with ``/dev/mapper/*`` as vdev. Password must
+be entered interactively at GRUB and thus incompatible with
+`Supply password with SSH <#supply-password-with-ssh>`__.
+
+Encrypted boot pool protects initrd from
+malicious modification and supports hibernation
+and persistent encrypted swap.
+
+#. Create encryption keys::
+
+    mkdir /etc/cryptkey.d/
+    chmod 700 /etc/cryptkey.d/
+    dd bs=32 count=1 if=/dev/urandom of=/etc/cryptkey.d/rpool_$INST_UUID-key-zfs
+    for i in ${DISK[@]}; do
+      dd bs=32 count=1 if=/dev/urandom of=/etc/cryptkey.d/${i##*/}-part2-bpool_$INST_UUID-key-luks
+    done
+
+#. Backup boot pool::
+
+    zfs snapshot -r bpool_$INST_UUID/sys@pre-luks
+    zfs send -Rv bpool_$INST_UUID/sys@pre-luks > /root/bpool_$INST_UUID-pre-luks
+
+#. Unmount EFI partition::
+
+    umount /boot/efi
+
+    for i in ${DISK[@]}; do
+     umount /boot/efis/${i##*/}-part1
+    done
+
+#. Destroy boot pool::
+
+    zpool destroy bpool_$INST_UUID
+
+#. LUKS password::
+
+    LUKS_PWD=secure-passwd
+
+   You will need to enter the same password for
+   each disk at boot. As root pool key is
+   protected by this password, the previous warning
+   about password strength still apply.
+
+#. Create LUKS containers::
+
+    for i in ${DISK[@]}; do
+     cryptsetup luksFormat -q --type luks1 --key-file /etc/cryptkey.d/${i##*/}-part2-bpool_$INST_UUID-key-luks $i-part2
+     echo $LUKS_PWD | cryptsetup luksAddKey --key-file /etc/cryptkey.d/${i##*/}-part2-bpool_$INST_UUID-key-luks $i-part2
+     cryptsetup open ${i}-part2 ${i##*/}-part2-luks-bpool_$INST_UUID --key-file /etc/cryptkey.d/${i##*/}-part2-bpool_$INST_UUID-key-luks
+     echo ${i##*/}-part2-luks-bpool_$INST_UUID ${i}-part2 /etc/cryptkey.d/${i##*/}-part2-bpool_$INST_UUID-key-luks discard >> /etc/crypttab
+    done
+
+#. Embed key file in initrd::
+
+    echo 'FILES=(/etc/cryptkey.d/* )' >> /etc/mkinitcpio.conf
+
+#. Recreate boot pool with mappers as vdev.
+
+   Example::
+
+     zpool create \
+     # reuse command here
+     # without '-R /mnt'
+     # ...
+     bpool_$INST_UUID \
+     mirror \
+     $(for i in ${DISK[@]}; do
+        printf "/dev/mapper/${i##*/}-part2-luks-bpool_$INST_UUID ";
+       done)
+
+#. Restore boot pool backup::
+
+    cat /root/bpool_$INST_UUID-pre-luks | zfs recv bpool_$INST_UUID/sys
+    rm /root/bpool_$INST_UUID-pre-luks
+
+#. Mount boot dataset and EFI partitions::
+
+    mount /boot
+    mount /boot/efi
+
+    for i in ${DISK[@]}; do
+     mount /boot/efis/${i##*/}-part1
+    done
+
+#. Change root pool password to key file::
+
+    zfs change-key -l \
+    -o keylocation=file:///etc/cryptkey.d/rpool_$INST_UUID-key-zfs \
+    -o keyformat=raw \
+    rpool_$INST_UUID/sys
+
+#. Import encrypted boot pool from ``/dev/mapper``::
+
+     tee /etc/systemd/system/zfs-import-bpool-mapper.service <<EOF
+     [Unit]
+     Description=Import encrypted boot pool
+     Documentation=man:zpool(8)
+     DefaultDependencies=no
+     Requires=systemd-udev-settle.service
+     After=cryptsetup.target
+     Before=boot.mount
+     ConditionPathIsDirectory=/sys/module/zfs
+
+     [Service]
+     Type=oneshot
+     RemainAfterExit=yes
+     ExecStart=/usr/bin/zpool import -aNd /dev/mapper
+
+     [Install]
+     WantedBy=zfs-import.target
+     EOF
+
+     systemctl enable zfs-import-bpool-mapper.service
+
+#. Remove ``zfsencryptssh`` hook.
+   Encrypted boot pool is incompatible with
+   password by SSH::
+
+    sed -i 's|zfsencryptssh||g' /etc/mkinitcpio.conf
+
+   If ``zfsencryptssh`` is not removed, initrd will
+   stuck at ``fail to load key material`` and fail to boot.
+
 #. Generate initrd::
 
-     mkinitcpio -P
+    mkinitcpio -P
 
-Optional Configuration
-~~~~~~~~~~~~~~~~~~~~~~~
+#. As keys are stored in initrd,
+   set secure permissions for ``/boot``::
 
-- Skip to `bootloader <#bootloader>`__ section if
-  no optional configuration is needed.
+    chmod 700 /boot
 
-- Boot Environment Manager
+#. Enable GRUB cryptodisk::
 
-  A boot environment is a dataset which contains a bootable
-  instance of an operating system. Within the context of this installation,
-  boot environments can be created on-the-fly to preserve root file system
-  states before pacman transactions.
+     echo "GRUB_ENABLE_CRYPTODISK=y" >> /etc/default/grub
 
-  Install `rozb3-pac <https://gitlab.com/m_zhou/rozb3-pac/-/releases>`__
-  pacman hook and
-  `bieaz <https://gitlab.com/m_zhou/bieaz/-/releases>`__
-  from AUR to create boot environments.
-  Prebuilt packages are also available.
+#. **Important**: Back up root dataset key ``/etc/cryptkey.d/rpool_$INST_UUID-key-zfs``
+   to a secure location.
 
-- Supply password with SSH
+   In the possible event of LUKS container corruption,
+   data on root set will only be available
+   with this key.
 
-  #. Install mkinitcpio tools::
+#. Optional: enable persistent swap partition. By default
+   encryption key of swap partition is discarded on reboot::
 
-      pacman -S mkinitcpio-netconf mkinitcpio-dropbear openssh
+    INST_SWAPKEY=/etc/cryptkey.d/${INST_PRIMARY_DISK##*/}-part4-key-luks-swap
+    INST_SWAPMAPPER=${INST_PRIMARY_DISK##*/}-part4-luks-swap
 
-  #. Store public keys in ``/etc/dropbear/root_key``::
+    # fstab
+    # remove all existing swap entries
+    sed -i '/ none swap defaults 0 0/d' /etc/fstab
+    # add single swap entry for LUKS encrypted swap partition
+    echo "/dev/mapper/${INST_SWAPMAPPER} none swap defaults 0 0" >> /etc/fstab
 
-      vi /etc/dropbear/root_key
+    # comment out entry in crypttab
+    sed -i "s|^${INST_PRIMARY_DISK##*/}-part4-swap|#${INST_PRIMARY_DISK##*/}-part4-swap|" /etc/crypttab
 
-  #. Edit mkinitcpio::
+    # create key and format partition as LUKS container
+    dd bs=32 count=1 if=/dev/urandom of=${INST_SWAPKEY};
+    cryptsetup luksFormat -q --type luks2 --key-file ${INST_SWAPKEY} ${INST_PRIMARY_DISK}-part4;
+    cryptsetup luksOpen ${INST_PRIMARY_DISK}-part4 ${INST_SWAPMAPPER} --key-file ${INST_SWAPKEY}
 
-      tee /etc/mkinitcpio.conf <<- 'EOF'
-      HOOKS=(base udev autodetect modconf block keyboard netconf dropbear zfsencryptssh zfs filesystems)
-      EOF
+    # initialize swap space
+    mkswap /dev/mapper/${INST_SWAPMAPPER}
 
-  #. Add ``ip=`` to kernel command line::
+#. Optional: after enabling persistent swap partition,
+   enable hibernation::
 
-      # example DHCP
-      echo 'GRUB_CMDLINE_LINUX="ip=::::::dhcp"' >> /etc/default/grub
+    # add hook in initrd
+    sed -i 's| zfs | encrypt resume zfs |' /etc/mkinitcpio.conf
+    # add kernel cmdline to decrypt swap in initrd
+    echo "GRUB_CMDLINE_LINUX=\" \
+    zfs_import_dir=${INST_PRIMARY_DISK%/*} \
+    cryptdevice=PARTUUID=$(blkid -s PARTUUID -o value ${INST_PRIMARY_DISK}-part4):${INST_SWAPMAPPER}:allow-discards \
+    cryptkey=rootfs:${INST_SWAPKEY} \
+    resume=/dev/mapper/${INST_SWAPMAPPER}\"" \
+    >> /etc/default/grub
 
-     Details for ``ip=`` can be found at
-     `here <https://www.kernel.org/doc/html/latest/admin-guide/nfs/nfsroot.html#kernel-command-line>`__.
+   Note that hibernation might not work with discrete graphics or
+   AMD APU integrated graphics. This is not specific to this guide.
 
-  #. Generate host keys::
+   Computer must resume from a continuous swap space, resume
+   from multiple swap partitions is not supported.
 
-      ssh-keygen -Am pem
+   ``encrypt`` hook can only decrypt one container at boot.
+   ``sd-encrypt`` can decrypt multiple devices but is
+   not compatible with ``zfs`` hook.
 
-  #. Manually convert ed25519 host key to dropbear
-     -readable format::
-
-      dropbearconvert openssh dropbear /etc/ssh/ssh_host_ed25519_key /etc/dropbear/dropbear_ed25519_host_key
-
-     `mkinitcpio-dropbear
-     <https://archlinux.org/packages/community/any/mkinitcpio-dropbear/>`__,
-     lacks support for converting ed25519 host key,
-     `see this pull request
-     <https://github.com/grazzolini/mkinitcpio-dropbear/pull/13>`__.
-
-  #. Regenerate initrd::
-
-      mkinitcpio -P
-
-- Encrypted boot pool.
-
-  If encryption is enabled earlier, boot pool can be optionally encrypted.
-
-  This step will reformat ``${DISK[@]}-part2`` as LUKS container and rebuild
-  boot pool with ``/dev/mapper/*`` as vdev. Password must
-  be entered interactively at GRUB and thus incompatible with
-  `Supply password with SSH <#supply-password-with-ssh>`__.
-
-  Encrypted boot pool protects initrd from
-  malicious modification and supports hibernation
-  and persistent encrypted swap.
-
-  #. Create encryption keys::
-
-      mkdir /etc/cryptkey.d/
-      chmod 700 /etc/cryptkey.d/
-      dd bs=32 count=1 if=/dev/urandom of=/etc/cryptkey.d/lukskey-bpool_$INST_UUID
-      dd bs=32 count=1 if=/dev/urandom of=/etc/cryptkey.d/zfskey-rpool_$INST_UUID
-
-  #. Backup boot pool::
-
-      zfs snapshot -r bpool_$INST_UUID/sys@pre-luks
-      zfs send -R bpool_$INST_UUID/sys@pre-luks > /root/bpool_$INST_UUID-pre-luks
-
-  #. Unmount EFI partition::
-
-      umount /boot/efi
-
-      for i in ${DISK[@]}; do
-       umount /boot/efis/${i##*/}
-      done
-
-  #. Destroy boot pool::
-
-      zpool destroy bpool_$INST_UUID
-
-  #. LUKS password::
-
-      LUKS_PWD=secure-passwd
-
-     You will need to enter the same password for
-     each disk at boot. As root pool key is
-     protected by this password, the previous warning
-     about password strength still apply.
-
-  #. Create LUKS containers::
-
-      for i in ${DISK[@]}; do
-       cryptsetup luksFormat -q --type luks1 --key-file /etc/cryptkey.d/lukskey-bpool_$INST_UUID $i-part2
-       echo $LUKS_PWD | cryptsetup luksAddKey --key-file /etc/cryptkey.d/lukskey-bpool_$INST_UUID $i-part2
-       cryptsetup open ${i}-part2 luks-bpool_$INST_UUID-${i##*/}-part2 --key-file /etc/cryptkey.d/lukskey-bpool_$INST_UUID
-       echo luks-bpool_$INST_UUID-${i##*/}-part2 ${i}-part2 /etc/cryptkey.d/lukskey-bpool_$INST_UUID discard >> /etc/crypttab
-      done
-
-  #. Embed key file in initrd::
-
-      tee -a /etc/mkinitcpio.conf <<EOF
-      FILES=(/etc/cryptkey.d/lukskey-bpool_$INST_UUID /etc/cryptkey.d/zfskey-rpool_$INST_UUID)
-      EOF
-
-  #. Recreate boot pool with mappers as vdev.
-
-     Example::
-
-       zpool create \
-       # reuse command here
-       # without '-R /mnt'
-       # ...
-       bpool_$INST_UUID \
-       mirror \
-       $(for i in ${DISK[@]}; do
-          printf "/dev/mapper/luks-bpool_$INST_UUID-${i##*/}-part2 ";
-         done)
-
-  #. Restore boot pool backup::
-
-      cat /root/bpool_$INST_UUID-pre-luks | zfs recv bpool_$INST_UUID/sys
-      rm /root/bpool_$INST_UUID-pre-luks
-
-  #. Mount boot dataset and EFI partitions::
-
-      mount /boot
-      mount /boot/efi
-
-      for i in ${DISK[@]}; do
-       mount /boot/efis/${i##*/}
-      done
-
-  #. Change root pool password to key file::
-
-      zfs change-key -l \
-      -o keylocation=file:///etc/cryptkey.d/zfskey-rpool_$INST_UUID \
-      -o keyformat=raw \
-      rpool_$INST_UUID/sys
-
-  #. Import encrypted boot pool from ``/dev/mapper``::
-
-       tee /etc/systemd/system/zfs-import-bpool-mapper.service <<EOF
-       [Unit]
-       Description=Import encrypted boot pool
-       Documentation=man:zpool(8)
-       DefaultDependencies=no
-       Requires=systemd-udev-settle.service
-       After=cryptsetup.target
-       Before=boot.mount
-       ConditionPathIsDirectory=/sys/module/zfs
-
-       [Service]
-       Type=oneshot
-       RemainAfterExit=yes
-       ExecStart=/usr/bin/zpool import -aNd /dev/mapper
-
-       [Install]
-       WantedBy=zfs-import.target
-       EOF
-
-       systemctl enable zfs-import-bpool-mapper.service
-
-  #. Remove ``zfsencryptssh`` hook.
-     Encrypted boot pool is incompatible with
-     password by SSH::
-
-      sed -i 's|zfsencryptssh||g' /etc/mkinitcpio.conf
-
-     If ``zfsencryptssh`` is not removed, initrd will
-     stuck at ``fail to load key material`` and fail to boot.
-
-  #. Generate initrd::
-
-      mkinitcpio -P
-
-  #. As keys are stored in initrd,
-     set secure permissions for ``/boot``::
-
-      chmod 700 /boot
-
-  #. Enable GRUB cryptodisk::
-
-       echo "GRUB_ENABLE_CRYPTODISK=y" >> /etc/default/grub
-
-  #. **Important**: Back up root dataset key ``/etc/cryptkey.d/zfskey-rpool_$INST_UUID``
-     to a secure location.
-
-     In the possible event of LUKS container corruption,
-     data on root set will only be available
-     with this key.
+   Do not touch anything on disk while the computer is
+   in hibernation, see `kernel documentation
+   <https://www.kernel.org/doc/html/latest/power/swsusp.html>`__.
 
 Bootloader
 ----------------------------
 
-Workarounds
+GRUB Workarounds
 ~~~~~~~~~~~~~~~~~~~~
 Currently GRUB has multiple compatibility problems with ZFS,
 especially with regards to newer ZFS features.
@@ -956,7 +1016,8 @@ Workarounds have to be applied.
    not pass variables in parent shell. Consider setting the following
    in ``/etc/sudoers``::
 
-    Defaults env_keep += "ZPOOL_VDEV_NAME_PATH"
+    pacman -S --noconfirm --needed sudo
+    echo 'Defaults env_keep += "ZPOOL_VDEV_NAME_PATH"' >> /etc/sudoers
 
 #. Pool name missing
 
@@ -969,27 +1030,82 @@ Workarounds have to be applied.
 
      sed -i "s|rpool=.*|rpool=\`zdb -l \${GRUB_DEVICE} \| grep -E '[[:blank:]]name' \| cut -d\\\' -f 2\`|"  /etc/grub.d/10_linux
 
-Installation
+GRUB Installation
 ~~~~~~~~~~~~~~~~~
 
-#. Install GRUB:
+#. Generate initrd::
 
-   If using EFI::
+     mkinitcpio -P
 
-    grub-install && grub-install --removable
+#. If using EFI:
 
-   If using multi-disk setup, mirror EFI system partitions::
+   #. Install GRUB::
 
-    cp -r /boot/efi/EFI /tmp
-    umount /boot/efi
-    for i in ${DISK[@]}; do
-     cp -r /tmp/EFI /boot/efis/${i##*/}
-     efibootmgr -cgp 1 -l "\EFI\arch\grubx64.efi" \
-     -L "arch-${i##*/}" -d ${i}-part1
-    done
-    mount /boot/efi
+       grub-install && grub-install --removable
 
-   If using BIOS booting::
+   #. Optional: Enable Secure Boot:
+
+      - Method 1: Generate and enroll your own certificates, then sign bootloader
+        with these keys.
+
+        This is the most secure method, see
+        `here <https://www.rodsbooks.com/efi-bootloaders/controlling-sb.html>`__
+        and `ArchWiki article
+        <https://wiki.archlinux.org/title/Secure_Boot#Using_your_own_keys>`__
+        for more information. However, enrolling your own key
+        `might brick your motherboard
+        <https://h30434.www3.hp.com/t5/Notebook-Operating-System-and-Recovery/Black-screen-after-enabling-secure-boot-and-installing/td-p/6754130>`__.
+
+        Tip: The author of this installation guide has
+        bricked EliteBook 820 G3 with ``KeyTool.efi`` during enrollment.
+
+      - Method 2: Use a preloader
+        signed with `Microsoft Corporation UEFI CA
+        <https://www.microsoft.com/pkiops/certs/MicCorUEFCA2011_2011-06-27.crt>`__ certificate.
+        See `ArchWiki article <https://wiki.archlinux.org/title/Secure_Boot#Using_a_signed_boot_loader>`__
+        and `here <https://www.rodsbooks.com/efi-bootloaders/secureboot.html>`__.
+
+        Example configuration with `signed PreLoader.efi
+        <https://blog.hansenpartnership.com/linux-foundation-secure-boot-system-released/>`__::
+
+         # download signed PreLoader and HashTool
+         curl -LO https://blog.hansenpartnership.com/wp-uploads/2013/HashTool.efi
+         curl -LO https://blog.hansenpartnership.com/wp-uploads/2013/PreLoader.efi
+         # rename GRUB to loader.efi
+         mv /boot/efi/EFI/BOOT/BOOTX64.EFI /boot/efi/EFI/BOOT/loader.efi
+
+         mv PreLoader.efi /boot/efi/EFI/BOOT/BOOTX64.EFI
+         mv HashTool.efi /boot/efi/EFI/BOOT/
+
+        After reboot, re-enable Secure Boot in firmware settings, save and reboot.
+        After reboot, enroll the hash of ``loader.efi``::
+
+         # OK -> Enroll Hash -> loader.efi -> Yes -> Reboot System -> Yes
+
+   #. If using multi-disk setup, mirror EFI system partitions::
+
+       # mirror ESP content
+       ESP_MIRROR=$(mktemp -d)
+       cp -r /boot/efi/EFI $ESP_MIRROR
+       umount /boot/efi
+       for i in /boot/efis/*; do
+        cp -r $ESP_MIRROR/EFI $i
+       done
+       mount /boot/efi
+       # add boot menu entries
+       for i in ${DISK[@]}; do
+        efibootmgr -cgp 1 -l "\EFI\arch\grubx64.efi" \
+        -L "arch-${i##*/}" -d ${i}-part1
+       done
+
+      If Secure Boot is enabled with PreLoader::
+
+        for i in ${DISK[@]}; do
+         efibootmgr -cgp 1 -l "\EFI\BOOT\BOOTX64.EFI" \
+         -L "arch-PreLoader-${i##*/}" -d ${i}-part1
+        done
+
+#. If using BIOS booting, install GRUB to every disk::
 
     for i in ${DISK[@]}; do
      grub-install --target=i386-pc $i
@@ -1014,9 +1130,7 @@ Finish Installation
 #. Unmount EFI system partition::
 
     umount /mnt/boot/efi
-    for i in ${DISK[@]}; do
-     umount /mnt/boot/efis/${i##*/}
-    done
+    umount /mnt/boot/efis/*
 
 #. Export pools::
 
@@ -1030,105 +1144,151 @@ Finish Installation
 GRUB Tips
 -------------
 
-- Switch prefix
+Boot from GRUB rescue
+~~~~~~~~~~~~~~~~~~~~~~~
 
-  If GRUB has not been reinstalled after switching default boot environment,
-  GRUB might fail to load configuration files or modules.
+If bootloader file is damaged, it's still possible
+to boot computer with GRUB rescue image.
 
-  We need to point prefix to the new boot environment and instruct GRUB
-  to load configurations from there.
+This section is also applicable if you are in
+``grub rescue>``.
 
-  #. Press ``c`` at GRUB menu. Skip this if you are in GRUB rescue.
+#. On another computer, generate rescue image with::
 
-  #. Check existing prefix::
+     pacman -S --needed mtools libisoburn grub
+     grub-mkrescue -o grub-rescue.img
+     dd if=grub-rescue.img of=/dev/your-usb-stick
 
-       grub > set
-       # ...
-       # unencrypted bpool_$INST_UUID
-       # prefix=(hd0,gpt2)/sys/BOOT/default@/grub
-       # encrypted bpool_$INST_UUID
-       # prefix=(cryptouuid/UUID)/sys/BOOT/default@/grub
+   Boot computer from the rescue media.
+   Both BIOS and EFI mode are supported.
 
-  #. List available boot environments::
+   Skip this step if you are in GRUB rescue.
 
-       # unencrypted bpool_$INST_UUID
-       grub > ls (hd0,gpt2)/sys/BOOT
-       # encrypted bpool_$INST_UUID
-       grub > ls (crypto0)/sys/BOOT
-       @/ default/ pac-multm2/
+#. List available disks with ``ls`` command::
 
-  #. Set new prefix::
+    grub> ls (hd # press tab
+    Possible devices are:
 
-      # unencrypted bpool_$INST_UUID
-      grub > prefix=(hd0,gpt2)/sys/BOOT/pac-multm2@/grub
-      # encrypted bpool_$INST_UUID
-      grub > prefix=(crypto0)/sys/BOOT/pac-multm2@/grub
+     hd0 hd1 hd2 hd3
 
-  #. Load config from new prefix::
+   If you are dropped to GRUB rescue instead of
+   booting from GRUB rescue image, boot disk can be found
+   out with::
 
-      grub > insmod normal
-      grub > normal
+    echo $root
 
-     New entries are shown below the old ones.
+   GRUB configuration is loaded from::
 
-- Encrypted boot pool, if the password entered is wrong, GRUB
-  will drop to ``grub-rescue`` instead of retrying::
+    echo $prefix
 
-   Attempting to decrypt master key...
-   Enter passphrase for hd0,gpt2 (c0987ea1a51049e9b3056622804de62a):
-   error: access denied.
-   error: no such cryptodisk found.
-   Entering rescue mode...
-   grub rescue>
+#. List partitions by pressing tab key:
 
-  Try entering the password again with::
+   .. code-block:: text
 
-   grub rescue> cryptomount hd0,gpt2
-   Attempting to decrypt master key...
-   Enter passphrase for hd0,gpt2 (c0987ea1a51049e9b3056622804de62a):
-   Slot 1 opened
-   grub rescue> insmod normal
-   grub rescue> normal
+     grub> ls (hd0 # press tab
+     Possible partitions are:
 
-  GRUB should then boot normally.
+     Device hd0: No known filesystem detected - Sector size 512B - Total size  20971520KiB
+     Partition hd0,gpt1: Filesystem type fat - Label `EFI', UUID 0DF5-3A76 - Partition start at 1024KiB - Total size 1048576KiB
+     Partition hd0,gpt2: No known filesystem detected - Partition start at 1049600KiB - Total size 4194304KiB
 
-- Encrypted boot pool, when prefix disk failed, GRUB might fail to boot.
+   - If boot pool is encrypted:
 
-  .. code-block:: text
+     Unlock it with ``cryptomount``::
 
-   Welcome to GRUB!
+         grub> insmod luks
+         grub> cryptomount hd0,gpt2
+         Attempting to decrypt master key...
+         Enter passphrase for hd0,gpt2 (af5a240e13e24483acf02600d61e0f36):
+         Slot 1 opened
 
-   error: no such cryptodisk found.
-   Attempting to decrypt master key...
-   Enter passphrase for hd0,gpt2 (c0987ea1a51049e9b3056622804de62a):
-   Slot 1 opened
-   error: disk `cryptouuid/47ed1b7eb0014bc9a70aede3d8714faf' not found.
-   Entering rescue mode...
-   grub rescue>
+     Unlocked LUKS container is ``(crypto0)``:
 
-  Ensure ``Slot 1 opened`` message
-  is shown. If ``error: access denied.`` is shown,
-  the password entered is wrong.
+     .. code-block:: text
 
-  Check prefix::
+         grub> ls (crypto0)
+         Device crypto0: Filesystem type zfs - Label `bpool_ip3tdb' - Last modification
+         time 2021-05-03 12:14:08 Monday, UUID f14d7bdf89fe21fb - Sector size 512B -
+         Total size 4192256KiB
+
+   - If boot pool is not encrypted:
+
+     .. code-block:: text
+
+       grub> ls (hd0,gpt2)
+       Device hd0,gpt2: Filesystem type zfs - Label `bpool_ip3tdb' - Last modification
+       time 2021-05-03 12:14:08 Monday, UUID f14d7bdf89fe21fb - Sector size 512B -
+       Total size 4192256KiB
+
+#. List boot environments nested inside ``bpool/sys/BOOT``::
+
+     grub> ls (crypto0)/sys/BOOT
+     @/ default/ be0/
+
+#. Instruct GRUB to load configuration from ``be0`` boot environment
+   then enter normal mode::
+
+     grub> prefix=(crypto0)/sys/BOOT/be0/@/grub
+     grub> insmod normal
+     grub> normal
+
+#. GRUB menu should now appear.
+
+#. After entering system, `reinstall GRUB <#grub-installation>`__.
+
+Switch GRUB prefix when disk fails
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you are using LUKS encrypted boot pool with multiple disks,
+the primary disk failed, GRUB will fail to load configuration.
+
+If there's still enough redundancy for the boot pool, try fix
+GRUB with the following method:
+
+#. Ensure ``Slot 1 opened`` message
+   is shown
+
+     .. code-block:: text
+
+        Welcome to GRUB!
+
+        error: no such cryptodisk found.
+        Attempting to decrypt master key...
+        Enter passphrase for hd0,gpt2 (c0987ea1a51049e9b3056622804de62a):
+        Slot 1 opened
+        error: disk `cryptouuid/47ed1b7eb0014bc9a70aede3d8714faf' not found.
+        Entering rescue mode...
+        grub rescue>
+
+   If ``error: access denied.`` is shown,
+   try re-enter password with::
+
+     grub rescue> cryptomount hd0,gpt2
+
+#. Check prefix::
 
       grub rescue > set
-      # prefix=(cryptouuid/47ed1b7eb0014bc9a70aede3d8714faf)/sys/BOOT/default@/grub
+      # prefix=(cryptouuid/47ed1b7eb0014bc9a70aede3d8714faf)/sys/BOOT/be0@/grub
       # root=cryptouuid/47ed1b7eb0014bc9a70aede3d8714faf
 
-  Replace ``cryptouuid/UUID`` with ``crypto0``::
+#. Set correct ``prefix`` and ``root`` by replacing
+   ``cryptouuid/UUID`` with ``crypto0``::
 
       grub rescue> prefix=(crypto0)/sys/BOOT/default@/grub
       grub rescue> root=crypto0
 
-  Boot GRUB::
+#. Boot GRUB::
 
       grub rescue> insmod normal
       grub rescue> normal
 
-  GRUB should then boot normally. After entering system,
-  promote one backup to ``/boot/efi`` and reinstall GRUB with
-  ``grub-install``.
+   GRUB should then boot normally.
+
+#. After entering system, edit ``/etc/fstab`` to promote
+   one backup to ``/boot/efi``.
+
+#. Make the change to ``prefix`` and ``root``
+   permanent by `reinstalling GRUB <#grub-installation>`__.
 
 Recovery
 --------
