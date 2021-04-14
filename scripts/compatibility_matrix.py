@@ -8,6 +8,7 @@ import logging
 import sys
 
 from collections import defaultdict
+from urllib.error import HTTPError
 from urllib.request import urlopen
 from datetime import datetime
 from re import sub as regex, findall
@@ -32,6 +33,7 @@ def openzfs():
     with urlopen('https://zfsonlinux.org') as web:
         versions = findall(r'download/zfs-([0-9.]+)',
                            web.read().decode('utf-8', 'ignore'))
+    versions.append("0.6.5.11")
     for ver in set(versions):
         sources[ver] = ('https://raw.githubusercontent.com/openzfs/zfs/'
                         'zfs-{}/man/man5/zpool-features.5'.format(ver))
@@ -103,15 +105,6 @@ def omniosce():
 def joyent():
     sources = {'master': 'https://raw.githubusercontent.com/joyent/'
                'illumos-joyent/master/usr/src/man/man5/zpool-features.5'}
-    with urlopen('https://github.com/joyent/illumos-joyent') as web:
-        versions = findall(r'data-name="release-([0-9]+)"',
-                           web.read().decode('utf-8', 'ignore'))
-    versions.sort()
-    versions = versions[-2:]
-    for ver in versions:
-        sources[ver] = ('https://raw.githubusercontent.com/joyent/illumos-'
-                        'joyent/release-{}/usr/src/man/man5/'
-                        'zpool-features.5'.format(ver))
     return sources
 
 
@@ -129,7 +122,24 @@ def netbsd():
             sources[ver] = url.format(tag)
     return sources
 
-openzfs_key = 'OpenZFS<br>(Linux, FreeBSD 13+)'
+
+def nexenta():
+    sources = {'master': 'https://raw.githubusercontent.com/Nexenta/'
+               'illumos-nexenta/master/usr/src/man/man5/zpool-features.5'}
+    with urlopen('https://github.com/Nexenta/illumos-nexenta') as web:
+        versions = findall(r'>release-([0-9.]+)</span>',
+                           web.read().decode('utf-8', 'ignore'))
+    versions.sort()
+    versions = versions[-2:]
+    versions.append("4.0.5-FP")
+    for ver in versions:
+        sources[ver] = ('https://raw.githubusercontent.com/Nexenta/illumos-'
+                        'nexenta/release-{}/usr/src/man/man5/'
+                        'zpool-features.5'.format(ver))
+    return sources
+
+
+openzfs_key = 'OpenZFS (Linux, FreeBSD 13+)'
 sources = {
         openzfs_key: openzfs(),
         'FreeBSD pre OpenZFS': freebsd_pre_openzfs(),
@@ -137,6 +147,7 @@ sources = {
         'OmniOS CE': omniosce(),
         'Joyent': joyent(),
         'NetBSD': netbsd(),
+        'Nexenta': nexenta(),
         'Illumos': {
             'master': 'https://raw.githubusercontent.com/illumos/illumos-gate/'
                       'master/usr/src/man/man5/zpool-features.5',
@@ -150,13 +161,20 @@ features = defaultdict(list)
 readonly = dict()
 
 for name, sub in sources.items():
+    found = {}
     LOG.debug('Work on %s...', name)
     for ver, url in sub.items():
         LOG.debug('Get %s...', url)
-        with urlopen(url) as c:
-            if c.getcode() != 200:
-                continue
-            man = c.read().decode('utf-8')
+        try:
+            with urlopen(url) as c:
+                if c.getcode() != 200:
+                    LOG.debug('Failed with HTTP code %d', c.getcode())
+                    continue
+                man = c.read().decode('utf-8')
+        except HTTPError:
+            LOG.debug('Failed with HTTPError')
+            continue
+        found[ver] = url
         for line in man.split('\n'):
             if line.startswith('.It '):
                 line = line[4:]
@@ -169,10 +187,19 @@ for name, sub in sources.items():
                     guid = 'org.zfsonlinux:allocation_classes'
                 elif guid == 'org.open-zfs:large_block':
                     guid += 's'
+                elif guid == 'com.nexenta:cos_properties':
+                    # This is wrong in the documentation.  The actual code in
+                    # zfeature_common.c uses this name:
+                    guid = 'com.nexenta:class_of_storage'
                 domain, feature = guid.split(':', 1)
                 features[(feature, domain)].append((name, ver))
             elif line.startswith('READ\\-ONLY COMPATIBLE'):
                 readonly[guid] = (line.split()[-1] == 'yes')
+        # This is missing in the documentation, but is supported by the code:
+        # https://github.com/Nexenta/illumos-nexenta/blob/release-4.0.4-FP/usr/src/common/zfs/zfeature_common.c
+        if name == 'Nexenta' and ver.startswith('4.'):
+            features[('meta_devices', 'com.nexenta')].append((name, ver))
+    sources[name] = found
 
 os_sources = sources.copy()
 os_sources.pop(openzfs_key)
@@ -190,35 +217,87 @@ html.write('''<!DOCTYPE html>
 <title>ZFS Feature Matrix</title>
 <meta charset="utf-8" /><meta name="referrer" content="never" />
 <link rel='shortcut icon' href='/favicon.ico' type='image/x-icon'>
-<style>body{font-family: "Helvetica", "Arial", sans-serif}
-.yes{background-color:lightgreen}
-.warn{background-color:yellow}
-.no{background-color:lightsalmon}
-abbr{text-decoration: none}
-table{border-collapse: collapse}
-th,td{padding:0.2em 0.4em;border:1px solid #aaa;background-color:#f9f9f9}
-th{background-color:#eaecf0}
-.l{display:inline-block;text-align:right;min-width:''' + str(d_len) + '''ex;color:#777}
-.r{display:inline-block;text-align:left;min-width:''' + str(f_len) + '''ex}
-.feature_col{min-width: ''' + str(f_len + d_len + 1) + '''ch;}</style>
+<style>
+body {
+  font-family: "Helvetica", "Arial", sans-serif;
+}
+.yes {
+  background-color: lightgreen;
+}
+.warn {
+  background-color: yellow;
+}
+.no {
+  background-color: lightsalmon;
+}
+abbr {
+  text-decoration: none;
+}
+table {
+  border-collapse: collapse;
+  display: block;
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
+.name {
+  max-width: 19ch;
+}
+th,td {
+  padding: 0.2em 0.4em;
+  border: 1px solid #aaa;
+  background-color: #f9f9f9;
+}
+.line:hover {
+  filter: brightness(115%);
+}
+th {
+  background-color: #eaecf0;
+}
+.l {
+  display: inline-block;
+  text-align: right;
+  min-width: ''' + str(d_len) + '''ex;
+  color: #777;
+}
+.r {
+  display: inline-block;
+  text-align: left;
+  min-width: ''' + str(f_len) + '''ex;
+}
+.feature_col {
+  min-width: ''' + str(f_len + d_len + 1) + '''ch;
+}
+.rotate {
+  text-align: center;
+  vertical-align: middle;
+}
+.rotate span {
+  writing-mode: vertical-rl;
+  -webkit-writing-mode: vertical-rl;
+  transform: scale(-1);
+}
+.rocol {
+  min-width: 3em;
+}
+</style>
 ''')
 
 html.write('<table>\n')
 html.write('<tr><th scope="col" class="feature_col" rowspan="2">Feature Flag</th>')
-html.write('<th scole="col" rowspan="2">Read-Only<br />Compatible</th>')
+html.write('<th class="rotate rocol" scole="col" rowspan="2"><span>Read-Only<br />Compatible</span></th>')
 
 for name, vers in header:
-    html.write('<th scope="col" colspan="' + str(len(vers)) + '">'
+    html.write('<th class="name" scope="col" colspan="' + str(len(vers)) + '">'
                + name + '</th>')
 html.write('</tr>\n<tr>')
 for _, vers in header:
     for ver in vers:
-        html.write('<td>' + ver + '</td>')
+        html.write('<td class="rotate"><span>' + ver + '</span></td>')
 html.write('</tr>\n')
 
 for (feature, domain), names in sorted(features.items()):
     guid = domain + ':' + feature
-    html.write(f'<tr><th scope="row"><span class="l">{domain}:</span><span class="r">{feature}</span></th>')
+    html.write(f'<tr class="line"><th scope="row"><span class="l">{domain}:</span><span class="r">{feature}</span></th>')
     if readonly[guid]:
         html.write('<td class="yes">yes</td>')
     else:

@@ -11,12 +11,12 @@ documentation <https://pthree.org/2012/04/17/install-zfs-on-debian-gnulinux/>`__
    :maxdepth: 3
    :glob:
 
-   ArchLinux <https://wiki.archlinux.org/index.php/ZFS>
+   Arch Linux/index
    Debian/index
    Fedora
    FreeBSD
    Gentoo <https://wiki.gentoo.org/wiki/ZFS>
    NixOS <https://nixos.wiki/wiki/NixOS_on_ZFS>
-   openSUSE <https://software.opensuse.org/package/zfs>
+   openSUSE/index
    RHEL and CentOS
    Ubuntu/index

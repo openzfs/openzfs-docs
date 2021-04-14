@@ -42,10 +42,11 @@ And for RHEL/CentOS 8 and newer:
 .. code:: sh
 
    $ sudo dnf install https://zfsonlinux.org/epel/zfs-release.<dist>.noarch.rpm
-   $ gpg --quiet --with-fingerprint /etc/pki/rpm-gpg/RPM-GPG-KEY-zfsonlinux
-   pub  2048R/F14AB620 2013-03-21 ZFS on Linux <zfs@zfsonlinux.org>
-       Key fingerprint = C93A FFFD 9F3F 7B03 C310  CEB6 A9D5 A1C0 F14A B620
-       sub  2048R/99685629 2013-03-21
+   $ gpg --import --import-options show-only /etc/pki/rpm-gpg/RPM-GPG-KEY-zfsonlinux
+   pub   rsa2048 2013-03-21 [SC]
+         C93AFFFD9F3F7B03C310CEB6A9D5A1C0F14AB620
+   uid                      ZFS on Linux <zfs@zfsonlinux.org>
+   sub   rsa2048 2013-03-21 [E]
 
 After installing the *zfs-release* package and verifying the public key
 users can opt to install either the DKMS or kABI-tracking kmod style packages.

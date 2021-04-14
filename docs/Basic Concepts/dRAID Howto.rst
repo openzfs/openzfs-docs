@@ -70,7 +70,7 @@ reasonable defaults are chosen.
 
    # zpool create <pool> draid[<parity>][:<data>d][:<children>c][:<spares>s] <vdevs...>
 
-- **parity** - The parity level (1-3).
+- **parity** - The parity level (1-3).  Defaults to one.
 
 - **data** - The number of data devices per redundancy group.  In general
   a smaller value of D will increase IOPS, improve the compression ratio,

@@ -152,8 +152,8 @@ Caution
 System Requirements
 ~~~~~~~~~~~~~~~~~~~
 
-- `Ubuntu 20.04.1 (“Focal”) Desktop CD
-  <https://releases.ubuntu.com/20.04/ubuntu-20.04.1-desktop-amd64.iso>`__
+- `Ubuntu 20.04.2 (“Focal”) Desktop CD
+  <https://releases.ubuntu.com/20.04/ubuntu-20.04.2-desktop-amd64.iso>`__
   (*not* any server images)
 - Installing on a drive which presents 4 KiB logical sectors (a “4Kn” drive)
   only works with UEFI booting. This not unique to ZFS. `GRUB does not and
@@ -252,6 +252,13 @@ Step 1: Prepare The Install Environment
    **Hint:** You can find your IP address with
    ``ip addr show scope global | grep inet``. Then, from your main machine,
    connect with ``ssh ubuntu@IP``.
+
+#. Disable automounting:
+
+   If the disk has been used before (with partitions at the same offsets),
+   previous filesystems (e.g. the ESP) will automount if not disabled::
+
+     gsettings set org.gnome.desktop.media-handling automount false
 
 #. Become root::
 
@@ -376,6 +383,7 @@ Step 2: Disk Formatting
 #. Create the boot pool::
 
      zpool create \
+         -o cachefile=/etc/zfs/zpool.cache \
          -o ashift=12 -o autotrim=on -d \
          -o feature@async_destroy=enabled \
          -o feature@bookmarks=enabled \
@@ -610,10 +618,17 @@ Step 3: System Installation
      zfs create -o com.ubuntu.zsys:bootfs-datasets=rpool/ROOT/ubuntu_$UUID \
          -o canmount=on -o mountpoint=/root \
          rpool/USERDATA/root_$UUID
+     chmod 700 /mnt/root
 
    For a mirror or raidz topology, create a dataset for ``/boot/grub``::
 
      zfs create -o com.ubuntu.zsys:bootfs=no bpool/grub
+
+   Mount a tmpfs at /run::
+
+     mkdir /mnt/run
+     mount -t tmpfs tmpfs /mnt/run
+     mkdir /mnt/run/lock
 
    A tmpfs is recommended later, but if you want a separate dataset for
    ``/tmp``::
@@ -640,6 +655,11 @@ Step 3: System Installation
    The ``debootstrap`` command leaves the new system in an unconfigured state.
    An alternative to using ``debootstrap`` is to copy the entirety of a
    working system into the new ZFS root.
+
+#. Copy in zpool.cache::
+
+     mkdir /mnt/etc/zfs
+     cp /etc/zfs/zpool.cache /mnt/etc/zfs/
 
 Step 4: System Configuration
 ----------------------------
@@ -792,10 +812,24 @@ Step 4: System Configuration
            grub-efi-amd64 grub-efi-amd64-signed linux-image-generic \
            shim-signed zfs-initramfs zsys
 
-     **Note:** For a mirror or raidz topology, this step only installs GRUB
-     on the first disk. The other disk(s) will be handled later.  For some
-     reason, grub-efi-amd64 does not prompt for ``install_devices`` here, but
-     does after a reboot.
+     **Notes:**
+
+     - Ignore any error messages saying ``ERROR: Couldn't resolve device`` and
+       ``WARNING: Couldn't determine root device``.  `cryptsetup does not
+       support ZFS
+       <https://bugs.launchpad.net/ubuntu/+source/cryptsetup/+bug/1612906>`__.
+
+     - Ignore any error messages saying ``Module zfs not found`` and
+       ``couldn't connect to zsys daemon``.  The first seems to occur due to a
+       version mismatch between the Live CD kernel and the chroot environment,
+       but this is irrelevant since the module is already loaded.  The second
+       may be caused by the first but either way is irrelevant since ``zed``
+       is started manually later.
+
+     - For a mirror or raidz topology, this step only installs GRUB on the
+       first disk. The other disk(s) will be handled later.  For some reason,
+       grub-efi-amd64 does not prompt for ``install_devices`` here, but does
+       after a reboot.
 
 #. Optional: Remove os-prober::
 
@@ -893,16 +927,16 @@ Step 5: GRUB Installation
 
      update-initramfs -c -k all
 
-   **Note:** When using LUKS, this will print “WARNING could not determine
-   root device from /etc/fstab”. This is because `cryptsetup does not
-   support ZFS
+   **Note:** Ignore any error messages saying ``ERROR: Couldn't resolve
+   device`` and ``WARNING: Couldn't determine root device``.  `cryptsetup
+   does not support ZFS
    <https://bugs.launchpad.net/ubuntu/+source/cryptsetup/+bug/1612906>`__.
 
 #. Disable memory zeroing::
 
      vi /etc/default/grub
      # Add init_on_alloc=0 to: GRUB_CMDLINE_LINUX_DEFAULT
-     # Save and quit.
+     # Save and quit (or see the next step).
 
    This is to address `performance regressions
    <https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1862822>`__.
@@ -982,10 +1016,13 @@ Step 5: GRUB Installation
 
    If either is empty, force a cache update and check again::
 
-     zfs set canmount=noauto bpool/BOOT/ubuntu_$UUID
-     zfs set canmount=noauto rpool/ROOT/ubuntu_$UUID
+     zfs set canmount=on bpool/BOOT/ubuntu_$UUID
+     zfs set canmount=on rpool/ROOT/ubuntu_$UUID
 
-   Stop ``zed``::
+   If they are still empty, stop zed (as below), start zed (as above) and try
+   again.
+
+   Once the files have data, stop ``zed``::
 
      fg
      Press Ctrl-C.
@@ -1173,6 +1210,8 @@ If needed, you can chroot into your installed environment::
   mount --rbind /dev  /mnt/dev
   mount --rbind /proc /mnt/proc
   mount --rbind /sys  /mnt/sys
+  mount -t tmpfs tmpfs /mnt/run
+  mkdir /mnt/run/lock
   chroot /mnt /bin/bash --login
   mount -a
 

@@ -59,7 +59,7 @@ Background
 
 Ordinary background radiation will randomly flip bits in computer
 memory, which causes undefined behavior. These are known as "bit flips".
-Each bit flip can have any of three possible consequences depending on
+Each bit flip can have any of four possible consequences depending on
 which bit is flipped:
 
 -  Bit flips can have no effect.

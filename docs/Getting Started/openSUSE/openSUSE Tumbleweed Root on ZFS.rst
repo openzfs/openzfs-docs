@@ -1,7 +1,7 @@
 .. highlight:: sh
 
-Debian Buster Root on ZFS
-=========================
+openSUSE Tumbleweed Root on ZFS
+===============================
 
 .. contents:: Table of Contents
   :local:
@@ -15,12 +15,19 @@ Caution
 - This HOWTO uses a whole physical disk.
 - Do not use these instructions for dual-booting.
 - Backup your data. Any existing data will be lost.
+- This is not an openSUSE official HOWTO page. This document will be updated if Root on ZFS support of
+  openSUSE is added in the future.
+  Also, `openSUSE's default system installer Yast2 does not support zfs <https://forums.opensuse.org/showthread.php/510071-HOWTO-Install-ZFSonLinux-on-OpenSuse>`__. The method of setting up system
+  with zypper without Yast2 used in this page is based on openSUSE installation methods written by the
+  experience of the people in the community.
+  For more information about this, please look at the external links.
+
 
 System Requirements
 ~~~~~~~~~~~~~~~~~~~
 
-- `64-bit Debian GNU/Linux Buster Live CD w/ GUI (e.g. gnome iso)
-  <https://cdimage.debian.org/mirror/cdimage/release/current-live/amd64/iso-hybrid/>`__
+- `64-bit openSUSE Tumbleweed Live CD w/ GUI (e.g. gnome iso)
+  <https://software.opensuse.org/distributions/tumbleweed>`__
 - `A 64-bit kernel is strongly encouraged.
   <https://github.com/zfsonlinux/zfs/wiki/FAQ#32-bit-vs-64-bit-systems>`__
 - Installing on a drive which presents 4 KiB logical sectors (a “4Kn” drive)
@@ -40,8 +47,7 @@ Support
 If you need help, reach out to the community using the :ref:`mailing_lists` or IRC at
 `#zfsonlinux <irc://irc.freenode.net/#zfsonlinux>`__ on `freenode
 <https://freenode.net/>`__. If you have a bug report or feature request
-related to this HOWTO, please `file a new issue and mention @rlaager
-<https://github.com/openzfs/openzfs-docs/issues/new?body=@rlaager,%20I%20have%20the%20following%20issue%20with%20the%20Debian%20Buster%20Root%20on%20ZFS%20HOWTO:>`__.
+related to this HOWTO, please file a new issue and mention `@Zaryob <https://github.com/Zaryob>`__.
 
 Contributing
 ~~~~~~~~~~~~
@@ -50,10 +56,8 @@ Contributing
 
 #. Install the tools::
 
-    sudo apt install python3-pip
-
+    sudo zypper install python3-pip
     pip3 install -r docs/requirements.txt
-
     # Add ~/.local/bin to your $PATH, e.g. by adding this to ~/.bashrc:
     PATH=$HOME/.local/bin:$PATH
 
@@ -66,7 +70,7 @@ Contributing
     sensible-browser _build/html/index.html
 
 #. ``git commit --signoff`` to a branch, ``git push``, and create a pull
-   request. Mention @rlaager.
+   request.
 
 Encryption
 ~~~~~~~~~~
@@ -96,35 +100,27 @@ encrypted once per disk.
 Step 1: Prepare The Install Environment
 ---------------------------------------
 
-#. Boot the Debian GNU/Linux Live CD. If prompted, login with the username
-   ``user`` and password ``live``. Connect your system to the Internet as
+#. Boot the openSUSE Live CD. If prompted, login with the username
+   ``live`` and password ``live``. Connect your system to the Internet as
    appropriate (e.g. join your WiFi network). Open a terminal.
 
 #. Setup and update the repositories::
 
-     sudo vi /etc/apt/sources.list
-
-   .. code-block:: sourceslist
-
-     deb http://deb.debian.org/debian buster main contrib
-     deb http://deb.debian.org/debian buster-backports main contrib
-
-   ::
-
-     sudo apt update
+     sudo zypper addrepo https://download.opensuse.org/repositories/filesystems/openSUSE_Tumbleweed/filesystems.repo
+     sudo zypper refresh  # Refresh all repositories
 
 #. Optional: Install and start the OpenSSH server in the Live CD environment:
 
    If you have a second system, using SSH to access the target system can be
    convenient::
 
-     sudo apt install --yes openssh-server
-
-     sudo systemctl restart ssh
+     sudo zypper install openssh-server
+     sudo systemctl restart sshd.service
 
    **Hint:** You can find your IP address with
    ``ip addr show scope global | grep inet``. Then, from your main machine,
    connect with ``ssh user@IP``.
+
 
 #. Disable automounting:
 
@@ -133,25 +129,16 @@ Step 1: Prepare The Install Environment
 
      gsettings set org.gnome.desktop.media-handling automount false
 
+
 #. Become root::
 
      sudo -i
 
 #. Install ZFS in the Live CD environment::
 
-     apt install --yes debootstrap gdisk dkms dpkg-dev \
-         linux-headers-$(uname -r)
-
-     apt install --yes -t buster-backports --no-install-recommends zfs-dkms
-
+     zypper install zfs
+     zypper install gdisk dkms
      modprobe zfs
-     apt install --yes -t buster-backports zfsutils-linux
-
-   - The dkms dependency is installed manually just so it comes from buster
-     and not buster-backports. This is not critical.
-   - We need to get the module built and loaded before installing
-     zfsutils-linux or `zfs-mount.service will fail to start
-     <https://github.com/zfsonlinux/zfs/issues/9599>`__.
 
 Step 2: Disk Formatting
 -----------------------
@@ -176,7 +163,7 @@ Step 2: Disk Formatting
 
    If the disk was previously used in an MD array::
 
-     apt install --yes mdadm
+     zypper install mdadm
 
      # See if one or more MD arrays are active:
      cat /proc/mdstat
@@ -297,6 +284,7 @@ Step 2: Disk Formatting
    - Unencrypted::
 
        zpool create \
+           -o cachefile=/etc/zfs/zpool.cache \
            -o ashift=12 \
            -O acltype=posixacl -O canmount=off -O compression=lz4 \
            -O dnodesize=auto -O normalization=formD -O relatime=on \
@@ -306,6 +294,7 @@ Step 2: Disk Formatting
    - ZFS native encryption::
 
        zpool create \
+           -o cachefile=/etc/zfs/zpool.cache \
            -o ashift=12 \
            -O encryption=aes-256-gcm \
            -O keylocation=prompt -O keyformat=passphrase \
@@ -316,11 +305,11 @@ Step 2: Disk Formatting
 
    - LUKS::
 
-       apt install --yes cryptsetup
-
+       zypper install cryptsetup
        cryptsetup luksFormat -c aes-xts-plain64 -s 512 -h sha256 ${DISK}-part4
        cryptsetup luksOpen ${DISK}-part4 luks1
        zpool create \
+           -o cachefile=/etc/zfs/zpool.cache \
            -o ashift=12 \
            -O acltype=posixacl -O canmount=off -O compression=lz4 \
            -O dnodesize=auto -O normalization=formD -O relatime=on \
@@ -428,10 +417,10 @@ Step 3: System Installation
 
 #. Create filesystem datasets for the root and boot filesystems::
 
-     zfs create -o canmount=noauto -o mountpoint=/ rpool/ROOT/debian
-     zfs mount rpool/ROOT/debian
+     zfs create -o canmount=noauto -o mountpoint=/ rpool/ROOT/suse
+     zfs mount rpool/ROOT/suse
 
-     zfs create -o mountpoint=/boot bpool/BOOT/debian
+     zfs create -o mountpoint=/boot bpool/BOOT/suse
 
    With ZFS, it is not normally necessary to use a mount command (either
    ``mount`` or ``zfs mount``). This situation is an exception because of
@@ -481,6 +470,10 @@ Step 3: System Installation
 
      zfs create                                 rpool/var/snap
 
+   If this system will use Flatpak packages::
+
+     zfs create                                 rpool/var/lib/flatpak
+
    If you use /var/www on this system::
 
      zfs create                                 rpool/var/www
@@ -498,11 +491,13 @@ Step 3: System Installation
 
      zfs create -o com.sun:auto-snapshot=false  rpool/var/lib/nfs
 
+
    Mount a tmpfs at /run::
 
      mkdir /mnt/run
      mount -t tmpfs tmpfs /mnt/run
      mkdir /mnt/run/lock
+
 
    A tmpfs is recommended later, but if you want a separate dataset for
    ``/tmp``::
@@ -521,20 +516,78 @@ Step 3: System Installation
    to limit the maximum space used. Otherwise, you can use a tmpfs (RAM
    filesystem) later.
 
-#. Install the minimal system::
-
-     debootstrap buster /mnt
-
-   The ``debootstrap`` command leaves the new system in an unconfigured state.
-   An alternative to using ``debootstrap`` is to copy the entirety of a
-   working system into the new ZFS root.
 
 #. Copy in zpool.cache::
 
-     mkdir /mnt/etc/zfs
+     mkdir /mnt/etc/zfs -p
      cp /etc/zfs/zpool.cache /mnt/etc/zfs/
 
-Step 4: System Configuration
+Step 4. Install System
+----------------------
+
+#. Add repositories into chrooting directory::
+
+     zypper --root /mnt ar http://download.opensuse.org/tumbleweed/repo/non-oss/ non-oss
+     zypper --root /mnt ar http://download.opensuse.org/tumbleweed/repo/oss/ oss
+
+#. Generate repository indexes::
+
+     zypper --root /mnt refresh
+
+
+   You will get fingerprint exception, click a to say always trust and continue.::
+
+     New repository or package signing key received:
+
+     Repository:       oss
+     Key Name:         openSUSE Project Signing Key <opensuse@opensuse.org>
+     Key Fingerprint:  22C07BA5 34178CD0 2EFE22AA B88B2FD4 3DBDC284
+     Key Created:      Mon May  5 11:37:40 2014
+     Key Expires:      Thu May  2 11:37:40 2024
+     Rpm Name:         gpg-pubkey-3dbdc284-53674dd4
+
+     Do you want to reject the key, trust temporarily, or trust always? [r/t/a/?] (r):
+
+
+#. Install openSUSE Tumbleweed with zypper:
+
+   If you install `base` pattern, zypper will install `busybox-grep` which is masks default kernel package.
+   Thats why I recommend you to install `enhanced_base` pattern, if you're new in openSUSE. But in `enhanced_base`, bloats
+   can annoy you, while you want to use it openSUSE on server. So, you need to select
+
+   a. Install base packages of openSUSE Tumbleweed with zypper (Recommended for server)::
+
+       zypper --root /mnt install -t pattern base
+
+
+   b. Install enhanced base of openSUSE Tumbleweed with zypper (Recommended for desktop)::
+
+       zypper --root /mnt install -t pattern enhanced_base
+
+
+
+#. Install openSUSE zypper package system into chroot::
+
+     zypper --root /mnt install zypper
+
+#. Recommended: Install openSUSE yast2 system into chroot::
+
+     zypper --root /mnt install yast2
+
+
+  .. note:: If your `/etc/resolv.conf` file is empty, proceed this command.
+
+     echo "nameserver 8.8.4.4" | tee -a /mnt/etc/resolv.conf
+
+
+  It will make easier to configure network and other configurations for beginners.
+
+
+
+To install a desktop environment, see the `openSUSE wiki
+<https://en.opensuse.org/openSUSE:Desktop_FAQ#How_to_choose_a_desktop_environment.3F>`__
+
+Step 5: System Configuration
 ----------------------------
 
 #. Configure the hostname:
@@ -544,65 +597,29 @@ Step 4: System Configuration
      echo HOSTNAME > /mnt/etc/hostname
      vi /mnt/etc/hosts
 
+   Add a line:
+
    .. code-block:: text
 
-     Add a line:
      127.0.1.1       HOSTNAME
-     or if the system has a real name in DNS:
+
+   or if the system has a real name in DNS:
+
+   .. code-block:: text
+
      127.0.1.1       FQDN HOSTNAME
 
    **Hint:** Use ``nano`` if you find ``vi`` confusing.
 
-#. Configure the network interface:
+#. Copy network information::
 
-   Find the interface name::
+     cp /etc/resolv.conf /mnt/etc
 
-     ip addr show
+   You will reconfigure network with yast2.
 
-   Adjust ``NAME`` below to match your interface name::
+   .. note:: If your `/etc/resolv.conf` file is empty, proceed this command.
 
-     vi /mnt/etc/network/interfaces.d/NAME
-
-   .. code-block:: text
-
-     auto NAME
-     iface NAME inet dhcp
-
-   Customize this file if the system is not a DHCP client.
-
-#. Configure the package sources::
-
-     vi /mnt/etc/apt/sources.list
-
-   .. code-block:: sourceslist
-
-     deb http://deb.debian.org/debian buster main contrib
-     deb-src http://deb.debian.org/debian buster main contrib
-
-     deb http://security.debian.org/debian-security buster/updates main contrib
-     deb-src http://security.debian.org/debian-security buster/updates main contrib
-
-     deb http://deb.debian.org/debian buster-updates main contrib
-     deb-src http://deb.debian.org/debian buster-updates main contrib
-
-   ::
-
-     vi /mnt/etc/apt/sources.list.d/buster-backports.list
-
-   .. code-block:: sourceslist
-
-     deb http://deb.debian.org/debian buster-backports main contrib
-     deb-src http://deb.debian.org/debian buster-backports main contrib
-
-   ::
-
-     vi /mnt/etc/apt/preferences.d/90_zfs
-
-   .. code-block:: control
-
-     Package: libnvpair1linux libuutil1linux libzfs2linux libzfslinux-dev libzpool2linux python3-pyzfs pyzfs-doc spl spl-dkms zfs-dkms zfs-dracut zfs-initramfs zfs-test zfsutils-linux zfsutils-linux-dev zfs-zed
-     Pin: release n=buster-backports
-     Pin-Priority: 990
+      echo "nameserver 8.8.4.4" | tee -a /mnt/etc/resolv.conf
 
 #. Bind the virtual filesystems from the LiveCD environment to the new
    system and ``chroot`` into it::
@@ -610,6 +627,9 @@ Step 4: System Configuration
      mount --rbind /dev  /mnt/dev
      mount --rbind /proc /mnt/proc
      mount --rbind /sys  /mnt/sys
+     mount -t tmpfs tmpfs /mnt/run
+     mkdir /mnt/run/lock
+
      chroot /mnt /usr/bin/env DISK=$DISK bash --login
 
    **Note:** This is using ``--rbind``, not ``--bind``.
@@ -617,34 +637,58 @@ Step 4: System Configuration
 #. Configure a basic system environment::
 
      ln -s /proc/self/mounts /etc/mtab
-     apt update
-
-     apt install --yes console-setup locales
+     zypper refresh
 
    Even if you prefer a non-English system language, always ensure that
    ``en_US.UTF-8`` is available::
 
-     dpkg-reconfigure locales tzdata keyboard-configuration console-setup
+     locale -a
+
+   Output must include that languages:
+
+   * C
+   * C.UTF-8
+   * en_US.utf8
+   * POSIX
+
+   Find yout locale from `locale -a` commands output then set it with following command.
+
+   .. code-block:: text
+
+     localectl set-locale LANG=en_US.UTF-8
+
+
+#. Optional: Reinstallation for stability:
+
+   After installation it may need. Some packages may have minor errors.
+   For that, do this if you wish. Since there is no command like
+   dpkg-reconfigure in openSUSE,  `zypper install -f stated as a alternative for
+   it <https://lists.opensuse.org/opensuse-factory/2009-07/msg00188.html>`__
+   but it will reinstall packages.
+
+   .. code-block:: text
+
+     zypper install -f permissions-config iputils ca-certificates  ca-certificates-mozilla pam shadow dbus libutempter0 suse-module-tools util-linux
+
+
+#. Install kernel::
+
+     zypper install kernel-default kernel-firmware
+
+   .. note:: If you installed `base` pattern, you need to deinstall busybox-grep to install `kernel-default` package.
 
 #. Install ZFS in the chroot environment for the new system::
+     zypper addrepo https://download.opensuse.org/repositories/filesystems/openSUSE_Tumbleweed/filesystems.repo
+     zypper refresh   # Refresh all repositories
+     zypper install zfs
 
-     apt install --yes dpkg-dev linux-headers-amd64 linux-image-amd64
-
-     apt install --yes zfs-initramfs
-
-     echo REMAKE_INITRD=yes > /etc/dkms/zfs.conf
-
-   **Note:** Ignore any error messages saying ``ERROR: Couldn't resolve
-   device`` and ``WARNING: Couldn't determine root device``.  `cryptsetup does
-   not support ZFS
-   <https://bugs.launchpad.net/ubuntu/+source/cryptsetup/+bug/1612906>`__.
 
 #. For LUKS installs only, setup ``/etc/crypttab``::
 
-     apt install --yes cryptsetup
+     zypper install cryptsetup
 
-     echo luks1 /dev/disk/by-uuid/$(blkid -s UUID -o value ${DISK}-part4) \
-         none luks,discard,initramfs > /etc/crypttab
+     echo luks1 /dev/disk/by-uuid/$(blkid -s UUID -o value ${DISK}-part4) none \
+         luks,discard,initramfs > /etc/crypttab
 
    The use of ``initramfs`` is a work-around for `cryptsetup does not support
    ZFS <https://bugs.launchpad.net/ubuntu/+source/cryptsetup/+bug/1612906>`__.
@@ -652,42 +696,45 @@ Step 4: System Configuration
    **Hint:** If you are creating a mirror or raidz topology, repeat the
    ``/etc/crypttab`` entries for ``luks2``, etc. adjusting for each disk.
 
+#. For LUKS installs only, fix cryptsetup naming for ZFS::
+
+     echo 'ENV{DM_NAME}!="", SYMLINK+="$env{DM_NAME}"
+     ENV{DM_NAME}!="", SYMLINK+="dm-name-$env{DM_NAME}"' >> /etc/udev/rules.d/99-local-crypt.rules
+
+
 #. Install GRUB
 
    Choose one of the following options:
 
    - Install GRUB for legacy (BIOS) booting::
 
-       apt install --yes grub-pc
+       zypper install grub2-x86_64-pc
 
-     Select (using the space bar) all of the disks (not partitions) in your
-     pool.
+     If your processor is 32bit use `grub2-i386-pc` instead of x86_64 one.
 
    - Install GRUB for UEFI booting::
 
-        apt install dosfstools
-
-        mkdosfs -F 32 -s 1 -n EFI ${DISK}-part2
-        mkdir /boot/efi
-        echo /dev/disk/by-uuid/$(blkid -s UUID -o value ${DISK}-part2) \
-           /boot/efi vfat defaults 0 0 >> /etc/fstab
-        mount /boot/efi
-        apt install --yes grub-efi-amd64 shim-signed
+       zypper install grub2-x86_64-efi dosfstools os-prober
+       mkdosfs -F 32 -s 1 -n EFI ${DISK}-part2
+       mkdir /boot/efi
+       echo /dev/disk/by-uuid/$(blkid -s PARTUUID -o value ${DISK}-part2) \
+          /boot/efi vfat defaults 0 0 >> /etc/fstab
+       mount /boot/efi
 
      **Notes:**
 
      - The ``-s 1`` for ``mkdosfs`` is only necessary for drives which present
-       4 KiB logical sectors (“4Kn” drives) to meet the minimum cluster size
-       (given the partition size of 512 MiB) for FAT32. It also works fine on
-       drives which present 512 B sectors.
+        4 KiB logical sectors (“4Kn” drives) to meet the minimum cluster size
+        (given the partition size of 512 MiB) for FAT32. It also works fine on
+        drives which present 512 B sectors.
      - For a mirror or raidz topology, this step only installs GRUB on the
-       first disk. The other disk(s) will be handled later.
+        first disk. The other disk(s) will be handled later.
 
 #. Optional: Remove os-prober::
 
-     apt remove --purge os-prober
+     zypper remove os-prober
 
-   This avoids error messages from `update-grub`.  `os-prober` is only
+   This avoids error messages from `update-bootloader`. `os-prober` is only
    necessary in dual-boot configurations.
 
 #. Set a root password::
@@ -737,38 +784,52 @@ Step 4: System Configuration
      cp /usr/share/systemd/tmp.mount /etc/systemd/system/
      systemctl enable tmp.mount
 
-#. Optional (but kindly requested): Install popcon
 
-   The ``popularity-contest`` package reports the list of packages install
-   on your system. Showing that ZFS is popular may be helpful in terms of
-   long-term attention from the distro.
+Step 6: Kernel Installation
+---------------------------
 
-   ::
+#. Add zfs module into dracut::
 
-     apt install --yes popularity-contest
+     echo 'zfs'>> /etc/modules-load.d/zfs.conf
 
-   Choose Yes at the prompt.
 
-Step 5: GRUB Installation
--------------------------
+#. Refresh kernel files::
 
-#. Verify that the ZFS boot filesystem is recognized::
-
-     grub-probe /boot
+     kernel-install add $(uname -r) /boot/vmlinuz-$(uname -r)
 
 #. Refresh the initrd files::
 
-     update-initramfs -c -k all
+     mkinitrd
 
-   **Note:** Ignore any error messages saying ``ERROR: Couldn't resolve
-   device`` and ``WARNING: Couldn't determine root device``.  `cryptsetup
-   does not support ZFS
-   <https://bugs.launchpad.net/ubuntu/+source/cryptsetup/+bug/1612906>`__.
+   **Note:** After some installations, LUKS partition cannot seen by dracut,
+   this will print “Failure occured during following action:
+   configuring encrypted DM device X VOLUME_CRYPTSETUP_FAILED“. For fix this
+   issue you need to check cryptsetup installation. `See for more information <https://forums.opensuse.org/showthread.php/528938-installation-with-LUKS-cryptsetup-installer-gives-error-code-3034?p=2850404#post2850404>`__
+   **Note:** Although we add the zfs config to the system module into `/etc/modules.d`, if it is not seen by dracut, we have to add it to dracut by force.
+   `dracut --kver $(uname -r) --force --add-drivers "zfs"`
+
+
+Step 7: Grub2 Installation
+--------------------------
+
+#. Verify that the ZFS boot filesystem is recognized::
+
+     grub2-probe /boot
+
+   Output must be `zfs`
+
+#. If you having trouble with `grub2-probe` command make this::
+
+     echo 'export ZPOOL_VDEV_NAME_PATH=YES' >> /etc/profile
+     export ZPOOL_VDEV_NAME_PATH=YES
+
+   then go back to `grub2-probe` step.
+
 
 #. Workaround GRUB's missing zpool-features support::
 
      vi /etc/default/grub
-     # Set: GRUB_CMDLINE_LINUX="root=ZFS=rpool/ROOT/debian"
+     # Set: GRUB_CMDLINE_LINUX="root=ZFS=rpool/ROOT/suse"
 
 #. Optional (but highly recommended): Make debugging GRUB easier::
 
@@ -782,15 +843,18 @@ Step 5: GRUB Installation
 
 #. Update the boot configuration::
 
-     update-grub
+     update-bootloader
 
    **Note:** Ignore errors from ``osprober``, if present.
+   **Note:** If you have had trouble with the grub2 installation, I suggest you use systemd-boot.
+   **Note:** If this command don't gives any output, use classic grub.cfg generation with following command:
+   ``grub2-mkconfig -o /boot/grub2/grub.cfg``
 
 #. Install the boot loader:
 
    #. For legacy (BIOS) booting, install GRUB to the MBR::
 
-        grub-install $DISK
+        grub2-install $DISK
 
    Note that you are installing GRUB to the whole disk, not a partition.
 
@@ -799,11 +863,51 @@ Step 5: GRUB Installation
 
    #. For UEFI booting, install GRUB to the ESP::
 
-        grub-install --target=x86_64-efi --efi-directory=/boot/efi \
-            --bootloader-id=debian --recheck --no-floppy
+        grub2-install --target=x86_64-efi --efi-directory=/boot/efi \
+            --bootloader-id=opensuse --recheck --no-floppy
 
       It is not necessary to specify the disk here. If you are creating a
       mirror or raidz topology, the additional disks will be handled later.
+
+Step 8: Systemd-Boot Installation
+---------------------------------
+
+**Warning:** This will break your Yast2 Bootloader Configuration. Make sure that you
+are not able to fix the problem you are having with grub2. I decided to write this
+part because sometimes grub2 doesn't see the rpool pool in some cases.
+
+#. Install systemd-boot::
+
+     bootctl install
+
+#. Configure bootloader configuration::
+
+     tee -a /boot/efi/loader/loader.conf << EOF
+     default openSUSE_Tumbleweed.conf
+     timeout 5
+     console-mode auto
+     EOF
+
+#. Write Entries::
+
+     tee -a /boot/efi/loader/entries/openSUSE_Tumbleweed.conf << EOF
+     title   openSUSE Tumbleweed
+     linux   /EFI/openSUSE/vmlinuz
+     initrd  /EFI/openSUSE/initrd
+     options root=zfs=rpool/ROOT/suse boot=zfs
+     EOF
+
+#. Copy files into EFI::
+
+     mkdir /boot/efi/EFI/openSUSE
+     cp /boot/{vmlinuz,initrd} /boot/efi/EFI/openSUSE
+
+#. Update systemd-boot variables::
+
+     bootctl update
+
+Step 9: Filesystem Configuration
+--------------------------------
 
 #. Fix filesystem mount ordering:
 
@@ -818,7 +922,7 @@ Step 5: GRUB Installation
      mkdir /etc/zfs/zfs-list.cache
      touch /etc/zfs/zfs-list.cache/bpool
      touch /etc/zfs/zfs-list.cache/rpool
-     ln -s /usr/lib/zfs-linux/zed.d/history_event-zfs-list-cacher.sh /etc/zfs/zed.d
+     ln -s /usr/lib/zfs/zed.d/history_event-zfs-list-cacher.sh /etc/zfs/zed.d
      zed -F &
 
    Verify that ``zed`` updated the cache by making sure these are not empty::
@@ -828,13 +932,13 @@ Step 5: GRUB Installation
 
    If either is empty, force a cache update and check again::
 
-     zfs set canmount=on     bpool/BOOT/debian
-     zfs set canmount=noauto rpool/ROOT/debian
+     zfs set canmount=on     bpool/BOOT/suse
+     zfs set canmount=noauto rpool/ROOT/suse
 
    If they are still empty, stop zed (as below), start zed (as above) and try
    again.
 
-   Once the files have data, stop ``zed``::
+   Stop ``zed``::
 
      fg
      Press Ctrl-C.
@@ -843,20 +947,20 @@ Step 5: GRUB Installation
 
      sed -Ei "s|/mnt/?|/|" /etc/zfs/zfs-list.cache/*
 
-Step 6: First Boot
-------------------
+Step 10: First Boot
+-------------------
 
 #. Optional: Install SSH::
 
-     apt install --yes openssh-server
+     zypper install --yes openssh-server
 
      vi /etc/ssh/sshd_config
      # Set: PermitRootLogin yes
 
 #. Optional: Snapshot the initial installation::
 
-     zfs snapshot bpool/BOOT/debian@install
-     zfs snapshot rpool/ROOT/debian@install
+     zfs snapshot bpool/BOOT/suse@install
+     zfs snapshot rpool/ROOT/suse@install
 
    In the future, you will likely want to take snapshots before each
    upgrade, and remove old snapshots (including this one) at some point to
@@ -896,8 +1000,19 @@ Step 6: First Boot
    disks.
 
    - For legacy (BIOS) booting::
+     Check to be sure we using efi mode:
 
-       dpkg-reconfigure grub-pc
+     .. code-block:: text
+
+         efibootmgr -v
+
+     This must return a message contains `legacy_boot`
+
+     Then reconfigure grub:
+
+     .. code-block:: text
+
+         grub-install $DISK
 
      Hit enter until you get to the device selection screen.
      Select (using the space bar) all of the disks (not partitions) in your pool.
@@ -911,11 +1026,11 @@ Step 6: First Boot
        dd if=/dev/disk/by-id/scsi-SATA_disk1-part2 \
           of=/dev/disk/by-id/scsi-SATA_disk2-part2
        efibootmgr -c -g -d /dev/disk/by-id/scsi-SATA_disk2 \
-           -p 2 -L "debian-2" -l '\EFI\debian\grubx64.efi'
+           -p 2 -L "opensuse-2" -l '\EFI\opensuse\grubx64.efi'
 
        mount /boot/efi
 
-Step 7: Optional: Configure Swap
+Step 11: Optional: Configure Swap
 ---------------------------------
 
 **Caution**: On systems with extremely high memory pressure, using a
@@ -960,46 +1075,16 @@ available. There is `a bug report upstream
 
      swapon -av
 
-Step 8: Full Software Installation
-----------------------------------
-
-#. Upgrade the minimal system::
-
-     apt dist-upgrade --yes
-
-#. Install a regular set of software::
-
-     tasksel
-
-#. Optional: Disable log compression:
-
-   As ``/var/log`` is already compressed by ZFS, logrotate’s compression is
-   going to burn CPU and disk I/O for (in most cases) very little gain. Also,
-   if you are making snapshots of ``/var/log``, logrotate’s compression will
-   actually waste space, as the uncompressed data will live on in the
-   snapshot. You can edit the files in ``/etc/logrotate.d`` by hand to comment
-   out ``compress``, or use this loop (copy-and-paste highly recommended)::
-
-     for file in /etc/logrotate.d/* ; do
-         if grep -Eq "(^|[^#y])compress" "$file" ; then
-             sed -i -r "s/(^|[^#y])(compress)/\1#\2/" "$file"
-         fi
-     done
-
-#. Reboot::
-
-     reboot
-
-Step 9: Final Cleanup
----------------------
+Step 12: Final Cleanup
+----------------------
 
 #. Wait for the system to boot normally. Login using the account you
    created. Ensure the system (including networking) works normally.
 
 #. Optional: Delete the snapshots of the initial installation::
 
-     sudo zfs destroy bpool/BOOT/debian@install
-     sudo zfs destroy rpool/ROOT/debian@install
+     sudo zfs destroy bpool/BOOT/suse@install
+     sudo zfs destroy rpool/ROOT/suse@install
 
 #. Optional: Disable the root password::
 
@@ -1012,7 +1097,7 @@ Step 9: Final Cleanup
      vi /etc/ssh/sshd_config
      # Remove: PermitRootLogin yes
 
-     systemctl restart ssh
+     systemctl restart sshd
 
 #. Optional: Re-enable the graphical boot process:
 
@@ -1026,7 +1111,7 @@ Step 9: Final Cleanup
      # Comment out GRUB_TERMINAL=console
      # Save and quit.
 
-     sudo update-grub
+     sudo update-bootloader
 
    **Note:** Ignore errors from ``osprober``, if present.
 
@@ -1052,8 +1137,7 @@ Go through `Step 1: Prepare The Install Environment
 
 For LUKS, first unlock the disk(s)::
 
-  apt install --yes cryptsetup
-
+  zypper install cryptsetup
   cryptsetup luksOpen /dev/disk/by-id/scsi-SATA_disk1-part4 luks1
   # Repeat for additional disks, if this is a mirror or raidz topology.
 
@@ -1063,7 +1147,7 @@ Mount everything correctly::
   zpool import -N -R /mnt rpool
   zpool import -N -R /mnt bpool
   zfs load-key -a
-  zfs mount rpool/ROOT/debian
+  zfs mount rpool/ROOT/suse
   zfs mount -a
 
 If needed, you can chroot into your installed environment::
@@ -1071,8 +1155,6 @@ If needed, you can chroot into your installed environment::
   mount --rbind /dev  /mnt/dev
   mount --rbind /proc /mnt/proc
   mount --rbind /sys  /mnt/sys
-  mount -t tmpfs tmpfs /mnt/run
-  mkdir /mnt/run/lock
   chroot /mnt /bin/bash --login
   mount /boot
   mount -a
@@ -1124,7 +1206,7 @@ Set a unique serial number on each virtual disk using libvirt or qemu
 To be able to use UEFI in guests (instead of only BIOS booting), run
 this on the host::
 
-  sudo apt install ovmf
+  sudo zypper install ovmf
   sudo vi /etc/libvirt/qemu.conf
 
 Uncomment these lines:
@@ -1147,3 +1229,10 @@ VMware
 
 - Set ``disk.EnableUUID = "TRUE"`` in the vmx file or vsphere configuration.
   Doing this ensures that ``/dev/disk`` aliases are created in the guest.
+
+
+External Links
+~~~~~~~~~~~~~~
+* `OpenZFS on openSUSE <https://en.opensuse.org/OpenZFS>`__
+* `ZenLinux Blog - How to Setup an openSUSE chroot
+  <https://blog.zenlinux.com/2011/02/how-to-setup-an-opensuse-chroot/comment-page-1/>`__
