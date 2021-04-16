@@ -10,3 +10,4 @@
    man/index
    msg/index
    License
+   Code_of_Conduct

@@ -698,4 +698,4 @@ Does OpenZFS have a Code of Conduct?
 ------------------------------------
 
 Yes, the OpenZFS community has a code of conduct. See the `Code of
-Conduct <https://openzfs.org/wiki/Code_of_Conduct>`__ for details.
+Conduct <https://openzfs.github.io/openzfs-docs/Code_of_Conduct.html>`__ for details.
