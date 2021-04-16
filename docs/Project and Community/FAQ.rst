@@ -629,29 +629,7 @@ the following contents:
 Licensing
 ---------
 
-ZFS is licensed under the Common Development and Distribution License
-(`CDDL <http://hub.opensolaris.org/bin/view/Main/opensolaris_license>`__),
-and the Linux kernel is licensed under the GNU General Public License
-Version 2 (`GPLv2 <http://www.gnu.org/licenses/gpl2.html>`__). While
-both are free open source licenses they are restrictive licenses. The
-combination of them causes problems because it prevents using pieces of
-code exclusively available under one license with pieces of code
-exclusively available under the other in the same binary. In the case of
-the kernel, this prevents us from distributing ZFS on Linux as part of
-the kernel binary. However, there is nothing in either license that
-prevents distributing it in the form of a binary module or in the form
-of source code.
-
-Additional reading and opinions:
-
--  `Software Freedom Law
-   Center <https://www.softwarefreedom.org/resources/2016/linux-kernel-cddl.html>`__
--  `Software Freedom
-   Conservancy <https://sfconservancy.org/blog/2016/feb/25/zfs-and-linux/>`__
--  `Free Software
-   Foundation <https://www.fsf.org/licensing/zfs-and-linux>`__
--  `Encouraging closed source
-   modules <http://www.networkworld.com/article/2301697/smb/encouraging-closed-source-modules-part-1--copyright-and-software.html>`__
+License information can be found `here <https://openzfs.github.io/openzfs-docs/License.html>`__.
 
 Reporting a problem
 -------------------
