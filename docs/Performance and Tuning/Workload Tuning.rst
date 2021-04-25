@@ -541,7 +541,7 @@ and are subject to significant sequential read workloads after creation.
 Database workloads
 ------------------
 
-Setting ``redundant_metadata=mostly`` can increase IOPS by at least a few
+Setting ``redundant_metadata=most`` can increase IOPS by at least a few
 percentage points by eliminating redundant metadata at the lowest level
 of the indirect block tree. This comes with the caveat that data loss
 will occur if a metadata block pointing to data blocks is corrupted and
