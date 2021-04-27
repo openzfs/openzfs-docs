@@ -83,6 +83,6 @@ repository can be installed as follows.
 
 .. _DKMS: https://en.wikipedia.org/wiki/Dynamic_Kernel_Module_Support
 .. _latest OpenZFS release: https://github.com/openzfs/zfs/releases/latest
-.. _zfs-release.fc31.noarch.rpm: https://zfsonlinux.org/fedora/zfs-release.fc31.noarch.rpm
 .. _zfs-release.fc32.noarch.rpm: https://zfsonlinux.org/fedora/zfs-release.fc32.noarch.rpm
 .. _zfs-release.fc33.noarch.rpm: https://zfsonlinux.org/fedora/zfs-release.fc33.noarch.rpm
+.. _zfs-release.fc34.noarch.rpm: https://zfsonlinux.org/fedora/zfs-release.fc34.noarch.rpm
