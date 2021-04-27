@@ -7,7 +7,7 @@ which does not provide a stable kABI. These packages track the official
 OpenZFS tags and are updated as new versions are released. Packages are
 available for the following configurations:
 
-| **Fedora Releases:** 31, 32, 33
+| **Fedora Releases:** 32, 33, 34
 | **Architectures:** x86_64
 
 .. note::
@@ -25,9 +25,9 @@ encouraged to verify the authenticity of the ZFS on Linux public key using
 the fingerprint listed here.
 
 | **Location:** /etc/pki/rpm-gpg/RPM-GPG-KEY-zfsonlinux
-| **Fedora 31 Package:** `zfs-release.fc31.noarch.rpm`_
 | **Fedora 32 Package:** `zfs-release.fc32.noarch.rpm`_
 | **Fedora 33 Package:** `zfs-release.fc33.noarch.rpm`_
+| **Fedora 34 Package:** `zfs-release.fc34.noarch.rpm`_
 | **Download from:**
   `pgp.mit.edu <https://pgp.mit.edu/pks/lookup?search=0xF14AB620&op=index&fingerprint=on>`__
 | **Fingerprint:** C93A FFFD 9F3F 7B03 C310 CEB6 A9D5 A1C0 F14A B620
