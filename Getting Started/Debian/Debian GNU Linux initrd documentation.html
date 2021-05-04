@@ -1,0 +1,355 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Debian GNU Linux initrd documentation &mdash; OpenZFS  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme_overrides.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/mandoc.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Fedora" href="../Fedora.html" />
+    <link rel="prev" title="Debian Stretch Root on ZFS" href="Debian Stretch Root on ZFS.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+          
+
+          
+            <a href="../../index.html">
+          
+
+          
+            
+            <img src="../../_static/logo_main.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Getting Started</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Arch Linux/index.html">Arch Linux</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Debian</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="index.html#installation">Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="index.html#root-on-zfs">Root on ZFS</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html#related-topics">Related topics</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Debian GNU Linux initrd documentation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Fedora.html">Fedora</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../FreeBSD.html">FreeBSD</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://wiki.gentoo.org/wiki/ZFS">Gentoo</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://nixos.wiki/wiki/NixOS_on_ZFS">NixOS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../openSUSE/index.html">openSUSE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../RHEL and CentOS.html">RHEL and CentOS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Ubuntu/index.html">Ubuntu</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../Project and Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Developer Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Performance and Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Basic Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../man/index.html">Man Pages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../License.html">License</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">OpenZFS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Getting Started</a> &raquo;</li>
+        
+          <li><a href="index.html">Debian</a> &raquo;</li>
+        
+      <li>Debian GNU Linux initrd documentation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/Getting Started/Debian/Debian GNU Linux initrd documentation.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="debian-gnu-linux-initrd-documentation">
+<h1>Debian GNU Linux initrd documentation<a class="headerlink" href="#debian-gnu-linux-initrd-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="supported-boot-parameters">
+<h2>Supported boot parameters<a class="headerlink" href="#supported-boot-parameters" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>rollback=&lt;on|yes|1&gt; Do a rollback of specified snapshot.</p></li>
+<li><p>zfs_debug=&lt;on|yes|1&gt; Debug the initrd script</p></li>
+<li><p>zfs_force=&lt;on|yes|1&gt; Force importing the pool. Should not be
+necessary.</p></li>
+<li><p>zfs=&lt;off|no|0&gt; Don’t try to import ANY pool, mount ANY filesystem or
+even load the module.</p></li>
+<li><p>rpool=&lt;pool&gt; Use this pool for root pool.</p></li>
+<li><p>bootfs=&lt;pool&gt;/&lt;dataset&gt; Use this dataset for root filesystem.</p></li>
+<li><p>root=&lt;pool&gt;/&lt;dataset&gt; Use this dataset for root filesystem.</p></li>
+<li><p>root=ZFS=&lt;pool&gt;/&lt;dataset&gt; Use this dataset for root filesystem.</p></li>
+<li><p>root=zfs:&lt;pool&gt;/&lt;dataset&gt; Use this dataset for root filesystem.</p></li>
+<li><p>root=zfs:AUTO Try to detect both pool and rootfs</p></li>
+</ul>
+<p>In all these cases, &lt;dataset&gt; could also be &lt;dataset&gt;&#64;&lt;snapshot&gt;.</p>
+<p>The reason there are so many supported boot options to get the root
+filesystem, is that there are a lot of different ways too boot ZFS out
+there, and I wanted to make sure I supported them all.</p>
+</div>
+<div class="section" id="pool-imports">
+<h2>Pool imports<a class="headerlink" href="#pool-imports" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="import-using-dev-disk-by">
+<h3>Import using /dev/disk/by-*<a class="headerlink" href="#import-using-dev-disk-by" title="Permalink to this headline">¶</a></h3>
+<p>The initrd will, if the variable USE_DISK_BY_ID is set in the file
+/etc/default/zfs, to import using the /dev/disk/by-* links. It will try
+to import in this order:</p>
+<ol class="arabic simple">
+<li><p>/dev/disk/by-vdev</p></li>
+<li><p>/dev/disk/by-*</p></li>
+<li><p>/dev</p></li>
+</ol>
+</div>
+<div class="section" id="import-using-cache-file">
+<h3>Import using cache file<a class="headerlink" href="#import-using-cache-file" title="Permalink to this headline">¶</a></h3>
+<p>If all of these imports fail (or if USE_DISK_BY_ID is unset), it will
+then try to import using the cache file.</p>
+</div>
+<div class="section" id="last-ditch-attempt-at-importing">
+<h3>Last ditch attempt at importing<a class="headerlink" href="#last-ditch-attempt-at-importing" title="Permalink to this headline">¶</a></h3>
+<p>If that ALSO fails, it will try one more time, without any -d or -c
+options.</p>
+</div>
+</div>
+<div class="section" id="booting">
+<h2>Booting<a class="headerlink" href="#booting" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="booting-from-snapshot">
+<h3>Booting from snapshot:<a class="headerlink" href="#booting-from-snapshot" title="Permalink to this headline">¶</a></h3>
+<p>Enter the snapshot for the root= parameter like in this example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>linux   /ROOT/debian-1@/boot/vmlinuz-3.2.0-4-amd64 root=ZFS=rpool/ROOT/debian-1@some_snapshot ro boot=zfs $bootfs quiet
+</pre></div>
+</div>
+<p>This will clone the snapshot <a class="reference external" href="mailto:rpool/ROOT/debian-1&#37;&#52;&#48;some_snapshot">rpool/ROOT/debian-1<span>&#64;</span>some_snapshot</a> into the
+filesystem rpool/ROOT/debian-1_some_snapshot and use that as root
+filesystem. The original filesystem and snapshot is left alone in this
+case.</p>
+<p><strong>BEWARE</strong> that it will first destroy, blindingly, the
+rpool/ROOT/debian-1_some_snapshot filesystem before trying to clone the
+snapshot into it again. So if you’ve booted from the same snapshot
+previously and done some changes in that root filesystem, they will be
+undone by the destruction of the filesystem.</p>
+</div>
+<div class="section" id="snapshot-rollback">
+<h3>Snapshot rollback<a class="headerlink" href="#snapshot-rollback" title="Permalink to this headline">¶</a></h3>
+<p>From version 0.6.4-1-3 it is now also possible to specify rollback=1 to
+do a rollback of the snapshot instead of cloning it. <strong>BEWARE</strong> that
+this will destroy <em>all</em> snapshots done after the specified snapshot!</p>
+</div>
+<div class="section" id="select-snapshot-dynamically">
+<h3>Select snapshot dynamically<a class="headerlink" href="#select-snapshot-dynamically" title="Permalink to this headline">¶</a></h3>
+<p>From version 0.6.4-1-3 it is now also possible to specify a NULL
+snapshot name (such as root=rpool/ROOT/debian-1&#64;) and if so, the initrd
+script will discover all snapshots below that filesystem (sans the at),
+and output a list of snapshot for the user to choose from.</p>
+</div>
+<div class="section" id="booting-from-native-encrypted-filesystem">
+<h3>Booting from native encrypted filesystem<a class="headerlink" href="#booting-from-native-encrypted-filesystem" title="Permalink to this headline">¶</a></h3>
+<p>Although there is currently no support for native encryption in ZFS On
+Linux, there is a patch floating around ‘out there’ and the initrd
+supports loading key and unlock such encrypted filesystem.</p>
+</div>
+<div class="section" id="separated-filesystems">
+<h3>Separated filesystems<a class="headerlink" href="#separated-filesystems" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="descended-filesystems">
+<h4>Descended filesystems<a class="headerlink" href="#descended-filesystems" title="Permalink to this headline">¶</a></h4>
+<p>If there are separate filesystems (for example a separate dataset for
+/usr), the snapshot boot code will try to find the snapshot under each
+filesystems and clone (or rollback) them.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rpool</span><span class="o">/</span><span class="n">ROOT</span><span class="o">/</span><span class="n">debian</span><span class="o">-</span><span class="mi">1</span><span class="nd">@some_snapshot</span>
+<span class="n">rpool</span><span class="o">/</span><span class="n">ROOT</span><span class="o">/</span><span class="n">debian</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="n">usr</span><span class="nd">@some_snapshot</span>
+</pre></div>
+</div>
+<p>These will create the following filesystems respectively (if not doing a
+rollback):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rpool</span><span class="o">/</span><span class="n">ROOT</span><span class="o">/</span><span class="n">debian</span><span class="o">-</span><span class="mi">1</span><span class="n">_some_snapshot</span>
+<span class="n">rpool</span><span class="o">/</span><span class="n">ROOT</span><span class="o">/</span><span class="n">debian</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="n">usr_some_snapshot</span>
+</pre></div>
+</div>
+<p>The initrd code will use the mountpoint option (if any) in the original
+(without the snapshot part) dataset to find <em>where</em> it should mount the
+dataset. Or it will use the name of the dataset below the root
+filesystem (rpool/ROOT/debian-1 in this example) for the mount point.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="../Fedora.html" class="btn btn-neutral float-right" title="Fedora" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="Debian Stretch Root on ZFS.html" class="btn btn-neutral float-left" title="Debian Stretch Root on ZFS" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, OpenZFS.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

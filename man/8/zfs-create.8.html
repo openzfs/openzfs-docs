@@ -1,0 +1,513 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>zfs-create.8 &mdash; OpenZFS  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme_overrides.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/mandoc.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="zfs-destroy.8" href="zfs-destroy.8.html" />
+    <link rel="prev" title="zfs-clone.8" href="zfs-clone.8.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+          
+
+          
+            <a href="../../index.html">
+          
+
+          
+            
+            <img src="../../_static/logo_main.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../Getting Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Project and Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Developer Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Performance and Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Basic Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Man Pages</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../1/index.html">User Commands (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../5/index.html">File Formats and Conventions (5)</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">System Administration Commands (8)</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="fsck.zfs.8.html">fsck.zfs.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mount.zfs.8.html">mount.zfs.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vdev_id.8.html">vdev_id.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zdb.8.html">zdb.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-allow.8.html">zfs-allow.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-bookmark.8.html">zfs-bookmark.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-change-key.8.html">zfs-change-key.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-clone.8.html">zfs-clone.8</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">zfs-create.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-destroy.8.html">zfs-destroy.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-diff.8.html">zfs-diff.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-get.8.html">zfs-get.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-groupspace.8.html">zfs-groupspace.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-hold.8.html">zfs-hold.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-inherit.8.html">zfs-inherit.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-jail.8.html">zfs-jail.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-list.8.html">zfs-list.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-load-key.8.html">zfs-load-key.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-mount.8.html">zfs-mount.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-program.8.html">zfs-program.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-project.8.html">zfs-project.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-projectspace.8.html">zfs-projectspace.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-promote.8.html">zfs-promote.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-receive.8.html">zfs-receive.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-recv.8.html">zfs-recv.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-redact.8.html">zfs-redact.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-release.8.html">zfs-release.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-rename.8.html">zfs-rename.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-rollback.8.html">zfs-rollback.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-send.8.html">zfs-send.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-set.8.html">zfs-set.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-share.8.html">zfs-share.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-snapshot.8.html">zfs-snapshot.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-unallow.8.html">zfs-unallow.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-unjail.8.html">zfs-unjail.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-unload-key.8.html">zfs-unload-key.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-unmount.8.html">zfs-unmount.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-upgrade.8.html">zfs-upgrade.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-userspace.8.html">zfs-userspace.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-wait.8.html">zfs-wait.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs.8.html">zfs.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs_ids_to_path.8.html">zfs_ids_to_path.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfsconcepts.8.html">zfsconcepts.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfsprops.8.html">zfsprops.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zgenhostid.8.html">zgenhostid.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zinject.8.html">zinject.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-add.8.html">zpool-add.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-attach.8.html">zpool-attach.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-checkpoint.8.html">zpool-checkpoint.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-clear.8.html">zpool-clear.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-create.8.html">zpool-create.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-destroy.8.html">zpool-destroy.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-detach.8.html">zpool-detach.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-events.8.html">zpool-events.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-export.8.html">zpool-export.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-get.8.html">zpool-get.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-history.8.html">zpool-history.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-import.8.html">zpool-import.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-initialize.8.html">zpool-initialize.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-iostat.8.html">zpool-iostat.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-labelclear.8.html">zpool-labelclear.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-list.8.html">zpool-list.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-offline.8.html">zpool-offline.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-online.8.html">zpool-online.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-reguid.8.html">zpool-reguid.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-remove.8.html">zpool-remove.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-reopen.8.html">zpool-reopen.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-replace.8.html">zpool-replace.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-resilver.8.html">zpool-resilver.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-scrub.8.html">zpool-scrub.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-set.8.html">zpool-set.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-split.8.html">zpool-split.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-status.8.html">zpool-status.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-sync.8.html">zpool-sync.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-trim.8.html">zpool-trim.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-upgrade.8.html">zpool-upgrade.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-wait.8.html">zpool-wait.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool.8.html">zpool.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool_influxdb.8.html">zpool_influxdb.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpoolconcepts.8.html">zpoolconcepts.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpoolprops.8.html">zpoolprops.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zstream.8.html">zstream.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zstreamdump.8.html">zstreamdump.8</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../License.html">License</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">OpenZFS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Man Pages</a> &raquo;</li>
+        
+          <li><a href="index.html">System Administration Commands (8)</a> &raquo;</li>
+        
+      <li>zfs-create.8</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/man/8/zfs-create.8.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="zfs-create-8">
+<h1>zfs-create.8<a class="headerlink" href="#zfs-create-8" title="Permalink to this headline">¶</a></h1>
+<div class="man_container"><table class="head">
+  <tr>
+    <td class="head-ltitle">ZFS-CREATE(8)</td>
+    <td class="head-vol">System Manager's Manual</td>
+    <td class="head-rtitle">ZFS-CREATE(8)</td>
+  </tr>
+</table>
+<div class="manual-text">
+<h1 class="Sh" title="Sh" id="NAME"><a class="permalink" href="#NAME">NAME</a></h1>
+<code class="Nm" title="Nm">zfs-create</code> &#x2014;
+<div class="Nd" title="Nd">Creates a new ZFS file system.</div>
+<h1 class="Sh" title="Sh" id="SYNOPSIS"><a class="permalink" href="#SYNOPSIS">SYNOPSIS</a></h1>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm" title="Nm">zfs</code></td>
+    <td><code class="Cm" title="Cm">create</code>
+      [<div class="Op"><code class="Fl" title="Fl">-Pnpuv</code></div>]
+      [<div class="Op"><code class="Fl" title="Fl">-o</code>
+      <var class="Ar" title="Ar">property</var>=<var class="Ar" title="Ar">value</var></div>]...
+      <var class="Ar" title="Ar">filesystem</var></td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm" title="Nm">zfs</code></td>
+    <td><code class="Cm" title="Cm">create</code>
+      [<div class="Op"><code class="Fl" title="Fl">-ps</code></div>]
+      [<div class="Op"><code class="Fl" title="Fl">-b</code>
+      <var class="Ar" title="Ar">blocksize</var></div>]
+      [<div class="Op"><code class="Fl" title="Fl">-o</code>
+      <var class="Ar" title="Ar">property</var>=<var class="Ar" title="Ar">value</var></div>]...
+      <code class="Fl" title="Fl">-V</code>
+      <var class="Ar" title="Ar">size</var>
+      <var class="Ar" title="Ar">volume</var></td>
+  </tr>
+</table>
+<h1 class="Sh" title="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h1>
+<dl class="Bl-tag">
+  <dt><code class="Nm" title="Nm">zfs</code>
+    <code class="Cm" title="Cm">create</code>
+    [<div class="Op"><code class="Fl" title="Fl">-Pnpuv</code></div>]
+    [<div class="Op"><code class="Fl" title="Fl">-o</code>
+    <var class="Ar" title="Ar">property</var>=<var class="Ar" title="Ar">value</var></div>]...
+    <var class="Ar" title="Ar">filesystem</var></dt>
+  <dd>Creates a new ZFS file system. The file system is automatically mounted
+      according to the <b class="Sy" title="Sy">mountpoint</b> property
+      inherited from the parent, unless the
+      <code class="Fl" title="Fl">-u</code> option is used.
+    <dl class="Bl-tag">
+      <dt><a class="permalink" href="#o"><code class="Fl" title="Fl" id="o">-o</code></a>
+        <var class="Ar" title="Ar">property</var>=<var class="Ar" title="Ar">value</var></dt>
+      <dd>Sets the specified property as if the command
+          <code class="Nm" title="Nm">zfs</code>
+          <code class="Cm" title="Cm">set</code>
+          <var class="Ar" title="Ar">property</var>=<var class="Ar" title="Ar">value</var>
+          was invoked at the same time the dataset was created. Any editable ZFS
+          property can also be set at creation time. Multiple
+          <code class="Fl" title="Fl">-o</code> options can be specified. An
+          error results if the same property is specified in multiple
+          <code class="Fl" title="Fl">-o</code> options.</dd>
+      <dt><a class="permalink" href="#p"><code class="Fl" title="Fl" id="p">-p</code></a></dt>
+      <dd>Creates all the non-existing parent datasets. Datasets created in this
+          manner are automatically mounted according to the
+          <b class="Sy" title="Sy">mountpoint</b> property inherited from their
+          parent. Any property specified on the command line using the
+          <code class="Fl" title="Fl">-o</code> option is ignored. If the target
+          filesystem already exists, the operation completes successfully.</dd>
+      <dt><a class="permalink" href="#n"><code class="Fl" title="Fl" id="n">-n</code></a></dt>
+      <dd>Do a dry-run (&#x201C;No-op&#x201D;) creation. No datasets will be
+          created. This is useful in conjunction with the
+          <code class="Fl" title="Fl">-v</code> or
+          <code class="Fl" title="Fl">-P</code> flags to validate properties
+          that are passed via <code class="Fl" title="Fl">-o</code> options and
+          those implied by other options. The actual dataset creation can still
+          fail due to insufficient privileges or available capacity.</dd>
+      <dt><a class="permalink" href="#P"><code class="Fl" title="Fl" id="P">-P</code></a></dt>
+      <dd>Print machine-parsable verbose information about the created dataset.
+          Each line of output contains a key and one or two values, all
+          separated by tabs. The <b class="Sy" title="Sy">create_ancestors</b>
+          and <b class="Sy" title="Sy">create</b> keys have
+          <i class="Em" title="Em">filesystem</i> as their only value. The
+          <b class="Sy" title="Sy">create_ancestors</b> key only appears if the
+          <code class="Fl" title="Fl">-p</code> option is used. The
+          <b class="Sy" title="Sy">property</b> key has two values, a property
+          name that property's value. The <b class="Sy" title="Sy">property</b>
+          key may appear zero or more times, once for each property that will be
+          set local to <i class="Em" title="Em">filesystem</i> due to the use of
+          the <code class="Fl" title="Fl">-o</code> option.</dd>
+      <dt><a class="permalink" href="#u"><code class="Fl" title="Fl" id="u">-u</code></a></dt>
+      <dd>Do not mount the newly created file system.</dd>
+      <dt><a class="permalink" href="#v"><code class="Fl" title="Fl" id="v">-v</code></a></dt>
+      <dd>Print verbose information about the created dataset.</dd>
+    </dl>
+  </dd>
+  <dt><code class="Nm" title="Nm">zfs</code>
+    <code class="Cm" title="Cm">create</code>
+    [<div class="Op"><code class="Fl" title="Fl">-ps</code></div>]
+    [<div class="Op"><code class="Fl" title="Fl">-b</code>
+    <var class="Ar" title="Ar">blocksize</var></div>]
+    [<div class="Op"><code class="Fl" title="Fl">-o</code>
+    <var class="Ar" title="Ar">property</var>=<var class="Ar" title="Ar">value</var></div>]...
+    <code class="Fl" title="Fl">-V</code> <var class="Ar" title="Ar">size</var>
+    <var class="Ar" title="Ar">volume</var></dt>
+  <dd>Creates a volume of the given size. The volume is exported as a block
+      device in <span class="Pa" title="Pa">/dev/zvol/path</span>, where
+      <i class="Em" title="Em">path</i> is the name of the volume in the ZFS
+      namespace. The size represents the logical size as exported by the device.
+      By default, a reservation of equal size is created.
+    <div class="Pp"></div>
+    <var class="Ar" title="Ar">size</var> is automatically rounded up to the
+      nearest multiple of the <b class="Sy" title="Sy">blocksize</b>.
+    <dl class="Bl-tag">
+      <dt><a class="permalink" href="#b"><code class="Fl" title="Fl" id="b">-b</code></a>
+        <var class="Ar" title="Ar">blocksize</var></dt>
+      <dd>Equivalent to <code class="Fl" title="Fl">-o</code>
+          <b class="Sy" title="Sy">volblocksize</b>=<var class="Ar" title="Ar">blocksize</var>.
+          If this option is specified in conjunction with
+          <code class="Fl" title="Fl">-o</code>
+          <b class="Sy" title="Sy">volblocksize</b>, the resulting behavior is
+          undefined.</dd>
+      <dt><a class="permalink" href="#o_2"><code class="Fl" title="Fl" id="o_2">-o</code></a>
+        <var class="Ar" title="Ar">property</var>=<var class="Ar" title="Ar">value</var></dt>
+      <dd>Sets the specified property as if the
+          <code class="Nm" title="Nm">zfs</code>
+          <code class="Cm" title="Cm">set</code>
+          <var class="Ar" title="Ar">property</var>=<var class="Ar" title="Ar">value</var>
+          command was invoked at the same time the dataset was created. Any
+          editable ZFS property can also be set at creation time. Multiple
+          <code class="Fl" title="Fl">-o</code> options can be specified. An
+          error results if the same property is specified in multiple
+          <code class="Fl" title="Fl">-o</code> options.</dd>
+      <dt><a class="permalink" href="#p_2"><code class="Fl" title="Fl" id="p_2">-p</code></a></dt>
+      <dd>Creates all the non-existing parent datasets. Datasets created in this
+          manner are automatically mounted according to the
+          <b class="Sy" title="Sy">mountpoint</b> property inherited from their
+          parent. Any property specified on the command line using the
+          <code class="Fl" title="Fl">-o</code> option is ignored. If the target
+          filesystem already exists, the operation completes successfully.</dd>
+      <dt><a class="permalink" href="#s"><code class="Fl" title="Fl" id="s">-s</code></a></dt>
+      <dd>Creates a sparse volume with no reservation. See
+          <b class="Sy" title="Sy">volsize</b> in the
+          <i class="Em" title="Em">Native Properties</i> section of
+          <a href="../8/zfsprops.8.html" class="Xr">zfsprops(8)</a> for more information about
+          sparse volumes.</dd>
+      <dt><a class="permalink" href="#n_2"><code class="Fl" title="Fl" id="n_2">-n</code></a></dt>
+      <dd>Do a dry-run (&#x201C;No-op&#x201D;) creation. No datasets will be
+          created. This is useful in conjunction with the
+          <code class="Fl" title="Fl">-v</code> or
+          <code class="Fl" title="Fl">-P</code> flags to validate properties
+          that are passed via <code class="Fl" title="Fl">-o</code> options and
+          those implied by other options. The actual dataset creation can still
+          fail due to insufficient privileges or available capacity.</dd>
+      <dt><a class="permalink" href="#P_2"><code class="Fl" title="Fl" id="P_2">-P</code></a></dt>
+      <dd>Print machine-parsable verbose information about the created dataset.
+          Each line of output contains a key and one or two values, all
+          separated by tabs. The <b class="Sy" title="Sy">create_ancestors</b>
+          and <b class="Sy" title="Sy">create</b> keys have
+          <i class="Em" title="Em">volume</i> as their only value. The
+          <b class="Sy" title="Sy">create_ancestors</b> key only appears if the
+          <code class="Fl" title="Fl">-p</code> option is used. The
+          <b class="Sy" title="Sy">property</b> key has two values, a property
+          name that property's value. The <b class="Sy" title="Sy">property</b>
+          key may appear zero or more times, once for each property that will be
+          set local to <i class="Em" title="Em">volume</i> due to the use of the
+          <code class="Fl" title="Fl">-b</code> or
+          <code class="Fl" title="Fl">-o</code> options, as well as
+          <b class="Sy" title="Sy">refreservation</b> if the volume is not
+          sparse.</dd>
+      <dt><a class="permalink" href="#v_2"><code class="Fl" title="Fl" id="v_2">-v</code></a></dt>
+      <dd>Print verbose information about the created dataset.</dd>
+    </dl>
+  </dd>
+</dl>
+<h2 class="Ss" title="Ss" id="ZFS_Volumes_as_Swap"><a class="permalink" href="#ZFS_Volumes_as_Swap">ZFS
+  Volumes as Swap</a></h2>
+ZFS volumes may be used as swap devices. After creating the volume with the
+  <code class="Nm" title="Nm">zfs</code>
+  <code class="Cm" title="Cm">create</code>
+  <code class="Fl" title="Fl">-V</code> command set up and enable the swap area
+  using the <a class="Xr" title="Xr">mkswap(8)</a> and
+  <a class="Xr" title="Xr">swapon(8)</a> commands. Do not swap to a file on a
+  ZFS file system. A ZFS swap file configuration is not supported.
+<h1 class="Sh" title="Sh" id="SEE_ALSO"><a class="permalink" href="#SEE_ALSO">SEE
+  ALSO</a></h1>
+<a href="../8/zfs-destroy.8.html" class="Xr">zfs-destroy(8)</a>,
+  <a href="../8/zfs-list.8.html" class="Xr">zfs-list(8)</a>,
+  <a href="../8/zpool-create.8.html" class="Xr">zpool-create(8)</a></div>
+<table class="foot">
+  <tr>
+    <td class="foot-date">December 1, 2020</td>
+    <td class="foot-os">Debian</td>
+  </tr>
+</table>
+</div></div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="zfs-destroy.8.html" class="btn btn-neutral float-right" title="zfs-destroy.8" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="zfs-clone.8.html" class="btn btn-neutral float-left" title="zfs-clone.8" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, OpenZFS.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,475 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>vdev_id.conf.5 &mdash; OpenZFS  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme_overrides.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/mandoc.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="zfs-events.5" href="zfs-events.5.html" />
+    <link rel="prev" title="spl-module-parameters.5" href="spl-module-parameters.5.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+          
+
+          
+            <a href="../../index.html">
+          
+
+          
+            
+            <img src="../../_static/logo_main.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../Getting Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Project and Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Developer Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Performance and Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Basic Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Man Pages</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../1/index.html">User Commands (1)</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">File Formats and Conventions (5)</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="spl-module-parameters.5.html">spl-module-parameters.5</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">vdev_id.conf.5</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-events.5.html">zfs-events.5</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-module-parameters.5.html">zfs-module-parameters.5</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-features.5.html">zpool-features.5</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../8/index.html">System Administration Commands (8)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../License.html">License</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">OpenZFS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Man Pages</a> &raquo;</li>
+        
+          <li><a href="index.html">File Formats and Conventions (5)</a> &raquo;</li>
+        
+      <li>vdev_id.conf.5</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/man/5/vdev_id.conf.5.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="vdev-id-conf-5">
+<h1>vdev_id.conf.5<a class="headerlink" href="#vdev-id-conf-5" title="Permalink to this headline">¶</a></h1>
+<div class="man_container"><table class="head">
+  <tr>
+    <td class="head-ltitle">VDEV_ID.CONF(5)</td>
+    <td class="head-vol">File Formats Manual</td>
+    <td class="head-rtitle">VDEV_ID.CONF(5)</td>
+  </tr>
+</table>
+<div class="manual-text">
+<h1 class="Sh" title="Sh" id="NAME"><a class="permalink" href="#NAME">NAME</a></h1>
+vdev_id.conf - Configuration file for vdev_id
+<h1 class="Sh" title="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h1>
+<i>vdev_id.conf</i> is the configuration file for <b>vdev_id</b>(8). It controls
+  the default behavior of <b>vdev_id</b>(8) while it is mapping a disk device
+  name to an alias.
+<div class="Pp"></div>
+The <i>vdev_id.conf</i> file uses a simple format consisting of a keyword
+  followed by one or more values on a single line. Any line not beginning with a
+  recognized keyword is ignored. Comments may optionally begin with a hash
+  character.
+<div class="Pp"></div>
+The following keywords and values are used.
+<dl class="Bl-tag">
+  <dt><i>alias</i> &lt;name&gt; &lt;devlink&gt;</dt>
+  <dd>Maps a device link in the /dev directory hierarchy to a new device name.
+      The udev rule defining the device link must have run prior to
+      <b>vdev_id</b>(8). A defined alias takes precedence over a
+      topology-derived name, but the two naming methods can otherwise coexist.
+      For example, one might name drives in a JBOD with the sas_direct topology
+      while naming an internal L2ARC device with an alias.
+    <div class="Pp"></div>
+     <i>name</i> - the name of the link to the device that will by created in
+      /dev/disk/by-vdev.
+    <div class="Pp"></div>
+     <i>devlink</i> - the name of the device link that has already been defined
+      by udev. This may be an absolute path or the base filename.
+    <div class="Pp"></div>
+  </dd>
+</dl>
+<dl class="Bl-tag">
+  <dt><i>channel</i> [pci_slot] &lt;port&gt; &lt;name&gt;</dt>
+  <dd>Maps a physical path to a channel name (typically representing a single
+      disk enclosure).
+    <div class="Pp"></div>
+  </dd>
+</dl>
+<dl class="Bl-tag">
+  <dt><i>enclosure_symlinks</i> &lt;yes|no&gt;</dt>
+  <dd>Additionally create /dev/by-enclosure symlinks to the disk enclosure sg
+      devices using the naming scheme from vdev_id.conf.
+      <i>enclosure_symlinks</i> is only allowed for sas_direct mode.</dd>
+</dl>
+<dl class="Bl-tag">
+  <dt><i>enclosure_symlinks_prefix</i> &lt;prefix&gt;</dt>
+  <dd>Specify the prefix for the enclosure symlinks in the form of:
+    <div class="Pp"></div>
+    /dev/by-enclosure/&lt;prefix&gt;-&lt;channel&gt;&lt;num&gt;
+    <div class="Pp"></div>
+    Defaults to &quot;enc&quot; if not specified.</dd>
+</dl>
+<dl class="Bl-tag">
+  <dt><i>pci_slot</i> - specifies the PCI SLOT of the HBA</dt>
+  <dd>hosting the disk enclosure being mapped, as found in the output of
+      <b>lspci</b>(8). This argument is not used in sas_switch mode.
+    <div class="Pp"></div>
+     <i>port</i> - specifies the numeric identifier of the HBA or SAS switch
+      port connected to the disk enclosure being mapped.
+    <div class="Pp"></div>
+     <i>name</i> - specifies the name of the channel.
+    <div class="Pp"></div>
+  </dd>
+</dl>
+<dl class="Bl-tag">
+  <dt><i>slot</i> &lt;old&gt; &lt;new&gt; [channel]</dt>
+  <dd>Maps a disk slot number as reported by the operating system to an
+      alternative slot number. If the <i>channel</i> parameter is specified then
+      the mapping is only applied to slots in the named channel, otherwise the
+      mapping is applied to all channels. The first-specified <i>slot</i> rule
+      that can match a slot takes precedence. Therefore a channel-specific
+      mapping for a given slot should generally appear before a generic mapping
+      for the same slot. In this way a custom mapping may be applied to a
+      particular channel and a default mapping applied to the others.
+    <div class="Pp"></div>
+  </dd>
+</dl>
+<dl class="Bl-tag">
+  <dt><i>multipath</i> &lt;yes|no&gt;</dt>
+  <dd>Specifies whether <b>vdev_id</b>(8) will handle only dm-multipath devices.
+      If set to &quot;yes&quot; then <b>vdev_id</b>(8) will examine the first
+      running component disk of a dm-multipath device as listed by the
+      <b>multipath</b>(8) command to determine the physical path.</dd>
+</dl>
+<dl class="Bl-tag">
+  <dt><i>topology</i> &lt;sas_direct|sas_switch&gt;</dt>
+  <dd>Identifies a physical topology that governs how physical paths are mapped
+      to channels.
+    <div class="Pp"></div>
+     <i>sas_direct</i> - in this mode a channel is uniquely identified by a PCI
+      slot and a HBA port number
+    <div class="Pp"></div>
+     <i>sas_switch</i> - in this mode a channel is uniquely identified by a SAS
+      switch port number
+    <div class="Pp"></div>
+  </dd>
+</dl>
+<dl class="Bl-tag">
+  <dt><i>phys_per_port</i> &lt;num&gt;</dt>
+  <dd>Specifies the number of PHY devices associated with a SAS HBA port or SAS
+      switch port. <b>vdev_id</b>(8) internally uses this value to determine
+      which HBA or switch port a device is connected to. The default is 4.
+    <div class="Pp"></div>
+  </dd>
+</dl>
+<dl class="Bl-tag">
+  <dt><i>slot</i> &lt;bay|phy|port|id|lun|ses&gt;</dt>
+  <dd>Specifies from which element of a SAS identifier the slot number is taken.
+      The default is bay.
+    <div class="Pp"></div>
+     <i>bay</i> - read the slot number from the bay identifier.
+    <div class="Pp"></div>
+     <i>phy</i> - read the slot number from the phy identifier.
+    <div class="Pp"></div>
+     <i>port</i> - use the SAS port as the slot number.
+    <div class="Pp"></div>
+     <i>id</i> - use the scsi id as the slot number.
+    <div class="Pp"></div>
+     <i>lun</i> - use the scsi lun as the slot number.
+    <div class="Pp"></div>
+     <i>ses</i> - use the SCSI Enclosure Services (SES) enclosure device slot
+      number, as reported by <b>sg_ses</b>(8). This is intended for use only on
+      systems where <i>bay</i> is unsupported, noting that <i>port</i> and
+      <i>id</i> may be unstable across disk replacement.</dd>
+</dl>
+<h1 class="Sh" title="Sh" id="EXAMPLES"><a class="permalink" href="#EXAMPLES">EXAMPLES</a></h1>
+A non-multipath configuration with direct-attached SAS enclosures and an
+  arbitrary slot re-mapping.
+<div class="Pp"></div>
+<pre>
+	multipath     no
+	topology      sas_direct
+	phys_per_port 4
+	slot          bay
+<div class="Pp"></div>
+	#       PCI_SLOT HBA PORT  CHANNEL NAME
+	channel 85:00.0  1         A
+	channel 85:00.0  0         B
+	channel 86:00.0  1         C
+	channel 86:00.0  0         D
+<div class="Pp"></div>
+	# Custom mapping for Channel A
+<div class="Pp"></div>
+	#    Linux      Mapped
+	#    Slot       Slot      Channel
+	slot 1          7         A
+	slot 2          10        A
+	slot 3          3         A
+	slot 4          6         A
+<div class="Pp"></div>
+	# Default mapping for B, C, and D
+<div class="Pp"></div>
+	slot 1          4
+	slot 2          2
+	slot 3          1
+	slot 4          3
+</pre>
+<div class="Pp"></div>
+A SAS-switch topology. Note that the <i>channel</i> keyword takes only two
+  arguments in this example.
+<div class="Pp"></div>
+<pre>
+	topology      sas_switch
+<div class="Pp"></div>
+	#       SWITCH PORT  CHANNEL NAME
+	channel 1            A
+	channel 2            B
+	channel 3            C
+	channel 4            D
+</pre>
+<div class="Pp"></div>
+A multipath configuration. Note that channel names have multiple definitions -
+  one per physical path.
+<div class="Pp"></div>
+<pre>
+	multipath yes
+<div class="Pp"></div>
+	#       PCI_SLOT HBA PORT  CHANNEL NAME
+	channel 85:00.0  1         A
+	channel 85:00.0  0         B
+	channel 86:00.0  1         A
+	channel 86:00.0  0         B
+</pre>
+<div class="Pp"></div>
+A configuration with enclosure_symlinks enabled.
+<div class="Pp"></div>
+<pre>
+	multipath yes
+	enclosure_symlinks yes
+<div class="Pp"></div>
+	#          PCI_ID      HBA PORT     CHANNEL NAME
+	channel    05:00.0     1            U
+	channel    05:00.0     0            L
+	channel    06:00.0     1            U
+	channel    06:00.0     0            L
+</pre>
+In addition to the disks symlinks, this configuration will create:
+<div class="Pp"></div>
+<pre>
+	/dev/by-enclosure/enc-L0
+	/dev/by-enclosure/enc-L1
+	/dev/by-enclosure/enc-U0
+	/dev/by-enclosure/enc-U1
+</pre>
+<div class="Pp"></div>
+A configuration using device link aliases.
+<div class="Pp"></div>
+<pre>
+	#     by-vdev
+	#     name     fully qualified or base name of device link
+	alias d1       /dev/disk/by-id/wwn-0x5000c5002de3b9ca
+	alias d2       wwn-0x5000c5002def789e
+</pre>
+<h1 class="Sh" title="Sh" id="FILES"><a class="permalink" href="#FILES">FILES</a></h1>
+<dl class="Bl-tag">
+  <dt><i>/etc/zfs/vdev_id.conf</i></dt>
+  <dd>The configuration file for <b>vdev_id</b>(8).</dd>
+</dl>
+<h1 class="Sh" title="Sh" id="SEE_ALSO"><a class="permalink" href="#SEE_ALSO">SEE
+  ALSO</a></h1>
+<b>vdev_id</b>(8)</div>
+<table class="foot">
+  <tr>
+    <td class="foot-date">August 24, 2020</td>
+    <td class="foot-os">OpenZFS</td>
+  </tr>
+</table>
+</div></div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="zfs-events.5.html" class="btn btn-neutral float-right" title="zfs-events.5" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="spl-module-parameters.5.html" class="btn btn-neutral float-left" title="spl-module-parameters.5" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, OpenZFS.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

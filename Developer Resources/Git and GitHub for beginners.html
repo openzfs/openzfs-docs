@@ -1,0 +1,421 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Git and GitHub for beginners (ZoL edition) &mdash; OpenZFS  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/mandoc.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Performance and Tuning" href="../Performance and Tuning/index.html" />
+    <link rel="prev" title="OpenZFS Exceptions" href="OpenZFS Exceptions.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/logo_main.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Getting Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Project and Community/index.html">Project and Community</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Developer Resources</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Custom Packages.html">Custom Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Building ZFS.html">Building ZFS</a></li>
+<li class="toctree-l2"><a class="reference external" href="http://build.zfsonlinux.org/tgrid?length=100&amp;branch=master&amp;category=Platforms&amp;rev_order=desc">Buildbot Status</a></li>
+<li class="toctree-l2"><a class="reference external" href="http://build.zfsonlinux.org/known-issues.html">Buildbot Issue Tracking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Buildbot Options.html">Buildbot Options</a></li>
+<li class="toctree-l2"><a class="reference external" href="http://build.zfsonlinux.org/openzfs-tracking.html">OpenZFS Tracking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="OpenZFS Patches.html">OpenZFS Patches</a></li>
+<li class="toctree-l2"><a class="reference internal" href="OpenZFS Exceptions.html">OpenZFS Exceptions</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://openzfs.org/wiki/Developer_resources">OpenZFS Documentation</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Git and GitHub for beginners (ZoL edition)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#first-time-setup">First time setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cloning-the-initial-repository">Cloning the initial repository</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#preparing-and-making-changes">Preparing and making changes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#testing-your-patches-before-pushing">Testing your patches before pushing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#committing-your-changes-to-be-pushed">Committing your changes to be pushed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pushing-and-creating-the-pull-request">Pushing and creating the pull request</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#correcting-issues-with-your-pull-request">Correcting issues with your pull request</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#maintaining-your-repository">Maintaining your repository</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#final-words">Final words</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Performance and Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Basic Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../man/index.html">Man Pages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../License.html">License</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">OpenZFS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Developer Resources</a> &raquo;</li>
+        
+      <li>Git and GitHub for beginners (ZoL edition)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/Developer Resources/Git and GitHub for beginners.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="git-and-github-for-beginners-zol-edition">
+<h1>Git and GitHub for beginners (ZoL edition)<a class="headerlink" href="#git-and-github-for-beginners-zol-edition" title="Permalink to this headline">¶</a></h1>
+<p>This is a very basic rundown of how to use Git and GitHub to make
+changes.</p>
+<p>Recommended reading: <a class="reference external" href="https://github.com/zfsonlinux/zfs/blob/master/.github/CONTRIBUTING.md">ZFS on Linux
+CONTRIBUTING.md</a></p>
+<div class="section" id="first-time-setup">
+<h2>First time setup<a class="headerlink" href="#first-time-setup" title="Permalink to this headline">¶</a></h2>
+<p>If you’ve never used Git before, you’ll need a little setup to start
+things off.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">config</span> <span class="o">--</span><span class="k">global</span> <span class="n">user</span><span class="o">.</span><span class="n">name</span> <span class="s2">&quot;My Name&quot;</span>
+<span class="n">git</span> <span class="n">config</span> <span class="o">--</span><span class="k">global</span> <span class="n">user</span><span class="o">.</span><span class="n">email</span> <span class="n">myemail</span><span class="nd">@noreply</span><span class="o">.</span><span class="n">non</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="cloning-the-initial-repository">
+<h2>Cloning the initial repository<a class="headerlink" href="#cloning-the-initial-repository" title="Permalink to this headline">¶</a></h2>
+<p>The easiest way to get started is to click the fork icon at the top of
+the main repository page. From there you need to download a copy of the
+forked repository to your computer:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/&lt;</span><span class="n">your</span><span class="o">-</span><span class="n">account</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;/</span><span class="n">zfs</span><span class="o">.</span><span class="n">git</span>
+</pre></div>
+</div>
+<p>This sets the “origin” repository to your fork. This will come in handy
+when creating pull requests. To make pulling from the “upstream”
+repository as changes are made, it is very useful to establish the
+upstream repository as another remote (man git-remote):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">zfs</span>
+<span class="n">git</span> <span class="n">remote</span> <span class="n">add</span> <span class="n">upstream</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">zfsonlinux</span><span class="o">/</span><span class="n">zfs</span><span class="o">.</span><span class="n">git</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="preparing-and-making-changes">
+<h2>Preparing and making changes<a class="headerlink" href="#preparing-and-making-changes" title="Permalink to this headline">¶</a></h2>
+<p>In order to make changes it is recommended to make a branch, this lets
+you work on several unrelated changes at once. It is also not
+recommended to make changes to the master branch unless you own the
+repository.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">checkout</span> <span class="o">-</span><span class="n">b</span> <span class="n">my</span><span class="o">-</span><span class="n">new</span><span class="o">-</span><span class="n">branch</span>
+</pre></div>
+</div>
+<p>From here you can make your changes and move on to the next step.</p>
+<p>Recommended reading: <a class="reference external" href="https://www.cis.upenn.edu/~lee/06cse480/data/cstyle.ms.pdf">C Style and Coding Standards for
+SunOS</a>,
+<a class="reference external" href="https://github.com/zfsonlinux/zfs/wiki/Developer-Resources">ZFS on Linux Developer
+Resources</a>,
+<a class="reference external" href="https://openzfs.org/wiki/Developer_resources">OpenZFS Developer
+Resources</a></p>
+</div>
+<div class="section" id="testing-your-patches-before-pushing">
+<h2>Testing your patches before pushing<a class="headerlink" href="#testing-your-patches-before-pushing" title="Permalink to this headline">¶</a></h2>
+<p>Before committing and pushing, you may want to test your patches. There
+are several tests you can run against your branch such as style
+checking, and functional tests. All pull requests go through these tests
+before being pushed to the main repository, however testing locally
+takes the load off the build/test servers. This step is optional but
+highly recommended, however the test suite should be run on a virtual
+machine or a host that currently does not use ZFS. You may need to
+install <code class="docutils literal notranslate"><span class="pre">shellcheck</span></code> and <code class="docutils literal notranslate"><span class="pre">flake8</span></code> to run the <code class="docutils literal notranslate"><span class="pre">checkstyle</span></code>
+correctly.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sh</span> <span class="n">autogen</span><span class="o">.</span><span class="n">sh</span>
+<span class="o">./</span><span class="n">configure</span>
+<span class="n">make</span> <span class="n">checkstyle</span>
+</pre></div>
+</div>
+<p>Recommended reading: <a class="reference external" href="https://github.com/zfsonlinux/zfs/wiki/Building-ZFS">Building
+ZFS</a>, <a class="reference external" href="https://github.com/zfsonlinux/zfs/blob/master/tests/README.md">ZFS Test
+Suite
+README</a></p>
+</div>
+<div class="section" id="committing-your-changes-to-be-pushed">
+<h2>Committing your changes to be pushed<a class="headerlink" href="#committing-your-changes-to-be-pushed" title="Permalink to this headline">¶</a></h2>
+<p>When you are done making changes to your branch there are a few more
+steps before you can make a pull request.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">commit</span> <span class="o">--</span><span class="nb">all</span> <span class="o">--</span><span class="n">signoff</span>
+</pre></div>
+</div>
+<p>This command opens an editor and adds all unstaged files from your
+branch. Here you need to describe your change and add a few things:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Please enter the commit message for your changes. Lines starting</span>
+<span class="c1"># with &#39;#&#39; will be ignored, and an empty message aborts the commit.</span>
+<span class="c1"># On branch my-new-branch</span>
+<span class="c1"># Changes to be committed:</span>
+<span class="c1">#   (use &quot;git reset HEAD &lt;file&gt;...&quot; to unstage)</span>
+<span class="c1">#</span>
+<span class="c1">#   modified:   hello.c</span>
+<span class="c1">#</span>
+</pre></div>
+</div>
+<p>The first thing we need to add is the commit message. This is what is
+displayed on the git log, and should be a short description of the
+change. By style guidelines, this has to be less than 72 characters in
+length.</p>
+<p>Underneath the commit message you can add a more descriptive text to
+your commit. The lines in this section have to be less than 72
+characters.</p>
+<p>When you are done, the commit should look like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Add</span> <span class="n">hello</span> <span class="n">command</span>
+
+<span class="n">This</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">test</span> <span class="n">commit</span> <span class="k">with</span> <span class="n">a</span> <span class="n">descriptive</span> <span class="n">commit</span> <span class="n">message</span><span class="o">.</span>
+<span class="n">This</span> <span class="n">message</span> <span class="n">can</span> <span class="n">be</span> <span class="n">more</span> <span class="n">than</span> <span class="n">one</span> <span class="n">line</span> <span class="k">as</span> <span class="n">shown</span> <span class="n">here</span><span class="o">.</span>
+
+<span class="n">Signed</span><span class="o">-</span><span class="n">off</span><span class="o">-</span><span class="n">by</span><span class="p">:</span> <span class="n">My</span> <span class="n">Name</span> <span class="o">&lt;</span><span class="n">myemail</span><span class="nd">@noreply</span><span class="o">.</span><span class="n">non</span><span class="o">&gt;</span>
+<span class="n">Closes</span> <span class="c1">#9998</span>
+<span class="n">Issue</span> <span class="c1">#9999</span>
+<span class="c1"># Please enter the commit message for your changes. Lines starting</span>
+<span class="c1"># with &#39;#&#39; will be ignored, and an empty message aborts the commit.</span>
+<span class="c1"># On branch my-new-branch</span>
+<span class="c1"># Changes to be committed:</span>
+<span class="c1">#   (use &quot;git reset HEAD &lt;file&gt;...&quot; to unstage)</span>
+<span class="c1">#</span>
+<span class="c1">#   modified:   hello.c</span>
+<span class="c1">#</span>
+</pre></div>
+</div>
+<p>You can also reference issues and pull requests if you are filing a pull
+request for an existing issue as shown above. Save and exit the editor
+when you are done.</p>
+</div>
+<div class="section" id="pushing-and-creating-the-pull-request">
+<h2>Pushing and creating the pull request<a class="headerlink" href="#pushing-and-creating-the-pull-request" title="Permalink to this headline">¶</a></h2>
+<p>Home stretch. You’ve made your change and made the commit. Now it’s time
+to push it.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">push</span> <span class="o">--</span><span class="nb">set</span><span class="o">-</span><span class="n">upstream</span> <span class="n">origin</span> <span class="n">my</span><span class="o">-</span><span class="n">new</span><span class="o">-</span><span class="n">branch</span>
+</pre></div>
+</div>
+<p>This should ask you for your github credentials and upload your changes
+to your repository.</p>
+<p>The last step is to either go to your repository or the upstream
+repository on GitHub and you should see a button for making a new pull
+request for your recently committed branch.</p>
+</div>
+<div class="section" id="correcting-issues-with-your-pull-request">
+<h2>Correcting issues with your pull request<a class="headerlink" href="#correcting-issues-with-your-pull-request" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes things don’t always go as planned and you may need to update
+your pull request with a correction to either your commit message, or
+your changes. This can be accomplished by re-pushing your branch. If you
+need to make code changes or <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span></code> a file, you can do those now,
+along with the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">commit</span> <span class="o">--</span><span class="n">amend</span>
+<span class="n">git</span> <span class="n">push</span> <span class="o">--</span><span class="n">force</span>
+</pre></div>
+</div>
+<p>This will return you to the commit editor screen, and push your changes
+over top of the old ones. Do note that this will restart the process of
+any build/test servers currently running and excessively pushing can
+cause delays in processing of all pull requests.</p>
+</div>
+<div class="section" id="maintaining-your-repository">
+<h2>Maintaining your repository<a class="headerlink" href="#maintaining-your-repository" title="Permalink to this headline">¶</a></h2>
+<p>When you wish to make changes in the future you will want to have an
+up-to-date copy of the upstream repository to make your changes on. Here
+is how you keep updated:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">checkout</span> <span class="n">master</span>
+<span class="n">git</span> <span class="n">pull</span> <span class="n">upstream</span> <span class="n">master</span>
+<span class="n">git</span> <span class="n">push</span> <span class="n">origin</span> <span class="n">master</span>
+</pre></div>
+</div>
+<p>This will make sure you are on the master branch of the repository, grab
+the changes from upstream, then push them back to your repository.</p>
+</div>
+<div class="section" id="final-words">
+<h2>Final words<a class="headerlink" href="#final-words" title="Permalink to this headline">¶</a></h2>
+<p>This is a very basic introduction to Git and GitHub, but should get you
+on your way to contributing to many open source projects. Not all
+projects have style requirements and some may have different processes
+to getting changes committed so please refer to their documentation to
+see if you need to do anything different. One topic we have not touched
+on is the <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">rebase</span></code> command which is a little more advanced for
+this wiki article.</p>
+<p>Additional resources: <a class="reference external" href="https://help.github.com/">Github Help</a>,
+<a class="reference external" href="https://www.atlassian.com/git/tutorials">Atlassian Git Tutorials</a></p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="../Performance and Tuning/index.html" class="btn btn-neutral float-right" title="Performance and Tuning" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="OpenZFS Exceptions.html" class="btn btn-neutral float-left" title="OpenZFS Exceptions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, OpenZFS.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

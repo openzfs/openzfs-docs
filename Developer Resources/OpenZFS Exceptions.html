@@ -1,0 +1,1509 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>OpenZFS Exceptions &mdash; OpenZFS  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/mandoc.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Git and GitHub for beginners (ZoL edition)" href="Git and GitHub for beginners.html" />
+    <link rel="prev" title="OpenZFS Patches" href="OpenZFS Patches.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/logo_main.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Getting Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Project and Community/index.html">Project and Community</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Developer Resources</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Custom Packages.html">Custom Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Building ZFS.html">Building ZFS</a></li>
+<li class="toctree-l2"><a class="reference external" href="http://build.zfsonlinux.org/tgrid?length=100&amp;branch=master&amp;category=Platforms&amp;rev_order=desc">Buildbot Status</a></li>
+<li class="toctree-l2"><a class="reference external" href="http://build.zfsonlinux.org/known-issues.html">Buildbot Issue Tracking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Buildbot Options.html">Buildbot Options</a></li>
+<li class="toctree-l2"><a class="reference external" href="http://build.zfsonlinux.org/openzfs-tracking.html">OpenZFS Tracking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="OpenZFS Patches.html">OpenZFS Patches</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">OpenZFS Exceptions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#format">Format:</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference external" href="https://openzfs.org/wiki/Developer_resources">OpenZFS Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Git and GitHub for beginners.html">Git and GitHub for beginners (ZoL edition)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Performance and Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Basic Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../man/index.html">Man Pages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../License.html">License</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">OpenZFS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Developer Resources</a> &raquo;</li>
+        
+      <li>OpenZFS Exceptions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/Developer Resources/OpenZFS Exceptions.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="openzfs-exceptions">
+<h1>OpenZFS Exceptions<a class="headerlink" href="#openzfs-exceptions" title="Permalink to this headline">¶</a></h1>
+<p>Commit exceptions used to explicitly reference a given Linux commit.
+These exceptions are useful for a variety of reasons.</p>
+<p><strong>This page is used to generate</strong>
+<a class="reference external" href="http://build.zfsonlinux.org/openzfs-tracking.html">OpenZFS Tracking</a>
+<strong>page.</strong></p>
+<div class="section" id="format">
+<h2>Format:<a class="headerlink" href="#format" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;openzfs</span> <span class="pre">issue&gt;|-|&lt;comment&gt;</span></code> - The OpenZFS commit isn’t applicable
+to Linux, or the OpenZFS -&gt; ZFS on Linux commit matching is unable to
+associate the related commits due to lack of information (denoted by
+a -).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;openzfs</span> <span class="pre">issue&gt;|&lt;commit&gt;|&lt;comment&gt;</span></code> - The fix was merged to Linux
+prior to their being an OpenZFS issue.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;openzfs</span> <span class="pre">issue&gt;|!|&lt;comment&gt;</span></code> - The commit is applicable but not
+applied for the reason described in the comment.</p></li>
+</ul>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 29%" />
+<col style="width: 44%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>OpenZFS issue id</p></th>
+<th class="head"><p>status/ZFS commit</p></th>
+<th class="head"><p>comment</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>11453</p></td>
+<td><p>!</p></td>
+<td><p>check_disk() on illumos
+isn’t available on ZoL /
+OpenZFS 2.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>11276</p></td>
+<td><p>da68988</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>11052</p></td>
+<td><p>2efea7c</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>11051</p></td>
+<td><p>3b61ca3</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>10853</p></td>
+<td><p>8dc2197</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>10844</p></td>
+<td><p>61c3391</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>10842</p></td>
+<td><p>d10b2f1</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>10841</p></td>
+<td><p>944a372</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>10809</p></td>
+<td><p>ee36c70</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>10808</p></td>
+<td><p>2ef0f8c</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>10701</p></td>
+<td><p>0091d66</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>10601</p></td>
+<td><p>cc99f27</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>10573</p></td>
+<td><p>48d3eb4</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>10572</p></td>
+<td><p>edc1e71</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>10566</p></td>
+<td><p>ab7615d</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>10554</p></td>
+<td><p>bec1067</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>10500</p></td>
+<td><p>03916905</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>10449</p></td>
+<td><p>379ca9c</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>10406</p></td>
+<td><p>da2feb4</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>10154</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Not applicable to Linux</p></td>
+</tr>
+<tr class="row-even"><td><p>10067</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>The only ZFS change was to
+zfs remap, which was
+removed on Linux.</p></td>
+</tr>
+<tr class="row-odd"><td><p>9884</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Not applicable to Linux</p></td>
+</tr>
+<tr class="row-even"><td><p>9851</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Not applicable to Linux</p></td>
+</tr>
+<tr class="row-odd"><td><p>9691</p></td>
+<td><p>d9b4bf0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>9683</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Not applicable to Linux due
+to devids not being used</p></td>
+</tr>
+<tr class="row-odd"><td><p>9680</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Applied and rolled back in
+OpenZFS, additional changes
+needed.</p></td>
+</tr>
+<tr class="row-even"><td><p>9672</p></td>
+<td><p>29445fe3</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>9647</p></td>
+<td><p>a448a25</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>9626</p></td>
+<td><p>59e6e7ca</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>9635</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Not applicable to Linux</p></td>
+</tr>
+<tr class="row-even"><td><p>9623</p></td>
+<td><p>22448f08</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>9621</p></td>
+<td><p>305bc4b3</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>9539</p></td>
+<td><p>5228cf01</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>9512</p></td>
+<td><p>b4555c77</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>9487</p></td>
+<td><p>48fbb9dd</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>9466</p></td>
+<td><p>272b5d73</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>9440</p></td>
+<td><p>f664f1e</p></td>
+<td><p>Illumos ticket 9440 never
+landed in openzfs/openzfs,
+but in ZoL / OpenZFS 2.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>9433</p></td>
+<td><p>0873bb63</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>9421</p></td>
+<td><p>64c1dcef</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>9237</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Introduced by 8567 which
+was never applied to Linux</p></td>
+</tr>
+<tr class="row-even"><td><p>9194</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Not applicable the ‘-o
+ashift=value’ option is
+provided on Linux</p></td>
+</tr>
+<tr class="row-odd"><td><p>9077</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Not applicable to Linux</p></td>
+</tr>
+<tr class="row-even"><td><p>9027</p></td>
+<td><p>4a5d7f82</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>9018</p></td>
+<td><p>3ec34e55</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>8984</p></td>
+<td><p>!</p></td>
+<td><p>WIP to support NFSv4 ACLs</p></td>
+</tr>
+<tr class="row-odd"><td><p>8969</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Not applicable to Linux</p></td>
+</tr>
+<tr class="row-even"><td><p>8942</p></td>
+<td><p>650258d7</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>8941</p></td>
+<td><p>390d679a</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>8862</p></td>
+<td><p>3b9edd7</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>8858</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Not applicable to Linux</p></td>
+</tr>
+<tr class="row-even"><td><p>8856</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Not applicable to Linux due
+to Encryption (b525630)</p></td>
+</tr>
+<tr class="row-odd"><td><p>8809</p></td>
+<td><p>!</p></td>
+<td><p>Adding libfakekernel needs
+to be done by refactoring
+existing code.</p></td>
+</tr>
+<tr class="row-even"><td><p>8727</p></td>
+<td><p>b525630</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>8713</p></td>
+<td><p>871e0732</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>8661</p></td>
+<td><p>1ce23dca</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>8648</p></td>
+<td><p>f763c3d1</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>8602</p></td>
+<td><p>a032ac4</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>8601</p></td>
+<td><p>d99a015</p></td>
+<td><p>Equivalent fix included in
+initial commit</p></td>
+</tr>
+<tr class="row-even"><td><p>8590</p></td>
+<td><p>935e2c2</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>8569</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>This change isn’t relevant
+for Linux.</p></td>
+</tr>
+<tr class="row-even"><td><p>8567</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>An alternate fix was
+applied for Linux.</p></td>
+</tr>
+<tr class="row-odd"><td><p>8552</p></td>
+<td><p>935e2c2</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>8521</p></td>
+<td><p>ee6370a7</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>8502</p></td>
+<td><p>!</p></td>
+<td><p>Apply when porting OpenZFS
+7955</p></td>
+</tr>
+<tr class="row-even"><td><p>9485</p></td>
+<td><p>1258bd7</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>8477</p></td>
+<td><p>92e43c1</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>8454</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>An alternate fix was
+applied for Linux.</p></td>
+</tr>
+<tr class="row-odd"><td><p>8423</p></td>
+<td><p>50c957f</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>8408</p></td>
+<td><p>5f1346c</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>8379</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>This change isn’t relevant
+for Linux.</p></td>
+</tr>
+<tr class="row-even"><td><p>8376</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>This change isn’t relevant
+for Linux.</p></td>
+</tr>
+<tr class="row-odd"><td><p>8311</p></td>
+<td><p>!</p></td>
+<td><p>Need to assess
+applicability to Linux.</p></td>
+</tr>
+<tr class="row-even"><td><p>8304</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>This change isn’t relevant
+for Linux.</p></td>
+</tr>
+<tr class="row-odd"><td><p>8300</p></td>
+<td><p>44f09cd</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>8265</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>The large_dnode feature has
+been implemented for Linux.</p></td>
+</tr>
+<tr class="row-odd"><td><p>8168</p></td>
+<td><p>78d95ea</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>8138</p></td>
+<td><p>44f09cd</p></td>
+<td><p>The spelling fix to the zfs
+man page came in with the
+mdoc conversion.</p></td>
+</tr>
+<tr class="row-odd"><td><p>8108</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>An equivalent Linux
+specific fix was made.</p></td>
+</tr>
+<tr class="row-even"><td><p>8068</p></td>
+<td><p>a1d477c24c</p></td>
+<td><p>merged with zfs device
+evacuation/removal</p></td>
+</tr>
+<tr class="row-odd"><td><p>8064</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>This change isn’t relevant
+for Linux.</p></td>
+</tr>
+<tr class="row-even"><td><p>8022</p></td>
+<td><p>e55ebf6</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>8021</p></td>
+<td><p>7657def</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>8013</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>The change is illumos
+specific and not applicable
+for Linux.</p></td>
+</tr>
+<tr class="row-odd"><td><p>7982</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>The change is illumos
+specific and not applicable
+for Linux.</p></td>
+</tr>
+<tr class="row-even"><td><p>7970</p></td>
+<td><p>c30e58c</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>7956</p></td>
+<td><p>cda0317</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>7955</p></td>
+<td><p>!</p></td>
+<td><p>Need to assess
+applicability to Linux. If
+porting, apply 8502.</p></td>
+</tr>
+<tr class="row-odd"><td><p>7869</p></td>
+<td><p>df7eecc</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>7816</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>The change is illumos
+specific and not applicable
+for Linux.</p></td>
+</tr>
+<tr class="row-odd"><td><p>7803</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>This functionality is
+provided by
+<code class="docutils literal notranslate"><span class="pre">upda</span>
+<span class="pre">te_vdev_config_dev_strs()</span></code>
+on Linux.</p></td>
+</tr>
+<tr class="row-even"><td><p>7801</p></td>
+<td><p>0eef1bd</p></td>
+<td><p>Commit f25efb3 in
+openzfs/master has a small
+change for linting which is
+being ported.</p></td>
+</tr>
+<tr class="row-odd"><td><p>7779</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>The change isn’t relevant,
+<code class="docutils literal notranslate"><span class="pre">zfs_ctldir.c</span></code> was
+rewritten for Linux.</p></td>
+</tr>
+<tr class="row-even"><td><p>7740</p></td>
+<td><p>32d41fb</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>7739</p></td>
+<td><p>582cc014</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>7730</p></td>
+<td><p>e24e62a</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>7710</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>None of the illumos build
+system is used under Linux.</p></td>
+</tr>
+<tr class="row-even"><td><p>7602</p></td>
+<td><p>44f09cd</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>7591</p></td>
+<td><p>541a090</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>7586</p></td>
+<td><p>c443487</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>7570</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Due to differences in the
+block layer all discards
+are handled asynchronously
+under Linux. This
+functionality could be
+ported but it’s unclear to
+what purpose.</p></td>
+</tr>
+<tr class="row-even"><td><p>7542</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>The Linux libshare code
+differs significantly from
+the upstream OpenZFS code.
+Since this change doesn’t
+address a Linux specific
+issue it doesn’t need to be
+ported. The eventual plan
+is to retire all of the
+existing libshare code and
+use the ZED to more
+flexibly control filesystem
+sharing.</p></td>
+</tr>
+<tr class="row-odd"><td><p>7512</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>None of the illumos build
+system is used under Linux.</p></td>
+</tr>
+<tr class="row-even"><td><p>7497</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>DTrace is isn’t readily
+available under Linux.</p></td>
+</tr>
+<tr class="row-odd"><td><p>7446</p></td>
+<td><p>!</p></td>
+<td><p>Need to assess
+applicability to Linux.</p></td>
+</tr>
+<tr class="row-even"><td><p>7430</p></td>
+<td><p>68cbd56</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>7402</p></td>
+<td><p>690fe64</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>7345</p></td>
+<td><p>058ac9b</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>7278</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Dynamic ARC tuning is
+handled slightly
+differently under Linux and
+this case is covered by
+arc_tuning_update()</p></td>
+</tr>
+<tr class="row-even"><td><p>7238</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>zvol_swap test already
+disabled in ZoL</p></td>
+</tr>
+<tr class="row-odd"><td><p>7194</p></td>
+<td><p>d7958b4</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>7164</p></td>
+<td><p>b1b85c87</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>7041</p></td>
+<td><p>33c0819</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>7016</p></td>
+<td><p>d3c2ae1</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>6914</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Under Linux the
+arc_meta_limit can be tuned
+with the
+zfs_arc_meta_limit_percent
+module option.</p></td>
+</tr>
+<tr class="row-even"><td><p>6875</p></td>
+<td><p>!</p></td>
+<td><p>WIP to support NFSv4 ACLs</p></td>
+</tr>
+<tr class="row-odd"><td><p>6843</p></td>
+<td><p>f5f087e</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>6841</p></td>
+<td><p>4254acb</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>6781</p></td>
+<td><p>15313c5</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>6765</p></td>
+<td><p>!</p></td>
+<td><p>WIP to support NFSv4 ACLs</p></td>
+</tr>
+<tr class="row-odd"><td><p>6764</p></td>
+<td><p>!</p></td>
+<td><p>WIP to support NFSv4 ACLs</p></td>
+</tr>
+<tr class="row-even"><td><p>6763</p></td>
+<td><p>!</p></td>
+<td><p>WIP to support NFSv4 ACLs</p></td>
+</tr>
+<tr class="row-odd"><td><p>6762</p></td>
+<td><p>!</p></td>
+<td><p>WIP to support NFSv4 ACLs</p></td>
+</tr>
+<tr class="row-even"><td><p>6648</p></td>
+<td><p>6bb24f4</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>6578</p></td>
+<td><p>6bb24f4</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>6577</p></td>
+<td><p>6bb24f4</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>6575</p></td>
+<td><p>6bb24f4</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>6568</p></td>
+<td><p>6bb24f4</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>6528</p></td>
+<td><p>6bb24f4</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>6494</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>The <code class="docutils literal notranslate"><span class="pre">vdev_disk.c</span></code> and
+<code class="docutils literal notranslate"><span class="pre">vdev_file.c</span></code> files have
+been reworked extensively
+for Linux. The proposed
+changes are not needed.</p></td>
+</tr>
+<tr class="row-odd"><td><p>6468</p></td>
+<td><p>6bb24f4</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>6465</p></td>
+<td><p>6bb24f4</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>6434</p></td>
+<td><p>472e7c6</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>6421</p></td>
+<td><p>ca0bf58</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>6418</p></td>
+<td><p>131cc95</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>6391</p></td>
+<td><p>ee06391</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>6390</p></td>
+<td><p>85802aa</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>6388</p></td>
+<td><p>0de7c55</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>6386</p></td>
+<td><p>485c581</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>6385</p></td>
+<td><p>f3ad9cd</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>6369</p></td>
+<td><p>6bb24f4</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>6368</p></td>
+<td><p>2024041</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>6346</p></td>
+<td><p>058ac9b</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>6334</p></td>
+<td><p>1a04bab</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>6290</p></td>
+<td><p>017da6</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>6250</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Linux handles crash dumps
+in a fundamentally
+different way than Illumos.
+The proposed changes are
+not needed.</p></td>
+</tr>
+<tr class="row-odd"><td><p>6249</p></td>
+<td><p>6bb24f4</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>6248</p></td>
+<td><p>6bb24f4</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>6220</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>The b_thawed debug code was
+unused under Linux and
+removed.</p></td>
+</tr>
+<tr class="row-even"><td><p>6209</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>The Linux user space mutex
+implementation is based on
+phtread primitives.</p></td>
+</tr>
+<tr class="row-odd"><td><p>6095</p></td>
+<td><p>f866a4ea</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>6091</p></td>
+<td><p>c11f100</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>6037</p></td>
+<td><p>a8bd6dc</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>5984</p></td>
+<td><p>480f626</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>5966</p></td>
+<td><p>6bb24f4</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>5961</p></td>
+<td><p>22872ff</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>5882</p></td>
+<td><p>83e9986</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>5815</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>This patch could be adapted
+if needed use equivalent
+Linux functionality.</p></td>
+</tr>
+<tr class="row-odd"><td><p>5770</p></td>
+<td><p>c3275b5</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>5769</p></td>
+<td><p>dd26aa5</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>5768</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>The change isn’t relevant,
+<code class="docutils literal notranslate"><span class="pre">zfs_ctldir.c</span></code> was
+rewritten for Linux.</p></td>
+</tr>
+<tr class="row-even"><td><p>5766</p></td>
+<td><p>4dd1893</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>5693</p></td>
+<td><p>0f7d2a4</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>5692</p></td>
+<td><p>!</p></td>
+<td><p>This functionality should
+be ported in such a way
+that it can be integrated
+with <code class="docutils literal notranslate"><span class="pre">filefrag(8)</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>5684</p></td>
+<td><p>6bb24f4</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>5410</p></td>
+<td><p>0bf8501</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>5409</p></td>
+<td><p>b23d543</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>5379</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>This particular issue never
+impacted Linux due to the
+need for a modified
+zfs_putpage()
+implementation.</p></td>
+</tr>
+<tr class="row-odd"><td><p>5316</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>The illumos idmap facility
+isn’t available under
+Linux. This patch could
+still be applied to
+minimize code delta or all
+HAVE_IDMAP chunks could be
+removed on Linux for better
+readability.</p></td>
+</tr>
+<tr class="row-even"><td><p>5313</p></td>
+<td><p>ec8501e</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>5312</p></td>
+<td><p>!</p></td>
+<td><p>This change should be made
+but the ideal time to do it
+is when the spl repository
+is folded in to the zfs
+repository (planned for
+0.8). At this time we’ll
+want to cleanup many of the
+includes.</p></td>
+</tr>
+<tr class="row-even"><td><p>5219</p></td>
+<td><p>ef56b07</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>5179</p></td>
+<td><p>3f4058c</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>5149</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Equivalent Linux
+functionality is provided
+by the
+<code class="docutils literal notranslate"><span class="pre">zvol_max_discard_blocks</span></code>
+module option.</p></td>
+</tr>
+<tr class="row-odd"><td><p>5148</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Discards are handled
+differently under Linux,
+there is no DKIOCFREE
+ioctl.</p></td>
+</tr>
+<tr class="row-even"><td><p>5136</p></td>
+<td><p>e8b96c6</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>4752</p></td>
+<td><p>aa9af22</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>4745</p></td>
+<td><p>411bf20</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>4698</p></td>
+<td><p>4fcc437</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>4620</p></td>
+<td><p>6bb24f4</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>4573</p></td>
+<td><p>10b7549</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>4571</p></td>
+<td><p>6e1b9d0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>4570</p></td>
+<td><p>b1d13a6</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>4391</p></td>
+<td><p>78e2739</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>4465</p></td>
+<td><p>cda0317</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>4263</p></td>
+<td><p>6bb24f4</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>4242</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Neither vnodes or their
+associated events exist
+under Linux.</p></td>
+</tr>
+<tr class="row-even"><td><p>4206</p></td>
+<td><p>2820bc4</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>4188</p></td>
+<td><p>2e7b765</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>4181</p></td>
+<td><p>44f09cd</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>4161</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>The Linux user space
+reader/writer
+implementation is based on
+phtread primitives.</p></td>
+</tr>
+<tr class="row-even"><td><p>4128</p></td>
+<td><p>!</p></td>
+<td><p>The
+ldi_ev_register_callbacks()
+interface doesn’t exist
+under Linux. It may be
+possible to receive similar
+notifications via the scsi
+error handlers or possibly
+a different interface.</p></td>
+</tr>
+<tr class="row-odd"><td><p>4072</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>None of the illumos build
+system is used under Linux.</p></td>
+</tr>
+<tr class="row-even"><td><p>3947</p></td>
+<td><p>7f9d994</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>3928</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Neither vnodes or their
+associated events exist
+under Linux.</p></td>
+</tr>
+<tr class="row-even"><td><p>3871</p></td>
+<td><p>d1d7e268</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>3747</p></td>
+<td><p>090ff09</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>3705</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>The Linux implementation
+uses the lz4 workspace kmem
+cache to resolve the stack
+issue.</p></td>
+</tr>
+<tr class="row-odd"><td><p>3606</p></td>
+<td><p>c5b247f</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>3580</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Linux provides generic
+ioctl handlers get/set
+block device information.</p></td>
+</tr>
+<tr class="row-odd"><td><p>3543</p></td>
+<td><p>8dca0a9</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>3512</p></td>
+<td><p>67629d0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>3507</p></td>
+<td><p>43a696e</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>3444</p></td>
+<td><p>6bb24f4</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>3371</p></td>
+<td><p>44f09cd</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>3311</p></td>
+<td><p>6bb24f4</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>3301</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>The Linux implementation of
+<code class="docutils literal notranslate"><span class="pre">vdev_disk.c</span></code> does not
+include this comment.</p></td>
+</tr>
+<tr class="row-even"><td><p>3258</p></td>
+<td><p>9d81146</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>3254</p></td>
+<td><p>!</p></td>
+<td><p>WIP to support NFSv4 ACLs</p></td>
+</tr>
+<tr class="row-even"><td><p>3246</p></td>
+<td><p>cc92e9d</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>2933</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>None of the illumos build
+system is used under Linux.</p></td>
+</tr>
+<tr class="row-even"><td><p>2897</p></td>
+<td><p>fb82700</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>2665</p></td>
+<td><p>32a9872</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>2130</p></td>
+<td><p>460a021</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>1974</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>This change was entirely
+replaced in the ARC
+restructuring.</p></td>
+</tr>
+<tr class="row-even"><td><p>1898</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>The zfs_putpage() function
+was rewritten to properly
+integrate with the Linux
+VM.</p></td>
+</tr>
+<tr class="row-odd"><td><p>1700</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Not applicable to Linux,
+the discard implementation
+is entirely different.</p></td>
+</tr>
+<tr class="row-even"><td><p>1618</p></td>
+<td><p>ca67b33</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>1337</p></td>
+<td><p>2402458</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>1126</p></td>
+<td><p>e43b290</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>763</p></td>
+<td><p>3cee226</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>742</p></td>
+<td><p>!</p></td>
+<td><p>WIP to support NFSv4 ACLs</p></td>
+</tr>
+<tr class="row-odd"><td><p>701</p></td>
+<td><p>460a021</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>348</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>The Linux implementation of
+<code class="docutils literal notranslate"><span class="pre">vdev_disk.c</span></code> must have
+this differently.</p></td>
+</tr>
+<tr class="row-odd"><td><p>243</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Manual updates have been
+made separately for Linux.</p></td>
+</tr>
+<tr class="row-even"><td><p>184</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>The zfs_putpage() function
+was rewritten to properly
+integrate with the Linux
+VM.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="Git and GitHub for beginners.html" class="btn btn-neutral float-right" title="Git and GitHub for beginners (ZoL edition)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="OpenZFS Patches.html" class="btn btn-neutral float-left" title="OpenZFS Patches" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, OpenZFS.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,595 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Arch Linux &mdash; OpenZFS  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme_overrides.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/mandoc.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Arch Linux Root on ZFS" href="Arch Linux Root on ZFS.html" />
+    <link rel="prev" title="Getting Started" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+          
+
+          
+            <a href="../../index.html">
+          
+
+          
+            
+            <img src="../../_static/logo_main.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Getting Started</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Arch Linux</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#support">Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#zfs-linux">zfs-linux*</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#zfs-dkms">zfs-dkms</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#installation">Installation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#archzfs-repo">archzfs repo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#zfs-linux-package">zfs-linux* package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#zfs-dkms-package">zfs-dkms package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#zfs-dkms-compatible-kernel">zfs-dkms compatible kernel</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#live-image">Live Image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#root-on-zfs">Root on ZFS</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Arch Linux Root on ZFS.html">Arch Linux Root on ZFS</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Debian/index.html">Debian</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Fedora.html">Fedora</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../FreeBSD.html">FreeBSD</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://wiki.gentoo.org/wiki/ZFS">Gentoo</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://nixos.wiki/wiki/NixOS_on_ZFS">NixOS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../openSUSE/index.html">openSUSE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../RHEL and CentOS.html">RHEL and CentOS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Ubuntu/index.html">Ubuntu</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../Project and Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Developer Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Performance and Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Basic Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../man/index.html">Man Pages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../License.html">License</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">OpenZFS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Getting Started</a> &raquo;</li>
+        
+      <li>Arch Linux</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/Getting Started/Arch Linux/index.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="arch-linux">
+<h1>Arch Linux<a class="headerlink" href="#arch-linux" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="table-of-contents">
+<p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#support" id="id1">Support</a></p></li>
+<li><p><a class="reference internal" href="#overview" id="id2">Overview</a></p>
+<ul>
+<li><p><a class="reference internal" href="#zfs-linux" id="id3">zfs-linux*</a></p></li>
+<li><p><a class="reference internal" href="#zfs-dkms" id="id4">zfs-dkms</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#installation" id="id5">Installation</a></p>
+<ul>
+<li><p><a class="reference internal" href="#archzfs-repo" id="id6">archzfs repo</a></p></li>
+<li><p><a class="reference internal" href="#zfs-linux-package" id="id7">zfs-linux* package</a></p></li>
+<li><p><a class="reference internal" href="#zfs-dkms-package" id="id8">zfs-dkms package</a></p></li>
+<li><p><a class="reference internal" href="#zfs-dkms-compatible-kernel" id="id9">zfs-dkms compatible kernel</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#live-image" id="id10">Live Image</a></p></li>
+<li><p><a class="reference internal" href="#root-on-zfs" id="id11">Root on ZFS</a></p></li>
+</ul>
+</div>
+<div class="section" id="support">
+<h2><a class="toc-backref" href="#id1">Support</a><a class="headerlink" href="#support" title="Permalink to this headline">¶</a></h2>
+<p>If you need help, reach out to the community using the <a class="reference internal" href="../../Project and Community/Mailing Lists.html#mailing-lists"><span class="std std-ref">Mailing Lists</span></a> or IRC at
+<a class="reference external" href="irc://irc.freenode.net/#zfsonlinux">#zfsonlinux</a> on <a class="reference external" href="https://freenode.net/">freenode</a>. If you have a bug report or feature request
+related to this HOWTO, please <a class="reference external" href="https://github.com/openzfs/openzfs-docs/issues/new?body=&#64;ne9z,%20I%20have%20the%20following%20issue%20with%20the%20Arch%20Linux%20ZFS%20HOWTO:">file a new issue and mention &#64;ne9z</a>.</p>
+</div>
+<div class="section" id="overview">
+<h2><a class="toc-backref" href="#id2">Overview</a><a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>Due to license incompatibility,
+ZFS support is provided by out-of-tree kernel modules.</p>
+<p>ZFS kernel modules can be installed with:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">zfs-linux*</span></code>, provides prebuilt ZFS kernel modules</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">zfs-dkms</span></code>, provides Dynamic Kernel Module Service support</p></li>
+</ul>
+<div class="section" id="zfs-linux">
+<h3><a class="toc-backref" href="#id3">zfs-linux*</a><a class="headerlink" href="#zfs-linux" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">zfs-linux*</span></code> packages are the most
+risk-free way to obtain ZFS support.</p>
+<p>Prebuilt modules are kernel-specific, i.e.,
+module built for 5.11.1 is incompatible
+with 5.11.2. For this reason, <code class="docutils literal notranslate"><span class="pre">zfs-linux*</span></code>
+depends on a particular kernel version.
+Example: if linux-5.11.2 is available, but
+<code class="docutils literal notranslate"><span class="pre">zfs-linux-5.11.2</span></code> is not available, you can not
+upgrade to linux-5.11.2 until <code class="docutils literal notranslate"><span class="pre">zfs-linux-5.11.2</span></code>
+came out.</p>
+<p><code class="docutils literal notranslate"><span class="pre">zfs-linux*</span></code> is recommended for users who are using stock kernels
+from official Arch Linux repo and can accept kernel update delays for
+up to a few days.</p>
+</div>
+<div class="section" id="zfs-dkms">
+<h3><a class="toc-backref" href="#id4">zfs-dkms</a><a class="headerlink" href="#zfs-dkms" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">zfs-dkms</span></code> package is the more versatile choice.
+After installation, Dynamic Kernel Module Support
+will automatically build ZFS kernel modules for installed
+kernels and does not interfere with kernel updates.</p>
+<p>However, there are several disadvantages:</p>
+<ul class="simple">
+<li><p>somewhat slow to build</p></li>
+<li><p>little warning when DKMS build fails</p></li>
+<li><p>does not check kernel compatibility, manual checks required</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">zfs-dkms</span></code> is required for users who are using custom kernels or
+do not accept delays for kernel updates. This package is also required for derivative
+distros such as <a class="reference external" href="https://artixlinux.org">Artix Linux</a>.</p>
+</div>
+</div>
+<div class="section" id="installation">
+<h2><a class="toc-backref" href="#id5">Installation</a><a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>If you want to use ZFS as your root filesystem, see the <a class="reference internal" href="#root-on-zfs">Root on ZFS</a>
+links below instead.</p>
+<div class="section" id="archzfs-repo">
+<h3><a class="toc-backref" href="#id6">archzfs repo</a><a class="headerlink" href="#archzfs-repo" title="Permalink to this headline">¶</a></h3>
+<p>ZFS packages are provided by the third-party
+<a class="reference external" href="https://github.com/archzfs/archzfs">archzfs repository</a>.
+You can use it as follows.</p>
+<ol class="arabic">
+<li><p>Import keys of archzfs repository:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>curl -L https://archzfs.com/archzfs.gpg <span class="p">|</span>  pacman-key -a -
+curl -L https://git.io/JtQpl <span class="p">|</span> xargs -i<span class="o">{}</span> pacman-key --lsign-key <span class="o">{}</span>
+curl -L https://git.io/JtQp4 &gt; /etc/pacman.d/mirrorlist-archzfs
+</pre></div>
+</div>
+</li>
+<li><p>Add archzfs repository:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>tee -a /etc/pacman.conf <span class="s">&lt;&lt;- &#39;EOF&#39;</span>
+
+<span class="s">#[archzfs-testing]</span>
+<span class="s">#Include = /etc/pacman.d/mirrorlist-archzfs</span>
+
+<span class="s">[archzfs]</span>
+<span class="s">Include = /etc/pacman.d/mirrorlist-archzfs</span>
+<span class="s">EOF</span>
+</pre></div>
+</div>
+</li>
+<li><p>Update pacman database:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pacman -Sy
+</pre></div>
+</div>
+</li>
+</ol>
+</div>
+<div class="section" id="zfs-linux-package">
+<h3><a class="toc-backref" href="#id7">zfs-linux* package</a><a class="headerlink" href="#zfs-linux-package" title="Permalink to this headline">¶</a></h3>
+<p>When using unmodified Arch Linux kernels,
+prebuilt <code class="docutils literal notranslate"><span class="pre">zfs-linux*</span></code> packages are available.
+You can also switch between <code class="docutils literal notranslate"><span class="pre">zfs-linux*</span></code> and <code class="docutils literal notranslate"><span class="pre">zfs-dkms</span></code>
+packages later.</p>
+<p>For other kernels or Arch-based distros, use zfs-dkms package.</p>
+<ol class="arabic">
+<li><p>Check kernel variant:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nv">INST_LINVAR</span><span class="o">=</span><span class="k">$(</span>sed <span class="s1">&#39;s|.*linux|linux|&#39;</span> /proc/cmdline <span class="p">|</span> sed <span class="s1">&#39;s|.img||g&#39;</span> <span class="p">|</span> awk <span class="s1">&#39;{ print $1 }&#39;</span><span class="k">)</span>
+</pre></div>
+</div>
+</li>
+<li><p>Check compatible kernel version:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nv">INST_LINVER</span><span class="o">=</span><span class="k">$(</span>pacman -Si zfs-<span class="si">${</span><span class="nv">INST_LINVAR</span><span class="si">}</span> <span class="p">|</span> grep <span class="s1">&#39;Depends On&#39;</span> <span class="p">|</span> sed <span class="s2">&quot;s|.*</span><span class="si">${</span><span class="nv">INST_LINVAR</span><span class="si">}</span><span class="s2">=||&quot;</span> <span class="p">|</span> awk <span class="s1">&#39;{ print $1 }&#39;</span><span class="k">)</span>
+</pre></div>
+</div>
+</li>
+<li><p>Install kernel. Download from archive if kernel is not available:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="o">[</span> <span class="si">${</span><span class="nv">INST_LINVER</span><span class="si">}</span> <span class="o">==</span> <span class="se">\</span>
+<span class="k">$(</span>pacman -Si <span class="si">${</span><span class="nv">INST_LINVAR</span><span class="si">}</span> <span class="p">|</span> grep Version <span class="p">|</span> awk <span class="s1">&#39;{ print $3 }&#39;</span><span class="k">)</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+ pacman -S --noconfirm --needed <span class="si">${</span><span class="nv">INST_LINVAR</span><span class="si">}</span>
+<span class="k">else</span>
+ pacman -U --noconfirm --needed <span class="se">\</span>
+ https://archive.archlinux.org/packages/l/<span class="si">${</span><span class="nv">INST_LINVAR</span><span class="si">}</span>/<span class="si">${</span><span class="nv">INST_LINVAR</span><span class="si">}</span>-<span class="si">${</span><span class="nv">INST_LINVER</span><span class="si">}</span>-x86_64.pkg.tar.zst
+<span class="k">fi</span>
+</pre></div>
+</div>
+</li>
+<li><p>Install zfs-linux*:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pacman -Sy zfs-<span class="si">${</span><span class="nv">INST_LINVAR</span><span class="si">}</span>
+</pre></div>
+</div>
+</li>
+<li><p>Ignore kernel updates:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sed -i <span class="s1">&#39;s/#IgnorePkg/IgnorePkg/&#39;</span> /etc/pacman.conf
+sed -i <span class="s2">&quot;/^IgnorePkg/ s/</span>$<span class="s2">/ </span><span class="si">${</span><span class="nv">INST_LINVAR</span><span class="si">}</span><span class="s2"> </span><span class="si">${</span><span class="nv">INST_LINVAR</span><span class="si">}</span><span class="s2">-headers zfs-</span><span class="si">${</span><span class="nv">INST_LINVAR</span><span class="si">}</span><span class="s2"> zfs-utils/&quot;</span> /etc/pacman.conf
+</pre></div>
+</div>
+</li>
+<li><p>To update kernel, run:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nv">INST_LINVAR</span><span class="o">=</span><span class="k">$(</span>sed <span class="s1">&#39;s|.*linux|linux|&#39;</span> /proc/cmdline <span class="p">|</span> sed <span class="s1">&#39;s|.img||g&#39;</span> <span class="p">|</span> awk <span class="s1">&#39;{ print $1 }&#39;</span><span class="k">)</span>
+pacman -Sy --needed --noconfirm <span class="si">${</span><span class="nv">INST_LINVAR</span><span class="si">}</span> <span class="si">${</span><span class="nv">INST_LINVAR</span><span class="si">}</span>-headers zfs-<span class="si">${</span><span class="nv">INST_LINVAR</span><span class="si">}</span> zfs-utils
+</pre></div>
+</div>
+</li>
+</ol>
+</div>
+<div class="section" id="zfs-dkms-package">
+<h3><a class="toc-backref" href="#id8">zfs-dkms package</a><a class="headerlink" href="#zfs-dkms-package" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic">
+<li><p>Check kernel variant:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nv">INST_LINVAR</span><span class="o">=</span><span class="k">$(</span>sed <span class="s1">&#39;s|.*linux|linux|&#39;</span> /proc/cmdline <span class="p">|</span> sed <span class="s1">&#39;s|.img||g&#39;</span> <span class="p">|</span> awk <span class="s1">&#39;{ print $1 }&#39;</span><span class="k">)</span>
+</pre></div>
+</div>
+</li>
+<li><p>Check kernel version:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nv">INST_LINVER</span><span class="o">=</span><span class="k">$(</span>pacman -Qi <span class="si">${</span><span class="nv">INST_LINVAR</span><span class="si">}</span> <span class="p">|</span> grep Version <span class="p">|</span> awk <span class="s1">&#39;{ print $3 }&#39;</span><span class="k">)</span>
+</pre></div>
+</div>
+<p>If you are updating kernel, use the following command:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nv">INST_LINVER</span><span class="o">=</span><span class="k">$(</span>pacman -Syi <span class="si">${</span><span class="nv">INST_LINVAR</span><span class="si">}</span> <span class="p">|</span> grep Version <span class="p">|</span> awk <span class="s1">&#39;{ print $3 }&#39;</span><span class="k">)</span>
+</pre></div>
+</div>
+</li>
+<li><p>Install kernel headers:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pacman -U <span class="se">\</span>
+https://archive.archlinux.org/packages/l/<span class="si">${</span><span class="nv">INST_LINVAR</span><span class="si">}</span>-headers/<span class="si">${</span><span class="nv">INST_LINVAR</span><span class="si">}</span>-headers-<span class="si">${</span><span class="nv">INST_LINVER</span><span class="si">}</span>-x86_64.pkg.tar.zst
+</pre></div>
+</div>
+</li>
+<li><p>Install zfs-dkms:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pacman -Sy zfs-dkms
+</pre></div>
+</div>
+<p>If you are updating kernel, use the following command:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pacman -Sy <span class="nv">$INST_LINVAR</span> <span class="nv">$INST_LINVAR</span>-headers zfs-dkms
+</pre></div>
+</div>
+<p>If pacman output contains the following error message,
+then the kernel needs a <a class="reference external" href="#zfs-dkms-compatible-kernel">downgrade</a>,
+or you can try <code class="docutils literal notranslate"><span class="pre">zfs-dkms-git</span></code> package:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="o">(</span><span class="m">3</span>/4<span class="o">)</span> Install DKMS <span class="nv">modules</span>
+<span class="o">==</span>&gt; dkms install --no-depmod -m zfs -v <span class="m">2</span>.0.4 -k <span class="m">5</span>.12.0-rc5-1-git-00030-gd19cc4bfbff1
+configure: error:
+    *** None of the expected <span class="s2">&quot;capability&quot;</span> interfaces were detected.
+    *** This may be because your kernel version is newer than what is
+    *** supported, or you are using a patched custom kernel with
+    *** incompatible modifications.
+    ***
+    *** ZFS Version: zfs-2.0.4-1
+    *** Compatible Kernels: <span class="m">3</span>.10 - <span class="m">5</span>.11
+</pre></div>
+</div>
+</li>
+<li><p>Ignore kernel package from updates:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sed -i <span class="s1">&#39;s/#IgnorePkg/IgnorePkg/&#39;</span> /etc/pacman.conf
+sed -i <span class="s2">&quot;/^IgnorePkg/ s/</span>$<span class="s2">/ </span><span class="si">${</span><span class="nv">INST_LINVAR</span><span class="si">}</span><span class="s2"> </span><span class="si">${</span><span class="nv">INST_LINVAR</span><span class="si">}</span><span class="s2">-headers/&quot;</span> /etc/pacman.conf
+</pre></div>
+</div>
+<p>To update kernel, go throught the above procedure
+again.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="zfs-dkms-compatible-kernel">
+<h3><a class="toc-backref" href="#id9">zfs-dkms compatible kernel</a><a class="headerlink" href="#zfs-dkms-compatible-kernel" title="Permalink to this headline">¶</a></h3>
+<p>If the installed kernel is not
+compatible with ZFS, a kernel downgrade
+is needed.</p>
+<ol class="arabic">
+<li><p>Choose kernel variant. Available variants are:</p>
+<ul class="simple">
+<li><p>linux</p></li>
+<li><p>linux-lts</p></li>
+<li><p>linux-zen</p></li>
+<li><p>linux-hardened</p></li>
+</ul>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nv">INST_LINVAR</span><span class="o">=</span>linux
+</pre></div>
+</div>
+</li>
+<li><p>Install kernels available when the package was built. Check build date:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nv">DKMS_DATE</span><span class="o">=</span><span class="k">$(</span>pacman -Syi zfs-dkms <span class="se">\</span>
+<span class="p">|</span> grep <span class="s1">&#39;Build Date&#39;</span> <span class="se">\</span>
+<span class="p">|</span> sed <span class="s1">&#39;s/.*: //&#39;</span> <span class="se">\</span>
+<span class="p">|</span> <span class="nv">LC_ALL</span><span class="o">=</span>C xargs -i<span class="o">{}</span> date -d <span class="o">{}</span> -u +%Y/%m/%d<span class="k">)</span>
+</pre></div>
+</div>
+</li>
+<li><p>Check kernel version:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nv">INST_LINVER</span><span class="o">=</span><span class="k">$(</span>curl https://archive.archlinux.org/repos/<span class="si">${</span><span class="nv">DKMS_DATE</span><span class="si">}</span>/core/os/x86_64/ <span class="se">\</span>
+<span class="p">|</span> grep <span class="se">\&quot;</span><span class="si">${</span><span class="nv">INST_LINVAR</span><span class="si">}</span>-<span class="s1">&#39;[0-9]&#39;</span> <span class="se">\</span>
+<span class="p">|</span> grep -v sig <span class="se">\</span>
+<span class="p">|</span> sed <span class="s2">&quot;s|.*</span><span class="nv">$INST_LINVAR</span><span class="s2">-||&quot;</span> <span class="se">\</span>
+<span class="p">|</span> sed <span class="s2">&quot;s|-x86_64.*||&quot;</span><span class="k">)</span>
+</pre></div>
+</div>
+</li>
+<li><p>Install compatible kernel and headers:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pacman -U <span class="se">\</span>
+https://archive.archlinux.org/packages/l/<span class="si">${</span><span class="nv">INST_LINVAR</span><span class="si">}</span>/<span class="si">${</span><span class="nv">INST_LINVAR</span><span class="si">}</span>-<span class="si">${</span><span class="nv">INST_LINVER</span><span class="si">}</span>-x86_64.pkg.tar.zst <span class="se">\</span>
+https://archive.archlinux.org/packages/l/<span class="si">${</span><span class="nv">INST_LINVAR</span><span class="si">}</span>-headers/<span class="si">${</span><span class="nv">INST_LINVAR</span><span class="si">}</span>-headers-<span class="si">${</span><span class="nv">INST_LINVER</span><span class="si">}</span>-x86_64.pkg.tar.zst
+</pre></div>
+</div>
+</li>
+<li><p>Install zfs-dkms:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pacman -Sy zfs-dkms
+</pre></div>
+</div>
+</li>
+<li><p>Hold kernel package from updates:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sed -i <span class="s1">&#39;s/#IgnorePkg/IgnorePkg/&#39;</span> /etc/pacman.conf
+sed -i <span class="s2">&quot;/^IgnorePkg/ s/</span>$<span class="s2">/ </span><span class="si">${</span><span class="nv">INST_LINVAR</span><span class="si">}</span><span class="s2"> </span><span class="si">${</span><span class="nv">INST_LINVAR</span><span class="si">}</span><span class="s2">-headers/&quot;</span> /etc/pacman.conf
+</pre></div>
+</div>
+<p>Kernel must be manually updated, see above.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="section" id="live-image">
+<h2><a class="toc-backref" href="#id10">Live Image</a><a class="headerlink" href="#live-image" title="Permalink to this headline">¶</a></h2>
+<p>Latest live image might contain a kernel incompatible with
+ZFS. Check the compatibility with the following procedure.</p>
+<p>Alternatively, an unofficial Arch Linux live
+image with ZFS is available at
+<a class="reference external" href="https://gitlab.com/m_zhou/archiso">here</a>.
+Use at your own discretion.</p>
+<ol class="arabic">
+<li><p>Choose a mirror:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>https://archlinux.org/mirrorlist/all/
+https://gitea.artixlinux.org/packagesA/artix-mirrorlist/src/branch/master/trunk/mirrorlist
+</pre></div>
+</div>
+</li>
+<li><p>Check the build date of the
+latest Arch Linux live image:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>https://mirrors.dotsrc.org/archlinux/iso/latest/
+https://mirrors.dotsrc.org/artix-linux/iso/
+<span class="c1"># archlinux-2021.01.01-x86_64.iso</span>
+</pre></div>
+</div>
+</li>
+<li><p>Check the kernel version of the live image:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>https://archive.archlinux.org/repos/2021/01/01/core/os/x86_64
+https://archive.artixlinux.org/repos/2021/01/01/system/os/x86_64
+<span class="c1"># linux-5.10.3.arch1-1-x86_64.pkg.tar.zst</span>
+</pre></div>
+</div>
+</li>
+<li><p>Check latest zfs-dkms package version:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>https://archzfs.com/archzfs/x86_64/
+<span class="c1"># zfs-dkms-2.0.1-1-x86_64.pkg.tar.zst</span>
+<span class="c1"># zfs-linux-2.0.1_5.10.10.arch1.1-1-x86_64.pkg.tar.zst</span>
+</pre></div>
+</div>
+</li>
+<li><p>Visit OpenZFS release page:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>curl -L https://github.com/openzfs/zfs/raw/zfs-2.0.1/META <span class="se">\</span>
+<span class="p">|</span> grep Linux
+<span class="c1"># Linux-Maximum: 5.10</span>
+<span class="c1"># Linux-Minimum: 3.10</span>
+</pre></div>
+</div>
+<ul>
+<li><p>If compatible, download the latest live image:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>https://mirrors.dotsrc.org/archlinux/iso/latest/archlinux-2021.01.01-x86_64.iso
+https://mirrors.dotsrc.org/artix-linux/iso/artix-base-openrc-20210101-x86_64.iso
+</pre></div>
+</div>
+</li>
+<li><p>If not compatible, use an older live image and verify that it contains
+a supported kernel using the above method:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>https://mirrors.dotsrc.org/archlinux/iso/
+https://iso.artixlinux.org/archived-isos.php
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+</ol>
+</div>
+<div class="section" id="root-on-zfs">
+<h2><a class="toc-backref" href="#id11">Root on ZFS</a><a class="headerlink" href="#root-on-zfs" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Arch Linux Root on ZFS.html">Arch Linux Root on ZFS</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="Arch Linux Root on ZFS.html" class="btn btn-neutral float-right" title="Arch Linux Root on ZFS" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../index.html" class="btn btn-neutral float-left" title="Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, OpenZFS.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

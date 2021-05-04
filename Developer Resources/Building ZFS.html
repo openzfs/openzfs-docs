@@ -1,0 +1,458 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Building ZFS &mdash; OpenZFS  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/mandoc.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Buildbot Options" href="Buildbot Options.html" />
+    <link rel="prev" title="Custom Packages" href="Custom Packages.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/logo_main.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Getting Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Project and Community/index.html">Project and Community</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Developer Resources</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Custom Packages.html">Custom Packages</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Building ZFS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#github-repositories">GitHub Repositories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#installing-dependencies">Installing Dependencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#build-options">Build Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#developing-in-tree">Developing In-Tree</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#clone-from-github">Clone from GitHub</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#configure-and-build">Configure and Build</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#install">Install</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#running-zloop-sh-and-zfs-tests-sh">Running zloop.sh and zfs-tests.sh</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference external" href="http://build.zfsonlinux.org/tgrid?length=100&amp;branch=master&amp;category=Platforms&amp;rev_order=desc">Buildbot Status</a></li>
+<li class="toctree-l2"><a class="reference external" href="http://build.zfsonlinux.org/known-issues.html">Buildbot Issue Tracking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Buildbot Options.html">Buildbot Options</a></li>
+<li class="toctree-l2"><a class="reference external" href="http://build.zfsonlinux.org/openzfs-tracking.html">OpenZFS Tracking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="OpenZFS Patches.html">OpenZFS Patches</a></li>
+<li class="toctree-l2"><a class="reference internal" href="OpenZFS Exceptions.html">OpenZFS Exceptions</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://openzfs.org/wiki/Developer_resources">OpenZFS Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Git and GitHub for beginners.html">Git and GitHub for beginners (ZoL edition)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Performance and Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Basic Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../man/index.html">Man Pages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../License.html">License</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">OpenZFS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Developer Resources</a> &raquo;</li>
+        
+      <li>Building ZFS</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/Developer Resources/Building ZFS.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="building-zfs">
+<h1>Building ZFS<a class="headerlink" href="#building-zfs" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="github-repositories">
+<h2>GitHub Repositories<a class="headerlink" href="#github-repositories" title="Permalink to this headline">¶</a></h2>
+<p>The official source for OpenZFS is maintained at GitHub by the
+<a class="reference external" href="https://github.com/openzfs/">openzfs</a> organization. The primary
+git repository for the project is the <a class="reference external" href="https://github.com/openzfs/zfs">zfs</a> repository.</p>
+<p>There are two main components in this repository:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>ZFS</strong>: The ZFS repository contains a copy of the upstream OpenZFS</dt><dd><p>code which has been adapted and extended for Linux and FreeBSD. The
+vast majority of the core OpenZFS code is self-contained and can be
+used without modification.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>SPL</strong>: The SPL is thin shim layer which is responsible for</dt><dd><p>implementing the fundamental interfaces required by OpenZFS. It’s
+this layer which allows OpenZFS to be used across multiple
+platforms. SPL used to be maintained in a separate repository, but
+was merged into the <a class="reference external" href="https://github.com/openzfs/zfs">zfs</a>
+repository in the <code class="docutils literal notranslate"><span class="pre">0.8</span></code> major release.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="installing-dependencies">
+<h2>Installing Dependencies<a class="headerlink" href="#installing-dependencies" title="Permalink to this headline">¶</a></h2>
+<p>The first thing you’ll need to do is prepare your environment by
+installing a full development tool chain. In addition, development
+headers for both the kernel and the following libraries must be
+available. It is important to note that if the development kernel
+headers for the currently running kernel aren’t installed, the modules
+won’t compile properly.</p>
+<p>The following dependencies should be installed to build the latest ZFS
+0.8 release.</p>
+<ul class="simple">
+<li><p><strong>RHEL/CentOS 7</strong>:</p></li>
+</ul>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sudo yum install epel-release gcc make autoconf automake libtool rpm-build dkms libtirpc-devel libblkid-devel libuuid-devel libudev-devel openssl-devel zlib-devel libaio-devel libattr-devel elfutils-libelf-devel kernel-devel-<span class="k">$(</span>uname -r<span class="k">)</span> python python2-devel python-setuptools python-cffi libffi-devel git
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>RHEL/CentOS 8, Fedora</strong>:</p></li>
+</ul>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sudo dnf install gcc make autoconf automake libtool rpm-build dkms libtirpc-devel libblkid-devel libuuid-devel libudev-devel openssl-devel zlib-devel libaio-devel libattr-devel elfutils-libelf-devel kernel-devel-<span class="k">$(</span>uname -r<span class="k">)</span> python3 python3-devel python3-setuptools python3-cffi libffi-devel git
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>Debian, Ubuntu</strong>:</p></li>
+</ul>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sudo apt install build-essential autoconf automake libtool gawk alien fakeroot dkms libblkid-dev uuid-dev libudev-dev libssl-dev zlib1g-dev libaio-dev libattr1-dev libelf-dev linux-headers-<span class="k">$(</span>uname -r<span class="k">)</span> python3 python3-dev python3-setuptools python3-cffi libffi-dev git
+</pre></div>
+</div>
+</div>
+<div class="section" id="build-options">
+<h2>Build Options<a class="headerlink" href="#build-options" title="Permalink to this headline">¶</a></h2>
+<p>There are two options for building OpenZFS; the correct one largely
+depends on your requirements.</p>
+<ul class="simple">
+<li><p><strong>Packages</strong>: Often it can be useful to build custom packages from
+git which can be installed on a system. This is the best way to
+perform integration testing with systemd, dracut, and udev. The
+downside to using packages it is greatly increases the time required
+to build, install, and test a change.</p></li>
+<li><dl class="simple">
+<dt><strong>In-tree</strong>: Development can be done entirely in the SPL/ZFS source</dt><dd><p>tree. This speeds up development by allowing developers to rapidly
+iterate on a patch. When working in-tree developers can leverage
+incremental builds, load/unload kernel modules, execute utilities,
+and verify all their changes with the ZFS Test Suite.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>The remainder of this page focuses on the <strong>in-tree</strong> option which is
+the recommended method of development for the majority of changes. See
+the <a class="reference internal" href="Custom Packages.html"><span class="doc">custom packages</span></a> page for additional information on building
+custom packages.</p>
+</div>
+<div class="section" id="developing-in-tree">
+<h2>Developing In-Tree<a class="headerlink" href="#developing-in-tree" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="clone-from-github">
+<h3>Clone from GitHub<a class="headerlink" href="#clone-from-github" title="Permalink to this headline">¶</a></h3>
+<p>Start by cloning the ZFS repository from GitHub. The repository has a
+<strong>master</strong> branch for development and a series of <strong>*-release</strong>
+branches for tagged releases. After checking out the repository your
+clone will default to the master branch. Tagged releases may be built
+by checking out zfs-x.y.z tags with matching version numbers or
+matching release branches.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">openzfs</span><span class="o">/</span><span class="n">zfs</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="configure-and-build">
+<h3>Configure and Build<a class="headerlink" href="#configure-and-build" title="Permalink to this headline">¶</a></h3>
+<p>For developers working on a change always create a new topic branch
+based off of master. This will make it easy to open a pull request with
+your change latter. The master branch is kept stable with extensive
+<a class="reference external" href="http://build.zfsonlinux.org/">regression testing</a> of every pull
+request before and after it’s merged. Every effort is made to catch
+defects as early as possible and to keep them out of the tree.
+Developers should be comfortable frequently rebasing their work against
+the latest master branch.</p>
+<p>In this example we’ll use the master branch and walk through a stock
+<strong>in-tree</strong> build. Start by checking out the desired branch then build
+the ZFS and SPL source in the tradition autotools fashion.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cd ./zfs
+git checkout master
+sh autogen.sh
+./configure
+make -s -j$(nproc)
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><strong>tip:</strong> <code class="docutils literal notranslate"><span class="pre">--with-linux=PATH</span></code> and <code class="docutils literal notranslate"><span class="pre">--with-linux-obj=PATH</span></code> can be
+passed to configure to specify a kernel installed in a non-default
+location. This option is also supported when building ZFS.</div>
+<div class="line"><strong>tip:</strong> <code class="docutils literal notranslate"><span class="pre">--enable-debug</span></code> can be set to enable all ASSERTs and
+additional correctness tests. This option is also supported when
+building ZFS.</div>
+</div>
+<p><strong>Optional</strong> Build packages</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">deb</span> <span class="c1">#example for Debian/Ubuntu</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="install">
+<h3>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h3>
+<p>You can run <code class="docutils literal notranslate"><span class="pre">zfs-tests.sh</span></code> without installing ZFS, see below. If you
+have reason to install ZFS after building it, pay attention to how your
+distribution handles kernel modules. On Ubuntu, for example, the modules
+from this repository install in the <code class="docutils literal notranslate"><span class="pre">extra</span></code> kernel module path, which
+is not in the standard <code class="docutils literal notranslate"><span class="pre">depmod</span></code> search path. Therefore, for the
+duration of your testing, edit <code class="docutils literal notranslate"><span class="pre">/etc/depmod.d/ubuntu.conf</span></code> and add
+<code class="docutils literal notranslate"><span class="pre">extra</span></code> to the beginning of the search path.</p>
+<p>You may then install using
+<code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">make</span> <span class="pre">install;</span> <span class="pre">sudo</span> <span class="pre">ldconfig;</span> <span class="pre">sudo</span> <span class="pre">depmod</span></code>. You’d uninstall with
+<code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">make</span> <span class="pre">uninstall;</span> <span class="pre">sudo</span> <span class="pre">ldconfig;</span> <span class="pre">sudo</span> <span class="pre">depmod</span></code>.</p>
+</div>
+<div class="section" id="running-zloop-sh-and-zfs-tests-sh">
+<span id="running-zloopsh-and-zfs-testssh"></span><h3>Running zloop.sh and zfs-tests.sh<a class="headerlink" href="#running-zloop-sh-and-zfs-tests-sh" title="Permalink to this headline">¶</a></h3>
+<p>If you wish to run the ZFS Test Suite (ZTS), then <code class="docutils literal notranslate"><span class="pre">ksh</span></code> and a few
+additional utilities must be installed.</p>
+<ul class="simple">
+<li><p><strong>RHEL/CentOS 7:</strong></p></li>
+</ul>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sudo yum install ksh bc fio acl sysstat mdadm lsscsi parted attr dbench nfs-utils samba rng-tools pax perf
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>RHEL/CentOS 8, Fedora:</strong></p></li>
+</ul>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sudo dnf install ksh bc fio acl sysstat mdadm lsscsi parted attr dbench nfs-utils samba rng-tools pax perf
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>Debian, Ubuntu:</strong></p></li>
+</ul>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sudo apt install ksh bc fio acl sysstat mdadm lsscsi parted attr dbench nfs-kernel-server samba rng-tools pax linux-tools-common selinux-utils quota
+</pre></div>
+</div>
+<p>There are a few helper scripts provided in the top-level scripts
+directory designed to aid developers working with in-tree builds.</p>
+<ul class="simple">
+<li><p><strong>zfs-helper.sh:</strong> Certain functionality (i.e. /dev/zvol/) depends on
+the ZFS provided udev helper scripts being installed on the system.
+This script can be used to create symlinks on the system from the
+installation location to the in-tree helper. These links must be in
+place to successfully run the ZFS Test Suite. The <strong>-i</strong> and <strong>-r</strong>
+options can be used to install and remove the symlinks.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="o">./</span><span class="n">scripts</span><span class="o">/</span><span class="n">zfs</span><span class="o">-</span><span class="n">helpers</span><span class="o">.</span><span class="n">sh</span> <span class="o">-</span><span class="n">i</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>zfs.sh:</strong> The freshly built kernel modules can be loaded using
+<code class="docutils literal notranslate"><span class="pre">zfs.sh</span></code>. This script can latter be used to unload the kernel
+modules with the <strong>-u</strong> option.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="o">./</span><span class="n">scripts</span><span class="o">/</span><span class="n">zfs</span><span class="o">.</span><span class="n">sh</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>zloop.sh:</strong> A wrapper to run ztest repeatedly with randomized
+arguments. The ztest command is a user space stress test designed to
+detect correctness issues by concurrently running a random set of
+test cases. If a crash is encountered, the ztest logs, any associated
+vdev files, and core file (if one exists) are collected and moved to
+the output directory for analysis.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="o">./</span><span class="n">scripts</span><span class="o">/</span><span class="n">zloop</span><span class="o">.</span><span class="n">sh</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>zfs-tests.sh:</strong> A wrapper which can be used to launch the ZFS Test
+Suite. Three loopback devices are created on top of sparse files
+located in <code class="docutils literal notranslate"><span class="pre">/var/tmp/</span></code> and used for the regression test. Detailed
+directions for the ZFS Test Suite can be found in the
+<a class="reference external" href="https://github.com/openzfs/zfs/tree/master/tests">README</a>
+located in the top-level tests directory.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">scripts</span><span class="o">/</span><span class="n">zfs</span><span class="o">-</span><span class="n">tests</span><span class="o">.</span><span class="n">sh</span> <span class="o">-</span><span class="n">vx</span>
+</pre></div>
+</div>
+<p><strong>tip:</strong> The <strong>delegate</strong> tests will be skipped unless group read
+permission is set on the zfs directory and its parents.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="Buildbot Options.html" class="btn btn-neutral float-right" title="Buildbot Options" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="Custom Packages.html" class="btn btn-neutral float-left" title="Custom Packages" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, OpenZFS.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

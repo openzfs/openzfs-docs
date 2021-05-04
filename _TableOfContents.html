@@ -1,0 +1,296 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>&lt;no title&gt; &mdash; OpenZFS  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme_overrides.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/mandoc.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/logo_main.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="Getting Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Project and Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Developer Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Performance and Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Basic Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="man/index.html">Man Pages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="License.html">License</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">OpenZFS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>&lt;no title&gt;</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/_TableOfContents.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Getting Started/index.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Getting Started/Arch Linux/index.html">Arch Linux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Getting Started/Debian/index.html">Debian</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Getting Started/Fedora.html">Fedora</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Getting Started/FreeBSD.html">FreeBSD</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://wiki.gentoo.org/wiki/ZFS">Gentoo</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://nixos.wiki/wiki/NixOS_on_ZFS">NixOS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Getting Started/openSUSE/index.html">openSUSE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Getting Started/RHEL and CentOS.html">RHEL and CentOS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Getting Started/Ubuntu/index.html">Ubuntu</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Project and Community/index.html">Project and Community</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Project and Community/Admin Documentation.html">Admin Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Project and Community/FAQ.html">FAQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Project and Community/Mailing Lists.html">Mailing Lists</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Project and Community/Signing Keys.html">Signing Keys</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/openzfs/zfs/issues">Issue Tracker</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/openzfs/zfs/releases">Releases</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/openzfs/zfs/milestones">Roadmap</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Developer Resources/index.html">Developer Resources</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Developer Resources/Custom Packages.html">Custom Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Developer Resources/Building ZFS.html">Building ZFS</a></li>
+<li class="toctree-l2"><a class="reference external" href="http://build.zfsonlinux.org/tgrid?length=100&amp;branch=master&amp;category=Platforms&amp;rev_order=desc">Buildbot Status</a></li>
+<li class="toctree-l2"><a class="reference external" href="http://build.zfsonlinux.org/known-issues.html">Buildbot Issue Tracking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Developer Resources/Buildbot Options.html">Buildbot Options</a></li>
+<li class="toctree-l2"><a class="reference external" href="http://build.zfsonlinux.org/openzfs-tracking.html">OpenZFS Tracking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Developer Resources/OpenZFS Patches.html">OpenZFS Patches</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Developer Resources/OpenZFS Exceptions.html">OpenZFS Exceptions</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://openzfs.org/wiki/Developer_resources">OpenZFS Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Developer Resources/Git and GitHub for beginners.html">Git and GitHub for beginners (ZoL edition)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Performance and Tuning/index.html">Performance and Tuning</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Performance and Tuning/Async Write.html">Async Writes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Performance and Tuning/Hardware.html">Hardware</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Performance and Tuning/Module Parameters.html">Module Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Performance and Tuning/Workload Tuning.html">Workload Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Performance and Tuning/ZFS Transaction Delay.html">ZFS Transaction Delay</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Performance and Tuning/ZIO Scheduler.html">ZFS I/O (ZIO) Scheduler</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Basic Concepts/index.html">Basic Concepts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Basic Concepts/Checksums.html">Checksums and Their Use in ZFS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Basic Concepts/Feature Flags.html">Feature Flags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Basic Concepts/Troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Basic Concepts/dRAID Howto.html">dRAID</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="man/index.html">Man Pages</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="man/1/index.html">User Commands (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="man/5/index.html">File Formats and Conventions (5)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="man/8/index.html">System Administration Commands (8)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="msg/index.html">ZFS Messages</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="msg/ZFS-8000-14/index.html">Message ID: ZFS-8000-14</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msg/ZFS-8000-2Q/index.html">Message ID: ZFS-8000-2Q</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msg/ZFS-8000-3C/index.html">Message ID: ZFS-8000-3C</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msg/ZFS-8000-4J/index.html">Message ID: ZFS-8000-4J</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msg/ZFS-8000-5E/index.html">Message ID: ZFS-8000-5E</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msg/ZFS-8000-6X/index.html">Message ID: ZFS-8000-6X</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msg/ZFS-8000-72/index.html">Message ID: ZFS-8000-72</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msg/ZFS-8000-8A/index.html">Message ID: ZFS-8000-8A</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msg/ZFS-8000-9P/index.html">Message ID: ZFS-8000-9P</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msg/ZFS-8000-A5/index.html">Message ID: ZFS-8000-A5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msg/ZFS-8000-ER/index.html">Message ID: ZFS-8000-ER</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msg/ZFS-8000-EY/index.html">Message ID: ZFS-8000-EY</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msg/ZFS-8000-HC/index.html">Message ID: ZFS-8000-HC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msg/ZFS-8000-JQ/index.html">Message ID: ZFS-8000-JQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msg/ZFS-8000-K4/index.html">Message ID: ZFS-8000-K4</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="License.html">License</a></li>
+</ul>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, OpenZFS.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

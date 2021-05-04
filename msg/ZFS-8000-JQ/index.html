@@ -1,0 +1,310 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Message ID: ZFS-8000-JQ &mdash; OpenZFS  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme_overrides.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/mandoc.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Message ID: ZFS-8000-K4" href="../ZFS-8000-K4/index.html" />
+    <link rel="prev" title="Message ID: ZFS-8000-HC" href="../ZFS-8000-HC/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+          
+
+          
+            <a href="../../index.html">
+          
+
+          
+            
+            <img src="../../_static/logo_main.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../Getting Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Project and Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Developer Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Performance and Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Basic Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../man/index.html">Man Pages</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">ZFS Messages</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../ZFS-8000-14/index.html">Message ID: ZFS-8000-14</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ZFS-8000-2Q/index.html">Message ID: ZFS-8000-2Q</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ZFS-8000-3C/index.html">Message ID: ZFS-8000-3C</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ZFS-8000-4J/index.html">Message ID: ZFS-8000-4J</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ZFS-8000-5E/index.html">Message ID: ZFS-8000-5E</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ZFS-8000-6X/index.html">Message ID: ZFS-8000-6X</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ZFS-8000-72/index.html">Message ID: ZFS-8000-72</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ZFS-8000-8A/index.html">Message ID: ZFS-8000-8A</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ZFS-8000-9P/index.html">Message ID: ZFS-8000-9P</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ZFS-8000-A5/index.html">Message ID: ZFS-8000-A5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ZFS-8000-ER/index.html">Message ID: ZFS-8000-ER</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ZFS-8000-EY/index.html">Message ID: ZFS-8000-EY</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ZFS-8000-HC/index.html">Message ID: ZFS-8000-HC</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Message ID: ZFS-8000-JQ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#zfs-pool-i-o-failures">ZFS pool I/O failures</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../ZFS-8000-K4/index.html">Message ID: ZFS-8000-K4</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../License.html">License</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">OpenZFS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">ZFS Messages</a> &raquo;</li>
+        
+      <li>Message ID: ZFS-8000-JQ</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/msg/ZFS-8000-JQ/index.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="message-id-zfs-8000-jq">
+<h1>Message ID: ZFS-8000-JQ<a class="headerlink" href="#message-id-zfs-8000-jq" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="zfs-pool-i-o-failures">
+<h2>ZFS pool I/O failures<a class="headerlink" href="#zfs-pool-i-o-failures" title="Permalink to this headline">¶</a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 62%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><strong>Type:</strong></p></td>
+<td><p>Error</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Severity:</strong></p></td>
+<td><p>Major</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Description:</strong></p></td>
+<td><p>The ZFS pool has experienced currently
+unrecoverable I/O failures.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Automated Response:</strong></p></td>
+<td><p>No automated response will be taken.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Impact:</strong></p></td>
+<td><p>Write I/Os cannot be serviced.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Suggested Action for System Administrator</p>
+<p>The pool has experienced I/O failures.  Since the ZFS pool property
+<code class="docutils literal notranslate"><span class="pre">failmode</span></code> is set to ‘continue’, read I/Os will continue to be
+serviced, but write I/Os are blocked.  See the zpoolprops(8) manpage for
+more information on the <code class="docutils literal notranslate"><span class="pre">failmode</span></code> property.  Manual intervention is
+required for write I/Os to be serviced.  You can see which devices are
+affected by running <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">status</span> <span class="pre">-x</span></code>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># zpool status -x
+  pool: test
+ state: FAULTED
+status: There are I/O failures.
+action: Make sure the affected devices are connected, then run &#39;zpool clear&#39;.
+   see: https://openzfs.github.io/openzfs-docs/msg/ZFS-8000-HC
+ scrub: none requested
+config:
+
+        NAME        STATE     READ WRITE CKSUM
+        test        FAULTED      0    13     0  insufficient replicas
+          sda9      FAULTED      0     7     0  experienced I/O failures
+          sdb9      ONLINE       0     0     0
+
+errors: 1 data errors, use &#39;-v&#39; for a list
+</pre></div>
+</div>
+<p>After you have made sure the affected devices are connected, run
+<code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">clear</span></code> to allow write I/O to the pool again:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># zpool clear test
+</pre></div>
+</div>
+<p>If I/O failures continue to happen, then applications and commands
+for the pool may hang.  At this point, a reboot may be necessary to
+allow I/O to the pool again.</p>
+<p class="rubric">Details</p>
+<p>The Message ID: <code class="docutils literal notranslate"><span class="pre">ZFS-8000-JQ</span></code> indicates that the pool has
+experienced I/O failures.  Take the documented action to resolve the
+problem.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="../ZFS-8000-K4/index.html" class="btn btn-neutral float-right" title="Message ID: ZFS-8000-K4" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../ZFS-8000-HC/index.html" class="btn btn-neutral float-left" title="Message ID: ZFS-8000-HC" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, OpenZFS.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

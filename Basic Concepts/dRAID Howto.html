@@ -1,0 +1,458 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>dRAID &mdash; OpenZFS  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/mandoc.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Man Pages" href="../man/index.html" />
+    <link rel="prev" title="Troubleshooting" href="Troubleshooting.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/logo_main.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Getting Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Project and Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Developer Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Performance and Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Basic Concepts</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Checksums.html">Checksums and Their Use in ZFS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Feature Flags.html">Feature Flags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">dRAID</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-a-draid-vdev">Create a dRAID vdev</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rebuilding-to-a-distributed-spare">Rebuilding to a Distributed Spare</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rebalancing">Rebalancing</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../man/index.html">Man Pages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../License.html">License</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">OpenZFS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Basic Concepts</a> &raquo;</li>
+        
+      <li>dRAID</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/Basic Concepts/dRAID Howto.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="draid">
+<h1>dRAID<a class="headerlink" href="#draid" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This page a describes functionality which has been merged to the
+master branch but is not in the OpenZFS 2.0 release.  In order to
+use dRAID you’ll need to checkout the latest source and build
+<a class="reference external" href="https://openzfs.github.io/openzfs-docs/Developer%20Resources/Custom%20Packages.html#">custom packages</a> to install.</p>
+</div>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://docs.google.com/presentation/d/1uo0nBfY84HIhEqGWEx-Tbm8fPbJKtIP3ICo4toOPcJo/edit">dRAID</a> is a variant of raidz that provides integrated distributed hot
+spares which allows for faster resilvering while retaining the benefits
+of raidz.  A dRAID vdev is constructed from multiple internal raidz
+groups, each with D data devices and P parity devices.  These groups
+are distributed over all of the children in order to fully utilize the
+available disk performance.  This is known as parity declustering and
+it has been an active area of research.  The image below is simplified,
+but it helps illustrate this key difference between dRAID and raidz.</p>
+<p><img alt="draid1" src="../_images/raidz_draid.png" /></p>
+<p>Additionally, a dRAID vdev must shuffle its child vdevs in such a way
+that regardless of which drive has failed, the rebuild IO (both read
+and write) will distribute evenly among all surviving drives.  This
+is accomplished by using carefully chosen precomputed permutation
+maps.  This has the advantage of both keeping pool creation fast and
+making it impossible for the mapping to be damaged or lost.</p>
+<p>Another way dRAID differs from raidz is that it uses a fixed stripe
+width (padding as necessary with zeros).  This allows a dRAID vdev to
+be sequentially resilvered, however the fixed stripe width significantly
+effects both usable capacity and IOPS.  For example, with the default
+D=8 and 4k disk sectors the minimum allocation size is 32k.  If using
+compression, this relatively large allocation size can reduce the
+effective compression ratio.  When using ZFS volumes and dRAID the
+default volblocksize property is increased to account for the allocation
+size.  If a dRAID pool will hold a significant amount of small blocks,
+it is recommended to also add a mirrored special vdev to store those
+blocks.</p>
+<p>In regards to IO/s, performance is similar to raidz since for any
+read all D data disks must be accessed.  Delivered random IOPS can be
+reasonably approximated as floor((N-S)/(D+P))*&lt;single-drive-IOPS&gt;.</p>
+<p>In summary dRAID can provide the same level of redundancy and
+performance as raidz, while also providing a fast integrated distributed
+spare.</p>
+</div>
+<div class="section" id="create-a-draid-vdev">
+<h2>Create a dRAID vdev<a class="headerlink" href="#create-a-draid-vdev" title="Permalink to this headline">¶</a></h2>
+<p>A dRAID vdev is created like any other by using the <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">create</span></code>
+command and enumerating the disks which should be used.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># zpool create &lt;pool&gt; draid[1,2,3] &lt;vdevs...&gt;</span>
+</pre></div>
+</div>
+<p>Like raidz, the parity level is specified immediately after the <code class="docutils literal notranslate"><span class="pre">draid</span></code>
+vdev type.  However, unlike raidz additional colon separated options can be
+specified.  The most important of which is the <code class="docutils literal notranslate"><span class="pre">:&lt;spares&gt;s</span></code> option which
+controls the number of distributed hot spares to create.  By default, no
+spares are created.  The <code class="docutils literal notranslate"><span class="pre">:&lt;data&gt;d</span></code> option can be specified to set the
+number of data devices to use in each RAID stripe (D+P).  When unspecified
+reasonable defaults are chosen.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># zpool create &lt;pool&gt; draid[&lt;parity&gt;][:&lt;data&gt;d][:&lt;children&gt;c][:&lt;spares&gt;s] &lt;vdevs...&gt;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>parity</strong> - The parity level (1-3).  Defaults to one.</p></li>
+<li><p><strong>data</strong> - The number of data devices per redundancy group.  In general
+a smaller value of D will increase IOPS, improve the compression ratio,
+and speed up resilvering at the expense of total usable capacity.
+Defaults to 8, unless N-P-S is less than 8.</p></li>
+<li><p><strong>children</strong> - The expected number of children.  Useful as a cross-check
+when listing a large number of devices.  An error is returned when the
+provided number of children differs.</p></li>
+<li><p><strong>spares</strong> - The number of distributed hot spares.  Defaults to zero.</p></li>
+</ul>
+<p>For example, to create an 11 disk dRAID pool with 4+1 redundancy and a
+single distributed spare the command would be:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># zpool create tank draid:4d:1s:11c /dev/sd[a-k]</span>
+<span class="c1"># zpool status tank</span>
+
+  <span class="n">pool</span><span class="p">:</span> <span class="n">tank</span>
+ <span class="n">state</span><span class="p">:</span> <span class="n">ONLINE</span>
+<span class="n">config</span><span class="p">:</span>
+
+        <span class="n">NAME</span>                  <span class="n">STATE</span>     <span class="n">READ</span> <span class="n">WRITE</span> <span class="n">CKSUM</span>
+        <span class="n">tank</span>                  <span class="n">ONLINE</span>       <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>
+          <span class="n">draid1</span><span class="p">:</span><span class="mi">4</span><span class="n">d</span><span class="p">:</span><span class="mi">11</span><span class="n">c</span><span class="p">:</span><span class="mi">1</span><span class="n">s</span><span class="o">-</span><span class="mi">0</span>  <span class="n">ONLINE</span>       <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>
+            <span class="n">sda</span>               <span class="n">ONLINE</span>       <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>
+            <span class="n">sdb</span>               <span class="n">ONLINE</span>       <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>
+            <span class="n">sdc</span>               <span class="n">ONLINE</span>       <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>
+            <span class="n">sdd</span>               <span class="n">ONLINE</span>       <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>
+            <span class="n">sde</span>               <span class="n">ONLINE</span>       <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>
+            <span class="n">sdf</span>               <span class="n">ONLINE</span>       <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>
+            <span class="n">sdg</span>               <span class="n">ONLINE</span>       <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>
+            <span class="n">sdh</span>               <span class="n">ONLINE</span>       <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>
+            <span class="n">sdi</span>               <span class="n">ONLINE</span>       <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>
+            <span class="n">sdj</span>               <span class="n">ONLINE</span>       <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>
+            <span class="n">sdk</span>               <span class="n">ONLINE</span>       <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>
+        <span class="n">spares</span>
+          <span class="n">draid1</span><span class="o">-</span><span class="mi">0</span><span class="o">-</span><span class="mi">0</span>          <span class="n">AVAIL</span>
+</pre></div>
+</div>
+<p>Note that the dRAID vdev name, <code class="docutils literal notranslate"><span class="pre">draid1:4d:11c:1s</span></code>, fully describes the
+configuration and all of disks which are part of the dRAID are listed.
+Furthermore, the logical distributed hot spare is shown as an available
+spare disk.</p>
+</div>
+<div class="section" id="rebuilding-to-a-distributed-spare">
+<h2>Rebuilding to a Distributed Spare<a class="headerlink" href="#rebuilding-to-a-distributed-spare" title="Permalink to this headline">¶</a></h2>
+<p>One of the major advantages of dRAID is that it supports both sequential
+and traditional healing resilvers.  When performing a sequential resilver
+to a distributed hot spare the performance scales with the number of disks
+divided by the stripe width (D+P).  This can greatly reduce resilver times
+and restore full redundancy in a fraction of the usual time.  For example,
+the following graph shows the observed sequential resilver time in hours
+for a 90 HDD based dRAID filled to 90% capacity.</p>
+<p><img alt="draid-resilver" src="../_images/draid-resilver-hours.png" /></p>
+<p>When using dRAID and a distributed spare, the process for handling a
+failed disk is almost identical to raidz with a traditional hot spare.
+When a disk failure is detected the ZFS Event Daemon (ZED) will start
+rebuilding to a spare if one is available.  The only difference is that
+for dRAID a sequential resilver is started, while a healing resilver must
+be used for raidz.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># echo offline &gt;/sys/block/sdg/device/state</span>
+<span class="c1"># zpool replace -s tank sdg draid1-0-0</span>
+<span class="c1"># zpool status</span>
+
+  <span class="n">pool</span><span class="p">:</span> <span class="n">tank</span>
+ <span class="n">state</span><span class="p">:</span> <span class="n">DEGRADED</span>
+<span class="n">status</span><span class="p">:</span> <span class="n">One</span> <span class="ow">or</span> <span class="n">more</span> <span class="n">devices</span> <span class="ow">is</span> <span class="n">currently</span> <span class="n">being</span> <span class="n">resilvered</span><span class="o">.</span>  <span class="n">The</span> <span class="n">pool</span> <span class="n">will</span>
+        <span class="k">continue</span> <span class="n">to</span> <span class="n">function</span><span class="p">,</span> <span class="n">possibly</span> <span class="ow">in</span> <span class="n">a</span> <span class="n">degraded</span> <span class="n">state</span><span class="o">.</span>
+<span class="n">action</span><span class="p">:</span> <span class="n">Wait</span> <span class="k">for</span> <span class="n">the</span> <span class="n">resilver</span> <span class="n">to</span> <span class="n">complete</span><span class="o">.</span>
+  <span class="n">scan</span><span class="p">:</span> <span class="n">resilver</span> <span class="p">(</span><span class="n">draid1</span><span class="p">:</span><span class="mi">4</span><span class="n">d</span><span class="p">:</span><span class="mi">11</span><span class="n">c</span><span class="p">:</span><span class="mi">1</span><span class="n">s</span><span class="o">-</span><span class="mi">0</span><span class="p">)</span> <span class="ow">in</span> <span class="n">progress</span> <span class="n">since</span> <span class="n">Tue</span> <span class="n">Nov</span> <span class="mi">24</span> <span class="mi">14</span><span class="p">:</span><span class="mi">34</span><span class="p">:</span><span class="mi">25</span> <span class="mi">2020</span>
+        <span class="mf">3.51</span><span class="n">T</span> <span class="n">scanned</span> <span class="n">at</span> <span class="mf">13.4</span><span class="n">G</span><span class="o">/</span><span class="n">s</span><span class="p">,</span> <span class="mf">1.59</span><span class="n">T</span> <span class="n">issued</span> <span class="mf">6.07</span><span class="n">G</span><span class="o">/</span><span class="n">s</span><span class="p">,</span> <span class="mf">6.13</span><span class="n">T</span> <span class="n">total</span>
+        <span class="mi">326</span><span class="n">G</span> <span class="n">resilvered</span><span class="p">,</span> <span class="mf">57.17</span><span class="o">%</span> <span class="n">done</span><span class="p">,</span> <span class="mi">00</span><span class="p">:</span><span class="mi">03</span><span class="p">:</span><span class="mi">21</span> <span class="n">to</span> <span class="n">go</span>
+<span class="n">config</span><span class="p">:</span>
+
+        <span class="n">NAME</span>                  <span class="n">STATE</span>     <span class="n">READ</span> <span class="n">WRITE</span> <span class="n">CKSUM</span>
+        <span class="n">tank</span>                  <span class="n">DEGRADED</span>     <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>
+          <span class="n">draid1</span><span class="p">:</span><span class="mi">4</span><span class="n">d</span><span class="p">:</span><span class="mi">11</span><span class="n">c</span><span class="p">:</span><span class="mi">1</span><span class="n">s</span><span class="o">-</span><span class="mi">0</span>  <span class="n">DEGRADED</span>     <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>
+            <span class="n">sda</span>               <span class="n">ONLINE</span>       <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>  <span class="p">(</span><span class="n">resilvering</span><span class="p">)</span>
+            <span class="n">sdb</span>               <span class="n">ONLINE</span>       <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>  <span class="p">(</span><span class="n">resilvering</span><span class="p">)</span>
+            <span class="n">sdc</span>               <span class="n">ONLINE</span>       <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>  <span class="p">(</span><span class="n">resilvering</span><span class="p">)</span>
+            <span class="n">sdd</span>               <span class="n">ONLINE</span>       <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>  <span class="p">(</span><span class="n">resilvering</span><span class="p">)</span>
+            <span class="n">sde</span>               <span class="n">ONLINE</span>       <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>  <span class="p">(</span><span class="n">resilvering</span><span class="p">)</span>
+            <span class="n">sdf</span>               <span class="n">ONLINE</span>       <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>  <span class="p">(</span><span class="n">resilvering</span><span class="p">)</span>
+            <span class="n">spare</span><span class="o">-</span><span class="mi">6</span>           <span class="n">DEGRADED</span>     <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>
+              <span class="n">sdg</span>             <span class="n">UNAVAIL</span>      <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>
+              <span class="n">draid1</span><span class="o">-</span><span class="mi">0</span><span class="o">-</span><span class="mi">0</span>      <span class="n">ONLINE</span>       <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>  <span class="p">(</span><span class="n">resilvering</span><span class="p">)</span>
+            <span class="n">sdh</span>               <span class="n">ONLINE</span>       <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>  <span class="p">(</span><span class="n">resilvering</span><span class="p">)</span>
+            <span class="n">sdi</span>               <span class="n">ONLINE</span>       <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>  <span class="p">(</span><span class="n">resilvering</span><span class="p">)</span>
+            <span class="n">sdj</span>               <span class="n">ONLINE</span>       <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>  <span class="p">(</span><span class="n">resilvering</span><span class="p">)</span>
+            <span class="n">sdk</span>               <span class="n">ONLINE</span>       <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>  <span class="p">(</span><span class="n">resilvering</span><span class="p">)</span>
+        <span class="n">spares</span>
+          <span class="n">draid1</span><span class="o">-</span><span class="mi">0</span><span class="o">-</span><span class="mi">0</span>          <span class="n">INUSE</span>     <span class="n">currently</span> <span class="ow">in</span> <span class="n">use</span>
+</pre></div>
+</div>
+<p>While both types of resilvering achieve the same goal it’s worth taking
+a moment to summarize the key differences.</p>
+<ul class="simple">
+<li><p>A traditional healing resilver scans the entire block tree.  This
+means the checksum for each block is available while it’s being
+repaired and can be immediately verified.  The downside is this
+creates a random read workload which is not ideal for performance.</p></li>
+<li><p>A sequential resilver instead scans the space maps in order to
+determine what space is allocated and what must be repaired.
+This rebuild process is not limited to block boundaries and can
+sequentially reads from the disks and make repairs using larger
+I/Os.  The price to pay for this performance improvement is that
+the block checksums cannot be verified while resilvering.  Therefore,
+a scrub is started to verify the checksums after the sequential
+resilver completes.</p></li>
+</ul>
+<p>For a more in depth explanation of the differences between sequential
+and healing resilvering check out these <a class="reference external" href="https://docs.google.com/presentation/d/1vLsgQ1MaHlifw40C9R2sPsSiHiQpxglxMbK2SMthu0Q/edit#slide=id.g995720a6cf_1_39">sequential resilver</a> slides
+which were presented at the OpenZFS Developer Summit.</p>
+</div>
+<div class="section" id="rebalancing">
+<h2>Rebalancing<a class="headerlink" href="#rebalancing" title="Permalink to this headline">¶</a></h2>
+<p>Distributed spare space can be made available again by simply replacing
+any failed drive with a new drive. This process is called rebalancing
+and is essentially a resilver.  When performing rebalancing a healing
+resilver is recommended since the pool is no longer degraded.  This
+ensures all checksums are verified when rebuilding to the new disk
+and eliminates the need to perform a subsequent scrub of the pool.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># zpool replace tank sdg sdl</span>
+<span class="c1"># zpool status</span>
+
+  <span class="n">pool</span><span class="p">:</span> <span class="n">tank</span>
+ <span class="n">state</span><span class="p">:</span> <span class="n">DEGRADED</span>
+<span class="n">status</span><span class="p">:</span> <span class="n">One</span> <span class="ow">or</span> <span class="n">more</span> <span class="n">devices</span> <span class="ow">is</span> <span class="n">currently</span> <span class="n">being</span> <span class="n">resilvered</span><span class="o">.</span>  <span class="n">The</span> <span class="n">pool</span> <span class="n">will</span>
+        <span class="k">continue</span> <span class="n">to</span> <span class="n">function</span><span class="p">,</span> <span class="n">possibly</span> <span class="ow">in</span> <span class="n">a</span> <span class="n">degraded</span> <span class="n">state</span><span class="o">.</span>
+<span class="n">action</span><span class="p">:</span> <span class="n">Wait</span> <span class="k">for</span> <span class="n">the</span> <span class="n">resilver</span> <span class="n">to</span> <span class="n">complete</span><span class="o">.</span>
+  <span class="n">scan</span><span class="p">:</span> <span class="n">resilver</span> <span class="ow">in</span> <span class="n">progress</span> <span class="n">since</span> <span class="n">Tue</span> <span class="n">Nov</span> <span class="mi">24</span> <span class="mi">14</span><span class="p">:</span><span class="mi">45</span><span class="p">:</span><span class="mi">16</span> <span class="mi">2020</span>
+        <span class="mf">6.13</span><span class="n">T</span> <span class="n">scanned</span> <span class="n">at</span> <span class="mf">7.82</span><span class="n">G</span><span class="o">/</span><span class="n">s</span><span class="p">,</span> <span class="mf">6.10</span><span class="n">T</span> <span class="n">issued</span> <span class="n">at</span> <span class="mf">7.78</span><span class="n">G</span><span class="o">/</span><span class="n">s</span><span class="p">,</span> <span class="mf">6.13</span><span class="n">T</span> <span class="n">total</span>
+        <span class="mi">565</span><span class="n">G</span> <span class="n">resilvered</span><span class="p">,</span> <span class="mf">99.44</span><span class="o">%</span> <span class="n">done</span><span class="p">,</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">04</span> <span class="n">to</span> <span class="n">go</span>
+<span class="n">config</span><span class="p">:</span>
+
+        <span class="n">NAME</span>                  <span class="n">STATE</span>     <span class="n">READ</span> <span class="n">WRITE</span> <span class="n">CKSUM</span>
+        <span class="n">tank</span>                  <span class="n">DEGRADED</span>     <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>
+          <span class="n">draid1</span><span class="p">:</span><span class="mi">4</span><span class="n">d</span><span class="p">:</span><span class="mi">11</span><span class="n">c</span><span class="p">:</span><span class="mi">1</span><span class="n">s</span><span class="o">-</span><span class="mi">0</span>  <span class="n">DEGRADED</span>     <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>
+            <span class="n">sda</span>               <span class="n">ONLINE</span>       <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>  <span class="p">(</span><span class="n">resilvering</span><span class="p">)</span>
+            <span class="n">sdb</span>               <span class="n">ONLINE</span>       <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>  <span class="p">(</span><span class="n">resilvering</span><span class="p">)</span>
+            <span class="n">sdc</span>               <span class="n">ONLINE</span>       <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>  <span class="p">(</span><span class="n">resilvering</span><span class="p">)</span>
+            <span class="n">sdd</span>               <span class="n">ONLINE</span>       <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>  <span class="p">(</span><span class="n">resilvering</span><span class="p">)</span>
+            <span class="n">sde</span>               <span class="n">ONLINE</span>       <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>  <span class="p">(</span><span class="n">resilvering</span><span class="p">)</span>
+            <span class="n">sdf</span>               <span class="n">ONLINE</span>       <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>  <span class="p">(</span><span class="n">resilvering</span><span class="p">)</span>
+            <span class="n">spare</span><span class="o">-</span><span class="mi">6</span>           <span class="n">DEGRADED</span>     <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>
+              <span class="n">replacing</span><span class="o">-</span><span class="mi">0</span>     <span class="n">DEGRADED</span>     <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>
+                <span class="n">sdg</span>           <span class="n">UNAVAIL</span>      <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>
+                <span class="n">sdl</span>           <span class="n">ONLINE</span>       <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>  <span class="p">(</span><span class="n">resilvering</span><span class="p">)</span>
+              <span class="n">draid1</span><span class="o">-</span><span class="mi">0</span><span class="o">-</span><span class="mi">0</span>      <span class="n">ONLINE</span>       <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>  <span class="p">(</span><span class="n">resilvering</span><span class="p">)</span>
+            <span class="n">sdh</span>               <span class="n">ONLINE</span>       <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>  <span class="p">(</span><span class="n">resilvering</span><span class="p">)</span>
+            <span class="n">sdi</span>               <span class="n">ONLINE</span>       <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>  <span class="p">(</span><span class="n">resilvering</span><span class="p">)</span>
+            <span class="n">sdj</span>               <span class="n">ONLINE</span>       <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>  <span class="p">(</span><span class="n">resilvering</span><span class="p">)</span>
+            <span class="n">sdk</span>               <span class="n">ONLINE</span>       <span class="mi">0</span>     <span class="mi">0</span>     <span class="mi">0</span>  <span class="p">(</span><span class="n">resilvering</span><span class="p">)</span>
+        <span class="n">spares</span>
+       <span class="n">draid1</span><span class="o">-</span><span class="mi">0</span><span class="o">-</span><span class="mi">0</span>          <span class="n">INUSE</span>     <span class="n">currently</span> <span class="ow">in</span> <span class="n">use</span>
+</pre></div>
+</div>
+<p>After the resilvering completes the distributed hot spare is once again
+available for use and the pool has been restored to its normal healthy
+state.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="../man/index.html" class="btn btn-neutral float-right" title="Man Pages" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="Troubleshooting.html" class="btn btn-neutral float-left" title="Troubleshooting" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, OpenZFS.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

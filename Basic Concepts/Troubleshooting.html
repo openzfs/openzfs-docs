@@ -1,0 +1,331 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Troubleshooting &mdash; OpenZFS  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/mandoc.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="dRAID" href="dRAID Howto.html" />
+    <link rel="prev" title="Feature Flags" href="Feature Flags.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/logo_main.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Getting Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Project and Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Developer Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Performance and Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Basic Concepts</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Checksums.html">Checksums and Their Use in ZFS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Feature Flags.html">Feature Flags</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#about-log-files">About Log Files</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#generic-kernel-log">Generic Kernel Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#zfs-kernel-module-debug-messages">ZFS Kernel Module Debug Messages</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#unkillable-process">Unkillable Process</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#zfs-events">ZFS Events</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dRAID Howto.html">dRAID</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../man/index.html">Man Pages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../License.html">License</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">OpenZFS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Basic Concepts</a> &raquo;</li>
+        
+      <li>Troubleshooting</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/Basic Concepts/Troubleshooting.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="troubleshooting">
+<h1>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<p>This page is a draft.</p>
+</div>
+<p>This page contains tips for troubleshooting ZFS on Linux and what info
+developers might want for bug triage.</p>
+<ul class="simple">
+<li><p><a class="reference external" href="#about-log-files">About Log Files</a></p>
+<ul>
+<li><p><a class="reference external" href="#generic-kernel-log">Generic Kernel Log</a></p></li>
+<li><p><a class="reference external" href="#zfs-kernel-module-debug-messages">ZFS Kernel Module Debug
+Messages</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="#unkillable-process">Unkillable Process</a></p></li>
+<li><p><a class="reference external" href="#zfs-events">ZFS Events</a></p></li>
+</ul>
+<hr class="docutils" />
+<div class="section" id="about-log-files">
+<h2>About Log Files<a class="headerlink" href="#about-log-files" title="Permalink to this headline">¶</a></h2>
+<p>Log files can be very useful for troubleshooting. In some cases,
+interesting information is stored in multiple log files that are
+correlated to system events.</p>
+<p>Pro tip: logging infrastructure tools like <em>elasticsearch</em>, <em>fluentd</em>,
+<em>influxdb</em>, or <em>splunk</em> can simplify log analysis and event correlation.</p>
+<div class="section" id="generic-kernel-log">
+<h3>Generic Kernel Log<a class="headerlink" href="#generic-kernel-log" title="Permalink to this headline">¶</a></h3>
+<p>Typically, Linux kernel log messages are available from <code class="docutils literal notranslate"><span class="pre">dmesg</span> <span class="pre">-T</span></code>,
+<code class="docutils literal notranslate"><span class="pre">/var/log/syslog</span></code>, or where kernel log messages are sent (eg by
+<code class="docutils literal notranslate"><span class="pre">rsyslogd</span></code>).</p>
+</div>
+<div class="section" id="zfs-kernel-module-debug-messages">
+<h3>ZFS Kernel Module Debug Messages<a class="headerlink" href="#zfs-kernel-module-debug-messages" title="Permalink to this headline">¶</a></h3>
+<p>The ZFS kernel modules use an internal log buffer for detailed logging
+information. This log information is available in the pseudo file
+<code class="docutils literal notranslate"><span class="pre">/proc/spl/kstat/zfs/dbgmsg</span></code> for ZFS builds where ZFS module parameter
+<a class="reference external" href="https://github.com/zfsonlinux/zfs/wiki/ZFS-on-Linux-Module-Parameters#zfs_dbgmsg_enable">zfs_dbgmsg_enable =
+1</a></p>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="unkillable-process">
+<h2>Unkillable Process<a class="headerlink" href="#unkillable-process" title="Permalink to this headline">¶</a></h2>
+<p>Symptom: <code class="docutils literal notranslate"><span class="pre">zfs</span></code> or <code class="docutils literal notranslate"><span class="pre">zpool</span></code> command appear hung, does not return, and
+is not killable</p>
+<p>Likely cause: kernel thread hung or panic</p>
+<p>Log files of interest: <a class="reference external" href="#generic-kernel-log">Generic Kernel Log</a>,
+<a class="reference external" href="#zfs-kernel-module-debug-messages">ZFS Kernel Module Debug Messages</a></p>
+<p>Important information: if a kernel thread is stuck, then a backtrace of
+the stuck thread can be in the logs. In some cases, the stuck thread is
+not logged until the deadman timer expires. See also <a class="reference external" href="https://github.com/zfsonlinux/zfs/wiki/ZFS-on-Linux-Module-Parameters#debug">debug
+tunables</a></p>
+</div>
+<hr class="docutils" />
+<div class="section" id="zfs-events">
+<h2>ZFS Events<a class="headerlink" href="#zfs-events" title="Permalink to this headline">¶</a></h2>
+<p>ZFS uses an event-based messaging interface for communication of
+important events to other consumers running on the system. The ZFS Event
+Daemon (zed) is a userland daemon that listens for these events and
+processes them. zed is extensible so you can write shell scripts or
+other programs that subscribe to events and take action. For example,
+the script usually installed at <code class="docutils literal notranslate"><span class="pre">/etc/zfs/zed.d/all-syslog.sh</span></code> writes
+a formatted event message to <code class="docutils literal notranslate"><span class="pre">syslog</span></code>. See the man page for <code class="docutils literal notranslate"><span class="pre">zed(8)</span></code>
+for more information.</p>
+<p>A history of events is also available via the <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">events</span></code> command.
+This history begins at ZFS kernel module load and includes events from
+any pool. These events are stored in RAM and limited in count to a value
+determined by the kernel tunable
+<a class="reference external" href="https://github.com/zfsonlinux/zfs/wiki/ZFS-on-Linux-Module-Parameters#zfs_zevent_len_max">zfs_event_len_max</a>.
+<code class="docutils literal notranslate"><span class="pre">zed</span></code> has an internal throttling mechanism to prevent overconsumption
+of system resources processing ZFS events.</p>
+<p>More detailed information about events is observable using
+<code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">events</span> <span class="pre">-v</span></code> The contents of the verbose events is subject to
+change, based on the event and information available at the time of the
+event.</p>
+<p>Each event has a class identifier used for filtering event types.
+Commonly seen events are those related to pool management with class
+<code class="docutils literal notranslate"><span class="pre">sysevent.fs.zfs.*</span></code> including import, export, configuration updates,
+and <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">history</span></code> updates.</p>
+<p>Events related to errors are reported as class <code class="docutils literal notranslate"><span class="pre">ereport.*</span></code> These can
+be invaluable for troubleshooting. Some faults can cause multiple
+ereports as various layers of the software deal with the fault. For
+example, on a simple pool without parity protection, a faulty disk could
+cause an <code class="docutils literal notranslate"><span class="pre">ereport.io</span></code> during a read from the disk that results in an
+<code class="docutils literal notranslate"><span class="pre">erport.fs.zfs.checksum</span></code> at the pool level. These events are also
+reflected by the error counters observed in <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">status</span></code> If you see
+checksum or read/write errors in <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">status</span></code> then there should be
+one or more corresponding ereports in the <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">events</span></code> output.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="dRAID Howto.html" class="btn btn-neutral float-right" title="dRAID" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="Feature Flags.html" class="btn btn-neutral float-left" title="Feature Flags" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, OpenZFS.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

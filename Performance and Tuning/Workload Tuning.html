@@ -1,0 +1,923 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Workload Tuning &mdash; OpenZFS  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/mandoc.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ZFS Transaction Delay" href="ZFS Transaction Delay.html" />
+    <link rel="prev" title="Module Parameters" href="Module Parameters.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/logo_main.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Getting Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Project and Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Developer Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Performance and Tuning</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Async Write.html">Async Writes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Hardware.html">Hardware</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Module Parameters.html">Module Parameters</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Workload Tuning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#basic-concepts">Basic concepts</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#adaptive-replacement-cache">Adaptive Replacement Cache</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#alignment-shift-ashift">Alignment Shift (ashift)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#compression">Compression</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#raid-z-stripe-width">RAID-Z stripe width</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dataset-recordsize">Dataset recordsize</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#zvol-volblocksize">zvol volblocksize</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#deduplication">Deduplication</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#metaslab-allocator">Metaslab Allocator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pool-geometry">Pool Geometry</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#whole-disks-versus-partitions">Whole Disks versus Partitions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#general-recommendations">General recommendations</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#alignment-shift">Alignment shift</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#atime-updates">Atime Updates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#free-space">Free Space</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lz4-compression">LZ4 compression</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nvme-low-level-formatting">NVMe low level formatting</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pool-geometry-1">Pool Geometry</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#synchronous-i-o">Synchronous I/O</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#whole-disks">Whole disks</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#bit-torrent">Bit Torrent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#database-workloads">Database workloads</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mysql">MySQL</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#postgresql">PostgreSQL</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sqlite">SQLite</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#file-servers">File servers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sequential-workloads">Sequential workloads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#video-games-directories">Video games directories</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#lutris">Lutris</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#steam">Steam</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#virtual-machines">Virtual machines</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#qemu-kvm-xen">QEMU / KVM / Xen</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ZFS Transaction Delay.html">ZFS Transaction Delay</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ZIO Scheduler.html">ZFS I/O (ZIO) Scheduler</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Basic Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../man/index.html">Man Pages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../License.html">License</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">OpenZFS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Performance and Tuning</a> &raquo;</li>
+        
+      <li>Workload Tuning</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/Performance and Tuning/Workload Tuning.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="workload-tuning">
+<h1>Workload Tuning<a class="headerlink" href="#workload-tuning" title="Permalink to this headline">¶</a></h1>
+<p>Below are tips for various workloads.</p>
+<div class="contents local topic" id="table-of-contents">
+<p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#basic-concepts" id="id31">Basic concepts</a></p>
+<ul>
+<li><p><a class="reference internal" href="#adaptive-replacement-cache" id="id32">Adaptive Replacement Cache</a></p></li>
+<li><p><a class="reference internal" href="#alignment-shift-ashift" id="id33">Alignment Shift (ashift)</a></p></li>
+<li><p><a class="reference internal" href="#compression" id="id34">Compression</a></p></li>
+<li><p><a class="reference internal" href="#raid-z-stripe-width" id="id35">RAID-Z stripe width</a></p></li>
+<li><p><a class="reference internal" href="#dataset-recordsize" id="id36">Dataset recordsize</a></p>
+<ul>
+<li><p><a class="reference internal" href="#larger-record-sizes" id="id37">Larger record sizes</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#zvol-volblocksize" id="id38">zvol volblocksize</a></p></li>
+<li><p><a class="reference internal" href="#deduplication" id="id39">Deduplication</a></p></li>
+<li><p><a class="reference internal" href="#metaslab-allocator" id="id40">Metaslab Allocator</a></p></li>
+<li><p><a class="reference internal" href="#pool-geometry" id="id41">Pool Geometry</a></p></li>
+<li><p><a class="reference internal" href="#whole-disks-versus-partitions" id="id42">Whole Disks versus Partitions</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#general-recommendations" id="id43">General recommendations</a></p>
+<ul>
+<li><p><a class="reference internal" href="#alignment-shift" id="id44">Alignment shift</a></p></li>
+<li><p><a class="reference internal" href="#atime-updates" id="id45">Atime Updates</a></p></li>
+<li><p><a class="reference internal" href="#free-space" id="id46">Free Space</a></p></li>
+<li><p><a class="reference internal" href="#lz4-compression" id="id47">LZ4 compression</a></p></li>
+<li><p><a class="reference internal" href="#nvme-low-level-formatting" id="id48">NVMe low level formatting</a></p></li>
+<li><p><a class="reference internal" href="#pool-geometry-1" id="id49">Pool Geometry</a></p></li>
+<li><p><a class="reference internal" href="#synchronous-i-o" id="id50">Synchronous I/O</a></p>
+<ul>
+<li><p><a class="reference internal" href="#overprovisioning-by-secure-erase-and-partition-table-trick" id="id51">Overprovisioning by secure erase and partition table trick</a></p></li>
+<li><p><a class="reference internal" href="#nvme-overprovisioning" id="id52">NVMe overprovisioning</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#whole-disks" id="id53">Whole disks</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#bit-torrent" id="id54">Bit Torrent</a></p></li>
+<li><p><a class="reference internal" href="#database-workloads" id="id55">Database workloads</a></p>
+<ul>
+<li><p><a class="reference internal" href="#mysql" id="id56">MySQL</a></p>
+<ul>
+<li><p><a class="reference internal" href="#innodb" id="id57">InnoDB</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#postgresql" id="id58">PostgreSQL</a></p></li>
+<li><p><a class="reference internal" href="#sqlite" id="id59">SQLite</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#file-servers" id="id60">File servers</a></p></li>
+<li><p><a class="reference internal" href="#sequential-workloads" id="id61">Sequential workloads</a></p></li>
+<li><p><a class="reference internal" href="#video-games-directories" id="id62">Video games directories</a></p>
+<ul>
+<li><p><a class="reference internal" href="#lutris" id="id63">Lutris</a></p></li>
+<li><p><a class="reference internal" href="#steam" id="id64">Steam</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#virtual-machines" id="id65">Virtual machines</a></p>
+<ul>
+<li><p><a class="reference internal" href="#qemu-kvm-xen" id="id66">QEMU / KVM / Xen</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="basic-concepts">
+<span id="id1"></span><h2><a class="toc-backref" href="#id31">Basic concepts</a><a class="headerlink" href="#basic-concepts" title="Permalink to this headline">¶</a></h2>
+<p>Descriptions of ZFS internals that have an effect on application
+performance follow.</p>
+<div class="section" id="adaptive-replacement-cache">
+<span id="id2"></span><h3><a class="toc-backref" href="#id32">Adaptive Replacement Cache</a><a class="headerlink" href="#adaptive-replacement-cache" title="Permalink to this headline">¶</a></h3>
+<p>For decades, operating systems have used RAM as a cache to avoid the
+necessity of waiting on disk IO, which is extremely slow. This concept
+is called page replacement. Until ZFS, virtually all filesystems used
+the Least Recently Used (LRU) page replacement algorithm in which the
+least recently used pages are the first to be replaced. Unfortunately,
+the LRU algorithm is vulnerable to cache flushes, where a brief change
+in workload that occurs occasionally removes all frequently used data
+from cache. The Adaptive Replacement Cache (ARC) algorithm was
+implemented in ZFS to replace LRU. It solves this problem by maintaining
+four lists:</p>
+<ol class="arabic simple">
+<li><p>A list for recently cached entries.</p></li>
+<li><p>A list for recently cached entries that have been accessed more than
+once.</p></li>
+<li><p>A list for entries evicted from #1.</p></li>
+<li><p>A list of entries evicited from #2.</p></li>
+</ol>
+<p>Data is evicted from the first list while an effort is made to keep data
+in the second list. In this way, ARC is able to outperform LRU by
+providing a superior hit rate.</p>
+<p>In addition, a dedicated cache device (typically a SSD) can be added to
+the pool, with
+<code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">add</span> <span class="pre">POOLNAME</span> <span class="pre">cache</span> <span class="pre">DEVICENAME</span></code>. The cache
+device is managed by the L2ARC, which scans entries that are next to be
+evicted and writes them to the cache device. The data stored in ARC and
+L2ARC can be controlled via the <code class="docutils literal notranslate"><span class="pre">primarycache</span></code> and <code class="docutils literal notranslate"><span class="pre">secondarycache</span></code>
+zfs properties respectively, which can be set on both zvols and
+datasets. Possible settings are <code class="docutils literal notranslate"><span class="pre">all</span></code>, <code class="docutils literal notranslate"><span class="pre">none</span></code> and <code class="docutils literal notranslate"><span class="pre">metadata</span></code>. It
+is possible to improve performance when a zvol or dataset hosts an
+application that does its own caching by caching only metadata. One
+example is PostgreSQL. Another would be a virtual machine using ZFS.</p>
+</div>
+<div class="section" id="alignment-shift-ashift">
+<span id="id3"></span><h3><a class="toc-backref" href="#id33">Alignment Shift (ashift)</a><a class="headerlink" href="#alignment-shift-ashift" title="Permalink to this headline">¶</a></h3>
+<p>Top-level vdevs contain an internal property called ashift, which stands
+for alignment shift. It is set at vdev creation and it is immutable. It
+can be read using the <code class="docutils literal notranslate"><span class="pre">zdb</span></code> command. It is calculated as the maximum
+base 2 logarithm of the physical sector size of any child vdev and it
+alters the disk format such that writes are always done according to it.
+This makes 2^ashift the smallest possible IO on a vdev. Configuring
+ashift correctly is important because partial sector writes incur a
+penalty where the sector must be read into a buffer before it can be
+written. ZFS makes the implicit assumption that the sector size reported
+by drives is correct and calculates ashift based on that.</p>
+<p>In an ideal world, physical sector size is always reported correctly and
+therefore, this requires no attention. Unfortunately, this is not the
+case. The sector size on all storage devices was 512-bytes prior to the
+creation of flash-based solid state drives. Some operating systems, such
+as Windows XP, were written under this assumption and will not function
+when drives report a different sector size.</p>
+<p>Flash-based solid state drives came to market around 2007. These devices
+report 512-byte sectors, but the actual flash pages, which roughly
+correspond to sectors, are never 512-bytes. The early models used
+4096-byte pages while the newer models have moved to an 8192-byte page.
+In addition, “Advanced Format” hard drives have been created which also
+use a 4096-byte sector size. Partial page writes suffer from similar
+performance degradation as partial sector writes. In some cases, the
+design of NAND-flash makes the performance degradation even worse, but
+that is beyond the scope of this description.</p>
+<p>Reporting the correct sector sizes is the responsibility the block
+device layer. This unfortunately has made proper handling of devices
+that misreport drives different across different platforms. The
+respective methods are as follows:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="http://wiki.illumos.org/display/illumos/ZFS+and+Advanced+Format+disks#ZFSandAdvancedFormatdisks-OverridingthePhysicalBlockSize">sd.conf</a>
+on illumos</p></li>
+<li><p><a class="reference external" href="https://www.freebsd.org/cgi/man.cgi?query=gnop&amp;sektion=8&amp;manpath=FreeBSD+10.2-RELEASE">gnop(8)</a>
+on FreeBSD; see for example <a class="reference external" href="http://web.archive.org/web/20151022020605/http://ivoras.sharanet.org/blog/tree/2011-01-01.freebsd-on-4k-sector-drives.html">FreeBSD on 4K sector
+drives</a>
+(2011-01-01)</p></li>
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/Project%20and%20Community/FAQ.html#advanced-format-disks">ashift=</a>
+on ZFS on Linux</p></li>
+<li><p>-o ashift= also works with both MacZFS (pool version 8) and ZFS-OSX
+(pool version 5000).</p></li>
+</ul>
+<p>-o ashift= is convenient, but it is flawed in that the creation of pools
+containing top level vdevs that have multiple optimal sector sizes
+require the use of multiple commands. <a class="reference external" href="http://www.listbox.com/member/archive/182191/2013/07/search/YXNoaWZ0/sort/time_rev/page/2/entry/16:58/20130709002459:82E21654-E84F-11E2-A0FF-F6B47351D2F5/">A newer
+syntax</a>
+that will rely on the actual sector sizes has been discussed as a cross
+platform replacement and will likely be implemented in the future.</p>
+<p>In addition, there is a <a class="reference external" href="https://github.com/openzfs/zfs/blob/master/cmd/zpool/os/linux/zpool_vdev_os.c#L98">database of
+drives known to misreport sector
+sizes</a>
+to the ZFS on Linux project. It is used to automatically adjust ashift
+without the assistance of the system administrator. This approach is
+unable to fully compensate for misreported sector sizes whenever drive
+identifiers are used ambiguously (e.g. virtual machines, iSCSI LUNs,
+some rare SSDs), but it does a great amount of good. The format is
+roughly compatible with illumos’ sd.conf and it is expected that other
+implementations will integrate the database in future releases. Strictly
+speaking, this database does not belong in ZFS, but the difficulty of
+patching the Linux kernel (especially older ones) necessitated that this
+be implemented in ZFS itself for Linux. The same is true for MacZFS.
+However, FreeBSD and illumos are both able to implement this in the
+correct layer.</p>
+</div>
+<div class="section" id="compression">
+<h3><a class="toc-backref" href="#id34">Compression</a><a class="headerlink" href="#compression" title="Permalink to this headline">¶</a></h3>
+<p>Internally, ZFS allocates data using multiples of the device’s sector
+size, typically either 512 bytes or 4KB (see above). When compression is
+enabled, a smaller number of sectors can be allocated for each block.
+The uncompressed block size is set by the <code class="docutils literal notranslate"><span class="pre">recordsize</span></code> (defaults to
+128KB) or <code class="docutils literal notranslate"><span class="pre">volblocksize</span></code> (defaults to 8KB) property (for filesystems
+vs volumes).</p>
+<p>The following compression algorithms are available:</p>
+<ul class="simple">
+<li><p>LZ4</p>
+<ul>
+<li><p>New algorithm added after feature flags were created. It is
+significantly superior to LZJB in all metrics tested. It is <a class="reference external" href="https://github.com/illumos/illumos-gate/commit/db1741f555ec79def5e9846e6bfd132248514ffe">new
+default compression algorithm</a>
+(compression=on) in OpenZFS.
+It is available on all platforms have as of 2020.</p></li>
+</ul>
+</li>
+<li><p>LZJB</p>
+<ul>
+<li><p>Original default compression algorithm (compression=on) for ZFS.
+It was created to satisfy the desire for a compression algorithm
+suitable for use in filesystems. Specifically, that it provides
+fair compression, has a high compression speed, has a high
+decompression speed and detects incompressible data detection
+quickly.</p></li>
+</ul>
+</li>
+<li><p>GZIP (1 through 9)</p>
+<ul>
+<li><p>Classic Lempel-Ziv implementation. It provides high compression,
+but it often makes IO CPU-bound.</p></li>
+</ul>
+</li>
+<li><p>ZLE (Zero Length Encoding)</p>
+<ul>
+<li><p>A very simple algorithm that only compresses zeroes.</p></li>
+</ul>
+</li>
+</ul>
+<p>If you want to use compression and are uncertain which to use, use LZ4.
+It averages a 2.1:1 compression ratio while gzip-1 averages 2.7:1, but
+gzip is much slower. Both figures are obtained from <a class="reference external" href="https://github.com/lz4/lz4">testing by the LZ4
+project</a> on the Silesia corpus. The
+greater compression ratio of gzip is usually only worthwhile for rarely
+accessed data.</p>
+</div>
+<div class="section" id="raid-z-stripe-width">
+<span id="id4"></span><h3><a class="toc-backref" href="#id35">RAID-Z stripe width</a><a class="headerlink" href="#raid-z-stripe-width" title="Permalink to this headline">¶</a></h3>
+<p>Choose a RAID-Z stripe width based on your IOPS needs and the amount of
+space you are willing to devote to parity information. If you need more
+IOPS, use fewer disks per stripe. If you need more usable space, use
+more disks per stripe. Trying to optimize your RAID-Z stripe width based
+on exact numbers is irrelevant in nearly all cases. See this <a class="reference external" href="https://www.delphix.com/blog/delphix-engineering/zfs-raidz-stripe-width-or-how-i-learned-stop-worrying-and-love-raidz/">blog
+post</a>
+for more details.</p>
+</div>
+<div class="section" id="dataset-recordsize">
+<span id="id5"></span><h3><a class="toc-backref" href="#id36">Dataset recordsize</a><a class="headerlink" href="#dataset-recordsize" title="Permalink to this headline">¶</a></h3>
+<p>ZFS datasets use an internal recordsize of 128KB by default. The dataset
+recordsize is the basic unit of data used for internal copy-on-write on
+files. Partial record writes require that data be read from either ARC
+(cheap) or disk (expensive). recordsize can be set to any power of 2
+from 512 bytes to 128 kilobytes. Software that writes in fixed record
+sizes (e.g. databases) will benefit from the use of a matching
+recordsize.</p>
+<p>Changing the recordsize on a dataset will only take effect for new
+files. If you change the recordsize because your application should
+perform better with a different one, you will need to recreate its
+files. A cp followed by a mv on each file is sufficient. Alternatively,
+send/recv should recreate the files with the correct recordsize when a
+full receive is done.</p>
+<div class="section" id="larger-record-sizes">
+<span id="id6"></span><h4><a class="toc-backref" href="#id37">Larger record sizes</a><a class="headerlink" href="#larger-record-sizes" title="Permalink to this headline">¶</a></h4>
+<p>Record sizes of up to 16M are supported with the large_blocks pool
+feature, which is enabled by default on new pools on systems that
+support it. However, record sizes larger than 1M is disabled by default
+unless the zfs_max_recordsize kernel module parameter is set to allow
+sizes higher than 1M. Larger record sizes than 1M are not well tested as
+1M, although they should work. `zfs send` operations must specify -L
+to ensure that larger than 128KB blocks are sent and the receiving pools
+must support the large_blocks feature.</p>
+</div>
+</div>
+<div class="section" id="zvol-volblocksize">
+<span id="id7"></span><h3><a class="toc-backref" href="#id38">zvol volblocksize</a><a class="headerlink" href="#zvol-volblocksize" title="Permalink to this headline">¶</a></h3>
+<p>Zvols have a volblocksize property that is analogous to record size. The
+default size is 8KB, which is the size of a page on the SPARC
+architecture. Workloads that use smaller sized IOs (such as swap on x86
+which use 4096-byte pages) will benefit from a smaller volblocksize.</p>
+</div>
+<div class="section" id="deduplication">
+<h3><a class="toc-backref" href="#id39">Deduplication</a><a class="headerlink" href="#deduplication" title="Permalink to this headline">¶</a></h3>
+<p>Deduplication uses an on-disk hash table, using <a class="reference external" href="http://en.wikipedia.org/wiki/Extensible_hashing">extensible
+hashing</a> as
+implemented in the ZAP (ZFS Attribute Processor). Each cached entry uses
+slightly more than 320 bytes of memory. The DDT code relies on ARC for
+caching the DDT entries, such that there is no double caching or
+internal fragmentation from the kernel memory allocator. Each pool has a
+global deduplication table shared across all datasets and zvols on which
+deduplication is enabled. Each entry in the hash table is a record of a
+unique block in the pool. (Where the block size is set by the
+<code class="docutils literal notranslate"><span class="pre">recordsize</span></code> or <code class="docutils literal notranslate"><span class="pre">volblocksize</span></code> properties.)</p>
+<p>The hash table (also known as the DDT or DeDup Table) must be accessed
+for every dedup-able block that is written or freed (regardless of
+whether it has multiple references). If there is insufficient memory for
+the DDT to be cached in memory, each cache miss will require reading a
+random block from disk, resulting in poor performance. For example, if
+operating on a single 7200RPM drive that can do 100 io/s, uncached DDT
+reads would limit overall write throughput to 100 blocks per second, or
+400KB/s with 4KB blocks.</p>
+<p>The consequence is that sufficient memory to store deduplication data is
+required for good performance. The deduplication data is considered
+metadata and therefore can be cached if the <code class="docutils literal notranslate"><span class="pre">primarycache</span></code> or
+<code class="docutils literal notranslate"><span class="pre">secondarycache</span></code> properties are set to <code class="docutils literal notranslate"><span class="pre">metadata</span></code>. In addition, the
+deduplication table will compete with other metadata for metadata
+storage, which can have a negative effect on performance. Simulation of
+the number of deduplication table entries needed for a given pool can be
+done using the -D option to zdb. Then a simple multiplication by
+320-bytes can be done to get the approximate memory requirements.
+Alternatively, you can estimate an upper bound on the number of unique
+blocks by dividing the amount of storage you plan to use on each dataset
+(taking into account that partial records each count as a full
+recordsize for the purposes of deduplication) by the recordsize and each
+zvol by the volblocksize, summing and then multiplying by 320-bytes.</p>
+</div>
+<div class="section" id="metaslab-allocator">
+<span id="id8"></span><h3><a class="toc-backref" href="#id40">Metaslab Allocator</a><a class="headerlink" href="#metaslab-allocator" title="Permalink to this headline">¶</a></h3>
+<p>ZFS top level vdevs are divided into metaslabs from which blocks can be
+independently allocated so allow for concurrent IOs to perform
+allocations without blocking one another. At present, <a class="reference external" href="https://github.com/zfsonlinux/zfs/pull/3643">there is a
+regression</a> on the
+Linux and Mac OS X ports that causes serialization to occur.</p>
+<p>By default, the selection of a metaslab is biased toward lower LBAs to
+improve performance of spinning disks, but this does not make sense on
+solid state media. This behavior can be adjusted globally by setting the
+ZFS module’s global metaslab_lba_weighting_enabled tuanble to 0. This
+tunable is only advisable on systems that only use solid state media for
+pools.</p>
+<p>The metaslab allocator will allocate blocks on a first-fit basis when a
+metaslab has more than or equal to 4 percent free space and a best-fit
+basis when a metaslab has less than 4 percent free space. The former is
+much faster than the latter, but it is not possible to tell when this
+behavior occurs from the pool’s free space. However, the command <code class="docutils literal notranslate"><span class="pre">zdb</span>
+<span class="pre">-mmm</span> <span class="pre">$POOLNAME</span></code> will provide this information.</p>
+</div>
+<div class="section" id="pool-geometry">
+<span id="id9"></span><h3><a class="toc-backref" href="#id41">Pool Geometry</a><a class="headerlink" href="#pool-geometry" title="Permalink to this headline">¶</a></h3>
+<p>If small random IOPS are of primary importance, mirrored vdevs will
+outperform raidz vdevs. Read IOPS on mirrors will scale with the number
+of drives in each mirror while raidz vdevs will each be limited to the
+IOPS of the slowest drive.</p>
+<p>If sequential writes are of primary importance, raidz will outperform
+mirrored vdevs. Sequential write throughput increases linearly with the
+number of data disks in raidz while writes are limited to the slowest
+drive in mirrored vdevs. Sequential read performance should be roughly
+the same on each.</p>
+<p>Both IOPS and throughput will increase by the respective sums of the
+IOPS and throughput of each top level vdev, regardless of whether they
+are raidz or mirrors.</p>
+</div>
+<div class="section" id="whole-disks-versus-partitions">
+<span id="id10"></span><h3><a class="toc-backref" href="#id42">Whole Disks versus Partitions</a><a class="headerlink" href="#whole-disks-versus-partitions" title="Permalink to this headline">¶</a></h3>
+<p>ZFS will behave differently on different platforms when given a whole
+disk.</p>
+<p>On illumos, ZFS attempts to enable the write cache on a whole disk. The
+illumos UFS driver cannot ensure integrity with the write cache enabled,
+so by default Sun/Solaris systems using UFS file system for boot were
+shipped with drive write cache disabled (long ago, when Sun was still an
+independent company). For safety on illumos, if ZFS is not given the
+whole disk, it could be shared with UFS and thus it is not appropriate
+for ZFS to enable write cache. In this case, the write cache setting is
+not changed and will remain as-is. Today, most vendors ship drives with
+write cache enabled by default.</p>
+<p>On Linux, the Linux IO elevator is largely redundant given that ZFS has
+its own IO elevator.</p>
+<p>ZFS will also create a GPT partition table own partitions when given a
+whole disk under illumos on x86/amd64 and on Linux. This is mainly to
+make booting through UEFI possible because UEFI requires a small FAT
+partition to be able to boot the system. The ZFS driver will be able to
+tell the difference between whether the pool had been given the entire
+disk or not via the whole_disk field in the label.</p>
+<p>This is not done on FreeBSD. Pools created by FreeBSD will always have
+the whole_disk field set to true, such that a pool imported on another
+platform that was created on FreeBSD will always be treated as the whole
+disks were given to ZFS.</p>
+</div>
+</div>
+<div class="section" id="general-recommendations">
+<span id="id11"></span><h2><a class="toc-backref" href="#id43">General recommendations</a><a class="headerlink" href="#general-recommendations" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="alignment-shift">
+<span id="id12"></span><h3><a class="toc-backref" href="#id44">Alignment shift</a><a class="headerlink" href="#alignment-shift" title="Permalink to this headline">¶</a></h3>
+<p>Make sure that you create your pools such that the vdevs have the
+correct alignment shift for your storage device’s size. if dealing with
+flash media, this is going to be either 12 (4K sectors) or 13 (8K
+sectors). For SSD ephemeral storage on Amazon EC2, the proper setting is
+12.</p>
+</div>
+<div class="section" id="atime-updates">
+<span id="id13"></span><h3><a class="toc-backref" href="#id45">Atime Updates</a><a class="headerlink" href="#atime-updates" title="Permalink to this headline">¶</a></h3>
+<p>Set either relatime=on or atime=off to minimize IOs used to update
+access time stamps. For backward compatibility with a small percentage
+of software that supports it, relatime is preferred when available and
+should be set on your entire pool. atime=off should be used more
+selectively.</p>
+</div>
+<div class="section" id="free-space">
+<span id="id14"></span><h3><a class="toc-backref" href="#id46">Free Space</a><a class="headerlink" href="#free-space" title="Permalink to this headline">¶</a></h3>
+<p>Keep pool free space above 10% to avoid many metaslabs from reaching the
+4% free space threshold to switch from first-fit to best-fit allocation
+strategies. When the threshold is hit, the <a class="reference internal" href="#metaslab-allocator"><span class="std std-ref">Metaslab Allocator</span></a> becomes very CPU
+intensive in an attempt to protect itself from fragmentation. This
+reduces IOPS, especially as more metaslabs reach the 4% threshold.</p>
+<p>The recommendation is 10% rather than 5% because metaslabs selection
+considers both location and free space unless the global
+metaslab_lba_weighting_enabled tunable is set to 0. When that tunable is
+0, ZFS will consider only free space, so the the expense of the best-fit
+allocator can be avoided by keeping free space above 5%. That setting
+should only be used on systems with pools that consist of solid state
+drives because it will reduce sequential IO performance on mechanical
+disks.</p>
+</div>
+<div class="section" id="lz4-compression">
+<span id="id15"></span><h3><a class="toc-backref" href="#id47">LZ4 compression</a><a class="headerlink" href="#lz4-compression" title="Permalink to this headline">¶</a></h3>
+<p>Set compression=lz4 on your pools’ root datasets so that all datasets
+inherit it unless you have a reason not to enable it. Userland tests of
+LZ4 compression of incompressible data in a single thread has shown that
+it can process 10GB/sec, so it is unlikely to be a bottleneck even on
+incompressible data. Furthermore, incompressible data will be stored
+without compression such that reads of incompressible data with
+compression enabled will not be subject to decompression. Writes are so
+fast that in-compressible data is unlikely to see a performance penalty
+from the use of LZ4 compression. The reduction in IO from LZ4 will
+typically be a performance win.</p>
+<p>Note that larger record sizes will increase compression ratios on
+compressible data by allowing compression algorithms to process more
+data at a time.</p>
+</div>
+<div class="section" id="nvme-low-level-formatting">
+<span id="nvme-low-level-formatting-link"></span><h3><a class="toc-backref" href="#id48">NVMe low level formatting</a><a class="headerlink" href="#nvme-low-level-formatting" title="Permalink to this headline">¶</a></h3>
+<p>See <a class="reference internal" href="Hardware.html#nvme-low-level-formatting"><span class="std std-ref">NVMe low level formatting</span></a>.</p>
+</div>
+<div class="section" id="pool-geometry-1">
+<span id="id16"></span><h3><a class="toc-backref" href="#id49">Pool Geometry</a><a class="headerlink" href="#pool-geometry-1" title="Permalink to this headline">¶</a></h3>
+<p>Do not put more than ~16 disks in raidz. The rebuild times on mechanical
+disks will be excessive when the pool is full.</p>
+</div>
+<div class="section" id="synchronous-i-o">
+<span id="synchronous-io"></span><h3><a class="toc-backref" href="#id50">Synchronous I/O</a><a class="headerlink" href="#synchronous-i-o" title="Permalink to this headline">¶</a></h3>
+<p>If your workload involves fsync or O_SYNC and your pool is backed by
+mechanical storage, consider adding one or more SLOG devices. Pools that
+have multiple SLOG devices will distribute ZIL operations across them.
+The best choice for SLOG device(s) are likely Optane / 3D XPoint SSDs.
+See <a class="reference internal" href="Hardware.html#optane-3d-xpoint-ssds"><span class="std std-ref">Optane / 3D XPoint SSDs</span></a>
+for a description of them. If an Optane / 3D XPoint SSD is an option,
+the rest of this section on synchronous I/O need not be read. If Optane
+/ 3D XPoint SSDs is not an option, see
+<a class="reference internal" href="Hardware.html#nand-flash-ssds"><span class="std std-ref">NAND Flash SSDs</span></a> for suggestions
+for NAND flash SSDs and also read the information below.</p>
+<p>To ensure maximum ZIL performance on NAND flash SSD-based SLOG devices,
+you should also overprovison spare area to increase
+IOPS <a class="footnote-reference brackets" href="#ssd-iops" id="id17">1</a>. Only
+about 4GB is needed, so the rest can be left as overprovisioned storage.
+The choice of 4GB is somewhat arbitrary. Most systems do not write
+anything close to 4GB to ZIL between transaction group commits, so
+overprovisioning all storage beyond the 4GB partition should be alright.
+If a workload needs more, then make it no more than the maximum ARC
+size. Even under extreme workloads, ZFS will not benefit from more SLOG
+storage than the maximum ARC size. That is half of system memory on
+Linux and 3/4 of system memory on illumos.</p>
+<div class="section" id="overprovisioning-by-secure-erase-and-partition-table-trick">
+<span id="id18"></span><h4><a class="toc-backref" href="#id51">Overprovisioning by secure erase and partition table trick</a><a class="headerlink" href="#overprovisioning-by-secure-erase-and-partition-table-trick" title="Permalink to this headline">¶</a></h4>
+<p>You can do this with a mix of a secure erase and a partition table
+trick, such as the following:</p>
+<ol class="arabic simple">
+<li><p>Run a secure erase on the NAND-flash SSD.</p></li>
+<li><p>Create a partition table on the NAND-flash SSD.</p></li>
+<li><p>Create a 4GB partition.</p></li>
+<li><p>Give the partition to ZFS to use as a log device.</p></li>
+</ol>
+<p>If using the secure erase and partition table trick, do <em>not</em> use the
+unpartitioned space for other things, even temporarily. That will reduce
+or eliminate the overprovisioning by marking pages as dirty.</p>
+<p>Alternatively, some devices allow you to change the sizes that they
+report.This would also work, although a secure erase should be done
+prior to changing the reported size to ensure that the SSD recognizes
+the additional spare area. Changing the reported size can be done on
+drives that support it with `hdparm -N ` on systems that have
+laptop-mode-tools.</p>
+</div>
+<div class="section" id="nvme-overprovisioning">
+<span id="id19"></span><h4><a class="toc-backref" href="#id52">NVMe overprovisioning</a><a class="headerlink" href="#nvme-overprovisioning" title="Permalink to this headline">¶</a></h4>
+<p>On NVMe, you can use namespaces to achieve overprovisioning:</p>
+<ol class="arabic simple">
+<li><p>Do a sanitize command as a precaution to ensure the device is
+completely clean.</p></li>
+<li><p>Delete the default namespace.</p></li>
+<li><p>Create a new namespace of size 4GB.</p></li>
+<li><p>Give the namespace to ZFS to use as a log device. e.g. zfs add tank
+log /dev/nvme1n1</p></li>
+</ol>
+</div>
+</div>
+<div class="section" id="whole-disks">
+<span id="id20"></span><h3><a class="toc-backref" href="#id53">Whole disks</a><a class="headerlink" href="#whole-disks" title="Permalink to this headline">¶</a></h3>
+<p>Whole disks should be given to ZFS rather than partitions. If you must
+use a partition, make certain that the partition is properly aligned to
+avoid read-modify-write overhead. See the section on
+<a class="reference internal" href="#alignment-shift-ashift"><span class="std std-ref">Alignment Shift (ashift)</span></a>
+for a description of proper alignment. Also, see the section on
+<a class="reference internal" href="#whole-disks-versus-partitions"><span class="std std-ref">Whole Disks versus Partitions</span></a>
+for a description of changes in ZFS behavior when operating on a
+partition.</p>
+<p>Single disk RAID 0 arrays from RAID controllers are not equivalent to
+whole disks. The <a class="reference internal" href="Hardware.html#hardware-raid-controllers"><span class="std std-ref">Hardware RAID controllers</span></a> page
+explains in detail.</p>
+</div>
+</div>
+<div class="section" id="bit-torrent">
+<span id="id21"></span><h2><a class="toc-backref" href="#id54">Bit Torrent</a><a class="headerlink" href="#bit-torrent" title="Permalink to this headline">¶</a></h2>
+<p>Bit torrent performs 16KB random reads/writes. The 16KB writes cause
+read-modify-write overhead. The read-modify-write overhead can reduce
+performance by a factor of 16 with 128KB record sizes when the amount of
+data written exceeds system memory. This can be avoided by using a
+dedicated dataset for bit torrent downloads with recordsize=16KB.</p>
+<p>When the files are read sequentially through a HTTP server, the random
+nature in which the files were generated creates fragmentation that has
+been observed to reduce sequential read performance by a factor of two
+on 7200RPM hard disks. If performance is a problem, fragmentation can be
+eliminated by rewriting the files sequentially in either of two ways:</p>
+<p>The first method is to configure your client to download the files to a
+temporary directory and then copy them into their final location when
+the downloads are finished, provided that your client supports this.</p>
+<p>The second method is to use send/recv to recreate a dataset
+sequentially.</p>
+<p>In practice, defragmenting files obtained through bit torrent should
+only improve performance when the files are stored on magnetic storage
+and are subject to significant sequential read workloads after creation.</p>
+</div>
+<div class="section" id="database-workloads">
+<span id="id22"></span><h2><a class="toc-backref" href="#id55">Database workloads</a><a class="headerlink" href="#database-workloads" title="Permalink to this headline">¶</a></h2>
+<p>Setting <code class="docutils literal notranslate"><span class="pre">redundant_metadata=most</span></code> can increase IOPS by at least a few
+percentage points by eliminating redundant metadata at the lowest level
+of the indirect block tree. This comes with the caveat that data loss
+will occur if a metadata block pointing to data blocks is corrupted and
+there are no duplicate copies, but this is generally not a problem in
+production on mirrored or raidz vdevs.</p>
+<div class="section" id="mysql">
+<h3><a class="toc-backref" href="#id56">MySQL</a><a class="headerlink" href="#mysql" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="innodb">
+<h4><a class="toc-backref" href="#id57">InnoDB</a><a class="headerlink" href="#innodb" title="Permalink to this headline">¶</a></h4>
+<p>Make separate datasets for InnoDB’s data files and log files. Set
+<code class="docutils literal notranslate"><span class="pre">recordsize=16K</span></code> on InnoDB’s data files to avoid expensive partial record
+writes and leave recordsize=128K on the log files. Set
+<code class="docutils literal notranslate"><span class="pre">primarycache=metadata</span></code> on both to prefer InnoDB’s
+caching <a class="footnote-reference brackets" href="#mysql-basic" id="id23">2</a>.
+Set <code class="docutils literal notranslate"><span class="pre">logbias=throughput</span></code> on the data to stop ZIL from writing twice.</p>
+<p>Set <code class="docutils literal notranslate"><span class="pre">skip-innodb_doublewrite</span></code> in my.cnf to prevent innodb from writing
+twice. The double writes are a data integrity feature meant to protect
+against corruption from partially-written records, but those are not
+possible on ZFS. It should be noted that <a class="reference external" href="https://www.percona.com/blog/2014/05/23/improve-innodb-performance-write-bound-loads/">Percona’s
+blog had advocated</a>
+using an ext4 configuration where double writes were
+turned off for a performance gain, but later recanted it because it
+caused data corruption. Following a well timed power failure, an in
+place filesystem such as ext4 can have half of a 8KB record be old while
+the other half would be new. This would be the corruption that caused
+Percona to recant its advice. However, ZFS’ copy on write design would
+cause it to return the old correct data following a power failure (no
+matter what the timing is). That prevents the corruption that the double
+write feature is intended to prevent from ever happening. The double
+write feature is therefore unnecessary on ZFS and can be safely turned
+off for better performance.</p>
+<p>On Linux, the driver’s AIO implementation is a compatibility shim that
+just barely passes the POSIX standard. InnoDB performance suffers when
+using its default AIO codepath. Set <code class="docutils literal notranslate"><span class="pre">innodb_use_native_aio=0</span></code> and
+<code class="docutils literal notranslate"><span class="pre">innodb_use_atomic_writes=0</span></code> in my.cnf to disable AIO. Both of these
+settings must be disabled to disable AIO.</p>
+</div>
+</div>
+<div class="section" id="postgresql">
+<h3><a class="toc-backref" href="#id58">PostgreSQL</a><a class="headerlink" href="#postgresql" title="Permalink to this headline">¶</a></h3>
+<p>Make separate datasets for PostgreSQL’s data and WAL. Set <code class="docutils literal notranslate"><span class="pre">recordsize=8K</span></code>
+on both to avoid expensive partial record writes. Set <code class="docutils literal notranslate"><span class="pre">logbias=throughput</span></code>
+on PostgreSQL’s data to avoid writing twice.</p>
+</div>
+<div class="section" id="sqlite">
+<h3><a class="toc-backref" href="#id59">SQLite</a><a class="headerlink" href="#sqlite" title="Permalink to this headline">¶</a></h3>
+<p>Make a separate dataset for the database. Set the recordsize to 64K. Set
+the SQLite page size to 65536
+bytes <a class="footnote-reference brackets" href="#sqlite-ps" id="id24">3</a>.</p>
+<p>Note that SQLite databases typically are not exercised enough to merit
+special tuning, but this will provide it. Note the side effect on cache
+size mentioned at
+SQLite.org <a class="footnote-reference brackets" href="#sqlite-ps-change" id="id25">4</a>.</p>
+</div>
+</div>
+<div class="section" id="file-servers">
+<span id="id26"></span><h2><a class="toc-backref" href="#id60">File servers</a><a class="headerlink" href="#file-servers" title="Permalink to this headline">¶</a></h2>
+<p>Create a dedicated dataset for files being served.</p>
+<p>See
+<a class="reference internal" href="#sequential-workloads"><span class="std std-ref">Sequential workloads</span></a>
+for configuration recommendations.</p>
+</div>
+<div class="section" id="sequential-workloads">
+<span id="id27"></span><h2><a class="toc-backref" href="#id61">Sequential workloads</a><a class="headerlink" href="#sequential-workloads" title="Permalink to this headline">¶</a></h2>
+<p>Set recordsize=1M on datasets that are subject to sequential workloads.
+Read
+<a class="reference internal" href="#larger-record-sizes"><span class="std std-ref">Larger record sizes</span></a>
+for documentation on things that should be known before setting 1M
+record sizes.</p>
+<p>Set compression=lz4 as per the general recommendation for <a class="reference internal" href="#lz4-compression"><span class="std std-ref">LZ4
+compression</span></a>.</p>
+</div>
+<div class="section" id="video-games-directories">
+<span id="id28"></span><h2><a class="toc-backref" href="#id62">Video games directories</a><a class="headerlink" href="#video-games-directories" title="Permalink to this headline">¶</a></h2>
+<p>Create a dedicated dataset, use chown to make it user accessible (or
+create a directory under it and use chown on that) and then configure
+the game download application to place games there. Specific information
+on how to configure various ones is below.</p>
+<p>See
+<a class="reference internal" href="#sequential-workloads"><span class="std std-ref">Sequential workloads</span></a>
+for configuration recommendations before installing games.</p>
+<p>Note that the performance gains from this tuning are likely to be small
+and limited to load times. However, the combination of 1M records and
+LZ4 will allow more games to be stored, which is why this tuning is
+documented despite the performance gains being limited. A steam library
+of 300 games (mostly from humble bundle) that had these tweaks applied
+to it saw 20% space savings. Both faster load times and significant
+space savings are possible on compressible games when this tuning has
+been done. Games whose assets are already compressed will see little to
+no benefit.</p>
+<div class="section" id="lutris">
+<h3><a class="toc-backref" href="#id63">Lutris</a><a class="headerlink" href="#lutris" title="Permalink to this headline">¶</a></h3>
+<p>Open the context menu by left clicking on the triple bar icon in the
+upper right. Go to “Preferences” and then the “System options” tab.
+Change the default installation directory and click save.</p>
+</div>
+<div class="section" id="steam">
+<h3><a class="toc-backref" href="#id64">Steam</a><a class="headerlink" href="#steam" title="Permalink to this headline">¶</a></h3>
+<p>Go to “Settings” -&gt; “Downloads” -&gt; “Steam Library Folders” and use “Add
+Library Folder” to set the directory for steam to use to store games.
+Make sure to set it to the default by right clicking on it and clicking
+“Make Default Folder” before closing the dialogue.</p>
+</div>
+</div>
+<div class="section" id="virtual-machines">
+<span id="id29"></span><h2><a class="toc-backref" href="#id65">Virtual machines</a><a class="headerlink" href="#virtual-machines" title="Permalink to this headline">¶</a></h2>
+<p>Virtual machine images on ZFS should be stored using either zvols or raw
+files to avoid unnecessary overhead. The recordsize/volblocksize and
+guest filesystem should be configured to match to avoid overhead from
+partial record modification. This would typically be 4K. If raw files
+are used, a separate dataset should be used to make it easy to configure
+recordsize independently of other things stored on ZFS.</p>
+<div class="section" id="qemu-kvm-xen">
+<span id="id30"></span><h3><a class="toc-backref" href="#id66">QEMU / KVM / Xen</a><a class="headerlink" href="#qemu-kvm-xen" title="Permalink to this headline">¶</a></h3>
+<p>AIO should be used to maximize IOPS when using files for guest storage.</p>
+<p class="rubric">Footnotes</p>
+<dl class="footnote brackets">
+<dt class="label" id="ssd-iops"><span class="brackets"><a class="fn-backref" href="#id17">1</a></span></dt>
+<dd><p>&lt;<a class="reference external" href="http://www.anandtech.com/show/6489/playing-with-op">http://www.anandtech.com/show/6489/playing-with-op</a>&gt;</p>
+</dd>
+<dt class="label" id="mysql-basic"><span class="brackets"><a class="fn-backref" href="#id23">2</a></span></dt>
+<dd><p>&lt;<a class="reference external" href="https://www.patpro.net/blog/index.php/2014/03/09/2617-mysql-on-zfs-on-freebsd/">https://www.patpro.net/blog/index.php/2014/03/09/2617-mysql-on-zfs-on-freebsd/</a>&gt;</p>
+</dd>
+<dt class="label" id="sqlite-ps"><span class="brackets"><a class="fn-backref" href="#id24">3</a></span></dt>
+<dd><p>&lt;<a class="reference external" href="https://www.sqlite.org/pragma.html#pragma_page_size">https://www.sqlite.org/pragma.html#pragma_page_size</a>&gt;</p>
+</dd>
+<dt class="label" id="sqlite-ps-change"><span class="brackets"><a class="fn-backref" href="#id25">4</a></span></dt>
+<dd><p>&lt;<a class="reference external" href="https://www.sqlite.org/pgszchng2016.html">https://www.sqlite.org/pgszchng2016.html</a>&gt;</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="ZFS Transaction Delay.html" class="btn btn-neutral float-right" title="ZFS Transaction Delay" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="Module Parameters.html" class="btn btn-neutral float-left" title="Module Parameters" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, OpenZFS.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

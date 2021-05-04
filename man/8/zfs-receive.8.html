@@ -1,0 +1,688 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>zfs-receive.8 &mdash; OpenZFS  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme_overrides.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/mandoc.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="zfs-recv.8" href="zfs-recv.8.html" />
+    <link rel="prev" title="zfs-promote.8" href="zfs-promote.8.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+          
+
+          
+            <a href="../../index.html">
+          
+
+          
+            
+            <img src="../../_static/logo_main.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../Getting Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Project and Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Developer Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Performance and Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Basic Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Man Pages</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../1/index.html">User Commands (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../5/index.html">File Formats and Conventions (5)</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">System Administration Commands (8)</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="fsck.zfs.8.html">fsck.zfs.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mount.zfs.8.html">mount.zfs.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vdev_id.8.html">vdev_id.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zdb.8.html">zdb.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-allow.8.html">zfs-allow.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-bookmark.8.html">zfs-bookmark.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-change-key.8.html">zfs-change-key.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-clone.8.html">zfs-clone.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-create.8.html">zfs-create.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-destroy.8.html">zfs-destroy.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-diff.8.html">zfs-diff.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-get.8.html">zfs-get.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-groupspace.8.html">zfs-groupspace.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-hold.8.html">zfs-hold.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-inherit.8.html">zfs-inherit.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-jail.8.html">zfs-jail.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-list.8.html">zfs-list.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-load-key.8.html">zfs-load-key.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-mount.8.html">zfs-mount.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-program.8.html">zfs-program.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-project.8.html">zfs-project.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-projectspace.8.html">zfs-projectspace.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-promote.8.html">zfs-promote.8</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">zfs-receive.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-recv.8.html">zfs-recv.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-redact.8.html">zfs-redact.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-release.8.html">zfs-release.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-rename.8.html">zfs-rename.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-rollback.8.html">zfs-rollback.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-send.8.html">zfs-send.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-set.8.html">zfs-set.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-share.8.html">zfs-share.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-snapshot.8.html">zfs-snapshot.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-unallow.8.html">zfs-unallow.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-unjail.8.html">zfs-unjail.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-unload-key.8.html">zfs-unload-key.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-unmount.8.html">zfs-unmount.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-upgrade.8.html">zfs-upgrade.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-userspace.8.html">zfs-userspace.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-wait.8.html">zfs-wait.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs.8.html">zfs.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs_ids_to_path.8.html">zfs_ids_to_path.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfsconcepts.8.html">zfsconcepts.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfsprops.8.html">zfsprops.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zgenhostid.8.html">zgenhostid.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zinject.8.html">zinject.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-add.8.html">zpool-add.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-attach.8.html">zpool-attach.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-checkpoint.8.html">zpool-checkpoint.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-clear.8.html">zpool-clear.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-create.8.html">zpool-create.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-destroy.8.html">zpool-destroy.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-detach.8.html">zpool-detach.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-events.8.html">zpool-events.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-export.8.html">zpool-export.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-get.8.html">zpool-get.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-history.8.html">zpool-history.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-import.8.html">zpool-import.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-initialize.8.html">zpool-initialize.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-iostat.8.html">zpool-iostat.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-labelclear.8.html">zpool-labelclear.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-list.8.html">zpool-list.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-offline.8.html">zpool-offline.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-online.8.html">zpool-online.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-reguid.8.html">zpool-reguid.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-remove.8.html">zpool-remove.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-reopen.8.html">zpool-reopen.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-replace.8.html">zpool-replace.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-resilver.8.html">zpool-resilver.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-scrub.8.html">zpool-scrub.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-set.8.html">zpool-set.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-split.8.html">zpool-split.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-status.8.html">zpool-status.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-sync.8.html">zpool-sync.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-trim.8.html">zpool-trim.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-upgrade.8.html">zpool-upgrade.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-wait.8.html">zpool-wait.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool.8.html">zpool.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool_influxdb.8.html">zpool_influxdb.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpoolconcepts.8.html">zpoolconcepts.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpoolprops.8.html">zpoolprops.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zstream.8.html">zstream.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zstreamdump.8.html">zstreamdump.8</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../License.html">License</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">OpenZFS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Man Pages</a> &raquo;</li>
+        
+          <li><a href="index.html">System Administration Commands (8)</a> &raquo;</li>
+        
+      <li>zfs-receive.8</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/man/8/zfs-receive.8.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="zfs-receive-8">
+<h1>zfs-receive.8<a class="headerlink" href="#zfs-receive-8" title="Permalink to this headline">¶</a></h1>
+<div class="man_container"><table class="head">
+  <tr>
+    <td class="head-ltitle">ZFS-RECEIVE(8)</td>
+    <td class="head-vol">System Manager's Manual</td>
+    <td class="head-rtitle">ZFS-RECEIVE(8)</td>
+  </tr>
+</table>
+<div class="manual-text">
+<h1 class="Sh" title="Sh" id="NAME"><a class="permalink" href="#NAME">NAME</a></h1>
+<code class="Nm" title="Nm">zfs-receive</code> &#x2014;
+<div class="Nd" title="Nd">Creates a snapshot whose contents are as specified in
+  the stream provided on standard input.</div>
+<h1 class="Sh" title="Sh" id="SYNOPSIS"><a class="permalink" href="#SYNOPSIS">SYNOPSIS</a></h1>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm" title="Nm">zfs</code></td>
+    <td><code class="Cm" title="Cm">receive</code>
+      [<div class="Op"><code class="Fl" title="Fl">-FhMnsuv</code></div>]
+      [<div class="Op"><code class="Fl" title="Fl">-o</code>
+      <b class="Sy" title="Sy">origin</b>=<var class="Ar" title="Ar">snapshot</var></div>]
+      [<div class="Op"><code class="Fl" title="Fl">-o</code>
+      <var class="Ar" title="Ar">property</var>=<var class="Ar" title="Ar">value</var></div>]
+      [<div class="Op"><code class="Fl" title="Fl">-x</code>
+      <var class="Ar" title="Ar">property</var></div>]
+      <var class="Ar" title="Ar">filesystem</var>|<var class="Ar" title="Ar">volume</var>|<var class="Ar" title="Ar">snapshot</var></td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm" title="Nm">zfs</code></td>
+    <td><code class="Cm" title="Cm">receive</code>
+      [<div class="Op"><code class="Fl" title="Fl">-FhMnsuv</code></div>]
+      [<div class="Op"><code class="Fl" title="Fl">-d</code>|<code class="Fl" title="Fl">-e</code></div>]
+      [<div class="Op"><code class="Fl" title="Fl">-o</code>
+      <b class="Sy" title="Sy">origin</b>=<var class="Ar" title="Ar">snapshot</var></div>]
+      [<div class="Op"><code class="Fl" title="Fl">-o</code>
+      <var class="Ar" title="Ar">property</var>=<var class="Ar" title="Ar">value</var></div>]
+      [<div class="Op"><code class="Fl" title="Fl">-x</code>
+      <var class="Ar" title="Ar">property</var></div>]
+      <var class="Ar" title="Ar">filesystem</var></td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm" title="Nm">zfs</code></td>
+    <td><code class="Cm" title="Cm">receive</code>
+      <code class="Fl" title="Fl">-A</code>
+      <var class="Ar" title="Ar">filesystem</var>|<var class="Ar" title="Ar">volume</var></td>
+  </tr>
+</table>
+<h1 class="Sh" title="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h1>
+<dl class="Bl-tag">
+  <dt><code class="Nm" title="Nm">zfs</code>
+    <code class="Cm" title="Cm">receive</code>
+    [<div class="Op"><code class="Fl" title="Fl">-FhMnsuv</code></div>]
+    [<div class="Op"><code class="Fl" title="Fl">-o</code>
+    <b class="Sy" title="Sy">origin</b>=<var class="Ar" title="Ar">snapshot</var></div>]
+    [<div class="Op"><code class="Fl" title="Fl">-o</code>
+    <var class="Ar" title="Ar">property</var>=<var class="Ar" title="Ar">value</var></div>]
+    [<div class="Op"><code class="Fl" title="Fl">-x</code>
+    <var class="Ar" title="Ar">property</var></div>]
+    <var class="Ar" title="Ar">filesystem</var>|<var class="Ar" title="Ar">volume</var>|<var class="Ar" title="Ar">snapshot</var></dt>
+  <dd style="width: auto;">&#x00A0;</dd>
+  <dt><code class="Nm" title="Nm">zfs</code>
+    <code class="Cm" title="Cm">receive</code>
+    [<div class="Op"><code class="Fl" title="Fl">-FhMnsuv</code></div>]
+    [<div class="Op"><code class="Fl" title="Fl">-d</code>|<code class="Fl" title="Fl">-e</code></div>]
+    [<div class="Op"><code class="Fl" title="Fl">-o</code>
+    <b class="Sy" title="Sy">origin</b>=<var class="Ar" title="Ar">snapshot</var></div>]
+    [<div class="Op"><code class="Fl" title="Fl">-o</code>
+    <var class="Ar" title="Ar">property</var>=<var class="Ar" title="Ar">value</var></div>]
+    [<div class="Op"><code class="Fl" title="Fl">-x</code>
+    <var class="Ar" title="Ar">property</var></div>]
+    <var class="Ar" title="Ar">filesystem</var></dt>
+  <dd>Creates a snapshot whose contents are as specified in the stream provided
+      on standard input. If a full stream is received, then a new file system is
+      created as well. Streams are created using the
+      <code class="Nm" title="Nm">zfs</code>
+      <code class="Cm" title="Cm">send</code> subcommand, which by default
+      creates a full stream. <code class="Nm" title="Nm">zfs</code>
+      <code class="Cm" title="Cm">recv</code> can be used as an alias for
+      <code class="Nm" title="Nm">zfs</code>
+      <code class="Cm" title="Cm">receive.</code>
+    <div class="Pp"></div>
+    If an incremental stream is received, then the destination file system must
+      already exist, and its most recent snapshot must match the incremental
+      stream's source. For <b class="Sy" title="Sy">zvols</b>, the destination
+      device link is destroyed and recreated, which means the
+      <b class="Sy" title="Sy">zvol</b> cannot be accessed during the
+      <code class="Cm" title="Cm">receive</code> operation.
+    <div class="Pp"></div>
+    When a snapshot replication package stream that is generated by using the
+      <code class="Nm" title="Nm">zfs</code>
+      <code class="Cm" title="Cm">send</code>
+      <code class="Fl" title="Fl">-R</code> command is received, any snapshots
+      that do not exist on the sending location are destroyed by using the
+      <code class="Nm" title="Nm">zfs</code>
+      <code class="Cm" title="Cm">destroy</code>
+      <code class="Fl" title="Fl">-d</code> command.
+    <div class="Pp"></div>
+    The ability to send and receive deduplicated send streams has been removed.
+      However, a deduplicated send stream created with older software can be
+      converted to a regular (non-deduplicated) stream by using the
+      <code class="Nm" title="Nm">zstream</code>
+      <code class="Cm" title="Cm">redup</code> command.
+    <div class="Pp"></div>
+    If <code class="Fl" title="Fl">-o</code>
+      <i class="Em" title="Em">property</i>=<var class="Ar" title="Ar">value</var>
+      or <code class="Fl" title="Fl">-x</code>
+      <i class="Em" title="Em">property</i> is specified, it applies to the
+      effective value of the property throughout the entire subtree of
+      replicated datasets. Effective property values will be set (
+      <code class="Fl" title="Fl">-o</code> ) or inherited (
+      <code class="Fl" title="Fl">-x</code> ) on the topmost in the replicated
+      subtree. In descendant datasets, if the property is set by the send
+      stream, it will be overridden by forcing the property to be inherited from
+      the top&#x2010;most file system. Received properties are retained in spite
+      of being overridden and may be restored with
+      <code class="Nm" title="Nm">zfs</code>
+      <code class="Cm" title="Cm">inherit</code>
+      <code class="Fl" title="Fl">-S</code>. Specifying
+      <code class="Fl" title="Fl">-o</code>
+      <b class="Sy" title="Sy">origin</b>=<i class="Em" title="Em">snapshot</i>
+      is a special case because, even if <b class="Sy" title="Sy">origin</b> is
+      a read-only property and cannot be set, it's allowed to receive the send
+      stream as a clone of the given snapshot.
+    <div class="Pp"></div>
+    Raw encrypted send streams (created with
+      <code class="Nm" title="Nm">zfs</code>
+      <code class="Cm" title="Cm">send</code>
+      <code class="Fl" title="Fl">-w</code> ) may only be received as is, and
+      cannot be re-encrypted, decrypted, or recompressed by the receive process.
+      Unencrypted streams can be received as encrypted datasets, either through
+      inheritance or by specifying encryption parameters with the
+      <code class="Fl" title="Fl">-o</code> options. Note that the
+      <b class="Sy" title="Sy">keylocation</b> property cannot be overridden to
+      <b class="Sy" title="Sy">prompt</b> during a receive. This is because the
+      receive process itself is already using stdin for the send stream.
+      Instead, the property can be overridden after the receive completes.
+    <div class="Pp"></div>
+    The added security provided by raw sends adds some restrictions to the send
+      and receive process. ZFS will not allow a mix of raw receives and non-raw
+      receives. Specifically, any raw incremental receives that are attempted
+      after a non-raw receive will fail. Non-raw receives do not have this
+      restriction and, therefore, are always possible. Because of this, it is
+      best practice to always use either raw sends for their security benefits
+      or non-raw sends for their flexibility when working with encrypted
+      datasets, but not a combination.
+    <div class="Pp"></div>
+    The reason for this restriction stems from the inherent restrictions of the
+      AEAD ciphers that ZFS uses to encrypt data. When using ZFS native
+      encryption, each block of data is encrypted against a randomly generated
+      number known as the &quot;initialization vector&quot; (IV), which is
+      stored in the filesystem metadata. This number is required by the
+      encryption algorithms whenever the data is to be decrypted. Together, all
+      of the IVs provided for all of the blocks in a given snapshot are
+      collectively called an &quot;IV set&quot;. When ZFS performs a raw send,
+      the IV set is transferred from the source to the destination in the send
+      stream. When ZFS performs a non-raw send, the data is decrypted by the
+      source system and re-encrypted by the destination system, creating a
+      snapshot with effectively the same data, but a different IV set. In order
+      for decryption to work after a raw send, ZFS must ensure that the IV set
+      used on both the source and destination side match. When an incremental
+      raw receive is performed on top of an existing snapshot, ZFS will check to
+      confirm that the &quot;from&quot; snapshot on both the source and
+      destination were using the same IV set, ensuring the new IV set is
+      consistent.
+    <div class="Pp"></div>
+    The name of the snapshot (and file system, if a full stream is received)
+      that this subcommand creates depends on the argument type and the use of
+      the <code class="Fl" title="Fl">-d</code> or
+      <code class="Fl" title="Fl">-e</code> options.
+    <div class="Pp"></div>
+    If the argument is a snapshot name, the specified
+      <var class="Ar" title="Ar">snapshot</var> is created. If the argument is a
+      file system or volume name, a snapshot with the same name as the sent
+      snapshot is created within the specified
+      <var class="Ar" title="Ar">filesystem</var> or
+      <var class="Ar" title="Ar">volume</var>. If neither of the
+      <code class="Fl" title="Fl">-d</code> or
+      <code class="Fl" title="Fl">-e</code> options are specified, the provided
+      target snapshot name is used exactly as provided.
+    <div class="Pp"></div>
+    The <code class="Fl" title="Fl">-d</code> and
+      <code class="Fl" title="Fl">-e</code> options cause the file system name
+      of the target snapshot to be determined by appending a portion of the sent
+      snapshot's name to the specified target
+      <var class="Ar" title="Ar">filesystem</var>. If the
+      <code class="Fl" title="Fl">-d</code> option is specified, all but the
+      first element of the sent snapshot's file system path (usually the pool
+      name) is used and any required intermediate file systems within the
+      specified one are created. If the <code class="Fl" title="Fl">-e</code>
+      option is specified, then only the last element of the sent snapshot's
+      file system name (i.e. the name of the source file system itself) is used
+      as the target file system name.
+    <dl class="Bl-tag">
+      <dt><a class="permalink" href="#F"><code class="Fl" title="Fl" id="F">-F</code></a></dt>
+      <dd>Force a rollback of the file system to the most recent snapshot before
+          performing the receive operation. If receiving an incremental
+          replication stream (for example, one generated by
+          <code class="Nm" title="Nm">zfs</code>
+          <code class="Cm" title="Cm">send</code>
+          <code class="Fl" title="Fl">-R</code>
+          [<div class="Op"><code class="Fl" title="Fl">-i</code>|<code class="Fl" title="Fl">-I</code></div>]),
+          destroy snapshots and file systems that do not exist on the sending
+          side.</dd>
+      <dt><a class="permalink" href="#d"><code class="Fl" title="Fl" id="d">-d</code></a></dt>
+      <dd>Discard the first element of the sent snapshot's file system name,
+          using the remaining elements to determine the name of the target file
+          system for the new snapshot as described in the paragraph above.</dd>
+      <dt><a class="permalink" href="#e"><code class="Fl" title="Fl" id="e">-e</code></a></dt>
+      <dd>Discard all but the last element of the sent snapshot's file system
+          name, using that element to determine the name of the target file
+          system for the new snapshot as described in the paragraph above.</dd>
+      <dt><a class="permalink" href="#h"><code class="Fl" title="Fl" id="h">-h</code></a></dt>
+      <dd>Skip the receive of holds. There is no effect if holds are not
+        sent.</dd>
+      <dt><a class="permalink" href="#M"><code class="Fl" title="Fl" id="M">-M</code></a></dt>
+      <dd>Force an unmount of the file system while receiving a snapshot. This
+          option is not supported on Linux.</dd>
+      <dt><a class="permalink" href="#n"><code class="Fl" title="Fl" id="n">-n</code></a></dt>
+      <dd>Do not actually receive the stream. This can be useful in conjunction
+          with the <code class="Fl" title="Fl">-v</code> option to verify the
+          name the receive operation would use.</dd>
+      <dt><a class="permalink" href="#o"><code class="Fl" title="Fl" id="o">-o</code></a>
+        <b class="Sy" title="Sy">origin</b>=<var class="Ar" title="Ar">snapshot</var></dt>
+      <dd>Forces the stream to be received as a clone of the given snapshot. If
+          the stream is a full send stream, this will create the filesystem
+          described by the stream as a clone of the specified snapshot. Which
+          snapshot was specified will not affect the success or failure of the
+          receive, as long as the snapshot does exist. If the stream is an
+          incremental send stream, all the normal verification will be
+          performed.</dd>
+      <dt><a class="permalink" href="#o_2"><code class="Fl" title="Fl" id="o_2">-o</code></a>
+        <i class="Em" title="Em">property</i>=<var class="Ar" title="Ar">value</var></dt>
+      <dd>Sets the specified property as if the command
+          <code class="Nm" title="Nm">zfs</code>
+          <code class="Cm" title="Cm">set</code>
+          <i class="Em" title="Em">property</i>=<var class="Ar" title="Ar">value</var>
+          was invoked immediately before the receive. When receiving a stream
+          from <code class="Nm" title="Nm">zfs</code>
+          <code class="Cm" title="Cm">send</code>
+          <code class="Fl" title="Fl">-R</code>, causes the property to be
+          inherited by all descendant datasets, as through
+          <code class="Nm" title="Nm">zfs</code>
+          <code class="Cm" title="Cm">inherit</code>
+          <i class="Em" title="Em">property</i> was run on any descendant
+          datasets that have this property set on the sending system.
+        <div class="Pp"></div>
+        If the send stream was sent with <code class="Fl" title="Fl">-c</code>
+          then overriding the <b class="Sy" title="Sy">compression</b> property
+          will have no affect on received data but the
+          <b class="Sy" title="Sy">compression</b> property will be set. To have
+          the data recompressed on receive remove the
+          <code class="Fl" title="Fl">-c</code> flag from the send stream.
+        <div class="Pp"></div>
+        Any editable property can be set at receive time. Set-once properties
+          bound to the received data, such as
+          <b class="Sy" title="Sy">normalization</b> and
+          <b class="Sy" title="Sy">casesensitivity</b>, cannot be set at receive
+          time even when the datasets are newly created by
+          <code class="Nm" title="Nm">zfs</code>
+          <code class="Cm" title="Cm">receive</code>. Additionally both settable
+          properties <b class="Sy" title="Sy">version</b> and
+          <b class="Sy" title="Sy">volsize</b> cannot be set at receive time.
+        <div class="Pp"></div>
+        The <code class="Fl" title="Fl">-o</code> option may be specified
+          multiple times, for different properties. An error results if the same
+          property is specified in multiple
+          <code class="Fl" title="Fl">-o</code> or
+          <code class="Fl" title="Fl">-x</code> options.
+        <div class="Pp"></div>
+        The <code class="Fl" title="Fl">-o</code> option may also be used to
+          override encryption properties upon initial receive. This allows
+          unencrypted streams to be received as encrypted datasets. To cause the
+          received dataset (or root dataset of a recursive stream) to be
+          received as an encryption root, specify encryption properties in the
+          same manner as is required for <code class="Nm" title="Nm">zfs</code>
+          <code class="Cm" title="Cm">create</code>. For instance:
+        <div class="Pp"></div>
+        <div class="Bd">
+        <pre class="Li">
+# zfs send tank/test@snap1 | zfs recv -o encryption=on -o keyformat=passphrase -o keylocation=file:///path/to/keyfile
+        </pre>
+        </div>
+        <div class="Pp"></div>
+        Note that [<div class="Op"><code class="Fl" title="Fl">-o</code>
+          <var class="Ar" title="Ar">keylocation</var>=<var class="Ar" title="Ar">prompt</var></div>]
+          may not be specified here, since stdin is already being utilized for
+          the send stream. Once the receive has completed, you can use
+          <code class="Nm" title="Nm">zfs</code>
+          <code class="Cm" title="Cm">set</code> to change this setting after
+          the fact. Similarly, you can receive a dataset as an encrypted child
+          by specifying [<div class="Op"><code class="Fl" title="Fl">-x</code>
+          <var class="Ar" title="Ar">encryption</var></div>] to force the
+          property to be inherited. Overriding encryption properties (except for
+          <b class="Sy" title="Sy">keylocation</b>) is not possible with raw
+          send streams.</dd>
+      <dt><a class="permalink" href="#s"><code class="Fl" title="Fl" id="s">-s</code></a></dt>
+      <dd>If the receive is interrupted, save the partially received state,
+          rather than deleting it. Interruption may be due to premature
+          termination of the stream (e.g. due to network failure or failure of
+          the remote system if the stream is being read over a network
+          connection), a checksum error in the stream, termination of the
+          <code class="Nm" title="Nm">zfs</code>
+          <code class="Cm" title="Cm">receive</code> process, or unclean
+          shutdown of the system.
+        <div class="Pp"></div>
+        The receive can be resumed with a stream generated by
+          <code class="Nm" title="Nm">zfs</code>
+          <code class="Cm" title="Cm">send</code>
+          <code class="Fl" title="Fl">-t</code>
+          <var class="Ar" title="Ar">token</var>, where the
+          <var class="Ar" title="Ar">token</var> is the value of the
+          <b class="Sy" title="Sy">receive_resume_token</b> property of the
+          filesystem or volume which is received into.
+        <div class="Pp"></div>
+        To use this flag, the storage pool must have the
+          <b class="Sy" title="Sy">extensible_dataset</b> feature enabled. See
+          <a href="../5/zpool-features.5.html" class="Xr">zpool-features(5)</a> for details on ZFS
+          feature flags.</dd>
+      <dt><a class="permalink" href="#u"><code class="Fl" title="Fl" id="u">-u</code></a></dt>
+      <dd>File system that is associated with the received stream is not
+          mounted.</dd>
+      <dt><a class="permalink" href="#v"><code class="Fl" title="Fl" id="v">-v</code></a></dt>
+      <dd>Print verbose information about the stream and the time required to
+          perform the receive operation.</dd>
+      <dt><a class="permalink" href="#x"><code class="Fl" title="Fl" id="x">-x</code></a>
+        <i class="Em" title="Em">property</i></dt>
+      <dd>Ensures that the effective value of the specified property after the
+          receive is unaffected by the value of that property in the send stream
+          (if any), as if the property had been excluded from the send stream.
+        <div class="Pp"></div>
+        If the specified property is not present in the send stream, this option
+          does nothing.
+        <div class="Pp"></div>
+        If a received property needs to be overridden, the effective value will
+          be set or inherited, depending on whether the property is inheritable
+          or not.
+        <div class="Pp"></div>
+        In the case of an incremental update,
+          <code class="Fl" title="Fl">-x</code> leaves any existing local
+          setting or explicit inheritance unchanged.
+        <div class="Pp"></div>
+        All <code class="Fl" title="Fl">-o</code> restrictions (e.g. set-once)
+          apply equally to <code class="Fl" title="Fl">-x</code>.</dd>
+    </dl>
+  </dd>
+  <dt><code class="Nm" title="Nm">zfs</code>
+    <code class="Cm" title="Cm">receive</code>
+    <code class="Fl" title="Fl">-A</code>
+    <var class="Ar" title="Ar">filesystem</var>|<var class="Ar" title="Ar">volume</var></dt>
+  <dd>Abort an interrupted <code class="Nm" title="Nm">zfs</code>
+      <code class="Cm" title="Cm">receive</code>
+      <code class="Fl" title="Fl">-s</code>, deleting its saved partially
+      received state.</dd>
+</dl>
+<h1 class="Sh" title="Sh" id="SEE_ALSO"><a class="permalink" href="#SEE_ALSO">SEE
+  ALSO</a></h1>
+<a href="../8/zfs-send.8.html" class="Xr">zfs-send(8)</a>
+  <a href="../8/zstream.8.html" class="Xr">zstream(8)</a></div>
+<table class="foot">
+  <tr>
+    <td class="foot-date">February 16, 2020</td>
+    <td class="foot-os">Debian</td>
+  </tr>
+</table>
+</div></div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="zfs-recv.8.html" class="btn btn-neutral float-right" title="zfs-recv.8" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="zfs-promote.8.html" class="btn btn-neutral float-left" title="zfs-promote.8" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, OpenZFS.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

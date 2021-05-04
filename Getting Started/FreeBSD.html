@@ -1,0 +1,349 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>FreeBSD &mdash; OpenZFS  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/mandoc.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="openSUSE" href="openSUSE/index.html" />
+    <link rel="prev" title="Fedora" href="Fedora.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/logo_main.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Getting Started</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Arch Linux/index.html">Arch Linux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Debian/index.html">Debian</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fedora.html">Fedora</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">FreeBSD</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#installation-on-freebsd">Installation on FreeBSD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#development-on-freebsd">Development on FreeBSD</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference external" href="https://wiki.gentoo.org/wiki/ZFS">Gentoo</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://nixos.wiki/wiki/NixOS_on_ZFS">NixOS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="openSUSE/index.html">openSUSE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RHEL and CentOS.html">RHEL and CentOS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Ubuntu/index.html">Ubuntu</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Project and Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Developer Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Performance and Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Basic Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../man/index.html">Man Pages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../License.html">License</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">OpenZFS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Getting Started</a> &raquo;</li>
+        
+      <li>FreeBSD</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/Getting Started/FreeBSD.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="freebsd">
+<h1>FreeBSD<a class="headerlink" href="#freebsd" title="Permalink to this headline">¶</a></h1>
+<p><img alt="ZoF-logo" src="../_images/zof-logo.png" /></p>
+<div class="section" id="installation-on-freebsd">
+<h2>Installation on FreeBSD<a class="headerlink" href="#installation-on-freebsd" title="Permalink to this headline">¶</a></h2>
+<p>OpenZFS is available pre-packaged as:</p>
+<ul class="simple">
+<li><p>the zfs-2.0-release branch, in the FreeBSD base system from FreeBSD 13.0-CURRENT forward</p></li>
+<li><p>the master branch, in the FreeBSD ports tree as sysutils/openzfs and sysutils/openzfs-kmod from FreeBSD 12.1 forward</p></li>
+</ul>
+<p>The rest of this document describes the use of OpenZFS either from ports/pkg or built manually from sources for development.</p>
+<p>The ZFS utilities will be installed in /usr/local/sbin/, so make sure
+your PATH gets adjusted accordingly.</p>
+<p>To load the module at boot, put <code class="docutils literal notranslate"><span class="pre">openzfs_load=&quot;YES&quot;</span></code> in
+/boot/loader.conf, and remove <code class="docutils literal notranslate"><span class="pre">zfs_load=&quot;YES&quot;</span></code> if migrating a ZFS
+install.</p>
+<p>Beware that the FreeBSD boot loader does not allow booting from root
+pools with encryption active (even if it is not in use), so do not try
+encryption on a pool you boot from.</p>
+</div>
+<div class="section" id="development-on-freebsd">
+<h2>Development on FreeBSD<a class="headerlink" href="#development-on-freebsd" title="Permalink to this headline">¶</a></h2>
+<p>The following dependencies are required to build OpenZFS on FreeBSD:</p>
+<ul>
+<li><p>FreeBSD sources in /usr/src or elsewhere specified by SYSDIR in env.
+If you don’t have the sources installed you can install them with
+svnlite.</p>
+<p>Install source For FreeBSD 12:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">svnlite</span> <span class="n">checkout</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">svn</span><span class="o">.</span><span class="n">freebsd</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">base</span><span class="o">/</span><span class="n">stable</span><span class="o">/</span><span class="mi">12</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">src</span>
+</pre></div>
+</div>
+<p>Install source for FreeBSD Current:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">svnlite</span> <span class="n">checkout</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">svn</span><span class="o">.</span><span class="n">freebsd</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">base</span><span class="o">/</span><span class="n">head</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">src</span>
+</pre></div>
+</div>
+</li>
+<li><p>Packages for build:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pkg</span> <span class="n">install</span> \
+    <span class="n">autoconf</span> \
+    <span class="n">automake</span> \
+    <span class="n">autotools</span> \
+    <span class="n">git</span> \
+    <span class="n">gmake</span> \
+</pre></div>
+</div>
+</li>
+<li><p>Optional packages for build:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pkg</span> <span class="n">install</span> <span class="n">python37</span> <span class="c1"># or your preferred Python version</span>
+<span class="n">pkg</span> <span class="n">install</span> <span class="n">py37</span><span class="o">-</span><span class="n">sysctl</span> <span class="c1"># needed for arcstat, arc_summary, dbufstat</span>
+</pre></div>
+</div>
+</li>
+<li><p>Packages for checks and tests:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pkg</span> <span class="n">install</span> \
+    <span class="n">base64</span> \
+    <span class="n">bash</span> \
+    <span class="n">checkbashisms</span> \
+    <span class="n">fio</span> \
+    <span class="n">hs</span><span class="o">-</span><span class="n">ShellCheck</span> \
+    <span class="n">ksh93</span> \
+    <span class="n">pamtester</span> \
+    <span class="n">py37</span><span class="o">-</span><span class="n">flake8</span> \
+    <span class="n">python37</span> \
+    <span class="n">sudo</span>
+</pre></div>
+</div>
+<p>Your preferred python version may be substituted. The user for
+running tests must have NOPASSWD sudo permission.</p>
+</li>
+</ul>
+<p>To build and install:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span># as user
+git clone https://github.com/openzfs/zfs
+cd zfs
+./autogen.sh
+./configure
+gmake -j`sysctl -n hw.ncpu`
+# as root
+gmake install
+</pre></div>
+</div>
+<p>To use the OpenZFS kernel module when FreeBSD starts, edit <code class="docutils literal notranslate"><span class="pre">/boot/loader.conf</span></code> :</p>
+<p>Replace the line:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">zfs_load</span><span class="o">=</span><span class="s2">&quot;YES&quot;</span>
+</pre></div>
+</div>
+<p>with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">openzfs_load</span><span class="o">=</span><span class="s2">&quot;YES&quot;</span>
+</pre></div>
+</div>
+<p>The stock FreeBSD ZFS binaries are installed in /sbin.  OpenZFS binaries are installed to /usr/local/sbin when installed form ports/pkg or manually from the source.  To use OpenZFS binaries, adjust your path so /usr/local/sbin is listed before /sbin.  Otherwise the native ZFS binaries will be used.</p>
+<p>For example, make changes to ~/.profile ~/.bashrc ~/.cshrc from this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">PATH</span><span class="o">=/</span><span class="n">sbin</span><span class="p">:</span><span class="o">/</span><span class="nb">bin</span><span class="p">:</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">sbin</span><span class="p">:</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="p">:</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">sbin</span><span class="p">:</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="nb">bin</span><span class="p">:</span><span class="o">~/</span><span class="nb">bin</span>
+</pre></div>
+</div>
+<p>To this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">PATH</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">sbin</span><span class="p">:</span><span class="o">/</span><span class="n">sbin</span><span class="p">:</span><span class="o">/</span><span class="nb">bin</span><span class="p">:</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">sbin</span><span class="p">:</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="p">:</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="nb">bin</span><span class="p">:</span><span class="o">~/</span><span class="nb">bin</span>
+</pre></div>
+</div>
+<p>For rapid development it can be convenient to do a UFS install instead
+of ZFS when setting up the work environment. That way the module can be
+unloaded and loaded without rebooting.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">reboot</span>
+</pre></div>
+</div>
+<p>Though not required, <code class="docutils literal notranslate"><span class="pre">WITHOUT_ZFS</span></code> is a useful build option in FreeBSD
+to avoid building and installing the legacy zfs tools and kmod - see
+<code class="docutils literal notranslate"><span class="pre">src.conf(5)</span></code>.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="openSUSE/index.html" class="btn btn-neutral float-right" title="openSUSE" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="Fedora.html" class="btn btn-neutral float-left" title="Fedora" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, OpenZFS.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

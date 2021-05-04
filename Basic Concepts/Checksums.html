@@ -1,0 +1,421 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Checksums and Their Use in ZFS &mdash; OpenZFS  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/mandoc.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Feature Flags" href="Feature Flags.html" />
+    <link rel="prev" title="Basic Concepts" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/logo_main.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Getting Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Project and Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Developer Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Performance and Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Basic Concepts</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Checksums and Their Use in ZFS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#checksum-algorithms">Checksum Algorithms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#checksum-accelerators">Checksum Accelerators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#checksum-microbenchmarks">Checksum Microbenchmarks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#disabling-checksums">Disabling Checksums</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Feature Flags.html">Feature Flags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dRAID Howto.html">dRAID</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../man/index.html">Man Pages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../License.html">License</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">OpenZFS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Basic Concepts</a> &raquo;</li>
+        
+      <li>Checksums and Their Use in ZFS</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/Basic Concepts/Checksums.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="checksums-and-their-use-in-zfs">
+<h1>Checksums and Their Use in ZFS<a class="headerlink" href="#checksums-and-their-use-in-zfs" title="Permalink to this headline">¶</a></h1>
+<p>End-to-end checksums are a key feature of ZFS and an important
+differentiator for ZFS over other RAID implementations and filesystems.
+Advantages of end-to-end checksums include:</p>
+<ul class="simple">
+<li><p>detects data corruption upon reading from media</p></li>
+<li><p>blocks that are detected as corrupt are automatically repaired if
+possible, by using the RAID protection in suitably configured pools,
+or redundant copies (see the zfs <code class="docutils literal notranslate"><span class="pre">copies</span></code> property)</p></li>
+<li><p>periodic scrubs can check data to detect and repair latent media
+degradation (bit rot) and corruption from other sources</p></li>
+<li><p>checksums on ZFS replication streams, <code class="docutils literal notranslate"><span class="pre">zfs</span> <span class="pre">send</span></code> and
+<code class="docutils literal notranslate"><span class="pre">zfs</span> <span class="pre">receive</span></code>, ensure the data received is not corrupted by
+intervening storage or transport mechanisms</p></li>
+</ul>
+<div class="section" id="checksum-algorithms">
+<h2>Checksum Algorithms<a class="headerlink" href="#checksum-algorithms" title="Permalink to this headline">¶</a></h2>
+<p>The checksum algorithms in ZFS can be changed for datasets (filesystems
+or volumes). The checksum algorithm used for each block is stored in the
+block pointer (metadata). The block checksum is calculated when the
+block is written, so changing the algorithm only affects writes
+occurring after the change.</p>
+<p>The checksum algorithm for a dataset can be changed by setting the
+<code class="docutils literal notranslate"><span class="pre">checksum</span></code> property:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zfs <span class="nb">set</span> <span class="nv">checksum</span><span class="o">=</span>sha256 pool_name/dataset_name
+</pre></div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 15%" />
+<col style="width: 19%" />
+<col style="width: 32%" />
+<col style="width: 34%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Checksum</p></th>
+<th class="head"><p>Ok for dedup
+and nopwrite?</p></th>
+<th class="head"><p>Compatible with
+other ZFS
+implementations?</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>on</p></td>
+<td><p>see notes</p></td>
+<td><p>yes</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">on</span></code> is a
+short hand for
+<code class="docutils literal notranslate"><span class="pre">fletcher4</span></code>
+for non-deduped
+datasets and
+<code class="docutils literal notranslate"><span class="pre">sha256</span></code> for
+deduped
+datasets</p></td>
+</tr>
+<tr class="row-odd"><td><p>off</p></td>
+<td><p>no</p></td>
+<td><p>yes</p></td>
+<td><p>Do not do use
+<code class="docutils literal notranslate"><span class="pre">off</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>fletcher2</p></td>
+<td><p>no</p></td>
+<td><p>yes</p></td>
+<td><p>Deprecated
+implementation
+of Fletcher
+checksum, use
+<code class="docutils literal notranslate"><span class="pre">fletcher4</span></code>
+instead</p></td>
+</tr>
+<tr class="row-odd"><td><p>fletcher4</p></td>
+<td><p>no</p></td>
+<td><p>yes</p></td>
+<td><p>Fletcher
+algorithm, also
+used for
+<code class="docutils literal notranslate"><span class="pre">zfs</span> <span class="pre">send</span></code>
+streams</p></td>
+</tr>
+<tr class="row-even"><td><p>sha256</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>Default for
+deduped
+datasets</p></td>
+</tr>
+<tr class="row-odd"><td><p>noparity</p></td>
+<td><p>no</p></td>
+<td><p>yes</p></td>
+<td><p>Do not use
+<code class="docutils literal notranslate"><span class="pre">noparity</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>sha512</p></td>
+<td><p>yes</p></td>
+<td><p>requires pool
+feature
+<code class="docutils literal notranslate"><span class="pre">org.illumos:sha512</span></code></p></td>
+<td><p>salted
+<code class="docutils literal notranslate"><span class="pre">sha512</span></code>
+currently not
+supported for
+any filesystem
+on the boot
+pools</p></td>
+</tr>
+<tr class="row-odd"><td><p>skein</p></td>
+<td><p>yes</p></td>
+<td><p>requires pool
+feature
+<code class="docutils literal notranslate"><span class="pre">org.illumos:skein</span></code></p></td>
+<td><p>salted
+<code class="docutils literal notranslate"><span class="pre">skein</span></code>
+currently not
+supported for
+any filesystem
+on the boot
+pools</p></td>
+</tr>
+<tr class="row-even"><td><p>edonr</p></td>
+<td><p>see notes</p></td>
+<td><p>requires pool
+feature
+<code class="docutils literal notranslate"><span class="pre">org.illumos:edonr</span></code></p></td>
+<td><p>salted
+<code class="docutils literal notranslate"><span class="pre">edonr</span></code>
+currently not
+supported for
+any filesystem
+on the boot
+pools</p>
+<p>In an abundance of
+caution, Edon-R requires
+verification when used
+with dedup, so it will
+automatically use
+<code class="docutils literal notranslate"><span class="pre">verify</span></code>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="checksum-accelerators">
+<h2>Checksum Accelerators<a class="headerlink" href="#checksum-accelerators" title="Permalink to this headline">¶</a></h2>
+<p>ZFS has the ability to offload checksum operations to the Intel
+QuickAssist Technology (QAT) adapters.</p>
+</div>
+<div class="section" id="checksum-microbenchmarks">
+<h2>Checksum Microbenchmarks<a class="headerlink" href="#checksum-microbenchmarks" title="Permalink to this headline">¶</a></h2>
+<p>Some ZFS features use microbenchmarks when the <code class="docutils literal notranslate"><span class="pre">zfs.ko</span></code> kernel module
+is loaded to determine the optimal algorithm for checksums. The results
+of the microbenchmarks are observable in the <code class="docutils literal notranslate"><span class="pre">/proc/spl/kstat/zfs</span></code>
+directory. The winning algorithm is reported as the “fastest” and
+becomes the default. The default can be overridden by setting zfs module
+parameters.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 52%" />
+<col style="width: 35%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Checksum</p></th>
+<th class="head"><p>Results Filename</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">zfs</span></code> module parameter</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Fletcher4</p></td>
+<td><p>/proc/spl/kstat/zfs/fletcher_4_bench</p></td>
+<td><p>zfs_fletcher_4_impl</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="disabling-checksums">
+<h2>Disabling Checksums<a class="headerlink" href="#disabling-checksums" title="Permalink to this headline">¶</a></h2>
+<p>While it may be tempting to disable checksums to improve CPU
+performance, it is widely considered by the ZFS community to be an
+extrodinarily bad idea. Don’t disable checksums.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="Feature Flags.html" class="btn btn-neutral float-right" title="Feature Flags" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="index.html" class="btn btn-neutral float-left" title="Basic Concepts" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, OpenZFS.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

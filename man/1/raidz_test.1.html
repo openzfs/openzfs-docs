@@ -1,0 +1,368 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>raidz_test.1 &mdash; OpenZFS  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme_overrides.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/mandoc.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="zhack.1" href="zhack.1.html" />
+    <link rel="prev" title="cstyle.1" href="cstyle.1.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+          
+
+          
+            <a href="../../index.html">
+          
+
+          
+            
+            <img src="../../_static/logo_main.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../Getting Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Project and Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Developer Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Performance and Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Basic Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Man Pages</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">User Commands (1)</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="arcstat.1.html">arcstat.1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cstyle.1.html">cstyle.1</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">raidz_test.1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zhack.1.html">zhack.1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ztest.1.html">ztest.1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zvol_wait.1.html">zvol_wait.1</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../5/index.html">File Formats and Conventions (5)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../8/index.html">System Administration Commands (8)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../License.html">License</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">OpenZFS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Man Pages</a> &raquo;</li>
+        
+          <li><a href="index.html">User Commands (1)</a> &raquo;</li>
+        
+      <li>raidz_test.1</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/man/1/raidz_test.1.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="raidz-test-1">
+<h1>raidz_test.1<a class="headerlink" href="#raidz-test-1" title="Permalink to this headline">¶</a></h1>
+<div class="man_container"><table class="head">
+  <tr>
+    <td class="head-ltitle">RAIDZ_TEST(1)</td>
+    <td class="head-vol">General Commands Manual</td>
+    <td class="head-rtitle">RAIDZ_TEST(1)</td>
+  </tr>
+</table>
+<div class="manual-text">
+<div class="Pp"></div>
+<h1 class="Sh" title="Sh" id="NAME"><a class="permalink" href="#NAME">NAME</a></h1>
+<b>raidz_test</b> - raidz implementation verification and benchmarking tool
+<h1 class="Sh" title="Sh" id="SYNOPSIS"><a class="permalink" href="#SYNOPSIS">SYNOPSIS</a></h1>
+<b>raidz_test &lt;options&gt;</b>
+<h1 class="Sh" title="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h1>
+This manual page documents briefly the <b>raidz_test</b> command.
+<div class="Pp"></div>
+Purpose of this tool is to run all supported raidz implementation and verify
+  results of all methods. Tool also contains a parameter sweep option where all
+  parameters affecting RAIDZ block are verified (like ashift size, data offset,
+  data size, etc...). The tool also supports a benchmarking mode using -B
+  option.
+<h1 class="Sh" title="Sh" id="OPTION"><a class="permalink" href="#OPTION">OPTION</a></h1>
+<div class="HP"><b>-h</b><i></i></div>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>Print a help summary.</dd>
+</dl>
+<div class="Pp"></div>
+<div class="HP"><b>-a</b><i> ashift (default: 9)</i></div>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>Ashift value.</dd>
+</dl>
+<div class="Pp"></div>
+<div class="HP"><b>-o</b><i> zio_off_shift</i><b> (default: 0)</b></div>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>Zio offset for raidz block. Offset value is 1 &lt;&lt;
+    (zio_off_shift)</dd>
+</dl>
+<div class="Pp"></div>
+<div class="HP"><b>-d</b><i> raidz_data_disks</i><b> (default: 8)</b></div>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>Number of raidz data disks to use. Additional disks for parity will be
+      used during testing.</dd>
+</dl>
+<div class="Pp"></div>
+<div class="HP"><b>-s</b><i> zio_size_shift</i><b> (default: 19)</b></div>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>Size of data for raidz block. Size is 1 &lt;&lt; (zio_size_shift).</dd>
+</dl>
+<div class="Pp"></div>
+<div class="HP"><b>-r</b><i> reflow_offset</i><b> (default: uint max)</b></div>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>Set raidz expansion offset. The expanded raidz map allocation function
+      will produce different map configurations depending on this value.</dd>
+</dl>
+<div class="Pp"></div>
+<div class="HP"><b>-S(weep)</b></div>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>Sweep parameter space while verifying the raidz implementations. This
+      option will exhaust all most of valid values for -a -o -d -s options.
+      Runtime using this option will be long.</dd>
+</dl>
+<div class="Pp"></div>
+<div class="HP"><b>-t(imeout)</b></div>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>Wall time for sweep test in seconds. The actual runtime could be
+    longer.</dd>
+</dl>
+<div class="Pp"></div>
+<div class="HP"><b>-B(enchmark)</b></div>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>This options starts the benchmark mode. All implementations are
+      benchmarked using increasing per disk data size. Results are given as
+      throughput per disk, measured in MiB/s.</dd>
+</dl>
+<div class="Pp"></div>
+<div class="HP"><b>-e(xpansion)</b></div>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>Use expanded raidz map allocation function.</dd>
+</dl>
+<div class="Pp"></div>
+<div class="HP"><b>-v(erbose)</b></div>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>Increase verbosity.</dd>
+</dl>
+<div class="Pp"></div>
+<div class="HP"><b>-T(est the test)</b></div>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>Debugging option. When this option is specified tool is supposed to fail
+      all tests. This is to check if tests would properly verify
+    bit-exactness.</dd>
+</dl>
+<div class="Pp"></div>
+<div class="HP"><b>-D(ebug)</b></div>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>Debugging option. Specify to attach gdb when SIGSEGV or SIGABRT are
+      received.</dd>
+</dl>
+<div class="Pp"></div>
+<div class="HP">
+<div class="Pp"></div>
+</div>
+<h1 class="Sh" title="Sh" id="SEE_ALSO"><a class="permalink" href="#SEE_ALSO">SEE
+  ALSO</a></h1>
+<b>ztest (1)</b>
+<h1 class="Sh" title="Sh" id="AUTHORS"><a class="permalink" href="#AUTHORS">AUTHORS</a></h1>
+vdev_raidz, created for OpenZFS by Gvozden Ne&#x0161;kovi&#x0107;
+  &lt;neskovic@gmail.com&gt;</div>
+<table class="foot">
+  <tr>
+    <td class="foot-date">August 24, 2020</td>
+    <td class="foot-os">OpenZFS</td>
+  </tr>
+</table>
+</div></div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="zhack.1.html" class="btn btn-neutral float-right" title="zhack.1" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="cstyle.1.html" class="btn btn-neutral float-left" title="cstyle.1" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, OpenZFS.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

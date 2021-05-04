@@ -1,0 +1,1128 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>zfs.8 &mdash; OpenZFS  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme_overrides.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/mandoc.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="zfs_ids_to_path.8" href="zfs_ids_to_path.8.html" />
+    <link rel="prev" title="zfs-wait.8" href="zfs-wait.8.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+          
+
+          
+            <a href="../../index.html">
+          
+
+          
+            
+            <img src="../../_static/logo_main.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../Getting Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Project and Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Developer Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Performance and Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Basic Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Man Pages</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../1/index.html">User Commands (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../5/index.html">File Formats and Conventions (5)</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">System Administration Commands (8)</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="fsck.zfs.8.html">fsck.zfs.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mount.zfs.8.html">mount.zfs.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vdev_id.8.html">vdev_id.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zdb.8.html">zdb.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-allow.8.html">zfs-allow.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-bookmark.8.html">zfs-bookmark.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-change-key.8.html">zfs-change-key.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-clone.8.html">zfs-clone.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-create.8.html">zfs-create.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-destroy.8.html">zfs-destroy.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-diff.8.html">zfs-diff.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-get.8.html">zfs-get.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-groupspace.8.html">zfs-groupspace.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-hold.8.html">zfs-hold.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-inherit.8.html">zfs-inherit.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-jail.8.html">zfs-jail.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-list.8.html">zfs-list.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-load-key.8.html">zfs-load-key.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-mount.8.html">zfs-mount.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-program.8.html">zfs-program.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-project.8.html">zfs-project.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-projectspace.8.html">zfs-projectspace.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-promote.8.html">zfs-promote.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-receive.8.html">zfs-receive.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-recv.8.html">zfs-recv.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-redact.8.html">zfs-redact.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-release.8.html">zfs-release.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-rename.8.html">zfs-rename.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-rollback.8.html">zfs-rollback.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-send.8.html">zfs-send.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-set.8.html">zfs-set.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-share.8.html">zfs-share.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-snapshot.8.html">zfs-snapshot.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-unallow.8.html">zfs-unallow.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-unjail.8.html">zfs-unjail.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-unload-key.8.html">zfs-unload-key.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-unmount.8.html">zfs-unmount.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-upgrade.8.html">zfs-upgrade.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-userspace.8.html">zfs-userspace.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-wait.8.html">zfs-wait.8</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">zfs.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs_ids_to_path.8.html">zfs_ids_to_path.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfsconcepts.8.html">zfsconcepts.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfsprops.8.html">zfsprops.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zgenhostid.8.html">zgenhostid.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zinject.8.html">zinject.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-add.8.html">zpool-add.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-attach.8.html">zpool-attach.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-checkpoint.8.html">zpool-checkpoint.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-clear.8.html">zpool-clear.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-create.8.html">zpool-create.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-destroy.8.html">zpool-destroy.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-detach.8.html">zpool-detach.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-events.8.html">zpool-events.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-export.8.html">zpool-export.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-get.8.html">zpool-get.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-history.8.html">zpool-history.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-import.8.html">zpool-import.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-initialize.8.html">zpool-initialize.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-iostat.8.html">zpool-iostat.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-labelclear.8.html">zpool-labelclear.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-list.8.html">zpool-list.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-offline.8.html">zpool-offline.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-online.8.html">zpool-online.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-reguid.8.html">zpool-reguid.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-remove.8.html">zpool-remove.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-reopen.8.html">zpool-reopen.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-replace.8.html">zpool-replace.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-resilver.8.html">zpool-resilver.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-scrub.8.html">zpool-scrub.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-set.8.html">zpool-set.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-split.8.html">zpool-split.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-status.8.html">zpool-status.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-sync.8.html">zpool-sync.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-trim.8.html">zpool-trim.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-upgrade.8.html">zpool-upgrade.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-wait.8.html">zpool-wait.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool.8.html">zpool.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool_influxdb.8.html">zpool_influxdb.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpoolconcepts.8.html">zpoolconcepts.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpoolprops.8.html">zpoolprops.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zstream.8.html">zstream.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zstreamdump.8.html">zstreamdump.8</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../License.html">License</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">OpenZFS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Man Pages</a> &raquo;</li>
+        
+          <li><a href="index.html">System Administration Commands (8)</a> &raquo;</li>
+        
+      <li>zfs.8</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/man/8/zfs.8.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="zfs-8">
+<h1>zfs.8<a class="headerlink" href="#zfs-8" title="Permalink to this headline">¶</a></h1>
+<div class="man_container"><table class="head">
+  <tr>
+    <td class="head-ltitle">ZFS(8)</td>
+    <td class="head-vol">System Manager's Manual</td>
+    <td class="head-rtitle">ZFS(8)</td>
+  </tr>
+</table>
+<div class="manual-text">
+<h1 class="Sh" title="Sh" id="NAME"><a class="permalink" href="#NAME">NAME</a></h1>
+<code class="Nm" title="Nm">zfs</code> &#x2014;
+<div class="Nd" title="Nd">configures ZFS file systems</div>
+<h1 class="Sh" title="Sh" id="SYNOPSIS"><a class="permalink" href="#SYNOPSIS">SYNOPSIS</a></h1>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm" title="Nm">zfs</code></td>
+    <td><code class="Fl" title="Fl">-?V</code></td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm" title="Nm">zfs</code></td>
+    <td><code class="Cm" title="Cm">version</code></td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm" title="Nm">zfs</code></td>
+    <td><code class="Cm" title="Cm">&lt;subcommand&gt;</code>
+      [<div class="Op"><var class="Ar" title="Ar">&lt;args&gt;</var></div>]</td>
+  </tr>
+</table>
+<h1 class="Sh" title="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h1>
+The <code class="Nm" title="Nm">zfs</code> command configures ZFS datasets
+  within a ZFS storage pool, as described in
+  <a href="../8/zpool.8.html" class="Xr">zpool(8)</a>. A dataset is identified by a unique
+  path within the ZFS namespace. For example:
+<div class="Pp"></div>
+<div class="Bd">
+<pre class="Li">
+pool/{filesystem,volume,snapshot}
+</pre>
+</div>
+<div class="Pp"></div>
+where the maximum length of a dataset name is
+  <code class="Dv" title="Dv">MAXNAMELEN</code> (256 bytes) and the maximum
+  amount of nesting allowed in a path is 50 levels deep.
+<div class="Pp"></div>
+A dataset can be one of the following:
+<dl class="Bl-tag">
+  <dt><b class="Sy" title="Sy">file system</b></dt>
+  <dd>A ZFS dataset of type <b class="Sy" title="Sy">filesystem</b> can be
+      mounted within the standard system namespace and behaves like other file
+      systems. While ZFS file systems are designed to be POSIX compliant, known
+      issues exist that prevent compliance in some cases. Applications that
+      depend on standards conformance might fail due to non-standard behavior
+      when checking file system free space.</dd>
+  <dt><b class="Sy" title="Sy">volume</b></dt>
+  <dd>A logical volume exported as a raw or block device. This type of dataset
+      should only be used when a block device is required. File systems are
+      typically used in most environments.</dd>
+  <dt><b class="Sy" title="Sy">snapshot</b></dt>
+  <dd>A read-only version of a file system or volume at a given point in time.
+      It is specified as
+      <var class="Ar" title="Ar">filesystem</var>@<var class="Ar" title="Ar">name</var>
+      or
+      <var class="Ar" title="Ar">volume</var>@<var class="Ar" title="Ar">name</var>.</dd>
+  <dt><b class="Sy" title="Sy">bookmark</b></dt>
+  <dd>Much like a <b class="Sy" title="Sy">snapshot</b>, but without the hold on
+      on-disk data. It can be used as the source of a send (but not for a
+      receive). It is specified as
+      <var class="Ar" title="Ar">filesystem</var>#<var class="Ar" title="Ar">name</var>
+      or
+      <var class="Ar" title="Ar">volume</var>#<var class="Ar" title="Ar">name</var>.</dd>
+</dl>
+<div class="Pp"></div>
+For details see <a href="../8/zfsconcepts.8.html" class="Xr">zfsconcepts(8)</a>.
+<h2 class="Ss" title="Ss" id="Properties"><a class="permalink" href="#Properties">Properties</a></h2>
+Properties are divided into two types, native properties and user-defined (or
+  &#x201C;user&#x201D;) properties. Native properties either export internal
+  statistics or control ZFS behavior. In addition, native properties are either
+  editable or read-only. User properties have no effect on ZFS behavior, but you
+  can use them to annotate datasets in a way that is meaningful in your
+  environment. For more information about properties, see the
+  <a href="../8/zfsprops.8.html" class="Xr">zfsprops(8)</a> man page.
+<h2 class="Ss" title="Ss" id="Encryption"><a class="permalink" href="#Encryption">Encryption</a></h2>
+Enabling the <b class="Sy" title="Sy">encryption</b> feature allows for the
+  creation of encrypted filesystems and volumes. ZFS will encrypt file and zvol
+  data, file attributes, ACLs, permission bits, directory listings, FUID
+  mappings, and <b class="Sy" title="Sy">userused</b> /
+  <b class="Sy" title="Sy">groupused</b> data. For an overview of encryption see
+  the <a href="../8/zfs-load-key.8.html" class="Xr">zfs-load-key(8)</a> command manual.
+<h1 class="Sh" title="Sh" id="SUBCOMMANDS"><a class="permalink" href="#SUBCOMMANDS">SUBCOMMANDS</a></h1>
+All subcommands that modify state are logged persistently to the pool in their
+  original form.
+<dl class="Bl-tag">
+  <dt><code class="Nm" title="Nm">zfs</code>
+    <code class="Fl" title="Fl">-</code>?</dt>
+  <dd>Displays a help message.</dd>
+  <dt><code class="Nm" title="Nm">zfs</code>
+    <code class="Fl" title="Fl">-V</code>,
+    <code class="Fl" title="Fl">--version</code></dt>
+  <dd>An alias for the <code class="Nm" title="Nm">zfs</code>
+      <code class="Cm" title="Cm">version</code> subcommand.</dd>
+  <dt><code class="Nm" title="Nm">zfs</code>
+    <code class="Cm" title="Cm">version</code></dt>
+  <dd>Displays the software version of the
+      <code class="Nm" title="Nm">zfs</code> userland utility and the zfs kernel
+      module.</dd>
+</dl>
+<h2 class="Ss" title="Ss" id="Dataset_Management"><a class="permalink" href="#Dataset_Management">Dataset
+  Management</a></h2>
+<dl class="Bl-tag">
+  <dt><a href="../8/zfs-list.8.html" class="Xr">zfs-list(8)</a></dt>
+  <dd>Lists the property information for the given datasets in tabular
+    form.</dd>
+  <dt><a href="../8/zfs-create.8.html" class="Xr">zfs-create(8)</a></dt>
+  <dd>Creates a new ZFS file system or volume.</dd>
+  <dt><a href="../8/zfs-destroy.8.html" class="Xr">zfs-destroy(8)</a></dt>
+  <dd>Destroys the given dataset(s), snapshot(s), or bookmark.</dd>
+  <dt><a href="../8/zfs-rename.8.html" class="Xr">zfs-rename(8)</a></dt>
+  <dd>Renames the given dataset (filesystem or snapshot).</dd>
+  <dt><a href="../8/zfs-upgrade.8.html" class="Xr">zfs-upgrade(8)</a></dt>
+  <dd>Manage upgrading the on-disk version of filesystems.</dd>
+</dl>
+<h2 class="Ss" title="Ss" id="Snapshots"><a class="permalink" href="#Snapshots">Snapshots</a></h2>
+<dl class="Bl-tag">
+  <dt><a href="../8/zfs-snapshot.8.html" class="Xr">zfs-snapshot(8)</a></dt>
+  <dd>Creates snapshots with the given names.</dd>
+  <dt><a href="../8/zfs-rollback.8.html" class="Xr">zfs-rollback(8)</a></dt>
+  <dd>Roll back the given dataset to a previous snapshot.</dd>
+  <dt><a href="../8/zfs-hold.8.html" class="Xr">zfs-hold(8)</a> /
+    <a href="../8/zfs-release.8.html" class="Xr">zfs-release(8)</a></dt>
+  <dd>Add or remove a hold reference to the specified snapshot or snapshots. If
+      a hold exists on a snapshot, attempts to destroy that snapshot by using
+      the <code class="Nm" title="Nm">zfs</code>
+      <code class="Cm" title="Cm">destroy</code> command return
+      <code class="Er" title="Er">EBUSY</code>.</dd>
+  <dt><a href="../8/zfs-diff.8.html" class="Xr">zfs-diff(8)</a></dt>
+  <dd>Display the difference between a snapshot of a given filesystem and
+      another snapshot of that filesystem from a later time or the current
+      contents of the filesystem.</dd>
+</dl>
+<h2 class="Ss" title="Ss" id="Clones"><a class="permalink" href="#Clones">Clones</a></h2>
+<dl class="Bl-tag">
+  <dt><a href="../8/zfs-clone.8.html" class="Xr">zfs-clone(8)</a></dt>
+  <dd>Creates a clone of the given snapshot.</dd>
+  <dt><a href="../8/zfs-promote.8.html" class="Xr">zfs-promote(8)</a></dt>
+  <dd>Promotes a clone file system to no longer be dependent on its
+      &#x201C;origin&#x201D; snapshot.</dd>
+</dl>
+<h2 class="Ss" title="Ss" id="Send_&amp;_Receive"><a class="permalink" href="#Send_&amp;_Receive">Send
+  &amp; Receive</a></h2>
+<dl class="Bl-tag">
+  <dt><a href="../8/zfs-send.8.html" class="Xr">zfs-send(8)</a></dt>
+  <dd>Generate a send stream, which may be of a filesystem, and may be
+      incremental from a bookmark.</dd>
+  <dt><a href="../8/zfs-receive.8.html" class="Xr">zfs-receive(8)</a></dt>
+  <dd>Creates a snapshot whose contents are as specified in the stream provided
+      on standard input. If a full stream is received, then a new file system is
+      created as well. Streams are created using the
+      <a href="../8/zfs-send.8.html" class="Xr">zfs-send(8)</a> subcommand, which by default
+      creates a full stream.</dd>
+  <dt><a href="../8/zfs-bookmark.8.html" class="Xr">zfs-bookmark(8)</a></dt>
+  <dd>Creates a new bookmark of the given snapshot or bookmark. Bookmarks mark
+      the point in time when the snapshot was created, and can be used as the
+      incremental source for a <code class="Nm" title="Nm">zfs</code>
+      <code class="Cm" title="Cm">send</code> command.</dd>
+  <dt><a href="../8/zfs-redact.8.html" class="Xr">zfs-redact(8)</a></dt>
+  <dd>Generate a new redaction bookmark. This feature can be used to allow
+      clones of a filesystem to be made available on a remote system, in the
+      case where their parent need not (or needs to not) be usable.</dd>
+</dl>
+<h2 class="Ss" title="Ss" id="Properties_2"><a class="permalink" href="#Properties_2">Properties</a></h2>
+<dl class="Bl-tag">
+  <dt><a href="../8/zfs-get.8.html" class="Xr">zfs-get(8)</a></dt>
+  <dd>Displays properties for the given datasets.</dd>
+  <dt><a href="../8/zfs-set.8.html" class="Xr">zfs-set(8)</a></dt>
+  <dd>Sets the property or list of properties to the given value(s) for each
+      dataset.</dd>
+  <dt><a href="../8/zfs-inherit.8.html" class="Xr">zfs-inherit(8)</a></dt>
+  <dd>Clears the specified property, causing it to be inherited from an
+      ancestor, restored to default if no ancestor has the property set, or with
+      the <code class="Fl" title="Fl">-S</code> option reverted to the received
+      value if one exists.</dd>
+</dl>
+<h2 class="Ss" title="Ss" id="Quotas"><a class="permalink" href="#Quotas">Quotas</a></h2>
+<dl class="Bl-tag">
+  <dt><a href="../8/zfs-userspace.8.html" class="Xr">zfs-userspace(8)</a> /
+    <a href="../8/zfs-groupspace.8.html" class="Xr">zfs-groupspace(8)</a> /
+    <a href="../8/zfs-projectspace.8.html" class="Xr">zfs-projectspace(8)</a></dt>
+  <dd>Displays space consumed by, and quotas on, each user, group, or project in
+      the specified filesystem or snapshot.</dd>
+  <dt><a href="../8/zfs-project.8.html" class="Xr">zfs-project(8)</a></dt>
+  <dd>List, set, or clear project ID and/or inherit flag on the file(s) or
+      directories.</dd>
+</dl>
+<h2 class="Ss" title="Ss" id="Mountpoints"><a class="permalink" href="#Mountpoints">Mountpoints</a></h2>
+<dl class="Bl-tag">
+  <dt><a href="../8/zfs-mount.8.html" class="Xr">zfs-mount(8)</a></dt>
+  <dd>Displays all ZFS file systems currently mounted, or mount ZFS filesystem
+      on a path described by its <b class="Sy" title="Sy">mountpoint</b>
+      property.</dd>
+  <dt><a href="../8/zfs-unmount.8.html" class="Xr">zfs-unmount(8)</a></dt>
+  <dd>Unmounts currently mounted ZFS file systems.</dd>
+</dl>
+<h2 class="Ss" title="Ss" id="Shares"><a class="permalink" href="#Shares">Shares</a></h2>
+<dl class="Bl-tag">
+  <dt><a href="../8/zfs-share.8.html" class="Xr">zfs-share(8)</a></dt>
+  <dd>Shares available ZFS file systems.</dd>
+  <dt><a class="Xr" title="Xr">zfs-unshare(8)</a></dt>
+  <dd>Unshares currently shared ZFS file systems.</dd>
+</dl>
+<h2 class="Ss" title="Ss" id="Delegated_Administration"><a class="permalink" href="#Delegated_Administration">Delegated
+  Administration</a></h2>
+<dl class="Bl-tag">
+  <dt><a href="../8/zfs-allow.8.html" class="Xr">zfs-allow(8)</a></dt>
+  <dd>Delegate permissions on the specified filesystem or volume.</dd>
+  <dt><a href="../8/zfs-unallow.8.html" class="Xr">zfs-unallow(8)</a></dt>
+  <dd>Remove delegated permissions on the specified filesystem or volume.</dd>
+</dl>
+<h2 class="Ss" title="Ss" id="Encryption_2"><a class="permalink" href="#Encryption_2">Encryption</a></h2>
+<dl class="Bl-tag">
+  <dt><a href="../8/zfs-change-key.8.html" class="Xr">zfs-change-key(8)</a></dt>
+  <dd>Add or change an encryption key on the specified dataset.</dd>
+  <dt><a href="../8/zfs-load-key.8.html" class="Xr">zfs-load-key(8)</a></dt>
+  <dd>Load the key for the specified encrypted dataset, enabling access.</dd>
+  <dt><a href="../8/zfs-unload-key.8.html" class="Xr">zfs-unload-key(8)</a></dt>
+  <dd>Unload a key for the specified dataset, removing the ability to access the
+      dataset.</dd>
+</dl>
+<h2 class="Ss" title="Ss" id="Channel_Programs"><a class="permalink" href="#Channel_Programs">Channel
+  Programs</a></h2>
+<dl class="Bl-tag">
+  <dt><a href="../8/zfs-program.8.html" class="Xr">zfs-program(8)</a></dt>
+  <dd>Execute ZFS administrative operations programmatically via a Lua
+      script-language channel program.</dd>
+</dl>
+<h2 class="Ss" title="Ss" id="Jails"><a class="permalink" href="#Jails">Jails</a></h2>
+<dl class="Bl-tag">
+  <dt><a href="../8/zfs-jail.8.html" class="Xr">zfs-jail(8)</a></dt>
+  <dd>Attaches a filesystem to a jail.</dd>
+  <dt><a href="../8/zfs-unjail.8.html" class="Xr">zfs-unjail(8)</a></dt>
+  <dd>Detaches a filesystem from a jail.</dd>
+</dl>
+<h2 class="Ss" title="Ss" id="Waiting"><a class="permalink" href="#Waiting">Waiting</a></h2>
+<dl class="Bl-tag">
+  <dt><a href="../8/zfs-wait.8.html" class="Xr">zfs-wait(8)</a></dt>
+  <dd>Wait for background activity in a filesystem to complete.</dd>
+</dl>
+<h1 class="Sh" title="Sh" id="EXIT_STATUS"><a class="permalink" href="#EXIT_STATUS">EXIT
+  STATUS</a></h1>
+The <code class="Nm" title="Nm">zfs</code> utility exits 0 on success, 1 if an
+  error occurs, and 2 if invalid command line options were specified.
+<h1 class="Sh" title="Sh" id="EXAMPLES"><a class="permalink" href="#EXAMPLES">EXAMPLES</a></h1>
+<dl class="Bl-tag">
+  <dt><b class="Sy" title="Sy">Example 1</b> <span class="No">Creating a ZFS
+    File System Hierarchy</span></dt>
+  <dd>The following commands create a file system named
+      <i class="Em" title="Em">pool/home</i> and a file system named
+      <i class="Em" title="Em">pool/home/bob</i>. The mount point
+      <span class="Pa" title="Pa">/export/home</span> is set for the parent file
+      system, and is automatically inherited by the child file system.
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zfs create pool/home 
+# zfs set mountpoint=/export/home pool/home 
+# zfs create pool/home/bob
+    </pre>
+    </div>
+  </dd>
+  <dt><b class="Sy" title="Sy">Example 2</b> <span class="No">Creating a ZFS
+    Snapshot</span></dt>
+  <dd>The following command creates a snapshot named
+      <b class="Sy" title="Sy">yesterday</b>. This snapshot is mounted on demand
+      in the <span class="Pa" title="Pa">.zfs/snapshot</span> directory at the
+      root of the <i class="Em" title="Em">pool/home/bob</i> file system.
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zfs snapshot pool/home/bob@yesterday
+    </pre>
+    </div>
+  </dd>
+  <dt><b class="Sy" title="Sy">Example 3</b> <span class="No">Creating and
+    Destroying Multiple Snapshots</span></dt>
+  <dd>The following command creates snapshots named
+      <b class="Sy" title="Sy">yesterday</b> of
+      <i class="Em" title="Em">pool/home</i> and all of its descendent file
+      systems. Each snapshot is mounted on demand in the
+      <span class="Pa" title="Pa">.zfs/snapshot</span> directory at the root of
+      its file system. The second command destroys the newly created snapshots.
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zfs snapshot -r pool/home@yesterday 
+# zfs destroy -r pool/home@yesterday
+    </pre>
+    </div>
+  </dd>
+  <dt><b class="Sy" title="Sy">Example 4</b> <span class="No">Disabling and
+    Enabling File System Compression</span></dt>
+  <dd>The following command disables the
+      <b class="Sy" title="Sy">compression</b> property for all file systems
+      under <i class="Em" title="Em">pool/home</i>. The next command explicitly
+      enables <b class="Sy" title="Sy">compression</b> for
+      <i class="Em" title="Em">pool/home/anne</i>.
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zfs set compression=off pool/home 
+# zfs set compression=on pool/home/anne
+    </pre>
+    </div>
+  </dd>
+  <dt><b class="Sy" title="Sy">Example 5</b> <span class="No">Listing ZFS
+    Datasets</span></dt>
+  <dd>The following command lists all active file systems and volumes in the
+      system. Snapshots are displayed if the
+      <b class="Sy" title="Sy">listsnaps</b> property is
+      <b class="Sy" title="Sy">on</b>. The default is
+      <b class="Sy" title="Sy">off</b>. See
+      <a href="../8/zpool.8.html" class="Xr">zpool(8)</a> for more information on pool
+      properties.
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zfs list 
+NAME                      USED  AVAIL  REFER  MOUNTPOINT 
+pool                      450K   457G    18K  /pool 
+pool/home                 315K   457G    21K  /export/home 
+pool/home/anne             18K   457G    18K  /export/home/anne 
+pool/home/bob             276K   457G   276K  /export/home/bob
+    </pre>
+    </div>
+  </dd>
+  <dt><b class="Sy" title="Sy">Example 6</b> <span class="No">Setting a Quota on
+    a ZFS File System</span></dt>
+  <dd>The following command sets a quota of 50 Gbytes for
+      <i class="Em" title="Em">pool/home/bob</i>.
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zfs set quota=50G pool/home/bob
+    </pre>
+    </div>
+  </dd>
+  <dt><b class="Sy" title="Sy">Example 7</b> <span class="No">Listing ZFS
+    Properties</span></dt>
+  <dd>The following command lists all properties for
+      <i class="Em" title="Em">pool/home/bob</i>.
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zfs get all pool/home/bob 
+NAME           PROPERTY              VALUE                  SOURCE 
+pool/home/bob  type                  filesystem             - 
+pool/home/bob  creation              Tue Jul 21 15:53 2009  - 
+pool/home/bob  used                  21K                    - 
+pool/home/bob  available             20.0G                  - 
+pool/home/bob  referenced            21K                    - 
+pool/home/bob  compressratio         1.00x                  - 
+pool/home/bob  mounted               yes                    - 
+pool/home/bob  quota                 20G                    local 
+pool/home/bob  reservation           none                   default 
+pool/home/bob  recordsize            128K                   default 
+pool/home/bob  mountpoint            /pool/home/bob         default 
+pool/home/bob  sharenfs              off                    default 
+pool/home/bob  checksum              on                     default 
+pool/home/bob  compression           on                     local 
+pool/home/bob  atime                 on                     default 
+pool/home/bob  devices               on                     default 
+pool/home/bob  exec                  on                     default 
+pool/home/bob  setuid                on                     default 
+pool/home/bob  readonly              off                    default 
+pool/home/bob  zoned                 off                    default 
+pool/home/bob  snapdir               hidden                 default 
+pool/home/bob  acltype               off                    default 
+pool/home/bob  aclmode               discard                default 
+pool/home/bob  aclinherit            restricted             default 
+pool/home/bob  canmount              on                     default 
+pool/home/bob  xattr                 on                     default 
+pool/home/bob  copies                1                      default 
+pool/home/bob  version               4                      - 
+pool/home/bob  utf8only              off                    - 
+pool/home/bob  normalization         none                   - 
+pool/home/bob  casesensitivity       sensitive              - 
+pool/home/bob  vscan                 off                    default 
+pool/home/bob  nbmand                off                    default 
+pool/home/bob  sharesmb              off                    default 
+pool/home/bob  refquota              none                   default 
+pool/home/bob  refreservation        none                   default 
+pool/home/bob  primarycache          all                    default 
+pool/home/bob  secondarycache        all                    default 
+pool/home/bob  usedbysnapshots       0                      - 
+pool/home/bob  usedbydataset         21K                    - 
+pool/home/bob  usedbychildren        0                      - 
+pool/home/bob  usedbyrefreservation  0                      -
+    </pre>
+    </div>
+    <div class="Pp"></div>
+    The following command gets a single property value.
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zfs get -H -o value compression pool/home/bob 
+on
+    </pre>
+    </div>
+    The following command lists all properties with local settings for
+      <i class="Em" title="Em">pool/home/bob</i>.
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zfs get -r -s local -o name,property,value all pool/home/bob 
+NAME           PROPERTY              VALUE 
+pool/home/bob  quota                 20G 
+pool/home/bob  compression           on
+    </pre>
+    </div>
+  </dd>
+  <dt><b class="Sy" title="Sy">Example 8</b> <span class="No">Rolling Back a ZFS
+    File System</span></dt>
+  <dd>The following command reverts the contents of
+      <i class="Em" title="Em">pool/home/anne</i> to the snapshot named
+      <b class="Sy" title="Sy">yesterday</b>, deleting all intermediate
+      snapshots.
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zfs rollback -r pool/home/anne@yesterday
+    </pre>
+    </div>
+  </dd>
+  <dt><b class="Sy" title="Sy">Example 9</b> <span class="No">Creating a ZFS
+    Clone</span></dt>
+  <dd>The following command creates a writable file system whose initial
+      contents are the same as
+      <i class="Em" title="Em">pool/home/bob@yesterday</i>.
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zfs clone pool/home/bob@yesterday pool/clone
+    </pre>
+    </div>
+  </dd>
+  <dt><b class="Sy" title="Sy">Example 10</b> <span class="No">Promoting a ZFS
+    Clone</span></dt>
+  <dd>The following commands illustrate how to test out changes to a file
+      system, and then replace the original file system with the changed one,
+      using clones, clone promotion, and renaming:
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zfs create pool/project/production 
+  populate /pool/project/production with data 
+# zfs snapshot pool/project/production@today 
+# zfs clone pool/project/production@today pool/project/beta 
+  make changes to /pool/project/beta and test them 
+# zfs promote pool/project/beta 
+# zfs rename pool/project/production pool/project/legacy 
+# zfs rename pool/project/beta pool/project/production 
+  once the legacy version is no longer needed, it can be destroyed 
+# zfs destroy pool/project/legacy
+    </pre>
+    </div>
+  </dd>
+  <dt><b class="Sy" title="Sy">Example 11</b> <span class="No">Inheriting ZFS
+    Properties</span></dt>
+  <dd>The following command causes <i class="Em" title="Em">pool/home/bob</i>
+      and <i class="Em" title="Em">pool/home/anne</i> to inherit the
+      <b class="Sy" title="Sy">checksum</b> property from their parent.
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zfs inherit checksum pool/home/bob pool/home/anne
+    </pre>
+    </div>
+  </dd>
+  <dt><b class="Sy" title="Sy">Example 12</b> <span class="No">Remotely
+    Replicating ZFS Data</span></dt>
+  <dd>The following commands send a full stream and then an incremental stream
+      to a remote machine, restoring them into
+      <i class="Em" title="Em">poolB/received/fs@a</i> and
+      <i class="Em" title="Em">poolB/received/fs@b</i>, respectively.
+      <i class="Em" title="Em">poolB</i> must contain the file system
+      <i class="Em" title="Em">poolB/received</i>, and must not initially
+      contain <i class="Em" title="Em">poolB/received/fs</i>.
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zfs send pool/fs@a | \ 
+  ssh host zfs receive poolB/received/fs@a 
+# zfs send -i a pool/fs@b | \ 
+  ssh host zfs receive poolB/received/fs
+    </pre>
+    </div>
+  </dd>
+  <dt><b class="Sy" title="Sy">Example 13</b> <span class="No">Using the zfs
+    receive -d Option</span></dt>
+  <dd>The following command sends a full stream of
+      <i class="Em" title="Em">poolA/fsA/fsB@snap</i> to a remote machine,
+      receiving it into
+      <i class="Em" title="Em">poolB/received/fsA/fsB@snap</i>. The
+      <i class="Em" title="Em">fsA/fsB@snap</i> portion of the received
+      snapshot's name is determined from the name of the sent snapshot.
+      <i class="Em" title="Em">poolB</i> must contain the file system
+      <i class="Em" title="Em">poolB/received</i>. If
+      <i class="Em" title="Em">poolB/received/fsA</i> does not exist, it is
+      created as an empty file system.
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zfs send poolA/fsA/fsB@snap | \ 
+  ssh host zfs receive -d poolB/received
+    </pre>
+    </div>
+  </dd>
+  <dt><b class="Sy" title="Sy">Example 14</b> <span class="No">Setting User
+    Properties</span></dt>
+  <dd>The following example sets the user-defined
+      <b class="Sy" title="Sy">com.example:department</b> property for a
+      dataset.
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zfs set com.example:department=12345 tank/accounting
+    </pre>
+    </div>
+  </dd>
+  <dt><b class="Sy" title="Sy">Example 15</b> <span class="No">Performing a
+    Rolling Snapshot</span></dt>
+  <dd>The following example shows how to maintain a history of snapshots with a
+      consistent naming scheme. To keep a week's worth of snapshots, the user
+      destroys the oldest snapshot, renames the remaining snapshots, and then
+      creates a new snapshot, as follows:
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zfs destroy -r pool/users@7daysago 
+# zfs rename -r pool/users@6daysago @7daysago 
+# zfs rename -r pool/users@5daysago @6daysago 
+# zfs rename -r pool/users@4daysago @5daysago 
+# zfs rename -r pool/users@3daysago @4daysago 
+# zfs rename -r pool/users@2daysago @3daysago 
+# zfs rename -r pool/users@yesterday @2daysago 
+# zfs rename -r pool/users@today @yesterday 
+# zfs snapshot -r pool/users@today
+    </pre>
+    </div>
+  </dd>
+  <dt><b class="Sy" title="Sy">Example 16</b> <span class="No">Setting sharenfs
+    Property Options on a ZFS File System</span></dt>
+  <dd>The following commands show how to set
+      <b class="Sy" title="Sy">sharenfs</b> property options to enable
+      <b class="Sy" title="Sy">rw</b> access for a set of
+      <b class="Sy" title="Sy">IP</b> addresses and to enable root access for
+      system <b class="Sy" title="Sy">neo</b> on the
+      <i class="Em" title="Em">tank/home</i> file system.
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zfs set sharenfs='rw=@123.123.0.0/16,root=neo' tank/home
+    </pre>
+    </div>
+    <div class="Pp"></div>
+    If you are using <b class="Sy" title="Sy">DNS</b> for host name resolution,
+      specify the fully qualified hostname.</dd>
+  <dt><b class="Sy" title="Sy">Example 17</b> <span class="No">Delegating ZFS
+    Administration Permissions on a ZFS Dataset</span></dt>
+  <dd>The following example shows how to set permissions so that user
+      <b class="Sy" title="Sy">cindys</b> can create, destroy, mount, and take
+      snapshots on <i class="Em" title="Em">tank/cindys</i>. The permissions on
+      <i class="Em" title="Em">tank/cindys</i> are also displayed.
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zfs allow cindys create,destroy,mount,snapshot tank/cindys 
+# zfs allow tank/cindys 
+---- Permissions on tank/cindys -------------------------------------- 
+Local+Descendent permissions: 
+        user cindys create,destroy,mount,snapshot
+    </pre>
+    </div>
+    <div class="Pp"></div>
+    Because the <i class="Em" title="Em">tank/cindys</i> mount point permission
+      is set to 755 by default, user <b class="Sy" title="Sy">cindys</b> will be
+      unable to mount file systems under
+      <i class="Em" title="Em">tank/cindys</i>. Add an ACE similar to the
+      following syntax to provide mount point access:
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# chmod A+user:cindys:add_subdirectory:allow /tank/cindys
+    </pre>
+    </div>
+  </dd>
+  <dt><b class="Sy" title="Sy">Example 18</b> <span class="No">Delegating Create
+    Time Permissions on a ZFS Dataset</span></dt>
+  <dd>The following example shows how to grant anyone in the group
+      <b class="Sy" title="Sy">staff</b> to create file systems in
+      <i class="Em" title="Em">tank/users</i>. This syntax also allows staff
+      members to destroy their own file systems, but not destroy anyone else's
+      file system. The permissions on <i class="Em" title="Em">tank/users</i>
+      are also displayed.
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zfs allow staff create,mount tank/users 
+# zfs allow -c destroy tank/users 
+# zfs allow tank/users 
+---- Permissions on tank/users --------------------------------------- 
+Permission sets: 
+        destroy 
+Local+Descendent permissions: 
+        group staff create,mount
+    </pre>
+    </div>
+  </dd>
+  <dt><b class="Sy" title="Sy">Example 19</b> <span class="No">Defining and
+    Granting a Permission Set on a ZFS Dataset</span></dt>
+  <dd>The following example shows how to define and grant a permission set on
+      the <i class="Em" title="Em">tank/users</i> file system. The permissions
+      on <i class="Em" title="Em">tank/users</i> are also displayed.
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zfs allow -s @pset create,destroy,snapshot,mount tank/users 
+# zfs allow staff @pset tank/users 
+# zfs allow tank/users 
+---- Permissions on tank/users --------------------------------------- 
+Permission sets: 
+        @pset create,destroy,mount,snapshot 
+Local+Descendent permissions: 
+        group staff @pset
+    </pre>
+    </div>
+  </dd>
+  <dt><b class="Sy" title="Sy">Example 20</b> <span class="No">Delegating
+    Property Permissions on a ZFS Dataset</span></dt>
+  <dd>The following example shows to grant the ability to set quotas and
+      reservations on the <i class="Em" title="Em">users/home</i> file system.
+      The permissions on <i class="Em" title="Em">users/home</i> are also
+      displayed.
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zfs allow cindys quota,reservation users/home 
+# zfs allow users/home 
+---- Permissions on users/home --------------------------------------- 
+Local+Descendent permissions: 
+        user cindys quota,reservation 
+cindys% zfs set quota=10G users/home/marks 
+cindys% zfs get quota users/home/marks 
+NAME              PROPERTY  VALUE  SOURCE 
+users/home/marks  quota     10G    local
+    </pre>
+    </div>
+  </dd>
+  <dt><b class="Sy" title="Sy">Example 21</b> <span class="No">Removing ZFS
+    Delegated Permissions on a ZFS Dataset</span></dt>
+  <dd>The following example shows how to remove the snapshot permission from the
+      <b class="Sy" title="Sy">staff</b> group on the
+      <i class="Em" title="Em">tank/users</i> file system. The permissions on
+      <i class="Em" title="Em">tank/users</i> are also displayed.
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zfs unallow staff snapshot tank/users 
+# zfs allow tank/users 
+---- Permissions on tank/users --------------------------------------- 
+Permission sets: 
+        @pset create,destroy,mount,snapshot 
+Local+Descendent permissions: 
+        group staff @pset
+    </pre>
+    </div>
+  </dd>
+  <dt><b class="Sy" title="Sy">Example 22</b> <span class="No">Showing the
+    differences between a snapshot and a ZFS Dataset</span></dt>
+  <dd>The following example shows how to see what has changed between a prior
+      snapshot of a ZFS dataset and its current state. The
+      <code class="Fl" title="Fl">-F</code> option is used to indicate type
+      information for the files affected.
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zfs diff -F tank/test@before tank/test 
+M       /       /tank/test/ 
+M       F       /tank/test/linked      (+1) 
+R       F       /tank/test/oldname -&gt; /tank/test/newname 
+-       F       /tank/test/deleted 
++       F       /tank/test/created 
+M       F       /tank/test/modified
+    </pre>
+    </div>
+  </dd>
+  <dt><b class="Sy" title="Sy">Example 23</b> <span class="No">Creating a
+    bookmark</span></dt>
+  <dd>The following example create a bookmark to a snapshot. This bookmark can
+      then be used instead of snapshot in send streams.
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zfs bookmark rpool@snapshot rpool#bookmark
+    </pre>
+    </div>
+  </dd>
+  <dt><b class="Sy" title="Sy">Example 24</b> <span class="No">Setting sharesmb
+    Property Options on a ZFS File System</span></dt>
+  <dd>The following example show how to share SMB filesystem through ZFS. Note
+      that a user and his/her password must be given.
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# smbmount //127.0.0.1/share_tmp /mnt/tmp \ 
+  -o user=workgroup/turbo,password=obrut,uid=1000
+    </pre>
+    </div>
+    <div class="Pp"></div>
+    Minimal <i class="Em" title="Em">/etc/samba/smb.conf</i> configuration
+      required:
+    <div class="Pp"></div>
+    Samba will need to listen to 'localhost' (127.0.0.1) for the ZFS utilities
+      to communicate with Samba. This is the default behavior for most Linux
+      distributions.
+    <div class="Pp"></div>
+    Samba must be able to authenticate a user. This can be done in a number of
+      ways, depending on if using the system password file, LDAP or the Samba
+      specific smbpasswd file. How to do this is outside the scope of this
+      manual. Please refer to the <a class="Xr" title="Xr">smb.conf(5)</a> man
+      page for more information.
+    <div class="Pp"></div>
+    See the <b class="Sy" title="Sy">USERSHARE section</b> of the
+      <a class="Xr" title="Xr">smb.conf(5)</a> man page for all configuration
+      options in case you need to modify any options to the share afterwards. Do
+      note that any changes done with the <a class="Xr" title="Xr">net(8)</a>
+      command will be undone if the share is ever unshared (such as at a reboot
+      etc).</dd>
+</dl>
+<h1 class="Sh" title="Sh" id="ENVIRONMENT_VARIABLES"><a class="permalink" href="#ENVIRONMENT_VARIABLES">ENVIRONMENT
+  VARIABLES</a></h1>
+<dl class="Bl-tag">
+  <dt><a class="permalink" href="#ZFS_MOUNT_HELPER"><code class="Ev" title="Ev" id="ZFS_MOUNT_HELPER">ZFS_MOUNT_HELPER</code></a></dt>
+  <dd>Cause <code class="Nm" title="Nm">zfs mount</code> to use
+      <i class="Em" title="Em">/bin/mount</i> to mount zfs datasets. This option
+      is provided for backwards compatibility with older zfs versions.</dd>
+</dl>
+<h1 class="Sh" title="Sh" id="INTERFACE_STABILITY"><a class="permalink" href="#INTERFACE_STABILITY">INTERFACE
+  STABILITY</a></h1>
+<b class="Sy" title="Sy">Committed</b>.
+<h1 class="Sh" title="Sh" id="SEE_ALSO"><a class="permalink" href="#SEE_ALSO">SEE
+  ALSO</a></h1>
+<a class="Xr" title="Xr">attr(1)</a>, <a class="Xr" title="Xr">gzip(1)</a>,
+  <a class="Xr" title="Xr">ssh(1)</a>, <a class="Xr" title="Xr">chmod(2)</a>,
+  <a class="Xr" title="Xr">fsync(2)</a>, <a class="Xr" title="Xr">stat(2)</a>,
+  <a class="Xr" title="Xr">write(2)</a>, <a class="Xr" title="Xr">acl(5)</a>,
+  <a class="Xr" title="Xr">attributes(5)</a>,
+  <a class="Xr" title="Xr">exports(5)</a>,
+  <a class="Xr" title="Xr">exportfs(8)</a>,
+  <a class="Xr" title="Xr">mount(8)</a>, <a class="Xr" title="Xr">net(8)</a>,
+  <a class="Xr" title="Xr">selinux(8)</a>,
+  <a href="../8/zfs-allow.8.html" class="Xr">zfs-allow(8)</a>,
+  <a href="../8/zfs-bookmark.8.html" class="Xr">zfs-bookmark(8)</a>,
+  <a href="../8/zfs-change-key.8.html" class="Xr">zfs-change-key(8)</a>,
+  <a href="../8/zfs-clone.8.html" class="Xr">zfs-clone(8)</a>,
+  <a href="../8/zfs-create.8.html" class="Xr">zfs-create(8)</a>,
+  <a href="../8/zfs-destroy.8.html" class="Xr">zfs-destroy(8)</a>,
+  <a href="../8/zfs-diff.8.html" class="Xr">zfs-diff(8)</a>,
+  <a href="../8/zfs-get.8.html" class="Xr">zfs-get(8)</a>,
+  <a href="../8/zfs-groupspace.8.html" class="Xr">zfs-groupspace(8)</a>,
+  <a href="../8/zfs-hold.8.html" class="Xr">zfs-hold(8)</a>,
+  <a href="../8/zfs-inherit.8.html" class="Xr">zfs-inherit(8)</a>,
+  <a href="../8/zfs-jail.8.html" class="Xr">zfs-jail(8)</a>,
+  <a href="../8/zfs-list.8.html" class="Xr">zfs-list(8)</a>,
+  <a href="../8/zfs-load-key.8.html" class="Xr">zfs-load-key(8)</a>,
+  <a href="../8/zfs-mount.8.html" class="Xr">zfs-mount(8)</a>,
+  <a href="../8/zfs-program.8.html" class="Xr">zfs-program(8)</a>,
+  <a href="../8/zfs-project.8.html" class="Xr">zfs-project(8)</a>,
+  <a href="../8/zfs-projectspace.8.html" class="Xr">zfs-projectspace(8)</a>,
+  <a href="../8/zfs-promote.8.html" class="Xr">zfs-promote(8)</a>,
+  <a href="../8/zfs-receive.8.html" class="Xr">zfs-receive(8)</a>,
+  <a href="../8/zfs-redact.8.html" class="Xr">zfs-redact(8)</a>,
+  <a href="../8/zfs-release.8.html" class="Xr">zfs-release(8)</a>,
+  <a href="../8/zfs-rename.8.html" class="Xr">zfs-rename(8)</a>,
+  <a href="../8/zfs-rollback.8.html" class="Xr">zfs-rollback(8)</a>,
+  <a href="../8/zfs-send.8.html" class="Xr">zfs-send(8)</a>,
+  <a href="../8/zfs-set.8.html" class="Xr">zfs-set(8)</a>,
+  <a href="../8/zfs-share.8.html" class="Xr">zfs-share(8)</a>,
+  <a href="../8/zfs-snapshot.8.html" class="Xr">zfs-snapshot(8)</a>,
+  <a href="../8/zfs-unallow.8.html" class="Xr">zfs-unallow(8)</a>,
+  <a href="../8/zfs-unjail.8.html" class="Xr">zfs-unjail(8)</a>,
+  <a href="../8/zfs-unload-key.8.html" class="Xr">zfs-unload-key(8)</a>,
+  <a href="../8/zfs-unmount.8.html" class="Xr">zfs-unmount(8)</a>,
+  <a class="Xr" title="Xr">zfs-unshare(8)</a>,
+  <a href="../8/zfs-upgrade.8.html" class="Xr">zfs-upgrade(8)</a>,
+  <a href="../8/zfs-userspace.8.html" class="Xr">zfs-userspace(8)</a>,
+  <a href="../8/zfs-wait.8.html" class="Xr">zfs-wait(8)</a>,
+  <a href="../8/zfsconcepts.8.html" class="Xr">zfsconcepts(8)</a>,
+  <a href="../8/zfsprops.8.html" class="Xr">zfsprops(8)</a>,
+  <a href="../8/zpool.8.html" class="Xr">zpool(8)</a></div>
+<table class="foot">
+  <tr>
+    <td class="foot-date">June 30, 2019</td>
+    <td class="foot-os">Debian</td>
+  </tr>
+</table>
+</div></div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="zfs_ids_to_path.8.html" class="btn btn-neutral float-right" title="zfs_ids_to_path.8" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="zfs-wait.8.html" class="btn btn-neutral float-left" title="zfs-wait.8" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, OpenZFS.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

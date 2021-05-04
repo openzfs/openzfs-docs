@@ -1,0 +1,1075 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Hardware &mdash; OpenZFS  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/mandoc.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Module Parameters" href="Module Parameters.html" />
+    <link rel="prev" title="Async Writes" href="Async Write.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/logo_main.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Getting Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Project and Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Developer Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Performance and Tuning</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Async Write.html">Async Writes</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Hardware</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bios-cpu-microcode-updates">BIOS / CPU microcode updates</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#background">Background</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#ecc-memory">ECC Memory</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#background-1">Background</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#drive-interfaces">Drive Interfaces</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sas-versus-sata">SAS versus SATA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#usb-hard-drives-and-or-adapters">USB Hard Drives and/or Adapters</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#controllers">Controllers</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#hardware-raid-controllers">Hardware RAID controllers</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#hard-drives">Hard drives</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sector-size">Sector Size</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#error-recovery-control">Error recovery control</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rpm-speeds">RPM Speeds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#command-queuing">Command Queuing</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#nand-flash-ssds">NAND Flash SSDs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#nvme-low-level-formatting">NVMe low level formatting</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#power-failure-protection">Power Failure Protection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#flash-pages">Flash pages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ata-trim-scsi-unmap">ATA TRIM / SCSI UNMAP</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#optane-3d-xpoint-ssds">Optane / 3D XPoint SSDs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#power">Power</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pwr-ok-signal">PWR_OK signal</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#psu-hold-up-times">PSU Hold-up Times</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ups-batteries">UPS batteries</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Module Parameters.html">Module Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Workload Tuning.html">Workload Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ZFS Transaction Delay.html">ZFS Transaction Delay</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ZIO Scheduler.html">ZFS I/O (ZIO) Scheduler</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Basic Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../man/index.html">Man Pages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../License.html">License</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">OpenZFS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Performance and Tuning</a> &raquo;</li>
+        
+      <li>Hardware</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/Performance and Tuning/Hardware.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="hardware">
+<h1>Hardware<a class="headerlink" href="#hardware" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="table-of-contents">
+<p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#introduction" id="id31">Introduction</a></p></li>
+<li><p><a class="reference internal" href="#bios-cpu-microcode-updates" id="id32">BIOS / CPU microcode updates</a></p>
+<ul>
+<li><p><a class="reference internal" href="#background" id="id33">Background</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#ecc-memory" id="id34">ECC Memory</a></p>
+<ul>
+<li><p><a class="reference internal" href="#background-1" id="id35">Background</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#drive-interfaces" id="id36">Drive Interfaces</a></p>
+<ul>
+<li><p><a class="reference internal" href="#sas-versus-sata" id="id37">SAS versus SATA</a></p></li>
+<li><p><a class="reference internal" href="#usb-hard-drives-and-or-adapters" id="id38">USB Hard Drives and/or Adapters</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#controllers" id="id39">Controllers</a></p>
+<ul>
+<li><p><a class="reference internal" href="#hardware-raid-controllers" id="id40">Hardware RAID controllers</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#hard-drives" id="id41">Hard drives</a></p>
+<ul>
+<li><p><a class="reference internal" href="#sector-size" id="id42">Sector Size</a></p></li>
+<li><p><a class="reference internal" href="#error-recovery-control" id="id43">Error recovery control</a></p>
+<ul>
+<li><p><a class="reference internal" href="#background-2" id="id44">Background</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#rpm-speeds" id="id45">RPM Speeds</a></p></li>
+<li><p><a class="reference internal" href="#command-queuing" id="id46">Command Queuing</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#nand-flash-ssds" id="id47">NAND Flash SSDs</a></p>
+<ul>
+<li><p><a class="reference internal" href="#nvme-low-level-formatting" id="id48">NVMe low level formatting</a></p></li>
+<li><p><a class="reference internal" href="#power-failure-protection" id="id49">Power Failure Protection</a></p>
+<ul>
+<li><p><a class="reference internal" href="#background-3" id="id50">Background</a></p></li>
+<li><p><a class="reference internal" href="#nvme-drives-with-power-failure-protection" id="id51">NVMe drives with power failure protection</a></p></li>
+<li><p><a class="reference internal" href="#sas-drives-with-power-failure-protection" id="id52">SAS drives with power failure protection</a></p></li>
+<li><p><a class="reference internal" href="#sata-drives-with-power-failure-protection" id="id53">SATA drives with power failure protection</a></p></li>
+<li><p><a class="reference internal" href="#criteria-process-for-inclusion-into-these-lists" id="id54">Criteria/process for inclusion into these lists</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#flash-pages" id="id55">Flash pages</a></p></li>
+<li><p><a class="reference internal" href="#ata-trim-scsi-unmap" id="id56">ATA TRIM / SCSI UNMAP</a></p>
+<ul>
+<li><p><a class="reference internal" href="#ata-trim-performance-issues" id="id57">ATA TRIM Performance Issues</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#optane-3d-xpoint-ssds" id="id58">Optane / 3D XPoint SSDs</a></p></li>
+<li><p><a class="reference internal" href="#power" id="id59">Power</a></p>
+<ul>
+<li><p><a class="reference internal" href="#pwr-ok-signal" id="id60">PWR_OK signal</a></p></li>
+<li><p><a class="reference internal" href="#psu-hold-up-times" id="id61">PSU Hold-up Times</a></p></li>
+<li><p><a class="reference internal" href="#ups-batteries" id="id62">UPS batteries</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id31">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Storage before ZFS involved rather expensive hardware that was unable to
+protect against silent corruption and did not scale very well. The
+introduction of ZFS has enabled people to use far less expensive
+hardware than previously used in the industry with superior scaling.
+This page attempts to provide some basic guidance to people buying
+hardware for use in ZFS-based servers and workstations.</p>
+<p>Hardware that adheres to this guidance will enable ZFS to reach its full
+potential for performance and reliability. Hardware that does not adhere
+to it will serve as a handicap. Unless otherwise stated, such handicaps
+apply to all storage stacks and are by no means specific to ZFS. Systems
+built using competing storage stacks will also benefit from these
+suggestions.</p>
+</div>
+<div class="section" id="bios-cpu-microcode-updates">
+<span id="id1"></span><h2><a class="toc-backref" href="#id32">BIOS / CPU microcode updates</a><a class="headerlink" href="#bios-cpu-microcode-updates" title="Permalink to this headline">¶</a></h2>
+<p>Running the latest BIOS and CPU microcode is highly recommended.</p>
+<div class="section" id="background">
+<h3><a class="toc-backref" href="#id33">Background</a><a class="headerlink" href="#background" title="Permalink to this headline">¶</a></h3>
+<p>Computer microprocessors are very complex designs that often have bugs,
+which are called errata. Modern microprocessors are designed to utilize
+microcode. This puts part of the hardware design into quasi-software
+that can be patched without replacing the entire chip. Errata are often
+resolved through CPU microcode updates. These are often bundled in BIOS
+updates. In some cases, the BIOS interactions with the CPU through
+machine registers can be modified to fix things with the same microcode.
+If a newer microcode is not bundled as part of a BIOS update, it can
+often be loaded by the operating system bootloader or the operating
+system itself.</p>
+</div>
+</div>
+<div class="section" id="ecc-memory">
+<span id="id2"></span><h2><a class="toc-backref" href="#id34">ECC Memory</a><a class="headerlink" href="#ecc-memory" title="Permalink to this headline">¶</a></h2>
+<p>Bit flips can have fairly dramatic consequences for all computer
+filesystems and ZFS is no exception. No technique used in ZFS (or any
+other filesystem) is capable of protecting against bit flips.
+Consequently, ECC Memory is highly recommended.</p>
+<div class="section" id="background-1">
+<span id="id3"></span><h3><a class="toc-backref" href="#id35">Background</a><a class="headerlink" href="#background-1" title="Permalink to this headline">¶</a></h3>
+<p>Ordinary background radiation will randomly flip bits in computer
+memory, which causes undefined behavior. These are known as “bit flips”.
+Each bit flip can have any of four possible consequences depending on
+which bit is flipped:</p>
+<ul class="simple">
+<li><p>Bit flips can have no effect.</p>
+<ul>
+<li><p>Bit flips that have no effect occur in unused memory.</p></li>
+</ul>
+</li>
+<li><p>Bit flips can cause runtime failures.</p>
+<ul>
+<li><p>This is the case when a bit flip occurs in something read from
+disk.</p></li>
+<li><p>Failures are typically observed when program code is altered.</p></li>
+<li><p>If the bit flip is in a routine within the system’s kernel or
+/sbin/init, the system will likely crash. Otherwise, reloading the
+affected data can clear it. This is typically achieved by a
+reboot.</p></li>
+</ul>
+</li>
+<li><p>It can cause data corruption.</p>
+<ul>
+<li><p>This is the case when the bit is in use by data being written to
+disk.</p></li>
+<li><p>If the bit flip occurs before ZFS’ checksum calculation, ZFS will
+not realize that the data is corrupt.</p></li>
+<li><p>If the bit flip occurs after ZFS’ checksum calculation, but before
+write-out, ZFS will detect it, but it might not be able to correct
+it.</p></li>
+</ul>
+</li>
+<li><p>It can cause metadata corruption.</p>
+<ul>
+<li><p>This is the case when a bit flips in an on-disk structure being
+written to disk.</p></li>
+<li><p>If the bit flip occurs before ZFS’ checksum calculation, ZFS will
+not realize that the metadata is corrupt.</p></li>
+<li><p>If the bit flip occurs after ZFS’ checksum calculation, but before
+write-out, ZFS will detect it, but it might not be able to correct
+it.</p></li>
+<li><p>Recovery from such an event will depend on what was corrupted. In
+the worst, case, a pool could be rendered unimportable.</p>
+<ul>
+<li><p>All filesystems have poor reliability in their absolute worst
+case bit-flip failure scenarios. Such scenarios should be
+considered extraordinarily rare.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="drive-interfaces">
+<span id="id4"></span><h2><a class="toc-backref" href="#id36">Drive Interfaces</a><a class="headerlink" href="#drive-interfaces" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="sas-versus-sata">
+<span id="id5"></span><h3><a class="toc-backref" href="#id37">SAS versus SATA</a><a class="headerlink" href="#sas-versus-sata" title="Permalink to this headline">¶</a></h3>
+<p>ZFS depends on the block device layer for storage. Consequently, ZFS is
+affected by the same things that affect other filesystems, such as
+driver support and non-working hardware. Consequently, there are a few
+things to note:</p>
+<ul class="simple">
+<li><p>Never place SATA disks into a SAS expander without a SAS interposer.</p>
+<ul>
+<li><p>If you do this and it does work, it is the exception, rather than
+the rule.</p></li>
+</ul>
+</li>
+<li><p>Do not expect SAS controllers to be compatible with SATA port
+multipliers.</p>
+<ul>
+<li><p>This configuration is typically not tested.</p></li>
+<li><p>The disks could be unrecognized.</p></li>
+</ul>
+</li>
+<li><p>Support for SATA port multipliers is inconsistent across OpenZFS
+platforms</p>
+<ul>
+<li><p>Linux drivers generally support them.</p></li>
+<li><p>Illumos drivers generally do not support them.</p></li>
+<li><p>FreeBSD drivers are somewhere between Linux and Illumos in terms
+of support.</p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="usb-hard-drives-and-or-adapters">
+<span id="usb-hard-drives-andor-adapters"></span><h3><a class="toc-backref" href="#id38">USB Hard Drives and/or Adapters</a><a class="headerlink" href="#usb-hard-drives-and-or-adapters" title="Permalink to this headline">¶</a></h3>
+<p>These have problems involving sector size reporting, SMART passthrough,
+the ability to set ERC and other areas. ZFS will perform as well on such
+devices as they are capable of allowing, but try to avoid them. They
+should not be expected to have the same up-time as SAS and SATA drives
+and should be considered unreliable.</p>
+</div>
+</div>
+<div class="section" id="controllers">
+<h2><a class="toc-backref" href="#id39">Controllers</a><a class="headerlink" href="#controllers" title="Permalink to this headline">¶</a></h2>
+<p>The ideal storage controller for ZFS has the following attributes:</p>
+<ul class="simple">
+<li><p>Driver support on major OpenZFS platforms</p>
+<ul>
+<li><p>Stability is important.</p></li>
+</ul>
+</li>
+<li><p>High per-port bandwidth</p>
+<ul>
+<li><p>PCI Express interface bandwidth divided by the number of ports</p></li>
+</ul>
+</li>
+<li><p>Low cost</p>
+<ul>
+<li><p>Support for RAID, Battery Backup Units and hardware write caches
+is unnecessary.</p></li>
+</ul>
+</li>
+</ul>
+<p>Marc Bevand’s blog post <a class="reference external" href="http://blog.zorinaq.com/?e=10">From 32 to 2 ports: Ideal SATA/SAS Controllers
+for ZFS &amp; Linux MD RAID</a> contains an
+excellent list of storage controllers that meet these criteria. He
+regularly updates it as newer controllers become available.</p>
+<div class="section" id="hardware-raid-controllers">
+<span id="id6"></span><h3><a class="toc-backref" href="#id40">Hardware RAID controllers</a><a class="headerlink" href="#hardware-raid-controllers" title="Permalink to this headline">¶</a></h3>
+<p>Hardware RAID controllers should not be used with ZFS. While ZFS will
+likely be more reliable than other filesystems on Hardware RAID, it will
+not be as reliable as it would be on its own.</p>
+<ul class="simple">
+<li><p>Hardware RAID will limit opportunities for ZFS to perform self
+healing on checksum failures. When ZFS does RAID-Z or mirroring, a
+checksum failure on one disk can be corrected by treating the disk
+containing the sector as bad for the purpose of reconstructing the
+original information. This cannot be done when a RAID controller
+handles the redundancy unless a duplicate copy is stored by ZFS in
+the case that the corruption involving as metadata, the copies flag
+is set or the RAID array is part of a mirror/raid-z vdev within ZFS.</p></li>
+<li><p>Sector size information is not necessarily passed correctly by
+hardware RAID on RAID 1 and cannot be passed correctly on RAID 5/6.
+Hardware RAID 1 is more likely to experience read-modify-write
+overhead from partial sector writes and Hardware RAID 5/6 will almost
+certainty suffer from partial stripe writes (i.e. the RAID write
+hole). Using ZFS with the disks directly will allow it to obtain the
+sector size information reported by the disks to avoid
+read-modify-write on sectors while ZFS avoids partial stripe writes
+on RAID-Z by desing from using copy-on-write.</p>
+<ul>
+<li><p>There can be sector alignment problems on ZFS when a drive
+misreports its sector size. Such drives are typically NAND-flash
+based solid state drives and older SATA drives from the advanced
+format (4K sector size) transition before Windows XP EoL occurred.
+This can be <a class="reference internal" href="Workload Tuning.html#alignment-shift-ashift"><span class="std std-ref">manually corrected</span></a> at
+vdev creation.</p></li>
+<li><p>It is possible for the RAID header to cause misalignment of sector
+writes on RAID 1 by starting the array within a sector on an
+actual drive, such that manual correction of sector alignment at
+vdev creation does not solve the problem.</p></li>
+</ul>
+</li>
+<li><p>Controller failures can require that the controller be replaced with
+the same model, or in less extreme cases, a model from the same
+manufacturer. Using ZFS by itself allows any controller to be used.</p></li>
+<li><p>If a hardware RAID controller’s write cache is used, an additional
+failure point is introduced that can only be partially mitigated by
+additional complexity from adding flash to save data in power loss
+events. The data can still be lost if the battery fails when it is
+required to survive a power loss event or there is no flash and power
+is not restored in a timely manner. The loss of the data in the write
+cache can severely damage anything stored on a RAID array when many
+outstanding writes are cached. In addition, all writes are stored in
+the cache rather than just synchronous writes that require a write
+cache, which is inefficient, and the write cache is relatively small.
+ZFS allows synchronous writes to be written directly to flash, which
+should provide similar acceleration to hardware RAID and the ability
+to accelerate many more in-flight operations.</p></li>
+<li><p>Behavior during RAID reconstruction when silent corruption damages
+data is undefined. There are reports of RAID 5 and 6 arrays being
+lost during reconstruction when the controller encounters silent
+corruption. ZFS’ checksums allow it to avoid this situation by
+determining if not enough information exists to reconstruct data. In
+which case, the file is listed as damaged in zpool status and the
+system administrator has the opportunity to restore it from a backup.</p></li>
+<li><p>IO response times will be reduced whenever the OS blocks on IO
+operations because the system CPU blocks on a much weaker embedded
+CPU used in the RAID controller. This lowers IOPS relative to what
+ZFS could have achieved.</p></li>
+<li><p>The controller’s firmware is an additional layer of complexity that
+cannot be inspected by arbitrary third parties. The ZFS source code
+is open source and can be inspected by anyone.</p></li>
+<li><p>If multiple RAID arrays are formed by the same controller and one
+fails, the identifiers provided by the arrays exposed to the OS might
+become inconsistent. Giving the drives directly to the OS allows this
+to be avoided via naming that maps to a unique port or unique drive
+identifier.</p>
+<ul>
+<li><p>e.g. If you have arrays A, B, C and D; array B dies, the
+interaction between the hardware RAID controller and the OS might
+rename arrays C and D to look like arrays B and C respectively.
+This can fault pools verbatim imported from the cachefile.</p></li>
+<li><p>Not all RAID controllers behave this way. However, this issue has
+been observed on both Linux and FreeBSD when system administrators
+used single drive RAID 0 arrays. It has also been observed with
+controllers from different vendors.</p></li>
+</ul>
+</li>
+</ul>
+<p>One might be inclined to try using single-drive RAID 0 arrays to try to
+use a RAID controller like a HBA, but this is not recommended for many
+of the reasons listed for other hardware RAID types. It is best to use a
+HBA instead of a RAID controller, for both performance and reliability.</p>
+</div>
+</div>
+<div class="section" id="hard-drives">
+<span id="id7"></span><h2><a class="toc-backref" href="#id41">Hard drives</a><a class="headerlink" href="#hard-drives" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="sector-size">
+<span id="id8"></span><h3><a class="toc-backref" href="#id42">Sector Size</a><a class="headerlink" href="#sector-size" title="Permalink to this headline">¶</a></h3>
+<p>Historically, all hard drives had 512-byte sectors, with the exception
+of some SCSI drives that could be modified to support slightly larger
+sectors. In 2009, the industry migrated from 512-byte sectors to
+4096-byte “Advanced Format” sectors. Since Windows XP is not compatible
+with 4096-byte sectors or drives larger than 2TB, some of the first
+advanced format drives implemented hacks to maintain Windows XP
+compatibility.</p>
+<ul class="simple">
+<li><p>The first advanced format drives on the market misreported their
+sector size as 512-bytes for Windows XP compatibility. As of 2013, it
+is believed that such hard drives are no longer in production.
+Advanced format hard drives made during or after this time should
+report their true physical sector size.</p></li>
+<li><p>Drives storing 2TB and smaller might have a jumper that can be set to
+map all sectors off by 1. This to provide proper alignment for
+Windows XP, which started its first partition at sector 63. This
+jumper setting should be off when using such drives with ZFS.</p></li>
+</ul>
+<p>As of 2014, there are still 512-byte and 4096-byte drives on the market,
+but they are known to properly identify themselves unless behind a USB
+to SATA controller. Replacing a 512-byte sector drive with a 4096-byte
+sector drives in a vdev created with 512-byte sector drives will
+adversely affect performance. Replacing a 4096-byte sector drive with a
+512-byte sector drive will have no negative effect on performance.</p>
+</div>
+<div class="section" id="error-recovery-control">
+<span id="id9"></span><h3><a class="toc-backref" href="#id43">Error recovery control</a><a class="headerlink" href="#error-recovery-control" title="Permalink to this headline">¶</a></h3>
+<p>ZFS is said to be able to use cheap drives. This was true when it was
+introduced and hard drives supported Error recovery control. Since ZFS’
+introduction, error recovery control has been removed from low-end
+drives from certain manufacturers, most notably Western Digital.
+Consistent performance requires hard drives that support error recovery
+control.</p>
+<div class="section" id="background-2">
+<span id="id10"></span><h4><a class="toc-backref" href="#id44">Background</a><a class="headerlink" href="#background-2" title="Permalink to this headline">¶</a></h4>
+<p>Hard drives store data using small polarized regions a magnetic surface.
+Reading from and/or writing to this surface poses a few reliability
+problems. One is that imperfections in the surface can corrupt bits.
+Another is that vibrations can cause drive heads to miss their targets.
+Consequently, hard drive sectors are composed of three regions:</p>
+<ul class="simple">
+<li><p>A sector number</p></li>
+<li><p>The actual data</p></li>
+<li><p>ECC</p></li>
+</ul>
+<p>The sector number and ECC enables hard drives to detect and respond to
+such events. When either event occurs during a read, hard drives will
+retry the read many times until they either succeed or conclude that the
+data cannot be read. The latter case can take a substantial amount of
+time and consequently, IO to the drive will stall.</p>
+<p>Enterprise hard drives and some consumer hard drives implement a feature
+called Time-Limited Error Recovery (TLER) by Western Digital, Error
+Recovery Control (ERC) by Seagate and Command Completion Time Limit by
+Hitachi and Samsung, which permits the time drives are willing to spend
+on such events to be limited by the system administrator.</p>
+<p>Drives that lack such functionality can be expected to have arbitrarily
+high limits. Several minutes is not impossible. Drives with this
+functionality typically default to 7 seconds. ZFS does not currently
+adjust this setting on drives. However, it is advisable to write a
+script to set the error recovery time to a low value, such as 0.1
+seconds until ZFS is modified to control it. This must be done on every
+boot.</p>
+</div>
+</div>
+<div class="section" id="rpm-speeds">
+<span id="id11"></span><h3><a class="toc-backref" href="#id45">RPM Speeds</a><a class="headerlink" href="#rpm-speeds" title="Permalink to this headline">¶</a></h3>
+<p>High RPM drives have lower seek times, which is historically regarded as
+being desirable. They increase cost and sacrifice storage density in
+order to achieve what is typically no more than a factor of 6
+improvement over their lower RPM counterparts.</p>
+<p>To provide some numbers, a 15k RPM drive from a major manufacturer is
+rated for 3.4 millisecond average read and 3.9 millisecond average
+write. Presumably, this number assumes that the target sector is at most
+half the number of drive tracks away from the head and half the disk
+away. Being even further away is worst-case 2 times slower. Manufacturer
+numbers for 7200 RPM drives are not available, but they average 13 to 16
+milliseconds in empirical measurements. 5400 RPM drives can be expected
+to be slower.</p>
+<p>ARC and ZIL are able to mitigate much of the benefit of lower seek
+times. Far larger increases in IOPS performance can be obtained by
+adding additional RAM for ARC, L2ARC devices and SLOG devices. Even
+higher increases in performance can be obtained by replacing hard drives
+with solid state storage entirely. Such things are typically more cost
+effective than high RPM drives when considering IOPS.</p>
+</div>
+<div class="section" id="command-queuing">
+<span id="id12"></span><h3><a class="toc-backref" href="#id46">Command Queuing</a><a class="headerlink" href="#command-queuing" title="Permalink to this headline">¶</a></h3>
+<p>Drives with command queues are able to reorder IO operations to increase
+IOPS. This is called Native Command Queuing on SATA and Tagged Command
+Queuing on PATA/SCSI/SAS. ZFS stores objects in metaslabs and it can use
+several metastabs at any given time. Consequently, ZFS is not only
+designed to take advantage of command queuing, but good ZFS performance
+requires command queuing. Almost all drives manufactured within the past
+10 years can be expected to support command queuing. The exceptions are:</p>
+<ul class="simple">
+<li><p>Consumer PATA/IDE drives</p></li>
+<li><p>First generation SATA drives, which used IDE to SATA translation
+chips, from 2003 to 2004.</p></li>
+<li><p>SATA drives operating under IDE emulation that was configured in the
+system BIOS.</p></li>
+</ul>
+<p>Each OpenZFS system has different methods for checking whether command
+queuing is supported. On Linux, <code class="docutils literal notranslate"><span class="pre">hdparm</span> <span class="pre">-I</span> <span class="pre">/path/to/device</span> <span class="pre">\|</span> <span class="pre">grep</span>
+<span class="pre">Queue</span></code> is used. On FreeBSD, <code class="docutils literal notranslate"><span class="pre">camcontrol</span> <span class="pre">identify</span> <span class="pre">$DEVICE</span></code> is used.</p>
+</div>
+</div>
+<div class="section" id="nand-flash-ssds">
+<span id="id13"></span><h2><a class="toc-backref" href="#id47">NAND Flash SSDs</a><a class="headerlink" href="#nand-flash-ssds" title="Permalink to this headline">¶</a></h2>
+<p>As of 2014, Solid state storage is dominated by NAND-flash and most
+articles on solid state storage focus on it exclusively. As of 2014, the
+most popular form of flash storage used with ZFS involve drives with
+SATA interfaces. Enterprise models with SAS interfaces are beginning to
+become available.</p>
+<p>As of 2017, Solid state storage using NAND-flash with PCI-E interfaces
+are widely available on the market. They are predominantly enterprise
+drives that utilize a NVMe interface that has lower overhead than the
+ATA used in SATA or SCSI used in SAS. There is also an interface known
+as M.2 that is primarily used by consumer SSDs, although not necessarily
+limited to them. It can provide electrical connectivity for multiple
+buses, such as SATA, PCI-E and USB. M.2 SSDs appear to use either SATA
+or NVME.</p>
+<div class="section" id="nvme-low-level-formatting">
+<span id="id14"></span><h3><a class="toc-backref" href="#id48">NVMe low level formatting</a><a class="headerlink" href="#nvme-low-level-formatting" title="Permalink to this headline">¶</a></h3>
+<p>Many NVMe SSDs support both 512-byte sectors and 4096-byte sectors. They
+often ship with 512-byte sectors, which are less performant than
+4096-byte sectors. Some also support metadata for T10/DIF CRC to try to
+improve reliability, although this is unnecessary with ZFS.</p>
+<p>NVMe drives should be
+<a class="reference external" href="https://filers.blogspot.com/2018/12/how-to-format-nvme-drive.html">formatted</a>
+to use 4096-byte sectors without metadata prior to being given to ZFS
+for best performance unless they indicate that 512-byte sectors are as
+performant as 4096-byte sectors, although this is unlikely. Lower
+numbers in the Rel_Perf of Supported LBA Sizes from <code class="docutils literal notranslate"><span class="pre">smartctl</span> <span class="pre">-a</span>
+<span class="pre">/dev/$device_namespace</span></code> (for example <code class="docutils literal notranslate"><span class="pre">smartctl</span> <span class="pre">-a</span> <span class="pre">/dev/nvme1n1</span></code>)
+indicate higher performance low level formats, with 0 being the best.
+The current formatting will be marked by a plus sign under the format
+Fmt.</p>
+<p>You may format a drive using <code class="docutils literal notranslate"><span class="pre">nvme</span> <span class="pre">format</span> <span class="pre">/dev/nvme1n1</span> <span class="pre">-l</span> <span class="pre">$ID</span></code>. The $ID
+corresponds to the Id field value from the Supported LBA Sizes SMART
+information.</p>
+</div>
+<div class="section" id="power-failure-protection">
+<span id="id15"></span><h3><a class="toc-backref" href="#id49">Power Failure Protection</a><a class="headerlink" href="#power-failure-protection" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="background-3">
+<span id="id16"></span><h4><a class="toc-backref" href="#id50">Background</a><a class="headerlink" href="#background-3" title="Permalink to this headline">¶</a></h4>
+<p>On-flash data structures are highly complex and traditionally have been
+highly vulnerable to corruption. In the past, such corruption would
+result in the loss of *all* drive data and an event such as a PSU
+failure could result in multiple drives simultaneously failing. Since
+the drive firmware is not available for review, the traditional
+conclusion was that all drives that lack hardware features to avoid
+power failure events cannot be trusted, which was found to be the case
+multiple times in the
+past <a class="footnote-reference brackets" href="#ssd-analysis" id="id17">1</a> <a class="footnote-reference brackets" href="#ssd-analysis2" id="id18">2</a> <a class="footnote-reference brackets" href="#ssd-analysis3" id="id19">3</a>.
+Discussion of power failures bricking NAND flash SSDs appears to have
+vanished from literature following the year 2015. SSD manufacturers now
+claim that firmware power loss protection is robust enough to provide
+equivalent protection to hardware power loss protection. <a class="reference external" href="https://www.kingston.com/us/solutions/servers-data-centers/ssd-power-loss-protection">Kingston is one
+example</a>.
+Firmware power loss protection is used to guarantee the protection of
+flushed data and the drives’ own metadata, which is all that filesystems
+such as ZFS need.</p>
+<p>However, those that either need or want strong guarantees that firmware
+bugs are unlikely to be able to brick drives following power loss events
+should continue to use drives that provide hardware power loss
+protection. The basic concept behind how hardware power failure
+protection works has been <a class="reference external" href="https://www.intel.com/content/dam/www/public/us/en/documents/technology-briefs/ssd-power-loss-imminent-technology-brief.pdf">documented by
+Intel</a>
+for those who wish to read about the details. As of 2020, use of
+hardware power loss protection is now a feature solely of enterprise
+SSDs that attempt to protect unflushed data in addition to drive
+metadata and flushed data. This additional protection beyond protecting
+flushed data and the drive metadata provides no additional benefit to
+ZFS, but it does not hurt it.</p>
+<p>It should also be noted that drives in data centers and laptops are
+unlikely to experience power loss events, reducing the usefulness of
+hardware power loss protection. This is especially the case in
+datacenters where redundant power, UPS power and the use of IPMI to do
+forced reboots should prevent most drives from experiencing power loss
+events.</p>
+<p>Lists of drives that provide hardware power loss protection are
+maintained below for those who need/want it. Since ZFS, like other
+filesystems, only requires power failure protection for flushed data and
+drive metadata, older drives that only protect these things are included
+on the lists.</p>
+</div>
+<div class="section" id="nvme-drives-with-power-failure-protection">
+<span id="id20"></span><h4><a class="toc-backref" href="#id51">NVMe drives with power failure protection</a><a class="headerlink" href="#nvme-drives-with-power-failure-protection" title="Permalink to this headline">¶</a></h4>
+<p>A non-exhaustive list of NVMe drives with power failure protection is as
+follows:</p>
+<ul class="simple">
+<li><p>Intel 750</p></li>
+<li><p>Intel DC P3500/P3600/P3608/P3700</p></li>
+<li><p>Samsung PM963 (M.2 form factor)</p></li>
+<li><p>Samsung PM1725/PM1725a</p></li>
+<li><p>Samsung XS1715</p></li>
+<li><p>Toshiba ZD6300</p></li>
+<li><p>Seagate Nytro 5000 M.2 (XP1920LE30002 tested; <strong>read notes below
+before buying</strong>)</p>
+<ul>
+<li><p>Inexpensive 22110 M.2 enterprise drive using consumer MLC that is
+optimized for read mostly workloads. It is not a good choice for a
+SLOG device, which is a write mostly workload.</p></li>
+<li><p>The
+<a class="reference external" href="https://www.seagate.com/www-content/support-content/enterprise-storage/solid-state-drives/nytro-5000/_shared/docs/nytro-5000-mp2-pm-100810195d.pdf">manual</a>
+for this drive specifies airflow requirements. If the drive does
+not receive sufficient airflow from case fans, it will overheat at
+idle. It’s thermal throttling will severely degrade performance
+such that write throughput performance will be limited to 1/10 of
+the specification and read latencies will reach several hundred
+milliseconds. Under continuous load, the device will continue to
+become hotter until it suffers a “degraded reliability” event
+where all data on at least one NVMe namespace is lost. The NVMe
+namespace is then unusable until a secure erase is done. Even with
+sufficient airflow under normal circumstances, data loss is
+possible under load following the failure of fans in an enterprise
+environment. Anyone deploying this into production in an
+enterprise environment should be mindful of this failure mode.</p></li>
+<li><p>Those who wish to use this drive in a low airflow situation can
+workaround this failure mode by placing a passive heatsink such as
+<a class="reference external" href="https://smile.amazon.com/gp/product/B07BDKN3XV">this</a> on the
+NAND flash controller. It is the chip under the sticker closest to
+the capacitors. This was tested by placing the heatsink over the
+sticker (as removing it was considered undesirable). The heatsink
+will prevent the drive from overheating to the point of data loss,
+but it will not fully alleviate the overheating situation under
+load without active airflow. A scrub will cause it to overheat
+after a few hundred gigabytes are read. However, the thermal
+throttling will quickly cool the drive from 76 degrees Celsius to
+74 degrees Celsius, restoring performance.</p>
+<ul>
+<li><p>It might be possible to use the heatsink in an enterprise
+environment to provide protection against data loss following
+fan failures. However, this was not evaluated. Furthermore,
+operating temperatures for consumer NAND flash should be at or
+above 40 degrees Celsius for long term data integrity.
+Therefore, the use of a heatsink to provide protection against
+data loss following fan failures in an enterprise environment
+should be evaluated before deploying drives into production to
+ensure that the drive is not overcooled.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="sas-drives-with-power-failure-protection">
+<span id="id21"></span><h4><a class="toc-backref" href="#id52">SAS drives with power failure protection</a><a class="headerlink" href="#sas-drives-with-power-failure-protection" title="Permalink to this headline">¶</a></h4>
+<p>A non-exhaustive list of SAS drives with power failure protection is as
+follows:</p>
+<ul class="simple">
+<li><p>Samsung PM1633/PM1633a</p></li>
+<li><p>Samsung SM1625</p></li>
+<li><p>Samsung PM853T</p></li>
+<li><p>Toshiba PX05SHB***/PX04SHB***/PX04SHQ***</p></li>
+<li><p>Toshiba PX05SLB***/PX04SLB***/PX04SLQ***</p></li>
+<li><p>Toshiba PX05SMB***/PX04SMB***/PX04SMQ***</p></li>
+<li><p>Toshiba PX05SRB***/PX04SRB***/PX04SRQ***</p></li>
+<li><p>Toshiba PX05SVB***/PX04SVB***/PX04SVQ***</p></li>
+</ul>
+</div>
+<div class="section" id="sata-drives-with-power-failure-protection">
+<span id="id22"></span><h4><a class="toc-backref" href="#id53">SATA drives with power failure protection</a><a class="headerlink" href="#sata-drives-with-power-failure-protection" title="Permalink to this headline">¶</a></h4>
+<p>A non-exhaustive list of SATA drives with power failure protection is as
+follows:</p>
+<ul class="simple">
+<li><p>Crucial MX100/MX200/MX300</p></li>
+<li><p>Crucial M500/M550/M600</p></li>
+<li><p>Intel 320</p>
+<ul>
+<li><p>Early reports claimed that the 330 and 335 had power failure
+protection too, <a class="reference external" href="http://blog.nordeus.com/dev-ops/power-failure-testing-with-ssds.htm">but they do
+not</a>.</p></li>
+</ul>
+</li>
+<li><p>Intel 710</p></li>
+<li><p>Intel 730</p></li>
+<li><p>Intel DC S3500/S3510/S3610/S3700/S3710</p></li>
+<li><p>Micron 5210 Ion</p>
+<ul>
+<li><p>First QLC drive on the list. High capacity with a low price per
+gigabyte.</p></li>
+</ul>
+</li>
+<li><p>Samsung PM863/PM863a</p></li>
+<li><p>Samsung SM843T (do not confuse with SM843)</p></li>
+<li><p>Samsung SM863/SM863a</p></li>
+<li><p>Samsung 845DC Evo</p></li>
+<li><p>Samsung 845DC Pro</p>
+<ul>
+<li><p><a class="reference external" href="http://www.anandtech.com/show/8319/samsung-ssd-845dc-evopro-preview-exploring-worstcase-iops/5">High sustained write
+IOPS</a></p></li>
+</ul>
+</li>
+<li><p>Toshiba HK4E/HK3E2</p></li>
+<li><p>Toshiba HK4R/HK3R2/HK3R</p></li>
+</ul>
+</div>
+<div class="section" id="criteria-process-for-inclusion-into-these-lists">
+<span id="criteriaprocess-for-inclusion-into-these-lists"></span><h4><a class="toc-backref" href="#id54">Criteria/process for inclusion into these lists</a><a class="headerlink" href="#criteria-process-for-inclusion-into-these-lists" title="Permalink to this headline">¶</a></h4>
+<p>These lists have been compiled on a volunteer basis by OpenZFS
+contributors (mainly Richard Yao) from trustworthy sources of
+information. The lists are intended to be vendor neutral and are not
+intended to benefit any particular manufacturer. Any perceived bias
+toward any manufacturer is caused by a lack of awareness and a lack of
+time to research additional options. Confirmation of the presence of
+adequate power loss protection by a reliable source is the only
+requirement for inclusion into this list. Adequate power loss protection
+means that the drive must protect both its own internal metadata and all
+flushed data. Protection of unflushed data is irrelevant and therefore
+not a requirement. ZFS only expects storage to protect flushed data.
+Consequently, solid state drives whose power loss protection only
+protects flushed data is sufficient for ZFS to ensure that data remains
+safe.</p>
+<p>Anyone who believes an unlisted drive to provide adequate power failure
+protection may contact the <a class="reference internal" href="../Project and Community/Mailing Lists.html#mailing-lists"><span class="std std-ref">Mailing Lists</span></a> with
+a request for inclusion and substantiation for the claim that power
+failure protection is provided. Examples of substantiation include
+pictures of drive internals showing the presence of capacitors,
+statements by well regarded independent review sites such as Anandtech
+and manufacturer specification sheets. The latter are accepted on the
+honor system until a manufacturer is found to misstate reality on the
+protection of the drives’ own internal metadata structures and/or the
+protection of flushed data. Thus far, all manufacturers have been
+honest.</p>
+</div>
+</div>
+<div class="section" id="flash-pages">
+<span id="id23"></span><h3><a class="toc-backref" href="#id55">Flash pages</a><a class="headerlink" href="#flash-pages" title="Permalink to this headline">¶</a></h3>
+<p>The smallest unit on a NAND chip that can be written is a flash page.
+The first NAND-flash SSDs on the market had 4096-byte pages. Further
+complicating matters is that the the page size has been doubled twice
+since then. NAND flash SSDs <strong>should</strong> report these pages as being
+sectors, but so far, all of them incorrectly report 512-byte sectors for
+Windows XP compatibility. The consequence is that we have a similar
+situation to what we had with early advanced format hard drives.</p>
+<p>As of 2014, most NAND-flash SSDs on the market have 8192-byte page
+sizes. However, models using 128-Gbit NAND from certain manufacturers
+have a 16384-byte page size. Maximum performance requires that vdevs be
+created with correct ashift values (13 for 8192-byte and 14 for
+16384-byte). However, not all OpenZFS platforms support this. The Linux
+port supports ashift=13, while others are limited to ashift=12
+(4096-byte).</p>
+<p>As of 2017, NAND-flash SSDs are tuned for 4096-byte IOs. Matching the
+flash page size is unnecessary and ashift=12 is usually the correct
+choice. Public documentation on flash page size is also nearly
+non-existent.</p>
+</div>
+<div class="section" id="ata-trim-scsi-unmap">
+<span id="id24"></span><h3><a class="toc-backref" href="#id56">ATA TRIM / SCSI UNMAP</a><a class="headerlink" href="#ata-trim-scsi-unmap" title="Permalink to this headline">¶</a></h3>
+<p>It should be noted that this is a separate case from
+discard on zvols or hole punching on filesystems. Those work regardless
+of whether ATA TRIM / SCSI UNMAP is sent to the actual block devices.</p>
+<div class="section" id="ata-trim-performance-issues">
+<span id="id25"></span><h4><a class="toc-backref" href="#id57">ATA TRIM Performance Issues</a><a class="headerlink" href="#ata-trim-performance-issues" title="Permalink to this headline">¶</a></h4>
+<p>The ATA TRIM command in SATA 3.0 and earlier is a non-queued command.
+Issuing a TRIM command on a SATA drive conforming to SATA 3.0 or earlier
+will cause the drive to drain its IO queue and stop servicing requests
+until it finishes, which hurts performance. SATA 3.1 removed this
+limitation, but very few SATA drives on the market are conformant to
+SATA 3.1 and it is difficult to distinguish them from SATA 3.0 drives.
+At the same time, SCSI UNMAP has no such problems.</p>
+</div>
+</div>
+</div>
+<div class="section" id="optane-3d-xpoint-ssds">
+<span id="id26"></span><h2><a class="toc-backref" href="#id58">Optane / 3D XPoint SSDs</a><a class="headerlink" href="#optane-3d-xpoint-ssds" title="Permalink to this headline">¶</a></h2>
+<p>These are SSDs with far better latencies and write endurance than NAND
+flash SSDs. They are byte addressable, such that ashift=9 is fine for
+use on them. Unlike NAND flash SSDs, they do not require any special
+power failure protection circuitry for reliability. There is also no
+need to run TRIM on them. However, they cost more per GB than NAND flash
+(as of 2020). The enterprise models make excellent SLOG devices. Here is
+a list of models that are known to perform well:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.servethehome.com/intel-optane-hands-on-real-world-benchmark-and-test-results/">Intel DC
+P4800X</a></p>
+<ul>
+<li><p>This gives basically the highest performance you can get as of
+June 2020.</p></li>
+</ul>
+</li>
+</ul>
+<p>Also, at time of writing in June 2020, only one model is listed. This is
+due to there being few such drives on the market. The client models are
+likely to be outperformed by well configured NAND flash drives, so they
+have not been listed (although they are likely cheaper than NAND flash).
+More will likely be added in the future.</p>
+<p>Note that SLOG devices rarely have more than 4GB in use at any given
+time, so the smaller sized devices are generally the best choice in
+terms of cost, with larger sizes giving no benefit. Larger sizes could
+be a good choice for other vdev types, depending on performance needs
+and cost considerations.</p>
+</div>
+<div class="section" id="power">
+<h2><a class="toc-backref" href="#id59">Power</a><a class="headerlink" href="#power" title="Permalink to this headline">¶</a></h2>
+<p>Ensuring that computers are properly grounded is highly recommended.
+There have been cases in user homes where machines experienced random
+failures when plugged into power receptacles that had open grounds (i.e.
+no ground wire at all). This can cause random failures on any computer
+system, whether it uses ZFS or not.</p>
+<p>Power should also be relatively stable. Large dips in voltages from
+brownouts are preferably avoided through the use of UPS units or line
+conditioners. Systems subject to unstable power that do not outright
+shutdown can exhibit undefined behavior. PSUs with longer hold-up times
+should be able to provide partial protection against this, but hold up
+times are often undocumented and are not a substitute for a UPS or line
+conditioner.</p>
+<div class="section" id="pwr-ok-signal">
+<span id="id27"></span><h3><a class="toc-backref" href="#id60">PWR_OK signal</a><a class="headerlink" href="#pwr-ok-signal" title="Permalink to this headline">¶</a></h3>
+<p>PSUs are supposed to deassert a PWR_OK signal to indicate that provided
+voltages are no longer within the rated specification. This should force
+an immediate shutdown. However, the system clock of a developer
+workstation was observed to significantly deviate from the expected
+value following during a series of ~1 second brown outs. This machine
+did not use a UPS at the time. However, the PWR_OK mechanism should have
+protected against this. The observation of the PWR_OK signal failing to
+force a shutdown with adverse consequences (to the system clock in this
+case) suggests that the PWR_OK mechanism is not a strict guarantee.</p>
+</div>
+<div class="section" id="psu-hold-up-times">
+<span id="id28"></span><h3><a class="toc-backref" href="#id61">PSU Hold-up Times</a><a class="headerlink" href="#psu-hold-up-times" title="Permalink to this headline">¶</a></h3>
+<p>A PSU hold-up time is the amount of time that a PSU can continue to
+output power at maximum output within standard voltage tolerances
+following the loss of input power. This is important for supporting UPS
+units because <a class="reference external" href="https://www.sunpower-uk.com/glossary/what-is-transfer-time/">the transfer
+time</a>
+taken by a standard UPS to supply power from its battery can leave
+machines without power for “5-12 ms”. <a class="reference external" href="https://paginas.fe.up.pt/~asousa/pc-info/atxps09_atx_pc_pow_supply.pdf">Intel’s ATX Power Supply design
+guide</a>
+specifies a hold up time of 17 milliseconds at maximum continuous
+output. The hold-up time is a inverse function of how much power is
+being output by the PSU, with lower power output increasing holdup
+times.</p>
+<p>Capacitor aging in PSUs will lower the hold-up time below what it was
+when new, which could cause reliability issues as equipment ages.
+Machines using substandard PSUs with hold-up times below the
+specification therefore require higher end UPS units for protection to
+ensure that the transfer time does not exceed the hold-up time. A
+hold-up time below the transfer time during a transfer to battery power
+can cause undefined behavior should the PWR_OK signal not become
+deasserted to force the machine to power off.</p>
+<p>If in doubt, use a double conversion UPS unit. Double conversion UPS
+units always run off the battery, such that the transfer time is 0. This
+is unless they are high efficiency models that are hybrids between
+standard UPS units and double conversion UPS units, although these are
+reported to have much lower transfer times than standard PSUs. You could
+also contact your PSU manufacturer for the hold up time specification,
+but if reliability for years is a requirement, you should use a higher
+end UPS with a low transfer time.</p>
+<p>Note that double conversion units are at most 94% efficient unless they
+support a high efficiency mode, which adds latency to the time to
+transition to battery power.</p>
+</div>
+<div class="section" id="ups-batteries">
+<span id="id29"></span><h3><a class="toc-backref" href="#id62">UPS batteries</a><a class="headerlink" href="#ups-batteries" title="Permalink to this headline">¶</a></h3>
+<p>The lead acid batteries in UPS units generally need to be replaced
+regularly to ensure that they provide power during power outages. For
+home systems, this is every 3 to 5 years, although this varies with
+temperature <a class="footnote-reference brackets" href="#ups-temp" id="id30">4</a>. For
+enterprise systems, contact your vendor.</p>
+<p class="rubric">Footnotes</p>
+<dl class="footnote brackets">
+<dt class="label" id="ssd-analysis"><span class="brackets"><a class="fn-backref" href="#id17">1</a></span></dt>
+<dd><p>&lt;<a class="reference external" href="http://lkcl.net/reports/ssd_analysis.html">http://lkcl.net/reports/ssd_analysis.html</a>&gt;</p>
+</dd>
+<dt class="label" id="ssd-analysis2"><span class="brackets"><a class="fn-backref" href="#id18">2</a></span></dt>
+<dd><p>&lt;<a class="reference external" href="https://www.usenix.org/system/files/conference/fast13/fast13-final80.pdf">https://www.usenix.org/system/files/conference/fast13/fast13-final80.pdf</a>&gt;</p>
+</dd>
+<dt class="label" id="ssd-analysis3"><span class="brackets"><a class="fn-backref" href="#id19">3</a></span></dt>
+<dd><p>&lt;<a class="reference external" href="http://blog.nordeus.com/dev-ops/power-failure-testing-with-ssds.htm">http://blog.nordeus.com/dev-ops/power-failure-testing-with-ssds.htm</a>&gt;</p>
+</dd>
+<dt class="label" id="ups-temp"><span class="brackets"><a class="fn-backref" href="#id30">4</a></span></dt>
+<dd><p>&lt;<a class="reference external" href="https://www.apc.com/us/en/faqs/FA158934/">https://www.apc.com/us/en/faqs/FA158934/</a>&gt;</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="Module Parameters.html" class="btn btn-neutral float-right" title="Module Parameters" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="Async Write.html" class="btn btn-neutral float-left" title="Async Writes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, OpenZFS.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

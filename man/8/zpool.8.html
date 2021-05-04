@@ -1,0 +1,950 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>zpool.8 &mdash; OpenZFS  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme_overrides.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/mandoc.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="zpool_influxdb.8" href="zpool_influxdb.8.html" />
+    <link rel="prev" title="zpool-wait.8" href="zpool-wait.8.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+          
+
+          
+            <a href="../../index.html">
+          
+
+          
+            
+            <img src="../../_static/logo_main.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../Getting Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Project and Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Developer Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Performance and Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Basic Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Man Pages</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../1/index.html">User Commands (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../5/index.html">File Formats and Conventions (5)</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">System Administration Commands (8)</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="fsck.zfs.8.html">fsck.zfs.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mount.zfs.8.html">mount.zfs.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vdev_id.8.html">vdev_id.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zdb.8.html">zdb.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-allow.8.html">zfs-allow.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-bookmark.8.html">zfs-bookmark.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-change-key.8.html">zfs-change-key.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-clone.8.html">zfs-clone.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-create.8.html">zfs-create.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-destroy.8.html">zfs-destroy.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-diff.8.html">zfs-diff.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-get.8.html">zfs-get.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-groupspace.8.html">zfs-groupspace.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-hold.8.html">zfs-hold.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-inherit.8.html">zfs-inherit.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-jail.8.html">zfs-jail.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-list.8.html">zfs-list.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-load-key.8.html">zfs-load-key.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-mount.8.html">zfs-mount.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-program.8.html">zfs-program.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-project.8.html">zfs-project.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-projectspace.8.html">zfs-projectspace.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-promote.8.html">zfs-promote.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-receive.8.html">zfs-receive.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-recv.8.html">zfs-recv.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-redact.8.html">zfs-redact.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-release.8.html">zfs-release.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-rename.8.html">zfs-rename.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-rollback.8.html">zfs-rollback.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-send.8.html">zfs-send.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-set.8.html">zfs-set.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-share.8.html">zfs-share.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-snapshot.8.html">zfs-snapshot.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-unallow.8.html">zfs-unallow.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-unjail.8.html">zfs-unjail.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-unload-key.8.html">zfs-unload-key.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-unmount.8.html">zfs-unmount.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-upgrade.8.html">zfs-upgrade.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-userspace.8.html">zfs-userspace.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-wait.8.html">zfs-wait.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs.8.html">zfs.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs_ids_to_path.8.html">zfs_ids_to_path.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfsconcepts.8.html">zfsconcepts.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfsprops.8.html">zfsprops.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zgenhostid.8.html">zgenhostid.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zinject.8.html">zinject.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-add.8.html">zpool-add.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-attach.8.html">zpool-attach.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-checkpoint.8.html">zpool-checkpoint.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-clear.8.html">zpool-clear.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-create.8.html">zpool-create.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-destroy.8.html">zpool-destroy.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-detach.8.html">zpool-detach.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-events.8.html">zpool-events.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-export.8.html">zpool-export.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-get.8.html">zpool-get.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-history.8.html">zpool-history.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-import.8.html">zpool-import.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-initialize.8.html">zpool-initialize.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-iostat.8.html">zpool-iostat.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-labelclear.8.html">zpool-labelclear.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-list.8.html">zpool-list.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-offline.8.html">zpool-offline.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-online.8.html">zpool-online.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-reguid.8.html">zpool-reguid.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-remove.8.html">zpool-remove.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-reopen.8.html">zpool-reopen.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-replace.8.html">zpool-replace.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-resilver.8.html">zpool-resilver.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-scrub.8.html">zpool-scrub.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-set.8.html">zpool-set.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-split.8.html">zpool-split.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-status.8.html">zpool-status.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-sync.8.html">zpool-sync.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-trim.8.html">zpool-trim.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-upgrade.8.html">zpool-upgrade.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-wait.8.html">zpool-wait.8</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">zpool.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool_influxdb.8.html">zpool_influxdb.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpoolconcepts.8.html">zpoolconcepts.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpoolprops.8.html">zpoolprops.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zstream.8.html">zstream.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zstreamdump.8.html">zstreamdump.8</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../License.html">License</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">OpenZFS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Man Pages</a> &raquo;</li>
+        
+          <li><a href="index.html">System Administration Commands (8)</a> &raquo;</li>
+        
+      <li>zpool.8</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/man/8/zpool.8.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="zpool-8">
+<h1>zpool.8<a class="headerlink" href="#zpool-8" title="Permalink to this headline">¶</a></h1>
+<div class="man_container"><table class="head">
+  <tr>
+    <td class="head-ltitle">ZPOOL(8)</td>
+    <td class="head-vol">System Manager's Manual</td>
+    <td class="head-rtitle">ZPOOL(8)</td>
+  </tr>
+</table>
+<div class="manual-text">
+<h1 class="Sh" title="Sh" id="NAME"><a class="permalink" href="#NAME">NAME</a></h1>
+<code class="Nm" title="Nm">zpool</code> &#x2014;
+<div class="Nd" title="Nd">configure ZFS storage pools</div>
+<h1 class="Sh" title="Sh" id="SYNOPSIS"><a class="permalink" href="#SYNOPSIS">SYNOPSIS</a></h1>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm" title="Nm">zpool</code></td>
+    <td><code class="Fl" title="Fl">-?V</code></td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm" title="Nm">zpool</code></td>
+    <td><code class="Cm" title="Cm">version</code></td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm" title="Nm">zpool</code></td>
+    <td><code class="Cm" title="Cm">&lt;subcommand&gt;</code>
+      [<div class="Op"><var class="Ar" title="Ar">&lt;args&gt;</var></div>]</td>
+  </tr>
+</table>
+<h1 class="Sh" title="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h1>
+The <code class="Nm" title="Nm">zpool</code> command configures ZFS storage
+  pools. A storage pool is a collection of devices that provides physical
+  storage and data replication for ZFS datasets. All datasets within a storage
+  pool share the same space. See <a href="../8/zfs.8.html" class="Xr">zfs(8)</a> for
+  information on managing datasets.
+<div class="Pp"></div>
+For an overview of creating and managing ZFS storage pools see the
+  <a href="../8/zpoolconcepts.8.html" class="Xr">zpoolconcepts(8)</a> manual page.
+<h1 class="Sh" title="Sh" id="SUBCOMMANDS"><a class="permalink" href="#SUBCOMMANDS">SUBCOMMANDS</a></h1>
+All subcommands that modify state are logged persistently to the pool in their
+  original form.
+<div class="Pp"></div>
+The <code class="Nm" title="Nm">zpool</code> command provides subcommands to
+  create and destroy storage pools, add capacity to storage pools, and provide
+  information about the storage pools. The following subcommands are supported:
+<dl class="Bl-tag">
+  <dt><code class="Nm" title="Nm">zpool</code>
+    <code class="Fl" title="Fl">-</code>?</dt>
+  <dd>Displays a help message.</dd>
+  <dt><code class="Nm" title="Nm">zpool</code>
+    <code class="Fl" title="Fl">-V,</code>
+    <code class="Fl" title="Fl">--version</code></dt>
+  <dd>An alias for the <code class="Nm" title="Nm">zpool</code>
+      <code class="Cm" title="Cm">version</code> subcommand.</dd>
+  <dt><code class="Nm" title="Nm">zpool</code>
+    <code class="Cm" title="Cm">version</code></dt>
+  <dd>Displays the software version of the
+      <code class="Nm" title="Nm">zpool</code> userland utility and the zfs
+      kernel module.</dd>
+</dl>
+<h2 class="Ss" title="Ss" id="Creation"><a class="permalink" href="#Creation">Creation</a></h2>
+<dl class="Bl-tag">
+  <dt><a href="../8/zpool-create.8.html" class="Xr">zpool-create(8)</a></dt>
+  <dd>Creates a new storage pool containing the virtual devices specified on the
+      command line.</dd>
+  <dt><a href="../8/zpool-initialize.8.html" class="Xr">zpool-initialize(8)</a></dt>
+  <dd>Begins initializing by writing to all unallocated regions on the specified
+      devices, or all eligible devices in the pool if no individual devices are
+      specified.</dd>
+</dl>
+<h2 class="Ss" title="Ss" id="Destruction"><a class="permalink" href="#Destruction">Destruction</a></h2>
+<dl class="Bl-tag">
+  <dt><a href="../8/zpool-destroy.8.html" class="Xr">zpool-destroy(8)</a></dt>
+  <dd>Destroys the given pool, freeing up any devices for other use.</dd>
+  <dt><a href="../8/zpool-labelclear.8.html" class="Xr">zpool-labelclear(8)</a></dt>
+  <dd>Removes ZFS label information from the specified
+      <var class="Ar" title="Ar">device</var>.</dd>
+</dl>
+<h2 class="Ss" title="Ss" id="Virtual_Devices"><a class="permalink" href="#Virtual_Devices">Virtual
+  Devices</a></h2>
+<dl class="Bl-tag">
+  <dt><a href="../8/zpool-attach.8.html" class="Xr">zpool-attach(8)</a> /
+    <a href="../8/zpool-detach.8.html" class="Xr">zpool-detach(8)</a></dt>
+  <dd>Increases or decreases redundancy by
+      <code class="Cm" title="Cm">attach</code>-ing or
+      <code class="Cm" title="Cm">detach</code>-ing a device on an existing vdev
+      (virtual device).</dd>
+  <dt><a href="../8/zpool-add.8.html" class="Xr">zpool-add(8)</a> /
+    <a href="../8/zpool-remove.8.html" class="Xr">zpool-remove(8)</a></dt>
+  <dd>Adds the specified virtual devices to the given pool, or removes the
+      specified device from the pool.</dd>
+  <dt><a href="../8/zpool-replace.8.html" class="Xr">zpool-replace(8)</a></dt>
+  <dd>Replaces an existing device (which may be faulted) with a new one.</dd>
+  <dt><a href="../8/zpool-split.8.html" class="Xr">zpool-split(8)</a></dt>
+  <dd>Creates a new pool by splitting all mirrors in an existing pool (which
+      decreases its redundancy).</dd>
+</dl>
+<h2 class="Ss" title="Ss" id="Properties"><a class="permalink" href="#Properties">Properties</a></h2>
+Available pool properties listed in the
+  <a href="../8/zpoolprops.8.html" class="Xr">zpoolprops(8)</a> manual page.
+<dl class="Bl-tag">
+  <dt><a href="../8/zpool-list.8.html" class="Xr">zpool-list(8)</a></dt>
+  <dd>Lists the given pools along with a health status and space usage.</dd>
+  <dt><a href="../8/zpool-get.8.html" class="Xr">zpool-get(8)</a> /
+    <a href="../8/zpool-set.8.html" class="Xr">zpool-set(8)</a></dt>
+  <dd>Retrieves the given list of properties (or all properties if
+      <b class="Sy" title="Sy">all</b> is used) for the specified storage
+      pool(s).</dd>
+</dl>
+<h2 class="Ss" title="Ss" id="Monitoring"><a class="permalink" href="#Monitoring">Monitoring</a></h2>
+<dl class="Bl-tag">
+  <dt><a href="../8/zpool-status.8.html" class="Xr">zpool-status(8)</a></dt>
+  <dd>Displays the detailed health status for the given pools.</dd>
+  <dt><a href="../8/zpool-iostat.8.html" class="Xr">zpool-iostat(8)</a></dt>
+  <dd>Displays logical I/O statistics for the given pools/vdevs. Physical I/Os
+      may be observed via <a class="Xr" title="Xr">iostat(1)</a>.</dd>
+  <dt><a href="../8/zpool-events.8.html" class="Xr">zpool-events(8)</a></dt>
+  <dd>Lists all recent events generated by the ZFS kernel modules. These events
+      are consumed by the <a class="Xr" title="Xr">zed(8)</a> and used to
+      automate administrative tasks such as replacing a failed device with a hot
+      spare. For more information about the subclasses and event payloads that
+      can be generated see the <a href="../5/zfs-events.5.html" class="Xr">zfs-events(5)</a> man
+      page.</dd>
+  <dt><a href="../8/zpool-history.8.html" class="Xr">zpool-history(8)</a></dt>
+  <dd>Displays the command history of the specified pool(s) or all pools if no
+      pool is specified.</dd>
+</dl>
+<h2 class="Ss" title="Ss" id="Maintenance"><a class="permalink" href="#Maintenance">Maintenance</a></h2>
+<dl class="Bl-tag">
+  <dt><a href="../8/zpool-scrub.8.html" class="Xr">zpool-scrub(8)</a></dt>
+  <dd>Begins a scrub or resumes a paused scrub.</dd>
+  <dt><a href="../8/zpool-checkpoint.8.html" class="Xr">zpool-checkpoint(8)</a></dt>
+  <dd>Checkpoints the current state of <var class="Ar" title="Ar">pool</var> ,
+      which can be later restored by <code class="Nm" title="Nm">zpool</code>
+      <code class="Cm" title="Cm">import --rewind-to-checkpoint</code>.</dd>
+  <dt><a href="../8/zpool-trim.8.html" class="Xr">zpool-trim(8)</a></dt>
+  <dd>Initiates an immediate on-demand TRIM operation for all of the free space
+      in a pool. This operation informs the underlying storage devices of all
+      blocks in the pool which are no longer allocated and allows thinly
+      provisioned devices to reclaim the space.</dd>
+  <dt><a href="../8/zpool-sync.8.html" class="Xr">zpool-sync(8)</a></dt>
+  <dd>This command forces all in-core dirty data to be written to the primary
+      pool storage and not the ZIL. It will also update administrative
+      information including quota reporting. Without arguments,
+      <b class="Sy" title="Sy">zpool sync</b> will sync all pools on the system.
+      Otherwise, it will sync only the specified pool(s).</dd>
+  <dt><a href="../8/zpool-upgrade.8.html" class="Xr">zpool-upgrade(8)</a></dt>
+  <dd>Manage the on-disk format version of storage pools.</dd>
+  <dt><a href="../8/zpool-wait.8.html" class="Xr">zpool-wait(8)</a></dt>
+  <dd>Waits until all background activity of the given types has ceased in the
+      given pool.</dd>
+</dl>
+<h2 class="Ss" title="Ss" id="Fault_Resolution"><a class="permalink" href="#Fault_Resolution">Fault
+  Resolution</a></h2>
+<dl class="Bl-tag">
+  <dt><a href="../8/zpool-offline.8.html" class="Xr">zpool-offline(8)</a>
+    <a href="../8/zpool-online.8.html" class="Xr">zpool-online(8)</a></dt>
+  <dd>Takes the specified physical device offline or brings it online.</dd>
+  <dt><a href="../8/zpool-resilver.8.html" class="Xr">zpool-resilver(8)</a></dt>
+  <dd>Starts a resilver. If an existing resilver is already running it will be
+      restarted from the beginning.</dd>
+  <dt><a href="../8/zpool-reopen.8.html" class="Xr">zpool-reopen(8)</a></dt>
+  <dd>Reopen all the vdevs associated with the pool.</dd>
+  <dt><a href="../8/zpool-clear.8.html" class="Xr">zpool-clear(8)</a></dt>
+  <dd>Clears device errors in a pool.</dd>
+</dl>
+<h2 class="Ss" title="Ss" id="Import_&amp;_Export"><a class="permalink" href="#Import_&amp;_Export">Import
+  &amp; Export</a></h2>
+<dl class="Bl-tag">
+  <dt><a href="../8/zpool-import.8.html" class="Xr">zpool-import(8)</a></dt>
+  <dd>Make disks containing ZFS storage pools available for use on the
+    system.</dd>
+  <dt><a href="../8/zpool-export.8.html" class="Xr">zpool-export(8)</a></dt>
+  <dd>Exports the given pools from the system.</dd>
+  <dt><a href="../8/zpool-reguid.8.html" class="Xr">zpool-reguid(8)</a></dt>
+  <dd>Generates a new unique identifier for the pool.</dd>
+</dl>
+<h1 class="Sh" title="Sh" id="EXIT_STATUS"><a class="permalink" href="#EXIT_STATUS">EXIT
+  STATUS</a></h1>
+The following exit values are returned:
+<dl class="Bl-tag">
+  <dt><b class="Sy" title="Sy">0</b></dt>
+  <dd>Successful completion.</dd>
+  <dt><b class="Sy" title="Sy">1</b></dt>
+  <dd>An error occurred.</dd>
+  <dt><b class="Sy" title="Sy">2</b></dt>
+  <dd>Invalid command line options were specified.</dd>
+</dl>
+<h1 class="Sh" title="Sh" id="EXAMPLES"><a class="permalink" href="#EXAMPLES">EXAMPLES</a></h1>
+<dl class="Bl-tag">
+  <dt><b class="Sy" title="Sy">Example 1</b> <span class="No">Creating a RAID-Z
+    Storage Pool</span></dt>
+  <dd>The following command creates a pool with a single raidz root vdev that
+      consists of six disks.
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zpool create tank raidz sda sdb sdc sdd sde sdf
+    </pre>
+    </div>
+  </dd>
+  <dt><b class="Sy" title="Sy">Example 2</b> <span class="No">Creating a
+    Mirrored Storage Pool</span></dt>
+  <dd>The following command creates a pool with two mirrors, where each mirror
+      contains two disks.
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zpool create tank mirror sda sdb mirror sdc sdd
+    </pre>
+    </div>
+  </dd>
+  <dt><b class="Sy" title="Sy">Example 3</b> <span class="No">Creating a ZFS
+    Storage Pool by Using Partitions</span></dt>
+  <dd>The following command creates an unmirrored pool using two disk
+      partitions.
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zpool create tank sda1 sdb2
+    </pre>
+    </div>
+  </dd>
+  <dt><b class="Sy" title="Sy">Example 4</b> <span class="No">Creating a ZFS
+    Storage Pool by Using Files</span></dt>
+  <dd>The following command creates an unmirrored pool using files. While not
+      recommended, a pool based on files can be useful for experimental
+      purposes.
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zpool create tank /path/to/file/a /path/to/file/b
+    </pre>
+    </div>
+  </dd>
+  <dt><b class="Sy" title="Sy">Example 5</b> <span class="No">Adding a Mirror to
+    a ZFS Storage Pool</span></dt>
+  <dd>The following command adds two mirrored disks to the pool
+      <i class="Em" title="Em">tank</i>, assuming the pool is already made up of
+      two-way mirrors. The additional space is immediately available to any
+      datasets within the pool.
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zpool add tank mirror sda sdb
+    </pre>
+    </div>
+  </dd>
+  <dt><b class="Sy" title="Sy">Example 6</b> <span class="No">Listing Available
+    ZFS Storage Pools</span></dt>
+  <dd>The following command lists all available pools on the system. In this
+      case, the pool <i class="Em" title="Em">zion</i> is faulted due to a
+      missing device. The results from this command are similar to the
+      following:
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zpool list 
+NAME    SIZE  ALLOC   FREE  EXPANDSZ   FRAG    CAP  DEDUP  HEALTH  ALTROOT 
+rpool  19.9G  8.43G  11.4G         -    33%    42%  1.00x  ONLINE  - 
+tank   61.5G  20.0G  41.5G         -    48%    32%  1.00x  ONLINE  - 
+zion       -      -      -         -      -      -      -  FAULTED -
+    </pre>
+    </div>
+  </dd>
+  <dt><b class="Sy" title="Sy">Example 7</b> <span class="No">Destroying a ZFS
+    Storage Pool</span></dt>
+  <dd>The following command destroys the pool <i class="Em" title="Em">tank</i>
+      and any datasets contained within.
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zpool destroy -f tank
+    </pre>
+    </div>
+  </dd>
+  <dt><b class="Sy" title="Sy">Example 8</b> <span class="No">Exporting a ZFS
+    Storage Pool</span></dt>
+  <dd>The following command exports the devices in pool
+      <i class="Em" title="Em">tank</i> so that they can be relocated or later
+      imported.
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zpool export tank
+    </pre>
+    </div>
+  </dd>
+  <dt><b class="Sy" title="Sy">Example 9</b> <span class="No">Importing a ZFS
+    Storage Pool</span></dt>
+  <dd>The following command displays available pools, and then imports the pool
+      <i class="Em" title="Em">tank</i> for use on the system. The results from
+      this command are similar to the following:
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zpool import 
+  pool: tank 
+    id: 15451357997522795478 
+ state: ONLINE 
+action: The pool can be imported using its name or numeric identifier. 
+config: 
+ 
+        tank        ONLINE 
+          mirror    ONLINE 
+            sda     ONLINE 
+            sdb     ONLINE 
+ 
+# zpool import tank
+    </pre>
+    </div>
+  </dd>
+  <dt><b class="Sy" title="Sy">Example 10</b> <span class="No">Upgrading All ZFS
+    Storage Pools to the Current Version</span></dt>
+  <dd>The following command upgrades all ZFS Storage pools to the current
+      version of the software.
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zpool upgrade -a 
+This system is currently running ZFS version 2.
+    </pre>
+    </div>
+  </dd>
+  <dt><b class="Sy" title="Sy">Example 11</b> <span class="No">Managing Hot
+    Spares</span></dt>
+  <dd>The following command creates a new pool with an available hot spare:
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zpool create tank mirror sda sdb spare sdc
+    </pre>
+    </div>
+    <div class="Pp"></div>
+    If one of the disks were to fail, the pool would be reduced to the degraded
+      state. The failed device can be replaced using the following command:
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zpool replace tank sda sdd
+    </pre>
+    </div>
+    <div class="Pp"></div>
+    Once the data has been resilvered, the spare is automatically removed and is
+      made available for use should another device fail. The hot spare can be
+      permanently removed from the pool using the following command:
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zpool remove tank sdc
+    </pre>
+    </div>
+  </dd>
+  <dt><b class="Sy" title="Sy">Example 12</b> <span class="No">Creating a ZFS
+    Pool with Mirrored Separate Intent Logs</span></dt>
+  <dd>The following command creates a ZFS storage pool consisting of two,
+      two-way mirrors and mirrored log devices:
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zpool create pool mirror sda sdb mirror sdc sdd log mirror \ 
+  sde sdf
+    </pre>
+    </div>
+  </dd>
+  <dt><b class="Sy" title="Sy">Example 13</b> <span class="No">Adding Cache
+    Devices to a ZFS Pool</span></dt>
+  <dd>The following command adds two disks for use as cache devices to a ZFS
+      storage pool:
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zpool add pool cache sdc sdd
+    </pre>
+    </div>
+    <div class="Pp"></div>
+    Once added, the cache devices gradually fill with content from main memory.
+      Depending on the size of your cache devices, it could take over an hour
+      for them to fill. Capacity and reads can be monitored using the
+      <code class="Cm" title="Cm">iostat</code> option as follows:
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zpool iostat -v pool 5
+    </pre>
+    </div>
+  </dd>
+  <dt><b class="Sy" title="Sy">Example 14</b> <span class="No">Removing a
+    Mirrored top-level (Log or Data) Device</span></dt>
+  <dd>The following commands remove the mirrored log device
+      <b class="Sy" title="Sy">mirror-2</b> and mirrored top-level data device
+      <b class="Sy" title="Sy">mirror-1</b>.
+    <div class="Pp"></div>
+    Given this configuration:
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+  pool: tank 
+ state: ONLINE 
+ scrub: none requested 
+config: 
+ 
+         NAME        STATE     READ WRITE CKSUM 
+         tank        ONLINE       0     0     0 
+           mirror-0  ONLINE       0     0     0 
+             sda     ONLINE       0     0     0 
+             sdb     ONLINE       0     0     0 
+           mirror-1  ONLINE       0     0     0 
+             sdc     ONLINE       0     0     0 
+             sdd     ONLINE       0     0     0 
+         logs 
+           mirror-2  ONLINE       0     0     0 
+             sde     ONLINE       0     0     0 
+             sdf     ONLINE       0     0     0
+    </pre>
+    </div>
+    <div class="Pp"></div>
+    The command to remove the mirrored log <b class="Sy" title="Sy">mirror-2</b>
+      is:
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zpool remove tank mirror-2
+    </pre>
+    </div>
+    <div class="Pp"></div>
+    The command to remove the mirrored data
+      <b class="Sy" title="Sy">mirror-1</b> is:
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zpool remove tank mirror-1
+    </pre>
+    </div>
+  </dd>
+  <dt><b class="Sy" title="Sy">Example 15</b> <span class="No">Displaying
+    expanded space on a device</span></dt>
+  <dd>The following command displays the detailed information for the pool
+      <i class="Em" title="Em">data</i>. This pool is comprised of a single
+      raidz vdev where one of its devices increased its capacity by 10GB. In
+      this example, the pool will not be able to utilize this extra capacity
+      until all the devices under the raidz vdev have been expanded.
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zpool list -v data 
+NAME         SIZE  ALLOC   FREE  EXPANDSZ   FRAG    CAP  DEDUP  HEALTH  ALTROOT 
+data        23.9G  14.6G  9.30G         -    48%    61%  1.00x  ONLINE  - 
+  raidz1    23.9G  14.6G  9.30G         -    48% 
+    sda         -      -      -         -      - 
+    sdb         -      -      -       10G      - 
+    sdc         -      -      -         -      -
+    </pre>
+    </div>
+  </dd>
+  <dt><b class="Sy" title="Sy">Example 16</b> <span class="No">Adding output
+    columns</span></dt>
+  <dd>Additional columns can be added to the
+      <code class="Nm" title="Nm">zpool</code>
+      <code class="Cm" title="Cm">status</code> and
+      <code class="Nm" title="Nm">zpool</code>
+      <code class="Cm" title="Cm">iostat</code> output with
+      <code class="Fl" title="Fl">-c</code> option.
+    <div class="Pp"></div>
+    <div class="Bd">
+    <pre class="Li">
+# zpool status -c vendor,model,size 
+   NAME     STATE  READ WRITE CKSUM vendor  model        size 
+   tank     ONLINE 0    0     0 
+   mirror-0 ONLINE 0    0     0 
+   U1       ONLINE 0    0     0     SEAGATE ST8000NM0075 7.3T 
+   U10      ONLINE 0    0     0     SEAGATE ST8000NM0075 7.3T 
+   U11      ONLINE 0    0     0     SEAGATE ST8000NM0075 7.3T 
+   U12      ONLINE 0    0     0     SEAGATE ST8000NM0075 7.3T 
+   U13      ONLINE 0    0     0     SEAGATE ST8000NM0075 7.3T 
+   U14      ONLINE 0    0     0     SEAGATE ST8000NM0075 7.3T 
+ 
+# zpool iostat -vc size 
+              capacity     operations     bandwidth 
+pool        alloc   free   read  write   read  write  size 
+----------  -----  -----  -----  -----  -----  -----  ---- 
+rpool       14.6G  54.9G      4     55   250K  2.69M 
+  sda1      14.6G  54.9G      4     55   250K  2.69M   70G 
+----------  -----  -----  -----  -----  -----  -----  ----
+    </pre>
+    </div>
+  </dd>
+</dl>
+<h1 class="Sh" title="Sh" id="ENVIRONMENT_VARIABLES"><a class="permalink" href="#ENVIRONMENT_VARIABLES">ENVIRONMENT
+  VARIABLES</a></h1>
+<dl class="Bl-tag">
+  <dt><a class="permalink" href="#ZFS_ABORT"><code class="Ev" title="Ev" id="ZFS_ABORT">ZFS_ABORT</code></a></dt>
+  <dd>Cause <code class="Nm" title="Nm">zpool</code> to dump core on exit for
+      the purposes of running <b class="Sy" title="Sy">::findleaks</b>.</dd>
+</dl>
+<dl class="Bl-tag">
+  <dt><a class="permalink" href="#ZFS_COLOR"><code class="Ev" title="Ev" id="ZFS_COLOR">ZFS_COLOR</code></a></dt>
+  <dd>Use ANSI color in <code class="Nm" title="Nm">zpool status</code>
+    output.</dd>
+</dl>
+<dl class="Bl-tag">
+  <dt><a class="permalink" href="#ZPOOL_IMPORT_PATH"><code class="Ev" title="Ev" id="ZPOOL_IMPORT_PATH">ZPOOL_IMPORT_PATH</code></a></dt>
+  <dd>The search path for devices or files to use with the pool. This is a
+      colon-separated list of directories in which
+      <code class="Nm" title="Nm">zpool</code> looks for device nodes and files.
+      Similar to the <code class="Fl" title="Fl">-d</code> option in
+      <code class="Nm" title="Nm">zpool import</code>.</dd>
+</dl>
+<dl class="Bl-tag">
+  <dt><a class="permalink" href="#ZPOOL_IMPORT_UDEV_TIMEOUT_MS"><code class="Ev" title="Ev" id="ZPOOL_IMPORT_UDEV_TIMEOUT_MS">ZPOOL_IMPORT_UDEV_TIMEOUT_MS</code></a></dt>
+  <dd>The maximum time in milliseconds that <code class="Nm" title="Nm">zpool
+      import</code> will wait for an expected device to be available.</dd>
+</dl>
+<dl class="Bl-tag">
+  <dt><a class="permalink" href="#ZPOOL_STATUS_NON_NATIVE_ASHIFT_IGNORE"><code class="Ev" title="Ev" id="ZPOOL_STATUS_NON_NATIVE_ASHIFT_IGNORE">ZPOOL_STATUS_NON_NATIVE_ASHIFT_IGNORE</code></a></dt>
+  <dd>If set, suppress warning about non-native vdev ashift in
+      <code class="Nm" title="Nm">zpool status</code>. The value is not used,
+      only the presence or absence of the variable matters.</dd>
+</dl>
+<dl class="Bl-tag">
+  <dt><a class="permalink" href="#ZPOOL_VDEV_NAME_GUID"><code class="Ev" title="Ev" id="ZPOOL_VDEV_NAME_GUID">ZPOOL_VDEV_NAME_GUID</code></a></dt>
+  <dd>Cause <code class="Nm" title="Nm">zpool</code> subcommands to output vdev
+      guids by default. This behavior is identical to the
+      <code class="Nm" title="Nm">zpool status -g</code> command line
+    option.</dd>
+</dl>
+<dl class="Bl-tag">
+  <dt><a class="permalink" href="#ZPOOL_VDEV_NAME_FOLLOW_LINKS"><code class="Ev" title="Ev" id="ZPOOL_VDEV_NAME_FOLLOW_LINKS">ZPOOL_VDEV_NAME_FOLLOW_LINKS</code></a></dt>
+  <dd>Cause <code class="Nm" title="Nm">zpool</code> subcommands to follow links
+      for vdev names by default. This behavior is identical to the
+      <code class="Nm" title="Nm">zpool status -L</code> command line
+    option.</dd>
+</dl>
+<dl class="Bl-tag">
+  <dt><a class="permalink" href="#ZPOOL_VDEV_NAME_PATH"><code class="Ev" title="Ev" id="ZPOOL_VDEV_NAME_PATH">ZPOOL_VDEV_NAME_PATH</code></a></dt>
+  <dd>Cause <code class="Nm" title="Nm">zpool</code> subcommands to output full
+      vdev path names by default. This behavior is identical to the
+      <code class="Nm" title="Nm">zpool status -P</code> command line
+    option.</dd>
+</dl>
+<dl class="Bl-tag">
+  <dt><a class="permalink" href="#ZFS_VDEV_DEVID_OPT_OUT"><code class="Ev" title="Ev" id="ZFS_VDEV_DEVID_OPT_OUT">ZFS_VDEV_DEVID_OPT_OUT</code></a></dt>
+  <dd>Older OpenZFS implementations had issues when attempting to display pool
+      config VDEV names if a <b class="Sy" title="Sy">devid</b> NVP value is
+      present in the pool's config.
+    <div class="Pp"></div>
+    For example, a pool that originated on illumos platform would have a devid
+      value in the config and <code class="Nm" title="Nm">zpool status</code>
+      would fail when listing the config. This would also be true for future
+      Linux based pools.
+    <div class="Pp"></div>
+    A pool can be stripped of any <b class="Sy" title="Sy">devid</b> values on
+      import or prevented from adding them on <code class="Nm" title="Nm">zpool
+      create</code> or <code class="Nm" title="Nm">zpool add</code> by setting
+      <b class="Sy" title="Sy">ZFS_VDEV_DEVID_OPT_OUT</b>.</dd>
+</dl>
+<dl class="Bl-tag">
+  <dt><a class="permalink" href="#ZPOOL_SCRIPTS_AS_ROOT"><code class="Ev" title="Ev" id="ZPOOL_SCRIPTS_AS_ROOT">ZPOOL_SCRIPTS_AS_ROOT</code></a></dt>
+  <dd>Allow a privileged user to run the <code class="Nm" title="Nm">zpool
+      status/iostat</code> with the <code class="Fl" title="Fl">-c</code>
+      option. Normally, only unprivileged users are allowed to run
+      <code class="Fl" title="Fl">-c</code>.</dd>
+</dl>
+<dl class="Bl-tag">
+  <dt><a class="permalink" href="#ZPOOL_SCRIPTS_PATH"><code class="Ev" title="Ev" id="ZPOOL_SCRIPTS_PATH">ZPOOL_SCRIPTS_PATH</code></a></dt>
+  <dd>The search path for scripts when running <code class="Nm" title="Nm">zpool
+      status/iostat</code> with the <code class="Fl" title="Fl">-c</code>
+      option. This is a colon-separated list of directories and overrides the
+      default <span class="Pa" title="Pa">~/.zpool.d</span> and
+      <span class="Pa" title="Pa">/etc/zfs/zpool.d</span> search paths.</dd>
+</dl>
+<dl class="Bl-tag">
+  <dt><a class="permalink" href="#ZPOOL_SCRIPTS_ENABLED"><code class="Ev" title="Ev" id="ZPOOL_SCRIPTS_ENABLED">ZPOOL_SCRIPTS_ENABLED</code></a></dt>
+  <dd>Allow a user to run <code class="Nm" title="Nm">zpool status/iostat</code>
+      with the <code class="Fl" title="Fl">-c</code> option. If
+      <b class="Sy" title="Sy">ZPOOL_SCRIPTS_ENABLED</b> is not set, it is
+      assumed that the user is allowed to run <code class="Nm" title="Nm">zpool
+      status/iostat -c</code>.</dd>
+</dl>
+<h1 class="Sh" title="Sh" id="INTERFACE_STABILITY"><a class="permalink" href="#INTERFACE_STABILITY">INTERFACE
+  STABILITY</a></h1>
+<b class="Sy" title="Sy">Evolving</b>
+<h1 class="Sh" title="Sh" id="SEE_ALSO"><a class="permalink" href="#SEE_ALSO">SEE
+  ALSO</a></h1>
+<a href="../5/zfs-events.5.html" class="Xr">zfs-events(5)</a>,
+  <a href="../5/zfs-module-parameters.5.html" class="Xr">zfs-module-parameters(5)</a>,
+  <a href="../5/zpool-features.5.html" class="Xr">zpool-features(5)</a>,
+  <a href="../8/zfs.8.html" class="Xr">zfs(8)</a>,
+  <a href="../8/zpool-add.8.html" class="Xr">zpool-add(8)</a>,
+  <a href="../8/zpool-attach.8.html" class="Xr">zpool-attach(8)</a>,
+  <a href="../8/zpool-checkpoint.8.html" class="Xr">zpool-checkpoint(8)</a>,
+  <a href="../8/zpool-clear.8.html" class="Xr">zpool-clear(8)</a>,
+  <a href="../8/zpool-create.8.html" class="Xr">zpool-create(8)</a>,
+  <a href="../8/zpool-destroy.8.html" class="Xr">zpool-destroy(8)</a>,
+  <a href="../8/zpool-detach.8.html" class="Xr">zpool-detach(8)</a>,
+  <a href="../8/zpool-events.8.html" class="Xr">zpool-events(8)</a>,
+  <a href="../8/zpool-export.8.html" class="Xr">zpool-export(8)</a>,
+  <a href="../8/zpool-get.8.html" class="Xr">zpool-get(8)</a>,
+  <a href="../8/zpool-history.8.html" class="Xr">zpool-history(8)</a>,
+  <a href="../8/zpool-import.8.html" class="Xr">zpool-import(8)</a>,
+  <a href="../8/zpool-initialize.8.html" class="Xr">zpool-initialize(8)</a>,
+  <a href="../8/zpool-iostat.8.html" class="Xr">zpool-iostat(8)</a>,
+  <a href="../8/zpool-labelclear.8.html" class="Xr">zpool-labelclear(8)</a>,
+  <a href="../8/zpool-list.8.html" class="Xr">zpool-list(8)</a>,
+  <a href="../8/zpool-offline.8.html" class="Xr">zpool-offline(8)</a>,
+  <a href="../8/zpool-online.8.html" class="Xr">zpool-online(8)</a>,
+  <a href="../8/zpool-reguid.8.html" class="Xr">zpool-reguid(8)</a>,
+  <a href="../8/zpool-remove.8.html" class="Xr">zpool-remove(8)</a>,
+  <a href="../8/zpool-reopen.8.html" class="Xr">zpool-reopen(8)</a>,
+  <a href="../8/zpool-replace.8.html" class="Xr">zpool-replace(8)</a>,
+  <a href="../8/zpool-resilver.8.html" class="Xr">zpool-resilver(8)</a>,
+  <a href="../8/zpool-scrub.8.html" class="Xr">zpool-scrub(8)</a>,
+  <a href="../8/zpool-set.8.html" class="Xr">zpool-set(8)</a>,
+  <a href="../8/zpool-split.8.html" class="Xr">zpool-split(8)</a>,
+  <a href="../8/zpool-status.8.html" class="Xr">zpool-status(8)</a>,
+  <a href="../8/zpool-sync.8.html" class="Xr">zpool-sync(8)</a>,
+  <a href="../8/zpool-trim.8.html" class="Xr">zpool-trim(8)</a>,
+  <a href="../8/zpool-upgrade.8.html" class="Xr">zpool-upgrade(8)</a>,
+  <a href="../8/zpool-wait.8.html" class="Xr">zpool-wait(8)</a>,
+  <a href="../8/zpoolconcepts.8.html" class="Xr">zpoolconcepts(8)</a>,
+  <a href="../8/zpoolprops.8.html" class="Xr">zpoolprops(8)</a></div>
+<table class="foot">
+  <tr>
+    <td class="foot-date">August 9, 2019</td>
+    <td class="foot-os">Debian</td>
+  </tr>
+</table>
+</div></div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="zpool_influxdb.8.html" class="btn btn-neutral float-right" title="zpool_influxdb.8" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="zpool-wait.8.html" class="btn btn-neutral float-left" title="zpool-wait.8" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, OpenZFS.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,928 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>FAQ &mdash; OpenZFS  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/mandoc.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Mailing Lists" href="Mailing Lists.html" />
+    <link rel="prev" title="Admin Documentation" href="Admin Documentation.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/logo_main.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Getting Started/index.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Project and Community</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Admin Documentation.html">Admin Documentation</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">FAQ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#what-is-openzfs">What is OpenZFS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hardware-requirements">Hardware Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#do-i-have-to-use-ecc-memory-for-zfs">Do I have to use ECC memory for ZFS?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#supported-architectures">Supported Architectures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#supported-linux-kernels">Supported Linux Kernels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bit-vs-64-bit-systems">32-bit vs 64-bit Systems</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#booting-from-zfs">Booting from ZFS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#selecting-dev-names-when-creating-a-pool-linux">Selecting /dev/ names when creating a pool (Linux)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#setting-up-the-etc-zfs-vdev-id-conf-file">Setting up the /etc/zfs/vdev_id.conf file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#changing-dev-names-on-an-existing-pool">Changing /dev/ names on an existing pool</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-etc-zfs-zpool-cache-file">The /etc/zfs/zpool.cache file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#generating-a-new-etc-zfs-zpool-cache-file">Generating a new /etc/zfs/zpool.cache file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sending-and-receiving-streams">Sending and Receiving Streams</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#hole-birth-bugs">hole_birth Bugs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sending-large-blocks">Sending Large Blocks</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#ceph-zfs">CEPH/ZFS</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#zfs-configuration">ZFS Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ceph-configuration-ceph-conf">CEPH Configuration (ceph.conf}</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#other-general-guidelines">Other General Guidelines</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#performance-considerations">Performance Considerations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#advanced-format-disks">Advanced Format Disks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#zvol-used-space-larger-than-expected">ZVOL used space larger than expected</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-a-zvol-for-a-swap-device-on-linux">Using a zvol for a swap device on Linux</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-zfs-on-xen-hypervisor-or-xen-dom0-linux">Using ZFS on Xen Hypervisor or Xen Dom0 (Linux)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#udisks2-creating-dev-mapper-entries-for-zvol-linux">udisks2 creating /dev/mapper/ entries for zvol (Linux)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#licensing">Licensing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#reporting-a-problem">Reporting a problem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#does-openzfs-have-a-code-of-conduct">Does OpenZFS have a Code of Conduct?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Mailing Lists.html">Mailing Lists</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Signing Keys.html">Signing Keys</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/openzfs/zfs/issues">Issue Tracker</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/openzfs/zfs/releases">Releases</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/openzfs/zfs/milestones">Roadmap</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Developer Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Performance and Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Basic Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../man/index.html">Man Pages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../License.html">License</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">OpenZFS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Project and Community</a> &raquo;</li>
+        
+      <li>FAQ</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/Project and Community/FAQ.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="faq">
+<h1>FAQ<a class="headerlink" href="#faq" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="table-of-contents">
+<p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#what-is-openzfs" id="id2">What is OpenZFS</a></p></li>
+<li><p><a class="reference internal" href="#hardware-requirements" id="id3">Hardware Requirements</a></p></li>
+<li><p><a class="reference internal" href="#do-i-have-to-use-ecc-memory-for-zfs" id="id4">Do I have to use ECC memory for ZFS?</a></p></li>
+<li><p><a class="reference internal" href="#installation" id="id5">Installation</a></p></li>
+<li><p><a class="reference internal" href="#supported-architectures" id="id6">Supported Architectures</a></p></li>
+<li><p><a class="reference internal" href="#supported-linux-kernels" id="id7">Supported Linux Kernels</a></p></li>
+<li><p><a class="reference internal" href="#bit-vs-64-bit-systems" id="id8">32-bit vs 64-bit Systems</a></p></li>
+<li><p><a class="reference internal" href="#booting-from-zfs" id="id9">Booting from ZFS</a></p></li>
+<li><p><a class="reference internal" href="#selecting-dev-names-when-creating-a-pool-linux" id="id10">Selecting /dev/ names when creating a pool (Linux)</a></p></li>
+<li><p><a class="reference internal" href="#setting-up-the-etc-zfs-vdev-id-conf-file" id="id11">Setting up the /etc/zfs/vdev_id.conf file</a></p></li>
+<li><p><a class="reference internal" href="#changing-dev-names-on-an-existing-pool" id="id12">Changing /dev/ names on an existing pool</a></p></li>
+<li><p><a class="reference internal" href="#the-etc-zfs-zpool-cache-file" id="id13">The /etc/zfs/zpool.cache file</a></p></li>
+<li><p><a class="reference internal" href="#generating-a-new-etc-zfs-zpool-cache-file" id="id14">Generating a new /etc/zfs/zpool.cache file</a></p></li>
+<li><p><a class="reference internal" href="#sending-and-receiving-streams" id="id15">Sending and Receiving Streams</a></p>
+<ul>
+<li><p><a class="reference internal" href="#hole-birth-bugs" id="id16">hole_birth Bugs</a></p></li>
+<li><p><a class="reference internal" href="#sending-large-blocks" id="id17">Sending Large Blocks</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#ceph-zfs" id="id18">CEPH/ZFS</a></p>
+<ul>
+<li><p><a class="reference internal" href="#zfs-configuration" id="id19">ZFS Configuration</a></p></li>
+<li><p><a class="reference internal" href="#ceph-configuration-ceph-conf" id="id20">CEPH Configuration (ceph.conf}</a></p></li>
+<li><p><a class="reference internal" href="#other-general-guidelines" id="id21">Other General Guidelines</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#performance-considerations" id="id22">Performance Considerations</a></p></li>
+<li><p><a class="reference internal" href="#advanced-format-disks" id="id23">Advanced Format Disks</a></p></li>
+<li><p><a class="reference internal" href="#zvol-used-space-larger-than-expected" id="id24">ZVOL used space larger than expected</a></p></li>
+<li><p><a class="reference internal" href="#using-a-zvol-for-a-swap-device-on-linux" id="id25">Using a zvol for a swap device on Linux</a></p></li>
+<li><p><a class="reference internal" href="#using-zfs-on-xen-hypervisor-or-xen-dom0-linux" id="id26">Using ZFS on Xen Hypervisor or Xen Dom0 (Linux)</a></p></li>
+<li><p><a class="reference internal" href="#udisks2-creating-dev-mapper-entries-for-zvol-linux" id="id27">udisks2 creating /dev/mapper/ entries for zvol (Linux)</a></p></li>
+<li><p><a class="reference internal" href="#licensing" id="id28">Licensing</a></p></li>
+<li><p><a class="reference internal" href="#reporting-a-problem" id="id29">Reporting a problem</a></p></li>
+<li><p><a class="reference internal" href="#does-openzfs-have-a-code-of-conduct" id="id30">Does OpenZFS have a Code of Conduct?</a></p></li>
+</ul>
+</div>
+<div class="section" id="what-is-openzfs">
+<h2><a class="toc-backref" href="#id2">What is OpenZFS</a><a class="headerlink" href="#what-is-openzfs" title="Permalink to this headline">¶</a></h2>
+<p>OpenZFS is an outstanding storage platform that
+encompasses the functionality of traditional filesystems, volume
+managers, and more, with consistent reliability, functionality and
+performance across all distributions. Additional information about
+OpenZFS can be found in the <a class="reference external" href="https://en.wikipedia.org/wiki/OpenZFS">OpenZFS wikipedia
+article</a>.</p>
+</div>
+<div class="section" id="hardware-requirements">
+<h2><a class="toc-backref" href="#id3">Hardware Requirements</a><a class="headerlink" href="#hardware-requirements" title="Permalink to this headline">¶</a></h2>
+<p>Because ZFS was originally designed for Sun Solaris it was long
+considered a filesystem for large servers and for companies that could
+afford the best and most powerful hardware available. But since the
+porting of ZFS to numerous OpenSource platforms (The BSDs, Illumos and
+Linux - under the umbrella organization “OpenZFS”), these requirements
+have been lowered.</p>
+<p>The suggested hardware requirements are:</p>
+<ul class="simple">
+<li><p>ECC memory. This isn’t really a requirement, but it’s highly
+recommended.</p></li>
+<li><p>8GB+ of memory for the best performance. It’s perfectly possible to
+run with 2GB or less (and people do), but you’ll need more if using
+deduplication.</p></li>
+</ul>
+</div>
+<div class="section" id="do-i-have-to-use-ecc-memory-for-zfs">
+<h2><a class="toc-backref" href="#id4">Do I have to use ECC memory for ZFS?</a><a class="headerlink" href="#do-i-have-to-use-ecc-memory-for-zfs" title="Permalink to this headline">¶</a></h2>
+<p>Using ECC memory for OpenZFS is strongly recommended for enterprise
+environments where the strongest data integrity guarantees are required.
+Without ECC memory rare random bit flips caused by cosmic rays or by
+faulty memory can go undetected. If this were to occur OpenZFS (or any
+other filesystem) will write the damaged data to disk and be unable to
+automatically detect the corruption.</p>
+<p>Unfortunately, ECC memory is not always supported by consumer grade
+hardware. And even when it is, ECC memory will be more expensive. For
+home users the additional safety brought by ECC memory might not justify
+the cost. It’s up to you to determine what level of protection your data
+requires.</p>
+</div>
+<div class="section" id="installation">
+<h2><a class="toc-backref" href="#id5">Installation</a><a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>OpenZFS is available for FreeBSD and all major Linux distributions. Refer to
+the <a class="reference internal" href="../Getting Started/index.html"><span class="doc">getting started</span></a> section of the wiki for
+links to installations instructions. If your distribution/OS isn’t
+listed you can always build OpenZFS from the latest official
+<a class="reference external" href="https://github.com/openzfs/zfs/releases">tarball</a>.</p>
+</div>
+<div class="section" id="supported-architectures">
+<h2><a class="toc-backref" href="#id6">Supported Architectures</a><a class="headerlink" href="#supported-architectures" title="Permalink to this headline">¶</a></h2>
+<p>OpenZFS is regularly compiled for the following architectures:
+aarch64, arm, ppc, ppc64, x86, x86_64.</p>
+</div>
+<div class="section" id="supported-linux-kernels">
+<h2><a class="toc-backref" href="#id7">Supported Linux Kernels</a><a class="headerlink" href="#supported-linux-kernels" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference external" href="https://github.com/openzfs/zfs/releases">notes</a> for a given
+OpenZFS release will include a range of supported kernels. Point
+releases will be tagged as needed in order to support the <em>stable</em>
+kernel available from <a class="reference external" href="https://www.kernel.org/">kernel.org</a>. The
+oldest supported kernel is 2.6.32 due to its prominence in Enterprise
+Linux distributions.</p>
+</div>
+<div class="section" id="bit-vs-64-bit-systems">
+<span id="id1"></span><h2><a class="toc-backref" href="#id8">32-bit vs 64-bit Systems</a><a class="headerlink" href="#bit-vs-64-bit-systems" title="Permalink to this headline">¶</a></h2>
+<p>You are <strong>strongly</strong> encouraged to use a 64-bit kernel. OpenZFS
+will build for 32-bit systems but you may encounter stability problems.</p>
+<p>ZFS was originally developed for the Solaris kernel which differs from
+some OpenZFS platforms in several significant ways. Perhaps most importantly
+for ZFS it is common practice in the Solaris kernel to make heavy use of
+the virtual address space. However, use of the virtual address space is
+strongly discouraged in the Linux kernel. This is particularly true on
+32-bit architectures where the virtual address space is limited to 100M
+by default. Using the virtual address space on 64-bit Linux kernels is
+also discouraged but the address space is so much larger than physical
+memory that it is less of an issue.</p>
+<p>If you are bumping up against the virtual memory limit on a 32-bit
+system you will see the following message in your system logs. You can
+increase the virtual address size with the boot option <code class="docutils literal notranslate"><span class="pre">vmalloc=512M</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vmap</span> <span class="n">allocation</span> <span class="k">for</span> <span class="n">size</span> <span class="mi">4198400</span> <span class="n">failed</span><span class="p">:</span> <span class="n">use</span> <span class="n">vmalloc</span><span class="o">=&lt;</span><span class="n">size</span><span class="o">&gt;</span> <span class="n">to</span> <span class="n">increase</span> <span class="n">size</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>However, even after making this change your system will likely not be
+entirely stable. Proper support for 32-bit systems is contingent upon
+the OpenZFS code being weaned off its dependence on virtual memory. This
+will take some time to do correctly but it is planned for OpenZFS. This
+change is also expected to improve how efficiently OpenZFS manages the
+ARC cache and allow for tighter integration with the standard Linux page
+cache.</p>
+</div>
+<div class="section" id="booting-from-zfs">
+<h2><a class="toc-backref" href="#id9">Booting from ZFS</a><a class="headerlink" href="#booting-from-zfs" title="Permalink to this headline">¶</a></h2>
+<p>Booting from ZFS on Linux is possible and many people do it. There are
+excellent walk throughs available for
+<a class="reference internal" href="../Getting Started/Debian/index.html"><span class="doc">Debian</span></a>,
+<a class="reference internal" href="../Getting Started/Ubuntu/index.html"><span class="doc">Ubuntu</span></a>, and
+<a class="reference external" href="https://github.com/pendor/gentoo-zfs-install/tree/master/install">Gentoo</a>.</p>
+<p>On FreeBSD 13+ booting from ZFS is supported out of the box.</p>
+</div>
+<div class="section" id="selecting-dev-names-when-creating-a-pool-linux">
+<h2><a class="toc-backref" href="#id10">Selecting /dev/ names when creating a pool (Linux)</a><a class="headerlink" href="#selecting-dev-names-when-creating-a-pool-linux" title="Permalink to this headline">¶</a></h2>
+<p>There are different /dev/ names that can be used when creating a ZFS
+pool. Each option has advantages and drawbacks, the right choice for
+your ZFS pool really depends on your requirements. For development and
+testing using /dev/sdX naming is quick and easy. A typical home server
+might prefer /dev/disk/by-id/ naming for simplicity and readability.
+While very large configurations with multiple controllers, enclosures,
+and switches will likely prefer /dev/disk/by-vdev naming for maximum
+control. But in the end, how you choose to identify your disks is up to
+you.</p>
+<ul class="simple">
+<li><p><strong>/dev/sdX, /dev/hdX:</strong> Best for development/test pools</p>
+<ul>
+<li><p>Summary: The top level /dev/ names are the default for consistency
+with other ZFS implementations. They are available under all Linux
+distributions and are commonly used. However, because they are not
+persistent they should only be used with ZFS for development/test
+pools.</p></li>
+<li><p>Benefits: This method is easy for a quick test, the names are
+short, and they will be available on all Linux distributions.</p></li>
+<li><p>Drawbacks: The names are not persistent and will change depending
+on what order the disks are detected in. Adding or removing
+hardware for your system can easily cause the names to change. You
+would then need to remove the zpool.cache file and re-import the
+pool using the new names.</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">create</span> <span class="pre">tank</span> <span class="pre">sda</span> <span class="pre">sdb</span></code></p></li>
+</ul>
+</li>
+<li><p><strong>/dev/disk/by-id/:</strong> Best for small pools (less than 10 disks)</p>
+<ul>
+<li><p>Summary: This directory contains disk identifiers with more human
+readable names. The disk identifier usually consists of the
+interface type, vendor name, model number, device serial number,
+and partition number. This approach is more user friendly because
+it simplifies identifying a specific disk.</p></li>
+<li><p>Benefits: Nice for small systems with a single disk controller.
+Because the names are persistent and guaranteed not to change, it
+doesn’t matter how the disks are attached to the system. You can
+take them all out, randomly mix them up on the desk, put them
+back anywhere in the system and your pool will still be
+automatically imported correctly.</p></li>
+<li><p>Drawbacks: Configuring redundancy groups based on physical
+location becomes difficult and error prone.</p></li>
+<li><p>Example:
+<code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">create</span> <span class="pre">tank</span> <span class="pre">scsi-SATA_Hitachi_HTS7220071201DP1D10DGG6HMRP</span></code></p></li>
+</ul>
+</li>
+<li><p><strong>/dev/disk/by-path/:</strong> Good for large pools (greater than 10 disks)</p>
+<ul>
+<li><p>Summary: This approach is to use device names which include the
+physical cable layout in the system, which means that a particular
+disk is tied to a specific location. The name describes the PCI
+bus number, as well as enclosure names and port numbers. This
+allows the most control when configuring a large pool.</p></li>
+<li><p>Benefits: Encoding the storage topology in the name is not only
+helpful for locating a disk in large installations. But it also
+allows you to explicitly layout your redundancy groups over
+multiple adapters or enclosures.</p></li>
+<li><p>Drawbacks: These names are long, cumbersome, and difficult for a
+human to manage.</p></li>
+<li><p>Example:
+<code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">create</span> <span class="pre">tank</span> <span class="pre">pci-0000:00:1f.2-scsi-0:0:0:0</span> <span class="pre">pci-0000:00:1f.2-scsi-1:0:0:0</span></code></p></li>
+</ul>
+</li>
+<li><p><strong>/dev/disk/by-vdev/:</strong> Best for large pools (greater than 10 disks)</p>
+<ul>
+<li><p>Summary: This approach provides administrative control over device
+naming using the configuration file /etc/zfs/vdev_id.conf. Names
+for disks in JBODs can be generated automatically to reflect their
+physical location by enclosure IDs and slot numbers. The names can
+also be manually assigned based on existing udev device links,
+including those in /dev/disk/by-path or /dev/disk/by-id. This
+allows you to pick your own unique meaningful names for the disks.
+These names will be displayed by all the zfs utilities so it can
+be used to clarify the administration of a large complex pool. See
+the vdev_id and vdev_id.conf man pages for further details.</p></li>
+<li><p>Benefits: The main benefit of this approach is that it allows you
+to choose meaningful human-readable names. Beyond that, the
+benefits depend on the naming method employed. If the names are
+derived from the physical path the benefits of /dev/disk/by-path
+are realized. On the other hand, aliasing the names based on drive
+identifiers or WWNs has the same benefits as using
+/dev/disk/by-id.</p></li>
+<li><p>Drawbacks: This method relies on having a /etc/zfs/vdev_id.conf
+file properly configured for your system. To configure this file
+please refer to section <a class="reference external" href="#setting-up-the-etczfsvdev_idconf-file">Setting up the /etc/zfs/vdev_id.conf
+file</a>. As with
+benefits, the drawbacks of /dev/disk/by-id or /dev/disk/by-path
+may apply depending on the naming method employed.</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">create</span> <span class="pre">tank</span> <span class="pre">mirror</span> <span class="pre">A1</span> <span class="pre">B1</span> <span class="pre">mirror</span> <span class="pre">A2</span> <span class="pre">B2</span></code></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="setting-up-the-etc-zfs-vdev-id-conf-file">
+<span id="setting-up-the-etczfsvdev-idconf-file"></span><h2><a class="toc-backref" href="#id11">Setting up the /etc/zfs/vdev_id.conf file</a><a class="headerlink" href="#setting-up-the-etc-zfs-vdev-id-conf-file" title="Permalink to this headline">¶</a></h2>
+<p>In order to use /dev/disk/by-vdev/ naming the <code class="docutils literal notranslate"><span class="pre">/etc/zfs/vdev_id.conf</span></code>
+must be configured. The format of this file is described in the
+vdev_id.conf man page. Several examples follow.</p>
+<p>A non-multipath configuration with direct-attached SAS enclosures and an
+arbitrary slot re-mapping.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">multipath</span>     <span class="n">no</span>
+<span class="n">topology</span>      <span class="n">sas_direct</span>
+<span class="n">phys_per_port</span> <span class="mi">4</span>
+
+<span class="c1">#       PCI_SLOT HBA PORT  CHANNEL NAME</span>
+<span class="n">channel</span> <span class="mi">85</span><span class="p">:</span><span class="mf">00.0</span>  <span class="mi">1</span>         <span class="n">A</span>
+<span class="n">channel</span> <span class="mi">85</span><span class="p">:</span><span class="mf">00.0</span>  <span class="mi">0</span>         <span class="n">B</span>
+
+<span class="c1">#    Linux      Mapped</span>
+<span class="c1">#    Slot       Slot</span>
+<span class="n">slot</span> <span class="mi">0</span>          <span class="mi">2</span>
+<span class="n">slot</span> <span class="mi">1</span>          <span class="mi">6</span>
+<span class="n">slot</span> <span class="mi">2</span>          <span class="mi">0</span>
+<span class="n">slot</span> <span class="mi">3</span>          <span class="mi">3</span>
+<span class="n">slot</span> <span class="mi">4</span>          <span class="mi">5</span>
+<span class="n">slot</span> <span class="mi">5</span>          <span class="mi">7</span>
+<span class="n">slot</span> <span class="mi">6</span>          <span class="mi">4</span>
+<span class="n">slot</span> <span class="mi">7</span>          <span class="mi">1</span>
+</pre></div>
+</div>
+<p>A SAS-switch topology. Note that the channel keyword takes only two
+arguments in this example.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">topology</span>      <span class="n">sas_switch</span>
+
+<span class="c1">#       SWITCH PORT  CHANNEL NAME</span>
+<span class="n">channel</span> <span class="mi">1</span>            <span class="n">A</span>
+<span class="n">channel</span> <span class="mi">2</span>            <span class="n">B</span>
+<span class="n">channel</span> <span class="mi">3</span>            <span class="n">C</span>
+<span class="n">channel</span> <span class="mi">4</span>            <span class="n">D</span>
+</pre></div>
+</div>
+<p>A multipath configuration. Note that channel names have multiple
+definitions - one per physical path.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">multipath</span> <span class="n">yes</span>
+
+<span class="c1">#       PCI_SLOT HBA PORT  CHANNEL NAME</span>
+<span class="n">channel</span> <span class="mi">85</span><span class="p">:</span><span class="mf">00.0</span>  <span class="mi">1</span>         <span class="n">A</span>
+<span class="n">channel</span> <span class="mi">85</span><span class="p">:</span><span class="mf">00.0</span>  <span class="mi">0</span>         <span class="n">B</span>
+<span class="n">channel</span> <span class="mi">86</span><span class="p">:</span><span class="mf">00.0</span>  <span class="mi">1</span>         <span class="n">A</span>
+<span class="n">channel</span> <span class="mi">86</span><span class="p">:</span><span class="mf">00.0</span>  <span class="mi">0</span>         <span class="n">B</span>
+</pre></div>
+</div>
+<p>A configuration using device link aliases.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#     by-vdev</span>
+<span class="c1">#     name     fully qualified or base name of device link</span>
+<span class="n">alias</span> <span class="n">d1</span>       <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">disk</span><span class="o">/</span><span class="n">by</span><span class="o">-</span><span class="nb">id</span><span class="o">/</span><span class="n">wwn</span><span class="o">-</span><span class="mh">0x5000c5002de3b9ca</span>
+<span class="n">alias</span> <span class="n">d2</span>       <span class="n">wwn</span><span class="o">-</span><span class="mh">0x5000c5002def789e</span>
+</pre></div>
+</div>
+<p>After defining the new disk names run <code class="docutils literal notranslate"><span class="pre">udevadm</span> <span class="pre">trigger</span></code> to prompt udev
+to parse the configuration file. This will result in a new
+/dev/disk/by-vdev directory which is populated with symlinks to /dev/sdX
+names. Following the first example above, you could then create the new
+pool of mirrors with the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ zpool create tank \
+    mirror A0 B0 mirror A1 B1 mirror A2 B2 mirror A3 B3 \
+    mirror A4 B4 mirror A5 B5 mirror A6 B6 mirror A7 B7
+
+$ zpool status
+  pool: tank
+ state: ONLINE
+ scan: none requested
+config:
+
+    NAME        STATE     READ WRITE CKSUM
+    tank        ONLINE       0     0     0
+      mirror-0  ONLINE       0     0     0
+        A0      ONLINE       0     0     0
+        B0      ONLINE       0     0     0
+      mirror-1  ONLINE       0     0     0
+        A1      ONLINE       0     0     0
+        B1      ONLINE       0     0     0
+      mirror-2  ONLINE       0     0     0
+        A2      ONLINE       0     0     0
+        B2      ONLINE       0     0     0
+      mirror-3  ONLINE       0     0     0
+        A3      ONLINE       0     0     0
+        B3      ONLINE       0     0     0
+      mirror-4  ONLINE       0     0     0
+        A4      ONLINE       0     0     0
+        B4      ONLINE       0     0     0
+      mirror-5  ONLINE       0     0     0
+        A5      ONLINE       0     0     0
+        B5      ONLINE       0     0     0
+      mirror-6  ONLINE       0     0     0
+        A6      ONLINE       0     0     0
+        B6      ONLINE       0     0     0
+      mirror-7  ONLINE       0     0     0
+        A7      ONLINE       0     0     0
+        B7      ONLINE       0     0     0
+
+errors: No known data errors
+</pre></div>
+</div>
+</div>
+<div class="section" id="changing-dev-names-on-an-existing-pool">
+<h2><a class="toc-backref" href="#id12">Changing /dev/ names on an existing pool</a><a class="headerlink" href="#changing-dev-names-on-an-existing-pool" title="Permalink to this headline">¶</a></h2>
+<p>Changing the /dev/ names on an existing pool can be done by simply
+exporting the pool and re-importing it with the -d option to specify
+which new names should be used. For example, to use the custom names in
+/dev/disk/by-vdev:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ zpool export tank
+$ zpool import -d /dev/disk/by-vdev tank
+</pre></div>
+</div>
+</div>
+<div class="section" id="the-etc-zfs-zpool-cache-file">
+<span id="the-etczfszpoolcache-file"></span><h2><a class="toc-backref" href="#id13">The /etc/zfs/zpool.cache file</a><a class="headerlink" href="#the-etc-zfs-zpool-cache-file" title="Permalink to this headline">¶</a></h2>
+<p>Whenever a pool is imported on the system it will be added to the
+<code class="docutils literal notranslate"><span class="pre">/etc/zfs/zpool.cache</span> <span class="pre">file</span></code>. This file stores pool configuration
+information, such as the device names and pool state. If this file
+exists when running the <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">import</span></code> command then it will be used to
+determine the list of pools available for import. When a pool is not
+listed in the cache file it will need to be detected and imported using
+the <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">import</span> <span class="pre">-d</span> <span class="pre">/dev/disk/by-id</span></code> command.</p>
+</div>
+<div class="section" id="generating-a-new-etc-zfs-zpool-cache-file">
+<span id="generating-a-new-etczfszpoolcache-file"></span><h2><a class="toc-backref" href="#id14">Generating a new /etc/zfs/zpool.cache file</a><a class="headerlink" href="#generating-a-new-etc-zfs-zpool-cache-file" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">/etc/zfs/zpool.cache</span></code> file will be automatically updated when
+your pool configuration is changed. However, if for some reason it
+becomes stale you can force the generation of a new
+<code class="docutils literal notranslate"><span class="pre">/etc/zfs/zpool.cache</span></code> file by setting the cachefile property on the
+pool.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ zpool set cachefile=/etc/zfs/zpool.cache tank
+</pre></div>
+</div>
+<p>Conversely the cache file can be disabled by setting <code class="docutils literal notranslate"><span class="pre">cachefile=none</span></code>.
+This is useful for failover configurations where the pool should always
+be explicitly imported by the failover software.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ zpool set cachefile=none tank
+</pre></div>
+</div>
+</div>
+<div class="section" id="sending-and-receiving-streams">
+<h2><a class="toc-backref" href="#id15">Sending and Receiving Streams</a><a class="headerlink" href="#sending-and-receiving-streams" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="hole-birth-bugs">
+<h3><a class="toc-backref" href="#id16">hole_birth Bugs</a><a class="headerlink" href="#hole-birth-bugs" title="Permalink to this headline">¶</a></h3>
+<p>The hole_birth feature has/had bugs, the result of which is that, if you
+do a <code class="docutils literal notranslate"><span class="pre">zfs</span> <span class="pre">send</span> <span class="pre">-i</span></code> (or <code class="docutils literal notranslate"><span class="pre">-R</span></code>, since it uses <code class="docutils literal notranslate"><span class="pre">-i</span></code>) from an affected
+dataset, the receiver <em>will not see any checksum or other errors, but
+will not match the source</em>.</p>
+<p>ZoL versions 0.6.5.8 and 0.7.0-rc1 (and above) default to ignoring the
+faulty metadata which causes this issue <em>on the sender side</em>.</p>
+<p>For more details, see the <a class="reference internal" href="FAQ hole birth.html"><span class="doc">hole_birth FAQ</span></a>.</p>
+</div>
+<div class="section" id="sending-large-blocks">
+<h3><a class="toc-backref" href="#id17">Sending Large Blocks</a><a class="headerlink" href="#sending-large-blocks" title="Permalink to this headline">¶</a></h3>
+<p>When sending incremental streams which contain large blocks (&gt;128K) the
+<code class="docutils literal notranslate"><span class="pre">--large-block</span></code> flag must be specified. Inconsistent use of the flag
+between incremental sends can result in files being incorrectly zeroed
+when they are received. Raw encrypted send/recvs automatically imply the
+<code class="docutils literal notranslate"><span class="pre">--large-block</span></code> flag and are therefore unaffected.</p>
+<p>For more details, see <a class="reference external" href="https://github.com/zfsonlinux/zfs/issues/6224">issue
+6224</a>.</p>
+</div>
+</div>
+<div class="section" id="ceph-zfs">
+<h2><a class="toc-backref" href="#id18">CEPH/ZFS</a><a class="headerlink" href="#ceph-zfs" title="Permalink to this headline">¶</a></h2>
+<p>There is a lot of tuning that can be done that’s dependent on the
+workload that is being put on CEPH/ZFS, as well as some general
+guidelines. Some are as follow;</p>
+<div class="section" id="zfs-configuration">
+<h3><a class="toc-backref" href="#id19">ZFS Configuration</a><a class="headerlink" href="#zfs-configuration" title="Permalink to this headline">¶</a></h3>
+<p>The CEPH filestore back-end heavily relies on xattrs, for optimal
+performance all CEPH workloads will benefit from the following ZFS
+dataset parameters</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">xattr=sa</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dnodesize=auto</span></code></p></li>
+</ul>
+<p>Beyond that typically rbd/cephfs focused workloads benefit from small
+recordsize({16K-128K), while objectstore/s3/rados focused workloads
+benefit from large recordsize (128K-1M).</p>
+</div>
+<div class="section" id="ceph-configuration-ceph-conf">
+<span id="ceph-configuration-cephconf"></span><h3><a class="toc-backref" href="#id20">CEPH Configuration (ceph.conf}</a><a class="headerlink" href="#ceph-configuration-ceph-conf" title="Permalink to this headline">¶</a></h3>
+<p>Additionally CEPH sets various values internally for handling xattrs
+based on the underlying filesystem. As CEPH only officially
+supports/detects XFS and BTRFS, for all other filesystems it falls back
+to rather <a class="reference external" href="https://github.com/ceph/ceph/blob/4fe7e2a458a1521839bc390c2e3233dd809ec3ac/src/common/config_opts.h#L1125-L1148">limited “safe”
+values</a>.
+On newer releases, the need for larger xattrs will prevent OSD’s from even
+starting.</p>
+<p>The officially recommended workaround (<a class="reference external" href="http://docs.ceph.com/docs/jewel/rados/configuration/filesystem-recommendations/#not-recommended">see
+here</a>)
+has some severe downsides, and more specifically is geared toward
+filesystems with “limited” xattr support such as ext4.</p>
+<p>ZFS does not have a limit internally to xattrs length, as such we can
+treat it similarly to how CEPH treats XFS. We can set overrides to set 3
+internal values to the same as those used with XFS(<a class="reference external" href="https://github.com/ceph/ceph/blob/9b317f7322848802b3aab9fec3def81dddd4a49b/src/os/filestore/FileStore.cc#L5714-L5737">see
+here</a>
+and
+<a class="reference external" href="https://github.com/ceph/ceph/blob/4fe7e2a458a1521839bc390c2e3233dd809ec3ac/src/common/config_opts.h#L1125-L1148">here</a>)
+and allow it be used without the severe limitations of the “official”
+workaround.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">osd</span><span class="p">]</span>
+<span class="n">filestore_max_inline_xattrs</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">filestore_max_inline_xattr_size</span> <span class="o">=</span> <span class="mi">65536</span>
+<span class="n">filestore_max_xattr_value_size</span> <span class="o">=</span> <span class="mi">65536</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="other-general-guidelines">
+<h3><a class="toc-backref" href="#id21">Other General Guidelines</a><a class="headerlink" href="#other-general-guidelines" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Use a separate journal device. Do not don’t collocate CEPH journal on
+ZFS dataset if at all possible, this will quickly lead to terrible
+fragmentation, not to mention terrible performance upfront even
+before fragmentation (CEPH journal does a dsync for every write).</p></li>
+<li><p>Use a SLOG device, even with a separate CEPH journal device. For some
+workloads, skipping SLOG and setting <code class="docutils literal notranslate"><span class="pre">logbias=throughput</span></code> may be
+acceptable.</p></li>
+<li><p>Use a high-quality SLOG/CEPH journal device.  A consumer based SSD, or
+even NVMe WILL NOT DO (Samsung 830, 840, 850, etc) for a variety of
+reasons. CEPH will kill them quickly, on-top of the performance being
+quite low in this use. Generally recommended devices are [Intel DC S3610,
+S3700, S3710, P3600, P3700], or [Samsung SM853, SM863], or better.</p></li>
+<li><p>If using a high quality SSD or NVMe device (as mentioned above), you
+CAN share SLOG and CEPH Journal to good results on single device. A
+ratio of 4 HDDs to 1 SSD (Intel DC S3710 200GB), with each SSD
+partitioned (remember to align!) to 4x10GB (for ZIL/SLOG) + 4x20GB
+(for CEPH journal) has been reported to work well.</p></li>
+</ul>
+<p>Again - CEPH + ZFS will KILL a consumer based SSD VERY quickly. Even
+ignoring the lack of power-loss protection, and endurance ratings, you
+will be very disappointed with performance of consumer based SSD under
+such a workload.</p>
+</div>
+</div>
+<div class="section" id="performance-considerations">
+<h2><a class="toc-backref" href="#id22">Performance Considerations</a><a class="headerlink" href="#performance-considerations" title="Permalink to this headline">¶</a></h2>
+<p>To achieve good performance with your pool there are some easy best
+practices you should follow.</p>
+<ul class="simple">
+<li><p><strong>Evenly balance your disks across controllers:</strong> Often the limiting
+factor for performance is not the disks but the controller. By
+balancing your disks evenly across controllers you can often improve
+throughput.</p></li>
+<li><p><strong>Create your pool using whole disks:</strong> When running zpool create use
+whole disk names. This will allow ZFS to automatically partition the
+disk to ensure correct alignment. It will also improve
+interoperability with other OpenZFS implementations which honor the
+wholedisk property.</p></li>
+<li><p><strong>Have enough memory:</strong> A minimum of 2GB of memory is recommended for
+ZFS. Additional memory is strongly recommended when the compression
+and deduplication features are enabled.</p></li>
+<li><p><strong>Improve performance by setting ashift=12:</strong> You may be able to
+improve performance for some workloads by setting <code class="docutils literal notranslate"><span class="pre">ashift=12</span></code>. This
+tuning can only be set when block devices are first added to a pool,
+such as when the pool is first created or when a new vdev is added to
+the pool. This tuning parameter can result in a decrease of capacity
+for RAIDZ configurations.</p></li>
+</ul>
+</div>
+<div class="section" id="advanced-format-disks">
+<h2><a class="toc-backref" href="#id23">Advanced Format Disks</a><a class="headerlink" href="#advanced-format-disks" title="Permalink to this headline">¶</a></h2>
+<p>Advanced Format (AF) is a new disk format which natively uses a 4,096
+byte, instead of 512 byte, sector size. To maintain compatibility with
+legacy systems many AF disks emulate a sector size of 512 bytes. By
+default, ZFS will automatically detect the sector size of the drive.
+This combination can result in poorly aligned disk accesses which will
+greatly degrade the pool performance.</p>
+<p>Therefore, the ability to set the ashift property has been added to the
+zpool command. This allows users to explicitly assign the sector size
+when devices are first added to a pool (typically at pool creation time
+or adding a vdev to the pool). The ashift values range from 9 to 16 with
+the default value 0 meaning that zfs should auto-detect the sector size.
+This value is actually a bit shift value, so an ashift value for 512
+bytes is 9 (2^9 = 512) while the ashift value for 4,096 bytes is 12
+(2^12 = 4,096).</p>
+<p>To force the pool to use 4,096 byte sectors at pool creation time, you
+may run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ zpool create -o ashift=12 tank mirror sda sdb
+</pre></div>
+</div>
+<p>To force the pool to use 4,096 byte sectors when adding a vdev to a
+pool, you may run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ zpool add -o ashift=12 tank mirror sdc sdd
+</pre></div>
+</div>
+</div>
+<div class="section" id="zvol-used-space-larger-than-expected">
+<h2><a class="toc-backref" href="#id24">ZVOL used space larger than expected</a><a class="headerlink" href="#zvol-used-space-larger-than-expected" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line">Depending on the filesystem used on the zvol (e.g. ext4) and the usage
+(e.g. deletion and creation of many files) the <code class="docutils literal notranslate"><span class="pre">used</span></code> and
+<code class="docutils literal notranslate"><span class="pre">referenced</span></code> properties reported by the zvol may be larger than the
+“actual” space that is being used as reported by the consumer.</div>
+<div class="line">This can happen due to the way some filesystems work, in which they
+prefer to allocate files in new untouched blocks rather than the
+fragmented used blocks marked as free. This forces zfs to reference
+all blocks that the underlying filesystem has ever touched.</div>
+<div class="line">This is in itself not much of a problem, as when the <code class="docutils literal notranslate"><span class="pre">used</span></code> property
+reaches the configured <code class="docutils literal notranslate"><span class="pre">volsize</span></code> the underlying filesystem will
+start reusing blocks. But the problem arises if it is desired to
+snapshot the zvol, as the space referenced by the snapshots will
+contain the unused blocks.</div>
+</div>
+<div class="line-block">
+<div class="line">This issue can be prevented, by issuing the so-called trim
+(for ex. <code class="docutils literal notranslate"><span class="pre">fstrim</span></code> command on Linux) to allow
+the kernel to specify to zfs which blocks are unused.</div>
+<div class="line">Issuing a trim before a snapshot is taken will ensure
+a minimum snapshot size.</div>
+<div class="line">For Linux adding the <code class="docutils literal notranslate"><span class="pre">discard</span></code> option for the mounted ZVOL in <code class="docutils literal notranslate"><span class="pre">/etc/fstab</span></code>
+effectively enables the kernel to issue the trim commands
+continuously, without the need to execute fstrim on-demand.</div>
+</div>
+</div>
+<div class="section" id="using-a-zvol-for-a-swap-device-on-linux">
+<h2><a class="toc-backref" href="#id25">Using a zvol for a swap device on Linux</a><a class="headerlink" href="#using-a-zvol-for-a-swap-device-on-linux" title="Permalink to this headline">¶</a></h2>
+<p>You may use a zvol as a swap device but you’ll need to configure it
+appropriately.</p>
+<p><strong>CAUTION:</strong> for now swap on zvol may lead to deadlock, in this case
+please send your logs
+<a class="reference external" href="https://github.com/zfsonlinux/zfs/issues/7734">here</a>.</p>
+<ul class="simple">
+<li><p>Set the volume block size to match your systems page size. This
+tuning prevents ZFS from having to perform read-modify-write options
+on a larger block while the system is already low on memory.</p></li>
+<li><p>Set the <code class="docutils literal notranslate"><span class="pre">logbias=throughput</span></code> and <code class="docutils literal notranslate"><span class="pre">sync=always</span></code> properties. Data
+written to the volume will be flushed immediately to disk freeing up
+memory as quickly as possible.</p></li>
+<li><p>Set <code class="docutils literal notranslate"><span class="pre">primarycache=metadata</span></code> to avoid keeping swap data in RAM via
+the ARC.</p></li>
+<li><p>Disable automatic snapshots of the swap device.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ zfs create -V 4G -b $(getconf PAGESIZE) \
+    -o logbias=throughput -o sync=always \
+    -o primarycache=metadata \
+    -o com.sun:auto-snapshot=false rpool/swap
+</pre></div>
+</div>
+</div>
+<div class="section" id="using-zfs-on-xen-hypervisor-or-xen-dom0-linux">
+<h2><a class="toc-backref" href="#id26">Using ZFS on Xen Hypervisor or Xen Dom0 (Linux)</a><a class="headerlink" href="#using-zfs-on-xen-hypervisor-or-xen-dom0-linux" title="Permalink to this headline">¶</a></h2>
+<p>It is usually recommended to keep virtual machine storage and hypervisor
+pools, quite separate. Although few people have managed to successfully
+deploy and run OpenZFS using the same machine configured as Dom0.
+There are few caveats:</p>
+<ul class="simple">
+<li><p>Set a fair amount of memory in grub.conf, dedicated to Dom0.</p>
+<ul>
+<li><p>dom0_mem=16384M,max:16384M</p></li>
+</ul>
+</li>
+<li><p>Allocate no more of 30-40% of Dom0’s memory to ZFS in
+<code class="docutils literal notranslate"><span class="pre">/etc/modprobe.d/zfs.conf</span></code>.</p>
+<ul>
+<li><p>options zfs zfs_arc_max=6442450944</p></li>
+</ul>
+</li>
+<li><p>Disable Xen’s auto-ballooning in <code class="docutils literal notranslate"><span class="pre">/etc/xen/xl.conf</span></code></p></li>
+<li><p>Watch out for any Xen bugs, such as <a class="reference external" href="https://github.com/zfsonlinux/zfs/issues/1067">this
+one</a> related to
+ballooning</p></li>
+</ul>
+</div>
+<div class="section" id="udisks2-creating-dev-mapper-entries-for-zvol-linux">
+<h2><a class="toc-backref" href="#id27">udisks2 creating /dev/mapper/ entries for zvol (Linux)</a><a class="headerlink" href="#udisks2-creating-dev-mapper-entries-for-zvol-linux" title="Permalink to this headline">¶</a></h2>
+<p>To prevent udisks2 from creating /dev/mapper entries that must be
+manually removed or maintained during zvol remove / rename, create a
+udev rule such as <code class="docutils literal notranslate"><span class="pre">/etc/udev/rules.d/80-udisks2-ignore-zfs.rules</span></code> with
+the following contents:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ENV</span><span class="p">{</span><span class="n">ID_PART_ENTRY_SCHEME</span><span class="p">}</span><span class="o">==</span><span class="s2">&quot;gpt&quot;</span><span class="p">,</span> <span class="n">ENV</span><span class="p">{</span><span class="n">ID_FS_TYPE</span><span class="p">}</span><span class="o">==</span><span class="s2">&quot;zfs_member&quot;</span><span class="p">,</span> <span class="n">ENV</span><span class="p">{</span><span class="n">ID_PART_ENTRY_TYPE</span><span class="p">}</span><span class="o">==</span><span class="s2">&quot;6a898cc3-1dd2-11b2-99a6-080020736631&quot;</span><span class="p">,</span> <span class="n">ENV</span><span class="p">{</span><span class="n">UDISKS_IGNORE</span><span class="p">}</span><span class="o">=</span><span class="s2">&quot;1&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="licensing">
+<h2><a class="toc-backref" href="#id28">Licensing</a><a class="headerlink" href="#licensing" title="Permalink to this headline">¶</a></h2>
+<p>License information can be found <a class="reference external" href="https://openzfs.github.io/openzfs-docs/License.html">here</a>.</p>
+</div>
+<div class="section" id="reporting-a-problem">
+<h2><a class="toc-backref" href="#id29">Reporting a problem</a><a class="headerlink" href="#reporting-a-problem" title="Permalink to this headline">¶</a></h2>
+<p>You can open a new issue and search existing issues using the public
+<a class="reference external" href="https://github.com/zfsonlinux/zfs/issues">issue tracker</a>. The issue
+tracker is used to organize outstanding bug reports, feature requests,
+and other development tasks. Anyone may post comments after signing up
+for a github account.</p>
+<p>Please make sure that what you’re actually seeing is a bug and not a
+support issue. If in doubt, please ask on the mailing list first, and if
+you’re then asked to file an issue, do so.</p>
+<p>When opening a new issue include this information at the top of the
+issue:</p>
+<ul class="simple">
+<li><p>What distribution you’re using and the version.</p></li>
+<li><p>What spl/zfs packages you’re using and the version.</p></li>
+<li><p>Describe the problem you’re observing.</p></li>
+<li><p>Describe how to reproduce the problem.</p></li>
+<li><p>Including any warning/errors/backtraces from the system logs.</p></li>
+</ul>
+<p>When a new issue is opened it’s not uncommon for a developer to request
+additional information about the problem. In general, the more detail
+you share about a problem the quicker a developer can resolve it. For
+example, providing a simple test case is always exceptionally helpful.
+Be prepared to work with the developer looking in to your bug in order
+to get it resolved. They may ask for information like:</p>
+<ul class="simple">
+<li><p>Your pool configuration as reported by <code class="docutils literal notranslate"><span class="pre">zdb</span></code> or <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">status</span></code>.</p></li>
+<li><p>Your hardware configuration, such as</p>
+<ul>
+<li><p>Number of CPUs.</p></li>
+<li><p>Amount of memory.</p></li>
+<li><p>Whether your system has ECC memory.</p></li>
+<li><p>Whether it is running under a VMM/Hypervisor.</p></li>
+<li><p>Kernel version.</p></li>
+<li><p>Values of the spl/zfs module parameters.</p></li>
+</ul>
+</li>
+<li><p>Stack traces which may be logged to <code class="docutils literal notranslate"><span class="pre">dmesg</span></code>.</p></li>
+</ul>
+</div>
+<div class="section" id="does-openzfs-have-a-code-of-conduct">
+<h2><a class="toc-backref" href="#id30">Does OpenZFS have a Code of Conduct?</a><a class="headerlink" href="#does-openzfs-have-a-code-of-conduct" title="Permalink to this headline">¶</a></h2>
+<p>Yes, the OpenZFS community has a code of conduct. See the <a class="reference external" href="https://openzfs.org/wiki/Code_of_Conduct">Code of
+Conduct</a> for details.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="Mailing Lists.html" class="btn btn-neutral float-right" title="Mailing Lists" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="Admin Documentation.html" class="btn btn-neutral float-left" title="Admin Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, OpenZFS.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

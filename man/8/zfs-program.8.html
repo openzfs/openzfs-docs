@@ -1,0 +1,995 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>zfs-program.8 &mdash; OpenZFS  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme_overrides.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/mandoc.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="zfs-project.8" href="zfs-project.8.html" />
+    <link rel="prev" title="zfs-mount.8" href="zfs-mount.8.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+          
+
+          
+            <a href="../../index.html">
+          
+
+          
+            
+            <img src="../../_static/logo_main.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../Getting Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Project and Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Developer Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Performance and Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Basic Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Man Pages</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../1/index.html">User Commands (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../5/index.html">File Formats and Conventions (5)</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">System Administration Commands (8)</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="fsck.zfs.8.html">fsck.zfs.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mount.zfs.8.html">mount.zfs.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vdev_id.8.html">vdev_id.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zdb.8.html">zdb.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-allow.8.html">zfs-allow.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-bookmark.8.html">zfs-bookmark.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-change-key.8.html">zfs-change-key.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-clone.8.html">zfs-clone.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-create.8.html">zfs-create.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-destroy.8.html">zfs-destroy.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-diff.8.html">zfs-diff.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-get.8.html">zfs-get.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-groupspace.8.html">zfs-groupspace.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-hold.8.html">zfs-hold.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-inherit.8.html">zfs-inherit.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-jail.8.html">zfs-jail.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-list.8.html">zfs-list.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-load-key.8.html">zfs-load-key.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-mount.8.html">zfs-mount.8</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">zfs-program.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-project.8.html">zfs-project.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-projectspace.8.html">zfs-projectspace.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-promote.8.html">zfs-promote.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-receive.8.html">zfs-receive.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-recv.8.html">zfs-recv.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-redact.8.html">zfs-redact.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-release.8.html">zfs-release.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-rename.8.html">zfs-rename.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-rollback.8.html">zfs-rollback.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-send.8.html">zfs-send.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-set.8.html">zfs-set.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-share.8.html">zfs-share.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-snapshot.8.html">zfs-snapshot.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-unallow.8.html">zfs-unallow.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-unjail.8.html">zfs-unjail.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-unload-key.8.html">zfs-unload-key.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-unmount.8.html">zfs-unmount.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-upgrade.8.html">zfs-upgrade.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-userspace.8.html">zfs-userspace.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs-wait.8.html">zfs-wait.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs.8.html">zfs.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfs_ids_to_path.8.html">zfs_ids_to_path.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfsconcepts.8.html">zfsconcepts.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zfsprops.8.html">zfsprops.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zgenhostid.8.html">zgenhostid.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zinject.8.html">zinject.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-add.8.html">zpool-add.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-attach.8.html">zpool-attach.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-checkpoint.8.html">zpool-checkpoint.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-clear.8.html">zpool-clear.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-create.8.html">zpool-create.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-destroy.8.html">zpool-destroy.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-detach.8.html">zpool-detach.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-events.8.html">zpool-events.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-export.8.html">zpool-export.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-get.8.html">zpool-get.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-history.8.html">zpool-history.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-import.8.html">zpool-import.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-initialize.8.html">zpool-initialize.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-iostat.8.html">zpool-iostat.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-labelclear.8.html">zpool-labelclear.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-list.8.html">zpool-list.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-offline.8.html">zpool-offline.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-online.8.html">zpool-online.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-reguid.8.html">zpool-reguid.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-remove.8.html">zpool-remove.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-reopen.8.html">zpool-reopen.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-replace.8.html">zpool-replace.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-resilver.8.html">zpool-resilver.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-scrub.8.html">zpool-scrub.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-set.8.html">zpool-set.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-split.8.html">zpool-split.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-status.8.html">zpool-status.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-sync.8.html">zpool-sync.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-trim.8.html">zpool-trim.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-upgrade.8.html">zpool-upgrade.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool-wait.8.html">zpool-wait.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool.8.html">zpool.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpool_influxdb.8.html">zpool_influxdb.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpoolconcepts.8.html">zpoolconcepts.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zpoolprops.8.html">zpoolprops.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zstream.8.html">zstream.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zstreamdump.8.html">zstreamdump.8</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../License.html">License</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">OpenZFS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Man Pages</a> &raquo;</li>
+        
+          <li><a href="index.html">System Administration Commands (8)</a> &raquo;</li>
+        
+      <li>zfs-program.8</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/man/8/zfs-program.8.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="zfs-program-8">
+<h1>zfs-program.8<a class="headerlink" href="#zfs-program-8" title="Permalink to this headline">¶</a></h1>
+<div class="man_container"><table class="head">
+  <tr>
+    <td class="head-ltitle">ZFS-PROGRAM(8)</td>
+    <td class="head-vol">System Manager's Manual</td>
+    <td class="head-rtitle">ZFS-PROGRAM(8)</td>
+  </tr>
+</table>
+<div class="manual-text">
+<h1 class="Sh" title="Sh" id="NAME"><a class="permalink" href="#NAME">NAME</a></h1>
+<code class="Nm" title="Nm">zfs-program</code> &#x2014;
+<div class="Nd" title="Nd">executes ZFS channel programs</div>
+<h1 class="Sh" title="Sh" id="SYNOPSIS"><a class="permalink" href="#SYNOPSIS">SYNOPSIS</a></h1>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm" title="Nm">zfs</code></td>
+    <td><code class="Cm" title="Cm">program</code>
+      [<div class="Op"><code class="Fl" title="Fl">-jn</code></div>]
+      [<div class="Op"><code class="Fl" title="Fl">-t</code>
+      <var class="Ar" title="Ar">instruction-limit</var></div>]
+      [<div class="Op"><code class="Fl" title="Fl">-m</code>
+      <var class="Ar" title="Ar">memory-limit</var></div>]
+      <var class="Ar" title="Ar">pool</var>
+      <var class="Ar" title="Ar">script</var></td>
+  </tr>
+</table>
+<h1 class="Sh" title="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h1>
+The ZFS channel program interface allows ZFS administrative operations to be run
+  programmatically as a Lua script. The entire script is executed atomically,
+  with no other administrative operations taking effect concurrently. A library
+  of ZFS calls is made available to channel program scripts. Channel programs
+  may only be run with root privileges.
+<div class="Pp"></div>
+A modified version of the Lua 5.2 interpreter is used to run channel program
+  scripts. The Lua 5.2 manual can be found at:
+<div class="Pp"></div>
+<div class="Bd
+  Bd-indent"><a class="Lk" title="Lk" href="http://www.lua.org/manual/5.2/">http://www.lua.org/manual/5.2/</a></div>
+<div class="Pp"></div>
+The channel program given by <var class="Ar" title="Ar">script</var> will be run
+  on <var class="Ar" title="Ar">pool</var>, and any attempts to access or modify
+  other pools will cause an error.
+<h1 class="Sh" title="Sh" id="OPTIONS"><a class="permalink" href="#OPTIONS">OPTIONS</a></h1>
+<dl class="Bl-tag">
+  <dt><a class="permalink" href="#j"><code class="Fl" title="Fl" id="j">-j</code></a></dt>
+  <dd>Display channel program output in JSON format. When this flag is specified
+      and standard output is empty - channel program encountered an error. The
+      details of such an error will be printed to standard error in plain
+    text.</dd>
+  <dt><a class="permalink" href="#n"><code class="Fl" title="Fl" id="n">-n</code></a></dt>
+  <dd>Executes a read-only channel program, which runs faster. The program
+      cannot change on-disk state by calling functions from the zfs.sync
+      submodule. The program can be used to gather information such as
+      properties and determining if changes would succeed (zfs.check.*). Without
+      this flag, all pending changes must be synced to disk before a channel
+      program can complete.</dd>
+  <dt><a class="permalink" href="#t"><code class="Fl" title="Fl" id="t">-t</code></a>
+    <var class="Ar" title="Ar">instruction-limit</var></dt>
+  <dd>Limit the number of Lua instructions to execute. If a channel program
+      executes more than the specified number of instructions, it will be
+      stopped and an error will be returned. The default limit is 10 million
+      instructions, and it can be set to a maximum of 100 million
+    instructions.</dd>
+  <dt><a class="permalink" href="#m"><code class="Fl" title="Fl" id="m">-m</code></a>
+    <var class="Ar" title="Ar">memory-limit</var></dt>
+  <dd>Memory limit, in bytes. If a channel program attempts to allocate more
+      memory than the given limit, it will be stopped and an error returned. The
+      default memory limit is 10 MB, and can be set to a maximum of 100 MB.</dd>
+</dl>
+<div class="Pp"></div>
+All remaining argument strings will be passed directly to the Lua script as
+  described in the <a class="Sx" title="Sx" href="#LUA_INTERFACE">LUA
+  INTERFACE</a> section below.
+<h1 class="Sh" title="Sh" id="LUA_INTERFACE"><a class="permalink" href="#LUA_INTERFACE">LUA
+  INTERFACE</a></h1>
+A channel program can be invoked either from the command line, or via a library
+  call to <code class="Fn" title="Fn">lzc_channel_program</code>().
+<h2 class="Ss" title="Ss" id="Arguments"><a class="permalink" href="#Arguments">Arguments</a></h2>
+Arguments passed to the channel program are converted to a Lua table. If invoked
+  from the command line, extra arguments to the Lua script will be accessible as
+  an array stored in the argument table with the key 'argv':
+<div class="Pp"></div>
+<div class="Bd Bd-indent">
+<pre class="Li">
+args = ... 
+argv = args[&quot;argv&quot;] 
+-- argv == {1=&quot;arg1&quot;, 2=&quot;arg2&quot;, ...}
+</pre>
+</div>
+<div class="Pp"></div>
+If invoked from the libZFS interface, an arbitrary argument list can be passed
+  to the channel program, which is accessible via the same &quot;...&quot;
+  syntax in Lua:
+<div class="Pp"></div>
+<div class="Bd Bd-indent">
+<pre class="Li">
+args = ... 
+-- args == {&quot;foo&quot;=&quot;bar&quot;, &quot;baz&quot;={...}, ...}
+</pre>
+</div>
+<div class="Pp"></div>
+Note that because Lua arrays are 1-indexed, arrays passed to Lua from the libZFS
+  interface will have their indices incremented by 1. That is, the element in
+  <var class="Va" title="Va">arr[0]</var> in a C array passed to a channel
+  program will be stored in <var class="Va" title="Va">arr[1]</var> when
+  accessed from Lua.
+<h2 class="Ss" title="Ss" id="Return_Values"><a class="permalink" href="#Return_Values">Return
+  Values</a></h2>
+Lua return statements take the form:
+<div class="Pp"></div>
+<div class="Bd Bd-indent">
+<pre class="Li">
+return ret0, ret1, ret2, ...
+</pre>
+</div>
+<div class="Pp"></div>
+Return statements returning multiple values are permitted internally in a
+  channel program script, but attempting to return more than one value from the
+  top level of the channel program is not permitted and will throw an error.
+  However, tables containing multiple values can still be returned. If invoked
+  from the command line, a return statement:
+<div class="Pp"></div>
+<div class="Bd Bd-indent">
+<pre class="Li">
+a = {foo=&quot;bar&quot;, baz=2} 
+return a
+</pre>
+</div>
+<div class="Pp"></div>
+Will be output formatted as:
+<div class="Pp"></div>
+<div class="Bd Bd-indent">
+<pre class="Li">
+Channel program fully executed with return value: 
+    return: 
+        baz: 2 
+        foo: 'bar'
+</pre>
+</div>
+<h2 class="Ss" title="Ss" id="Fatal_Errors"><a class="permalink" href="#Fatal_Errors">Fatal
+  Errors</a></h2>
+If the channel program encounters a fatal error while running, a non-zero exit
+  status will be returned. If more information about the error is available, a
+  singleton list will be returned detailing the error:
+<div class="Pp"></div>
+<div class="Bd Bd-indent">
+<pre class="Li">
+error: &quot;error string, including Lua stack trace&quot;
+</pre>
+</div>
+<div class="Pp"></div>
+If a fatal error is returned, the channel program may have not executed at all,
+  may have partially executed, or may have fully executed but failed to pass a
+  return value back to userland.
+<div class="Pp"></div>
+If the channel program exhausts an instruction or memory limit, a fatal error
+  will be generated and the program will be stopped, leaving the program
+  partially executed. No attempt is made to reverse or undo any operations
+  already performed. Note that because both the instruction count and amount of
+  memory used by a channel program are deterministic when run against the same
+  inputs and filesystem state, as long as a channel program has run successfully
+  once, you can guarantee that it will finish successfully against a similar
+  size system.
+<div class="Pp"></div>
+If a channel program attempts to return too large a value, the program will
+  fully execute but exit with a nonzero status code and no return value.
+<div class="Pp"></div>
+<i class="Em" title="Em">Note</i>: ZFS API functions do not generate Fatal
+  Errors when correctly invoked, they return an error code and the channel
+  program continues executing. See the
+  <a class="Sx" title="Sx" href="#ZFS_API">ZFS API</a> section below for
+  function-specific details on error return codes.
+<h2 class="Ss" title="Ss" id="Lua_to_C_Value_Conversion"><a class="permalink" href="#Lua_to_C_Value_Conversion">Lua
+  to C Value Conversion</a></h2>
+When invoking a channel program via the libZFS interface, it is necessary to
+  translate arguments and return values from Lua values to their C equivalents,
+  and vice-versa.
+<div class="Pp"></div>
+There is a correspondence between nvlist values in C and Lua tables. A Lua table
+  which is returned from the channel program will be recursively converted to an
+  nvlist, with table values converted to their natural equivalents:
+<div class="Pp"></div>
+<div class="Bd Bd-indent">
+<pre class="Li">
+string -&gt; string 
+number -&gt; int64 
+boolean -&gt; boolean_value 
+nil -&gt; boolean (no value) 
+table -&gt; nvlist
+</pre>
+</div>
+<div class="Pp"></div>
+Likewise, table keys are replaced by string equivalents as follows:
+<div class="Pp"></div>
+<div class="Bd Bd-indent">
+<pre class="Li">
+string -&gt; no change 
+number -&gt; signed decimal string (&quot;%lld&quot;) 
+boolean -&gt; &quot;true&quot; | &quot;false&quot;
+</pre>
+</div>
+<div class="Pp"></div>
+Any collision of table key strings (for example, the string &quot;true&quot; and
+  a true boolean value) will cause a fatal error.
+<div class="Pp"></div>
+Lua numbers are represented internally as signed 64-bit integers.
+<h1 class="Sh" title="Sh" id="LUA_STANDARD_LIBRARY"><a class="permalink" href="#LUA_STANDARD_LIBRARY">LUA
+  STANDARD LIBRARY</a></h1>
+The following Lua built-in base library functions are available:
+<div class="Pp"></div>
+<div class="Bd Bd-indent">
+<pre class="Li">
+assert                  rawlen 
+collectgarbage          rawget 
+error                   rawset 
+getmetatable            select 
+ipairs                  setmetatable 
+next                    tonumber 
+pairs                   tostring 
+rawequal                type
+</pre>
+</div>
+<div class="Pp"></div>
+All functions in the <i class="Em" title="Em">coroutine</i>,
+  <i class="Em" title="Em">string</i>, and <i class="Em" title="Em">table</i>
+  built-in submodules are also available. A complete list and documentation of
+  these modules is available in the Lua manual.
+<div class="Pp"></div>
+The following functions base library functions have been disabled and are not
+  available for use in channel programs:
+<div class="Pp"></div>
+<div class="Bd Bd-indent">
+<pre class="Li">
+dofile 
+loadfile 
+load 
+pcall 
+print 
+xpcall
+</pre>
+</div>
+<h1 class="Sh" title="Sh" id="ZFS_API"><a class="permalink" href="#ZFS_API">ZFS
+  API</a></h1>
+<h2 class="Ss" title="Ss" id="Function_Arguments"><a class="permalink" href="#Function_Arguments">Function
+  Arguments</a></h2>
+Each API function takes a fixed set of required positional arguments and
+  optional keyword arguments. For example, the destroy function takes a single
+  positional string argument (the name of the dataset to destroy) and an
+  optional &quot;defer&quot; keyword boolean argument. When using parentheses to
+  specify the arguments to a Lua function, only positional arguments can be
+  used:
+<div class="Pp"></div>
+<div class="Bd Bd-indent">
+<pre class="Li">
+zfs.sync.destroy(&quot;rpool@snap&quot;)
+</pre>
+</div>
+<div class="Pp"></div>
+To use keyword arguments, functions must be called with a single argument that
+  is a Lua table containing entries mapping integers to positional arguments and
+  strings to keyword arguments:
+<div class="Pp"></div>
+<div class="Bd Bd-indent">
+<pre class="Li">
+zfs.sync.destroy({1=&quot;rpool@snap&quot;, defer=true})
+</pre>
+</div>
+<div class="Pp"></div>
+The Lua language allows curly braces to be used in place of parenthesis as
+  syntactic sugar for this calling convention:
+<div class="Pp"></div>
+<div class="Bd Bd-indent">
+<pre class="Li">
+zfs.sync.snapshot{&quot;rpool@snap&quot;, defer=true}
+</pre>
+</div>
+<h2 class="Ss" title="Ss" id="Function_Return_Values"><a class="permalink" href="#Function_Return_Values">Function
+  Return Values</a></h2>
+If an API function succeeds, it returns 0. If it fails, it returns an error code
+  and the channel program continues executing. API functions do not generate
+  Fatal Errors except in the case of an unrecoverable internal file system
+  error.
+<div class="Pp"></div>
+In addition to returning an error code, some functions also return extra details
+  describing what caused the error. This extra description is given as a second
+  return value, and will always be a Lua table, or Nil if no error details were
+  returned. Different keys will exist in the error details table depending on
+  the function and error case. Any such function may be called expecting a
+  single return value:
+<div class="Pp"></div>
+<div class="Bd Bd-indent">
+<pre class="Li">
+errno = zfs.sync.promote(dataset)
+</pre>
+</div>
+<div class="Pp"></div>
+Or, the error details can be retrieved:
+<div class="Pp"></div>
+<div class="Bd Bd-indent">
+<pre class="Li">
+errno, details = zfs.sync.promote(dataset) 
+if (errno == EEXIST) then 
+    assert(details ~= Nil) 
+    list_of_conflicting_snapshots = details 
+end
+</pre>
+</div>
+<div class="Pp"></div>
+The following global aliases for API function error return codes are defined for
+  use in channel programs:
+<div class="Pp"></div>
+<div class="Bd Bd-indent">
+<pre class="Li">
+EPERM     ECHILD      ENODEV      ENOSPC 
+ENOENT    EAGAIN      ENOTDIR     ESPIPE 
+ESRCH     ENOMEM      EISDIR      EROFS 
+EINTR     EACCES      EINVAL      EMLINK 
+EIO       EFAULT      ENFILE      EPIPE 
+ENXIO     ENOTBLK     EMFILE      EDOM 
+E2BIG     EBUSY       ENOTTY      ERANGE 
+ENOEXEC   EEXIST      ETXTBSY     EDQUOT 
+EBADF     EXDEV       EFBIG
+</pre>
+</div>
+<h2 class="Ss" title="Ss" id="API_Functions"><a class="permalink" href="#API_Functions">API
+  Functions</a></h2>
+For detailed descriptions of the exact behavior of any zfs administrative
+  operations, see the main <a href="../8/zfs.8.html" class="Xr">zfs(8)</a> manual page.
+<dl class="Bl-tag">
+  <dt><i class="Em" title="Em">zfs.debug(msg)</i></dt>
+  <dd>Record a debug message in the zfs_dbgmsg log. A log of these messages can
+      be printed via mdb's &quot;::zfs_dbgmsg&quot; command, or can be monitored
+      live by running:
+    <div class="Pp"></div>
+    <div class="Bd Bd-indent">
+    <pre class="Li">
+  dtrace -n 'zfs-dbgmsg{trace(stringof(arg0))}'
+    </pre>
+    </div>
+    <div class="Pp"></div>
+    msg (string)
+    <div class="Bd Bd-indent">Debug message to be printed.</div>
+  </dd>
+  <dt><i class="Em" title="Em">zfs.exists(dataset)</i></dt>
+  <dd>Returns true if the given dataset exists, or false if it doesn't. A fatal
+      error will be thrown if the dataset is not in the target pool. That is, in
+      a channel program running on rpool,
+      zfs.exists(&quot;rpool/nonexistent_fs&quot;) returns false, but
+      zfs.exists(&quot;somepool/fs_that_may_exist&quot;) will error.
+    <div class="Pp"></div>
+    dataset (string)
+    <div class="Bd Bd-indent">Dataset to check for existence. Must be in the
+      target pool.</div>
+  </dd>
+  <dt><i class="Em" title="Em">zfs.get_prop(dataset, property)</i></dt>
+  <dd>Returns two values. First, a string, number or table containing the
+      property value for the given dataset. Second, a string containing the
+      source of the property (i.e. the name of the dataset in which it was set
+      or nil if it is readonly). Throws a Lua error if the dataset is invalid or
+      the property doesn't exist. Note that Lua only supports int64 number types
+      whereas ZFS number properties are uint64. This means very large values
+      (like guid) may wrap around and appear negative.
+    <div class="Pp"></div>
+    dataset (string)
+    <div class="Bd Bd-indent">Filesystem or snapshot path to retrieve properties
+      from.</div>
+    <div class="Pp"></div>
+    property (string)
+    <div class="Bd Bd-indent">Name of property to retrieve. All filesystem,
+      snapshot and volume properties are supported except for 'mounted' and
+      'iscsioptions.' Also supports the 'written@snap' and 'written#bookmark'
+      properties and the '&lt;user|group&gt;&lt;quota|used&gt;@id' properties,
+      though the id must be in numeric form.</div>
+  </dd>
+</dl>
+<dl class="Bl-tag">
+  <dt><b class="Sy" title="Sy">zfs.sync submodule</b></dt>
+  <dd>The sync submodule contains functions that modify the on-disk state. They
+      are executed in &quot;syncing context&quot;.
+    <div class="Pp"></div>
+    The available sync submodule functions are as follows:
+    <dl class="Bl-tag">
+      <dt><i class="Em" title="Em">zfs.sync.destroy(dataset,
+        [defer=true|false])</i></dt>
+      <dd>Destroy the given dataset. Returns 0 on successful destroy, or a
+          nonzero error code if the dataset could not be destroyed (for example,
+          if the dataset has any active children or clones).
+        <div class="Pp"></div>
+        dataset (string)
+        <div class="Bd Bd-indent">Filesystem or snapshot to be destroyed.</div>
+        <div class="Pp"></div>
+        [optional] defer (boolean)
+        <div class="Bd Bd-indent">Valid only for destroying snapshots. If set to
+          true, and the snapshot has holds or clones, allows the snapshot to be
+          marked for deferred deletion rather than failing.</div>
+      </dd>
+      <dt><i class="Em" title="Em">zfs.sync.inherit(dataset, property)</i></dt>
+      <dd>Clears the specified property in the given dataset, causing it to be
+          inherited from an ancestor, or restored to the default if no ancestor
+          property is set. The &#x2018;<code class="Li">zfs inherit
+          -S</code>&#x2019; option has not been implemented. Returns 0 on
+          success, or a nonzero error code if the property could not be cleared.
+        <div class="Pp"></div>
+        dataset (string)
+        <div class="Bd Bd-indent">Filesystem or snapshot containing the property
+          to clear.</div>
+        <div class="Pp"></div>
+        property (string)
+        <div class="Bd Bd-indent">The property to clear. Allowed properties are
+          the same as those for the <code class="Nm" title="Nm">zfs</code>
+          <code class="Cm" title="Cm">inherit</code> command.</div>
+      </dd>
+      <dt><i class="Em" title="Em">zfs.sync.promote(dataset)</i></dt>
+      <dd>Promote the given clone to a filesystem. Returns 0 on successful
+          promotion, or a nonzero error code otherwise. If EEXIST is returned,
+          the second return value will be an array of the clone's snapshots
+          whose names collide with snapshots of the parent filesystem.
+        <div class="Pp"></div>
+        dataset (string)
+        <div class="Bd Bd-indent">Clone to be promoted.</div>
+      </dd>
+      <dt><i class="Em" title="Em">zfs.sync.rollback(filesystem)</i></dt>
+      <dd>Rollback to the previous snapshot for a dataset. Returns 0 on
+          successful rollback, or a nonzero error code otherwise. Rollbacks can
+          be performed on filesystems or zvols, but not on snapshots or mounted
+          datasets. EBUSY is returned in the case where the filesystem is
+          mounted.
+        <div class="Pp"></div>
+        filesystem (string)
+        <div class="Bd Bd-indent">Filesystem to rollback.</div>
+      </dd>
+      <dt><i class="Em" title="Em">zfs.sync.set_prop(dataset, property,
+        value)</i></dt>
+      <dd>Sets the given property on a dataset. Currently only user properties
+          are supported. Returns 0 if the property was set, or a nonzero error
+          code otherwise.
+        <div class="Pp"></div>
+        dataset (string)
+        <div class="Bd Bd-indent">The dataset where the property will be
+          set.</div>
+        <div class="Pp"></div>
+        property (string)
+        <div class="Bd Bd-indent">The property to set. Only user properties are
+          supported.</div>
+        <div class="Pp"></div>
+        value (string)
+        <div class="Bd Bd-indent">The value of the property to be set.</div>
+      </dd>
+      <dt><i class="Em" title="Em">zfs.sync.snapshot(dataset)</i></dt>
+      <dd>Create a snapshot of a filesystem. Returns 0 if the snapshot was
+          successfully created, and a nonzero error code otherwise.
+        <div class="Pp"></div>
+        Note: Taking a snapshot will fail on any pool older than legacy version
+          27. To enable taking snapshots from ZCP scripts, the pool must be
+          upgraded.
+        <div class="Pp"></div>
+        dataset (string)
+        <div class="Bd Bd-indent">Name of snapshot to create.</div>
+      </dd>
+      <dt><i class="Em" title="Em">zfs.sync.bookmark(source,
+        newbookmark)</i></dt>
+      <dd>Create a bookmark of an existing source snapshot or bookmark. Returns
+          0 if the new bookmark was successfully created, and a nonzero error
+          code otherwise.
+        <div class="Pp"></div>
+        Note: Bookmarking requires the corresponding pool feature to be enabled.
+        <div class="Pp"></div>
+        source (string)
+        <div class="Bd Bd-indent">Full name of the existing snapshot or
+          bookmark.</div>
+        <div class="Pp"></div>
+        newbookmark (string)
+        <div class="Bd Bd-indent">Full name of the new bookmark.</div>
+      </dd>
+    </dl>
+  </dd>
+  <dt><b class="Sy" title="Sy">zfs.check submodule</b></dt>
+  <dd>For each function in the zfs.sync submodule, there is a corresponding
+      zfs.check function which performs a &quot;dry run&quot; of the same
+      operation. Each takes the same arguments as its zfs.sync counterpart and
+      returns 0 if the operation would succeed, or a non-zero error code if it
+      would fail, along with any other error details. That is, each has the same
+      behavior as the corresponding sync function except for actually executing
+      the requested change. For example,
+      <i class="Em" title="Em">zfs.check.destroy(&quot;fs&quot;)</i> returns 0
+      if <i class="Em" title="Em">zfs.sync.destroy(&quot;fs&quot;)</i> would
+      successfully destroy the dataset.
+    <div class="Pp"></div>
+    The available zfs.check functions are:
+    <dl class="Bl-tag">
+      <dt><i class="Em" title="Em">zfs.check.destroy(dataset,
+        [defer=true|false])</i></dt>
+      <dd style="width: auto;">&#x00A0;</dd>
+      <dt><i class="Em" title="Em">zfs.check.promote(dataset)</i></dt>
+      <dd style="width: auto;">&#x00A0;</dd>
+      <dt><i class="Em" title="Em">zfs.check.rollback(filesystem)</i></dt>
+      <dd style="width: auto;">&#x00A0;</dd>
+      <dt><i class="Em" title="Em">zfs.check.set_property(dataset, property,
+        value)</i></dt>
+      <dd style="width: auto;">&#x00A0;</dd>
+      <dt><i class="Em" title="Em">zfs.check.snapshot(dataset)</i></dt>
+      <dd style="width: auto;">&#x00A0;</dd>
+    </dl>
+  </dd>
+  <dt><b class="Sy" title="Sy">zfs.list submodule</b></dt>
+  <dd>The zfs.list submodule provides functions for iterating over datasets and
+      properties. Rather than returning tables, these functions act as Lua
+      iterators, and are generally used as follows:
+    <div class="Pp"></div>
+    <div class="Bd Bd-indent">
+    <pre class="Li">
+for child in zfs.list.children(&quot;rpool&quot;) do 
+    ... 
+end
+    </pre>
+    </div>
+    <div class="Pp"></div>
+    The available zfs.list functions are:
+    <dl class="Bl-tag">
+      <dt><i class="Em" title="Em">zfs.list.clones(snapshot)</i></dt>
+      <dd>Iterate through all clones of the given snapshot.
+        <div class="Pp"></div>
+        snapshot (string)
+        <div class="Bd Bd-indent">Must be a valid snapshot path in the current
+          pool.</div>
+      </dd>
+      <dt><i class="Em" title="Em">zfs.list.snapshots(dataset)</i></dt>
+      <dd>Iterate through all snapshots of the given dataset. Each snapshot is
+          returned as a string containing the full dataset name, e.g.
+          &quot;pool/fs@snap&quot;.
+        <div class="Pp"></div>
+        dataset (string)
+        <div class="Bd Bd-indent">Must be a valid filesystem or volume.</div>
+      </dd>
+      <dt><i class="Em" title="Em">zfs.list.children(dataset)</i></dt>
+      <dd>Iterate through all direct children of the given dataset. Each child
+          is returned as a string containing the full dataset name, e.g.
+          &quot;pool/fs/child&quot;.
+        <div class="Pp"></div>
+        dataset (string)
+        <div class="Bd Bd-indent">Must be a valid filesystem or volume.</div>
+      </dd>
+      <dt><i class="Em" title="Em">zfs.list.bookmarks(dataset)</i></dt>
+      <dd>Iterate through all bookmarks of the given dataset. Each bookmark is
+          returned as a string containing the full dataset name, e.g.
+          &quot;pool/fs#bookmark&quot;.
+        <div class="Pp"></div>
+        dataset (string)
+        <div class="Bd Bd-indent">Must be a valid filesystem or volume.</div>
+      </dd>
+      <dt><i class="Em" title="Em">zfs.list.holds(snapshot)</i></dt>
+      <dd>Iterate through all user holds on the given snapshot. Each hold is
+          returned as a pair of the hold's tag and the timestamp (in seconds
+          since the epoch) at which it was created.
+        <div class="Pp"></div>
+        snapshot (string)
+        <div class="Bd Bd-indent">Must be a valid snapshot.</div>
+      </dd>
+      <dt><i class="Em" title="Em">zfs.list.properties(dataset)</i></dt>
+      <dd>An alias for zfs.list.user_properties (see relevant entry).
+        <div class="Pp"></div>
+        dataset (string)
+        <div class="Bd Bd-indent">Must be a valid filesystem, snapshot, or
+          volume.</div>
+      </dd>
+      <dt><i class="Em" title="Em">zfs.list.user_properties(dataset)</i></dt>
+      <dd>Iterate through all user properties for the given dataset. For each
+          step of the iteration, output the property name, its value, and its
+          source. Throws a Lua error if the dataset is invalid.
+        <div class="Pp"></div>
+        dataset (string)
+        <div class="Bd Bd-indent">Must be a valid filesystem, snapshot, or
+          volume.</div>
+      </dd>
+      <dt><i class="Em" title="Em">zfs.list.system_properties(dataset)</i></dt>
+      <dd>Returns an array of strings, the names of the valid system (non-user
+          defined) properties for the given dataset. Throws a Lua error if the
+          dataset is invalid.
+        <div class="Pp"></div>
+        dataset (string)
+        <div class="Bd Bd-indent">Must be a valid filesystem, snapshot or
+          volume.</div>
+      </dd>
+    </dl>
+  </dd>
+</dl>
+<h1 class="Sh" title="Sh" id="EXAMPLES"><a class="permalink" href="#EXAMPLES">EXAMPLES</a></h1>
+<h2 class="Ss" title="Ss" id="Example_1"><a class="permalink" href="#Example_1">Example
+  1</a></h2>
+The following channel program recursively destroys a filesystem and all its
+  snapshots and children in a naive manner. Note that this does not involve any
+  error handling or reporting.
+<div class="Pp"></div>
+<div class="Bd Bd-indent">
+<pre class="Li">
+function destroy_recursive(root) 
+    for child in zfs.list.children(root) do 
+        destroy_recursive(child) 
+    end 
+    for snap in zfs.list.snapshots(root) do 
+        zfs.sync.destroy(snap) 
+    end 
+    zfs.sync.destroy(root) 
+end 
+destroy_recursive(&quot;pool/somefs&quot;)
+</pre>
+</div>
+<h2 class="Ss" title="Ss" id="Example_2"><a class="permalink" href="#Example_2">Example
+  2</a></h2>
+A more verbose and robust version of the same channel program, which properly
+  detects and reports errors, and also takes the dataset to destroy as a command
+  line argument, would be as follows:
+<div class="Pp"></div>
+<div class="Bd Bd-indent">
+<pre class="Li">
+succeeded = {} 
+failed = {} 
+ 
+function destroy_recursive(root) 
+    for child in zfs.list.children(root) do 
+        destroy_recursive(child) 
+    end 
+    for snap in zfs.list.snapshots(root) do 
+        err = zfs.sync.destroy(snap) 
+        if (err ~= 0) then 
+            failed[snap] = err 
+        else 
+            succeeded[snap] = err 
+        end 
+    end 
+    err = zfs.sync.destroy(root) 
+    if (err ~= 0) then 
+        failed[root] = err 
+    else 
+        succeeded[root] = err 
+    end 
+end 
+ 
+args = ... 
+argv = args[&quot;argv&quot;] 
+ 
+destroy_recursive(argv[1]) 
+ 
+results = {} 
+results[&quot;succeeded&quot;] = succeeded 
+results[&quot;failed&quot;] = failed 
+return results
+</pre>
+</div>
+<h2 class="Ss" title="Ss" id="Example_3"><a class="permalink" href="#Example_3">Example
+  3</a></h2>
+The following function performs a forced promote operation by attempting to
+  promote the given clone and destroying any conflicting snapshots.
+<div class="Pp"></div>
+<div class="Bd Bd-indent">
+<pre class="Li">
+function force_promote(ds) 
+   errno, details = zfs.check.promote(ds) 
+   if (errno == EEXIST) then 
+       assert(details ~= Nil) 
+       for i, snap in ipairs(details) do 
+           zfs.sync.destroy(ds .. &quot;@&quot; .. snap) 
+       end 
+   elseif (errno ~= 0) then 
+       return errno 
+   end 
+   return zfs.sync.promote(ds) 
+end
+</pre>
+</div>
+</div>
+<table class="foot">
+  <tr>
+    <td class="foot-date">January 26, 2021</td>
+    <td class="foot-os">Debian</td>
+  </tr>
+</table>
+</div></div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="zfs-project.8.html" class="btn btn-neutral float-right" title="zfs-project.8" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="zfs-mount.8.html" class="btn btn-neutral float-left" title="zfs-mount.8" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, OpenZFS.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,432 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Custom Packages &mdash; OpenZFS  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/mandoc.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Building ZFS" href="Building ZFS.html" />
+    <link rel="prev" title="Developer Resources" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/logo_main.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Getting Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Project and Community/index.html">Project and Community</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Developer Resources</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Custom Packages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#rhel-centos-and-fedora">RHEL, CentOS and Fedora</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#dkms">DKMS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#kmod">kmod</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#kabi-tracking-kmod">kABI-tracking kmod</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#debian-and-ubuntu">Debian and Ubuntu</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#kmod-1">kmod</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dkms-1">DKMS</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#get-the-source-code">Get the Source Code</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#released-tarball">Released Tarball</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#git-master-branch">Git Master Branch</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Building ZFS.html">Building ZFS</a></li>
+<li class="toctree-l2"><a class="reference external" href="http://build.zfsonlinux.org/tgrid?length=100&amp;branch=master&amp;category=Platforms&amp;rev_order=desc">Buildbot Status</a></li>
+<li class="toctree-l2"><a class="reference external" href="http://build.zfsonlinux.org/known-issues.html">Buildbot Issue Tracking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Buildbot Options.html">Buildbot Options</a></li>
+<li class="toctree-l2"><a class="reference external" href="http://build.zfsonlinux.org/openzfs-tracking.html">OpenZFS Tracking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="OpenZFS Patches.html">OpenZFS Patches</a></li>
+<li class="toctree-l2"><a class="reference internal" href="OpenZFS Exceptions.html">OpenZFS Exceptions</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://openzfs.org/wiki/Developer_resources">OpenZFS Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Git and GitHub for beginners.html">Git and GitHub for beginners (ZoL edition)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Performance and Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Basic Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../man/index.html">Man Pages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../License.html">License</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">OpenZFS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Developer Resources</a> &raquo;</li>
+        
+      <li>Custom Packages</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/Developer Resources/Custom Packages.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="custom-packages">
+<h1>Custom Packages<a class="headerlink" href="#custom-packages" title="Permalink to this headline">¶</a></h1>
+<p>The following instructions assume you are building from an official
+<a class="reference external" href="https://github.com/zfsonlinux/zfs/releases/latest">release tarball</a>
+(version 0.8.0 or newer) or directly from the <a class="reference external" href="https://github.com/zfsonlinux/zfs">git
+repository</a>. Most users should not
+need to do this and should preferentially use the distribution packages.
+As a general rule the distribution packages will be more tightly
+integrated, widely tested, and better supported. However, if your
+distribution of choice doesn’t provide packages, or you’re a developer
+and want to roll your own, here’s how to do it.</p>
+<p>The first thing to be aware of is that the build system is capable of
+generating several different types of packages. Which type of package
+you choose depends on what’s supported on your platform and exactly what
+your needs are.</p>
+<ul class="simple">
+<li><p><strong>DKMS</strong> packages contain only the source code and scripts for
+rebuilding the kernel modules. When the DKMS package is installed
+kernel modules will be built for all available kernels. Additionally,
+when the kernel is upgraded new kernel modules will be automatically
+built for that kernel. This is particularly convenient for desktop
+systems which receive frequent kernel updates. The downside is that
+because the DKMS packages build the kernel modules from source a full
+development environment is required which may not be appropriate for
+large deployments.</p></li>
+<li><p><strong>kmods</strong> packages are binary kernel modules which are compiled
+against a specific version of the kernel. This means that if you
+update the kernel you must compile and install a new kmod package. If
+you don’t frequently update your kernel, or if you’re managing a
+large number of systems, then kmod packages are a good choice.</p></li>
+<li><p><strong>kABI-tracking kmod</strong> Packages are similar to standard binary kmods
+and may be used with Enterprise Linux distributions like Red Hat and
+CentOS. These distributions provide a stable kABI (Kernel Application
+Binary Interface) which allows the same binary modules to be used
+with new versions of the distribution provided kernel.</p></li>
+</ul>
+<p>By default the build system will generate user packages and both DKMS
+and kmod style kernel packages if possible. The user packages can be
+used with either set of kernel packages and do not need to be rebuilt
+when the kernel is updated. You can also streamline the build process by
+building only the DKMS or kmod packages as shown below.</p>
+<p>Be aware that when building directly from a git repository you must
+first run the <em>autogen.sh</em> script to create the <em>configure</em> script. This
+will require installing the GNU autotools packages for your
+distribution. To perform any of the builds, you must install all the
+necessary development tools and headers for your distribution.</p>
+<p>It is important to note that if the development kernel headers for the
+currently running kernel aren’t installed, the modules won’t compile
+properly.</p>
+<ul class="simple">
+<li><p><a class="reference external" href="#red-hat-centos-and-fedora">Red Hat, CentOS and Fedora</a></p></li>
+<li><p><a class="reference external" href="#debian-and-ubuntu">Debian and Ubuntu</a></p></li>
+</ul>
+<div class="section" id="rhel-centos-and-fedora">
+<h2>RHEL, CentOS and Fedora<a class="headerlink" href="#rhel-centos-and-fedora" title="Permalink to this headline">¶</a></h2>
+<p>Make sure that the required packages are installed to build the latest
+ZFS 0.8 release:</p>
+<ul class="simple">
+<li><p><strong>RHEL/CentOS 7</strong>:</p></li>
+</ul>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sudo yum install epel-release gcc make autoconf automake libtool rpm-build dkms libtirpc-devel libblkid-devel libuuid-devel libudev-devel openssl-devel zlib-devel libaio-devel libattr-devel elfutils-libelf-devel kernel-devel-<span class="k">$(</span>uname -r<span class="k">)</span> python python2-devel python-setuptools python-cffi libffi-devel
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>RHEL/CentOS 8, Fedora</strong>:</p></li>
+</ul>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sudo dnf install gcc make autoconf automake libtool rpm-build kernel-rpm-macros dkms libtirpc-devel libblkid-devel libuuid-devel libudev-devel openssl-devel zlib-devel libaio-devel libattr-devel elfutils-libelf-devel kernel-devel-<span class="k">$(</span>uname -r<span class="k">)</span> python3 python3-devel python3-setuptools python3-cffi libffi-devel
+</pre></div>
+</div>
+<p><a class="reference external" href="#get-the-source-code">Get the source code</a>.</p>
+<div class="section" id="dkms">
+<h3>DKMS<a class="headerlink" href="#dkms" title="Permalink to this headline">¶</a></h3>
+<p>Building rpm-based DKMS and user packages can be done as follows:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> zfs
+$ ./configure
+$ make -j1 rpm-utils rpm-dkms
+$ sudo yum localinstall *.<span class="k">$(</span>uname -p<span class="k">)</span>.rpm *.noarch.rpm
+</pre></div>
+</div>
+</div>
+<div class="section" id="kmod">
+<h3>kmod<a class="headerlink" href="#kmod" title="Permalink to this headline">¶</a></h3>
+<p>The key thing to know when building a kmod package is that a specific
+Linux kernel must be specified. At configure time the build system will
+make an educated guess as to which kernel you want to build against.
+However, if configure is unable to locate your kernel development
+headers, or you want to build against a different kernel, you must
+specify the exact path with the <em>–with-linux</em> and <em>–with-linux-obj</em>
+options.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> zfs
+$ ./configure
+$ make -j1 rpm-utils rpm-kmod
+$ sudo yum localinstall *.<span class="k">$(</span>uname -p<span class="k">)</span>.rpm
+</pre></div>
+</div>
+</div>
+<div class="section" id="kabi-tracking-kmod">
+<h3>kABI-tracking kmod<a class="headerlink" href="#kabi-tracking-kmod" title="Permalink to this headline">¶</a></h3>
+<p>The process for building kABI-tracking kmods is almost identical to for
+building normal kmods. However, it will only produce binaries which can
+be used by multiple kernels if the distribution supports a stable kABI.
+In order to request kABI-tracking package the <em>–with-spec=redhat</em>
+option must be passed to configure.</p>
+<p><strong>NOTE:</strong> This type of package is not available for Fedora.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> zfs
+$ ./configure --with-spec<span class="o">=</span>redhat
+$ make -j1 rpm-utils rpm-kmod
+$ sudo yum localinstall *.<span class="k">$(</span>uname -p<span class="k">)</span>.rpm
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="debian-and-ubuntu">
+<h2>Debian and Ubuntu<a class="headerlink" href="#debian-and-ubuntu" title="Permalink to this headline">¶</a></h2>
+<p>Make sure that the required packages are installed:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sudo apt install build-essential autoconf automake libtool gawk alien fakeroot dkms libblkid-dev uuid-dev libudev-dev libssl-dev zlib1g-dev libaio-dev libattr1-dev libelf-dev linux-headers-<span class="k">$(</span>uname -r<span class="k">)</span> python3 python3-dev python3-setuptools python3-cffi libffi-dev
+</pre></div>
+</div>
+<p><a class="reference external" href="#get-the-source-code">Get the source code</a>.</p>
+<div class="section" id="kmod-1">
+<span id="id1"></span><h3>kmod<a class="headerlink" href="#kmod-1" title="Permalink to this headline">¶</a></h3>
+<p>The key thing to know when building a kmod package is that a specific
+Linux kernel must be specified. At configure time the build system will
+make an educated guess as to which kernel you want to build against.
+However, if configure is unable to locate your kernel development
+headers, or you want to build against a different kernel, you must
+specify the exact path with the <em>–with-linux</em> and <em>–with-linux-obj</em>
+options.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> zfs
+$ ./configure --enable-systemd
+$ make -j1 deb-utils deb-kmod
+$ <span class="k">for</span> file in *.deb<span class="p">;</span> <span class="k">do</span> sudo gdebi -q --non-interactive <span class="nv">$file</span><span class="p">;</span> <span class="k">done</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="dkms-1">
+<span id="id2"></span><h3>DKMS<a class="headerlink" href="#dkms-1" title="Permalink to this headline">¶</a></h3>
+<p>Building deb-based DKMS and user packages can be done as follows:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ sudo apt-get install dkms
+$ <span class="nb">cd</span> zfs
+$ ./configure --enable-systemd
+$ make -j1 deb-utils deb-dkms
+$ <span class="k">for</span> file in *.deb<span class="p">;</span> <span class="k">do</span> sudo gdebi -q --non-interactive <span class="nv">$file</span><span class="p">;</span> <span class="k">done</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="get-the-source-code">
+<h2>Get the Source Code<a class="headerlink" href="#get-the-source-code" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="released-tarball">
+<h3>Released Tarball<a class="headerlink" href="#released-tarball" title="Permalink to this headline">¶</a></h3>
+<p>The released tarball contains the latest fully tested and released
+version of ZFS. This is the preferred source code location for use in
+production systems. If you want to use the official released tarballs,
+then use the following commands to fetch and prepare the source.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ wget http://archive.zfsonlinux.org/downloads/zfsonlinux/zfs/zfs-x.y.z.tar.gz
+$ tar -xzf zfs-x.y.z.tar.gz
+</pre></div>
+</div>
+</div>
+<div class="section" id="git-master-branch">
+<h3>Git Master Branch<a class="headerlink" href="#git-master-branch" title="Permalink to this headline">¶</a></h3>
+<p>The Git <em>master</em> branch contains the latest version of the software, and
+will probably contain fixes that, for some reason, weren’t included in
+the released tarball. This is the preferred source code location for
+developers who intend to modify ZFS. If you would like to use the git
+version, you can clone it from Github and prepare the source like this.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/zfsonlinux/zfs.git
+$ <span class="nb">cd</span> zfs
+$ ./autogen.sh
+</pre></div>
+</div>
+<p>Once the source has been prepared you’ll need to decide what kind of
+packages you’re building and jump the to appropriate section above. Note
+that not all package types are supported for all platforms.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="Building ZFS.html" class="btn btn-neutral float-right" title="Building ZFS" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="index.html" class="btn btn-neutral float-left" title="Developer Resources" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, OpenZFS.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

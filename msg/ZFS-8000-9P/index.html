@@ -1,0 +1,374 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Message ID: ZFS-8000-9P &mdash; OpenZFS  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme_overrides.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/mandoc.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Message ID: ZFS-8000-A5" href="../ZFS-8000-A5/index.html" />
+    <link rel="prev" title="Message ID: ZFS-8000-8A" href="../ZFS-8000-8A/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+          
+
+          
+            <a href="../../index.html">
+          
+
+          
+            
+            <img src="../../_static/logo_main.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../Getting Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Project and Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Developer Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Performance and Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Basic Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../man/index.html">Man Pages</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">ZFS Messages</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../ZFS-8000-14/index.html">Message ID: ZFS-8000-14</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ZFS-8000-2Q/index.html">Message ID: ZFS-8000-2Q</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ZFS-8000-3C/index.html">Message ID: ZFS-8000-3C</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ZFS-8000-4J/index.html">Message ID: ZFS-8000-4J</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ZFS-8000-5E/index.html">Message ID: ZFS-8000-5E</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ZFS-8000-6X/index.html">Message ID: ZFS-8000-6X</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ZFS-8000-72/index.html">Message ID: ZFS-8000-72</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ZFS-8000-8A/index.html">Message ID: ZFS-8000-8A</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Message ID: ZFS-8000-9P</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#failing-device-in-replicated-configuration">Failing device in replicated configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../ZFS-8000-A5/index.html">Message ID: ZFS-8000-A5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ZFS-8000-ER/index.html">Message ID: ZFS-8000-ER</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ZFS-8000-EY/index.html">Message ID: ZFS-8000-EY</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ZFS-8000-HC/index.html">Message ID: ZFS-8000-HC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ZFS-8000-JQ/index.html">Message ID: ZFS-8000-JQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ZFS-8000-K4/index.html">Message ID: ZFS-8000-K4</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../License.html">License</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">OpenZFS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">ZFS Messages</a> &raquo;</li>
+        
+      <li>Message ID: ZFS-8000-9P</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/msg/ZFS-8000-9P/index.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="message-id-zfs-8000-9p">
+<h1>Message ID: ZFS-8000-9P<a class="headerlink" href="#message-id-zfs-8000-9p" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="failing-device-in-replicated-configuration">
+<h2>Failing device in replicated configuration<a class="headerlink" href="#failing-device-in-replicated-configuration" title="Permalink to this headline">¶</a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 32%" />
+<col style="width: 68%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><strong>Type:</strong></p></td>
+<td><p>Error</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Severity:</strong></p></td>
+<td><p>Minor</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Description:</strong></p></td>
+<td><p>A device has experienced uncorrectable errors in a
+replicated configuration.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Automated Response:</strong></p></td>
+<td><p>ZFS has attempted to repair the affected data.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Impact:</strong></p></td>
+<td><p>The system is unaffected, though errors may
+indicate future failure.  Future errors may cause
+ZFS to automatically fault the device.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Suggested Action for System Administrator</p>
+<p>Run <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">status</span> <span class="pre">-x</span></code> to determine which pool has experienced errors:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># zpool status
+  pool: test
+ state: ONLINE
+status: One or more devices has experienced an unrecoverable error.  An
+        attempt was made to correct the error.  Applications are unaffected.
+action: Determine if the device needs to be replaced, and clear the errors
+        using &#39;zpool online&#39; or replace the device with &#39;zpool replace&#39;.
+   see: https://openzfs.github.io/openzfs-docs/msg/ZFS-8000-9P
+ scrub: none requested
+config:
+
+        NAME                  STATE     READ WRITE CKSUM
+        test                  ONLINE       0     0     0
+          mirror              ONLINE       0     0     0
+            c0t0d0            ONLINE       0     0     2
+            c0t0d1            ONLINE       0     0     0
+
+errors: No known data errors
+</pre></div>
+</div>
+<p>Find the device with a non-zero error count for READ, WRITE, or
+CKSUM.  This indicates that the device has experienced a read I/O
+error, write I/O error, or checksum validation error.  Because the
+device is part of a mirror or RAID-Z device, ZFS was able to recover
+from the error and subsequently repair the damaged data.</p>
+<p>If these errors persist over a period of time, ZFS may determine the
+device is faulty and mark it as such.  However, these error counts may
+or may not indicate that the device is unusable.  It depends on how
+the errors were caused, which the administrator can determine in
+advance of any ZFS diagnosis.  For example, the following cases will
+all produce errors that do not indicate potential device failure:</p>
+<ul class="simple">
+<li><p>A network attached device lost connectivity but has now
+recovered</p></li>
+<li><p>A device suffered from a bit flip, an expected event over long
+periods of time</p></li>
+<li><p>An administrator accidentally wrote over a portion of the disk
+using another program</p></li>
+</ul>
+<p>In these cases, the presence of errors does not indicate that the
+device is likely to fail in the future, and therefore does not need
+to be replaced.  If this is the case, then the device errors should be
+cleared using <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">clear</span></code>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># zpool clear test c0t0d0
+</pre></div>
+</div>
+<p>On the other hand, errors may very well indicate that the device has
+failed or is about to fail.  If there are continual I/O errors to a
+device that is otherwise attached and functioning on the system, it
+most likely needs to be replaced.  The administrator should check the
+system log for any driver messages that may indicate hardware
+failure.  If it is determined that the device needs to be replaced,
+then the <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">replace</span></code> command should be used:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># zpool replace test c0t0d0 c0t0d2
+</pre></div>
+</div>
+<p>This will attach the new device to the pool and begin resilvering
+data to it.  Once the resilvering process is complete, the old device
+will automatically be removed from the pool, at which point it can
+safely be removed from the system.  If the device needs to be replaced
+in-place (because there are no available spare devices), the original
+device can be removed and replaced with a new device, at which point
+a different form of <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">replace</span></code> can be used:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># zpool replace test c0t0d0
+</pre></div>
+</div>
+<p>This assumes that the original device at ‘c0t0d0’ has been replaced
+with a new device under the same path, and will be replaced
+appropriately.</p>
+<p>You can monitor the progress of the resilvering operation by using
+the <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">status</span> <span class="pre">-x</span></code> command:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># zpool status -x
+  pool: test
+ state: DEGRADED
+status: One or more devices is currently being replaced.  The pool may not be
+        providing the necessary level of replication.
+action: Wait for the resilvering operation to complete
+ scrub: resilver in progress, 0.14% done, 0h0m to go
+config:
+
+        NAME                  STATE     READ WRITE CKSUM
+        test                  ONLINE       0     0     0
+          mirror              ONLINE       0     0     0
+            replacing         ONLINE       0     0     0
+              c0t0d0          ONLINE       0     0     3
+              c0t0d2          ONLINE       0     0     0  58.5K resilvered
+            c0t0d1            ONLINE       0     0     0
+
+errors: No known data errors
+</pre></div>
+</div>
+<p class="rubric">Details</p>
+<p>The Message ID: <code class="docutils literal notranslate"><span class="pre">ZFS-8000-9P</span></code> indicates a device has exceeded the
+acceptable limit of errors allowed by the system.  See document
+<a class="reference external" href="http://web.archive.org/web/20090409151209/http://sunsolve.sun.com/search/document.do?assetkey=1-61-203768-1&amp;searchclause=203768/">203768</a>
+for additional information.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="../ZFS-8000-A5/index.html" class="btn btn-neutral float-right" title="Message ID: ZFS-8000-A5" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../ZFS-8000-8A/index.html" class="btn btn-neutral float-left" title="Message ID: ZFS-8000-8A" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, OpenZFS.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,489 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Buildbot Options &mdash; OpenZFS  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/mandoc.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="OpenZFS Patches" href="OpenZFS Patches.html" />
+    <link rel="prev" title="Building ZFS" href="Building ZFS.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/logo_main.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Getting Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Project and Community/index.html">Project and Community</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Developer Resources</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Custom Packages.html">Custom Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Building ZFS.html">Building ZFS</a></li>
+<li class="toctree-l2"><a class="reference external" href="http://build.zfsonlinux.org/tgrid?length=100&amp;branch=master&amp;category=Platforms&amp;rev_order=desc">Buildbot Status</a></li>
+<li class="toctree-l2"><a class="reference external" href="http://build.zfsonlinux.org/known-issues.html">Buildbot Issue Tracking</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Buildbot Options</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#choosing-builders">Choosing Builders</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#preventing-a-commit-from-being-built-and-tested">Preventing a commit from being built and tested.</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#submitting-a-commit-to-style-and-test-builders-only">Submitting a commit to STYLE and TEST builders only.</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#requiring-spl-versions">Requiring SPL Versions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#build-spl-from-a-specific-pull-request">Build SPL from a specific pull request</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#build-spl-branch-spl-branch-name-from-zfsonlinux-spl-repository">Build SPL branch <code class="docutils literal notranslate"><span class="pre">spl-branch-name</span></code> from <code class="docutils literal notranslate"><span class="pre">zfsonlinux/spl</span></code> repository</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#requiring-kernel-version">Requiring Kernel Version</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#build-linux-kernel-version-4-14">Build Linux Kernel Version 4.14</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#build-steps-overrides">Build Steps Overrides</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#skip-building-the-spl-and-build-lustre-without-ldiskfs">Skip building the SPL and build Lustre without ldiskfs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#build-zfs-only">Build ZFS Only</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#configuring-tests-with-the-test-file">Configuring Tests with the TEST File</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference external" href="http://build.zfsonlinux.org/openzfs-tracking.html">OpenZFS Tracking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="OpenZFS Patches.html">OpenZFS Patches</a></li>
+<li class="toctree-l2"><a class="reference internal" href="OpenZFS Exceptions.html">OpenZFS Exceptions</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://openzfs.org/wiki/Developer_resources">OpenZFS Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Git and GitHub for beginners.html">Git and GitHub for beginners (ZoL edition)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Performance and Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Basic Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../man/index.html">Man Pages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../License.html">License</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">OpenZFS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Developer Resources</a> &raquo;</li>
+        
+      <li>Buildbot Options</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/Developer Resources/Buildbot Options.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="buildbot-options">
+<h1>Buildbot Options<a class="headerlink" href="#buildbot-options" title="Permalink to this headline">¶</a></h1>
+<p>There are a number of ways to control the ZFS Buildbot at a commit
+level. This page provides a summary of various options that the ZFS
+Buildbot supports and how it impacts testing. More detailed information
+regarding its implementation can be found at the <a class="reference external" href="https://github.com/zfsonlinux/zfs-buildbot">ZFS Buildbot Github
+page</a>.</p>
+<div class="section" id="choosing-builders">
+<h2>Choosing Builders<a class="headerlink" href="#choosing-builders" title="Permalink to this headline">¶</a></h2>
+<p>By default, all commits in your ZFS pull request are compiled by the
+BUILD builders. Additionally, the top commit of your ZFS pull request is
+tested by TEST builders. However, there is the option to override which
+types of builder should be used on a per commit basis. In this case, you
+can add
+<code class="docutils literal notranslate"><span class="pre">Requires-builders:</span> <span class="pre">&lt;none|all|style|build|arch|distro|test|perf|coverage|unstable&gt;</span></code>
+to your commit message. A comma separated list of options can be
+provided. Supported options are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">all</span></code>: This commit should be built by all available builders</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">none</span></code>: This commit should not be built by any builders</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">style</span></code>: This commit should be built by STYLE builders</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">build</span></code>: This commit should be built by all BUILD builders</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">arch</span></code>: This commit should be built by BUILD builders tagged as
+‘Architectures’</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">distro</span></code>: This commit should be built by BUILD builders tagged as
+‘Distributions’</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">test</span></code>: This commit should be built and tested by the TEST builders
+(excluding the Coverage TEST builders)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">perf</span></code>: This commit should be built and tested by the PERF builders</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">coverage</span></code> : This commit should be built and tested by the Coverage
+TEST builders</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">unstable</span></code> : This commit should be built and tested by the Unstable
+TEST builders (currently only the Fedora Rawhide TEST builder)</p></li>
+</ul>
+<p>A couple of examples on how to use <code class="docutils literal notranslate"><span class="pre">Requires-builders:</span></code> in commit
+messages can be found below.</p>
+<div class="section" id="preventing-a-commit-from-being-built-and-tested">
+<span id="id1"></span><h3>Preventing a commit from being built and tested.<a class="headerlink" href="#preventing-a-commit-from-being-built-and-tested" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">This</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">commit</span> <span class="n">message</span>
+
+<span class="n">This</span> <span class="n">text</span> <span class="ow">is</span> <span class="n">part</span> <span class="n">of</span> <span class="n">the</span> <span class="n">commit</span> <span class="n">message</span> <span class="n">body</span><span class="o">.</span>
+
+<span class="n">Signed</span><span class="o">-</span><span class="n">off</span><span class="o">-</span><span class="n">by</span><span class="p">:</span> <span class="n">Contributor</span> <span class="o">&lt;</span><span class="n">contributor</span><span class="nd">@email</span><span class="o">.</span><span class="n">com</span><span class="o">&gt;</span>
+<span class="n">Requires</span><span class="o">-</span><span class="n">builders</span><span class="p">:</span> <span class="n">none</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="submitting-a-commit-to-style-and-test-builders-only">
+<span id="id2"></span><h3>Submitting a commit to STYLE and TEST builders only.<a class="headerlink" href="#submitting-a-commit-to-style-and-test-builders-only" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">This</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">commit</span> <span class="n">message</span>
+
+<span class="n">This</span> <span class="n">text</span> <span class="ow">is</span> <span class="n">part</span> <span class="n">of</span> <span class="n">the</span> <span class="n">commit</span> <span class="n">message</span> <span class="n">body</span><span class="o">.</span>
+
+<span class="n">Signed</span><span class="o">-</span><span class="n">off</span><span class="o">-</span><span class="n">by</span><span class="p">:</span> <span class="n">Contributor</span> <span class="o">&lt;</span><span class="n">contributor</span><span class="nd">@email</span><span class="o">.</span><span class="n">com</span><span class="o">&gt;</span>
+<span class="n">Requires</span><span class="o">-</span><span class="n">builders</span><span class="p">:</span> <span class="n">style</span> <span class="n">test</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="requiring-spl-versions">
+<h2>Requiring SPL Versions<a class="headerlink" href="#requiring-spl-versions" title="Permalink to this headline">¶</a></h2>
+<p>Currently, the ZFS Buildbot attempts to choose the correct SPL branch to
+build based on a pull request’s base branch. In the cases where a
+specific SPL version needs to be built, the ZFS buildbot supports
+specifying an SPL version for pull request testing. By opening a pull
+request against ZFS and adding <code class="docutils literal notranslate"><span class="pre">Requires-spl:</span></code> in a commit message,
+you can instruct the buildbot to use a specific SPL version. Below are
+examples of a commit messages that specify the SPL version.</p>
+<div class="section" id="build-spl-from-a-specific-pull-request">
+<h3>Build SPL from a specific pull request<a class="headerlink" href="#build-spl-from-a-specific-pull-request" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">This</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">commit</span> <span class="n">message</span>
+
+<span class="n">This</span> <span class="n">text</span> <span class="ow">is</span> <span class="n">part</span> <span class="n">of</span> <span class="n">the</span> <span class="n">commit</span> <span class="n">message</span> <span class="n">body</span><span class="o">.</span>
+
+<span class="n">Signed</span><span class="o">-</span><span class="n">off</span><span class="o">-</span><span class="n">by</span><span class="p">:</span> <span class="n">Contributor</span> <span class="o">&lt;</span><span class="n">contributor</span><span class="nd">@email</span><span class="o">.</span><span class="n">com</span><span class="o">&gt;</span>
+<span class="n">Requires</span><span class="o">-</span><span class="n">spl</span><span class="p">:</span> <span class="n">refs</span><span class="o">/</span><span class="n">pull</span><span class="o">/</span><span class="mi">123</span><span class="o">/</span><span class="n">head</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="build-spl-branch-spl-branch-name-from-zfsonlinux-spl-repository">
+<h3>Build SPL branch <code class="docutils literal notranslate"><span class="pre">spl-branch-name</span></code> from <code class="docutils literal notranslate"><span class="pre">zfsonlinux/spl</span></code> repository<a class="headerlink" href="#build-spl-branch-spl-branch-name-from-zfsonlinux-spl-repository" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">This</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">commit</span> <span class="n">message</span>
+
+<span class="n">This</span> <span class="n">text</span> <span class="ow">is</span> <span class="n">part</span> <span class="n">of</span> <span class="n">the</span> <span class="n">commit</span> <span class="n">message</span> <span class="n">body</span><span class="o">.</span>
+
+<span class="n">Signed</span><span class="o">-</span><span class="n">off</span><span class="o">-</span><span class="n">by</span><span class="p">:</span> <span class="n">Contributor</span> <span class="o">&lt;</span><span class="n">contributor</span><span class="nd">@email</span><span class="o">.</span><span class="n">com</span><span class="o">&gt;</span>
+<span class="n">Requires</span><span class="o">-</span><span class="n">spl</span><span class="p">:</span> <span class="n">spl</span><span class="o">-</span><span class="n">branch</span><span class="o">-</span><span class="n">name</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="requiring-kernel-version">
+<h2>Requiring Kernel Version<a class="headerlink" href="#requiring-kernel-version" title="Permalink to this headline">¶</a></h2>
+<p>Currently, Kernel.org builders will clone and build the master branch of
+Linux. In cases where a specific version of the Linux kernel needs to be
+built, the ZFS buildbot supports specifying the Linux kernel to be built
+via commit message. By opening a pull request against ZFS and adding
+<code class="docutils literal notranslate"><span class="pre">Requires-kernel:</span></code> in a commit message, you can instruct the buildbot
+to use a specific Linux kernel. Below is an example commit message that
+specifies a specific Linux kernel tag.</p>
+<div class="section" id="build-linux-kernel-version-4-14">
+<span id="build-linux-kernel-version-414"></span><h3>Build Linux Kernel Version 4.14<a class="headerlink" href="#build-linux-kernel-version-4-14" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">This</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">commit</span> <span class="n">message</span>
+
+<span class="n">This</span> <span class="n">text</span> <span class="ow">is</span> <span class="n">part</span> <span class="n">of</span> <span class="n">the</span> <span class="n">commit</span> <span class="n">message</span> <span class="n">body</span><span class="o">.</span>
+
+<span class="n">Signed</span><span class="o">-</span><span class="n">off</span><span class="o">-</span><span class="n">by</span><span class="p">:</span> <span class="n">Contributor</span> <span class="o">&lt;</span><span class="n">contributor</span><span class="nd">@email</span><span class="o">.</span><span class="n">com</span><span class="o">&gt;</span>
+<span class="n">Requires</span><span class="o">-</span><span class="n">kernel</span><span class="p">:</span> <span class="n">v4</span><span class="o">.</span><span class="mi">14</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="build-steps-overrides">
+<h2>Build Steps Overrides<a class="headerlink" href="#build-steps-overrides" title="Permalink to this headline">¶</a></h2>
+<p>Each builder will execute or skip build steps based on its default
+preferences. In some scenarios, it might be possible to skip various
+build steps. The ZFS buildbot supports overriding the defaults of all
+builders in a commit message. The list of available overrides are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Build-linux:</span> <span class="pre">&lt;Yes|No&gt;</span></code>: All builders should build Linux for this
+commit</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Build-lustre:</span> <span class="pre">&lt;Yes|No&gt;</span></code>: All builders should build Lustre for this
+commit</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Build-spl:</span> <span class="pre">&lt;Yes|No&gt;</span></code>: All builders should build the SPL for this
+commit</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Build-zfs:</span> <span class="pre">&lt;Yes|No&gt;</span></code>: All builders should build ZFS for this
+commit</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Built-in:</span> <span class="pre">&lt;Yes|No&gt;</span></code>: All Linux builds should build in SPL and ZFS</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Check-lint:</span> <span class="pre">&lt;Yes|No&gt;</span></code>: All builders should perform lint checks for
+this commit</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Configure-lustre:</span> <span class="pre">&lt;options&gt;</span></code>: Provide <code class="docutils literal notranslate"><span class="pre">&lt;options&gt;</span></code> as configure
+flags when building Lustre</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Configure-spl:</span> <span class="pre">&lt;options&gt;</span></code>: Provide <code class="docutils literal notranslate"><span class="pre">&lt;options&gt;</span></code> as configure
+flags when building the SPL</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Configure-zfs:</span> <span class="pre">&lt;options&gt;</span></code>: Provide <code class="docutils literal notranslate"><span class="pre">&lt;options&gt;</span></code> as configure
+flags when building ZFS</p></li>
+</ul>
+<p>A couple of examples on how to use overrides in commit messages can be
+found below.</p>
+<div class="section" id="skip-building-the-spl-and-build-lustre-without-ldiskfs">
+<h3>Skip building the SPL and build Lustre without ldiskfs<a class="headerlink" href="#skip-building-the-spl-and-build-lustre-without-ldiskfs" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">This</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">commit</span> <span class="n">message</span>
+
+<span class="n">This</span> <span class="n">text</span> <span class="ow">is</span> <span class="n">part</span> <span class="n">of</span> <span class="n">the</span> <span class="n">commit</span> <span class="n">message</span> <span class="n">body</span><span class="o">.</span>
+
+<span class="n">Signed</span><span class="o">-</span><span class="n">off</span><span class="o">-</span><span class="n">by</span><span class="p">:</span> <span class="n">Contributor</span> <span class="o">&lt;</span><span class="n">contributor</span><span class="nd">@email</span><span class="o">.</span><span class="n">com</span><span class="o">&gt;</span>
+<span class="n">Build</span><span class="o">-</span><span class="n">lustre</span><span class="p">:</span> <span class="n">Yes</span>
+<span class="n">Configure</span><span class="o">-</span><span class="n">lustre</span><span class="p">:</span> <span class="o">--</span><span class="n">disable</span><span class="o">-</span><span class="n">ldiskfs</span>
+<span class="n">Build</span><span class="o">-</span><span class="n">spl</span><span class="p">:</span> <span class="n">No</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="build-zfs-only">
+<h3>Build ZFS Only<a class="headerlink" href="#build-zfs-only" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">This</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">commit</span> <span class="n">message</span>
+
+<span class="n">This</span> <span class="n">text</span> <span class="ow">is</span> <span class="n">part</span> <span class="n">of</span> <span class="n">the</span> <span class="n">commit</span> <span class="n">message</span> <span class="n">body</span><span class="o">.</span>
+
+<span class="n">Signed</span><span class="o">-</span><span class="n">off</span><span class="o">-</span><span class="n">by</span><span class="p">:</span> <span class="n">Contributor</span> <span class="o">&lt;</span><span class="n">contributor</span><span class="nd">@email</span><span class="o">.</span><span class="n">com</span><span class="o">&gt;</span>
+<span class="n">Build</span><span class="o">-</span><span class="n">lustre</span><span class="p">:</span> <span class="n">No</span>
+<span class="n">Build</span><span class="o">-</span><span class="n">spl</span><span class="p">:</span> <span class="n">No</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="configuring-tests-with-the-test-file">
+<h2>Configuring Tests with the TEST File<a class="headerlink" href="#configuring-tests-with-the-test-file" title="Permalink to this headline">¶</a></h2>
+<p>At the top level of the ZFS source tree, there is the <a class="reference external" href="https://github.com/zfsonlinux/zfs/blob/master/TEST">TEST
+file</a> which
+contains variables that control if and how a specific test should run.
+Below is a list of each variable and a brief description of what each
+variable controls.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">TEST_PREPARE_WATCHDOG</span></code> - Enables the Linux kernel watchdog</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TEST_PREPARE_SHARES</span></code> - Start NFS and Samba servers</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TEST_SPLAT_SKIP</span></code> - Determines if <code class="docutils literal notranslate"><span class="pre">splat</span></code> testing is skipped</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TEST_SPLAT_OPTIONS</span></code> - Command line options to provide to <code class="docutils literal notranslate"><span class="pre">splat</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TEST_ZTEST_SKIP</span></code> - Determines if <code class="docutils literal notranslate"><span class="pre">ztest</span></code> testing is skipped</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TEST_ZTEST_TIMEOUT</span></code> - The length of time <code class="docutils literal notranslate"><span class="pre">ztest</span></code> should run</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TEST_ZTEST_DIR</span></code> - Directory where <code class="docutils literal notranslate"><span class="pre">ztest</span></code> will create vdevs</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TEST_ZTEST_OPTIONS</span></code> - Options to pass to <code class="docutils literal notranslate"><span class="pre">ztest</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TEST_ZTEST_CORE_DIR</span></code> - Directory for <code class="docutils literal notranslate"><span class="pre">ztest</span></code> to store core dumps</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TEST_ZIMPORT_SKIP</span></code> - Determines if <code class="docutils literal notranslate"><span class="pre">zimport</span></code> testing is skipped</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TEST_ZIMPORT_DIR</span></code> - Directory used during <code class="docutils literal notranslate"><span class="pre">zimport</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TEST_ZIMPORT_VERSIONS</span></code> - Source versions to test</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TEST_ZIMPORT_POOLS</span></code> - Names of the pools for <code class="docutils literal notranslate"><span class="pre">zimport</span></code> to use
+for testing</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TEST_ZIMPORT_OPTIONS</span></code> - Command line options to provide to
+<code class="docutils literal notranslate"><span class="pre">zimport</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TEST_XFSTESTS_SKIP</span></code> - Determines if <code class="docutils literal notranslate"><span class="pre">xfstest</span></code> testing is skipped</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TEST_XFSTESTS_URL</span></code> - URL to download <code class="docutils literal notranslate"><span class="pre">xfstest</span></code> from</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TEST_XFSTESTS_VER</span></code> - Name of the tarball to download from
+<code class="docutils literal notranslate"><span class="pre">TEST_XFSTESTS_URL</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TEST_XFSTESTS_POOL</span></code> - Name of pool to create and used by
+<code class="docutils literal notranslate"><span class="pre">xfstest</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TEST_XFSTESTS_FS</span></code> - Name of dataset for use by <code class="docutils literal notranslate"><span class="pre">xfstest</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TEST_XFSTESTS_VDEV</span></code> - Name of the vdev used by <code class="docutils literal notranslate"><span class="pre">xfstest</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TEST_XFSTESTS_OPTIONS</span></code> - Command line options to provide to
+<code class="docutils literal notranslate"><span class="pre">xfstest</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TEST_ZFSTESTS_SKIP</span></code> - Determines if <code class="docutils literal notranslate"><span class="pre">zfs-tests</span></code> testing is
+skipped</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TEST_ZFSTESTS_DIR</span></code> - Directory to store files and loopback devices</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TEST_ZFSTESTS_DISKS</span></code> - Space delimited list of disks that
+<code class="docutils literal notranslate"><span class="pre">zfs-tests</span></code> is allowed to use</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TEST_ZFSTESTS_DISKSIZE</span></code> - File size of file based vdevs used by
+<code class="docutils literal notranslate"><span class="pre">zfs-tests</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TEST_ZFSTESTS_ITERS</span></code> - Number of times <code class="docutils literal notranslate"><span class="pre">test-runner</span></code> should
+execute its set of tests</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TEST_ZFSTESTS_OPTIONS</span></code> - Options to provide <code class="docutils literal notranslate"><span class="pre">zfs-tests</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TEST_ZFSTESTS_RUNFILE</span></code> - The runfile to use when running
+<code class="docutils literal notranslate"><span class="pre">zfs-tests</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TEST_ZFSTESTS_TAGS</span></code> - List of tags to provide to <code class="docutils literal notranslate"><span class="pre">test-runner</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TEST_ZFSSTRESS_SKIP</span></code> - Determines if <code class="docutils literal notranslate"><span class="pre">zfsstress</span></code> testing is
+skipped</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TEST_ZFSSTRESS_URL</span></code> - URL to download <code class="docutils literal notranslate"><span class="pre">zfsstress</span></code> from</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TEST_ZFSSTRESS_VER</span></code> - Name of the tarball to download from
+<code class="docutils literal notranslate"><span class="pre">TEST_ZFSSTRESS_URL</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TEST_ZFSSTRESS_RUNTIME</span></code> - Duration to run <code class="docutils literal notranslate"><span class="pre">runstress.sh</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TEST_ZFSSTRESS_POOL</span></code> - Name of pool to create and use for
+<code class="docutils literal notranslate"><span class="pre">zfsstress</span></code> testing</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TEST_ZFSSTRESS_FS</span></code> - Name of dataset for use during <code class="docutils literal notranslate"><span class="pre">zfsstress</span></code>
+tests</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TEST_ZFSSTRESS_FSOPT</span></code> - File system options to provide to
+<code class="docutils literal notranslate"><span class="pre">zfsstress</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TEST_ZFSSTRESS_VDEV</span></code> - Directory to store vdevs for use during
+<code class="docutils literal notranslate"><span class="pre">zfsstress</span></code> tests</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TEST_ZFSSTRESS_OPTIONS</span></code> - Command line options to provide to
+<code class="docutils literal notranslate"><span class="pre">runstress.sh</span></code></p></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="OpenZFS Patches.html" class="btn btn-neutral float-right" title="OpenZFS Patches" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="Building ZFS.html" class="btn btn-neutral float-left" title="Building ZFS" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, OpenZFS.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

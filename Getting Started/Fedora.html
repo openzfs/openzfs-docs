@@ -1,0 +1,313 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Fedora &mdash; OpenZFS  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/mandoc.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FreeBSD" href="FreeBSD.html" />
+    <link rel="prev" title="Debian GNU Linux initrd documentation" href="Debian/Debian GNU Linux initrd documentation.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/logo_main.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Getting Started</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Arch Linux/index.html">Arch Linux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Debian/index.html">Debian</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Fedora</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#testing-repositories">Testing Repositories</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="FreeBSD.html">FreeBSD</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://wiki.gentoo.org/wiki/ZFS">Gentoo</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://nixos.wiki/wiki/NixOS_on_ZFS">NixOS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="openSUSE/index.html">openSUSE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RHEL and CentOS.html">RHEL and CentOS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Ubuntu/index.html">Ubuntu</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Project and Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Developer Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Performance and Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Basic Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../man/index.html">Man Pages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../License.html">License</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">OpenZFS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Getting Started</a> &raquo;</li>
+        
+      <li>Fedora</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/Getting Started/Fedora.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="fedora">
+<h1>Fedora<a class="headerlink" href="#fedora" title="Permalink to this headline">¶</a></h1>
+<p>Only <a class="reference external" href="https://en.wikipedia.org/wiki/Dynamic_Kernel_Module_Support">DKMS</a> style packages can be provided for Fedora from the official
+OpenZFS repository. This is because Fedora is a fast moving distribution
+which does not provide a stable kABI. These packages track the official
+OpenZFS tags and are updated as new versions are released. Packages are
+available for the following configurations:</p>
+<div class="line-block">
+<div class="line"><strong>Fedora Releases:</strong> 32, 33, 34</div>
+<div class="line"><strong>Architectures:</strong> x86_64</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Due to the release cycle of OpenZFS and Fedora’s rapid adoption of new
+kernels it may happen that you won’t be able to build DKMS packages for
+the most recent kernel update. If the <a class="reference external" href="https://github.com/openzfs/zfs/releases/latest">latest OpenZFS release</a> does
+not yet support the installed Fedora kernel you will have to pin your
+kernel to an earlier supported version.</p>
+</div>
+<p>To simplify installation a <em>zfs-release</em> package is provided which includes
+a zfs.repo configuration file and public signing key. All official
+OpenZFS packages are signed using this key, and by default dnf will verify a
+package’s signature before allowing it be to installed. Users are strongly
+encouraged to verify the authenticity of the ZFS on Linux public key using
+the fingerprint listed here.</p>
+<div class="line-block">
+<div class="line"><strong>Location:</strong> /etc/pki/rpm-gpg/RPM-GPG-KEY-zfsonlinux</div>
+<div class="line"><strong>Fedora 32 Package:</strong> <a class="reference external" href="https://zfsonlinux.org/fedora/zfs-release.fc32.noarch.rpm">zfs-release.fc32.noarch.rpm</a></div>
+<div class="line"><strong>Fedora 33 Package:</strong> <a class="reference external" href="https://zfsonlinux.org/fedora/zfs-release.fc33.noarch.rpm">zfs-release.fc33.noarch.rpm</a></div>
+<div class="line"><strong>Fedora 34 Package:</strong> <a class="reference external" href="https://zfsonlinux.org/fedora/zfs-release.fc34.noarch.rpm">zfs-release.fc34.noarch.rpm</a></div>
+<div class="line"><strong>Download from:</strong>
+<a class="reference external" href="https://pgp.mit.edu/pks/lookup?search=0xF14AB620&amp;op=index&amp;fingerprint=on">pgp.mit.edu</a></div>
+<div class="line"><strong>Fingerprint:</strong> C93A FFFD 9F3F 7B03 C310 CEB6 A9D5 A1C0 F14A B620</div>
+</div>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ sudo dnf install https://zfsonlinux.org/fedora/zfs-release<span class="k">$(</span>rpm -E %dist<span class="k">)</span>.noarch.rpm
+$ gpg --import --import-options show-only /etc/pki/rpm-gpg/RPM-GPG-KEY-zfsonlinux
+pub   rsa2048 <span class="m">2013</span>-03-21 <span class="o">[</span>SC<span class="o">]</span>
+      C93AFFFD9F3F7B03C310CEB6A9D5A1C0F14AB620
+uid                      ZFS on Linux &lt;zfs@zfsonlinux.org&gt;
+sub   rsa2048 <span class="m">2013</span>-03-21 <span class="o">[</span>E<span class="o">]</span>
+</pre></div>
+</div>
+<p>The OpenZFS packages should be installed with <code class="docutils literal notranslate"><span class="pre">dnf</span></code> on Fedora.  Note that
+it is important to make sure that the matching <em>kernel-devel</em> package is
+installed for the running kernel since DKMS requires it to build ZFS.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ sudo dnf install zfs
+</pre></div>
+</div>
+<p>If the Fedora provided <em>zfs-fuse</em> package is already installed on the
+system. Then the <code class="docutils literal notranslate"><span class="pre">dnf</span> <span class="pre">swap</span></code> command should be used to replace the
+existing fuse packages with the ZFS on Linux packages.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ sudo dnf swap zfs-fuse zfs
+</pre></div>
+</div>
+<p>By default the OpenZFS kernel modules are automatically loaded when a ZFS
+pool is detected. If you would prefer to always load the modules at boot
+time you must create an <code class="docutils literal notranslate"><span class="pre">/etc/modules-load.d/zfs.conf</span></code> file.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ sudo sh -c <span class="s2">&quot;echo zfs &gt;/etc/modules-load.d/zfs.conf&quot;</span>
+</pre></div>
+</div>
+<div class="section" id="testing-repositories">
+<h2>Testing Repositories<a class="headerlink" href="#testing-repositories" title="Permalink to this headline">¶</a></h2>
+<p>In addition to the primary <em>zfs</em> repository a <em>zfs-testing</em> repository
+is available. This repository, which is disabled by default, contains
+the latest version of OpenZFS which is under active development. These
+packages are made available in order to get feedback from users regarding
+the functionality and stability of upcoming releases. These packages
+<strong>should not</strong> be used on production systems. Packages from the testing
+repository can be installed as follows.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo dnf config-manager --enable zfs-testing
+$ sudo dnf install zfs
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="FreeBSD.html" class="btn btn-neutral float-right" title="FreeBSD" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="Debian/Debian GNU Linux initrd documentation.html" class="btn btn-neutral float-left" title="Debian GNU Linux initrd documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, OpenZFS.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
