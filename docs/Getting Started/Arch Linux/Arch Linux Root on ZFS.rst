@@ -1248,17 +1248,17 @@ GRUB with the following method:
 #. Ensure ``Slot 1 opened`` message
    is shown
 
-     .. code-block:: text
+   .. code-block:: text
 
-        Welcome to GRUB!
+      Welcome to GRUB!
 
-        error: no such cryptodisk found.
-        Attempting to decrypt master key...
-        Enter passphrase for hd0,gpt2 (c0987ea1a51049e9b3056622804de62a):
-        Slot 1 opened
-        error: disk `cryptouuid/47ed1b7eb0014bc9a70aede3d8714faf' not found.
-        Entering rescue mode...
-        grub rescue>
+      error: no such cryptodisk found.
+      Attempting to decrypt master key...
+      Enter passphrase for hd0,gpt2 (c0987ea1a51049e9b3056622804de62a):
+      Slot 1 opened
+      error: disk `cryptouuid/47ed1b7eb0014bc9a70aede3d8714faf' not found.
+      Entering rescue mode...
+      grub rescue>
 
    If ``error: access denied.`` is shown,
    try re-enter password with::
