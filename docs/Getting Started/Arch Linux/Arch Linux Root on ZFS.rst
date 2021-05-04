@@ -199,12 +199,6 @@ Preparations
 
     INST_HOST='archonzfs'
 
-   Set live system hostname, this will be used
-   in SSH keys and zpool::
-
-    hostnamectl set-hostname $INST_HOST
-    echo $INST_HOST > /etc/hostname
-
 #. Kernel variant
 
    Store the kernel variant in a variable.
@@ -1095,14 +1089,14 @@ GRUB Installation
        # add boot menu entries
        for i in ${DISK[@]}; do
         efibootmgr -cgp 1 -l "\EFI\arch\grubx64.efi" \
-        -L "arch-${i##*/}" -d ${i}-part1
+        -L "arch-${i##*/}" -d ${i}
        done
 
       If Secure Boot is enabled with PreLoader::
 
         for i in ${DISK[@]}; do
          efibootmgr -cgp 1 -l "\EFI\BOOT\BOOTX64.EFI" \
-         -L "arch-PreLoader-${i##*/}" -d ${i}-part1
+         -L "arch-PreLoader-${i##*/}" -d ${i}
         done
 
 #. If using BIOS booting, install GRUB to every disk::
@@ -1176,10 +1170,14 @@ This section is also applicable if you are in
    out with::
 
     echo $root
+    # cryto0
+    # hd0,gpt2
 
    GRUB configuration is loaded from::
 
     echo $prefix
+    # (crypto0)/sys/BOOT/default@/grub
+    # (hd0,gpt2)/sys/BOOT/default@/grub
 
 #. List partitions by pressing tab key:
 
