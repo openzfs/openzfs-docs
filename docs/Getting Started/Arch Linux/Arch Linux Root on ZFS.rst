@@ -12,8 +12,11 @@ Overview
 Caution
 ~~~~~~~
 
-- This guide uses entire physical disks.
-- Multiple systems on one disk is not supported.
+- This guide wipes entire physical disks.
+- For advanced users, distros with ZFS support (Linux, FreeBSD)
+  can be manually installed in datasets.
+- Other operating system without ZFS support can be installed
+  in the reserved space.
 - Target disk will be wiped. Back up your data before continuing.
 - The target system, virtual or physical, must have at least 2GB RAM,
   or the DKMS module might fail to build.
@@ -221,11 +224,15 @@ Preparations
 
     INST_UUID=$(dd if=/dev/urandom bs=1 count=100 2>/dev/null | tr -dc 'a-z0-9' | cut -c-6)
 
+#. Identify this installation in ZFS filesystem path::
+
+    INST_ID=arch
+
 #. Target disk
 
    List available disks with::
 
-    fdisk -l /dev/disk/by-id/*
+    ls /dev/disk/by-id/*
 
    If using virtio as disk bus, use
    ``/dev/disk/by-path/*`` or ``/dev/vd*``.
@@ -249,6 +256,28 @@ Preparations
    hook treats ``:`` as argument separator without a means to
    escape this character.
 
+#. Set ESP size. ESP contains Live ISO for recovery,
+   as described `below <#enable-recovery-with-local-live-iso>`__::
+
+    INST_PARTSIZE_ESP=4 # in GB
+    #INST_PARTSIZE_ESP=1 # if local recovery is not needed
+
+#. Set boot pool size. To avoid running out of space while using
+   boot environments, the minimum is 4GB. Adjust the size if you
+   intend to use multiple kernel/distros::
+
+    INST_PARTSIZE_BPOOL=4
+
+#. Set swap size. It's `recommended <https://chrisdown.name/2018/01/02/in-defence-of-swap.html>`__
+   to setup a swap partition. If you intend to use hibernation,
+   the minimum should be no less than RAM size. Skip if swap is not needed::
+
+    INST_PARTSIZE_SWAP=8
+
+#. Reserve space at disk end, skip if not needed::
+
+    INST_PARTSIZE_RESERVE=
+
 System Installation
 -------------------
 
@@ -260,30 +289,27 @@ System Installation
      sgdisk --zap-all $i
 
      # EFI system partition; must be created
-     sgdisk -n1:1M:+1G -t1:EF00 $i
+     sgdisk -n1:1M:+${INST_PARTSIZE_ESP}G -t1:EF00 $i
 
      # Boot pool partition
-     sgdisk -n2:0:+4G -t2:BE00 $i
+     sgdisk -n2:0:+${INST_PARTSIZE_BPOOL}G -t2:BE00 $i
 
-     # with swap
-     sgdisk -n3:0:-8G -t3:BF00 $i
-     sgdisk -n4:0:0   -t4:8200 $i
+     # swap
+     if [ "${INST_PARTSIZE_SWAP}" != "" ]; then
+         sgdisk -n4:0:+${INST_PARTSIZE_SWAP}G -t4:8200 $i
+     fi
 
-     # without swap (not recommended)
-     #sgdisk -n3:0:0 -t3:BF00 $i
+     # root pool partition
+     if [ "${INST_PARTSIZE_RESERVE}" = "" ]; then
+         sgdisk -n3:0:0   -t3:BF00 $i
+     else
+         sgdisk -n3:0:-${INST_PARTSIZE_RESERVE}G -t3:BF00 $i
+     fi
 
      # with BIOS booting; can co-exist with EFI
      sgdisk -a1 -n5:24K:+1000K -t5:EF02 $i
 
      done
-
-   It's `recommended <https://chrisdown.name/2018/01/02/in-defence-of-swap.html>`__
-   to create a swap partition.
-
-   Adjust the swap partition size to your needs.
-   If hibernation is needed,
-   swap size should be same or larger than RAM.
-   Check RAM size with ``free -h``.
 
 #. When creating pools, for single disk installation, omit topology specification
    ``mirror``::
@@ -436,7 +462,7 @@ System Installation
     zfs create \
      -o canmount=off \
      -o mountpoint=none \
-     bpool_$INST_UUID/sys
+     bpool_$INST_UUID/$INST_ID
 
 #. Create system root container:
 
@@ -448,7 +474,7 @@ System Installation
       zfs create \
        -o canmount=off \
        -o mountpoint=none \
-       rpool_$INST_UUID/sys
+       rpool_$INST_UUID/$INST_ID
 
    - Encrypted:
 
@@ -485,57 +511,57 @@ System Installation
         -o encryption=on \
         -o keylocation=prompt \
         -o keyformat=passphrase \
-        rpool_$INST_UUID/sys
+        rpool_$INST_UUID/$INST_ID
 
 #. Create container datasets::
 
-    zfs create -o canmount=off -o mountpoint=none bpool_$INST_UUID/sys/BOOT
-    zfs create -o canmount=off -o mountpoint=none rpool_$INST_UUID/sys/ROOT
-    zfs create -o canmount=off -o mountpoint=none rpool_$INST_UUID/sys/DATA
+    zfs create -o canmount=off -o mountpoint=none bpool_$INST_UUID/$INST_ID/BOOT
+    zfs create -o canmount=off -o mountpoint=none rpool_$INST_UUID/$INST_ID/ROOT
+    zfs create -o canmount=off -o mountpoint=none rpool_$INST_UUID/$INST_ID/DATA
 
 #. Create root and boot filesystem datasets::
 
-     zfs create -o mountpoint=legacy -o canmount=noauto bpool_$INST_UUID/sys/BOOT/default
-     zfs create -o mountpoint=/      -o canmount=off    rpool_$INST_UUID/sys/DATA/default
-     zfs create -o mountpoint=/      -o canmount=noauto rpool_$INST_UUID/sys/ROOT/default
+     zfs create -o mountpoint=legacy -o canmount=noauto bpool_$INST_UUID/$INST_ID/BOOT/default
+     zfs create -o mountpoint=/      -o canmount=off    rpool_$INST_UUID/$INST_ID/DATA/default
+     zfs create -o mountpoint=/      -o canmount=noauto rpool_$INST_UUID/$INST_ID/ROOT/default
 
 #. Mount root and boot filesystem datasets::
 
-    zfs mount rpool_$INST_UUID/sys/ROOT/default
+    zfs mount rpool_$INST_UUID/$INST_ID/ROOT/default
     mkdir /mnt/boot
-    mount -t zfs bpool_$INST_UUID/sys/BOOT/default /mnt/boot
+    mount -t zfs bpool_$INST_UUID/$INST_ID/BOOT/default /mnt/boot
 
 #. Create datasets to separate user data from root filesystem::
 
     # create containers
     for i in {usr,var,var/lib};
     do
-        zfs create -o canmount=off rpool_$INST_UUID/sys/DATA/default/$i
+        zfs create -o canmount=off rpool_$INST_UUID/$INST_ID/DATA/default/$i
     done
 
     for i in {home,root,srv,usr/local,var/log,var/spool};
     do
-        zfs create -o canmount=on rpool_$INST_UUID/sys/DATA/default/$i
+        zfs create -o canmount=on rpool_$INST_UUID/$INST_ID/DATA/default/$i
     done
 
     chmod 750 /mnt/root
 
 #. Create optional user data datasets to omit data from rollback::
 
-     zfs create -o canmount=on rpool_$INST_UUID/sys/DATA/default/var/games
-     zfs create -o canmount=on rpool_$INST_UUID/sys/DATA/default/var/www
+     zfs create -o canmount=on rpool_$INST_UUID/$INST_ID/DATA/default/var/games
+     zfs create -o canmount=on rpool_$INST_UUID/$INST_ID/DATA/default/var/www
      # for GNOME
-     zfs create -o canmount=on rpool_$INST_UUID/sys/DATA/default/var/lib/AccountsService
+     zfs create -o canmount=on rpool_$INST_UUID/$INST_ID/DATA/default/var/lib/AccountsService
      # for Docker
-     zfs create -o canmount=on rpool_$INST_UUID/sys/DATA/default/var/lib/docker
+     zfs create -o canmount=on rpool_$INST_UUID/$INST_ID/DATA/default/var/lib/docker
      # for NFS
-     zfs create -o canmount=on rpool_$INST_UUID/sys/DATA/default/var/lib/nfs
+     zfs create -o canmount=on rpool_$INST_UUID/$INST_ID/DATA/default/var/lib/nfs
      # for LXC
-     zfs create -o canmount=on rpool_$INST_UUID/sys/DATA/default/var/lib/lxc
+     zfs create -o canmount=on rpool_$INST_UUID/$INST_ID/DATA/default/var/lib/lxc
      # for LibVirt
-     zfs create -o canmount=on rpool_$INST_UUID/sys/DATA/default/var/lib/libvirt
+     zfs create -o canmount=on rpool_$INST_UUID/$INST_ID/DATA/default/var/lib/libvirt
      ##other application
-     # zfs create -o canmount=on rpool_$INST_UUID/sys/DATA/default/var/lib/$name
+     # zfs create -o canmount=on rpool_$INST_UUID/$INST_ID/DATA/default/var/lib/$name
 
    Add other datasets when needed, such as PostgreSQL.
 
@@ -609,7 +635,7 @@ System Configuration
 
 #. Generate fstab::
 
-    echo bpool_$INST_UUID/sys/BOOT/default /boot zfs rw,xattr,posixacl 0 0 >> /mnt/etc/fstab
+    echo bpool_$INST_UUID/$INST_ID/BOOT/default /boot zfs rw,xattr,posixacl 0 0 >> /mnt/etc/fstab
 
     for i in ${DISK[@]}; do
        echo UUID=$(blkid -s UUID -o value ${i}-part1) /boot/efis/${i##*/}-part1 vfat \
@@ -678,7 +704,8 @@ System Configuration
 
     echo "INST_PRIMARY_DISK=$INST_PRIMARY_DISK
     INST_LINVAR=$INST_LINVAR
-    INST_UUID=$INST_UUID" > /mnt/root/chroot
+    INST_UUID=$INST_UUID
+    INST_ID=$INST_ID" > /mnt/root/chroot
     echo DISK=\($(for i in ${DISK[@]}; do printf "$i "; done)\) >> /mnt/root/chroot
     arch-chroot /mnt bash --login
 
@@ -728,7 +755,7 @@ Optional Configuration
 Skip to `bootloader <#bootloader>`__ section if
 no optional configuration is needed.
 
-Boot Environment Manager
+Boot environment manager
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 A boot environment is a dataset which contains a bootable
@@ -785,7 +812,7 @@ Supply password with SSH
 
     mkinitcpio -P
 
-Encrypted boot pool
+Encrypt boot pool
 ~~~~~~~~~~~~~~~~~~~
 
 If encryption is enabled earlier, boot pool can be optionally encrypted.
@@ -803,15 +830,15 @@ and persistent encrypted swap.
 
     mkdir /etc/cryptkey.d/
     chmod 700 /etc/cryptkey.d/
-    dd bs=32 count=1 if=/dev/urandom of=/etc/cryptkey.d/rpool_$INST_UUID-key-zfs
+    dd bs=32 count=1 if=/dev/urandom of=/etc/cryptkey.d/rpool_$INST_UUID-${INST_ID}-key-zfs
     for i in ${DISK[@]}; do
       dd bs=32 count=1 if=/dev/urandom of=/etc/cryptkey.d/${i##*/}-part2-bpool_$INST_UUID-key-luks
     done
 
 #. Backup boot pool::
 
-    zfs snapshot -r bpool_$INST_UUID/sys@pre-luks
-    zfs send -Rv bpool_$INST_UUID/sys@pre-luks > /root/bpool_$INST_UUID-pre-luks
+    zfs snapshot -r bpool_$INST_UUID/$INST_ID@pre-luks
+    zfs send -Rv bpool_$INST_UUID/$INST_ID@pre-luks > /root/bpool_$INST_UUID-${INST_ID}-pre-luks
 
 #. Unmount EFI partition::
 
@@ -863,8 +890,8 @@ and persistent encrypted swap.
 
 #. Restore boot pool backup::
 
-    cat /root/bpool_$INST_UUID-pre-luks | zfs recv bpool_$INST_UUID/sys
-    rm /root/bpool_$INST_UUID-pre-luks
+    zfs recv bpool_${INST_UUID}/${INST_ID} < /root/bpool_$INST_UUID-${INST_ID}-pre-luks
+    rm /root/bpool_$INST_UUID-${INST_ID}-pre-luks
 
 #. Mount boot dataset and EFI partitions::
 
@@ -878,9 +905,9 @@ and persistent encrypted swap.
 #. Change root pool password to key file::
 
     zfs change-key -l \
-    -o keylocation=file:///etc/cryptkey.d/rpool_$INST_UUID-key-zfs \
+    -o keylocation=file:///etc/cryptkey.d/rpool_$INST_UUID-${INST_ID}-key-zfs \
     -o keyformat=raw \
-    rpool_$INST_UUID/sys
+    rpool_$INST_UUID/$INST_ID
 
 #. Import encrypted boot pool from ``/dev/mapper``::
 
@@ -927,7 +954,7 @@ and persistent encrypted swap.
 
      echo "GRUB_ENABLE_CRYPTODISK=y" >> /etc/default/grub
 
-#. **Important**: Back up root dataset key ``/etc/cryptkey.d/rpool_$INST_UUID-key-zfs``
+#. **Important**: Back up root dataset key ``/etc/cryptkey.d/rpool_$INST_UUID-${INST_ID}-key-zfs``
    to a secure location.
 
    In the possible event of LUKS container corruption,
@@ -983,6 +1010,85 @@ and persistent encrypted swap.
    Do not touch anything on disk while the computer is
    in hibernation, see `kernel documentation
    <https://www.kernel.org/doc/html/latest/power/swsusp.html>`__.
+
+Enable recovery with local live ISO
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+GRUB `can be configured <https://wiki.archlinux.org/title/Multiboot_USB_drive>`__ to boot ISO file directly:
+
+- GRUB mounts ISO as `loopback device <https://www.gnu.org/software/grub/manual/grub/html_node/loopback.html>`__.
+- GRUB loads vmlinuz and initrd from loopback device.
+- The location of ISO is passed to initrd `archiso_loop_mnt
+  <https://gitlab.archlinux.org/archlinux/archiso/-/blob/master/archiso/initcpio/hooks/archiso_loop_mnt>`__
+  hook.
+
+In this section, we will download Live ISO to EFI system partition and configure GRUB to
+boot from it. This enables system recovery and re-installation.
+
+#. Download Live iso to EFI system partition::
+
+    mkdir /boot/efi/iso
+    cd /boot/efi/iso
+    curl -O https://mirrors.ocf.berkeley.edu/archlinux/iso/2021.05.01/archlinux-2021.05.01-x86_64.iso
+    curl -O https://archlinux.org/iso/2021.05.01/archlinux-2021.05.01-x86_64.iso.sig
+    gpg --auto-key-retrieve --verify archlinux-2021.05.01-x86_64.iso.sig
+
+   Additionally you can build your own live image
+   with `archiso package <https://gitlab.archlinux.org/archlinux/archiso>`__.
+   An unofficial live image with built-in ZFS support is available
+   `here <https://gitlab.com/m_zhou/archiso>`__.
+
+   GRUB supports verifying checksum.
+   See `manual page
+   <https://www.gnu.org/software/grub/manual/grub/html_node/Command_002dline-and-menu-entry-commands.html#Command_002dline-and-menu-entry-commands>`__
+   for details.
+
+#. Add custom GRUB entry for ``/boot/efi/iso/archlinux-*.iso``::
+
+    tee /etc/grub.d/43_archiso <<-'FOE'
+    #!/bin/sh
+    ESP_MNT=/boot/efi
+    ISO_REL=/iso
+    ISO_PATH=${ESP_MNT}/${ISO_REL}
+    # df command needs warm up due to systemd mount-on-demand
+    ls $ISO_PATH 1> /dev/null
+    ESP_UUID=$(blkid -s UUID -o value $(df --output=source ${ISO_PATH} | tail -n +2))
+    cat <<EOF
+    submenu 'archiso' {
+        configfile \$prefix/archiso.cfg
+    }
+    EOF
+    tee /boot/grub/archiso.cfg 1> /dev/null <<EOF
+    insmod search_fs_uuid
+    set isorootuuid=$ESP_UUID
+    search --fs-uuid --no-floppy --set=isopart \$isorootuuid
+    set isopath=$ISO_REL
+    EOF
+    ISO_NUM=0
+    for isofile in $ISO_PATH/archlinux-*.iso; do
+        if [ "$ISO_NUM" -gt 300 ]; then break; fi
+        isoname=${isofile##*/}
+    tee -a /boot/grub/archiso.cfg 1> /dev/null <<EOF
+    menuentry "$isoname" {
+        loopback loop0 (\$isopart)\$isopath/$isoname
+        linux (loop0)/arch/boot/x86_64/vmlinuz-linux earlymodules=loop img_dev=/dev/disk/by-uuid/\$isorootuuid img_loop=\$isopath/$isoname
+        initrd (loop0)/arch/boot/intel-ucode.img (loop0)/arch/boot/amd-ucode.img (loop0)/arch/boot/x86_64/initramfs-linux.img
+    }
+    EOF
+    ISO_NUM=$(( $ISO_NUM + 1 ))
+    done
+    FOE
+    chmod +x /etc/grub.d/43_archiso
+
+   You can also boot Live ISO for other distros, see `glim
+   <https://github.com/thias/glim/tree/master/grub2>`__
+   configurations.
+
+   ISO is not mirrored to other devices due to its size.
+   Change ``$ESP_MNT`` to adapt to other ESP.
+
+#. Generate ``grub.cfg`` in the next step. If a new file
+   has been added later, regenerate ``grub.cfg``.
 
 Bootloader
 ----------------------------
@@ -1076,6 +1182,8 @@ GRUB Installation
 
          # OK -> Enroll Hash -> loader.efi -> Yes -> Reboot System -> Yes
 
+        Re-enrolling the hash is needed if GRUB has been reinstalled.
+
    #. If using multi-disk setup, mirror EFI system partitions::
 
        # mirror ESP content
@@ -1118,8 +1226,8 @@ Finish Installation
 
 #. Take a snapshot of the clean installation for future use::
 
-    zfs snapshot -r rpool_$INST_UUID/sys@install
-    zfs snapshot -r bpool_$INST_UUID/sys@install
+    zfs snapshot -r rpool_$INST_UUID/$INST_ID@install
+    zfs snapshot -r bpool_$INST_UUID/$INST_ID@install
 
 #. Unmount EFI system partition::
 
@@ -1218,7 +1326,7 @@ This section is also applicable if you are in
        time 2021-05-03 12:14:08 Monday, UUID f14d7bdf89fe21fb - Sector size 512B -
        Total size 4192256KiB
 
-#. List boot environments nested inside ``bpool/sys/BOOT``::
+#. List boot environments nested inside ``bpool/$INST_ID/BOOT``::
 
      grub> ls (crypto0)/sys/BOOT
      @/ default/ be0/
@@ -1300,11 +1408,11 @@ Recovery
 
    If using password::
 
-     zfs load-key rpool_$INST_UUID/sys
+     zfs load-key rpool_$INST_UUID/$INST_ID
 
    If using keyfile::
 
-     zfs load-key -L file:///path/to/keyfile rpool_$INST_UUID/sys
+     zfs load-key -L file:///path/to/keyfile rpool_$INST_UUID/$INST_ID
 
 #. Find the current boot environment::
 
@@ -1313,7 +1421,7 @@ Recovery
 
 #. Mount root filesystem::
 
-     zfs mount rpool_$INST_UUID/sys/ROOT/$BE
+     zfs mount rpool_$INST_UUID/$INST_ID/ROOT/$BE
 
 #. chroot into the system::
 
