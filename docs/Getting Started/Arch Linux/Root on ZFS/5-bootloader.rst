@@ -50,7 +50,7 @@ Install GRUB
 
      mkinitcpio -P
 
-#. When not sure, install both legacy boot
+#. When in doubt, install both legacy boot
    and EFI.
 
 #. If using legacy booting, install GRUB to every disk::
@@ -113,6 +113,13 @@ This is optional.
 
    mv PreLoader.efi /boot/efi/EFI/BOOT/BOOTX64.EFI
    mv HashTool.efi /boot/efi/EFI/BOOT/
+
+   # mirror ESP content
+   ESP_MIRROR=$(mktemp -d)
+   cp -r /boot/efi/EFI $ESP_MIRROR
+   for i in /boot/efis/*; do
+    cp -r $ESP_MIRROR/EFI $i
+   done
 
    for i in ${DISK[@]}; do
     efibootmgr -cgp 1 -l "\EFI\BOOT\BOOTX64.EFI" \

@@ -2,8 +2,6 @@
 
 Overview
 ======================
-Before following this guide, you might want to read `index page <../index.html>`__.
-
 This document describes how to install Arch Linux with ZFS as root
 file system.
 
@@ -76,17 +74,49 @@ Dataset layout
 
 Encryption
 ~~~~~~~~~~
-User should be aware that, ZFS native encryption, used on root pool,
-does not encrypt some metadata of the datasets.
 
-ZFS native encryption also does not change master key when ``zfs change-key`` is invoked,
-it means that you must wipe the disk when password is compromised to protect confidentiality.
+- Swap
 
-See `zfs-load-key.8 <https://openzfs.github.io/openzfs-docs/man/8/zfs-load-key.8.html>`__
-and `zfs-change-key.8 <https://openzfs.github.io/openzfs-docs/man/8/zfs-change-key.8.html>`__ for more information.
+  Swap is always encrypted. By default, swap is encrypted
+  with plain dm-crypt with key generated from ``/dev/urandom``
+  at every boot. Swap content does not persist between reboots.
 
-Root dataset encryption is enabled at creation and can not be disabled later. If root dataset is protected
-with a passphrase and boot pool is not encrypted, then password can be supplied via SSH.
+  LUKS2-encrypted persistent swap can be
+  enabled after encrypting both boot pool and root pool, see below.
 
-Boot pool can be encrypted with LUKS 1, this requires the password to be interactively entered at boot
-in GRUB.
+  With persistent swap, hibernation (suspend-to-disk) can be enabled.
+
+- Root pool
+
+  ZFS native encryption can be optionally enabled for ``rpool/sys``
+  and child datasets.
+
+  User should be aware that, ZFS native encryption does not
+  encrypt some metadata of the datasets.
+  ZFS native encryption also does not change master key when ``zfs change-key`` is invoked.
+  Therefore, you should wipe the disk when password is compromised to protect confidentiality.
+  See `zfs-load-key.8 <https://openzfs.github.io/openzfs-docs/man/8/zfs-load-key.8.html>`__
+  and `zfs-change-key.8 <https://openzfs.github.io/openzfs-docs/man/8/zfs-change-key.8.html>`__
+  for more information regarding ZFS native encryption.
+
+  Encryption is enabled at dataset creation and can not be disabled later.
+  Password can be supplied via SSH.
+
+- Boot pool
+
+  After encrypting root pool, boot pool can also be encrypted with LUKS1.
+  This protects initrd from attacks and also protects key material in initrd.
+
+  Password must be interactively entered at boot in GRUB. This disables
+  password with SSH.
+
+- Bootloader
+
+  Bootloader can not be encrypted.
+
+  However, with Secure Boot, bootloader
+  can be verified by motherboard firmware to be untempered,
+  which should be sufficient for most purposes.
+
+  As enabling Secure Boot is device specific, this is not
+  covered in detail.

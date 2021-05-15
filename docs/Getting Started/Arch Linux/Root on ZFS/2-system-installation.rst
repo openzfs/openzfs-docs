@@ -143,6 +143,8 @@ System Installation
 
 #. This section implements dataset layout as described in `overview <0-overview.html>`__.
 
+   Create root system container:
+
    - Unencrypted::
 
       zfs create -o canmount=off -o mountpoint=none rpool_$INST_UUID/$INST_ID
@@ -154,7 +156,7 @@ System Installation
 
       zfs create -o canmount=off -o mountpoint=none -o encryption=on -o keylocation=prompt -o keyformat=passphrase rpool_$INST_UUID/$INST_ID
 
-   ::
+   Create other system datasets::
 
     zfs create -o canmount=off -o mountpoint=none bpool_$INST_UUID/$INST_ID
     zfs create -o canmount=off -o mountpoint=none bpool_$INST_UUID/$INST_ID/BOOT

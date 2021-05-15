@@ -159,10 +159,10 @@ GRUB with the following method:
 #. Make the change to ``prefix`` and ``root``
    permanent by `reinstalling GRUB <#grub-installation>`__.
 
-Recovery
---------
+Access system in chroot
+-----------------------
 
-#. Go through `preparations <#preparations>`__.
+#. Go through `preparation <1-preparation.html>`__.
 
 #. Import and unlock root and boot pool::
 
@@ -193,3 +193,34 @@ Recovery
      mount -a
 
 #. Finish rescue. See `finish installation <#finish-installation>`__.
+
+Backup and migrate existing installation
+----------------------------------------
+With the help of `zfs send
+<https://openzfs.github.io/openzfs-docs/man/8/zfs-send.8.html>`__
+it is relatively easy to perform a system backup and migration.
+
+#. Create a snapshot of root file system::
+
+    zfs snapshot -r rpool/arch@backup
+    zfs snapshot -r bpool/arch@backup
+
+#. Save snapshot to a file or pipe to SSH::
+
+    zfs send --options rpool/arch@backup > /backup/arch-rpool
+    zfs send --options bpool/arch@backup > /backup/arch-bpool
+
+#. Re-create partitions and root/boot
+   pool on target system.
+
+#. Restore backup::
+
+    zfs recv rpool_new/arch < /backup/arch-rpool
+    zfs recv bpool_new/arch < /backup/arch-bpool
+
+#. Chroot and reinstall bootloader.
+
+#. Update pool name in ``/etc/fstab``, ``/boot/grub/grub.cfg``
+   and ``/etc/zfs/zfs-list.cache/*``.
+
+#. Update device name, etc, in ``/etc/fstab`` and ``/etc/crypttab``.
