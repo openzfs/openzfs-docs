@@ -32,14 +32,6 @@ System Configuration
     done
     echo UUID=$(blkid -s UUID -o value ${INST_PRIMARY_DISK}-part1) /boot/efi vfat \
     x-systemd.idle-timeout=1min,x-systemd.automount,noauto,umask=0022,fmask=0022,dmask=0022 0 1 >> /mnt/etc/fstab
-
-   By default systemd will halt boot process if EFI system partition
-   fails to mount at boot. The above mount options
-   tells systemd to only mount partitions on demand.
-   Thus if a disk fails, system will still boot normally.
-
-   Add encrypted swap. Skip if swap was not created::
-
     if [ "${INST_PARTSIZE_SWAP}" != "" ]; then
      for i in ${DISK[@]}; do
       echo ${i##*/}-part4-swap ${i}-part4 /dev/urandom swap,cipher=aes-cbc-essiv:sha256,size=256,discard >> /mnt/etc/crypttab
@@ -47,10 +39,14 @@ System Configuration
      done
     fi
 
+   By default, systemd will halt boot process if any entry in ``/etc/fstab`` fails
+   to mount. This is unnecessary for mirrored EFI boot partitions.
+   With the above mount options, systemd will skip mounting them at boot,
+   only mount them on demand when accessed.
+
 #. Configure mkinitcpio::
 
     mv /mnt/etc/mkinitcpio.conf /mnt/etc/mkinitcpio.conf.original
-
     tee /mnt/etc/mkinitcpio.conf <<EOF
     HOOKS=(base udev autodetect modconf block keyboard zfs filesystems)
     EOF
@@ -101,7 +97,6 @@ System Configuration
 #. Enable ZFS services::
 
     systemctl enable zfs-import-scan.service zfs-import.target zfs-mount zfs-zed zfs.target --root=/mnt
-
 
 #. Chroot::
 

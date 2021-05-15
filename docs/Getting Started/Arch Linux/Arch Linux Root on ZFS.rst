@@ -1,4 +1,4 @@
-Root on ZFS
+Arch Linux Root on ZFS
 ======================
 `Start here <Root%20on%20ZFS/0-overview.html>`__.
 

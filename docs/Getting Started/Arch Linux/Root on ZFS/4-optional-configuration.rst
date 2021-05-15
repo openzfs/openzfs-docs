@@ -61,6 +61,7 @@ Supply password with SSH
 
 Encrypt boot pool
 ~~~~~~~~~~~~~~~~~~~
+Note: This will disable password with SSH.
 
 #. LUKS password::
 
@@ -71,8 +72,8 @@ Encrypt boot pool
    protected by this password, the previous warning
    about password strength still apply.
 
-   Double-check password here. You will need a complete reinstallation if
-   it is wrong.
+   Double-check password here. Complete reinstallation is
+   needed if entered wrong.
 
 #. Create encryption keys::
 

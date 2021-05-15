@@ -6,7 +6,9 @@ Preparation
 .. contents:: Table of Contents
    :local:
 
-#. Download 2021.05.01 build and signature.
+#. Download
+   `2021.05.01 <https://mirrors.ocf.berkeley.edu/archlinux/iso/2021.05.01/archlinux-2021.05.01-x86_64.iso>`__
+   Live ISO and `signature <https://archlinux.org/iso/2021.05.01/archlinux-2021.05.01-x86_64.iso.sig>`__.
 
 #. Follow `installation guide on Arch wiki <https://wiki.archlinux.org/title/Installation_guide>`__
    up to **Update the system clock**.
@@ -29,10 +31,10 @@ Preparation
      LIVE_ZFS_PKG="zfs-linux-2.0.4_5.11.16.arch1.1-1-x86_64.pkg.tar.zst"
      LIVE_ZFS_UTILS="zfs-utils-2.0.4-1-x86_64.pkg.tar.zst"
      LIVE_ZFS_MIRROR="https://mirror.sum7.eu/archlinux/archzfs"
-     pacman -U --noconfirm ${LIVE_ZFS_MIRROR}/archzfs/x86_64/${LIVE_ZFS_UTILS} \
-     || pacman -U --noconfirm ${LIVE_ZFS_MIRROR}/archive_archzfs/${LIVE_ZFS_UTILS}
-     pacman -U --noconfirm ${LIVE_ZFS_MIRROR}/archzfs/x86_64/${LIVE_ZFS_PKG} \
-     || pacman -U --noconfirm ${LIVE_ZFS_MIRROR}/archive_archzfs/${LIVE_ZFS_PKG}
+     pacman -U --noconfirm ${LIVE_ZFS_MIRROR}/archzfs/x86_64/${LIVE_ZFS_UTILS} || \
+     pacman -U --noconfirm ${LIVE_ZFS_MIRROR}/archive_archzfs/${LIVE_ZFS_UTILS}
+     pacman -U --noconfirm ${LIVE_ZFS_MIRROR}/archzfs/x86_64/${LIVE_ZFS_PKG} || \
+     pacman -U --noconfirm ${LIVE_ZFS_MIRROR}/archive_archzfs/${LIVE_ZFS_PKG}
      modprobe zfs
 
 #. Timezone
@@ -105,9 +107,9 @@ Preparation
    hook treats ``:`` as argument separator without a means to
    escape this character.
 
-#. Set vdev specification, possible values are:
+#. Set vdev topology, possible values are:
 
-   - (not set, single disk)
+   - (not set, single disk or striped; no redundancy)
    - mirror
    - raidz1
    - raidz2
