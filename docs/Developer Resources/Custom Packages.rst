@@ -61,19 +61,20 @@ RHEL, CentOS and Fedora
 -----------------------
 
 Make sure that the required packages are installed to build the latest
-ZFS 0.8 release:
+ZFS 2.1 release:
 
 -  **RHEL/CentOS 7**:
 
 .. code:: sh
 
-   sudo yum install epel-release gcc make autoconf automake libtool rpm-build dkms libtirpc-devel libblkid-devel libuuid-devel libudev-devel openssl-devel zlib-devel libaio-devel libattr-devel elfutils-libelf-devel kernel-devel-$(uname -r) python python2-devel python-setuptools python-cffi libffi-devel
+   sudo yum install epel-release gcc make autoconf automake libtool rpm-build libtirpc-devel libblkid-devel libuuid-devel libudev-devel openssl-devel zlib-devel libaio-devel libattr-devel elfutils-libelf-devel kernel-devel-$(uname -r) python python2-devel python-setuptools python-cffi libffi-devel
+   sudo yum install --enablerepo=epel dkms python-packaging
 
 -  **RHEL/CentOS 8, Fedora**:
 
 .. code:: sh
-
-   sudo dnf install gcc make autoconf automake libtool rpm-build kernel-rpm-macros dkms libtirpc-devel libblkid-devel libuuid-devel libudev-devel openssl-devel zlib-devel libaio-devel libattr-devel elfutils-libelf-devel kernel-devel-$(uname -r) python3 python3-devel python3-setuptools python3-cffi libffi-devel
+   sudo dnf install --skip-broken epel-release gcc make autoconf automake libtool rpm-build kernel-rpm-macros libtirpc-devel libblkid-devel libuuid-devel libudev-devel openssl-devel zlib-devel libaio-devel libattr-devel elfutils-libelf-devel kernel-devel-$(uname -r) python3 python3-devel python3-setuptools python3-cffi libffi-devel
+   sudo dnf install --skip-broken --enablerepo=epel --enablerepo=powertools python3-packaging dkms
 
 `Get the source code <#get-the-source-code>`__.
 
@@ -132,7 +133,7 @@ Make sure that the required packages are installed:
 
 .. code:: sh
 
-   sudo apt install build-essential autoconf automake libtool gawk alien fakeroot dkms libblkid-dev uuid-dev libudev-dev libssl-dev zlib1g-dev libaio-dev libattr1-dev libelf-dev linux-headers-$(uname -r) python3 python3-dev python3-setuptools python3-cffi libffi-dev
+   sudo apt install build-essential autoconf automake libtool gawk alien fakeroot dkms libblkid-dev uuid-dev libudev-dev libssl-dev zlib1g-dev libaio-dev libattr1-dev libelf-dev linux-headers-$(uname -r) python3 python3-dev python3-setuptools python3-cffi libffi-dev python3-packaging
 
 `Get the source code <#get-the-source-code>`__.
 
