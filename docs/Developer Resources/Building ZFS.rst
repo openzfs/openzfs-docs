@@ -16,7 +16,7 @@ There are two main components in this repository:
    vast majority of the core OpenZFS code is self-contained and can be
    used without modification.
 
-- **SPL**: The SPL is thin shim layer which is responsible for
+- **SPL**: The SPL is a thin shim layer which is responsible for
    implementing the fundamental interfaces required by OpenZFS. It's
    this layer which allows OpenZFS to be used across multiple
    platforms. SPL used to be maintained in a separate repository, but
@@ -28,31 +28,33 @@ Installing Dependencies
 
 The first thing you'll need to do is prepare your environment by
 installing a full development tool chain. In addition, development
-headers for both the kernel and the following libraries must be
+headers for both the kernel and the following packages must be
 available. It is important to note that if the development kernel
 headers for the currently running kernel aren't installed, the modules
 won't compile properly.
 
 The following dependencies should be installed to build the latest ZFS
-0.8 release.
+2.1 release.
 
 -  **RHEL/CentOS 7**:
 
 .. code:: sh
 
-   sudo yum install epel-release gcc make autoconf automake libtool rpm-build dkms libtirpc-devel libblkid-devel libuuid-devel libudev-devel openssl-devel zlib-devel libaio-devel libattr-devel elfutils-libelf-devel kernel-devel-$(uname -r) python python2-devel python-setuptools python-cffi libffi-devel git
+   sudo yum install epel-release gcc make autoconf automake libtool rpm-build libtirpc-devel libblkid-devel libuuid-devel libudev-devel openssl-devel zlib-devel libaio-devel libattr-devel elfutils-libelf-devel kernel-devel-$(uname -r) python python2-devel python-setuptools python-cffi libffi-devel git
+   sudo yum install --enablerepo=epel python-packaging dkms
 
 -  **RHEL/CentOS 8, Fedora**:
 
 .. code:: sh
 
-   sudo dnf install gcc make autoconf automake libtool rpm-build dkms libtirpc-devel libblkid-devel libuuid-devel libudev-devel openssl-devel zlib-devel libaio-devel libattr-devel elfutils-libelf-devel kernel-devel-$(uname -r) python3 python3-devel python3-setuptools python3-cffi libffi-devel git
+   sudo dnf install --skip-broken epel-release gcc make autoconf automake libtool rpm-build libtirpc-devel libblkid-devel libuuid-devel libudev-devel openssl-devel zlib-devel libaio-devel libattr-devel elfutils-libelf-devel kernel-devel-$(uname -r) python3 python3-devel python3-setuptools python3-cffi libffi-devel git
+   sudo dnf install --skip-broken --enablerepo=epel --enablerepo=powertools python3-packaging dkms
 
 -  **Debian, Ubuntu**:
 
 .. code:: sh
 
-   sudo apt install build-essential autoconf automake libtool gawk alien fakeroot dkms libblkid-dev uuid-dev libudev-dev libssl-dev zlib1g-dev libaio-dev libattr1-dev libelf-dev linux-headers-$(uname -r) python3 python3-dev python3-setuptools python3-cffi libffi-dev git
+   sudo apt install build-essential autoconf automake libtool gawk alien fakeroot dkms libblkid-dev uuid-dev libudev-dev libssl-dev zlib1g-dev libaio-dev libattr1-dev libelf-dev linux-headers-$(uname -r) python3 python3-dev python3-setuptools python3-cffi libffi-dev python3-packaging git
 
 Build Options
 ~~~~~~~~~~~~~
@@ -74,8 +76,8 @@ depends on your requirements.
 
 The remainder of this page focuses on the **in-tree** option which is
 the recommended method of development for the majority of changes. See
-the :doc:`custom packages <./Custom Packages>` page for additional information on building
-custom packages.
+the :doc:`custom packages <./Custom Packages>` page for additional
+information on building custom packages.
 
 Developing In-Tree
 ~~~~~~~~~~~~~~~~~~
@@ -108,7 +110,7 @@ the latest master branch.
 
 In this example we'll use the master branch and walk through a stock
 **in-tree** build. Start by checking out the desired branch then build
-the ZFS and SPL source in the tradition autotools fashion.
+the ZFS and SPL source in the traditional autotools fashion.
 
 ::
 
@@ -158,19 +160,28 @@ additional utilities must be installed.
 
 .. code:: sh
 
-   sudo yum install ksh bc fio acl sysstat mdadm lsscsi parted attr dbench nfs-utils samba rng-tools pax perf
+   sudo yum install ksh bc fio acl sysstat mdadm lsscsi parted attr nfs-utils samba rng-tools pax perf
+   sudo yum install --enablerepo=epel dbench
 
 -  **RHEL/CentOS 8, Fedora:**
 
 .. code:: sh
 
-   sudo dnf install ksh bc fio acl sysstat mdadm lsscsi parted attr dbench nfs-utils samba rng-tools pax perf
+   sudo dnf install --skip-broken ksh bc fio acl sysstat mdadm lsscsi parted attr nfs-utils samba rng-tools pax perf
+   sudo dnf install --skip-broken --enablerepo=epel dbench
 
--  **Debian, Ubuntu:**
+-  **Debian:**
+
+.. code:: sh
+
+   sudo apt install ksh bc fio acl sysstat mdadm lsscsi parted attr dbench nfs-kernel-server samba rng-tools pax linux-perf selinux-utils quota
+
+-  **Ubuntu:**
 
 .. code:: sh
 
    sudo apt install ksh bc fio acl sysstat mdadm lsscsi parted attr dbench nfs-kernel-server samba rng-tools pax linux-tools-common selinux-utils quota
+
 
 There are a few helper scripts provided in the top-level scripts
 directory designed to aid developers working with in-tree builds.
@@ -187,7 +198,7 @@ directory designed to aid developers working with in-tree builds.
    sudo ./scripts/zfs-helpers.sh -i
 
 -  **zfs.sh:** The freshly built kernel modules can be loaded using
-   ``zfs.sh``. This script can latter be used to unload the kernel
+   ``zfs.sh``. This script can later be used to unload the kernel
    modules with the **-u** option.
 
 ::
