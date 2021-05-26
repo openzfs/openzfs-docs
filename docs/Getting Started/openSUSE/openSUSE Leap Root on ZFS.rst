@@ -46,8 +46,8 @@ Support
 ~~~~~~~
 
 If you need help, reach out to the community using the :ref:`mailing_lists` or IRC at
-`#zfsonlinux <irc://irc.freenode.net/#zfsonlinux>`__ on `freenode
-<https://freenode.net/>`__. If you have a bug report or feature request
+`#zfsonlinux <ircs://irc.libera.chat/#zfsonlinux>`__ on `Libera Chat
+<https://libera.chat/>`__. If you have a bug report or feature request
 related to this HOWTO, please file a new issue and mention `@Zaryob <https://github.com/Zaryob>`__.
 
 Contributing

@@ -14,8 +14,8 @@ Contents
 Support
 -------
 Reach out to the community using the :ref:`mailing_lists` or IRC at
-`#zfsonlinux <irc://irc.freenode.net/#zfsonlinux>`__ on `freenode
-<https://freenode.net/>`__.
+`#zfsonlinux <ircs://irc.libera.chat/#zfsonlinux>`__ on `Libera Chat
+<https://libera.chat/>`__.
 
 If you have a bug report or feature request
 related to this HOWTO, please `file a new issue and mention @ne9z
