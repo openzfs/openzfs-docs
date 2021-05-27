@@ -26,7 +26,7 @@ packages later.
 
 For other kernels or Arch-based distros, use zfs-dkms package.
 
-Availabile packages
+Available packages
 ~~~~~~~~~~~~~~~~~~~
 * zfs-linux
 * zfs-linux-lts
