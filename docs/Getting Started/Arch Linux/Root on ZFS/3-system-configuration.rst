@@ -51,10 +51,6 @@ System Configuration
     HOOKS=(base udev autodetect modconf block keyboard zfs filesystems)
     EOF
 
-#. Host name::
-
-    echo $INST_HOST > /mnt/etc/hostname
-
 #. Enable DHCP on all ethernet ports::
 
      tee /mnt/etc/systemd/network/20-default.network <<EOF
@@ -74,18 +70,27 @@ System Configuration
    Alternatively, install a network manager such as
    ``NetworkManager``.
 
-#. Timezone::
+#. Enable internet time sync::
 
-    ln -sf $INST_TZ /mnt/etc/localtime
     hwclock --systohc
     systemctl enable systemd-timesyncd --root=/mnt
 
-#. Locale::
+#. Interactively set locale, keymap, timezone, hostname and root password::
 
-    echo "en_US.UTF-8 UTF-8" >> /mnt/etc/locale.gen
-    echo "LANG=en_US.UTF-8" >> /mnt/etc/locale.conf
+    rm -f /mnt/etc/localtime
+    systemd-firstboot --root=/mnt --force --prompt --root-password=PASSWORD
 
-   Other locales should be added after reboot.
+   This can be non-interactive, see man page for details::
+
+    rm -f /mnt/etc/localtime
+    systemd-firstboot --root=/mnt --force \
+     --locale="en_US.UTF-8" --locale-messages="en_US.UTF-8" \
+     --keymap=us --timezone="Europe/Berlin" --hostname=myHost \
+     --root-password=PASSWORD --root-shell=/bin/bash
+
+   ``systemd-firstboot`` has bugs for setting root password, reset it here::
+
+    arch-chroot /mnt passwd
 
 #. Ignore kernel updates::
 
@@ -112,12 +117,9 @@ System Configuration
 
     source /root/chroot
 
-#. Apply locales::
+#. Apply locales, change if needed::
 
+    echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
     locale-gen
 
 #. `Add archzfs repo <../0-archzfs-repo.html>`__.
-
-#. Set root password::
-
-     passwd

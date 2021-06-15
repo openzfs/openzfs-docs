@@ -22,8 +22,8 @@ Workarounds have to be applied.
 
    Solution::
 
-    echo 'export ZPOOL_VDEV_NAME_PATH=YES' >> /etc/profile
-    source /etc/profile
+    echo 'export ZPOOL_VDEV_NAME_PATH=YES' >> /etc/profile.d/zpool_vdev_name_path.sh
+    source /etc/profile.d/zpool_vdev_name_path.sh
 
    Note that ``sudo`` will not read ``/etc/profile`` and will
    not pass variables in parent shell. Consider setting the following
@@ -48,26 +48,29 @@ Install GRUB
 
 #. Generate initrd::
 
-     mkinitcpio -P
+    mkinitcpio -P
 
 #. When in doubt, install both legacy boot
    and EFI.
 
+#. Create GRUB boot directory, in ESP and boot pool::
+
+    mkdir -p /boot/efi/EFI/arch
+    mkdir -p /boot/grub
+
+   Boot environment-specific configuration (kernel, etc)
+   is stored in ``/boot/grub/grub.cfg``, enabling rollback.
+
 #. If using legacy booting, install GRUB to every disk::
 
     for i in ${DISK[@]}; do
-     grub-install --target=i386-pc $i
+     grub-install --boot-directory /boot/efi/EFI/arch --target=i386-pc $i
     done
 
 #. If using EFI::
 
-    grub-install && grub-install --removable
-    # mirror ESP content
-    ESP_MIRROR=$(mktemp -d)
-    cp -r /boot/efi/EFI $ESP_MIRROR
-    for i in /boot/efis/*; do
-     cp -r $ESP_MIRROR/EFI $i
-    done
+    grub-install --boot-directory /boot/efi/EFI/arch --efi-directory /boot/efi/
+    grub-install --boot-directory /boot/efi/EFI/arch --efi-directory /boot/efi/ --removable
     for i in ${DISK[@]}; do
      efibootmgr -cgp 1 -l "\EFI\arch\grubx64.efi" \
      -L "arch-${i##*/}" -d ${i}
@@ -75,64 +78,21 @@ Install GRUB
 
 #. Generate GRUB Menu::
 
-    grub-mkconfig -o /boot/grub/grub.cfg
+    grub-mkconfig -o /boot/efi/EFI/arch/grub/grub.cfg
+    cp /boot/efi/EFI/arch/grub/grub.cfg /boot/grub/grub.cfg
+
+#. For both legacy and EFI booting: mirror ESP content::
+   
+    ESP_MIRROR=$(mktemp -d)
+    cp -r /boot/efi/EFI $ESP_MIRROR
+    for i in /boot/efis/*; do
+     cp -r $ESP_MIRROR/EFI $i
+    done
 
 Enable Secure Boot
 ----------------------------
 
-This is optional.
-
-- Method 1: Generate and enroll your own certificates, then sign bootloader
-  with these keys.
-
-  This is the most secure method, see
-  `here <https://www.rodsbooks.com/efi-bootloaders/controlling-sb.html>`__
-  and `ArchWiki article
-  <https://wiki.archlinux.org/title/Secure_Boot#Using_your_own_keys>`__
-  for more information. However, enrolling your own key
-  `might brick your motherboard
-  <https://h30434.www3.hp.com/t5/Notebook-Operating-System-and-Recovery/Black-screen-after-enabling-secure-boot-and-installing/td-p/6754130>`__.
-
-  Tip: The author of this installation guide has
-  bricked EliteBook 820 G3 with ``KeyTool.efi`` during enrollment.
-
-- Method 2: Use a preloader
-  signed with `Microsoft Corporation UEFI CA
-  <https://www.microsoft.com/pkiops/certs/MicCorUEFCA2011_2011-06-27.crt>`__ certificate.
-  See `ArchWiki article <https://wiki.archlinux.org/title/Secure_Boot#Using_a_signed_boot_loader>`__
-  and `here <https://www.rodsbooks.com/efi-bootloaders/secureboot.html>`__.
-
-  Example configuration with `signed PreLoader.efi
-  <https://blog.hansenpartnership.com/linux-foundation-secure-boot-system-released/>`__::
-
-   # download signed PreLoader and HashTool
-   curl -LO https://blog.hansenpartnership.com/wp-uploads/2013/HashTool.efi
-   curl -LO https://blog.hansenpartnership.com/wp-uploads/2013/PreLoader.efi
-   # rename GRUB to loader.efi
-   mv /boot/efi/EFI/BOOT/BOOTX64.EFI /boot/efi/EFI/BOOT/loader.efi
-
-   mv PreLoader.efi /boot/efi/EFI/BOOT/BOOTX64.EFI
-   mv HashTool.efi /boot/efi/EFI/BOOT/
-
-   # mirror ESP content
-   ESP_MIRROR=$(mktemp -d)
-   cp -r /boot/efi/EFI $ESP_MIRROR
-   for i in /boot/efis/*; do
-    cp -r $ESP_MIRROR/EFI $i
-   done
-
-   for i in ${DISK[@]}; do
-    efibootmgr -cgp 1 -l "\EFI\BOOT\BOOTX64.EFI" \
-    -L "arch-PreLoader-${i##*/}" -d ${i}
-   done
-
-  After reboot, re-enable Secure Boot in firmware settings, save and reboot.
-  After enabling Secure Boot,
-  enroll the hash of ``loader.efi`` with ``HashTool.efi``::
-
-   # OK -> Enroll Hash -> loader.efi -> Yes -> Reboot System -> Yes
-
-  Re-enrolling the hash is needed if GRUB has been reinstalled.
+This is optional. `See Arch Wiki article <https://wiki.archlinux.org/title/Secure_Boot>`__.
 
 Finish Installation
 ~~~~~~~~~~~~~~~~~~~~
@@ -159,3 +119,28 @@ Finish Installation
 #. Reboot::
 
     reboot
+
+#. After reboot, consider adding a normal user::
+
+    myUser=UserName
+    zfs create $(df --output=source /home | tail -n +2)/${myUser}
+    useradd -MUd /home/${myUser} -c 'My Name' ${myUser}
+    zfs allow -u ${myUser} mount,snapshot,destroy $(df --output=source /home | tail -n +2)/${myUser}
+    chown -R ${myUser}:${myUser} /home/${myUser}
+    chmod 700 /home/${myUser}
+    passwd ${myUser}
+
+   Set up cron job to snapshot user home everyday::
+
+    dnf install cronie
+    systemctl enable --now cronie
+    crontab -eu ${myUser}
+    #@daily zfs snap $(df --output=source /home/${myUser} | tail -n +2)@$(dd if=/dev/urandom of=/dev/stdout bs=1 count=100 2>/dev/null |tr -dc 'a-z0-9' | cut -c-6)
+    zfs list -t snapshot -S creation $(df --output=source /home/${myUser} | tail -n +2)
+
+   Install package groups::
+
+    pacman -Sg        # query package groups
+    pacman -S 'gnome'
+    pacman -S 'plasma'
+
