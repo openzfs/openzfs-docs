@@ -1,5 +1,13 @@
-RHEL and CentOS
-===============
+RHEL-based distro
+=======================
+
+Contents
+--------
+.. toctree::
+  :maxdepth: 1
+  :glob:
+
+  *
 
 `DKMS`_ or `kABI-tracking kmod`_ style packages are provided for RHEL and
 CentOS based distributions from the OpenZFS repository. These packages are
@@ -27,26 +35,15 @@ the fingerprint listed here.
   `pgp.mit.edu <https://pgp.mit.edu/pks/lookup?search=0xF14AB620&op=index&fingerprint=on>`__
 | **Fingerprint:** C93A FFFD 9F3F 7B03 C310 CEB6 A9D5 A1C0 F14A B620
 
-For RHEL/CentOS versions 6 and 7 run:
+For RHEL/CentOS versions 6 and 7 run::
 
-.. code:: sh
+ yum install https://zfsonlinux.org/epel/zfs-release$(rpm -E %distro).noarch.rpm
+ rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-zfsonlinux
 
-   $ sudo yum install https://zfsonlinux.org/epel/zfs-release.<dist>.noarch.rpm
-   $ gpg --quiet --with-fingerprint /etc/pki/rpm-gpg/RPM-GPG-KEY-zfsonlinux
-   pub  2048R/F14AB620 2013-03-21 ZFS on Linux <zfs@zfsonlinux.org>
-       Key fingerprint = C93A FFFD 9F3F 7B03 C310  CEB6 A9D5 A1C0 F14A B620
-       sub  2048R/99685629 2013-03-21
+And for RHEL/CentOS 8 and newer::
 
-And for RHEL/CentOS 8 and newer:
-
-.. code:: sh
-
-   $ sudo dnf install https://zfsonlinux.org/epel/zfs-release.<dist>.noarch.rpm
-   $ gpg --import --import-options show-only /etc/pki/rpm-gpg/RPM-GPG-KEY-zfsonlinux
-   pub   rsa2048 2013-03-21 [SC]
-         C93AFFFD9F3F7B03C310CEB6A9D5A1C0F14AB620
-   uid                      ZFS on Linux <zfs@zfsonlinux.org>
-   sub   rsa2048 2013-03-21 [E]
+ dnf install https://zfsonlinux.org/epel/zfs-release$(rpm -E %distro).noarch.rpm
+ rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-zfsonlinux
 
 After installing the *zfs-release* package and verifying the public key
 users can opt to install either the DKMS or kABI-tracking kmod style packages.
@@ -64,19 +61,13 @@ package, then the *kernel-devel* and *zfs* packages. Note that it is
 important to make sure that the matching *kernel-devel* package is installed
 for the running kernel since DKMS requires it to build OpenZFS.
 
-For RHEL/CentOS versions 6 and 7 run:
+For RHEL/CentOS versions 6 and 7 run::
 
-.. code:: sh
+ yum install epel-release kernel-devel zfs
 
-   $ sudo yum install epel-release
-   $ sudo yum install kernel-devel zfs
+And for RHEL/CentOS 8 and newer::
 
-And for RHEL/CentOS 8 and newer:
-
-.. code:: sh
-
-   $ sudo dnf install epel-release
-   $ sudo dnf install kernel-devel zfs
+ dnf install epel-release kernel-devel zfs
 
 .. note::
    When switching from DKMS to kABI-tracking kmods first uninstall the
@@ -93,29 +84,23 @@ install the kABI-tracking kmods the default repository must be switched
 from *zfs* to *zfs-kmod*. Keep in mind that the kABI-tracking kmods are
 only verified to work with the distribution provided kernel.
 
-For RHEL/CentOS versions 6 and 7 run:
+For RHEL/CentOS versions 6 and 7 run::
 
-.. code:: sh
+ yum-config-manager --disable zfs
+ yum-config-manager --enable zfs-kmod
+ yum install zfs
 
-   $ sudo yum-config-manager --disable zfs
-   $ sudo yum-config-manager --enable zfs-kmod
-   $ sudo yum install zfs
+And for RHEL/CentOS 8 and newer::
 
-And for RHEL/CentOS 8 and newer:
-
-.. code:: sh
-
-   $ sudo dnf config-manager --disable zfs
-   $ sudo dnf config-manager --enable zfs-kmod
-   $ sudo dnf install zfs
+ dnf config-manager --disable zfs
+ dnf config-manager --enable zfs-kmod
+ dnf install zfs
 
 By default the OpenZFS kernel modules are automatically loaded when a ZFS
 pool is detected. If you would prefer to always load the modules at boot
-time you must create an ``/etc/modules-load.d/zfs.conf`` file.
+time you must create an ``/etc/modules-load.d/zfs.conf`` file::
 
-.. code:: sh
-
-   $ sudo sh -c "echo zfs >/etc/modules-load.d/zfs.conf"
+ echo zfs >/etc/modules-load.d/zfs.conf
 
 .. note::
    When updating to a new RHEL/CentOS minor release the existing kmod
@@ -134,23 +119,29 @@ the functionality and stability of upcoming releases. These packages
 **should not** be used on production systems. Packages from the testing
 repository can be installed as follows.
 
-For RHEL/CentOS versions 6 and 7 run:
+For RHEL/CentOS versions 6 and 7 run::
 
-.. code:: sh
+ yum-config-manager --enable zfs-testing
+ yum install kernel-devel zfs
 
-   $ sudo yum-config-manager --enable zfs-testing
-   $ sudo yum install kernel-devel zfs
+And for RHEL/CentOS 8 and newer::
 
-And for RHEL/CentOS 8 and newer:
-
-.. code:: sh
-
-   $ sudo dnf config-manager --enable zfs-testing
-   $ sudo dnf install kernel-devel zfs
+ dnf config-manager --enable zfs-testing
+ dnf install kernel-devel zfs
 
 .. note::
    Use *zfs-testing* for DKMS packages and *zfs-testing-kmod*
    kABI-tracking kmod packages.
+
+RHEL 8-based distro Root on ZFS
+-------------------------------
+`Start here <RHEL%208-based%20distro%20Root%20on%20ZFS/0-overview.html>`__.
+
+.. toctree::
+  :maxdepth: 1
+  :glob:
+
+  RHEL 8-based distro Root on ZFS/*
 
 .. _kABI-tracking kmod: https://elrepoproject.blogspot.com/2016/02/kabi-tracking-kmod-packages.html
 .. _DKMS: https://en.wikipedia.org/wiki/Dynamic_Kernel_Module_Support

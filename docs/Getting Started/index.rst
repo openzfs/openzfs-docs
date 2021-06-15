@@ -18,5 +18,5 @@ documentation <https://pthree.org/2012/04/17/install-zfs-on-debian-gnulinux/>`__
    Gentoo <https://wiki.gentoo.org/wiki/ZFS>
    NixOS <https://nixos.wiki/wiki/NixOS_on_ZFS>
    openSUSE/index
-   RHEL and CentOS
+   RHEL-based distro/index
    Ubuntu/index
