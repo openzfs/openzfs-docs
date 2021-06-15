@@ -80,9 +80,7 @@ Note: This will disable password with SSH.
     mkdir /etc/cryptkey.d/
     chmod 700 /etc/cryptkey.d/
     dd bs=32 count=1 if=/dev/urandom of=/etc/cryptkey.d/rpool_$INST_UUID-${INST_ID}-key-zfs
-    for i in ${DISK[@]}; do
-      dd bs=32 count=1 if=/dev/urandom of=/etc/cryptkey.d/${i##*/}-part2-bpool_$INST_UUID-key-luks
-    done
+    dd bs=32 count=1 if=/dev/urandom of=/etc/cryptkey.d/bpool_$INST_UUID-key-luks
 
 #. Backup boot pool::
 
@@ -104,11 +102,14 @@ Note: This will disable password with SSH.
 #. Create LUKS containers::
 
     for i in ${DISK[@]}; do
-     cryptsetup luksFormat -q --type luks1 --key-file /etc/cryptkey.d/${i##*/}-part2-bpool_$INST_UUID-key-luks $i-part2
-     echo $LUKS_PWD | cryptsetup luksAddKey --key-file /etc/cryptkey.d/${i##*/}-part2-bpool_$INST_UUID-key-luks $i-part2
-     cryptsetup open ${i}-part2 ${i##*/}-part2-luks-bpool_$INST_UUID --key-file /etc/cryptkey.d/${i##*/}-part2-bpool_$INST_UUID-key-luks
-     echo ${i##*/}-part2-luks-bpool_$INST_UUID ${i}-part2 /etc/cryptkey.d/${i##*/}-part2-bpool_$INST_UUID-key-luks discard >> /etc/crypttab
+     cryptsetup luksFormat -q --type luks1 --key-file /etc/cryptkey.d/bpool_$INST_UUID-key-luks $i-part2
+     echo $LUKS_PWD | cryptsetup luksAddKey --key-file /etc/cryptkey.d/bpool_$INST_UUID-key-luks $i-part2
+     cryptsetup open ${i}-part2 ${i##*/}-part2-luks-bpool_$INST_UUID --key-file /etc/cryptkey.d/bpool_$INST_UUID-key-luks
+     echo ${i##*/}-part2-luks-bpool_$INST_UUID ${i}-part2 /etc/cryptkey.d/bpool_$INST_UUID-key-luks discard >> /etc/crypttab
     done
+
+   GRUB 2.06 still does not have complete support for LUKS2, LUKS1
+   is used instead.
 
 #. Embed key file in initrd::
 
@@ -158,6 +159,11 @@ Note: This will disable password with SSH.
      mount /boot/efis/${i##*/}-part1
     done
 
+#. As keys are stored in initrd,
+   set secure permissions for ``/boot``::
+
+    chmod 700 /boot
+
 #. Change root pool password to key file::
 
     zfs change-key -l \
@@ -178,11 +184,6 @@ Note: This will disable password with SSH.
 
    If ``zfsencryptssh`` is not removed, initrd will
    stuck at ``fail to load key material`` and fail to boot.
-
-#. As keys are stored in initrd,
-   set secure permissions for ``/boot``::
-
-    chmod 700 /boot
 
 #. Enable GRUB cryptodisk::
 
@@ -259,9 +260,9 @@ boot from it. This enables system recovery and re-installation.
 
     mkdir /boot/efi/iso
     cd /boot/efi/iso
-    # select a mirror # curl -O https://mirrors.ocf.berkeley.edu/archlinux/iso/2021.05.01/archlinux-2021.05.01-x86_64.iso
-    curl -O https://archlinux.org/iso/2021.05.01/archlinux-2021.05.01-x86_64.iso.sig
-    gpg --auto-key-retrieve --verify archlinux-2021.05.01-x86_64.iso.sig
+    # select a mirror # curl -O https://mirrors.ocf.berkeley.edu/archlinux/iso/2021.06.01/archlinux-2021.06.01-x86_64.iso
+    curl -O https://archlinux.org/iso/2021.06.01/archlinux-2021.06.01-x86_64.iso.sig
+    gpg --auto-key-retrieve --verify archlinux-2021.06.01-x86_64.iso.sig
 
    Additionally you can build your own live image
    with `archiso package <https://gitlab.archlinux.org/archlinux/archiso>`__.

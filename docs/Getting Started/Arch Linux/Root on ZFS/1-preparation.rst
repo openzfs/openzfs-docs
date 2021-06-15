@@ -7,8 +7,8 @@ Preparation
    :local:
 
 #. Download
-   `2021.05.01 <https://mirrors.ocf.berkeley.edu/archlinux/iso/2021.05.01/archlinux-2021.05.01-x86_64.iso>`__
-   Live ISO and `signature <https://archlinux.org/iso/2021.05.01/archlinux-2021.05.01-x86_64.iso.sig>`__.
+   `2021.06.01 <https://mirrors.ocf.berkeley.edu/archlinux/iso/2021.06.01/archlinux-2021.06.01-x86_64.iso>`__
+   Live ISO and `signature <https://archlinux.org/iso/2021.06.01/archlinux-2021.06.01-x86_64.iso.sig>`__.
 
 #. Follow `installation guide on Arch wiki <https://wiki.archlinux.org/title/Installation_guide>`__
    up to **Update the system clock**.
@@ -28,7 +28,7 @@ Preparation
 
 #.  Install ZFS::
 
-     LIVE_ZFS_PKG="zfs-linux-2.0.4_5.11.16.arch1.1-1-x86_64.pkg.tar.zst"
+     LIVE_ZFS_PKG="zfs-linux-2.0.4_5.12.8.arch1.1-1-x86_64.pkg.tar.zst"
      LIVE_ZFS_UTILS="zfs-utils-2.0.4-1-x86_64.pkg.tar.zst"
      LIVE_ZFS_MIRROR="https://mirror.sum7.eu/archlinux/archzfs"
      pacman -U --noconfirm ${LIVE_ZFS_MIRROR}/archzfs/x86_64/${LIVE_ZFS_UTILS} || \
@@ -36,22 +36,6 @@ Preparation
      pacman -U --noconfirm ${LIVE_ZFS_MIRROR}/archzfs/x86_64/${LIVE_ZFS_PKG} || \
      pacman -U --noconfirm ${LIVE_ZFS_MIRROR}/archive_archzfs/${LIVE_ZFS_PKG}
      modprobe zfs
-
-#. Timezone
-
-   List available timezones with::
-
-    ls /usr/share/zoneinfo/
-
-   Store target timezone in a variable::
-
-    INST_TZ=/usr/share/zoneinfo/Asia/Irkutsk
-
-#. Host name
-
-   Store the host name in a variable::
-
-    INST_HOST='archonzfs'
 
 #. Kernel variant
 
