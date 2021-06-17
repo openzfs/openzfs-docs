@@ -47,7 +47,7 @@ are issued regardless of whether all per-queue minimums have been met.
 For many physical devices, throughput increases with the number of
 concurrent operations, but latency typically suffers. Further, physical
 devices typically have a limit at which more concurrent operations have
-no effect on throughput or can actually cause it to performance to
+no effect on throughput or can cause the disk performance to
 decrease.
 
 The ZIO scheduler selects the next operation to issue by first looking
@@ -86,7 +86,7 @@ amount of dirty data in the pool. Since both throughput and latency
 typically increase as the number of concurrent operations issued to
 physical devices, reducing the burstiness in the number of concurrent
 operations also stabilizes the response time of operations from other
-queues. This is particular important for the sync read and write queues,
+queues. This is particularly important for the sync read and write queues,
 where the periodic async write bursts of the txg sync can lead to
 device-level contention. In broad strokes, the ZIO scheduler issues more
 concurrent operations from the async write queue as there's more dirty
