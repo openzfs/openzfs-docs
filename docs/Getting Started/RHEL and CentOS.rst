@@ -20,8 +20,8 @@ the fingerprint listed here.
 | **Location:** /etc/pki/rpm-gpg/RPM-GPG-KEY-zfsonlinux
 | **EL6 Package:** `zfs-release.el6.noarch.rpm`_ (zfs-0.8.x)
 | **EL7.9 Package:** `zfs-release.el7_9.noarch.rpm`_ (zfs-0.8.x)
-| **EL8.3 Package:** `zfs-release.el8_3.noarch.rpm`_ (zfs-0.8.x)
-| **Archived Repositories:** `el7_5`_, `el7_6`_, `el7_7`_, `el7_8`_, `el8_0`_, `el8_1`_, `el8_2`_
+| **EL8.4 Package:** `zfs-release.el8_4.noarch.rpm`_ (zfs-2.0.5)
+| **Archived Repositories:** `el7_5`_, `el7_6`_, `el7_7`_, `el7_8`_, `el8_0`_, `el8_1`_, `el8_2`_, `el8_3`_
 
 | **Download from:**
   `pgp.mit.edu <https://pgp.mit.edu/pks/lookup?search=0xF14AB620&op=index&fingerprint=on>`__
@@ -156,7 +156,7 @@ And for RHEL/CentOS 8 and newer:
 .. _DKMS: https://en.wikipedia.org/wiki/Dynamic_Kernel_Module_Support
 .. _zfs-release.el6.noarch.rpm: https://zfsonlinux.org/epel/zfs-release.el6.noarch.rpm
 .. _zfs-release.el7_9.noarch.rpm: https://zfsonlinux.org/epel/zfs-release.el7_9.noarch.rpm
-.. _zfs-release.el8_3.noarch.rpm: https://zfsonlinux.org/epel/zfs-release.el8_3.noarch.rpm
+.. _zfs-release.el8_4.noarch.rpm: https://zfsonlinux.org/epel/zfs-release.el8_4.noarch.rpm
 .. _el7_5: https://zfsonlinux.org/epel/zfs-release.el7_5.noarch.rpm
 .. _el7_6: https://zfsonlinux.org/epel/zfs-release.el7_6.noarch.rpm
 .. _el7_7: https://zfsonlinux.org/epel/zfs-release.el7_7.noarch.rpm
@@ -164,5 +164,6 @@ And for RHEL/CentOS 8 and newer:
 .. _el8_0: https://zfsonlinux.org/epel/zfs-release.el8_0.noarch.rpm
 .. _el8_1: https://zfsonlinux.org/epel/zfs-release.el8_1.noarch.rpm
 .. _el8_2: https://zfsonlinux.org/epel/zfs-release.el8_2.noarch.rpm
+.. _el8_3: https://zfsonlinux.org/epel/zfs-release.el8_3.noarch.rpm
 
 .. _EPEL repository: https://fedoraproject.org/wiki/EPEL
