@@ -7,7 +7,7 @@ updated as new versions are released. Only the current repository for each
 major release is updated with new packages. Packages are available for the
 following configurations:
 
-| **EL Releases:** 6, 7.9, 8.3
+| **EL Releases:** 6, 7.9, 8.4
 | **Architectures:** x86_64
 
 To simplify installation a *zfs-release* package is provided which includes
