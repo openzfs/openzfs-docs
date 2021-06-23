@@ -297,6 +297,7 @@ Step 2: Disk Formatting
    - Unencrypted::
 
        zpool create \
+           -o cachefile=/etc/zfs/zpool.cache \
            -o ashift=12 \
            -O acltype=posixacl -O canmount=off -O compression=lz4 \
            -O dnodesize=auto -O normalization=formD -O relatime=on \
@@ -306,6 +307,7 @@ Step 2: Disk Formatting
    - ZFS native encryption::
 
        zpool create \
+           -o cachefile=/etc/zfs/zpool.cache \
            -o ashift=12 \
            -O encryption=aes-256-gcm \
            -O keylocation=prompt -O keyformat=passphrase \
