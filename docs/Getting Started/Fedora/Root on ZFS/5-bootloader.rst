@@ -157,7 +157,7 @@ Finish Installation
     dnf install cronie
     systemctl enable --now crond
     crontab -eu ${myUser}
-    #@daily zfs snap $(df --output=source /home/${myUser} | tail -n +2)@$(dd if=/dev/urandom of=/dev/stdout bs=1 count=100 2>/dev/null |tr -dc 'a-z0-9' | cut -c-6)
+    #@daily /usr/sbin/zfs snap $(df --output=source /home/${myUser} | tail -n +2)@$(dd if=/dev/urandom of=/dev/stdout bs=1 count=100 2>/dev/null |tr -dc 'a-z0-9' | cut -c-6)
     zfs list -t snapshot -S creation $(df --output=source /home/${myUser} | tail -n +2)
 
    Install package groups::
