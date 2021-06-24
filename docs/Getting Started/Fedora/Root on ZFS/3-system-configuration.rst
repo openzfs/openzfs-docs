@@ -30,7 +30,7 @@ System Configuration
     if [ "${INST_PARTSIZE_SWAP}" != "" ]; then
      for i in ${DISK[@]}; do
       echo ${i##*/}-part4-swap ${i}-part4 /dev/urandom swap,cipher=aes-cbc-essiv:sha256,size=256,discard >> /mnt/etc/crypttab
-      echo /dev/mapper/${i##*/}-part4-swap none swap defaults 0 0 >> /mnt/etc/fstab
+      echo /dev/mapper/${i##*/}-part4-swap none swap x-systemd.requires=cryptsetup.target,defaults 0 0 >> /mnt/etc/fstab
      done
     fi
 
