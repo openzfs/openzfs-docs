@@ -6,13 +6,9 @@ Preparation
 .. contents:: Table of Contents
    :local:
 
-#. Download a variant of Fedora 33 live image
-   such as `LXDE spin
-   <https://sjc.edge.kernel.org/fedora-buffet/fedora/linux/releases/33/Spins/x86_64/iso/Fedora-LXDE-Live-x86_64-33-1.2.iso>`__
+#. Download a variant of Fedora 34 live image
    and boot from it.
 
-   Fedora 33 live image is required. This does not
-   affect the installed system.
 #. Disable Secure Boot. ZFS modules can not be loaded of Secure Boot is enabled.
 #. Set root password or ``/root/authorized_keys``.
 #. Start SSH server::

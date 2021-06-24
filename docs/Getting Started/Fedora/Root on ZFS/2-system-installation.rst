@@ -221,12 +221,8 @@ System Installation
 
      dnf --installroot=/mnt --releasever=${INST_FEDORA_VER} -y install \
      https://zfsonlinux.org/fedora/zfs-release.fc${INST_FEDORA_VER}.noarch.rpm \
-     @core grub2-efi-x64 grub2-pc-modules grub2-efi-x64-modules shim-x64 efibootmgr cryptsetup
-
-#. Install LTS kernel::
-
-    dnf --installroot=/mnt --releasever=${INST_FEDORA_VER} -y copr enable kwizart/kernel-longterm-5.4
-    dnf --installroot=/mnt --releasever=${INST_FEDORA_VER} -y install kernel-longterm kernel-longterm-devel
+     @core grub2-efi-x64 grub2-pc-modules grub2-efi-x64-modules shim-x64 efibootmgr cryptsetup \
+     kernel kernel-devel
 
 #. Install ZFS::
 
