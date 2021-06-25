@@ -91,6 +91,11 @@ System Configuration
 
     systemctl enable zfs-import-scan.service zfs-import.target zfs-mount zfs-zed zfs.target --root=/mnt
 
+#. By default SSH server is enabled, allowing root login by password,
+   disable SSH server::
+
+    systemctl disable sshd --root=/mnt
+
 #. Chroot::
 
     echo "INST_PRIMARY_DISK=$INST_PRIMARY_DISK
