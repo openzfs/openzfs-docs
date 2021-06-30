@@ -84,15 +84,7 @@ Install GRUB
     done
     cp -r /usr/lib/grub/x86_64-efi/ /boot/efi/EFI/rocky
 
-#. Generate GRUB Menu::
-
-    grub2-mkconfig -o /boot/efi/EFI/rocky/grub.cfg
-    cp /boot/efi/EFI/rocky/grub.cfg /boot/efi/EFI/rocky/grub2/grub.cfg
-    cp /boot/efi/EFI/rocky/grub.cfg /boot/grub2/grub.cfg
-
-   If the following error is seen::
-
-    # /usr/sbin/grub2-probe: error: ../grub-core/kern/fs.c:120:unknown filesystem.
+#. Generate GRUB Menu:
 
    Apply workaround::
 
@@ -103,7 +95,11 @@ Install GRUB
     EOF
     chmod +x /etc/grub.d/09_fix_root_on_zfs
 
-   Regenerate menu with steps above.
+   Generate menu::
+
+    grub2-mkconfig -o /boot/efi/EFI/rocky/grub.cfg
+    cp /boot/efi/EFI/rocky/grub.cfg /boot/efi/EFI/rocky/grub2/grub.cfg
+    cp /boot/efi/EFI/rocky/grub.cfg /boot/grub2/grub.cfg
 
 #. For both legacy and EFI booting: mirror ESP content::
 
