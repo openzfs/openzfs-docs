@@ -2,10 +2,8 @@ dRAID
 =====
 
 .. note::
-   This page a describes functionality which has been merged to the
-   master branch but is not in the OpenZFS 2.0 release.  In order to
-   use dRAID you'll need to checkout the latest source and build
-   `custom packages`_ to install.
+   This page describes functionality which has been added for the
+   OpenZFS 2.1.0 release, it is not in the OpenZFS 2.0.0 release.
 
 Introduction
 ~~~~~~~~~~~~
