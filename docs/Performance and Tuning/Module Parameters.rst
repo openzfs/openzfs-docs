@@ -5144,7 +5144,7 @@ zfs_scan_mem_lim_fact
 I/O sorting by sequential scan algorithm. When the limit is reached
 scanning metadata is stopped and data verification I/O is started. Data
 verification I/O continues until the memory used by the sorting
-algorithm drops below below
+algorithm drops by
 `zfs_scan_mem_lim_soft_fact <#zfs-scan-mem-lim-soft-fact>`__
 
 Memory used by the sequential scan algorithm can be observed as the kmem
@@ -5181,7 +5181,7 @@ zfs_scan_mem_lim_soft_fact
 `zfs_scan_mem_lim_fact <#zfs-scan-mem-lim-fact>`__, used to determined
 the RAM soft limit for I/O sorting by the sequential scan algorithm.
 After `zfs_scan_mem_lim_fact <#zfs-scan-mem-lim-fact>`__ has been
-reached, metadata scanning is stopped until the RAM usage drops below
+reached, metadata scanning is stopped until the RAM usage drops by
 ``zfs_scan_mem_lim_soft_fact``
 
 +----------------------------+----------------------------------------+
