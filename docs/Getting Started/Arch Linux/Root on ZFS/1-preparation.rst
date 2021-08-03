@@ -7,8 +7,8 @@ Preparation
    :local:
 
 #. Download
-   `2021.06.01 <https://mirrors.ocf.berkeley.edu/archlinux/iso/2021.06.01/archlinux-2021.06.01-x86_64.iso>`__
-   Live ISO and `signature <https://archlinux.org/iso/2021.06.01/archlinux-2021.06.01-x86_64.iso.sig>`__.
+   `2021.08.01 <https://mirrors.ocf.berkeley.edu/archlinux/iso/2021.08.01/archlinux-2021.08.01-x86_64.iso>`__
+   Live ISO and `signature <https://archlinux.org/iso/2021.08.01/archlinux-2021.08.01-x86_64.iso.sig>`__.
 
 #. Follow `installation guide on Arch wiki <https://wiki.archlinux.org/title/Installation_guide>`__
    up to **Update the system clock**.
@@ -26,10 +26,11 @@ Preparation
 
 #. `Add archzfs repo <../0-archzfs-repo.html>`__.
 
-#.  Install ZFS::
+#.  Install prebuilt ZFS package, corresponding to
+    `live image kernel version <https://archlinux.org/download/>`__::
 
-     LIVE_ZFS_PKG="zfs-linux-2.0.4_5.12.8.arch1.1-1-x86_64.pkg.tar.zst"
-     LIVE_ZFS_UTILS="zfs-utils-2.0.4-1-x86_64.pkg.tar.zst"
+     LIVE_ZFS_PKG="zfs-linux-2.1.0_5.13.6.arch1.1-1-x86_64.pkg.tar.zst"
+     LIVE_ZFS_UTILS="zfs-utils-2.1.0-2-x86_64.pkg.tar.zst"
      LIVE_ZFS_MIRROR="https://mirror.sum7.eu/archlinux/archzfs"
      pacman -U --noconfirm ${LIVE_ZFS_MIRROR}/archzfs/x86_64/${LIVE_ZFS_UTILS} || \
      pacman -U --noconfirm ${LIVE_ZFS_MIRROR}/archive_archzfs/${LIVE_ZFS_UTILS}

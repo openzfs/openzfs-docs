@@ -97,7 +97,7 @@ System Configuration
     sed -i 's/#IgnorePkg/IgnorePkg/' /mnt/etc/pacman.conf
     sed -i "/^IgnorePkg/ s/$/ ${INST_LINVAR} ${INST_LINVAR}-headers zfs-${INST_LINVAR} zfs-utils/" /mnt/etc/pacman.conf
 
-   Kernel will be updated manually. See `here <../2-zfs-linux.html>`__.
+   Kernel will be updated manually. See `here <../1-zfs-linux.html#update-kernel>`__.
 
 #. Enable ZFS services::
 
@@ -112,6 +112,7 @@ System Configuration
     INST_VDEV=$INST_VDEV" > /mnt/root/chroot
     echo DISK=\($(for i in ${DISK[@]}; do printf "$i "; done)\) >> /mnt/root/chroot
     arch-chroot /mnt bash --login
+    cd ~
 
 #. Source variables::
 

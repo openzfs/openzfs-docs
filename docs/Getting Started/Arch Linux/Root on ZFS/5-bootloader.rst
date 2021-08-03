@@ -132,7 +132,7 @@ Finish Installation
 
    Set up cron job to snapshot user home everyday::
 
-    dnf install cronie
+    pacman -S cronie
     systemctl enable --now cronie
     crontab -eu ${myUser}
     #@daily zfs snap $(df --output=source /home/${myUser} | tail -n +2)@$(dd if=/dev/urandom of=/dev/stdout bs=1 count=100 2>/dev/null |tr -dc 'a-z0-9' | cut -c-6)
