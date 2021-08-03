@@ -61,7 +61,8 @@ Supply password with SSH
 
 Encrypt boot pool
 ~~~~~~~~~~~~~~~~~~~
-Note: This will disable password with SSH.
+Note: This will disable password with SSH. The password previously set for
+root pool will be replaced by keyfile, embedded in initrd.
 
 #. LUKS password::
 
@@ -118,17 +119,7 @@ Note: This will disable password with SSH.
 #. Recreate boot pool with mappers as vdev::
 
     zpool create \
-    -d -o feature@async_destroy=enabled \
-    -o feature@bookmarks=enabled \
-    -o feature@embedded_data=enabled \
-    -o feature@empty_bpobj=enabled \
-    -o feature@enabled_txg=enabled \
-    -o feature@extensible_dataset=enabled \
-    -o feature@filesystem_limits=enabled \
-    -o feature@hole_birth=enabled \
-    -o feature@large_blocks=enabled \
-    -o feature@lz4_compress=enabled \
-    -o feature@spacemap_histogram=enabled \
+        -o compatibility=grub2 \
         -o ashift=12 \
         -o autotrim=on \
         -O acltype=posixacl \
@@ -260,9 +251,9 @@ boot from it. This enables system recovery and re-installation.
 
     mkdir /boot/efi/iso
     cd /boot/efi/iso
-    # select a mirror # curl -O https://mirrors.ocf.berkeley.edu/archlinux/iso/2021.06.01/archlinux-2021.06.01-x86_64.iso
-    curl -O https://archlinux.org/iso/2021.06.01/archlinux-2021.06.01-x86_64.iso.sig
-    gpg --auto-key-retrieve --verify archlinux-2021.06.01-x86_64.iso.sig
+    # select a mirror # curl -O https://mirrors.ocf.berkeley.edu/archlinux/iso/2021.08.01/archlinux-2021.08.01-x86_64.iso
+    curl -O https://archlinux.org/iso/2021.08.01/archlinux-2021.08.01-x86_64.iso.sig
+    gpg --auto-key-retrieve --verify archlinux-2021.08.01-x86_64.iso.sig
 
    Additionally you can build your own live image
    with `archiso package <https://gitlab.archlinux.org/archlinux/archiso>`__.
