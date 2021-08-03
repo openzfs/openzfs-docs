@@ -109,4 +109,4 @@ Encryption
   can be verified by motherboard firmware to be untempered,
   which should be sufficient for most purposes.
 
-  Secure Boot is supported out-of-the-box by RHEL 8-based distro.
+  Secure Boot is not supported out-of-the-box due to ZFS module.

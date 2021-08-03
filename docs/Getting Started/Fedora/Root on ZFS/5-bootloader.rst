@@ -103,14 +103,18 @@ Install GRUB
    To support Secure Boot, GRUB has been heavily modified by Fedora,
    namely:
 
-    - ``grub2-install`` is `disabled for UEFI <https://bugzilla.redhat.com/show_bug.cgi?id=1917213>`__
-    - Only a static, signed version of bootloader is copied to EFI system partition
-    - This signed bootloader does not have built-in support for either ZFS or LUKS containers
-    - This signed bootloader only loads configuration from ``/boot/efi/EFI/fedora/grub.cfg``
+   - ``grub2-install`` is `disabled for UEFI <https://bugzilla.redhat.com/show_bug.cgi?id=1917213>`__
+   - Only a static, signed version of bootloader is copied to EFI system partition
+   - This signed bootloader does not have built-in support for either ZFS or LUKS containers
+   - This signed bootloader only loads configuration from ``/boot/efi/EFI/fedora/grub.cfg``
 
    Unrelated to Secure Boot, GRUB has also been modified to provide optional
    support for `systemd bootloader specification (bls) <https://systemd.io/BOOT_LOADER_SPECIFICATION/>`__.
    Currently ``blscfg.mod`` is incompatible with root on ZFS.
+
+   As bls is disabled, you will need to regenerate GRUB menu after each kernel upgrade.
+   Or else the new kernel will not be recognized and system will boot the old kernel
+   on reboot.
 
    Also see `Fedora docs for GRUB
    <https://docs.fedoraproject.org/en-US/fedora/rawhide/system-administrators-guide/kernel-module-driver-configuration/Working_with_the_GRUB_2_Boot_Loader/>`__.
