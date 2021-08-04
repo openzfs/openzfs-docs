@@ -92,6 +92,10 @@ System Configuration
 
     arch-chroot /mnt passwd
 
+#. Generate host id::
+
+    zgenhostid -f -o /mnt/etc/hostid
+
 #. Ignore kernel updates::
 
     sed -i 's/#IgnorePkg/IgnorePkg/' /mnt/etc/pacman.conf

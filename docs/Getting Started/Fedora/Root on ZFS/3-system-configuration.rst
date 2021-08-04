@@ -81,6 +81,10 @@ System Configuration
 
    ``systemd-firstboot`` have bugs, root password is set below.
 
+#. Generate host id::
+
+    zgenhostid -f -o /mnt/etc/hostid
+
 #. Install locale package, example for English locale::
 
     dnf --installroot=/mnt install -y glibc-minimal-langpack glibc-langpack-en
@@ -95,6 +99,7 @@ System Configuration
    disable SSH server::
 
     systemctl disable sshd --root=/mnt
+    systemctl enable firewalld --root=/mnt
 
 #. Chroot::
 
@@ -102,16 +107,16 @@ System Configuration
     INST_LINVAR=$INST_LINVAR
     INST_UUID=$INST_UUID
     INST_ID=$INST_ID
+    unalias -a
     INST_VDEV=$INST_VDEV" > /mnt/root/chroot
     echo DISK=\($(for i in ${DISK[@]}; do printf "$i "; done)\) >> /mnt/root/chroot
     arch-chroot /mnt bash --login
-    unalias -a
 
 #. Source variables::
 
     source /root/chroot
 
-#. Relabel filesystem on next boot::
+#. For SELinux, relabel filesystem on next boot::
 
     fixfiles -F onboot
 

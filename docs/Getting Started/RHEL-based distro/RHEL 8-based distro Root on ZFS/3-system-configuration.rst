@@ -46,17 +46,21 @@ System Configuration
 #. Interactively set locale, keymap, timezone, hostname and root password::
 
     rm -f /mnt/etc/localtime
-    systemd-firstboot --root=/mnt --force --prompt --root-password=PASSWORD
+    systemd-firstboot --root=/mnt --prompt --root-password=PASSWORD
 
    This can be non-interactive, see man page for details::
 
     rm -f /mnt/etc/localtime
-    systemd-firstboot --root=/mnt --force \
+    systemd-firstboot --root=/mnt \
      --locale="en_US.UTF-8" --locale-messages="en_US.UTF-8" \
      --keymap=us --timezone="Europe/Berlin" --hostname=myHost \
-     --root-password=PASSWORD --root-shell=/bin/bash
+     --root-password=PASSWORD
 
    ``systemd-firstboot`` have bugs, root password is set below.
+
+#. Generate host id::
+
+    zgenhostid -f -o /mnt/etc/hostid
 
 #. Install locale package, example for English locale::
 
@@ -72,6 +76,7 @@ System Configuration
    disable SSH server::
 
     systemctl disable sshd --root=/mnt
+    systemctl enable firewalld --root=/mnt
 
 #. Chroot::
 
@@ -79,27 +84,20 @@ System Configuration
     INST_LINVAR=$INST_LINVAR
     INST_UUID=$INST_UUID
     INST_ID=$INST_ID
+    unalias -a
     INST_VDEV=$INST_VDEV
     TERM=xterm" > /mnt/root/chroot
     echo DISK=\($(for i in ${DISK[@]}; do printf "$i "; done)\) >> /mnt/root/chroot
     arch-chroot /mnt bash --login
-    unalias -a
 
 #. Source variables::
 
     source /root/chroot
 
-#. Relabel filesystem on reboot::
+#. For SELinux, relabel filesystem on reboot::
 
     fixfiles -F onboot
 
 #. Set root password::
 
     passwd
-
-#. Build modules::
-
-    ls -1 /lib/modules \
-    | while read kernel_version; do
-      dkms autoinstall -k $kernel_version
-      done

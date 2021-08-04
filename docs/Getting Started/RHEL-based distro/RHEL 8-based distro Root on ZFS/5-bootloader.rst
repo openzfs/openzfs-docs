@@ -54,9 +54,6 @@ Install GRUB
       dracut --force --kver $kernel_version
       done
 
-#. When in doubt, install both legacy boot
-   and EFI.
-
 #. Load ZFS modules and disable BLS::
 
     echo 'GRUB_ENABLE_BLSCFG=false' >> /etc/default/grub
@@ -69,6 +66,9 @@ Install GRUB
 
    Boot environment-specific configuration (kernel, etc)
    is stored in ``/boot/grub2/grub.cfg``, enabling rollback.
+
+#. When in doubt, install both legacy boot
+   and EFI.
 
 #. If using legacy booting, install GRUB to every disk::
 
@@ -104,6 +104,7 @@ Install GRUB
 #. For both legacy and EFI booting: mirror ESP content::
 
     ESP_MIRROR=$(mktemp -d)
+    unalias -a
     cp -r /boot/efi/EFI $ESP_MIRROR
     for i in /boot/efis/*; do
      cp -r $ESP_MIRROR/EFI $i

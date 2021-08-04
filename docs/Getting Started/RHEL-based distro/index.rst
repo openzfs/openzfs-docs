@@ -42,7 +42,8 @@ For RHEL/CentOS versions 6 and 7 run::
 
 And for RHEL/CentOS 8 and newer::
 
- dnf install https://zfsonlinux.org/epel/zfs-release$(rpm -E %distro).noarch.rpm
+ source /etc/os-release
+ dnf install https://zfsonlinux.org/epel/zfs-release.el${VERSION_ID/./_}.noarch.rpm
  rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-zfsonlinux
 
 After installing the *zfs-release* package and verifying the public key
