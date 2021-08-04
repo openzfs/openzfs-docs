@@ -21,13 +21,14 @@ This section is also applicable if you are in
 #. On another computer, generate rescue image with::
 
      pacman -S --needed mtools libisoburn grub
+     grub-install
      grub-mkrescue -o grub-rescue.img
      dd if=grub-rescue.img of=/dev/your-usb-stick
 
    Boot computer from the rescue media.
    Both legacy and EFI mode are supported.
 
-   Skip this step if you are in GRUB rescue.
+   Or `download generated GRUB rescue image <https://gitlab.com/m_zhou/bieaz/uploads/4a1b7cefb42723de6eb04f9dc485be3b/grub-rescue.img.7z>`__.
 
 #. List available disks with ``ls`` command::
 
@@ -35,20 +36,6 @@ This section is also applicable if you are in
     Possible devices are:
 
      hd0 hd1 hd2 hd3
-
-   If you are dropped to GRUB rescue instead of
-   booting from GRUB rescue image, boot disk can be found
-   out with::
-
-    echo $root
-    # cryto0
-    # hd0,gpt2
-
-   GRUB configuration is loaded from::
-
-    echo $prefix
-    # (crypto0)/sys/BOOT/default@/grub
-    # (hd0,gpt2)/sys/BOOT/default@/grub
 
 #. List partitions by pressing tab key:
 
@@ -94,12 +81,10 @@ This section is also applicable if you are in
      grub> ls (crypto0)/sys/BOOT
      @/ default/ be0/
 
-#. Instruct GRUB to load configuration from ``be0`` boot environment
-   then enter normal mode::
+#. Instruct GRUB to load configuration from ``be0`` boot environment::
 
      grub> prefix=(crypto0)/sys/BOOT/be0/@/grub
-     grub> insmod normal
-     grub> normal
+     grub> configfile $prefix/grub.cfg
 
 #. GRUB menu should now appear.
 
@@ -188,7 +173,7 @@ Access system in chroot
 
 #. chroot into the system::
 
-     rhel-chroot /mnt /bin/bash --login
+     arch-chroot /mnt /bin/bash --login
      zfs mount -a
      mount -a
 
@@ -202,21 +187,21 @@ it is relatively easy to perform a system backup and migration.
 
 #. Create a snapshot of root file system::
 
-    zfs snapshot -r rpool/rhel@backup
-    zfs snapshot -r bpool/rhel@backup
+    zfs snapshot -r rpool/arch@backup
+    zfs snapshot -r bpool/arch@backup
 
 #. Save snapshot to a file or pipe to SSH::
 
-    zfs send --options rpool/rhel@backup > /backup/rhel-rpool
-    zfs send --options bpool/rhel@backup > /backup/rhel-bpool
+    zfs send --options rpool/arch@backup > /backup/arch-rpool
+    zfs send --options bpool/arch@backup > /backup/arch-bpool
 
 #. Re-create partitions and root/boot
    pool on target system.
 
 #. Restore backup::
 
-    zfs recv rpool_new/rhel < /backup/rhel-rpool
-    zfs recv bpool_new/rhel < /backup/rhel-bpool
+    zfs recv rpool_new/arch < /backup/arch-rpool
+    zfs recv bpool_new/arch < /backup/arch-bpool
 
 #. Chroot and reinstall bootloader.
 

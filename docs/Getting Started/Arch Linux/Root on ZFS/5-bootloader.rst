@@ -50,9 +50,6 @@ Install GRUB
 
     mkinitcpio -P
 
-#. When in doubt, install both legacy boot
-   and EFI.
-
 #. Create GRUB boot directory, in ESP and boot pool::
 
     mkdir -p /boot/efi/EFI/arch
@@ -60,6 +57,9 @@ Install GRUB
 
    Boot environment-specific configuration (kernel, etc)
    is stored in ``/boot/grub/grub.cfg``, enabling rollback.
+
+#. When in doubt, install both legacy boot
+   and EFI.
 
 #. If using legacy booting, install GRUB to every disk::
 

@@ -34,8 +34,17 @@ see below.
 
     dnf copr enable -y kwizart/kernel-longterm-5.4
     dnf install -y kernel-longterm kernel-longterm-devel
-    # reboot to new LTS kernel
+
+   Reboot to new LTS kernel, then load kernel module::
+
     modprobe zfs
+
+   It might be necessary to rebuild module::
+
+    ls -1 /lib/modules \
+    | while read kernel_version; do
+      dkms autoinstall -k $kernel_version
+    done
 
 #. By default ZFS kernel modules are loaded upon detecting a pool.
    To always load the modules at boot::

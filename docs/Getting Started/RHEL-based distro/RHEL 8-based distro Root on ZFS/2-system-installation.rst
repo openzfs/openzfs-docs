@@ -70,25 +70,12 @@ System Installation
 #. Create root pool::
 
        zpool create \
-           -d \
-           -o feature@empty_bpobj=enabled \
-           -o feature@lz4_compress=enabled \
-           -o feature@spacemap_histogram=enabled \
-           -o feature@enabled_txg=enabled \
-           -o feature@hole_birth=enabled \
-           -o feature@extensible_dataset=enabled \
-           -o feature@embedded_data=enabled \
-           -o feature@large_dnode=enabled \
-           -o feature@userobj_accounting=enabled \
-           -o feature@encryption=enabled \
-           -o feature@project_quota=enabled \
-           -o feature@spacemap_v2=enabled \
            -o ashift=12 \
            -o autotrim=on \
            -R /mnt \
            -O acltype=posixacl \
            -O canmount=off \
-           -O compression=lz4 \
+           -O compression=zstd \
            -O dnodesize=auto \
            -O normalization=formD \
            -O relatime=on \
@@ -232,15 +219,16 @@ System Installation
 
 #. Install base packages::
 
-    dnf --installroot=/mnt --releasever=${INST_RHEL_VER} -y install dnf
+    dnf --installroot=/mnt --releasever=${INST_RHEL_VER} -y install \
+    ${RHEL_ZFS_REPO} @core epel-release grub2-efi-x64 grub2-pc-modules grub2-efi-x64-modules shim-x64 efibootmgr
+    dnf config-manager --installroot=/mnt --disable zfs
+    dnf config-manager --installroot=/mnt --enable zfs-kmod
+    dnf install --installroot=/mnt -y zfs zfs-dracut
 
-#. Install bootloader, kernel and ZFS::
+   If speed is slow, you can manually pick a fixed mirror
+   from `mirrorlist <https://mirrors.rockylinux.org/mirrormanager/mirrors>`__
+   and apply it::
 
-    cp /etc/resolv.conf /mnt/etc
-    arch-chroot /mnt bash --login <<EOF
-    dnf --releasever=${INST_RHEL_VER} -y install ${RHEL_ZFS_REPO} \
-    @core epel-release \
-    grub2-efi-x64 grub2-pc-modules grub2-efi-x64-modules shim-x64 efibootmgr \
-    kernel kernel-devel
-    dnf --releasever=${INST_RHEL_VER} -y install zfs zfs-dracut
-    EOF
+    sed -i 's|^mirrorlist=|#mirrorlist=|g' /etc/yum.repos.d/*
+    sed -i 's|^#baseurl=|baseurl=|g' /etc/yum.repos.d/*
+    sed -i 's|dl.rockylinux.org/$contentdir|mirrors.sjtug.sjtu.edu.cn/rocky|g' /etc/yum.repos.d/*

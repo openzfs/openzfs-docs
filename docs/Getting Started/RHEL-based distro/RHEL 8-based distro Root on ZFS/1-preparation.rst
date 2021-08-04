@@ -6,15 +6,15 @@ Preparation
 .. contents:: Table of Contents
    :local:
 
-#. Download a variant of Fedora 34 live image
-   such as LXDE spin and boot from it.
+#. Download a variant of `Rocky Linux 8.4 Live
+   ISO <https://dl.rockylinux.org/pub/rocky/8.4/Live/x86_64/>`__ and boot from it.
 
 #. Disable Secure Boot. ZFS modules can not be loaded of Secure Boot is enabled.
 #. Set root password or ``/root/authorized_keys``.
 #. Start SSH server::
 
     echo PermitRootLogin yes >> /etc/ssh/sshd_config
-    systemctl start sshd
+    systemctl restart sshd
 
 #. Connect from another computer::
 
@@ -24,17 +24,17 @@ Preparation
 
     setenforce 0
 
-#. Install ``kernel-devel``::
-
-    source /etc/os-release
-    dnf install -y https://dl.fedoraproject.org/pub/fedora/linux/releases/${VERSION_ID}/Everything/x86_64/os/Packages/k/kernel-devel-$(uname -r).rpm
-
 #. Add ZFS repo::
 
-    dnf install -y https://zfsonlinux.org/fedora/zfs-release.fc${VERSION_ID}.noarch.rpm
+    source /etc/os-release
+    RHEL_ZFS_REPO=https://zfsonlinux.org/epel/zfs-release.el${VERSION_ID/./_}.noarch.rpm
+    dnf install -y $RHEL_ZFS_REPO
 
 #. Install ZFS packages::
 
+    dnf config-manager --disable zfs
+    dnf config-manager --enable zfs-kmod
+    dnf install -y epel-release
     dnf install -y zfs
 
 #. Load kernel modules::
@@ -43,23 +43,12 @@ Preparation
 
 #. Install helper script and partition tool::
 
-    dnf install -y arch-install-scripts gdisk
+    rpm -ivh --nodeps https://dl.fedoraproject.org/pub/fedora/linux/releases/34/Everything/x86_64/os/Packages/a/arch-install-scripts-23-3.fc34.noarch.rpm
+    dnf install -y gdisk dosfstools
 
 #. Set RHEL version::
 
     INST_RHEL_VER=8
-
-#. Remove Fedora repo and install target distro repo, zfs repo::
-
-    rpm -qa | grep -E ^fedora | xargs -i{} rpm -e --nodeps {}
-    rpm -e zfs-release
-    ROCKY_REPO=https://dl.rockylinux.org/pub/rocky/8.4/BaseOS/x86_64/os/Packages/
-    rpm -ivh \
-      ${ROCKY_REPO}rocky-gpg-keys-8.4-26.el8.noarch.rpm \
-      ${ROCKY_REPO}rocky-release-8.4-26.el8.noarch.rpm \
-      ${ROCKY_REPO}rocky-repos-8.4-26.el8.noarch.rpm
-    RHEL_ZFS_REPO=https://zfsonlinux.org/epel/zfs-release.el8_4.noarch.rpm
-    dnf install -y ${RHEL_ZFS_REPO} epel-release
 
 #. Unique pool suffix. ZFS expects pool names to be
    unique, therefore it's recommended to create
@@ -89,7 +78,7 @@ Preparation
     DISK=(/dev/disk/by-id/disk1)
 
 #. Choose a primary disk. This disk will be used
-   for primary EFI partition and hibernation, default to
+   for primary EFI partition, default to
    first disk in the array::
 
     INST_PRIMARY_DISK=${DISK[0]}
@@ -105,6 +94,24 @@ Preparation
    ::
 
     INST_VDEV=
+
+   This will create a single vdev with the topology of your choice.
+   It is also possible to manually create a pool with multiple vdevs, such as::
+
+    zpool create --options \
+          poolName \
+          mirror sda sdb \
+          raidz2 sdc ... \
+          raidz3 sde ... \
+          spare  sdf ...
+
+   Notice the cost of parity when using RAID-Z. See
+   `here <https://www.delphix.com/blog/delphix-engineering/zfs-raidz-stripe-width-or-how-i-learned-stop-worrying-and-love-raidz>`__
+   and `here <https://docs.google.com/spreadsheets/d/1tf4qx1aMJp8Lo_R6gpT689wTjHv6CGVElrPqTA0w_ZY/>`__.
+
+   Refer to `zpoolconcepts <https://openzfs.github.io/openzfs-docs/man/7/zpoolconcepts.7.html>`__
+   and `zpool-create <https://openzfs.github.io/openzfs-docs/man/8/zpool-create.8.html>`__
+   man pages for details.
 
 #. Set partition size:
 
