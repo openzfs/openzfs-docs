@@ -187,21 +187,21 @@ it is relatively easy to perform a system backup and migration.
 
 #. Create a snapshot of root file system::
 
-    zfs snapshot -r rpool/arch@backup
-    zfs snapshot -r bpool/arch@backup
+    zfs snapshot -r rpool/$INST_ID@backup
+    zfs snapshot -r bpool/$INST_ID@backup
 
 #. Save snapshot to a file or pipe to SSH::
 
-    zfs send --options rpool/arch@backup > /backup/arch-rpool
-    zfs send --options bpool/arch@backup > /backup/arch-bpool
+    zfs send --options rpool/$INST_ID@backup > /backup/$INST_ID-rpool
+    zfs send --options bpool/$INST_ID@backup > /backup/$INST_ID-bpool
 
 #. Re-create partitions and root/boot
    pool on target system.
 
 #. Restore backup::
 
-    zfs recv rpool_new/arch < /backup/arch-rpool
-    zfs recv bpool_new/arch < /backup/arch-bpool
+    zfs recv rpool_new/$INST_ID < /backup/$INST_ID-rpool
+    zfs recv bpool_new/$INST_ID < /backup/$INST_ID-bpool
 
 #. Chroot and reinstall bootloader.
 
