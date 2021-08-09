@@ -7,27 +7,52 @@ ls $ISO_PATH 1> /dev/null
 ESP_UUID=$(blkid -s UUID -o value $(df --output=source ${ISO_PATH} | tail -n +2))
 cat <<EOF
 submenu 'archiso' {
-    configfile \$prefix/archiso.cfg
-}
-EOF
-tee /boot/grub/archiso.cfg 1> /dev/null <<EOF
+rmmod tpm
 insmod search_fs_uuid
 set isorootuuid=$ESP_UUID
 search --fs-uuid --no-floppy --set=isopart \$isorootuuid
 set isopath=$ISO_REL
+configfile \$prefix/archiso.cfg
 EOF
 ISO_NUM=0
 for isofile in $ISO_PATH/archlinux-*.iso; do
     if [ "$ISO_NUM" -gt 300 ]; then break; fi
     isoname=${isofile##*/}
-tee -a /boot/grub/archiso.cfg 1> /dev/null <<EOF
-menuentry "$isoname" {
+cat <<EOF
+submenu "$isoname" {
+menuentry "Arch Linux install medium" {
     loopback loop0 (\$isopart)\$isopath/$isoname
-    linux (loop0)/arch/boot/x86_64/vmlinuz-linux earlymodules=loop img_dev=/dev/disk/by-uuid/\$isorootuuid img_loop=\$isopath/$isoname
-    initrd (loop0)/arch/boot/intel-ucode.img (loop0)/arch/boot/amd-ucode.img (loop0)/arch/boot/x86_64/initramfs-linux.img
+    linux  (loop0)/arch/boot/x86_64/vmlinuz-linux \\
+           earlymodules=loop img_dev=/dev/disk/by-uuid/\$isorootuuid img_loop=\$isopath/$isoname
+    initrd (loop0)/arch/boot/intel-ucode.img
+    initrd (loop0)/arch/boot/amd-ucode.img
+    initrd (loop0)/arch/boot/x86_64/initramfs-linux.img
+}
+menuentry "Arch Linux install medium, Copy to RAM" {
+    loopback loop0 (\$isopart)\$isopath/$isoname
+    linux  (loop0)/arch/boot/x86_64/vmlinuz-linux \\
+           earlymodules=loop img_dev=/dev/disk/by-uuid/\$isorootuuid img_loop=\$isopath/$isoname \\
+	   copytoram
+    initrd (loop0)/arch/boot/intel-ucode.img
+    initrd (loop0)/arch/boot/amd-ucode.img
+    initrd (loop0)/arch/boot/x86_64/initramfs-linux.img
+}
+menuentry "Arch Linux install medium with speech" {
+    loopback loop0 (\$isopart)\$isopath/$isoname
+    linux  (loop0)/arch/boot/x86_64/vmlinuz-linux \\
+           earlymodules=loop img_dev=/dev/disk/by-uuid/\$isorootuuid img_loop=\$isopath/$isoname \\
+	   accessibility=on
+    initrd (loop0)/arch/boot/intel-ucode.img
+    initrd (loop0)/arch/boot/amd-ucode.img
+    initrd (loop0)/arch/boot/x86_64/initramfs-linux.img
+}
 }
 EOF
 ISO_NUM=$(( $ISO_NUM + 1 ))
 done
+cat <<EOF
+}
+EOF
+
 # archiso kernel cmdline from
-# https://gitlab.archlinux.org/archlinux/archiso/-/blob/master/configs/releng/efiboot/loader/entries/archiso-x86_64-linux.conf
+# https://gitlab.archlinux.org/archlinux/archiso/-/tree/master/configs/releng/efiboot/loader/entries

@@ -83,17 +83,7 @@ In test installation, GRUB took nearly 2 minutes to decrypt LUKS container.
 #. Recreate boot pool with mappers as vdev::
 
     zpool create \
-    -d -o feature@async_destroy=enabled \
-    -o feature@bookmarks=enabled \
-    -o feature@embedded_data=enabled \
-    -o feature@empty_bpobj=enabled \
-    -o feature@enabled_txg=enabled \
-    -o feature@extensible_dataset=enabled \
-    -o feature@filesystem_limits=enabled \
-    -o feature@hole_birth=enabled \
-    -o feature@large_blocks=enabled \
-    -o feature@lz4_compress=enabled \
-    -o feature@spacemap_histogram=enabled \
+        -o compatibility=grub2 \
         -o ashift=12 \
         -o autotrim=on \
         -O acltype=posixacl \
