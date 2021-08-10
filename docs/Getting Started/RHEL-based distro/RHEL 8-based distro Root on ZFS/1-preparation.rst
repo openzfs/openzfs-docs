@@ -20,9 +20,11 @@ Preparation
 
     ssh root@192.168.1.19
 
-#. Set SELinux to permissive::
+#. Temporarily set SELinux to permissive in live environment::
 
     setenforce 0
+
+   SELinux will be enabled on the installed system.
 
 #. Add ZFS repo::
 
