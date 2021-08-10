@@ -101,6 +101,13 @@ Install GRUB
     cp /boot/efi/EFI/rocky/grub.cfg /boot/efi/EFI/rocky/grub2/grub.cfg
     cp /boot/efi/EFI/rocky/grub.cfg /boot/grub2/grub.cfg
 
+   The following errors may be safely ignored::
+
+    #device-mapper: reload ioctl on osprober-linux-sda2 (253:0) failed: Device or resource busy
+    #Command failed.
+
+    #/usr/sbin/grub2-probe: error: ../grub-core/kern/fs.c:120:unknown filesystem.
+
 #. For both legacy and EFI booting: mirror ESP content::
 
     ESP_MIRROR=$(mktemp -d)
