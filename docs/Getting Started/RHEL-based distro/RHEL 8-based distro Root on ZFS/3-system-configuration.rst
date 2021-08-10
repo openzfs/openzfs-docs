@@ -101,3 +101,10 @@ System Configuration
 #. Set root password::
 
     passwd
+
+#. Build ZFS modules::
+
+    ls -1 /lib/modules \
+    | while read kernel_version; do
+      dkms autoinstall -k $kernel_version
+      done
