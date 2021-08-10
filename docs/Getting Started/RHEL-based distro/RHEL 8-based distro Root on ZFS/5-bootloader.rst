@@ -105,8 +105,13 @@ Install GRUB
 
     #device-mapper: reload ioctl on osprober-linux-sda2 (253:0) failed: Device or resource busy
     #Command failed.
+    # this is caused by os-prober probing OS on the partitions used by ZFS
+    # this is harmless but os-prober can be disabled by
+    echo GRUB_DISABLE_OS_PROBER=true >> /etc/default/grub
 
     #/usr/sbin/grub2-probe: error: ../grub-core/kern/fs.c:120:unknown filesystem.
+    # on some machines this will appear, causing grub to not recognize bpool
+    # this is fixed by /etc/grub.d/09_fix_root_on_zfs
 
 #. For both legacy and EFI booting: mirror ESP content::
 
