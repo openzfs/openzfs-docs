@@ -221,8 +221,6 @@ System Installation
 
     dnf --installroot=/mnt --releasever=${INST_RHEL_VER} -y install \
     ${RHEL_ZFS_REPO} @core epel-release grub2-efi-x64 grub2-pc-modules grub2-efi-x64-modules shim-x64 efibootmgr
-    dnf config-manager --installroot=/mnt --disable zfs
-    dnf config-manager --installroot=/mnt --enable zfs-kmod
     dnf install --installroot=/mnt -y zfs zfs-dracut
 
    If speed is slow, you can manually pick a fixed mirror
@@ -232,3 +230,9 @@ System Installation
     sed -i 's|^mirrorlist=|#mirrorlist=|g' /etc/yum.repos.d/*
     sed -i 's|^#baseurl=|baseurl=|g' /etc/yum.repos.d/*
     sed -i 's|dl.rockylinux.org/$contentdir|mirrors.sjtug.sjtu.edu.cn/rocky|g' /etc/yum.repos.d/*
+
+#. Update zfs repo if a newer release is available::
+
+    source /mnt/etc/os-release
+    RHEL_ZFS_REPO_NEW=https://zfsonlinux.org/epel/zfs-release.el${VERSION_ID/./_}.noarch.rpm
+    dnf install --installroot=/mnt -y $RHEL_ZFS_REPO_NEW || true
