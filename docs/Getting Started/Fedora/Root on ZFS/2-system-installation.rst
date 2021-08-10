@@ -216,4 +216,4 @@ System Installation
 
 #. Install ZFS::
 
-    dnf --installroot=/mnt --releasever=${INST_FEDORA_VER} -y install zfs zfs-dracut
+    dnf --installroot=/mnt -y install zfs zfs-dracut
