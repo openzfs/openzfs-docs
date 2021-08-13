@@ -26,17 +26,7 @@ Preparation
 
 #. `Add archzfs repo <../0-archzfs-repo.html>`__.
 
-#.  Install prebuilt ZFS package, corresponding to
-    `live image kernel version <https://archlinux.org/download/>`__::
-
-     LIVE_ZFS_PKG="zfs-linux-2.1.0_5.13.6.arch1.1-1-x86_64.pkg.tar.zst"
-     LIVE_ZFS_UTILS="zfs-utils-2.1.0-2-x86_64.pkg.tar.zst"
-     LIVE_ZFS_MIRROR="https://mirror.sum7.eu/archlinux/archzfs"
-     pacman -U --noconfirm ${LIVE_ZFS_MIRROR}/archzfs/x86_64/${LIVE_ZFS_UTILS} || \
-     pacman -U --noconfirm ${LIVE_ZFS_MIRROR}/archive_archzfs/${LIVE_ZFS_UTILS}
-     pacman -U --noconfirm ${LIVE_ZFS_MIRROR}/archzfs/x86_64/${LIVE_ZFS_PKG} || \
-     pacman -U --noconfirm ${LIVE_ZFS_MIRROR}/archive_archzfs/${LIVE_ZFS_PKG}
-     modprobe zfs
+#. `Install zfs-dkms in live environment <../2-zfs-dkms.html#installation>`__.
 
 #. Kernel variant
 
