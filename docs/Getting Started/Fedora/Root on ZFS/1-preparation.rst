@@ -6,10 +6,13 @@ Preparation
 .. contents:: Table of Contents
    :local:
 
+#. Disable Secure Boot. ZFS modules can not be loaded of Secure Boot is enabled.
 #. Download a variant of Fedora 34 live image
    and boot from it.
 
-#. Disable Secure Boot. ZFS modules can not be loaded of Secure Boot is enabled.
+   - `Fedora Workstation (GNOME) <https://download.fedoraproject.org/pub/fedora/linux/releases/34/Workstation/x86_64/iso/>`__
+   - `Fedora Spins (Xfce, i3, ...) <https://download.fedoraproject.org/pub/fedora/linux/releases/34/Spins/x86_64/iso/>`__
+
 #. Set root password or ``/root/authorized_keys``.
 #. Start SSH server::
 
