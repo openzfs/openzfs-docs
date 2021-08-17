@@ -35,7 +35,7 @@ Preparation
 
 #. Install ZFS packages::
 
-    dnf install -y zfs
+    dnf swap zfs-fuse zfs
 
 #. Load kernel modules::
 
