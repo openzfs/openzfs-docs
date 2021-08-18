@@ -6,10 +6,10 @@ Preparation
 .. contents:: Table of Contents
    :local:
 
+#. Disable Secure Boot. ZFS modules can not be loaded of Secure Boot is enabled.
 #. Download a variant of `Rocky Linux 8.4 Live
    ISO <https://dl.rockylinux.org/pub/rocky/8.4/Live/x86_64/>`__ and boot from it.
 
-#. Disable Secure Boot. ZFS modules can not be loaded of Secure Boot is enabled.
 #. Set root password or ``/root/authorized_keys``.
 #. Start SSH server::
 
@@ -25,6 +25,14 @@ Preparation
     setenforce 0
 
    SELinux will be enabled on the installed system.
+
+#. Optional: If mirror speed is slow, you can manually pick a fixed mirror
+   from `mirrorlist <https://mirrors.rockylinux.org/mirrormanager/mirrors>`__
+   and apply it::
+
+    sed -i 's|^mirrorlist=|#mirrorlist=|g' /etc/yum.repos.d/*
+    sed -i 's|^#baseurl=|baseurl=|g' /etc/yum.repos.d/*
+    sed -i 's|dl.rockylinux.org/$contentdir|mirrors.sjtug.sjtu.edu.cn/rocky|g' /etc/yum.repos.d/*
 
 #. Add ZFS repo::
 

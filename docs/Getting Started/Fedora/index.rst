@@ -16,6 +16,12 @@ Note: this is for installing ZFS on an existing Fedora
 installation. To use ZFS as root file system,
 see below.
 
+#. If ``zfs-fuse`` from official Fedora repo is installed,
+   remove it first. It is not maintained and should not be used
+   under any circumstance::
+
+    dnf remove -y zfs-fuse
+
 #. Add ZFS repo::
 
     dnf install -y https://zfsonlinux.org/fedora/zfs-release$(rpm -E %dist).noarch.rpm
