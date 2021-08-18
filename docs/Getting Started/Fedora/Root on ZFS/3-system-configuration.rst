@@ -43,24 +43,6 @@ System Configuration
 
     echo 'add_dracutmodules+=" zfs "' > /mnt/etc/dracut.conf.d/zfs.conf
 
-#. Enable DHCP on all ethernet ports::
-
-     tee /mnt/etc/systemd/network/20-default.network <<EOF
-
-     [Match]
-     Name=en*
-     Name=eth*
-
-     [Network]
-     DHCP=yes
-     EOF
-     systemctl enable systemd-networkd systemd-resolved --root=/mnt
-
-   Customize this file if the system is not using wired DHCP network.
-   See `Network Configuration <https://wiki.archlinux.org/index.php/Network_configuration>`__.
-
-   Alternatively, configure ``NetworkManager``.
-
 #. Enable timezone sync::
 
     hwclock --systohc
