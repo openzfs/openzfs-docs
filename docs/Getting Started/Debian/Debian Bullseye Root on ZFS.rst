@@ -1,7 +1,7 @@
 .. highlight:: sh
 
 Debian Bullseye Root on ZFS
-=========================
+===========================
 
 .. contents:: Table of Contents
   :local:
@@ -20,7 +20,7 @@ System Requirements
 ~~~~~~~~~~~~~~~~~~~
 
 - `64-bit Debian GNU/Linux Bullseye Live CD w/ GUI (e.g. gnome iso)
-  <https://cdimage.debian.org/mirror/cdimage/unofficial/non-free/cd-including-firmware/weekly-live-builds/amd64/iso-hybrid/debian-live-testing-amd64-standard+nonfree.iso>`__
+  <https://cdimage.debian.org/mirror/cdimage/unofficial/non-free/cd-including-firmware/current-live/amd64/iso-hybrid/debian-live-11.0.0-amd64-standard+nonfree.iso>`__
 - `A 64-bit kernel is strongly encouraged.
   <https://github.com/zfsonlinux/zfs/wiki/FAQ#32-bit-vs-64-bit-systems>`__
 - Installing on a drive which presents 4 KiB logical sectors (a “4Kn” drive)
@@ -41,7 +41,7 @@ If you need help, reach out to the community using the :ref:`mailing_lists` or I
 `#zfsonlinux <irc://irc.freenode.net/#zfsonlinux>`__ on `freenode
 <https://freenode.net/>`__. If you have a bug report or feature request
 related to this HOWTO, please `file a new issue and mention @rlaager
-<https://github.com/openzfs/openzfs-docs/issues/new?body=@rlaager,%20I%20have%20the%20following%20issue%20with%20the%20Debian%20Buster%20Root%20on%20ZFS%20HOWTO:>`__.
+<https://github.com/openzfs/openzfs-docs/issues/new?body=@rlaager,%20I%20have%20the%20following%20issue%20with%20the%20Debian%20Bullseye%20Root%20on%20ZFS%20HOWTO:>`__.
 
 Contributing
 ~~~~~~~~~~~~
@@ -139,10 +139,7 @@ Step 1: Prepare The Install Environment
 
 #. Install ZFS in the Live CD environment::
 
-     apt install --yes debootstrap gdisk dkms dpkg-dev \
-         linux-headers-$(uname -r)
-
-     apt install --yes --no-install-recommends zfs-dkms
+     apt install --yes debootstrap gdisk dkms dpkg-dev zfs-dkms
 
      modprobe zfs
      apt install --yes zfsutils-linux
@@ -575,24 +572,11 @@ Step 4: System Configuration
    .. code-block:: sourceslist
 
      deb http://deb.debian.org/debian bullseye main contrib
-     #deb-src http://deb.debian.org/debian bullseye main contrib
-
-     #deb http://security.debian.org/debian-security bullseye/updates main contrib
-     #deb-src http://security.debian.org/debian-security bullseye/updates main contrib
-
-     #deb http://deb.debian.org/debian bullseye-updates main contrib
-     #deb-src http://deb.debian.org/debian bullseye-updates main contrib
+     deb http://security.debian.org/debian-security bullseye-security/updates main contrib
+     deb http://deb.debian.org/debian bullseye-updates main contrib
 
    ::
 
-     vi /mnt/etc/apt/sources.list.d/bullseye-backports.list
-
-   .. code-block:: sourceslist
-
-     #deb http://deb.debian.org/debian bullseye-backports main contrib
-     #deb-src http://deb.debian.org/debian bullseye-backports main contrib
-
-   ::
 
 #. Bind the virtual filesystems from the LiveCD environment to the new
    system and ``chroot`` into it::
