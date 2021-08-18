@@ -24,9 +24,17 @@ Preparation
     ssh root@192.168.1.19
     bash
 
+#. Expand live root filesystem::
+
+    mount -o remount,size=2G /run/archiso/cowspace/
+
 #. `Add archzfs repo <../0-archzfs-repo.html>`__.
 
 #. `Install zfs-dkms in live environment <../2-zfs-dkms.html#installation>`__.
+
+#. Load zfs kernel module::
+
+    modprobe zfs
 
 #. Kernel variant
 

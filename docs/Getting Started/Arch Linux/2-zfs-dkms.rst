@@ -42,7 +42,7 @@ Installation
 
 #. Install zfs-dkms::
 
-     pacman -Sy --needed zfs-dkms glibc
+     pacman -Sy --needed --noconfirm zfs-dkms glibc
 
    If pacman output contains the following error message,
    then the kernel needs a `downgrade <#zfs-dkms-compatible-kernel>`__,
