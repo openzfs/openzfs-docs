@@ -82,6 +82,7 @@ root pool will be replaced by keyfile, embedded in initrd.
     chmod 700 /etc/cryptkey.d/
     dd bs=32 count=1 if=/dev/urandom of=/etc/cryptkey.d/rpool_$INST_UUID-${INST_ID}-key-zfs
     dd bs=32 count=1 if=/dev/urandom of=/etc/cryptkey.d/bpool_$INST_UUID-key-luks
+    chmod u=r,go= /etc/cryptkey.d/*
 
 #. Backup boot pool::
 
@@ -206,7 +207,8 @@ Persistent swap and hibernation
 
     # create key and format partition as LUKS container
     dd bs=32 count=1 if=/dev/urandom of=${INST_SWAPKEY};
-    cryptsetup luksFormat -q --type luks2 --key-file ${INST_SWAPKEY} ${INST_PRIMARY_DISK}-part4;
+    chmod u=r,go= /etc/cryptkey.d/*
+    cryptsetup luksFormat -q --type luks2 --key-file ${INST_SWAPKEY} ${INST_PRIMARY_DISK}-part4
     cryptsetup luksOpen ${INST_PRIMARY_DISK}-part4 ${INST_SWAPMAPPER} --key-file ${INST_SWAPKEY}
 
     # initialize swap space
