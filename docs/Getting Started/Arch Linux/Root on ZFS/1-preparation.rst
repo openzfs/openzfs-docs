@@ -18,11 +18,15 @@ Preparation
 
     systemctl start sshd
 
-#. Connect from another computer
-   and enter a bash shell::
+#. Connect from another computer::
 
     ssh root@192.168.1.19
+
+   and, most important, enter a bash shell::
+
     bash
+
+   This guide is untested with the default shell ``zsh`` in live environment.
 
 #. Expand live root filesystem::
 
