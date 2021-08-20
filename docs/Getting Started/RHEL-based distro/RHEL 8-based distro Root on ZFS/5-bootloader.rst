@@ -121,6 +121,29 @@ Install GRUB
      cp -r $ESP_MIRROR/EFI $i
     done
 
+#. Automatically regenerate GRUB menu on kernel update::
+
+     tee /etc/dnf/plugins/post-transaction-actions.d/00-update-grub-menu-for-kernel.action <<EOF >/dev/null
+     kernel*:in:/usr/local/sbin/update-grub-menu.sh
+     kernel*:out:/usr/local/sbin/update-grub-menu.sh
+     EOF
+
+     tee /usr/local/sbin/update-grub-menu.sh <<-'EOF'
+     #!/bin/sh
+     export PATH=$PATH:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+     grub2-mkconfig -o /boot/efi/EFI/rocky/grub.cfg
+     cp /boot/efi/EFI/rocky/grub.cfg /boot/efi/EFI/rocky/grub2/grub.cfg
+     cp /boot/efi/EFI/rocky/grub.cfg /boot/grub2/grub.cfg
+     ESP_MIRROR=$(mktemp -d)
+     cp -r /boot/efi/EFI $ESP_MIRROR
+     for i in /boot/efis/*; do
+      cp -r $ESP_MIRROR/EFI $i
+     done
+     rm -rf $ESP_MIRROR
+     EOF
+
+     chmod +x /usr/local/sbin/update-grub-menu.sh
+
 #. Notes for GRUB on RHEL
 
    To support Secure Boot, GRUB has been heavily modified by Fedora,

@@ -238,7 +238,8 @@ System Installation
 
     dnf --installroot=/mnt --releasever=${INST_RHEL_VER} -y install \
     ${RHEL_ZFS_REPO} @core epel-release grub2-efi-x64 grub2-pc-modules \
-    grub2-efi-x64-modules shim-x64 efibootmgr kernel kernel-devel
+    grub2-efi-x64-modules shim-x64 efibootmgr \
+    kernel kernel-devel python3-dnf-plugin-post-transaction-actions
     dnf install --installroot=/mnt -y zfs zfs-dracut
 
 #. Update zfs repo if a newer release is available::
