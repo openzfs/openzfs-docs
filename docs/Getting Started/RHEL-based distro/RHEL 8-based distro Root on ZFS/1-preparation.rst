@@ -6,7 +6,7 @@ Preparation
 .. contents:: Table of Contents
    :local:
 
-#. Disable Secure Boot. ZFS modules can not be loaded of Secure Boot is enabled.
+#. Disable Secure Boot. ZFS modules can not be loaded if Secure Boot is enabled.
 #. Download a variant of `Rocky Linux 8.4 Live
    ISO <https://dl.rockylinux.org/pub/rocky/8.4/Live/x86_64/>`__ and boot from it.
 
