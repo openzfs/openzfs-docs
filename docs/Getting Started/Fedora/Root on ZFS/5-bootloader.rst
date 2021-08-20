@@ -102,16 +102,20 @@ Install GRUB
 #. Automatically regenerate GRUB menu on kernel update::
 
      tee /etc/dnf/plugins/post-transaction-actions.d/00-update-grub-menu-for-kernel.action <<EOF >/dev/null
-     kernel*:in:/usr/local/sbin/update-grub-menu.sh
-     kernel*:out:/usr/local/sbin/update-grub-menu.sh
+     # kernel-core package contains vmlinuz and initramfs
+     # change package name if non-standard kernel is used
+     kernel-core:in:/usr/local/sbin/update-grub-menu.sh
+     kernel-core:out:/usr/local/sbin/update-grub-menu.sh
      EOF
 
      tee /usr/local/sbin/update-grub-menu.sh <<-'EOF' >/dev/null
      #!/bin/sh
      export PATH=$PATH:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-     grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
-     cp /boot/efi/EFI/fedora/grub.cfg /boot/efi/EFI/fedora/grub2/grub.cfg
-     cp /boot/efi/EFI/fedora/grub.cfg /boot/grub2/grub.cfg
+     export ZPOOL_VDEV_NAME_PATH=YES
+     source /etc/os-release
+     grub2-mkconfig -o /boot/efi/EFI/${ID}/grub.cfg
+     cp /boot/efi/EFI/${ID}/grub.cfg /boot/efi/EFI/${ID}/grub2/grub.cfg
+     cp /boot/efi/EFI/${ID}/grub.cfg /boot/grub2/grub.cfg
      ESP_MIRROR=$(mktemp -d)
      cp -r /boot/efi/EFI $ESP_MIRROR
      for i in /boot/efis/*; do
