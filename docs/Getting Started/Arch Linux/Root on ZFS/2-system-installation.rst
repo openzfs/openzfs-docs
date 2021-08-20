@@ -6,6 +6,23 @@ System Installation
 .. contents:: Table of Contents
    :local:
 
+#. Optional: wipe solid-state drives with the generic tool
+   `blkdiscard <https://utcc.utoronto.ca/~cks/space/blog/linux/ErasingSSDsWithBlkdiscard>`__,
+   to clean previous partition tables and improve performance.
+
+   All content will be irrevocably destroyed::
+
+    for i in ${DISK[@]}; do
+    blkdiscard -f $i &
+    done
+    wait
+
+   This is a quick operation and should be completed under one
+   minute.
+
+   For other device specific methods, see
+   `Memory cell clearing <https://wiki.archlinux.org/title/Solid_state_drive/Memory_cell_clearing>`__
+
 #. Partition the disks.
    See `Overview <0-overview.html>`__ for details::
 
