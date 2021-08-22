@@ -48,6 +48,10 @@ Install GRUB
 
 #. Generate initrd::
 
+    rm -f /etc/zfs/zpool.cache
+    touch /etc/zfs/zpool.cache
+    chmod a-w /etc/zfs/zpool.cache
+    chattr +i /etc/zfs/zpool.cache
     mkinitcpio -P
 
 #. Create GRUB boot directory, in ESP and boot pool::
