@@ -1,0 +1,6 @@
+# action.yml
+name: 'sitegen'
+description: 'Generate website'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
