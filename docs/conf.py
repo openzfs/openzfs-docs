@@ -22,7 +22,7 @@ import sphinx_rtd_theme
 # -- Project information -----------------------------------------------------
 
 project = u'OpenZFS'
-copyright = u'2020, OpenZFS'
+copyright = u'2021, OpenZFS'
 author = u'OpenZFS'
 
 # The short X.Y version
