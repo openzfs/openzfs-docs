@@ -67,7 +67,7 @@ Install GRUB
 
 #. If using legacy booting, install GRUB to every disk::
 
-    for i in ${DISK[@]}; do
+    for i in ${DISK}; do
      grub-install --boot-directory /boot/efi/EFI/arch --target=i386-pc $i
     done
 
@@ -75,7 +75,7 @@ Install GRUB
 
     grub-install --boot-directory /boot/efi/EFI/arch --efi-directory /boot/efi/
     grub-install --boot-directory /boot/efi/EFI/arch --efi-directory /boot/efi/ --removable
-    for i in ${DISK[@]}; do
+    for i in ${DISK}; do
      efibootmgr -cgp 1 -l "\EFI\arch\grubx64.efi" \
      -L "arch-${i##*/}" -d ${i}
     done
@@ -123,6 +123,24 @@ Finish Installation
 #. Reboot::
 
     reboot
+
+Post installaion
+~~~~~~~~~~~~~~~~
+
+#. If you have other data pools, generate list of datasets for `zfs-mount-generator
+   <https://manpages.ubuntu.com/manpages/focal/man8/zfs-mount-generator.8.html>`__ to mount them at boot::
+
+    DATA_POOL='tank0 tank1'
+
+    # tab-separated zfs properties
+    # see /etc/zfs/zed.d/history_event-zfs-list-cacher.sh
+    export \
+    PROPS="name,mountpoint,canmount,atime,relatime,devices,exec\
+    ,readonly,setuid,nbmand,encroot,keylocation"
+
+    for i in $DATA_POOL; do
+    zfs list -H -t filesystem -o $PROPS -r $i > /etc/zfs/zfs-list.cache/$i
+    done
 
 #. After reboot, consider adding a normal user::
 

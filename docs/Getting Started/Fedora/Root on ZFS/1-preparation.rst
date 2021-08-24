@@ -75,17 +75,17 @@ Preparation
 
    Declare disk array::
 
-    DISK=(/dev/disk/by-id/ata-FOO /dev/disk/by-id/nvme-BAR)
+    DISK='/dev/disk/by-id/ata-FOO /dev/disk/by-id/nvme-BAR'
 
    For single disk installation, use::
 
-    DISK=(/dev/disk/by-id/disk1)
+    DISK='/dev/disk/by-id/disk1'
 
 #. Choose a primary disk. This disk will be used
    for primary EFI partition and hibernation, default to
    first disk in the array::
 
-    INST_PRIMARY_DISK=${DISK[0]}
+    INST_PRIMARY_DISK=$(echo $DISK | cut -f1 -d\ )
 
 #. Set vdev topology, possible values are:
 

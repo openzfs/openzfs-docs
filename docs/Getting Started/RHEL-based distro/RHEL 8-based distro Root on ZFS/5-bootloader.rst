@@ -72,13 +72,13 @@ Install GRUB
 
 #. If using legacy booting, install GRUB to every disk::
 
-    for i in ${DISK[@]}; do
+    for i in ${DISK}; do
      grub2-install --boot-directory /boot/efi/EFI/rocky --target=i386-pc $i
     done
 
 #. If using EFI::
 
-    for i in ${DISK[@]}; do
+    for i in ${DISK}; do
      efibootmgr -cgp 1 -l "\EFI\rocky\shimx64.efi" \
      -L "rocky-${i##*/}" -d ${i}
     done
@@ -194,6 +194,24 @@ Finish Installation
 #. Reboot::
 
     reboot
+
+Post installaion
+~~~~~~~~~~~~~~~~
+
+#. If you have other data pools, generate list of datasets for `zfs-mount-generator
+   <https://manpages.ubuntu.com/manpages/focal/man8/zfs-mount-generator.8.html>`__ to mount them at boot::
+
+    DATA_POOL='tank0 tank1'
+
+    # tab-separated zfs properties
+    # see /etc/zfs/zed.d/history_event-zfs-list-cacher.sh
+    export \
+    PROPS="name,mountpoint,canmount,atime,relatime,devices,exec\
+    ,readonly,setuid,nbmand,encroot,keylocation"
+
+    for i in $DATA_POOL; do
+    zfs list -H -t filesystem -o $PROPS -r $i > /etc/zfs/zfs-list.cache/$i
+    done
 
 #. After reboot, consider adding a normal user::
 

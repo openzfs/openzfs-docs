@@ -93,7 +93,7 @@ root pool will be replaced by keyfile, embedded in initrd.
 
     umount /boot/efi
 
-    for i in ${DISK[@]}; do
+    for i in ${DISK}; do
      umount /boot/efis/${i##*/}-part1
     done
 
@@ -103,7 +103,7 @@ root pool will be replaced by keyfile, embedded in initrd.
 
 #. Create LUKS containers::
 
-    for i in ${DISK[@]}; do
+    for i in ${DISK}; do
      cryptsetup luksFormat -q --type luks1 --key-file /etc/cryptkey.d/bpool_$INST_UUID-key-luks $i-part2
      echo $LUKS_PWD | cryptsetup luksAddKey --key-file /etc/cryptkey.d/bpool_$INST_UUID-key-luks $i-part2
      cryptsetup open ${i}-part2 ${i##*/}-part2-luks-bpool_$INST_UUID --key-file /etc/cryptkey.d/bpool_$INST_UUID-key-luks
@@ -133,7 +133,7 @@ root pool will be replaced by keyfile, embedded in initrd.
         -O mountpoint=/boot \
         bpool_$INST_UUID \
         $INST_VDEV \
-        $(for i in ${DISK[@]}; do
+        $(for i in ${DISK}; do
            printf "/dev/mapper/${i##*/}-part2-luks-bpool_$INST_UUID ";
           done)
 
@@ -147,7 +147,7 @@ root pool will be replaced by keyfile, embedded in initrd.
     mount /boot
     mount /boot/efi
 
-    for i in ${DISK[@]}; do
+    for i in ${DISK}; do
      mount /boot/efis/${i##*/}-part1
     done
 
