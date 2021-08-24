@@ -84,7 +84,7 @@ System Configuration
 
 #. Chroot::
 
-    echo "INST_PRIMARY_DISK=$(echo $DISK | cut -f1 -d\ )
+    echo "INST_PRIMARY_DISK=$INST_PRIMARY_DISK
     INST_LINVAR=$INST_LINVAR
     INST_UUID=$INST_UUID
     INST_ID=$INST_ID
