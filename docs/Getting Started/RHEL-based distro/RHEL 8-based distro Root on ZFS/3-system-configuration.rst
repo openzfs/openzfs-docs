@@ -70,7 +70,11 @@ System Configuration
 
 #. Enable ZFS services::
 
-    systemctl enable zfs-import-scan.service zfs-import.target zfs-mount zfs-zed zfs.target --root=/mnt
+    systemctl enable zfs-import-scan.service zfs-import.target zfs-zed zfs.target --root=/mnt
+    systemctl disable zfs-mount --root=/mnt
+
+   At boot, datasets on rpool are mounted with ``zfs-mount-generator``.
+   which is more reliable than ``zfs-mount.service`` on systemd-based systems.
 
 #. By default SSH server is enabled, allowing root login by password,
    disable SSH server::
