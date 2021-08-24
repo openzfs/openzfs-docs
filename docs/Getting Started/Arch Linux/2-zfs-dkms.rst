@@ -24,7 +24,9 @@ Installation
 
 #. Check kernel variant::
 
-    INST_LINVAR=$(sed 's|.*vmlinuz-linux|linux|' /proc/cmdline | sed 's|.img||g' | awk '{ print $1 }')
+    INST_LINVAR=$(sed 's|.*linux|linux|' /proc/cmdline | sed 's|.img||g' | awk '{ print $1 }')
+    #for live image
+    INST_LINVAR=linux
 
 #. Check kernel version::
 
