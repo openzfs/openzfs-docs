@@ -1,20 +1,37 @@
 #!/bin/sh
+
+# mountpoint of vfat-formatted partition
 ESP_MNT=/boot/efi
+
+# path to iso files relative to the partition
 ISO_REL=/iso
+
+# absolute path to iso files
 ISO_PATH=${ESP_MNT}/${ISO_REL}
+
 # df command needs warm up due to systemd mount-on-demand
 ls $ISO_PATH 1> /dev/null
+
+# vfat partition UUID
 ESP_UUID=$(blkid -s UUID -o value $(df --output=source ${ISO_PATH} | tail -n +2))
+
 cat <<EOF
-submenu 'archiso' {
+submenu 'Boot from Live ISO' {
+#if tpm module is loaded, grub might fail to setup loop
+#error message: out of memory
+#rmmod tpm
 EOF
+
+# limit detected number of ISOs, too many
+# lines might crush grub
 ISO_NUM=0
+
+# for archlinux
 for isofile in $ISO_PATH/archlinux-*.iso; do
     if [ "$ISO_NUM" -gt 300 ]; then break; fi
     isoname=${isofile##*/}
 cat <<EOF
 submenu "$isoname" {
-if rmmod tpm; then :; fi
 insmod search_fs_uuid
 set isorootuuid=$ESP_UUID
 search --fs-uuid --no-floppy --set=isopart \$isorootuuid
@@ -46,13 +63,15 @@ menuentry "Arch Linux install medium with speech" {
 }
 }
 EOF
+ISO_NUM=$(( $ISO_NUM + 1 ))
 done
+
+# for ubuntu
 for isofile in $ISO_PATH/ubuntu-*.iso; do
     if [ "$ISO_NUM" -gt 300 ]; then break; fi
     isoname=${isofile##*/}
 cat <<EOF
 submenu "$isoname" {
-if rmmod tpm; then :; fi
 insmod search_fs_uuid
 set isorootuuid=$ESP_UUID
 search --fs-uuid --no-floppy --set=isopart \$isorootuuid
@@ -64,11 +83,17 @@ menuentry "Ubuntu" {
            boot=casper iso-scan/filename=\$isopath/$isoname
     initrd /casper/initrd
 }
+menuentry "Ubuntu, Copy to RAM" {
+    linux  /casper/vmlinuz \\
+           boot=casper iso-scan/filename=\$isopath/$isoname \\
+	   toram
+    initrd /casper/initrd
+}
 }
 EOF
-
 ISO_NUM=$(( $ISO_NUM + 1 ))
 done
+
 cat <<EOF
 }
 EOF
