@@ -26,7 +26,7 @@ Installation
 
     INST_LINVAR=$(sed 's|.*linux|linux|' /proc/cmdline | sed 's|.img||g' | awk '{ print $1 }')
     #for live image
-    INST_LINVAR=linux
+    #INST_LINVAR=linux
 
 #. Check kernel version::
 
