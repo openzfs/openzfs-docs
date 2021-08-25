@@ -14,7 +14,7 @@ for isofile in $ISO_PATH/archlinux-*.iso; do
     isoname=${isofile##*/}
 cat <<EOF
 submenu "$isoname" {
-rmmod tpm || true
+if rmmod tpm; then :; fi
 insmod search_fs_uuid
 set isorootuuid=$ESP_UUID
 search --fs-uuid --no-floppy --set=isopart \$isorootuuid
@@ -52,7 +52,7 @@ for isofile in $ISO_PATH/ubuntu-*.iso; do
     isoname=${isofile##*/}
 cat <<EOF
 submenu "$isoname" {
-rmmod tpm || true
+if rmmod tpm; then :; fi
 insmod search_fs_uuid
 set isorootuuid=$ESP_UUID
 search --fs-uuid --no-floppy --set=isopart \$isorootuuid
