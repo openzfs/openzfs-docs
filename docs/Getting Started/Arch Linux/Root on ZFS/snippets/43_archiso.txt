@@ -1,55 +1,99 @@
 #!/bin/sh
+
+# mountpoint of vfat-formatted partition
 ESP_MNT=/boot/efi
+
+# path to iso files relative to the partition
 ISO_REL=/iso
+
+# absolute path to iso files
 ISO_PATH=${ESP_MNT}/${ISO_REL}
+
 # df command needs warm up due to systemd mount-on-demand
 ls $ISO_PATH 1> /dev/null
+
+# vfat partition UUID
 ESP_UUID=$(blkid -s UUID -o value $(df --output=source ${ISO_PATH} | tail -n +2))
+
 cat <<EOF
-submenu 'archiso' {
-rmmod tpm
-insmod search_fs_uuid
-set isorootuuid=$ESP_UUID
-search --fs-uuid --no-floppy --set=isopart \$isorootuuid
-set isopath=$ISO_REL
-configfile \$prefix/archiso.cfg
+submenu 'Boot from Live ISO' {
+#if tpm module is loaded, grub might fail to setup loop
+#error message: out of memory
+#rmmod tpm
 EOF
+
+# limit detected number of ISOs, too many
+# lines might crush grub
 ISO_NUM=0
+
+# for archlinux
 for isofile in $ISO_PATH/archlinux-*.iso; do
     if [ "$ISO_NUM" -gt 300 ]; then break; fi
     isoname=${isofile##*/}
 cat <<EOF
 submenu "$isoname" {
+insmod search_fs_uuid
+set isorootuuid=$ESP_UUID
+search --fs-uuid --no-floppy --set=isopart \$isorootuuid
+set isopath=$ISO_REL
+loopback loop0 (\$isopart)\$isopath/$isoname
+set root=(loop0)
 menuentry "Arch Linux install medium" {
-    loopback loop0 (\$isopart)\$isopath/$isoname
-    linux  (loop0)/arch/boot/x86_64/vmlinuz-linux \\
+    linux  /arch/boot/x86_64/vmlinuz-linux \\
            earlymodules=loop img_dev=/dev/disk/by-uuid/\$isorootuuid img_loop=\$isopath/$isoname
-    initrd (loop0)/arch/boot/intel-ucode.img
-    initrd (loop0)/arch/boot/amd-ucode.img
-    initrd (loop0)/arch/boot/x86_64/initramfs-linux.img
+    initrd /arch/boot/intel-ucode.img
+    initrd /arch/boot/amd-ucode.img
+    initrd /arch/boot/x86_64/initramfs-linux.img
 }
 menuentry "Arch Linux install medium, Copy to RAM" {
-    loopback loop0 (\$isopart)\$isopath/$isoname
-    linux  (loop0)/arch/boot/x86_64/vmlinuz-linux \\
+    linux  /arch/boot/x86_64/vmlinuz-linux \\
            earlymodules=loop img_dev=/dev/disk/by-uuid/\$isorootuuid img_loop=\$isopath/$isoname \\
 	   copytoram
-    initrd (loop0)/arch/boot/intel-ucode.img
-    initrd (loop0)/arch/boot/amd-ucode.img
-    initrd (loop0)/arch/boot/x86_64/initramfs-linux.img
+    initrd /arch/boot/intel-ucode.img
+    initrd /arch/boot/amd-ucode.img
+    initrd /arch/boot/x86_64/initramfs-linux.img
 }
 menuentry "Arch Linux install medium with speech" {
-    loopback loop0 (\$isopart)\$isopath/$isoname
-    linux  (loop0)/arch/boot/x86_64/vmlinuz-linux \\
+    linux  /arch/boot/x86_64/vmlinuz-linux \\
            earlymodules=loop img_dev=/dev/disk/by-uuid/\$isorootuuid img_loop=\$isopath/$isoname \\
 	   accessibility=on
-    initrd (loop0)/arch/boot/intel-ucode.img
-    initrd (loop0)/arch/boot/amd-ucode.img
-    initrd (loop0)/arch/boot/x86_64/initramfs-linux.img
+    initrd /arch/boot/intel-ucode.img
+    initrd /arch/boot/amd-ucode.img
+    initrd /arch/boot/x86_64/initramfs-linux.img
 }
 }
 EOF
 ISO_NUM=$(( $ISO_NUM + 1 ))
 done
+
+# for ubuntu
+for isofile in $ISO_PATH/ubuntu-*.iso; do
+    if [ "$ISO_NUM" -gt 300 ]; then break; fi
+    isoname=${isofile##*/}
+cat <<EOF
+submenu "$isoname" {
+insmod search_fs_uuid
+set isorootuuid=$ESP_UUID
+search --fs-uuid --no-floppy --set=isopart \$isorootuuid
+set isopath=$ISO_REL
+loopback loop0 (\$isopart)\$isopath/$isoname
+set root=(loop0)
+menuentry "Ubuntu" {
+    linux  /casper/vmlinuz \\
+           boot=casper iso-scan/filename=\$isopath/$isoname
+    initrd /casper/initrd
+}
+menuentry "Ubuntu, Copy to RAM" {
+    linux  /casper/vmlinuz \\
+           boot=casper iso-scan/filename=\$isopath/$isoname \\
+	   toram
+    initrd /casper/initrd
+}
+}
+EOF
+ISO_NUM=$(( $ISO_NUM + 1 ))
+done
+
 cat <<EOF
 }
 EOF

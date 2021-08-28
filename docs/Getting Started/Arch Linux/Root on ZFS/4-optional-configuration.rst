@@ -82,6 +82,7 @@ root pool will be replaced by keyfile, embedded in initrd.
     chmod 700 /etc/cryptkey.d/
     dd bs=32 count=1 if=/dev/urandom of=/etc/cryptkey.d/rpool_$INST_UUID-${INST_ID}-key-zfs
     dd bs=32 count=1 if=/dev/urandom of=/etc/cryptkey.d/bpool_$INST_UUID-key-luks
+    chmod u=r,go= /etc/cryptkey.d/*
 
 #. Backup boot pool::
 
@@ -92,7 +93,7 @@ root pool will be replaced by keyfile, embedded in initrd.
 
     umount /boot/efi
 
-    for i in ${DISK[@]}; do
+    for i in ${DISK}; do
      umount /boot/efis/${i##*/}-part1
     done
 
@@ -102,7 +103,7 @@ root pool will be replaced by keyfile, embedded in initrd.
 
 #. Create LUKS containers::
 
-    for i in ${DISK[@]}; do
+    for i in ${DISK}; do
      cryptsetup luksFormat -q --type luks1 --key-file /etc/cryptkey.d/bpool_$INST_UUID-key-luks $i-part2
      echo $LUKS_PWD | cryptsetup luksAddKey --key-file /etc/cryptkey.d/bpool_$INST_UUID-key-luks $i-part2
      cryptsetup open ${i}-part2 ${i##*/}-part2-luks-bpool_$INST_UUID --key-file /etc/cryptkey.d/bpool_$INST_UUID-key-luks
@@ -132,7 +133,7 @@ root pool will be replaced by keyfile, embedded in initrd.
         -O mountpoint=/boot \
         bpool_$INST_UUID \
         $INST_VDEV \
-        $(for i in ${DISK[@]}; do
+        $(for i in ${DISK}; do
            printf "/dev/mapper/${i##*/}-part2-luks-bpool_$INST_UUID ";
           done)
 
@@ -146,7 +147,7 @@ root pool will be replaced by keyfile, embedded in initrd.
     mount /boot
     mount /boot/efi
 
-    for i in ${DISK[@]}; do
+    for i in ${DISK}; do
      mount /boot/efis/${i##*/}-part1
     done
 
@@ -206,7 +207,8 @@ Persistent swap and hibernation
 
     # create key and format partition as LUKS container
     dd bs=32 count=1 if=/dev/urandom of=${INST_SWAPKEY};
-    cryptsetup luksFormat -q --type luks2 --key-file ${INST_SWAPKEY} ${INST_PRIMARY_DISK}-part4;
+    chmod u=r,go= /etc/cryptkey.d/*
+    cryptsetup luksFormat -q --type luks2 --key-file ${INST_SWAPKEY} ${INST_PRIMARY_DISK}-part4
     cryptsetup luksOpen ${INST_PRIMARY_DISK}-part4 ${INST_SWAPMAPPER} --key-file ${INST_SWAPKEY}
 
     # initialize swap space

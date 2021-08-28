@@ -21,14 +21,14 @@ System Configuration
 #. Generate fstab::
 
     echo bpool_$INST_UUID/$INST_ID/BOOT/default /boot zfs rw,xattr,posixacl 0 0 >> /mnt/etc/fstab
-    for i in ${DISK[@]}; do
+    for i in ${DISK}; do
        echo UUID=$(blkid -s UUID -o value ${i}-part1) /boot/efis/${i##*/}-part1 vfat \
        x-systemd.idle-timeout=1min,x-systemd.automount,noauto,umask=0022,fmask=0022,dmask=0022 0 1 >> /mnt/etc/fstab
     done
     echo UUID=$(blkid -s UUID -o value ${INST_PRIMARY_DISK}-part1) /boot/efi vfat \
     x-systemd.idle-timeout=1min,x-systemd.automount,noauto,umask=0022,fmask=0022,dmask=0022 0 1 >> /mnt/etc/fstab
     if [ "${INST_PARTSIZE_SWAP}" != "" ]; then
-     for i in ${DISK[@]}; do
+     for i in ${DISK}; do
       echo ${i##*/}-part4-swap ${i}-part4 /dev/urandom swap,cipher=aes-cbc-essiv:sha256,size=256,discard >> /mnt/etc/crypttab
       echo /dev/mapper/${i##*/}-part4-swap none swap x-systemd.requires=cryptsetup.target,defaults 0 0 >> /mnt/etc/fstab
      done
@@ -42,24 +42,6 @@ System Configuration
 #. Configure dracut::
 
     echo 'add_dracutmodules+=" zfs "' > /mnt/etc/dracut.conf.d/zfs.conf
-
-#. Enable DHCP on all ethernet ports::
-
-     tee /mnt/etc/systemd/network/20-default.network <<EOF
-
-     [Match]
-     Name=en*
-     Name=eth*
-
-     [Network]
-     DHCP=yes
-     EOF
-     systemctl enable systemd-networkd systemd-resolved --root=/mnt
-
-   Customize this file if the system is not using wired DHCP network.
-   See `Network Configuration <https://wiki.archlinux.org/index.php/Network_configuration>`__.
-
-   Alternatively, configure ``NetworkManager``.
 
 #. Enable timezone sync::
 
@@ -93,7 +75,12 @@ System Configuration
 
 #. Enable ZFS services::
 
-    systemctl enable zfs-import-scan.service zfs-import.target zfs-mount zfs-zed zfs.target --root=/mnt
+    systemctl enable zfs-import-scan.service zfs-import.target zfs-zed zfs.target --root=/mnt
+    systemctl disable zfs-mount --root=/mnt
+
+   At boot, datasets on rpool are mounted with ``zfs-mount-generator``,
+   which can control the mounting process more precisely than ``zfs-mount.service``.
+
 
 #. By default SSH server is enabled, allowing root login by password,
    disable SSH server::
@@ -108,8 +95,8 @@ System Configuration
     INST_UUID=$INST_UUID
     INST_ID=$INST_ID
     unalias -a
-    INST_VDEV=$INST_VDEV" > /mnt/root/chroot
-    echo DISK=\($(for i in ${DISK[@]}; do printf "$i "; done)\) >> /mnt/root/chroot
+    INST_VDEV=$INST_VDEV
+    DISK=$DISK" > /mnt/root/chroot
     arch-chroot /mnt bash --login
 
 #. Source variables::

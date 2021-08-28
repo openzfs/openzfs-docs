@@ -25,6 +25,8 @@ Installation
 #. Check kernel variant::
 
     INST_LINVAR=$(sed 's|.*linux|linux|' /proc/cmdline | sed 's|.img||g' | awk '{ print $1 }')
+    #for live image
+    #INST_LINVAR=linux
 
 #. Check kernel version::
 
@@ -42,7 +44,7 @@ Installation
 
 #. Install zfs-dkms::
 
-     pacman -Sy --needed zfs-dkms glibc
+     pacman -Sy --needed --noconfirm zfs-dkms glibc
 
    If pacman output contains the following error message,
    then the kernel needs a `downgrade <#zfs-dkms-compatible-kernel>`__,

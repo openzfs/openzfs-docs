@@ -6,10 +6,27 @@ System Installation
 .. contents:: Table of Contents
    :local:
 
+#. Optional: wipe solid-state drives with the generic tool
+   `blkdiscard <https://utcc.utoronto.ca/~cks/space/blog/linux/ErasingSSDsWithBlkdiscard>`__,
+   to clean previous partition tables and improve performance.
+
+   All content will be irrevocably destroyed::
+
+    for i in ${DISK}; do
+    blkdiscard -f $i &
+    done
+    wait
+
+   This is a quick operation and should be completed under one
+   minute.
+
+   For other device specific methods, see
+   `Memory cell clearing <https://wiki.archlinux.org/title/Solid_state_drive/Memory_cell_clearing>`__
+
 #. Partition the disks.
    See `Overview <0-overview.html>`__ for details::
 
-     for i in ${DISK[@]}; do
+     for i in ${DISK}; do
      sgdisk --zap-all $i
      sgdisk -n1:1M:+${INST_PARTSIZE_ESP}G -t1:EF00 $i
      sgdisk -n2:0:+${INST_PARTSIZE_BPOOL}G -t2:BE00 $i
@@ -41,7 +58,7 @@ System Installation
         -R /mnt \
         bpool_$INST_UUID \
         $INST_VDEV \
-        $(for i in ${DISK[@]}; do
+        $(for i in ${DISK}; do
            printf "$i-part2 ";
           done)
 
@@ -73,7 +90,7 @@ System Installation
            -O mountpoint=/ \
            rpool_$INST_UUID \
            $INST_VDEV \
-          $(for i in ${DISK[@]}; do
+          $(for i in ${DISK}; do
              printf "$i-part3 ";
             done)
 
@@ -170,7 +187,7 @@ System Installation
 
 #. Format and mount ESP::
 
-    for i in ${DISK[@]}; do
+    for i in ${DISK}; do
      mkfs.vfat -n EFI ${i}-part1
      mkdir -p /mnt/boot/efis/${i##*/}-part1
      mount -t vfat ${i}-part1 /mnt/boot/efis/${i##*/}-part1
@@ -211,7 +228,7 @@ System Installation
 
 #. Install kernel. Download from archive if kernel is not available::
 
-    if [ ${INST_LINVER} == \
+    if [ ${INST_LINVER} = \
     $(pacman -Si ${INST_LINVAR} | grep Version | awk '{ print $3 }') ]; then
      pacstrap /mnt ${INST_LINVAR}
     else

@@ -18,25 +18,27 @@ Preparation
 
     systemctl start sshd
 
-#. Connect from another computer
-   and enter a bash shell::
+#. Connect from another computer::
 
     ssh root@192.168.1.19
+
+   and, most important, enter a bash shell::
+
     bash
+
+   This guide is untested with the default shell ``zsh`` in live environment.
+
+#. Expand live root filesystem::
+
+    mount -o remount,size=2G /run/archiso/cowspace/
 
 #. `Add archzfs repo <../0-archzfs-repo.html>`__.
 
-#.  Install prebuilt ZFS package, corresponding to
-    `live image kernel version <https://archlinux.org/download/>`__::
+#. `Install zfs-dkms in live environment <../2-zfs-dkms.html#installation>`__.
 
-     LIVE_ZFS_PKG="zfs-linux-2.1.0_5.13.6.arch1.1-1-x86_64.pkg.tar.zst"
-     LIVE_ZFS_UTILS="zfs-utils-2.1.0-2-x86_64.pkg.tar.zst"
-     LIVE_ZFS_MIRROR="https://mirror.sum7.eu/archlinux/archzfs"
-     pacman -U --noconfirm ${LIVE_ZFS_MIRROR}/archzfs/x86_64/${LIVE_ZFS_UTILS} || \
-     pacman -U --noconfirm ${LIVE_ZFS_MIRROR}/archive_archzfs/${LIVE_ZFS_UTILS}
-     pacman -U --noconfirm ${LIVE_ZFS_MIRROR}/archzfs/x86_64/${LIVE_ZFS_PKG} || \
-     pacman -U --noconfirm ${LIVE_ZFS_MIRROR}/archive_archzfs/${LIVE_ZFS_PKG}
-     modprobe zfs
+#. Load zfs kernel module::
+
+    modprobe zfs
 
 #. Kernel variant
 
@@ -75,17 +77,17 @@ Preparation
 
    Declare disk array::
 
-    DISK=(/dev/disk/by-id/ata-FOO /dev/disk/by-id/nvme-BAR)
+    DISK='/dev/disk/by-id/ata-FOO /dev/disk/by-id/nvme-BAR'
 
    For single disk installation, use::
 
-    DISK=(/dev/disk/by-id/disk1)
+    DISK='/dev/disk/by-id/disk1'
 
 #. Choose a primary disk. This disk will be used
    for primary EFI partition and hibernation, default to
    first disk in the array::
 
-    INST_PRIMARY_DISK=${DISK[0]}
+    INST_PRIMARY_DISK=$(echo $DISK | cut -f1 -d\ )
 
    If disk path contains colon ``:``, this disk
    can not be used for hibernation. ``encrypt`` mkinitcpio

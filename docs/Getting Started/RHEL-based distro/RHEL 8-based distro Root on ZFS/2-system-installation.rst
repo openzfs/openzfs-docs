@@ -6,10 +6,27 @@ System Installation
 .. contents:: Table of Contents
    :local:
 
+#. Optional: wipe solid-state drives with the generic tool
+   `blkdiscard <https://utcc.utoronto.ca/~cks/space/blog/linux/ErasingSSDsWithBlkdiscard>`__,
+   to clean previous partition tables and improve performance.
+
+   All content will be irrevocably destroyed::
+
+    for i in ${DISK}; do
+    blkdiscard $i &
+    done
+    wait
+
+   This is a quick operation and should be completed under one
+   minute.
+
+   For other device specific methods, see
+   `Memory cell clearing <https://wiki.archlinux.org/title/Solid_state_drive/Memory_cell_clearing>`__
+
 #. Partition the disks.
    See `Overview <0-overview.html>`__ for details::
 
-     for i in ${DISK[@]}; do
+     for i in ${DISK}; do
      sgdisk --zap-all $i
      sgdisk -n1:1M:+${INST_PARTSIZE_ESP}G -t1:EF00 $i
      sgdisk -n2:0:+${INST_PARTSIZE_BPOOL}G -t2:BE00 $i
@@ -51,7 +68,7 @@ System Installation
         -R /mnt \
         bpool_$INST_UUID \
         $INST_VDEV \
-        $(for i in ${DISK[@]}; do
+        $(for i in ${DISK}; do
            printf "$i-part2 ";
           done)
 
@@ -83,7 +100,7 @@ System Installation
            -O mountpoint=/ \
            rpool_$INST_UUID \
            $INST_VDEV \
-          $(for i in ${DISK[@]}; do
+          $(for i in ${DISK}; do
              printf "$i-part3 ";
             done)
 
@@ -189,7 +206,7 @@ System Installation
 
 #. Format and mount ESP::
 
-    for i in ${DISK[@]}; do
+    for i in ${DISK}; do
      mkfs.vfat -n EFI ${i}-part1
      mkdir -p /mnt/boot/efis/${i##*/}-part1
      mount -t vfat ${i}-part1 /mnt/boot/efis/${i##*/}-part1
@@ -220,15 +237,13 @@ System Installation
 #. Install base packages::
 
     dnf --installroot=/mnt --releasever=${INST_RHEL_VER} -y install \
-    ${RHEL_ZFS_REPO} @core epel-release grub2-efi-x64 grub2-pc-modules grub2-efi-x64-modules shim-x64 efibootmgr
-    dnf config-manager --installroot=/mnt --disable zfs
-    dnf config-manager --installroot=/mnt --enable zfs-kmod
+    ${RHEL_ZFS_REPO} @core epel-release grub2-efi-x64 grub2-pc-modules \
+    grub2-efi-x64-modules shim-x64 efibootmgr \
+    kernel kernel-devel python3-dnf-plugin-post-transaction-actions
     dnf install --installroot=/mnt -y zfs zfs-dracut
 
-   If speed is slow, you can manually pick a fixed mirror
-   from `mirrorlist <https://mirrors.rockylinux.org/mirrormanager/mirrors>`__
-   and apply it::
+#. Update zfs repo if a newer release is available::
 
-    sed -i 's|^mirrorlist=|#mirrorlist=|g' /etc/yum.repos.d/*
-    sed -i 's|^#baseurl=|baseurl=|g' /etc/yum.repos.d/*
-    sed -i 's|dl.rockylinux.org/$contentdir|mirrors.sjtug.sjtu.edu.cn/rocky|g' /etc/yum.repos.d/*
+    source /mnt/etc/os-release
+    RHEL_ZFS_REPO_NEW=https://zfsonlinux.org/epel/zfs-release.el${VERSION_ID/./_}.noarch.rpm
+    dnf install --installroot=/mnt -y $RHEL_ZFS_REPO_NEW || true

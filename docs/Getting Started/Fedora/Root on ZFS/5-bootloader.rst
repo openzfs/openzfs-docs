@@ -72,13 +72,13 @@ Install GRUB
 
 #. If using legacy booting, install GRUB to every disk::
 
-    for i in ${DISK[@]}; do
+    for i in ${DISK}; do
      grub2-install --boot-directory /boot/efi/EFI/fedora --target=i386-pc $i
     done
 
 #. If using EFI::
 
-    for i in ${DISK[@]}; do
+    for i in ${DISK}; do
      efibootmgr -cgp 1 -l "\EFI\fedora\shimx64.efi" \
      -L "fedora-${i##*/}" -d ${i}
     done
@@ -98,6 +98,33 @@ Install GRUB
     for i in /boot/efis/*; do
      cp -r $ESP_MIRROR/EFI $i
     done
+
+#. Automatically regenerate GRUB menu on kernel update::
+
+     tee /etc/dnf/plugins/post-transaction-actions.d/00-update-grub-menu-for-kernel.action <<EOF >/dev/null
+     # kernel-core package contains vmlinuz and initramfs
+     # change package name if non-standard kernel is used
+     kernel-core:in:/usr/local/sbin/update-grub-menu.sh
+     kernel-core:out:/usr/local/sbin/update-grub-menu.sh
+     EOF
+
+     tee /usr/local/sbin/update-grub-menu.sh <<-'EOF' >/dev/null
+     #!/bin/sh
+     export PATH=$PATH:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+     export ZPOOL_VDEV_NAME_PATH=YES
+     source /etc/os-release
+     grub2-mkconfig -o /boot/efi/EFI/${ID}/grub.cfg
+     cp /boot/efi/EFI/${ID}/grub.cfg /boot/efi/EFI/${ID}/grub2/grub.cfg
+     cp /boot/efi/EFI/${ID}/grub.cfg /boot/grub2/grub.cfg
+     ESP_MIRROR=$(mktemp -d)
+     cp -r /boot/efi/EFI $ESP_MIRROR
+     for i in /boot/efis/*; do
+      cp -r $ESP_MIRROR/EFI $i
+     done
+     rm -rf $ESP_MIRROR
+     EOF
+
+     chmod +x /usr/local/sbin/update-grub-menu.sh
 
 #. Notes for GRUB on Fedora
 
@@ -145,6 +172,24 @@ Finish Installation
 #. Reboot::
 
     reboot
+
+Post installaion
+~~~~~~~~~~~~~~~~
+
+#. If you have other data pools, generate list of datasets for `zfs-mount-generator
+   <https://manpages.ubuntu.com/manpages/focal/man8/zfs-mount-generator.8.html>`__ to mount them at boot::
+
+    DATA_POOL='tank0 tank1'
+
+    # tab-separated zfs properties
+    # see /etc/zfs/zed.d/history_event-zfs-list-cacher.sh
+    export \
+    PROPS="name,mountpoint,canmount,atime,relatime,devices,exec\
+    ,readonly,setuid,nbmand,encroot,keylocation"
+
+    for i in $DATA_POOL; do
+    zfs list -H -t filesystem -o $PROPS -r $i > /etc/zfs/zfs-list.cache/$i
+    done
 
 #. After reboot, consider adding a normal user::
 

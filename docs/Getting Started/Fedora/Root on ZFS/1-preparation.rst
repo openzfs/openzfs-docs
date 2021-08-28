@@ -6,10 +6,13 @@ Preparation
 .. contents:: Table of Contents
    :local:
 
+#. Disable Secure Boot. ZFS modules can not be loaded if Secure Boot is enabled.
 #. Download a variant of Fedora 34 live image
    and boot from it.
 
-#. Disable Secure Boot. ZFS modules can not be loaded of Secure Boot is enabled.
+   - `Fedora Workstation (GNOME) <https://download.fedoraproject.org/pub/fedora/linux/releases/34/Workstation/x86_64/iso/>`__
+   - `Fedora Spins (Xfce, i3, ...) <https://download.fedoraproject.org/pub/fedora/linux/releases/34/Spins/x86_64/iso/>`__
+
 #. Set root password or ``/root/authorized_keys``.
 #. Start SSH server::
 
@@ -20,9 +23,11 @@ Preparation
 
     ssh root@192.168.1.19
 
-#. Set SELinux to persmissive::
+#. Temporarily set SELinux to permissive in live environment::
 
     setenforce 0
+
+   SELinux will be enabled on the installed system.
 
 #. Install ``kernel-devel``::
 
@@ -70,17 +75,17 @@ Preparation
 
    Declare disk array::
 
-    DISK=(/dev/disk/by-id/ata-FOO /dev/disk/by-id/nvme-BAR)
+    DISK='/dev/disk/by-id/ata-FOO /dev/disk/by-id/nvme-BAR'
 
    For single disk installation, use::
 
-    DISK=(/dev/disk/by-id/disk1)
+    DISK='/dev/disk/by-id/disk1'
 
 #. Choose a primary disk. This disk will be used
    for primary EFI partition and hibernation, default to
    first disk in the array::
 
-    INST_PRIMARY_DISK=${DISK[0]}
+    INST_PRIMARY_DISK=$(echo $DISK | cut -f1 -d\ )
 
 #. Set vdev topology, possible values are:
 

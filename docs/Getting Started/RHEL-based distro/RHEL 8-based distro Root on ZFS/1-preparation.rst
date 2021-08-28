@@ -6,10 +6,10 @@ Preparation
 .. contents:: Table of Contents
    :local:
 
+#. Disable Secure Boot. ZFS modules can not be loaded if Secure Boot is enabled.
 #. Download a variant of `Rocky Linux 8.4 Live
    ISO <https://dl.rockylinux.org/pub/rocky/8.4/Live/x86_64/>`__ and boot from it.
 
-#. Disable Secure Boot. ZFS modules can not be loaded of Secure Boot is enabled.
 #. Set root password or ``/root/authorized_keys``.
 #. Start SSH server::
 
@@ -20,9 +20,19 @@ Preparation
 
     ssh root@192.168.1.19
 
-#. Set SELinux to permissive::
+#. Temporarily set SELinux to permissive in live environment::
 
     setenforce 0
+
+   SELinux will be enabled on the installed system.
+
+#. Optional: If mirror speed is slow, you can manually pick a fixed mirror
+   from `mirrorlist <https://mirrors.rockylinux.org/mirrormanager/mirrors>`__
+   and apply it::
+
+    sed -i 's|^mirrorlist=|#mirrorlist=|g' /etc/yum.repos.d/*
+    sed -i 's|^#baseurl=|baseurl=|g' /etc/yum.repos.d/*
+    sed -i 's|dl.rockylinux.org/$contentdir|mirrors.sjtug.sjtu.edu.cn/rocky|g' /etc/yum.repos.d/*
 
 #. Add ZFS repo::
 
@@ -71,17 +81,17 @@ Preparation
 
    Declare disk array::
 
-    DISK=(/dev/disk/by-id/ata-FOO /dev/disk/by-id/nvme-BAR)
+    DISK='/dev/disk/by-id/ata-FOO /dev/disk/by-id/nvme-BAR'
 
    For single disk installation, use::
 
-    DISK=(/dev/disk/by-id/disk1)
+    DISK='/dev/disk/by-id/disk1'
 
 #. Choose a primary disk. This disk will be used
    for primary EFI partition, default to
    first disk in the array::
 
-    INST_PRIMARY_DISK=${DISK[0]}
+    INST_PRIMARY_DISK=$(echo $DISK | cut -f1 -d\ )
 
 #. Set vdev topology, possible values are:
 
