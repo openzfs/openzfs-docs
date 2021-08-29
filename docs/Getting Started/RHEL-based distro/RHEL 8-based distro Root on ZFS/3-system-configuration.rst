@@ -6,21 +6,9 @@ System Configuration
 .. contents:: Table of Contents
    :local:
 
-#. Generate list of datasets for `zfs-mount-generator
-   <https://manpages.ubuntu.com/manpages/focal/man8/zfs-mount-generator.8.html>`__ to mount them at boot::
-
-    # tab-separated zfs properties
-    # see /etc/zfs/zed.d/history_event-zfs-list-cacher.sh
-    export \
-    PROPS="name,mountpoint,canmount,atime,relatime,devices,exec\
-    ,readonly,setuid,nbmand,encroot,keylocation"
-    mkdir -p /mnt/etc/zfs/zfs-list.cache
-    zfs list -H -t filesystem -o $PROPS -r rpool_$INST_UUID > /mnt/etc/zfs/zfs-list.cache/rpool_$INST_UUID
-    sed -Ei "s|/mnt/?|/|" /mnt/etc/zfs/zfs-list.cache/*
-
 #. Generate fstab::
 
-    echo bpool_$INST_UUID/$INST_ID/BOOT/default /boot zfs rw,xattr,posixacl 0 0 >> /mnt/etc/fstab
+    genfstab -U /mnt | sed 's;zfs[[:space:]]*;zfs zfsutil,;g' | grep "zfs zfsutil" >> /mnt/etc/fstab
     for i in ${DISK}; do
        echo UUID=$(blkid -s UUID -o value ${i}-part1) /boot/efis/${i##*/}-part1 vfat \
        x-systemd.idle-timeout=1min,x-systemd.automount,noauto,umask=0022,fmask=0022,dmask=0022 0 1 >> /mnt/etc/fstab
@@ -73,7 +61,7 @@ System Configuration
     systemctl enable zfs-import-scan.service zfs-import.target zfs-zed zfs.target --root=/mnt
     systemctl disable zfs-mount --root=/mnt
 
-   At boot, datasets on rpool are mounted with ``zfs-mount-generator``,
+   At boot, datasets on rpool are mounted with ``/etc/fstab``,
    which can control the mounting process more precisely than ``zfs-mount.service``.
 
 #. By default SSH server is enabled, allowing root login by password,

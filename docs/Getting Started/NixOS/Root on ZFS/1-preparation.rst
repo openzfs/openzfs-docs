@@ -6,55 +6,16 @@ Preparation
 .. contents:: Table of Contents
    :local:
 
-#. Download
-   `2021.08.01 <https://mirrors.ocf.berkeley.edu/archlinux/iso/2021.08.01/archlinux-2021.08.01-x86_64.iso>`__
-   Live ISO and `signature <https://archlinux.org/iso/2021.08.01/archlinux-2021.08.01-x86_64.iso.sig>`__.
+#. Download `Minimal ISO image
+   <https://channels.nixos.org/nixos-21.05/latest-nixos-minimal-x86_64-linux.iso>`__ and boot from it.
 
-#. Follow `installation guide on Arch wiki <https://wiki.archlinux.org/title/Installation_guide>`__
-   up to **Update the system clock**.
+#. SSH server is enabled by default. To connect, set root password with::
 
-#. Set root password or ``/root/authorized_keys``.
-#. Start SSH server::
-
-    systemctl start sshd
+    sudo passwd
 
 #. Connect from another computer::
 
     ssh root@192.168.1.19
-
-   and, most important, enter a bash shell::
-
-    bash
-
-   This guide is untested with the default shell ``zsh`` in live environment.
-
-#. Expand live root filesystem::
-
-    mount -o remount,size=2G /run/archiso/cowspace/
-
-#. `Add archzfs repo <../0-archzfs-repo.html>`__.
-
-#. `Install zfs-dkms in live environment <../2-zfs-dkms.html#installation>`__.
-
-#. Load zfs kernel module::
-
-    modprobe zfs
-
-#. Kernel variant
-
-   Store the kernel variant in a variable.
-   Available variants in official repo are:
-
-   - linux
-   - linux-lts
-   - linux-zen
-   - linux-hardened
-
-   ::
-
-    INST_LINVAR='linux'
-
-   ``linux-hardened`` does not support hibernation.
 
 #. Unique pool suffix. ZFS expects pool names to be
    unique, therefore it's recommended to create
@@ -64,7 +25,11 @@ Preparation
 
 #. Identify this installation in ZFS filesystem path::
 
-    INST_ID=arch
+    INST_ID=nixos
+
+#. Root on ZFS configuration file name::
+
+    INST_CONFIG_FILE='zfs.nix'
 
 #. Target disk
 
@@ -84,15 +49,10 @@ Preparation
     DISK='/dev/disk/by-id/disk1'
 
 #. Choose a primary disk. This disk will be used
-   for primary EFI partition and hibernation, default to
+   for primary EFI partition, default to
    first disk in the array::
 
     INST_PRIMARY_DISK=$(echo $DISK | cut -f1 -d\ )
-
-   If disk path contains colon ``:``, this disk
-   can not be used for hibernation. ``encrypt`` mkinitcpio
-   hook treats ``:`` as argument separator without a means to
-   escape this character.
 
 #. Set vdev topology, possible values are:
 
@@ -126,11 +86,9 @@ Preparation
 
 #. Set partition size:
 
-   Set ESP size. ESP contains Live ISO for recovery,
-   as described in `optional configurations <4-optional-configuration.html>`__::
+   Set ESP size::
 
-    INST_PARTSIZE_ESP=4 # in GB
-    #INST_PARTSIZE_ESP=1 # if local recovery is not needed
+    INST_PARTSIZE_ESP=2 # in GB
 
    Set boot pool size. To avoid running out of space while using
    boot environments, the minimum is 4GB. Adjust the size if you

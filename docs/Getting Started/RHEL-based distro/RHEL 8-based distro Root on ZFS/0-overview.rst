@@ -63,12 +63,12 @@ Dataset layout
 |                           |                      |                      |                                     | datasets", "persistent datasets"; also    |
 |                           |                      |                      |                                     | include /var/lib, /srv, ...               |
 +---------------------------+----------------------+----------------------+-------------------------------------+-------------------------------------------+
-|   bpool/sys/BOOT/default  | noauto               | legacy /boot         | no                                  | noauto is used to switch BE. because of   |
+|   bpool/sys/BOOT/default  | noauto               |        /boot         | no                                  | noauto is used to switch BE. because of   |
 |                           |                      |                      |                                     | noauto, must use fstab to mount           |
 +---------------------------+----------------------+----------------------+-------------------------------------+-------------------------------------------+
 |   rpool/sys/ROOT/default  | noauto               | /                    | no                                  | mounted by initrd zfs hook                |
 +---------------------------+----------------------+----------------------+-------------------------------------+-------------------------------------------+
-|   bpool/sys/BOOT/be1      | noauto               | legacy /boot         | no                                  | see bpool/sys/BOOT/default                |
+|   bpool/sys/BOOT/be1      | noauto               |        /boot         | no                                  | see bpool/sys/BOOT/default                |
 +---------------------------+----------------------+----------------------+-------------------------------------+-------------------------------------------+
 |   rpool/sys/ROOT/be1      | noauto               | /                    | no                                  | see rpool/sys/ROOT/default                |
 +---------------------------+----------------------+----------------------+-------------------------------------+-------------------------------------------+
@@ -110,3 +110,32 @@ Encryption
   which should be sufficient for most purposes.
 
   Secure Boot is not supported out-of-the-box due to ZFS module.
+
+Booting with disk failure
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This guide is written with disk failure in mind.
+
+If disks used in Root on ZFS pool failed, but
+sufficient redundancy for both root pool and boot pool
+still exists, the system will still boot normally.
+
+Swap partition on the failed disk will fail to mount,
+after an 1m30s timeout.
+
+This feature is useful for use cases such
+as an unattended remote server.
+
+Example:
+
+ - System has disks ``n>1``
+
+ - Installed with mirrored setup
+
+ - Mirrored setup can tolerate up to ``n-1`` disk failures
+
+ - Disconnect one or more disks, keep at least
+   one disk connected
+
+ - System still boots, but fails to mount swap and
+   EFI partition
