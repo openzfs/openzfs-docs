@@ -107,7 +107,6 @@ Step 1: Prepare The Install Environment
    .. code-block:: sourceslist
 
      deb http://deb.debian.org/debian bullseye main contrib
-     deb http://deb.debian.org/debian bullseye main contrib
 
    ::
 
