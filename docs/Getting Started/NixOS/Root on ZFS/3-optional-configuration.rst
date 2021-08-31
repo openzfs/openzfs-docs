@@ -12,7 +12,9 @@ no optional configuration is needed.
 Supply password with SSH
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Note: this is incompatible with encrypted boot pool.
+Note: if you choose to encrypt boot pool, where decryption is handled
+by GRUB, as described in the next section, configuration performed
+in this section will have no effect.
 
 This example uses DHCP::
 
