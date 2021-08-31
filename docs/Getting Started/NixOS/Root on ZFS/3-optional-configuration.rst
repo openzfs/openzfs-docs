@@ -60,7 +60,7 @@ root pool will be replaced by keyfile, embedded in initrd.
 
 #. Create encryption keys::
 
-    mkdir /mnt/etc/cryptkey.d/
+    mkdir -p /mnt/etc/cryptkey.d/
     chmod 700 /mnt/etc/cryptkey.d/
     dd bs=32 count=1 if=/dev/urandom of=/mnt/etc/cryptkey.d/rpool_$INST_UUID-${INST_ID}-key-zfs
     dd bs=32 count=1 if=/dev/urandom of=/mnt/etc/cryptkey.d/bpool_$INST_UUID-key-luks
