@@ -144,7 +144,7 @@ an empty dataset as root file system.
 
 #. Set empty file system as root::
 
-    sed -i "s,${ROOT_FS},${ROOT_FS%/*}/empty,g" /etc/nixos/hardware-configuration.nix
+    sed -i "s,${ROOT_FS},${ROOT_FS%/*}/empty,g" /etc/nixos/hardware-configuration-zfs.nix
 
 #. Apply changes and reboot::
 
