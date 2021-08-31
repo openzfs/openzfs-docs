@@ -255,7 +255,7 @@ System Configuration
 #. Edit config file to import ZFS options::
 
     sed -i "s|./hardware-configuration.nix|./hardware-configuration-zfs.nix ./${INST_CONFIG_FILE}|g" /mnt/etc/nixos/configuration.nix
-    # backup, might be overwritten by nixos-generate-config
+    # backup, prevent being overwritten by nixos-generate-config
     mv /mnt/etc/nixos/hardware-configuration.nix /mnt/etc/nixos/hardware-configuration-zfs.nix
 
 #. ZFS options::
