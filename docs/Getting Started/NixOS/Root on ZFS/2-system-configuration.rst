@@ -210,7 +210,7 @@ System Configuration
    Datasets for immutable root filesystem::
 
     zfs create -o canmount=on rpool_$INST_UUID/$INST_ID/DATA/default/state
-    for i in {/etc/nixos,/etc/cryptkey.d,/etc/ssh,/etc/zfs}; do
+    for i in {/etc/nixos,/etc/cryptkey.d}; do
       mkdir -p /mnt/state/$i /mnt/$i
       mount -o bind /mnt/state/$i /mnt/$i
     done
@@ -302,11 +302,22 @@ System Configuration
     EOF
     fi
 
-#. For immutable root file system, save machine-id::
+#. For immutable root file system, save machine-id and other files::
 
+    mkdir -p /mnt/state/etc/{ssh,zfs}
     touch /mnt/state/etc/machine-id
     tee -a /mnt/etc/nixos/${INST_CONFIG_FILE} <<EOF
       environment.etc."machine-id".source = "/state/etc/machine-id";
+      environment.etc."ssh/ssh_host_rsa_key".source
+        = "/state/etc/ssh/ssh_host_rsa_key";
+      environment.etc."ssh/ssh_host_rsa_key.pub".source
+        = "/state/etc/ssh/ssh_host_rsa_key.pub";
+      environment.etc."ssh/ssh_host_ed25519_key".source
+        = "/state/etc/ssh/ssh_host_ed25519_key";
+      environment.etc."ssh/ssh_host_ed25519_key.pub".source
+        = "/state/etc/ssh/ssh_host_ed25519_key.pub";
+      environment.etc."zfs/zpool.cache".source
+        = "/state/etc/zfs/zpool.cache";
     EOF
 
 #. Configure GRUB boot loader for both legacy boot and UEFI::
