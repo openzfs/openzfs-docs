@@ -7,13 +7,16 @@ System Installation
    :local:
 
 
-Other configuration
-~~~~~~~~~~~~~~~~~~~
+Additional configuration
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 As NixOS configuration is declarative, post-installation tasks,
 such as user accounts and package selection, can all be done by
 specifing them in configuration. See `NixOS manual <https://nixos.org/nixos/manual/>`__
 for details.
+
+For timezone, hostname, networking, keyboard layout, etc,
+see ``/mnt/etc/nixos/configuration.nix``.
 
 Set root password
 -----------------
