@@ -21,7 +21,7 @@ This example uses DHCP::
  mkdir -p /mnt/etc/state/ssh/
  ssh-keygen -t ed25519 -N "" -f /mnt/state/etc/ssh/ssh_host_initrd_ed25519_key
  tee -a /mnt/etc/nixos/${INST_CONFIG_FILE} <<EOF
-   #networking.useDHCP = true;
+   #networking.interfaces.enp1s0.useDHCP = true;
    boot = {
      initrd.network = {
        enable = true;
