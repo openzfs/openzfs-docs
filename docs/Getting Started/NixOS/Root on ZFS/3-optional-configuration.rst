@@ -16,8 +16,8 @@ Note: this is incompatible with encrypted boot pool.
 
 This example uses DHCP::
 
- mkdir -p /mnt/etc/ssh/
- ssh-keygen -t ed25519 -N "" -f /mnt/etc/ssh/ssh_host_ed25519_key
+ mkdir -p /mnt/etc/state/ssh/
+ ssh-keygen -t ed25519 -N "" -f /mnt/state/etc/ssh/ssh_host_ed25519_key
  tee -a /mnt/etc/nixos/${INST_CONFIG_FILE} <<EOF
    #networking.useDHCP = true;
    boot = {
@@ -25,7 +25,7 @@ This example uses DHCP::
        enable = true;
        ssh = {
          enable = true;
-         hostKeys = [ /etc/ssh/ssh_host_ed25519_key ];
+         hostKeys = [ /state/etc/ssh/ssh_host_ed25519_key ];
          authorizedKeys = [ "ssh-rsa AAAA/your-key/..." ];
        };
        postCommands = ''

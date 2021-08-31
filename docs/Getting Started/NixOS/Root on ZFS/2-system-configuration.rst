@@ -308,14 +308,6 @@ System Configuration
     touch /mnt/state/etc/machine-id
     tee -a /mnt/etc/nixos/${INST_CONFIG_FILE} <<EOF
       environment.etc."machine-id".source = "/state/etc/machine-id";
-      environment.etc."ssh/ssh_host_rsa_key".source
-        = "/state/etc/ssh/ssh_host_rsa_key";
-      environment.etc."ssh/ssh_host_rsa_key.pub".source
-        = "/state/etc/ssh/ssh_host_rsa_key.pub";
-      environment.etc."ssh/ssh_host_ed25519_key".source
-        = "/state/etc/ssh/ssh_host_ed25519_key";
-      environment.etc."ssh/ssh_host_ed25519_key.pub".source
-        = "/state/etc/ssh/ssh_host_ed25519_key.pub";
       environment.etc."zfs/zpool.cache".source
         = "/state/etc/zfs/zpool.cache";
     EOF
