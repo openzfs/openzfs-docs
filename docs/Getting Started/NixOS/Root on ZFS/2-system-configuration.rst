@@ -319,6 +319,7 @@ System Configuration
     sed -i '/boot.loader/d' /mnt/etc/nixos/configuration.nix
     tee -a /mnt/etc/nixos/${INST_CONFIG_FILE} <<EOF
       boot.loader = {
+        generationsDir.copyKernels = true;
         ##for problematic UEFI firmware
         grub.efiInstallAsRemovable = true;
         efi.canTouchEfiVariables = false;
@@ -330,6 +331,11 @@ System Configuration
         grub.copyKernels = true;
         grub.efiSupport = true;
         grub.zfsSupport = true;
+        # for systemd-autofs
+        grub.extraPrepareConfig = ''
+          mkdir -p /boot/efis
+          mount /boot/efis/*
+        '';
         grub.devices = [
     EOF
     for i in $DISK; do

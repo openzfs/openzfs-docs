@@ -132,7 +132,13 @@ Below are some tips.
      "L /var/lib/bluetooth - - - - /state/var/lib/bluetooth"
    ];
 
-- Bind mount.
+- Bind mount::
+
+   for i in {/etc/nixos,/etc/cryptkey.d}; do
+     mkdir -p /state/$i /$i
+     mount -o bind /state/$i /$i
+   done
+   nixos-generate-config --show-hardware-config
 
 Boot from empty root file system
 --------------------------------
@@ -156,6 +162,7 @@ an empty dataset as root file system.
 
 #. If everything went fine, add the output of the following command to configuration::
 
+    ROOT_FS=$(df --output=source /|tail -n1)
     cat <<EOF
       boot.initrd.postDeviceCommands = ''
         zfs rollback -r ${ROOT_FS%/*}/empty@start
@@ -164,5 +171,5 @@ an empty dataset as root file system.
 
 #. Apply and reboot::
 
-    nixos-switch boot
+    nixos-rebuild boot
     reboot

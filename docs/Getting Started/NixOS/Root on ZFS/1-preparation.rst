@@ -9,6 +9,8 @@ Preparation
 #. Download `Minimal ISO image
    <https://channels.nixos.org/nixos-21.05/latest-nixos-minimal-x86_64-linux.iso>`__ and boot from it.
 
+#. Connect to network. See `NixOS manual <https://nixos.org/manual/nixos/stable/index.html#sec-installation-booting>`__.
+
 #. SSH server is enabled by default. To connect, set root password with::
 
     sudo passwd
