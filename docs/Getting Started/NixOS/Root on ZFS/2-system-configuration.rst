@@ -334,7 +334,7 @@ System Configuration
         # for systemd-autofs
         grub.extraPrepareConfig = ''
           mkdir -p /boot/efis
-          for i in  /boot/efis/*; do mount $i ; done
+          for i in  /boot/efis/*; do mount \$i ; done
         '';
         grub.devices = [
     EOF
