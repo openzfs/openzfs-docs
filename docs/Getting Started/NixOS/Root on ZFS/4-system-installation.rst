@@ -165,6 +165,7 @@ an empty dataset as root file system.
     ROOT_FS=$(df --output=source /|tail -n1)
     cat <<EOF
       boot.initrd.postDeviceCommands = ''
+        zpool import -Nf ${ROOT_FS%%/*}
         zfs rollback -r ${ROOT_FS%/*}/empty@start
       '';
     EOF

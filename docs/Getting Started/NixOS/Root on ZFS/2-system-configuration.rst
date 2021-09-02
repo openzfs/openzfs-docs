@@ -309,6 +309,7 @@ System Configuration
     mkdir -p /mnt/state/etc/{ssh,zfs}
     touch /mnt/state/etc/machine-id
     tee -a /mnt/etc/nixos/${INST_CONFIG_FILE} <<EOF
+      systemd.services.zfs-mount.enable = false;
       environment.etc."machine-id".source = "/state/etc/machine-id";
       environment.etc."zfs/zpool.cache".source
         = "/state/etc/zfs/zpool.cache";
