@@ -164,10 +164,8 @@ an empty dataset as root file system.
 
     ROOT_FS=$(df --output=source /|tail -n1)
     cat <<EOF
-      boot.initrd.postMountCommands = ''
+      boot.initrd.postDeviceCommands = ''
         zfs rollback -r ${ROOT_FS%/*}/empty@start
-        mkdir -p /mnt-root/nix
-        mkdir -p /mnt-root/CREATE_OTHER_MOUNTPOINTS
       '';
     EOF
 
