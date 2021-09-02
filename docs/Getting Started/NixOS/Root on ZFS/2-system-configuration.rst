@@ -307,7 +307,7 @@ System Configuration
 #. For immutable root file system, save machine-id and other files::
 
     mkdir -p /mnt/state/etc/{ssh,zfs}
-    touch /mnt/state/etc/machine-id
+    systemd-machine-id-setup --print > /mnt/state/etc/machine-id
     tee -a /mnt/etc/nixos/${INST_CONFIG_FILE} <<EOF
       systemd.services.zfs-mount.enable = false;
       environment.etc."machine-id".source = "/state/etc/machine-id";
