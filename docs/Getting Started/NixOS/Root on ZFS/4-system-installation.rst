@@ -166,6 +166,8 @@ an empty dataset as root file system.
     cat <<EOF
       boot.initrd.postMountCommands = ''
         zfs rollback -r ${ROOT_FS%/*}/empty@start
+        mkdir -p /mnt-root/nix
+        mkdir -p /mnt-root/CREATE_OTHER_MOUNTPOINTS
       '';
     EOF
 
