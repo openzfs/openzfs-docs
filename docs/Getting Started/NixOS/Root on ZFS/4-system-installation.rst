@@ -26,15 +26,14 @@ of declaratively configuring the system.
 
 #. Generate password hash::
 
-    mkpasswd -m SHA-512 -s
-    #output: $6$DeHnzc
+    INST_ROOT_PASSWD=$(mkpasswd -m SHA-512 -s)
 
 #. Declare `initialHashedPassword
    <https://nixos.org/manual/nixos/stable/options.html#opt-users.users._name_.initialHashedPassword>`__
    for root user::
 
-    tee -a /mnt/etc/nixos/${INST_CONFIG_FILE} <<-'EOF'
-      users.users.root.initialHashedPassword = "$6$DeHnzc";
+    tee -a /mnt/etc/nixos/${INST_CONFIG_FILE} <<EOF
+      users.users.root.initialHashedPassword = "${INST_ROOT_PASSWD}";
     EOF
 
 System installation
