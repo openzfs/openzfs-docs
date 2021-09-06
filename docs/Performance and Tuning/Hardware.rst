@@ -583,7 +583,7 @@ follows:
 
    -  Early reports claimed that the 330 and 335 had power failure
       protection too, `but they do
-      not <http://blog.nordeus.com/dev-ops/power-failure-testing-with-ssds.htm>`__.
+      not <https://engineering.nordeus.com/power-failure-testing-with-ssds>`__.
 
 -  Intel 710
 -  Intel 730
