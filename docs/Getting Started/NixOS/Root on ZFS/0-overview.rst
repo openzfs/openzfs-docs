@@ -2,12 +2,11 @@
 
 Overview
 ======================
-This document describes how to install Arch Linux with ZFS as root
+This document describes how to install NixOS with ZFS as root
 file system.
 
 Caution
 ~~~~~~~
-
 - This guide wipes entire physical disks. Back up existing data.
 - `GRUB does not and
   will not work on 4Kn drive with legacy (BIOS) booting.
@@ -24,19 +23,24 @@ EFI system partition will be referred to as **ESP** in this document.
 +======================+======================+=======================+======================+=====================+=======================+=================+
 | File system          |                      |  vfat                 | ZFS                  | swap                | ZFS                   |                 |
 +----------------------+----------------------+-----------------------+----------------------+---------------------+-----------------------+-----------------+
-| Size                 |  1M                  |  4G, or 1G w/o ISO    | 4G                   | depends on RAM size |                       |                 |
+| Size                 |  1M                  |  2G                   | 4G                   | depends on RAM size |                       |                 |
 +----------------------+----------------------+-----------------------+----------------------+---------------------+-----------------------+-----------------+
-| Optional encryption  |                      |  *Secure Boot*        | luks 1               | plain dm-crypt or   | ZFS native encryption |                 |
-|                      |                      |                       |                      | luks2               |                       |                 |
+| Optional encryption  |                      |  *Secure Boot*        |                      | plain dm-crypt      | ZFS native encryption |                 |
+|                      |                      |                       |                      |                     |                       |                 |
 +----------------------+----------------------+-----------------------+----------------------+---------------------+-----------------------+-----------------+
 | Partition no.        | 5                    | 1                     | 2                    | 4                   | 3                     |                 |
 +----------------------+----------------------+-----------------------+----------------------+---------------------+-----------------------+-----------------+
-| Mount point          |                      | /boot/efi             | /boot                |                     | /                     |                 |
+| Mount point          |                      |                       | /boot                |                     | /                     |                 |
 |                      |                      | /boot/efis/disk-part1 |                      |                     |                       |                 |
 +----------------------+----------------------+-----------------------+----------------------+---------------------+-----------------------+-----------------+
 
 Dataset layout
 ~~~~~~~~~~~~~~
+
+The dataset layout used in this guide follows stardard
+mutable file positions (``/var``, ``/etc``, ...), but can
+still be modified to `a immutable root <https://grahamc.com/blog/erase-your-darlings>`__
+after installation.
 
 +---------------------------+----------------------+----------------------+-------------------------------------+-------------------------------------------+
 | Dataset                   | canmount             | mountpoint           | container                           | notes                                     |
@@ -57,6 +61,8 @@ Dataset layout
 +---------------------------+----------------------+----------------------+-------------------------------------+-------------------------------------------+
 |  rpool/sys/DATA/default   | off                  | /                    | contains user datasets              | child datsets inherits mountpoint         |
 +---------------------------+----------------------+----------------------+-------------------------------------+-------------------------------------------+
+|  rpool/sys/DATA/local     | off                  | /                    | contains /nix datasets              | child datsets inherits mountpoint         |
++---------------------------+----------------------+----------------------+-------------------------------------+-------------------------------------------+
 | rpool/sys/DATA/default/   | on                   |  /home (inherited)   | no                                  |                                           |
 | home                      |                      |                      |                                     | user datasets, also called "shared        |
 |                           |                      |                      |                                     | datasets", "persistent datasets"; also    |
@@ -67,10 +73,6 @@ Dataset layout
 +---------------------------+----------------------+----------------------+-------------------------------------+-------------------------------------------+
 |   rpool/sys/ROOT/default  | noauto               | /                    | no                                  | mounted by initrd zfs hook                |
 +---------------------------+----------------------+----------------------+-------------------------------------+-------------------------------------------+
-|   bpool/sys/BOOT/be1      | noauto               |        /boot         | no                                  | see bpool/sys/BOOT/default                |
-+---------------------------+----------------------+----------------------+-------------------------------------+-------------------------------------------+
-|   rpool/sys/ROOT/be1      | noauto               | /                    | no                                  | see rpool/sys/ROOT/default                |
-+---------------------------+----------------------+----------------------+-------------------------------------+-------------------------------------------+
 
 Encryption
 ~~~~~~~~~~
@@ -80,11 +82,6 @@ Encryption
   Swap is always encrypted. By default, swap is encrypted
   with plain dm-crypt with key generated from ``/dev/urandom``
   at every boot. Swap content does not persist between reboots.
-
-  LUKS2-encrypted persistent swap can be
-  enabled after encrypting both boot pool and root pool, see below.
-
-  With persistent swap, hibernation (suspend-to-disk) can be enabled.
 
 - Root pool
 
@@ -100,15 +97,10 @@ Encryption
   for more information regarding ZFS native encryption.
 
   Encryption is enabled at dataset creation and can not be disabled later.
-  Password can be supplied via SSH.
 
 - Boot pool
 
-  After encrypting root pool, boot pool can also be encrypted with LUKS1.
-  This protects initrd from attacks and also protects key material in initrd.
-
-  Password must be interactively entered at boot in GRUB. This disables
-  password with SSH.
+  Boot pool can not be encrypted.
 
 - Bootloader
 
@@ -118,8 +110,7 @@ Encryption
   can be verified by motherboard firmware to be untempered,
   which should be sufficient for most purposes.
 
-  As enabling Secure Boot is device specific, this is not
-  covered in detail.
+  Secure Boot is not supported out-of-the-box due to ZFS module.
 
 Booting with disk failure
 ~~~~~~~~~~~~~~~~~~~~~~~~~

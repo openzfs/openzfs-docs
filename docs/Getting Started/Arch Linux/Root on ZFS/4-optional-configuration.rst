@@ -227,7 +227,7 @@ Persistent swap and hibernation
     resume=/dev/mapper/${INST_SWAPMAPPER}\"" \
     >> /etc/default/grub
 
-   Note that hibernation might not work with discrete graphics or
+   Note that hibernation might not work with discrete graphics, virtio graphics or
    AMD APU integrated graphics. This is not specific to this guide.
 
    Computer must resume from a continuous swap space, resume

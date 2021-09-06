@@ -188,12 +188,11 @@ System Installation
     zfs create -o canmount=off -o mountpoint=none bpool_$INST_UUID/$INST_ID/BOOT
     zfs create -o canmount=off -o mountpoint=none rpool_$INST_UUID/$INST_ID/ROOT
     zfs create -o canmount=off -o mountpoint=none rpool_$INST_UUID/$INST_ID/DATA
-    zfs create -o mountpoint=legacy -o canmount=noauto bpool_$INST_UUID/$INST_ID/BOOT/default
+    zfs create -o mountpoint=/boot -o canmount=noauto bpool_$INST_UUID/$INST_ID/BOOT/default
     zfs create -o mountpoint=/ -o canmount=off    rpool_$INST_UUID/$INST_ID/DATA/default
     zfs create -o mountpoint=/ -o canmount=noauto rpool_$INST_UUID/$INST_ID/ROOT/default
     zfs mount rpool_$INST_UUID/$INST_ID/ROOT/default
-    mkdir /mnt/boot
-    mount -t zfs bpool_$INST_UUID/$INST_ID/BOOT/default /mnt/boot
+    zfs mount bpool_$INST_UUID/$INST_ID/BOOT/default
     for i in {usr,var,var/lib};
     do
         zfs create -o canmount=off rpool_$INST_UUID/$INST_ID/DATA/default/$i

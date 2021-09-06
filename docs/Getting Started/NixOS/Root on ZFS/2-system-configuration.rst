@@ -1,6 +1,6 @@
 .. highlight:: sh
 
-System Installation
+System Configuration
 ======================
 
 .. contents:: Table of Contents
@@ -44,7 +44,17 @@ System Installation
 #. Create boot pool::
 
     zpool create \
-        -o compatibility=grub2 \
+    -d -o feature@async_destroy=enabled \
+    -o feature@bookmarks=enabled \
+    -o feature@embedded_data=enabled \
+    -o feature@empty_bpobj=enabled \
+    -o feature@enabled_txg=enabled \
+    -o feature@extensible_dataset=enabled \
+    -o feature@filesystem_limits=enabled \
+    -o feature@hole_birth=enabled \
+    -o feature@large_blocks=enabled \
+    -o feature@lz4_compress=enabled \
+    -o feature@spacemap_histogram=enabled \
         -o ashift=12 \
         -o autotrim=on \
         -O acltype=posixacl \
@@ -167,7 +177,7 @@ System Installation
       zfs create \
        -o canmount=off \
        -o mountpoint=none \
-       -o encryption=on \
+       -o encryption=aes-256-gcm \
        -o keylocation=prompt \
        -o keyformat=passphrase \
        rpool_$INST_UUID/$INST_ID
@@ -180,6 +190,7 @@ System Installation
     zfs create -o canmount=off -o mountpoint=none rpool_$INST_UUID/$INST_ID/DATA
     zfs create -o mountpoint=/boot -o canmount=noauto bpool_$INST_UUID/$INST_ID/BOOT/default
     zfs create -o mountpoint=/ -o canmount=off    rpool_$INST_UUID/$INST_ID/DATA/default
+    zfs create -o mountpoint=/ -o canmount=off    rpool_$INST_UUID/$INST_ID/DATA/local
     zfs create -o mountpoint=/ -o canmount=noauto rpool_$INST_UUID/$INST_ID/ROOT/default
     zfs mount rpool_$INST_UUID/$INST_ID/ROOT/default
     zfs mount bpool_$INST_UUID/$INST_ID/BOOT/default
@@ -192,6 +203,19 @@ System Installation
         zfs create -o canmount=on rpool_$INST_UUID/$INST_ID/DATA/default/$i
     done
     chmod 750 /mnt/root
+    for i in {nix,}; do
+        zfs create -o canmount=on -o mountpoint=/$i rpool_$INST_UUID/$INST_ID/DATA/local/$i
+    done
+
+   Datasets for immutable root filesystem::
+
+    zfs create -o canmount=on rpool_$INST_UUID/$INST_ID/DATA/default/state
+    for i in {/etc/nixos,/etc/cryptkey.d}; do
+      mkdir -p /mnt/state/$i /mnt/$i
+      mount -o bind /mnt/state/$i /mnt/$i
+    done
+    zfs create -o mountpoint=/ -o canmount=noauto rpool_$INST_UUID/$INST_ID/ROOT/empty
+    zfs snapshot rpool_$INST_UUID/$INST_ID/ROOT/empty@start
 
 #. Format and mount ESP::
 
@@ -200,9 +224,6 @@ System Installation
      mkdir -p /mnt/boot/efis/${i##*/}-part1
      mount -t vfat ${i}-part1 /mnt/boot/efis/${i##*/}-part1
     done
-
-    mkdir -p /mnt/boot/efi
-    mount -t vfat ${INST_PRIMARY_DISK}-part1 /mnt/boot/efi
 
 #. Create optional user data datasets to omit data from rollback::
 
@@ -223,13 +244,113 @@ System Installation
 
    Add other datasets when needed, such as PostgreSQL.
 
-#. Install base packages::
+#. Generate initial NixOS system configuration::
 
-     dnf --installroot=/mnt --releasever=${INST_FEDORA_VER} -y install \
-     https://zfsonlinux.org/fedora/zfs-release.fc${INST_FEDORA_VER}.noarch.rpm \
-     @core grub2-efi-x64 grub2-pc-modules grub2-efi-x64-modules shim-x64 efibootmgr cryptsetup \
-     kernel kernel-devel python3-dnf-plugin-post-transaction-actions
+    nixos-generate-config --root /mnt
 
-#. Install ZFS::
+   This command will generate two files, ``configuration.nix``
+   and ``hardware-configuration-zfs.nix``, which will be the starting point
+   of configuring the system.
 
-    dnf --installroot=/mnt -y install zfs zfs-dracut
+#. Edit config file to import ZFS options::
+
+    sed -i "s|./hardware-configuration.nix|./hardware-configuration-zfs.nix ./${INST_CONFIG_FILE}|g" /mnt/etc/nixos/configuration.nix
+    # backup, prevent being overwritten by nixos-generate-config
+    mv /mnt/etc/nixos/hardware-configuration.nix /mnt/etc/nixos/hardware-configuration-zfs.nix
+
+#. ZFS options::
+
+    tee -a /mnt/etc/nixos/${INST_CONFIG_FILE} <<EOF
+    { config, pkgs, ... }:
+
+    { boot.supportedFilesystems = [ "zfs" ];
+      networking.hostId = "$(head -c 8 /etc/machine-id)";
+      boot.zfs.devNodes = "${INST_PRIMARY_DISK%/*}";
+    EOF
+
+   ZFS datasets should be mounted with ``-o zfsutil`` option::
+
+    sed -i 's|fsType = "zfs";|fsType = "zfs"; options = [ "zfsutil" ];|g' \
+    /mnt/etc/nixos/hardware-configuration-zfs.nix
+
+   Allow EFI system partition mounting to fail at boot::
+
+    sed -i 's|fsType = "vfat";|fsType = "vfat"; options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" ];|g' \
+    /mnt/etc/nixos/hardware-configuration-zfs.nix
+
+   Disable cache::
+
+    mkdir -p /mnt/state/etc/zfs/
+    rm -f /mnt/state/etc/zfs/zpool.cache
+    touch /mnt/state/etc/zfs/zpool.cache
+    chmod a-w /mnt/state/etc/zfs/zpool.cache
+    chattr +i /mnt/state/etc/zfs/zpool.cache
+
+#. If swap is enabled::
+
+    if [ "${INST_PARTSIZE_SWAP}" != "" ]; then
+    sed -i '/swapDevices/d' /mnt/etc/nixos/hardware-configuration-zfs.nix
+
+    tee -a /mnt/etc/nixos/${INST_CONFIG_FILE} <<EOF
+      swapDevices = [
+    EOF
+    for i in $DISK; do
+    tee -a /mnt/etc/nixos/${INST_CONFIG_FILE} <<EOF
+        { device = "$i-part4"; randomEncryption.enable = true; }
+    EOF
+    done
+    tee -a /mnt/etc/nixos/${INST_CONFIG_FILE} <<EOF
+      ];
+    EOF
+    fi
+
+#. For immutable root file system, save machine-id and other files::
+
+    mkdir -p /mnt/state/etc/{ssh,zfs}
+    systemd-machine-id-setup --print > /mnt/state/etc/machine-id
+    tee -a /mnt/etc/nixos/${INST_CONFIG_FILE} <<EOF
+      systemd.services.zfs-mount.enable = false;
+      environment.etc."machine-id".source = "/state/etc/machine-id";
+      environment.etc."zfs/zpool.cache".source
+        = "/state/etc/zfs/zpool.cache";
+    EOF
+
+#. Configure GRUB boot loader for both legacy boot and UEFI::
+
+    sed -i '/boot.loader/d' /mnt/etc/nixos/configuration.nix
+    tee -a /mnt/etc/nixos/${INST_CONFIG_FILE} <<EOF
+      boot.loader = {
+        generationsDir.copyKernels = true;
+        ##for problematic UEFI firmware
+        grub.efiInstallAsRemovable = true;
+        efi.canTouchEfiVariables = false;
+        ##if UEFI firmware can detect entries
+        #efi.canTouchEfiVariables = true;
+        efi.efiSysMountPoint = "/boot/efis/${INST_PRIMARY_DISK##*/}-part1";
+        grub.enable = true;
+        grub.version = 2;
+        grub.copyKernels = true;
+        grub.efiSupport = true;
+        grub.zfsSupport = true;
+        # for systemd-autofs
+        grub.extraPrepareConfig = ''
+          mkdir -p /boot/efis
+          for i in  /boot/efis/*; do mount \$i ; done
+        '';
+        grub.devices = [
+    EOF
+    for i in $DISK; do
+      printf "      \"$i\"\n" >>/mnt/etc/nixos/${INST_CONFIG_FILE}
+    done
+    tee -a /mnt/etc/nixos/${INST_CONFIG_FILE} <<EOF
+        ];
+        grub.mirroredBoots = [
+    EOF
+    for i in $DISK; do
+      printf "      { devices = [ \"$i\" ] ; efiSysMountPoint = \"/boot/efis/${i##*/}-part1\"; path = \"/boot\"; }\n" \
+      >>/mnt/etc/nixos/${INST_CONFIG_FILE}
+    done
+    tee -a /mnt/etc/nixos/${INST_CONFIG_FILE} <<EOF
+        ];
+      };
+    EOF

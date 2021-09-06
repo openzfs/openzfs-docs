@@ -71,7 +71,7 @@ Preparation
     ls /dev/disk/by-id/*
 
    If using virtio as disk bus, use
-   ``/dev/disk/by-path/*`` or ``/dev/vd*``.
+   ``/dev/disk/by-path/*``.
 
    Declare disk array::
 
