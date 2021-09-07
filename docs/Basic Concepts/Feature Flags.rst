@@ -34,7 +34,7 @@ Reference materials
 Archive Wayback Machine) in particular: "… Legacy version numbers still
 exist for pool versions 1-28 …".
 
-`zpool-features(5) man page <../man/7/zpool-features.7.html>`_ - OpenZFS
+`zpool-features(7) man page <../man/7/zpool-features.7.html>`_ - OpenZFS
 
 `zpool-features <http://illumos.org/man/5/zpool-features>`__ (5) – illumos
 
