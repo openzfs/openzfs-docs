@@ -28,14 +28,20 @@ else:
 
 def openzfs():
     sources = {'master': 'https://raw.githubusercontent.com/openzfs/zfs/'
-               'master/man/man5/zpool-features.5'}
+               'master/man/man7/zpool-features.7'}
     # TODO(gmelikov): use git tags from OpenZFS repo
     with urlopen('https://zfsonlinux.org') as web:
         versions = findall(r'download/zfs-([0-9.]+)',
                            web.read().decode('utf-8', 'ignore'))
     versions.append("0.6.5.11")
     for ver in set(versions):
-        sources[ver] = ('https://raw.githubusercontent.com/openzfs/zfs/'
+        ver_split = ver.split(".")
+        if (int(ver_split[0]) >= 3 or
+            (int(ver_split[0]) == 2 and int(ver_split[1]) >= 1)):
+            sources[ver] = ('https://raw.githubusercontent.com/openzfs/zfs/'
+                        'zfs-{}/man/man7/zpool-features.7'.format(ver))
+        else:
+            sources[ver] = ('https://raw.githubusercontent.com/openzfs/zfs/'
                         'zfs-{}/man/man5/zpool-features.5'.format(ver))
     return sources
 
@@ -176,25 +182,35 @@ for name, sub in sources.items():
             continue
         found[ver] = url
         for line in man.split('\n'):
-            if line.startswith('.It '):
-                line = line[4:]
-            if line.startswith('GUID'):
-                guid = line.split()[-1]
-                if guid == 'com.intel:allocation_classes':
-                    # This is wrong in the documentation for Illumos and
-                    # FreeBSD.  The actual code in zfeature_common.c uses
-                    # org.zfsonlinux:allocation_classes.
-                    guid = 'org.zfsonlinux:allocation_classes'
-                elif guid == 'org.open-zfs:large_block':
-                    guid += 's'
-                elif guid == 'com.nexenta:cos_properties':
-                    # This is wrong in the documentation.  The actual code in
-                    # zfeature_common.c uses this name:
-                    guid = 'com.nexenta:class_of_storage'
+            if line.startswith('.feature '):
+                guid = ":".join(line.split()[1:3])
+                readonly[guid] = (line.split()[3] == 'yes')
                 domain, feature = guid.split(':', 1)
                 features[(feature, domain)].append((name, ver))
-            elif line.startswith('READ\\-ONLY COMPATIBLE'):
-                readonly[guid] = (line.split()[-1] == 'yes')
+            else:
+                if line.startswith('.It '):
+                    line = line[4:]
+                if line.startswith('GUID'):
+                    # The new-style man page hits the .feature definition here
+                    # and errors out, so let's exclude that
+                    if len(line) < 10:
+                        continue
+                    guid = line.split()[-1]
+                    if guid == 'com.intel:allocation_classes':
+                        # This is wrong in the documentation for Illumos and
+                        # FreeBSD.  The actual code in zfeature_common.c uses
+                        # org.zfsonlinux:allocation_classes.
+                        guid = 'org.zfsonlinux:allocation_classes'
+                    elif guid == 'org.open-zfs:large_block':
+                        guid += 's'
+                    elif guid == 'com.nexenta:cos_properties':
+                        # This is wrong in the documentation.  The actual code in
+                        # zfeature_common.c uses this name:
+                        guid = 'com.nexenta:class_of_storage'
+                    domain, feature = guid.split(':', 1)
+                    features[(feature, domain)].append((name, ver))
+                elif line.startswith('READ\\-ONLY COMPATIBLE'):
+                    readonly[guid] = (line.split()[-1] == 'yes')
         # This is missing in the documentation, but is supported by the code:
         # https://github.com/Nexenta/illumos-nexenta/blob/release-4.0.4-FP/usr/src/common/zfs/zfeature_common.c
         if name == 'Nexenta' and ver.startswith('4.'):
