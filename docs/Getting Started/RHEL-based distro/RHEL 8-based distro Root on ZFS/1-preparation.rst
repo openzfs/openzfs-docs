@@ -119,6 +119,9 @@ Preparation
    `here <https://www.delphix.com/blog/delphix-engineering/zfs-raidz-stripe-width-or-how-i-learned-stop-worrying-and-love-raidz>`__
    and `here <https://docs.google.com/spreadsheets/d/1tf4qx1aMJp8Lo_R6gpT689wTjHv6CGVElrPqTA0w_ZY/>`__.
 
+   For boot pool, which must be readable by GRUB, mirrored vdev should always be used for maximum redundancy.
+   This guide will use mirrored bpool for multi-disk setup.
+
    Refer to `zpoolconcepts <https://openzfs.github.io/openzfs-docs/man/7/zpoolconcepts.7.html>`__
    and `zpool-create <https://openzfs.github.io/openzfs-docs/man/8/zpool-create.8.html>`__
    man pages for details.

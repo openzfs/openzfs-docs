@@ -114,6 +114,10 @@ root pool will be replaced by keyfile, embedded in initrd.
 
 #. Recreate boot pool with mappers as vdev::
 
+    disk_num=0; for i in $DISK; do disk_num=$(( $disk_num + 1 )); done
+    if [ $disk_num -gt 1 ]; then INST_VDEV_BPOOL=mirror; fi
+
+
     zpool create \
         -d -o feature@async_destroy=enabled \
         -o feature@bookmarks=enabled \
@@ -138,7 +142,7 @@ root pool will be replaced by keyfile, embedded in initrd.
         -O mountpoint=/boot \
         -R /mnt \
         bpool_$INST_UUID \
-        $INST_VDEV \
+         $INST_VDEV_BPOOL \
         $(for i in ${DISK}; do
            printf "/dev/mapper/${i##*/}-part2-luks-bpool_$INST_UUID ";
           done)
