@@ -43,6 +43,11 @@ System Installation
 
 #. Create boot pool::
 
+
+    disk_num=0; for i in $DISK; do disk_num=$(( $disk_num + 1 )); done
+    if [ $disk_num -gt 1 ]; then INST_VDEV_BPOOL=mirror; fi
+
+
     zpool create \
     -d -o feature@async_destroy=enabled \
     -o feature@bookmarks=enabled \
@@ -67,7 +72,7 @@ System Installation
         -O mountpoint=/boot \
         -R /mnt \
         bpool_$INST_UUID \
-        $INST_VDEV \
+         $INST_VDEV_BPOOL \
         $(for i in ${DISK}; do
            printf "$i-part2 ";
           done)
