@@ -62,3 +62,31 @@ An installation guide is available.
   :glob:
 
   Root on ZFS/*
+
+Contribute
+----------
+#. Fork and clone `this repo <https://github.com/openzfs/openzfs-docs>`__.
+
+#. Launch an ephemeral nix-shell with the following packages::
+
+    nix-shell -p python39 python39Packages.pip gnumake \
+        python39Packages.setuptools python39Packages.sphinx
+
+#. Create python virtual environment and install packages::
+
+    cd openzfs-docs
+    python -m venv .venv
+    source .venv/bin/activate
+
+    pip install -r docs/requirements.txt
+
+#. Make your changes.
+
+#. Test::
+
+    cd docs
+    make html
+    sensible-browser _build/html/index.html
+
+#. ``git commit --signoff`` to a branch, ``git push``, and create a pull
+   request. Mention @rlaager.
