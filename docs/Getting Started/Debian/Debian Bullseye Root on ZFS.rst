@@ -20,7 +20,7 @@ System Requirements
 ~~~~~~~~~~~~~~~~~~~
 
 - `64-bit Debian GNU/Linux Bullseye Live CD w/ GUI (e.g. gnome iso)
-  <https://cdimage.debian.org/mirror/cdimage/unofficial/non-free/cd-including-firmware/current-live/amd64/iso-hybrid/debian-live-11.0.0-amd64-standard+nonfree.iso>`__
+  <https://cdimage.debian.org/mirror/cdimage/release/current-live/amd64/iso-hybrid/>`__
 - `A 64-bit kernel is strongly encouraged.
   <https://github.com/zfsonlinux/zfs/wiki/FAQ#32-bit-vs-64-bit-systems>`__
 - Installing on a drive which presents 4 KiB logical sectors (a “4Kn” drive)
@@ -107,6 +107,7 @@ Step 1: Prepare The Install Environment
    .. code-block:: sourceslist
 
      deb http://deb.debian.org/debian bullseye main contrib
+     deb http://deb.debian.org/debian bullseye-backports main contrib
 
    ::
 
@@ -138,7 +139,8 @@ Step 1: Prepare The Install Environment
 
 #. Install ZFS in the Live CD environment::
 
-     apt install --yes debootstrap gdisk dkms dpkg-dev zfs-dkms
+     apt install --yes debootstrap gdisk dkms dpkg-dev zfs-dkms \
+         linux-headers-$(uname -r)
 
      modprobe zfs
      apt install --yes zfsutils-linux
@@ -517,7 +519,7 @@ Step 3: System Installation
 
 #. Install the minimal system::
 
-     debootstrap --components=main,contrib bullseye /mnt 
+     debootstrap --components=main,contrib bullseye /mnt
 
    The ``debootstrap`` command leaves the new system in an unconfigured state.
    An alternative to using ``debootstrap`` is to copy the entirety of a
