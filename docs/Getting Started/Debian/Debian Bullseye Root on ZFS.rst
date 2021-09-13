@@ -221,7 +221,7 @@ Step 2: Disk Formatting
 
 #. Create the boot pool::
 
-     zpool create \
+     zpool create -f \
          -o cachefile=/etc/zfs/zpool.cache \
          -o ashift=12 -d \
          -o feature@async_destroy=enabled \
@@ -255,7 +255,7 @@ Step 2: Disk Formatting
 
    - If you are creating a mirror topology, create the pool using::
 
-       zpool create \
+       zpool create -f \
            ... \
            bpool mirror \
            /dev/disk/by-id/scsi-SATA_disk1-part3 \
@@ -292,7 +292,7 @@ Step 2: Disk Formatting
 
    - Unencrypted::
 
-       zpool create \
+       zpool create -f \
            -o ashift=12 \
            -O acltype=posixacl -O canmount=off -O compression=lz4 \
            -O dnodesize=auto -O normalization=formD -O relatime=on \
@@ -301,7 +301,7 @@ Step 2: Disk Formatting
 
    - ZFS native encryption::
 
-       zpool create \
+       zpool create -f \
            -o ashift=12 \
            -O encryption=aes-256-gcm \
            -O keylocation=prompt -O keyformat=passphrase \
@@ -390,7 +390,7 @@ Step 2: Disk Formatting
 
    - If you are creating a mirror topology, create the pool using::
 
-       zpool create \
+       zpool create -f \
            ... \
            rpool mirror \
            /dev/disk/by-id/scsi-SATA_disk1-part4 \
