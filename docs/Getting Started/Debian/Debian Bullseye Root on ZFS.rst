@@ -857,13 +857,17 @@ Step 6: First Boot
      zfs create rpool/home/USERNAME
      adduser USERNAME
 
-   You will get this message:
-   The home directory `/home/USERNAME' already exists.  Not copying from `/etc/skel'.
-   adduser: Warning: The home directory `/home/USERNAME' does not belong to the user you are currently creating
+   You will get this message
+   
+      The home directory `/home/USERNAME' already exists.  Not copying from `/etc/skel'.
+      
+      adduser: Warning: The home directory `/home/USERNAME' does not belong to the user you are currently creating
 
-     cp -a /etc/skel/. /home/USERNAME
-     chown -R USERNAME:USERNAME /home/USERNAME
-     usermod -a -G audio,cdrom,dip,floppy,netdev,plugdev,sudo,video USERNAME
+   ::
+
+      cp -a /etc/skel/. /home/USERNAME
+      chown -R USERNAME:USERNAME /home/USERNAME
+      usermod -a -G audio,cdrom,dip,floppy,netdev,plugdev,sudo,video USERNAME
 
 #. Mirror GRUB
 
