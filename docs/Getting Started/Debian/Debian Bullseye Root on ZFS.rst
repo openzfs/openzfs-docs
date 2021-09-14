@@ -20,7 +20,7 @@ System Requirements
 ~~~~~~~~~~~~~~~~~~~
 
 - `64-bit Debian GNU/Linux Bullseye Live CD w/ GUI (e.g. gnome iso)
-  <https://cdimage.debian.org/mirror/cdimage/release/current-live/amd64/iso-hybrid/>`__
+  <https://cdimage.debian.org/mirror/cdimage/unofficial/non-free/cd-including-firmware/current-live/amd64/iso-hybrid/debian-live-11.0.0-amd64-standard+nonfree.iso>`__
 - `A 64-bit kernel is strongly encouraged.
   <https://github.com/zfsonlinux/zfs/wiki/FAQ#32-bit-vs-64-bit-systems>`__
 - Installing on a drive which presents 4 KiB logical sectors (a “4Kn” drive)
@@ -139,8 +139,7 @@ Step 1: Prepare The Install Environment
 
 #. Install ZFS in the Live CD environment::
 
-     apt install --yes debootstrap gdisk dkms dpkg-dev zfs-dkms \
-         linux-headers-$(uname -r)
+     apt install --yes debootstrap gdisk dkms dpkg-dev zfs-dkms
 
      modprobe zfs
      apt install --yes zfsutils-linux
@@ -221,7 +220,7 @@ Step 2: Disk Formatting
 
 #. Create the boot pool::
 
-     zpool create -f \
+     zpool create \
          -o cachefile=/etc/zfs/zpool.cache \
          -o ashift=12 -d \
          -o feature@async_destroy=enabled \
@@ -255,7 +254,7 @@ Step 2: Disk Formatting
 
    - If you are creating a mirror topology, create the pool using::
 
-       zpool create -f \
+       zpool create \
            ... \
            bpool mirror \
            /dev/disk/by-id/scsi-SATA_disk1-part3 \
@@ -292,7 +291,7 @@ Step 2: Disk Formatting
 
    - Unencrypted::
 
-       zpool create -f \
+       zpool create \
            -o ashift=12 \
            -O acltype=posixacl -O canmount=off -O compression=lz4 \
            -O dnodesize=auto -O normalization=formD -O relatime=on \
@@ -301,7 +300,7 @@ Step 2: Disk Formatting
 
    - ZFS native encryption::
 
-       zpool create -f \
+       zpool create \
            -o ashift=12 \
            -O encryption=aes-256-gcm \
            -O keylocation=prompt -O keyformat=passphrase \
@@ -390,7 +389,7 @@ Step 2: Disk Formatting
 
    - If you are creating a mirror topology, create the pool using::
 
-       zpool create -f \
+       zpool create \
            ... \
            rpool mirror \
            /dev/disk/by-id/scsi-SATA_disk1-part4 \
