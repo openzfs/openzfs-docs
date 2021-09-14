@@ -42,6 +42,10 @@ Install the packages::
   apt install dpkg-dev linux-headers-$(uname -r) linux-image-amd64
   apt install zfs-dkms zfsutils-linux
 
+**Caution**: If you are in a poorly configured environment (e.g. certain VM or container consoles), when apt attempts to pop up a message on first install, it may fail to notice a real console is unavailable, and instead appear to hang indefinitely. To circumvent this, you can prefix the `apt install` commands with ``DEBIAN_FRONTEND=noninteractive``, like this::
+
+  DEBIAN_FRONTEND=noninteractive apt install zfs-dkms zfsutils-linux
+
 Root on ZFS
 -----------
 .. toctree::
