@@ -107,7 +107,6 @@ Step 1: Prepare The Install Environment
    .. code-block:: sourceslist
 
      deb http://deb.debian.org/debian bullseye main contrib
-     deb http://deb.debian.org/debian bullseye-backports main contrib
 
    ::
 
@@ -857,9 +856,9 @@ Step 6: First Boot
      adduser USERNAME
 
    You will get this message
-   
+
       The home directory `/home/USERNAME' already exists.  Not copying from `/etc/skel'.
-      
+
       adduser: Warning: The home directory `/home/USERNAME' does not belong to the user you are currently creating
 
    ::
