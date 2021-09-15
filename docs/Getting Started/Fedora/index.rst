@@ -36,7 +36,10 @@ see below.
 
    If kernel module can not be loaded, your kernel version
    might be not yet supported by OpenZFS. Try install
-   an LTS kernel::
+   an LTS kernel from COPR.
+
+   This kernel is provided by a third-party and you should use it
+   at your own risk::
 
     dnf copr enable -y kwizart/kernel-longterm-5.4
     dnf install -y kernel-longterm kernel-longterm-devel
