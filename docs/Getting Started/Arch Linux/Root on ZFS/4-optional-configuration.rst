@@ -17,11 +17,10 @@ instance of an operating system. Within the context of this installation,
 boot environments can be created on-the-fly to preserve root file system
 states before pacman transactions.
 
-Install `rozb3-pac <https://gitlab.com/m_zhou/rozb3-pac/-/releases>`__
-pacman hook and
-`bieaz <https://gitlab.com/m_zhou/bieaz/-/releases>`__
-from AUR to create boot environments.
-Prebuilt packages are also available.
+Install ``bieaz`` from AUR. Optionally install ``rozb3-pac`` from AUR
+for pacman integration.
+
+See `home page <https://nu8.org/pages/projects/bieaz/>`__ for details.
 
 Supply password with SSH
 ~~~~~~~~~~~~~~~~~~~~~~~~
