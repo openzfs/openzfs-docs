@@ -38,6 +38,10 @@ Preparation
 
     dnf install -y https://zfsonlinux.org/fedora/zfs-release.fc${VERSION_ID}.noarch.rpm
 
+#. If zfs-fuse from official Fedora repo is installed, remove it first. It is not maintained and should not be used under any circumstance::
+
+    dnf remove -y zfs-fuse
+
 #. Install ZFS packages::
 
     dnf install -y zfs
