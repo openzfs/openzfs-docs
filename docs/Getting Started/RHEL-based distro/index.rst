@@ -109,6 +109,16 @@ time you must create an ``/etc/modules-load.d/zfs.conf`` file::
    After upgrading users must uninstall OpenZFS and then reinstall it
    from the matching repository as described in this section.
 
+It might be necessary to rebuild ZFS module::
+
+ for directory in /lib/modules/*; do
+   kernel_version=$(basename $directory)
+   dkms autoinstall -k $kernel_version
+ done
+
+If for some reason, ZFS kernel module is not successfully built,
+you can also run the above command to debug the problem.
+
 Testing Repositories
 --------------------
 

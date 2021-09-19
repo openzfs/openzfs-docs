@@ -45,12 +45,15 @@ see below.
 
     modprobe zfs
 
-   It might be necessary to rebuild module::
+   It might be necessary to rebuild ZFS module::
 
-    ls -1 /lib/modules \
-    | while read kernel_version; do
+    for directory in /lib/modules/*; do
+      kernel_version=$(basename $directory)
       dkms autoinstall -k $kernel_version
     done
+
+   If for some reason, ZFS kernel module is not successfully built,
+   you can also run the above command to debug the problem.
 
 #. By default ZFS kernel modules are loaded upon detecting a pool.
    To always load the modules at boot::
