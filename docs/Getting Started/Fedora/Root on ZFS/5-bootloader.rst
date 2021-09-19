@@ -49,10 +49,10 @@ Install GRUB
     touch /etc/zfs/zpool.cache
     chmod a-w /etc/zfs/zpool.cache
     chattr +i /etc/zfs/zpool.cache
-    ls -1 /lib/modules \
-    | while read kernel_version; do
+    for directory in /lib/modules/*; do
+      kernel_version=$(basename $directory)
       dracut --force --kver $kernel_version
-      done
+    done
 
 #. Disable BLS::
 

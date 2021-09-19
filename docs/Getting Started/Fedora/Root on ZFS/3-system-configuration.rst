@@ -101,7 +101,7 @@ System Configuration
 
 #. Build ZFS modules::
 
-    ls -1 /lib/modules \
-    | while read kernel_version; do
+    for directory in /lib/modules/*; do
+      kernel_version=$(basename $directory)
       dkms autoinstall -k $kernel_version
-      done
+    done
