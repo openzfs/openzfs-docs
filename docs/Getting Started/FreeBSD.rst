@@ -51,13 +51,13 @@ The following dependencies are required to build OpenZFS on FreeBSD:
           automake \
           autotools \
           git \
-          gmake \
+          gmake
 
 -  Optional packages for build:
    ::
 
-      pkg install python37 # or your preferred Python version
-      pkg install py37-sysctl # needed for arcstat, arc_summary, dbufstat
+      pkg install python38 # or your preferred Python version
+      pkg install py38-sysctl # needed for arcstat, arc_summary, dbufstat
 
 -  Packages for checks and tests:
    ::
@@ -70,8 +70,8 @@ The following dependencies are required to build OpenZFS on FreeBSD:
           hs-ShellCheck \
           ksh93 \
           pamtester \
-          py37-flake8 \
-          python37 \
+          py38-flake8 \
+          python38 \
           sudo
 
    Your preferred python version may be substituted. The user for
