@@ -82,4 +82,4 @@ Contribute
     sensible-browser _build/html/index.html
 
 #. ``git commit --signoff`` to a branch, ``git push``, and create a pull
-   request. Mention @rlaager.
+   request. Mention @ne9z.
