@@ -177,7 +177,7 @@ Access system in chroot
      zfs mount -a
      mount -a
 
-#. Finish rescue. See `finish installation <#finish-installation>`__.
+#. Finish rescue. See `finish installation <5-bootloader.html#finish-installation>`__.
 
 Backup and migrate existing installation
 ----------------------------------------
