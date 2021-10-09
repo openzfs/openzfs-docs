@@ -36,7 +36,7 @@ System Configuration
 
     mv /mnt/etc/mkinitcpio.conf /mnt/etc/mkinitcpio.conf.original
     tee /mnt/etc/mkinitcpio.conf <<EOF
-    HOOKS=(base udev autodetect modconf block keyboard zfs filesystems)
+    HOOKS=(base udev autodetect modconf block keyboard keymap zfs filesystems)
     EOF
 
 #. Enable DHCP on all ethernet ports::
