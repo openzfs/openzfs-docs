@@ -1071,17 +1071,18 @@ Step 6: First Boot
 
    Replace ``username`` with your desired username::
 
+     UserName=username
      UUID=$(dd if=/dev/urandom bs=1 count=100 2>/dev/null |
          tr -dc 'a-z0-9' | cut -c-6)
      ROOT_DS=$(zfs list -o name | awk '/ROOT\/ubuntu_/{print $1;exit}')
      zfs create -o com.ubuntu.zsys:bootfs-datasets=$ROOT_DS \
-         -o canmount=on -o mountpoint=/home/username \
-         rpool/USERDATA/username_$UUID
-     adduser username
+         -o canmount=on -o mountpoint=/home/$UserName \
+         rpool/USERDATA/${UserName}_$UUID
+     adduser $UserName
 
-     cp -a /etc/skel/. /home/username
-     chown -R username:username /home/username
-     usermod -a -G adm,cdrom,dip,lpadmin,lxd,plugdev,sambashare,sudo username
+     cp -a /etc/skel/. /home/$UserName
+     chown -R $UserName:$UserName /home/$UserName
+     usermod -a -G adm,cdrom,dip,lpadmin,lxd,plugdev,sambashare,sudo $UserName
 
 Step 7: Full Software Installation
 ----------------------------------
