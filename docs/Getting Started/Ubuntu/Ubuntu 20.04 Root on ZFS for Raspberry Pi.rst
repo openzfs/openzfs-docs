@@ -595,19 +595,21 @@ Step 5: First Boot
 
 #. Create a user account:
 
-   Replace ``username`` with your desired username::
+   Replace ``YOUR_USERNAME`` with your desired username::
+
+     username=YOUR_USERNAME
 
      UUID=$(dd if=/dev/urandom bs=1 count=100 2>/dev/null |
          tr -dc 'a-z0-9' | cut -c-6)
      ROOT_DS=$(zfs list -o name | awk '/ROOT\/ubuntu_/{print $1;exit}')
      zfs create -o com.ubuntu.zsys:bootfs-datasets=$ROOT_DS \
-         -o canmount=on -o mountpoint=/home/username \
-         rpool/USERDATA/username_$UUID
-     adduser username
+         -o canmount=on -o mountpoint=/home/$username \
+         rpool/USERDATA/${username}_$UUID
+     adduser $username
 
-     cp -a /etc/skel/. /home/username
-     chown -R username:username /home/username
-     usermod -a -G adm,cdrom,dip,lxd,plugdev,sudo username
+     cp -a /etc/skel/. /home/$username
+     chown -R $username:$username /home/$username
+     usermod -a -G adm,cdrom,dip,lpadmin,lxd,plugdev,sambashare,sudo $username
 
 #. Reboot::
 
