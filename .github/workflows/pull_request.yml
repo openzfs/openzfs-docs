@@ -19,7 +19,6 @@ jobs:
     - name: Gen_sphinx
       uses: ammaraskar/sphinx-action@master
       with:
-        pre-build-command: "apt-get update -y --allow-releaseinfo-change && apt-get install -y git"
         docs-folder: "docs/"
     - uses: actions/upload-artifact@v2
       with:

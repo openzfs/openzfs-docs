@@ -1,5 +1,4 @@
 Sphinx
 sphinx-issues
-# sphinx-notfound-page with change for Github Pages https://github.com/readthedocs/sphinx-notfound-page/pull/94
-git+https://github.com/gmelikov/sphinx-notfound-page.git@github_pages#egg=sphinx-notfound-page
+sphinx-notfound-page>=0.5
 sphinx-rtd-theme

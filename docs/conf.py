@@ -218,5 +218,4 @@ issues_pr_uri = "https://github.com/openzfs/zfs/pull/{pr}"
 issues_commit_uri = "https://github.com/openzfs/zfs/commit/{commit}"
 
 # Get absolute paths in 404
-notfound_no_urls_prefix = True
-notfound_url_prefix = '/openzfs-docs'
+notfound_urls_prefix = '/openzfs-docs/'
