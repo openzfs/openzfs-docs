@@ -152,6 +152,9 @@ Step 2: Disk Formatting
 
 ::
 
+  Ensure swap paritions are not in use:
+  # swapoff --all
+
   If the disk was previously used in an MD array, zero the superblock:
   # apt install --yes mdadm
   # mdadm --zero-superblock --force /dev/disk/by-id/scsi-SATA_disk1

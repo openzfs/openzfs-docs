@@ -144,6 +144,10 @@ especially on systems that have more than one storage pool.
 
 2.2 If you are re-using a disk, clear it as necessary:
 
+Ensure swap partitions are not in use::
+
+  swapoff --all
+
 If the disk was previously used in an MD array, zero the superblock::
 
   apt install --yes mdadm

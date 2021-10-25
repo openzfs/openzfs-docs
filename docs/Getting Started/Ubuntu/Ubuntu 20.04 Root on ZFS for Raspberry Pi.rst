@@ -158,6 +158,10 @@ be deleted.
 
      DISK=/dev/mmcblk0
 
+#. Ensure swap partitions are not in use::
+
+     sudo swapoff --all
+
 #. Clear old ZFS labels::
 
      sudo zpool labelclear -f ${DISK}

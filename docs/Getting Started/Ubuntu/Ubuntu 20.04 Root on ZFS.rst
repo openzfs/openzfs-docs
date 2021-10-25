@@ -291,6 +291,10 @@ Step 2: Disk Formatting
 
 #. If you are re-using a disk, clear it as necessary:
 
+   Ensure swap partitions are not in use::
+   
+     swapoff --all
+
    If the disk was previously used in an MD array::
 
      apt install --yes mdadm
