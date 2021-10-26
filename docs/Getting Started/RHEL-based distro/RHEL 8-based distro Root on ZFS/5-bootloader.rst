@@ -31,8 +31,12 @@ Workarounds have to be applied.
    Root pool name is missing from ``root=ZFS=rpool_$INST_UUID/ROOT/default``
    kernel cmdline in generated ``grub.cfg`` file.
 
-   A workaround is to replace the pool name detection with ``zdb``
-   command::
+   The package [`grub-zfs-fixer`](https://github.com/Rudd-O/grub-zfs-fixer)
+   applies workarounds to get this working.  Its instructions explain how to
+   build the package and install it on your new ZFS system.
+
+   To document a similar workaround: have `grub2-mkconfig` replace the pool
+   name detection with ``zdb` command::
 
      sed -i "s|rpool=.*|rpool=\`zdb -l \${GRUB_DEVICE} \| grep -E '[[:blank:]]name' \| cut -d\\\' -f 2\`|"  /etc/grub.d/10_linux
 
