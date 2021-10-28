@@ -911,7 +911,7 @@ Step 4: System Configuration
 
    For ZFS native encryption or LUKS::
 
-     sudo apt install --yes curl patch
+     apt install --yes curl patch sudo
 
      curl https://launchpadlibrarian.net/478315221/2150-fix-systemd-dependency-loops.patch | \
          sed "s|/etc|/lib|;s|\.in$||" | (cd / ; sudo patch -p1)
