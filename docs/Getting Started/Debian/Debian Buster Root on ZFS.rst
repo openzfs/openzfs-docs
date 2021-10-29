@@ -1015,10 +1015,10 @@ Step 9: Final Cleanup
 
    If you installed SSH earlier, revert the temporary change::
 
-     vi /etc/ssh/sshd_config
+     sudo vi /etc/ssh/sshd_config
      # Remove: PermitRootLogin yes
 
-     systemctl restart ssh
+     sudo systemctl restart ssh
 
 #. Optional: Re-enable the graphical boot process:
 

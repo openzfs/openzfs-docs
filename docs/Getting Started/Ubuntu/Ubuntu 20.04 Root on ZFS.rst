@@ -911,10 +911,10 @@ Step 4: System Configuration
 
    For ZFS native encryption or LUKS::
 
-     sudo apt install --yes curl patch
+     apt install --yes curl patch
 
      curl https://launchpadlibrarian.net/478315221/2150-fix-systemd-dependency-loops.patch | \
-         sed "s|/etc|/lib|;s|\.in$||" | (cd / ; sudo patch -p1)
+         sed "s|/etc|/lib|;s|\.in$||" | (cd / ; patch -p1)
 
    This patch is from `Bug #1875577 Encrypted swap won't load on 20.04 with
    zfs root
@@ -1153,10 +1153,10 @@ Step 8: Final Cleanup
 
    If you installed SSH earlier, revert the temporary change::
 
-     vi /etc/ssh/sshd_config
+     sudo vi /etc/ssh/sshd_config
      # Remove: PermitRootLogin yes
 
-     systemctl restart ssh
+     sudo systemctl restart ssh
 
 #. Optional: Re-enable the graphical boot process:
 
