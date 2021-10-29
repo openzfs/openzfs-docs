@@ -920,6 +920,13 @@ Step 4: System Configuration
    zfs root
    <https://bugs.launchpad.net/ubuntu/+source/zfs-linux/+bug/1875577>`__.
 
+#. Optional: Install SSH::
+
+     apt install --yes openssh-server
+
+     vi /etc/ssh/sshd_config
+     # Set: PermitRootLogin yes
+
 Step 5: GRUB Installation
 -------------------------
 
@@ -1035,16 +1042,6 @@ Step 5: GRUB Installation
 
      sed -Ei "s|/mnt/?|/|" /etc/zfs/zfs-list.cache/*
 
-Step 6: First Boot
-------------------
-
-#. Optional: Install SSH::
-
-     apt install --yes openssh-server
-
-     vi /etc/ssh/sshd_config
-     # Set: PermitRootLogin yes
-
 #. Exit from the ``chroot`` environment back to the LiveCD environment::
 
      exit
@@ -1061,6 +1058,9 @@ Step 6: First Boot
      reboot
 
    Wait for the newly installed system to boot normally. Login as root.
+
+Step 6: First Boot
+------------------
 
 #. Install GRUB to additional disks:
 

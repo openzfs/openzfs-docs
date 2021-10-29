@@ -741,6 +741,13 @@ Step 4: System Configuration
      cp /usr/share/systemd/tmp.mount /etc/systemd/system/
      systemctl enable tmp.mount
 
+#. Optional: Install SSH::
+
+     apt install --yes openssh-server
+
+     vi /etc/ssh/sshd_config
+     # Set: PermitRootLogin yes
+
 #. Optional (but kindly requested): Install popcon
 
    The ``popularity-contest`` package reports the list of packages install
@@ -849,13 +856,6 @@ Step 5: GRUB Installation
 
 Step 6: First Boot
 ------------------
-
-#. Optional: Install SSH::
-
-     apt install --yes openssh-server
-
-     vi /etc/ssh/sshd_config
-     # Set: PermitRootLogin yes
 
 #. Optional: Snapshot the initial installation::
 
