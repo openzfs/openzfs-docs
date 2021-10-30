@@ -512,6 +512,12 @@ Step 4: System Configuration
      cp /usr/share/systemd/tmp.mount /etc/systemd/system/
      systemctl enable tmp.mount
 
+#. Setup system groups::
+
+     addgroup --system lpadmin
+     addgroup --system lxd
+     addgroup --system sambashare
+
 #. Patch a dependency loop:
 
    For ZFS native encryption or LUKS::
