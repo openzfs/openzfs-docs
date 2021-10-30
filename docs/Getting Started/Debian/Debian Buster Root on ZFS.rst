@@ -175,8 +175,8 @@ Step 2: Disk Formatting
 #. If you are re-using a disk, clear it as necessary:
 
    Ensure swap partitions are not in use::
-￼
-￼    swapoff --all
+
+     swapoff --all
 
    If the disk was previously used in an MD array::
 
@@ -198,7 +198,6 @@ Step 2: Disk Formatting
 
    If you get a message about the kernel still using the old partition table,
    reboot and start over (except that you can skip this step).
-
 
 #. Partition your disk(s):
 
