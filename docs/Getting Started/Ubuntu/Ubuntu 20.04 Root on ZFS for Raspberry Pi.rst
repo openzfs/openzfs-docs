@@ -580,10 +580,6 @@ Step 4: System Configuration
    The ``init_on_alloc=0`` is to address `performance regressions
    <https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1862822>`__.
 
-#. Optional (but highly recommended): Make debugging booting easier::
-
-     sed -i "s|$| nosplash|" /boot/firmware/cmdline.txt
-
 #. Reboot::
 
      exit
