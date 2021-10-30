@@ -774,11 +774,11 @@ Step 6: Full Software Installation
 
    .. code-block:: yaml
 
-     network:
-       version: 2
-       ethernets:
-         eth0:
-           dhcp4: true
+    network:
+      version: 2
+      ethernets:
+        eth0:
+          dhcp4: true
 
     rm /etc/netplan/50-cloud-init.yaml
     apt purge --autoremove ^cloud-init
