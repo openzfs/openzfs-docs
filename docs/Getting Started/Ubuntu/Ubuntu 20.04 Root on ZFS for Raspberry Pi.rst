@@ -655,6 +655,7 @@ Step 6: Full Software Installation
 
     rm /etc/netplan/50-cloud-init.yaml
     apt purge --autoremove ^cloud-init
+    rm -rf /etc/cloud
 
 #. Optional: Remove other storage packages::
 
