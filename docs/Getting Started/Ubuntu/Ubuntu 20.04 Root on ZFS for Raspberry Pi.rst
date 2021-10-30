@@ -585,11 +585,14 @@ Step 4: System Configuration
      exit
      reboot
 
-   Wait for the newly installed system to boot normally. Login as ``ubuntu``
-   and become root with ``sudo -i``.
+   Wait for the newly installed system to boot normally. Login as ``ubuntu``.
 
 Step 5: First Boot
 ------------------
+
+#. Become root::
+
+     sudo -i
 
 #. Delete the ext4 partition and expand the ZFS partition::
 
@@ -621,8 +624,12 @@ Step 5: First Boot
 
      reboot
 
-   Wait for the system to boot normally. Login with your username and become
-   root with ``sudo -i``.
+   Wait for the system to boot normally. Login using the account you
+   created.
+
+#. Become root::
+
+     sudo -i
 
 #. Expand the ZFS pool:
 
