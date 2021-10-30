@@ -160,7 +160,9 @@ be deleted.
 
 #. Ensure swap partitions are not in use::
 
-     sudo swapoff --all
+     swapon -v
+     # If a partition is in use from the SD card, disable it:
+     sudo swapoff THAT_PARTITION
 
 #. Clear old ZFS labels::
 
