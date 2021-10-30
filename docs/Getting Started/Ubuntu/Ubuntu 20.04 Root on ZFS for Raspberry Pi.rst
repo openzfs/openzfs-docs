@@ -233,13 +233,11 @@ Step 2: Setup ZFS
 
 #. Install ZFS::
 
+     systemctl stop unattended-upgrades
+
      apt update
 
      apt install pv zfs-initramfs
-
-   **Note:** Since this is the first boot, you may get ``Waiting for cache
-   lock`` because ``unattended-upgrades`` is running in the background.
-   Wait for it to finish.
 
 #. Create the root pool:
 
