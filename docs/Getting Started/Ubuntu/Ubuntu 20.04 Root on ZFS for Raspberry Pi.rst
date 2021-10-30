@@ -22,10 +22,10 @@ System Requirements
   :doc:`Ubuntu 20.04 Root on ZFS`.)
 - `Ubuntu Server 20.04.3 (“Focal”) for Raspberry Pi 4
   <https://cdimage.ubuntu.com/releases/20.04.3/release/ubuntu-20.04.3-preinstalled-server-arm64+raspi.img.xz>`__
-- A microSD card. For recommendations, see Jeff Geerling's `performance
+- A microSD card or USB disk. For microSD card recommendations, see Jeff Geerling's `performance
   comparison
   <https://www.jeffgeerling.com/blog/2019/raspberry-pi-microsd-card-performance-comparison-2019>`__.
-- An Ubuntu system (with the ability to write to the SD card) other than the
+- An Ubuntu system (with the ability to write to the SD card or USB disk) other than the
   target Raspberry Pi.
 
 4 GiB of memory is recommended. Do not use deduplication, as it needs `massive
@@ -97,6 +97,35 @@ entered at the console. Performance is good, but LUKS sits underneath ZFS, so
 if multiple disks (mirror or raidz topologies) are used, the data has to be
 encrypted once per disk.
 
+USB Solid State Drives (SSDs)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The Raspberry Pi 4 runs much faster using a USB SSD than an SD card. These
+instructions can also be used to install Ubuntu on a USB-connected Solid
+State Drive (SSD) or other USB disk. USB disks have three requirements that
+do not apply to SD cards:
+
+#. The Raspberry Pi's Bootloader EEPROM must be dated 2020-09-21 or later.
+
+   - To check the firmware version, power up the Raspberry Pi without an SD card
+     inserted or a USB boot device attached; the firmware date will be on the
+     ``bootloader`` line. Alternatively, run ``sudo rpi-eeprom-update`` with the
+     Raspberry Pi booted into Raspberry Pi OS.
+   - `Update the EEPROM firmware <https://www.raspberrypi.com/documentation/computers/raspberry-pi.html#updating-the-bootloader>`_ if needed.
+
+#. The Raspberry Pi must configured for USB boot. The simplest way enable USB boot is
+
+   - Download the `Raspberry Pi Imager Utility <https://www.raspberrypi.com/news/raspberry-pi-imager-imaging-utility/>`_.
+   - Flash the ``USB Boot`` image to an SD card. The ``USB Boot`` image is
+     listed under ``Bootload`` in the ``Misc utility images`` folder.
+   - Boot the Raspberry Pi from the SD card. USB Boot should be enabled
+     automatically.
+
+#. The Ubuntu Linux kernel must not be compressed. These instructions
+   decompress the kernel and add a script to `/etc/kernel/postinst.d` to keep
+   the kernel decompressed when the kernel is upgraded or otherwise changed.
+   This script is not sanctioned by Ubuntu. Use at your own risk.
+
 Step 1: Disk Formatting
 -----------------------
 
@@ -143,14 +172,28 @@ be deleted.
      3 : start=$((2048+BOOT+ROOT)), size=$ROOT, type=83
      EOF
 
-#. Connect the SD card:
+#. Connect the SD card or USB disk:
 
    Connect the SD card to a machine other than the target Raspberry Pi.  If
-   any filesystems are automatically mounted (e.g. by GNOME), unmount them.
-   Determine the device name (which is almost certainly as shown below) and
-   set it in a variable::
+   any filesystems are automatically mounted (e.g. by GNOME) unmount them.
+   Determine the device name. (For SD, the device name is almost certainly
+   ``/dev/mmcblk0``). For USB SSDs, the device name is ``/dev/sdX``, where `X` is
+   a lowercase letter. ``lsblk`` can help determine the device name.
+   Set the ``DISK`` environment variable to the device name::
 
-     DISK=/dev/mmcblk0
+     export DISK=/dev/mmcblk0    # SD card
+     export DISK=/dev/sdX        # USB disk
+
+   Because partitions are named differently for ``/dev/mmcblk0`` and ``/dev/sdX``
+   devices, set a second variable used when working with partitions::
+
+     export DISKP=${DISK}p       # SD card
+     export DISKP=${DISK}        # USB disk ($DISKP == $DISK for /dev/sdX devices)
+
+   **Hint**: SD cards connected using a USB reader also have ``/dev/sdX`` names.
+
+   **WARNING**: The following steps destroy the existing data on the disk. Ensure
+   ``DISK`` and ``DISKP`` are correct before proceeding.
 
 #. Ensure swap partitions are not in use::
 
@@ -167,14 +210,14 @@ be deleted.
 
    **Hint:** If you do not already have the ZFS utilities installed, you can
    install them with: ``sudo apt install zfsutils-linux``  Alternatively, you
-   can zero the entire SD card with:
+   can zero the entire disk with:
    ``sudo dd if=/dev/zero of=${DISK} bs=1M status=progress``
 
 #. Delete existing partitions::
 
      echo "label: dos" | sudo sfdisk ${DISK}
      sudo partprobe
-     ls ${DISK}*
+     ls ${DISKP}*
 
    Make sure there are no partitions, just the file for the disk itself.  This
    step is not strictly necessary; it exists to catch problems.
@@ -190,11 +233,11 @@ be deleted.
 
 #. Copy the bootloader data::
 
-     sudo dd if=${IMG}p1 of=${DISK}p1 bs=1M
+     sudo dd if=${IMG}p1 of=${DISKP}1 bs=1M
 
 #. Clear old label(s) from partition 2::
 
-     sudo wipefs -a ${DISK}p2
+     sudo wipefs -a ${DISKP}2
 
    If a filesystem with the ``writable`` label from the Ubuntu image is still
    present in partition 2, the system will not boot initially.
@@ -202,11 +245,79 @@ be deleted.
 #. Copy the root filesystem data::
 
      # NOTE: the destination is p3, not p2.
-     sudo dd if=${IMG}p2 of=${DISK}p3 bs=1M status=progress conv=fsync
+     sudo dd if=${IMG}p2 of=${DISKP}3 bs=1M status=progress conv=fsync
 
 #. Unmount the image::
 
      sudo losetup -d $IMG
+
+#. If setting up a USB disk, setup decompressed kernel and boot config.
+
+   Decompress the kernel::
+
+     sudo -sE
+
+     MNT=$(mktemp -d /mnt/XXXXXXXX)
+     mkdir -p $MNT/boot $MNT/root
+     mount ${DISKP}1 $MNT/boot
+     mount ${DISKP}3 $MNT/root
+
+     zcat -qf $MNT/boot/vmlinuz >$MNT/boot/vmlinux
+     touch -r $MNT/boot/vmlinuz $MNT/boot/vmlinux
+
+   Modify boot config.txt::
+
+     [ ! -f $MNT/boot/config.txt.original ] \
+         && cp $MNT/boot/config.txt $MNT/boot/config.txt.original
+     awk '
+         /^\[pi4\][[:blank:]]*$/ {
+             state="pi4"
+         }
+         state == "pi4" && /kernel=/ {
+             print "kernel=vmlinux"
+             next
+         }
+         state == "pi4" && /^[[:blank:]]*$/ {
+             print "dtoverlay=vc4-fkms-v3d"
+             print "initramfs initrd.img followkernel"
+             print "boot_delay"
+             state = ""
+         }
+         { print }
+     ' $MNT/boot/config.txt >$MNT/boot/config.txt.new
+     mv -f $MNT/boot/config.txt.new $MNT/boot/config.txt
+     chmod --reference $MNT/boot/config.txt.original $MNT/boot/config.txt
+
+   Create a script to automatically decompress the kernel after an upgrade::
+
+     cat >$MNT/root/etc/kernel/postinst.d/zz-decompress-kernel << 'EOF'
+     #!/bin/sh
+
+     set -eu
+
+     # Decompress vmlinuz into a temp file
+     vmlinuxtmp=$(mktemp /boot/firmware/vmlinux.XXXXXXXX)
+     zcat -qf /boot/vmlinuz > $vmlinuxtmp
+
+     # If vmlinuz changed, move the temp file into place; otherwise, remove it.
+     if ! cmp --quiet $vmlinuxtmp /boot/firmware/vmlinux
+     then
+         echo "Updating decompressed kernel..."
+         [ -e /boot/firmware/vmlinux ] && \
+             cp /boot/firmware/vmlinux /boot/firmware/vmlinux.old
+         mv $vmlinuxtmp /boot/firmware/vmlinux
+         touch -r /boot/vmlinuz /boot/firmware/vmlinux
+     else
+         echo "No kernel decompression needed..."
+         rm $vmlinuxtmp
+     fi
+     EOF
+
+     chmod +x $MNT/root/etc/kernel/postinst.d/zz-decompress-kernel
+     umount $MNT/*
+     rm -fr $MNT
+
+     exit
 
 #. Boot the Raspberry Pi.
 
@@ -221,15 +332,21 @@ be deleted.
 Step 2: Setup ZFS
 -----------------
 
-#. Become root::
+#. Login as ``ubuntu``; then, become root::
 
      sudo -i
 
-#. Set a variable with the disk name::
+#. Set the DISK and DISKP variables again::
 
-     DISK=/dev/mmcblk0
+     DISK=/dev/mmcblk0    # SD card
+     DISKP=${DISK}p       # SD card
 
-   On the Pi, this is always ``mmcblk0``.
+     DISK=/dev/sdX        # USB disk
+     DISKP=${DISK}        # USB disk
+
+   **WARNING:** Device names can change when moving a device to a different computer
+   or switching the SD card from a USB reader to a built-in slot. Double check the
+   device name before continuing.
 
 #. Install ZFS::
 
@@ -250,7 +367,7 @@ Step 2: Setup ZFS
            -O acltype=posixacl -O canmount=off -O compression=lz4 \
            -O dnodesize=auto -O normalization=formD -O relatime=on \
            -O xattr=sa -O mountpoint=/ -R /mnt \
-           rpool ${DISK}p2
+           rpool ${DISKP}2
 
    **WARNING:** Encryption has not yet been tested on the Raspberry Pi.
 
@@ -263,11 +380,11 @@ Step 2: Setup ZFS
            -O acltype=posixacl -O canmount=off -O compression=lz4 \
            -O dnodesize=auto -O normalization=formD -O relatime=on \
            -O xattr=sa -O mountpoint=/ -R /mnt \
-           rpool ${DISK}p2
+           rpool ${DISKP}2
 
    - LUKS::
 
-       cryptsetup luksFormat -c aes-xts-plain64 -s 512 -h sha256 ${DISK}p2
+       cryptsetup luksFormat -c aes-xts-plain64 -s 512 -h sha256 ${DISKP}2
        cryptsetup luksOpen ${DISK}-part4 luks1
        zpool create \
            -o ashift=12 \
@@ -583,7 +700,7 @@ Step 4: System Configuration
      exit
      reboot
 
-   Wait for the newly installed system to boot normally. Login as ``ubuntu``.
+   Wait for the newly installed system to boot normally.
 
 Step 5: First Boot
 ------------------
@@ -592,10 +709,18 @@ Step 5: First Boot
 
      sudo -i
 
+#. Set the DISK and DISKP variables again::
+
+     DISK=/dev/mmcblk0    # SD card
+     DISKP=${DISK}p       # SD card
+
+     DISK=/dev/sdX        # USB disk
+     DISKP=${DISK}        # USB disk
+
 #. Delete the ext4 partition and expand the ZFS partition::
 
-     sfdisk /dev/mmcblk0 --delete 3
-     echo ", +" | sfdisk --no-reread -N 2 /dev/mmcblk0
+     sfdisk $DISK --delete 3
+     echo ", +" | sfdisk --no-reread -N 2 $DISK
 
    **Note:** This does not automatically expand the pool.  That will be happen
    on reboot.
@@ -629,6 +754,14 @@ Step 5: First Boot
 
      sudo -i
 
+#. Set the DISK and DISKP variables again::
+
+     DISK=/dev/mmcblk0    # SD card
+     DISK=/dev/sdX        # USB disk
+
+     DISKP=${DISK}p       # SD card
+     DISKP=${DISK}        # USB disk
+
 #. Expand the ZFS pool:
 
    Verify the pool expanded::
@@ -637,7 +770,7 @@ Step 5: First Boot
 
    If it did not automatically expand, try to expand it manually::
 
-     zpool online -e rpool mmcblk0p2
+     zpool online -e rpool ${DISKP}2
 
 #. Delete the ``ubuntu`` user::
 
@@ -648,15 +781,13 @@ Step 6: Full Software Installation
 
 #. Optional: Remove cloud-init::
 
-    vi /etc/netplan/01-netcfg.yaml
-
-   .. code-block:: yaml
-
-     network:
-       version: 2
-       ethernets:
-         eth0:
-           dhcp4: true
+    cat >/etc/netplan/01-netcfg.yaml << EOF
+    network:
+      version: 2
+      ethernets:
+        eth0:
+          dhcp4: true
+    EOF
 
     rm /etc/netplan/50-cloud-init.yaml
     apt purge --autoremove ^cloud-init
