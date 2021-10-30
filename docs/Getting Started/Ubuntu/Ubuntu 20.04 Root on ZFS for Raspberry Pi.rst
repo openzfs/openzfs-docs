@@ -680,6 +680,7 @@ Step 6: Full Software Installation
 #. Optional: Install a full GUI environment::
 
      apt install --yes ubuntu-desktop
+     echo dtoverlay=vc4-fkms-v3d >> /boot/firmware/usercfg.txt
 
    **Hint**: If you are installing a full GUI environment, you will likely
    want to remove cloud-init as discussed above but manage your network with
