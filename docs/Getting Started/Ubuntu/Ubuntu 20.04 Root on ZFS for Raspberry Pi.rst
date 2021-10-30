@@ -616,9 +616,9 @@ Step 4: System Configuration
 
 #. Setup system groups::
 
-     addgroup --system lpadmin
-     addgroup --system lxd
-     addgroup --system sambashare
+     addgroup --quiet --system lpadmin
+     addgroup --quiet --system lxd
+     addgroup --quiet --system sambashare
 
 #. Patch a dependency loop:
 
