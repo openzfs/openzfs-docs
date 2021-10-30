@@ -129,22 +129,16 @@ be deleted.
 
    The important numbers are 524288 and 6052348.  Store those in variables::
 
-     export BOOT=524288
-     export ROOT=6052348
+     BOOT=524288
+     ROOT=6052348
 
 #. Create a partition script::
 
-     vi partitions.sh
-
-   with the following contents:
-
-   .. code-block:: sh
-
-     cat << EOF
+     cat > partitions << EOF
      label: dos
      unit: sectors
-     
-     1 : start=  2048,  size=$BOOT, type=c, bootable
+
+     1 : start=  2048,  size=$BOOT,  type=c, bootable
      2 : start=$((2048+BOOT)),  size=$ROOT, type=83
      3 : start=$((2048+BOOT+ROOT)), size=$ROOT, type=83
      EOF
@@ -187,7 +181,7 @@ be deleted.
 
 #. Create the partitions::
 
-     sh -u partitions.sh | sudo sfdisk $DISK
+     sudo sfdisk $DISK < partitions
 
 #. Loopback mount the image::
 
