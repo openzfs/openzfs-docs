@@ -152,7 +152,7 @@ be deleted.
 #. Connect the SD card:
 
    Connect the SD card to a machine other than the target Raspberry Pi.  If
-   any filesystems are automatically mounted (e.g. by GNOME) unmount them.
+   any filesystems are automatically mounted (e.g. by GNOME), unmount them.
    Determine the device name (which is almost certainly as shown below) and
    set it in a variable::
 
