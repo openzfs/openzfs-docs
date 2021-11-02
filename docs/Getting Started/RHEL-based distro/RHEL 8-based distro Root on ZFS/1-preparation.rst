@@ -10,7 +10,7 @@ Preparation
 #. Download a variant of `Rocky Linux 8.4 Live
    ISO <https://dl.rockylinux.org/pub/rocky/8.4/Live/x86_64/>`__ and boot from it.
 
-#. Set root password or ``/root/authorized_keys``.
+#. Set root password or ``/root/.ssh/authorized_keys``.
 #. Start SSH server::
 
     echo PermitRootLogin yes >> /etc/ssh/sshd_config
@@ -42,8 +42,6 @@ Preparation
 
 #. Install ZFS packages::
 
-    dnf config-manager --disable zfs
-    dnf config-manager --enable zfs-kmod
     dnf install -y epel-release
     dnf install -y zfs
 

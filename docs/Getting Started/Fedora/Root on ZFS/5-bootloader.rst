@@ -212,7 +212,7 @@ Post installaion
 
    Install package groups::
 
-    dnf group list                         # query package groups
+    dnf group list --hidden -v       # query package groups
     dnf group install 'i3 Desktop'
     dnf group install 'Fedora Workstation' # GNOME
     dnf group install 'Web Server'

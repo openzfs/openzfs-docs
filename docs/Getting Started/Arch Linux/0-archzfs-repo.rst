@@ -13,7 +13,7 @@ You can use it as follows.
 #. Import keys of archzfs repository::
 
     curl -L https://archzfs.com/archzfs.gpg |  pacman-key -a -
-    curl -L https://git.io/JsfVS | xargs -i{} pacman-key --lsign-key {}
+    pacman-key --lsign-key $(curl -L https://git.io/JsfVS)
     curl -L https://git.io/Jsfw2 > /etc/pacman.d/mirrorlist-archzfs
 
 #. Add archzfs repository::

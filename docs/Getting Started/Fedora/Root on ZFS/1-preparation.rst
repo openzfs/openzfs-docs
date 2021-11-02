@@ -13,7 +13,7 @@ Preparation
    - `Fedora Workstation (GNOME) <https://download.fedoraproject.org/pub/fedora/linux/releases/34/Workstation/x86_64/iso/>`__
    - `Fedora Spins (Xfce, i3, ...) <https://download.fedoraproject.org/pub/fedora/linux/releases/34/Spins/x86_64/iso/>`__
 
-#. Set root password or ``/root/authorized_keys``.
+#. Set root password or ``/root/.ssh/authorized_keys``.
 #. Start SSH server::
 
     echo PermitRootLogin yes >> /etc/ssh/sshd_config

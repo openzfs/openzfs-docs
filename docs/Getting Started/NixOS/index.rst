@@ -70,7 +70,7 @@ Contribute
 #. Launch an ephemeral nix-shell with the following packages::
 
     nix-shell -p python39 python39Packages.pip gnumake \
-        python39Packages.setuptools python39Packages.sphinx
+        python39Packages.setuptools
 
 #. Create python virtual environment and install packages::
 
@@ -84,7 +84,6 @@ Contribute
 
 #. Test::
 
-    cd docs
     make html
     sensible-browser _build/html/index.html
 
