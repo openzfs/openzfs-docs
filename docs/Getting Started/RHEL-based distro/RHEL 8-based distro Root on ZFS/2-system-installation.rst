@@ -251,3 +251,8 @@ System Installation
     source /mnt/etc/os-release
     RHEL_ZFS_REPO_NEW=https://zfsonlinux.org/epel/zfs-release.el${VERSION_ID/./_}.noarch.rpm
     dnf install --installroot=/mnt -y $RHEL_ZFS_REPO_NEW || true
+
+#. Optional: enable boot environment support and dnf integration::
+
+    dnf --installroot=/mnt copr enable -y m0p/bieaz
+    dnf --installroot=/mnt install -y bieaz python3-dnf-plugin-rozb3

@@ -7,13 +7,13 @@ Preparation
    :local:
 
 #. Download
-   `2021.09.01 <https://mirrors.ocf.berkeley.edu/archlinux/iso/2021.09.01/archlinux-2021.09.01-x86_64.iso>`__
-   Live ISO and `signature <https://archlinux.org/iso/2021.09.01/archlinux-2021.09.01-x86_64.iso.sig>`__.
+   `2021.11.01 <https://mirrors.ocf.berkeley.edu/archlinux/iso/2021.11.01/archlinux-2021.11.01-x86_64.iso>`__
+   Live ISO and `signature <https://archlinux.org/iso/2021.11.01/archlinux-2021.11.01-x86_64.iso.sig>`__.
 
 #. Follow `installation guide on Arch wiki <https://wiki.archlinux.org/title/Installation_guide>`__
    up to **Update the system clock**.
 
-#. Set root password or ``/root/authorized_keys``.
+#. Set root password or ``/root/.ssh/authorized_keys``.
 #. Start SSH server::
 
     systemctl start sshd
