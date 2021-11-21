@@ -28,7 +28,7 @@ This section is also applicable if you are in
    Boot computer from the rescue media.
    Both legacy and EFI mode are supported.
 
-   Or `download generated GRUB rescue image <https://gitlab.com/m_zhou/bieaz/uploads/4a1b7cefb42723de6eb04f9dc485be3b/grub-rescue.img.7z>`__.
+   Or `download generated GRUB rescue image <https://nu8.org/pages/projects/bieaz/#grub-rescue-images>`__.
 
 #. List available disks with ``ls`` command::
 
