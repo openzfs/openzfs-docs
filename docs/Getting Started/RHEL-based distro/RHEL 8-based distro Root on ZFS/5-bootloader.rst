@@ -234,5 +234,5 @@ Post installaion
 
    Install package groups::
 
-    dnf group list                         # query package groups
+    dnf group list --hidden -v       # query package groups
     dnf group install 'Virtualization Host'

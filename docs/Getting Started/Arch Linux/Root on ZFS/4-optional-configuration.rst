@@ -17,10 +17,14 @@ instance of an operating system. Within the context of this installation,
 boot environments can be created on-the-fly to preserve root file system
 states before pacman transactions.
 
-Install ``bieaz`` from AUR. Optionally install ``rozb3-pac`` from AUR
-for pacman integration.
+Install an AUR helper of choice then install ``rozb3-pac`` from AUR
+for pacman integration::
 
-See `home page <https://nu8.org/pages/projects/bieaz/>`__ for details.
+  pacman -S --needed git base-devel
+  git clone https://aur.archlinux.org/paru-bin.git
+  cd paru-bin
+  makepkg -si
+  paru -S rozb3-pac
 
 Supply password with SSH
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -256,9 +260,9 @@ boot from it. This enables system recovery and re-installation.
 
     mkdir /boot/efi/iso
     cd /boot/efi/iso
-    # select a mirror # curl -O https://mirrors.ocf.berkeley.edu/archlinux/iso/2021.09.01/archlinux-2021.09.01-x86_64.iso
-    curl -O https://archlinux.org/iso/2021.09.01/archlinux-2021.09.01-x86_64.iso.sig
-    gpg --auto-key-retrieve --verify archlinux-2021.09.01-x86_64.iso.sig
+    # select a mirror # curl -O https://mirrors.ocf.berkeley.edu/archlinux/iso/2021.11.01/archlinux-2021.11.01-x86_64.iso
+    curl -O https://archlinux.org/iso/2021.11.01/archlinux-2021.11.01-x86_64.iso.sig
+    gpg --auto-key-retrieve --verify archlinux-2021.11.01-x86_64.iso.sig
 
    Additionally you can build your own live image
    with `archiso package <https://gitlab.archlinux.org/archlinux/archiso>`__.

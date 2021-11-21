@@ -238,3 +238,8 @@ System Installation
 #. Install ZFS::
 
     dnf --installroot=/mnt -y install zfs zfs-dracut
+
+#. Optional: enable boot environment support and dnf integration::
+
+    dnf --installroot=/mnt copr enable -y m0p/bieaz
+    dnf --installroot=/mnt install -y bieaz python3-dnf-plugin-rozb3
