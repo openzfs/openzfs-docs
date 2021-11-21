@@ -20,11 +20,17 @@ states before pacman transactions.
 Install an AUR helper of choice then install ``rozb3-pac`` from AUR
 for pacman integration::
 
-  pacman -S --needed git base-devel
+  pacman -S --needed git base-devel sudo
+  echo 'nobody ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/00_nobody
+  su - nobody -s /bin/bash
+  mkdir /tmp/build
+  export HOME=/tmp/build
   git clone https://aur.archlinux.org/paru-bin.git
   cd paru-bin
   makepkg -si
   paru -S rozb3-pac
+  logout
+  rm /etc/sudoers.d/00_nobody
 
 Supply password with SSH
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -107,14 +113,15 @@ root pool will be replaced by keyfile, embedded in initrd.
 #. Create LUKS containers::
 
     for i in ${DISK}; do
-     cryptsetup luksFormat -q --type luks1 --key-file /etc/cryptkey.d/bpool_$INST_UUID-key-luks $i-part2
-     echo $LUKS_PWD | cryptsetup luksAddKey --key-file /etc/cryptkey.d/bpool_$INST_UUID-key-luks $i-part2
+     cryptsetup luksFormat -q --type luks2 --key-file /etc/cryptkey.d/bpool_$INST_UUID-key-luks $i-part2
+     echo $LUKS_PWD | cryptsetup luksAddKey --pbkdf pbkdf2 --key-file /etc/cryptkey.d/bpool_$INST_UUID-key-luks $i-part2
      cryptsetup open ${i}-part2 ${i##*/}-part2-luks-bpool_$INST_UUID --key-file /etc/cryptkey.d/bpool_$INST_UUID-key-luks
      echo ${i##*/}-part2-luks-bpool_$INST_UUID ${i}-part2 /etc/cryptkey.d/bpool_$INST_UUID-key-luks discard >> /etc/crypttab
     done
 
-   GRUB 2.06 still does not have complete support for LUKS2, LUKS1
-   is used instead.
+   In GRUB 2.06, only the PBKDF2 key derivation function
+   is supported, thus PBKDF2 is used
+   for passphrase key slot. Other slots are not affected.
 
 #. Embed key file in initrd::
 
@@ -187,6 +194,21 @@ root pool will be replaced by keyfile, embedded in initrd.
 #. Enable GRUB cryptodisk::
 
      echo "GRUB_ENABLE_CRYPTODISK=y" >> /etc/default/grub
+#. Let GRUB decrypt all LUKS containers on boot::
+
+     tee -a /etc/grub.d/09_bpool_luks2-decryption <<FOE
+     cat <<EOF
+       insmod luks2
+       insmod pbkdf2
+       insmod part_gpt
+       insmod gcry_rijndael
+       insmod gcry_sha256
+       insmod cryptodisk
+       cryptomount hd0,gpt2
+     EOF
+     FOE
+
+     chmod +x /etc/grub.d/09_bpool_luks2-decryption
 
 #. **Important**: Back up root dataset key ``/etc/cryptkey.d/rpool_$INST_UUID-${INST_ID}-key-zfs``
    to a secure location.

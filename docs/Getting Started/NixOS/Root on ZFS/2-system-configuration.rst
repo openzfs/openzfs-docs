@@ -212,8 +212,6 @@ System Configuration
         zfs create -o canmount=on -o mountpoint=/$i rpool_$INST_UUID/$INST_ID/DATA/local/$i
     done
 
-   Datasets for immutable root filesystem::
-
     zfs create -o canmount=on rpool_$INST_UUID/$INST_ID/DATA/default/state
     for i in {/etc/nixos,/etc/cryptkey.d}; do
       mkdir -p /mnt/state/$i /mnt/$i
