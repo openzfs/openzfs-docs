@@ -39,6 +39,10 @@ System Configuration
     HOOKS=(base udev autodetect modconf block keyboard zfs filesystems)
     EOF
 
+   For more information on mkinitcpio configuration,
+   such as support for other keyboard layouts, see
+   `wiki article <https://wiki.archlinux.org/title/mkinitcpio>`__.
+
 #. Enable DHCP on all ethernet ports::
 
      tee /mnt/etc/systemd/network/20-default.network <<EOF

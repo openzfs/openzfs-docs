@@ -275,7 +275,7 @@ System Configuration
 
    ZFS datasets should be mounted with ``-o zfsutil`` option::
 
-    sed -i 's|fsType = "zfs";|fsType = "zfs"; options = [ "zfsutil" ];|g' \
+    sed -i 's|fsType = "zfs";|fsType = "zfs"; options = [ "zfsutil" "X-mount.mkdir" ];|g' \
     /mnt/etc/nixos/hardware-configuration-zfs.nix
 
    Allow EFI system partition mounting to fail at boot::
