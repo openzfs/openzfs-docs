@@ -197,6 +197,7 @@ root pool will be replaced by keyfile, embedded in initrd.
 #. Let GRUB decrypt all LUKS containers on boot::
 
      tee -a /etc/grub.d/09_bpool_luks2-decryption <<FOE
+     #!/bin/sh
      cat <<EOF
        insmod luks2
        insmod pbkdf2
