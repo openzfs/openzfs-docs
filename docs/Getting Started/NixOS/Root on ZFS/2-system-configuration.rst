@@ -227,6 +227,8 @@ System Configuration
      mkdir -p /mnt/boot/efis/${i##*/}-part1
      mount -t vfat ${i}-part1 /mnt/boot/efis/${i##*/}-part1
     done
+    mkdir -p /mnt/boot/efi
+    mount -t vfat ${INST_PRIMARY_DISK}-part1 /mnt/boot/efi
 
 #. Create optional user data datasets to omit data from rollback::
 
@@ -321,7 +323,7 @@ System Configuration
 #. Configure GRUB boot loader for both legacy boot and UEFI::
 
     sed -i '/boot.loader/d' /mnt/etc/nixos/configuration.nix
-    tee -a /mnt/etc/nixos/${INST_CONFIG_FILE} <<EOF
+    tee -a /mnt/etc/nixos/${INST_CONFIG_FILE} <<-'EOF'
       boot.loader = {
         generationsDir.copyKernels = true;
         ##for problematic UEFI firmware
@@ -329,7 +331,7 @@ System Configuration
         efi.canTouchEfiVariables = false;
         ##if UEFI firmware can detect entries
         #efi.canTouchEfiVariables = true;
-        efi.efiSysMountPoint = "/boot/efis/${INST_PRIMARY_DISK##*/}-part1";
+        efi.efiSysMountPoint = "/boot/efi";
         grub.enable = true;
         grub.version = 2;
         grub.copyKernels = true;
@@ -338,20 +340,20 @@ System Configuration
         # for systemd-autofs
         grub.extraPrepareConfig = ''
           mkdir -p /boot/efis
-          for i in  /boot/efis/*; do mount \$i ; done
+          for i in  /boot/efis/*; do mount $i ; done
+        '';
+        grub.extraInstallCommands = ''
+           export ESP_MIRROR=$(mktemp -d -p /tmp)
+           cp -r /boot/efi/EFI $ESP_MIRROR
+           for i in /boot/efis/*; do
+            cp -r $ESP_MIRROR/EFI $i
+           done
+           rm -rf $ESP_MIRROR
         '';
         grub.devices = [
     EOF
     for i in $DISK; do
       printf "      \"$i\"\n" >>/mnt/etc/nixos/${INST_CONFIG_FILE}
-    done
-    tee -a /mnt/etc/nixos/${INST_CONFIG_FILE} <<EOF
-        ];
-        grub.mirroredBoots = [
-    EOF
-    for i in $DISK; do
-      printf "      { devices = [ \"$i\" ] ; efiSysMountPoint = \"/boot/efis/${i##*/}-part1\"; path = \"/boot\"; }\n" \
-      >>/mnt/etc/nixos/${INST_CONFIG_FILE}
     done
     tee -a /mnt/etc/nixos/${INST_CONFIG_FILE} <<EOF
         ];
