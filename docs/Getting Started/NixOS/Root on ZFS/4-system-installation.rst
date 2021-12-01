@@ -75,6 +75,7 @@ Finish installation
 #. Unmount EFI system partition::
 
     umount /mnt/boot/efis/*
+    umount /mnt/boot/efi
 
 #. Export pools::
 
