@@ -273,6 +273,12 @@ System Configuration
     sed -i 's|fsType = "vfat";|fsType = "vfat"; options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" ];|g' \
     /mnt/etc/nixos/hardware-configuration-zfs.nix
 
+   Restrict kernel to versions supported by ZFS::
+
+     tee -a /mnt/etc/nixos/${INST_CONFIG_FILE} <<EOF
+       boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
+     EOF
+
    Disable cache::
 
     mkdir -p /mnt/state/etc/zfs/
