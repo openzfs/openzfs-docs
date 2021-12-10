@@ -25,6 +25,7 @@ for pacman integration::
   su - nobody -s /bin/bash
   mkdir /tmp/build
   export HOME=/tmp/build
+  cd
   git clone https://aur.archlinux.org/paru-bin.git
   cd paru-bin
   makepkg -si
