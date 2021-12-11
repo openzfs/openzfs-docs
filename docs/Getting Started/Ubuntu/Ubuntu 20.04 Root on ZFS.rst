@@ -266,7 +266,7 @@ Step 1: Prepare The Install Environment
 
 #. Install ZFS in the Live CD environment::
 
-     apt install --yes debootstrap gdisk zfs-initramfs
+     apt install --yes debootstrap gdisk zfsutils-linux
 
      systemctl stop zed
 
