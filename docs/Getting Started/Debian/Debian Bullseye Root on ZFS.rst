@@ -1,19 +1,13 @@
 .. highlight:: sh
 
-Debian Buster Root on ZFS
-=========================
+Debian Bullseye Root on ZFS
+===========================
 
 .. contents:: Table of Contents
   :local:
 
 Overview
 --------
-
-Newer release available
-~~~~~~~~~~~~~~~~~~~~~~~
-
-- See :doc:`Debian Bullseye Root on ZFS <./Debian Bullseye Root on ZFS>` for
-  new installs.
 
 Caution
 ~~~~~~~
@@ -25,7 +19,7 @@ Caution
 System Requirements
 ~~~~~~~~~~~~~~~~~~~
 
-- `64-bit Debian GNU/Linux Buster Live CD w/ GUI (e.g. gnome iso)
+- `64-bit Debian GNU/Linux Bullseye Live CD w/ GUI (e.g. gnome iso)
   <https://cdimage.debian.org/mirror/cdimage/release/current-live/amd64/iso-hybrid/>`__
 - `A 64-bit kernel is strongly encouraged.
   <https://github.com/zfsonlinux/zfs/wiki/FAQ#32-bit-vs-64-bit-systems>`__
@@ -47,7 +41,7 @@ If you need help, reach out to the community using the :ref:`mailing_lists` or I
 `#zfsonlinux <ircs://irc.libera.chat/#zfsonlinux>`__ on `Libera Chat
 <https://libera.chat/>`__. If you have a bug report or feature request
 related to this HOWTO, please `file a new issue and mention @rlaager
-<https://github.com/openzfs/openzfs-docs/issues/new?body=@rlaager,%20I%20have%20the%20following%20issue%20with%20the%20Debian%20Buster%20Root%20on%20ZFS%20HOWTO:>`__.
+<https://github.com/openzfs/openzfs-docs/issues/new?body=@rlaager,%20I%20have%20the%20following%20issue%20with%20the%20Debian%20Bullseye%20Root%20on%20ZFS%20HOWTO:>`__.
 
 Contributing
 ~~~~~~~~~~~~
@@ -112,8 +106,7 @@ Step 1: Prepare The Install Environment
 
    .. code-block:: sourceslist
 
-     deb http://deb.debian.org/debian buster main contrib
-     deb http://deb.debian.org/debian buster-backports main contrib
+     deb http://deb.debian.org/debian bullseye main contrib
 
    ::
 
@@ -145,19 +138,7 @@ Step 1: Prepare The Install Environment
 
 #. Install ZFS in the Live CD environment::
 
-     apt install --yes debootstrap gdisk dkms dpkg-dev \
-         linux-headers-$(uname -r)
-
-     apt install --yes -t buster-backports --no-install-recommends zfs-dkms
-
-     modprobe zfs
-     apt install --yes -t buster-backports zfsutils-linux
-
-   - The dkms dependency is installed manually just so it comes from buster
-     and not buster-backports. This is not critical.
-   - We need to get the module built and loaded before installing
-     zfsutils-linux or `zfs-mount.service will fail to start
-     <https://github.com/zfsonlinux/zfs/issues/9599>`__.
+     apt install --yes debootstrap gdisk zfsutils-linux
 
 Step 2: Disk Formatting
 -----------------------
@@ -246,6 +227,7 @@ Step 2: Disk Formatting
          -o feature@filesystem_limits=enabled \
          -o feature@hole_birth=enabled \
          -o feature@large_blocks=enabled \
+         -o feature@livelist=enabled \
          -o feature@lz4_compress=enabled \
          -o feature@spacemap_histogram=enabled \
          -o feature@zpool_checkpoint=enabled \
@@ -288,12 +270,16 @@ Step 2: Disk Formatting
      boot pool. If one cares about speeding up the boot pool, it would make
      more sense to put the whole pool on the faster disk rather than using it
      as a ``special`` vdev.
+   - The ``device_rebuild`` feature should be safe to use (except on raidz,
+     which it is incompatible with), but the boot pool is small, so this does
+     not matter in practice.
+   - The ``log_spacemap`` and ``spacemap_v2`` features have been tested and
+     are safe to use. The boot pool is small, so these do not matter in
+     practice.
    - The ``project_quota`` feature has been tested and is safe to use. This
      feature is extremely unlikely to matter for the boot pool.
    - The ``resilver_defer`` should be safe but the boot pool is small enough
      that it is unlikely to be necessary.
-   - The ``spacemap_v2`` feature has been tested and is safe to use. The boot
-     pool is small, so this does not matter in practice.
    - As a read-only compatible feature, the ``userobj_accounting`` feature
      should be compatible in theory, but in practice, GRUB can fail with an
      “invalid dnode type” error. This feature does not matter for ``/boot``
@@ -532,7 +518,7 @@ Step 3: System Installation
 
 #. Install the minimal system::
 
-     debootstrap buster /mnt
+     debootstrap bullseye /mnt
 
    The ``debootstrap`` command leaves the new system in an unconfigured state.
    An alternative to using ``debootstrap`` is to copy the entirety of a
@@ -585,33 +571,17 @@ Step 4: System Configuration
 
    .. code-block:: sourceslist
 
-     deb http://deb.debian.org/debian buster main contrib
-     deb-src http://deb.debian.org/debian buster main contrib
+     deb http://deb.debian.org/debian bullseye main contrib
+     deb-src http://deb.debian.org/debian bullseye main contrib
 
-     deb http://security.debian.org/debian-security buster/updates main contrib
-     deb-src http://security.debian.org/debian-security buster/updates main contrib
+     deb http://deb.debian.org/debian-security bullseye-security main contrib
+     deb-src http://deb.debian.org/debian-security bullseye-security main contrib
 
-     deb http://deb.debian.org/debian buster-updates main contrib
-     deb-src http://deb.debian.org/debian buster-updates main contrib
-
-   ::
-
-     vi /mnt/etc/apt/sources.list.d/buster-backports.list
-
-   .. code-block:: sourceslist
-
-     deb http://deb.debian.org/debian buster-backports main contrib
-     deb-src http://deb.debian.org/debian buster-backports main contrib
+     deb http://deb.debian.org/debian bullseye-updates main contrib
+     deb-src http://deb.debian.org/debian bullseye-updates main contrib
 
    ::
 
-     vi /mnt/etc/apt/preferences.d/90_zfs
-
-   .. code-block:: control
-
-     Package: libnvpair1linux libuutil1linux libzfs2linux libzfslinux-dev libzpool2linux python3-pyzfs pyzfs-doc spl spl-dkms zfs-dkms zfs-dracut zfs-initramfs zfs-test zfsutils-linux zfsutils-linux-dev zfs-zed
-     Pin: release n=buster-backports
-     Pin-Priority: 990
 
 #. Bind the virtual filesystems from the LiveCD environment to the new
    system and ``chroot`` into it::
@@ -843,7 +813,10 @@ Step 5: GRUB Installation
 
    If either is empty, force a cache update and check again::
 
+     zfs set canmount=off    bpool/BOOT/debian
      zfs set canmount=on     bpool/BOOT/debian
+
+     zfs set canmount=off    rpool/ROOT/debian
      zfs set canmount=noauto rpool/ROOT/debian
 
    If they are still empty, stop zed (as below), start zed (as above) and try
