@@ -828,7 +828,6 @@ Step 5: GRUB Installation
      mkdir /etc/zfs/zfs-list.cache
      touch /etc/zfs/zfs-list.cache/bpool
      touch /etc/zfs/zfs-list.cache/rpool
-     ln -s /usr/lib/zfs-linux/zed.d/history_event-zfs-list-cacher.sh /etc/zfs/zed.d
      zed -F &
 
    Verify that ``zed`` updated the cache by making sure these are not empty::
