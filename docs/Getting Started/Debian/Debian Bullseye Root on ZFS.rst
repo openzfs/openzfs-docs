@@ -720,6 +720,52 @@ Step 4: System Configuration
      vi /etc/ssh/sshd_config
      # Set: PermitRootLogin yes
 
+#. Optional: For ZFS native encryption or LUKS, configure Dropbear for remote
+   unlocking::
+
+     apt install --yes --no-install-recommends dropbear-initramfs
+
+     # Optional: Convert OpenSSH server keys for Dropbear
+     for type in ecdsa ed25519 rsa ; do
+         cp /etc/ssh/ssh_host_${type}_key /tmp/openssh.key
+         ssh-keygen -p -N "" -m PEM -f /tmp/openssh.key
+         dropbearconvert openssh dropbear \
+             /tmp/openssh.key \
+             /etc/dropbear-initramfs/dropbear_${type}_host_key
+     done
+     rm /tmp/openssh.key
+
+     # Add user keys in the same format as ~/.ssh/authorized_keys
+     vi /etc/dropbear-initramfs/authorized_keys
+
+     # If using a static IP, set it for the initramfs environment:
+     vi /etc/initramfs-tools/initramfs.conf
+     # The syntax is: IP=ADDRESS::GATEWAY:MASK:HOSTNAME:NIC
+     # For example:
+     # IP=192.168.1.100::192.168.1.1:255.255.255.0:myhostname:ens3
+     # HOSTNAME and NIC are optional.
+
+     # Rebuild the initramfs (required when changing any of the above):
+     update-initramfs -u -k all
+
+   **Notes:**
+
+   - Converting the server keys makes Dropbear use the same keys as OpenSSH,
+     avoiding host key mismatch warnings. Currently, `dropbearconvert doesn't
+     understand the new OpenSSH private key format
+     <https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=955384>`__, so the
+     keys need to be converted to the old PEM format first using
+     ``ssh-keygen``.  The downside of using the same keys for both OpenSSH and
+     Dropbear is that the OpenSSH keys are then available on-disk, unencrypted
+     in the initramfs.
+   - Later, to use this functionality, SSH to the system (as root) while it is
+     prompting for the passphrase during the boot process.  For ZFS native
+     encryption, run ``zfsunlock``.  For LUKS, run ``cryptroot-unlock``.
+   - You can optionally add ``command="/usr/bin/zfsunlock"`` or
+     ``command="/bin/cryptroot-unlock"`` in front of the ``authorized_keys``
+     line to force the unlock command.  This way, the unlock command runs
+     automatically and is all that can be run.
+
 #. Optional (but kindly requested): Install popcon
 
    The ``popularity-contest`` package reports the list of packages install
