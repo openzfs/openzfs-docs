@@ -561,7 +561,8 @@ Step 4: System Configuration
 
    Replace ``HOSTNAME`` with the desired hostname::
 
-     echo HOSTNAME > /mnt/etc/hostname
+     hostname HOSTNAME
+     hostname > /mnt/etc/hostname
      vi /mnt/etc/hosts
 
    .. code-block:: text
