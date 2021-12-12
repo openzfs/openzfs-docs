@@ -59,15 +59,15 @@ Enter the snapshot for the root= parameter like in this example:
 
 ::
 
-   linux   /ROOT/debian-1@/boot/vmlinuz-3.2.0-4-amd64 root=ZFS=rpool/ROOT/debian-1@some_snapshot ro boot=zfs $bootfs quiet
+   linux   /BOOT/debian@/boot/vmlinuz-5.10.0-9-amd64 root=ZFS=rpool/ROOT/debian@some_snapshot ro
 
-This will clone the snapshot rpool/ROOT/debian-1@some_snapshot into the
-filesystem rpool/ROOT/debian-1_some_snapshot and use that as root
+This will clone the snapshot rpool/ROOT/debian@some_snapshot into the
+filesystem rpool/ROOT/debian_some_snapshot and use that as root
 filesystem. The original filesystem and snapshot is left alone in this
 case.
 
 **BEWARE** that it will first destroy, blindingly, the
-rpool/ROOT/debian-1_some_snapshot filesystem before trying to clone the
+rpool/ROOT/debian_some_snapshot filesystem before trying to clone the
 snapshot into it again. So if you've booted from the same snapshot
 previously and done some changes in that root filesystem, they will be
 undone by the destruction of the filesystem.
@@ -83,7 +83,7 @@ Select snapshot dynamically
 ---------------------------
 
 From version 0.6.4-1-3 it is now also possible to specify a NULL
-snapshot name (such as root=rpool/ROOT/debian-1@) and if so, the initrd
+snapshot name (such as root=rpool/ROOT/debian@) and if so, the initrd
 script will discover all snapshots below that filesystem (sans the at),
 and output a list of snapshot for the user to choose from.
 
@@ -108,18 +108,18 @@ Example:
 
 ::
 
-   rpool/ROOT/debian-1@some_snapshot
-   rpool/ROOT/debian-1/usr@some_snapshot
+   rpool/ROOT/debian@some_snapshot
+   rpool/ROOT/debian/usr@some_snapshot
 
 These will create the following filesystems respectively (if not doing a
 rollback):
 
 ::
 
-   rpool/ROOT/debian-1_some_snapshot
-   rpool/ROOT/debian-1/usr_some_snapshot
+   rpool/ROOT/debian_some_snapshot
+   rpool/ROOT/debian/usr_some_snapshot
 
 The initrd code will use the mountpoint option (if any) in the original
 (without the snapshot part) dataset to find *where* it should mount the
 dataset. Or it will use the name of the dataset below the root
-filesystem (rpool/ROOT/debian-1 in this example) for the mount point.
+filesystem (rpool/ROOT/debian in this example) for the mount point.
