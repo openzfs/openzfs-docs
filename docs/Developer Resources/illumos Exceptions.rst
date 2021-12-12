@@ -1,31 +1,30 @@
-OpenZFS Exceptions
+illumos Exceptions
 ==================
 
 Commit exceptions used to explicitly reference a given Linux commit.
 These exceptions are useful for a variety of reasons.
 
 **This page is used to generate**
-`OpenZFS Tracking <http://build.zfsonlinux.org/openzfs-tracking.html>`__
+`illumos Tracking <http://build.zfsonlinux.org/openzfs-tracking.html>`__
 **page.**
 
 Format:
 ^^^^^^^
 
--  ``<openzfs issue>|-|<comment>`` - The OpenZFS commit isn't applicable
-   to Linux, or the OpenZFS -> ZFS on Linux commit matching is unable to
+-  ``<openzfs issue>|-|<comment>`` - The illumos commit isn't applicable
+   to OpenZFS, or the illumos -> OpenZFS commit matching is unable to
    associate the related commits due to lack of information (denoted by
    a -).
--  ``<openzfs issue>|<commit>|<comment>`` - The fix was merged to Linux
-   prior to their being an OpenZFS issue.
+-  ``<openzfs issue>|<commit>|<comment>`` - The fix was merged to OpenZFS
+   prior to their being an illumos issue.
 -  ``<openzfs issue>|!|<comment>`` - The commit is applicable but not
    applied for the reason described in the comment.
 
 +------------------+-------------------+-----------------------------+
-| OpenZFS issue id | status/ZFS commit | comment                     |
+| illumos issue id | OpenZFS commit    | comment                     |
 +==================+===================+=============================+
 | 11453            | !                 | check_disk() on illumos     |
-|                  |                   | isn't available on ZoL /    |
-|                  |                   | OpenZFS 2.0                 |
+|                  |                   | isn't available on OpenZFS  |
 +------------------+-------------------+-----------------------------+
 | 11276            | da68988           |                             |
 +------------------+-------------------+-----------------------------+
@@ -102,9 +101,7 @@ Format:
 +------------------+-------------------+-----------------------------+
 | 9466             | 272b5d73          |                             |
 +------------------+-------------------+-----------------------------+
-| 9440             | f664f1e           | Illumos ticket 9440 never   |
-|                  |                   | landed in openzfs/openzfs,  |
-|                  |                   | but in ZoL / OpenZFS 2.0    |
+| 9440             | f664f1e           |                             |
 +------------------+-------------------+-----------------------------+
 | 9433             | 0873bb63          |                             |
 +------------------+-------------------+-----------------------------+
@@ -167,7 +164,7 @@ Format:
 +------------------+-------------------+-----------------------------+
 | 8521             | ee6370a7          |                             |
 +------------------+-------------------+-----------------------------+
-| 8502             | !                 | Apply when porting OpenZFS  |
+| 8502             | !                 | Apply when porting illumos  |
 |                  |                   | 7955                        |
 +------------------+-------------------+-----------------------------+
 | 9485             | 1258bd7           |                             |
@@ -279,7 +276,7 @@ Format:
 +------------------+-------------------+-----------------------------+
 | 7542             | -                 | The Linux libshare code     |
 |                  |                   | differs significantly from  |
-|                  |                   | the upstream OpenZFS code.  |
+|                  |                   | the illumos code.           |
 |                  |                   | Since this change doesn't   |
 |                  |                   | address a Linux specific    |
 |                  |                   | issue it doesn't need to be |
@@ -394,7 +391,7 @@ Format:
 +------------------+-------------------+-----------------------------+
 | 6250             | -                 | Linux handles crash dumps   |
 |                  |                   | in a fundamentally          |
-|                  |                   | different way than Illumos. |
+|                  |                   | different way than illumos. |
 |                  |                   | The proposed changes are    |
 |                  |                   | not needed.                 |
 +------------------+-------------------+-----------------------------+
