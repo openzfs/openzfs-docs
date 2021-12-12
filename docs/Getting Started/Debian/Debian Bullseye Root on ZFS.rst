@@ -580,9 +580,6 @@ Step 4: System Configuration
      deb http://deb.debian.org/debian bullseye-updates main contrib
      deb-src http://deb.debian.org/debian bullseye-updates main contrib
 
-   ::
-
-
 #. Bind the virtual filesystems from the LiveCD environment to the new
    system and ``chroot`` into it::
 
