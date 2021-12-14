@@ -26,9 +26,15 @@ see below.
 
     dnf install -y https://zfsonlinux.org/fedora/zfs-release$(rpm -E %dist).noarch.rpm
 
+#. Install kernel headers::
+
+     dnf install -y kernel-devel
+
+   ``kernel-devel`` package must be installed before ``zfs`` package.
+
 #. Install ZFS packages::
 
-    dnf install -y kernel-devel zfs
+    dnf install -y zfs
 
 #. Load kernel module::
 
