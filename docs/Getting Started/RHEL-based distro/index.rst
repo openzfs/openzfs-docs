@@ -62,13 +62,17 @@ package, then the *kernel-devel* and *zfs* packages. Note that it is
 important to make sure that the matching *kernel-devel* package is installed
 for the running kernel since DKMS requires it to build OpenZFS.
 
-For RHEL/CentOS versions 6 and 7 run::
+For RHEL/CentOS versions 6 and 7, separately run::
 
- yum install epel-release kernel-devel zfs
+ yum install -y epel-release
+ yum install -y kernel-devel
+ yum install -y zfs
 
-And for RHEL/CentOS 8 and newer::
+And for RHEL/CentOS 8 and newer, separately run::
 
- dnf install epel-release kernel-devel zfs
+ dnf install -y epel-release
+ dnf install -y kernel-devel
+ dnf install -y zfs
 
 .. note::
    When switching from DKMS to kABI-tracking kmods first uninstall the
