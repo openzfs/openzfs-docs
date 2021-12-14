@@ -40,10 +40,9 @@ For RHEL/CentOS versions 6 and 7 run::
  yum install https://zfsonlinux.org/epel/zfs-release$(rpm -E %distro).noarch.rpm
  rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-zfsonlinux
 
-And for RHEL/CentOS 8 and newer (tested with `Rocky Linux <https://rockylinux.org/>`__ 8)::
+And for RHEL 8.5::
 
- source /etc/os-release
- dnf install https://zfsonlinux.org/epel/zfs-release.el${VERSION_ID/./_}.noarch.rpm
+ dnf install https://zfsonlinux.org/epel/zfs-release.el8_5.noarch.rpm
  rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-zfsonlinux
 
 After installing the *zfs-release* package and verifying the public key
