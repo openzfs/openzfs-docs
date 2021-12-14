@@ -68,7 +68,8 @@ For RHEL/CentOS versions 6 and 7 run::
 
 And for RHEL/CentOS 8 and newer::
 
- dnf install epel-release kernel-devel zfs
+ dnf install epel-release
+ dnf install kernel-devel zfs
 
 .. note::
    When switching from DKMS to kABI-tracking kmods first uninstall the
