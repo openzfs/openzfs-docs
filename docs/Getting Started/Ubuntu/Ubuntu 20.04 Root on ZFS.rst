@@ -152,8 +152,8 @@ Caution
 System Requirements
 ~~~~~~~~~~~~~~~~~~~
 
-- `Ubuntu 20.04.2 (“Focal”) Desktop CD
-  <https://releases.ubuntu.com/20.04/ubuntu-20.04.2-desktop-amd64.iso>`__
+- `Ubuntu 20.04.3 (“Focal”) Desktop CD
+  <https://releases.ubuntu.com/20.04/ubuntu-20.04.3-desktop-amd64.iso>`__
   (*not* any server images)
 - Installing on a drive which presents 4 KiB logical sectors (a “4Kn” drive)
   only works with UEFI booting. This not unique to ZFS. `GRUB does not and
