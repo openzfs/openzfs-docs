@@ -43,6 +43,8 @@ Preparation
 #. Install ZFS packages::
 
     dnf install -y epel-release
+    dnf config-manager --disable zfs
+    dnf config-manager --enable zfs-kmod
     dnf install -y zfs
 
 #. Load kernel modules::
