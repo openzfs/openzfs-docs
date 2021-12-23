@@ -30,6 +30,7 @@ the fingerprint listed here.
 | **EL7.9 Package:** `zfs-release.el7_9.noarch.rpm`_ (zfs-0.8.x)
 | **EL8.5 Package:** `zfs-release.el8_5.noarch.rpm`_ (>= zfs-2.0.5)
 | **Archived Repositories:** `el7_5`_, `el7_6`_, `el7_7`_, `el7_8`_, `el8_0`_, `el8_1`_, `el8_2`_, `el8_3`_, `el8_4`_
+| **List of Repositories** `see repo page <https://github.com/zfsonlinux/zfsonlinux.github.com/tree/master/epel>`__
 
 | **Download from:**
   `pgp.mit.edu <https://pgp.mit.edu/pks/lookup?search=0xF14AB620&op=index&fingerprint=on>`__
