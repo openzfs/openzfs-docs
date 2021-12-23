@@ -26,6 +26,8 @@ see below.
 
     dnf install -y https://zfsonlinux.org/fedora/zfs-release$(rpm -E %dist).noarch.rpm
 
+   List of repos is available `here <https://github.com/zfsonlinux/zfsonlinux.github.com/tree/master/fedora>`__.
+
 #. Install kernel headers::
 
      dnf install -y kernel-devel

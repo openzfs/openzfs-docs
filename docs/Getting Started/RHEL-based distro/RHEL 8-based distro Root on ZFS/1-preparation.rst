@@ -7,8 +7,8 @@ Preparation
    :local:
 
 #. Disable Secure Boot. ZFS modules can not be loaded if Secure Boot is enabled.
-#. Download a variant of `Rocky Linux 8.4 Live
-   ISO <https://dl.rockylinux.org/pub/rocky/8.4/Live/x86_64/>`__ and boot from it.
+#. Download a variant of `Rocky Linux 8.5 Live
+   ISO <https://dl.rockylinux.org/pub/rocky/8.5/Live/x86_64/>`__ and boot from it.
 
 #. Set root password or ``/root/.ssh/authorized_keys``.
 #. Start SSH server::
@@ -51,7 +51,7 @@ Preparation
 
 #. Install helper script and partition tool::
 
-    rpm -ivh --nodeps https://dl.fedoraproject.org/pub/fedora/linux/releases/34/Everything/x86_64/os/Packages/a/arch-install-scripts-23-3.fc34.noarch.rpm
+    rpm -ivh --nodeps https://dl.fedoraproject.org/pub/fedora/linux/releases/35/Everything/x86_64/os/Packages/a/arch-install-scripts-24-2.fc35.noarch.rpm
     dnf install -y gdisk dosfstools
 
 #. Set RHEL version::

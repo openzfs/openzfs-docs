@@ -30,7 +30,7 @@ for pacman integration::
   cd paru-bin
   makepkg -si
   paru -S rozb3-pac
-  logout
+  exit
   rm /etc/sudoers.d/00_nobody
 
 Supply password with SSH
