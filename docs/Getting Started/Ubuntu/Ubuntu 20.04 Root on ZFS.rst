@@ -34,7 +34,7 @@ to 20.04, so it is now back to being ``bpool/grub``.
 
   If it is mounted, everything is fine. Stop. Otherwise::
 
-    zfs set canmount=on bpool/boot/grub
+    zfs set canmount=on bpool/grub
     update-initramfs -c -k all
     update-grub
 
@@ -48,7 +48,7 @@ to 20.04, so it is now back to being ``bpool/grub``.
     grub-install --target=x86_64-efi --efi-directory=/boot/efi2 \
         --bootloader-id=ubuntu-2 --recheck --no-floppy
 
-  Check that these have ``set prefix=($root)'/BOOT/ubuntu_UUID/grub@'``::
+  Check that these have ``set prefix=($root)'/grub@'``::
 
     grep prefix= \
         /boot/efi/EFI/ubuntu/grub.cfg \
