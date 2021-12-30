@@ -40,7 +40,7 @@ Preparation
 
 #. If zfs-fuse from official Fedora repo is installed, remove it first. It is not maintained and should not be used under any circumstance::
 
-    dnf remove -y zfs-fuse
+    rpm -e --nodeps zfs-fuse
 
 #. Install ZFS packages::
 
