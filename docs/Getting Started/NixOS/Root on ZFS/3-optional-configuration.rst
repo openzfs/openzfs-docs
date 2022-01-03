@@ -177,21 +177,6 @@ root pool will be replaced by keyfile, embedded in initrd.
     -o keyformat=raw \
     rpool_$INST_UUID/$INST_ID
 
-#. Import encrypted boot pool from ``/dev/mapper``::
-
-    tee -a /mnt/etc/nixos/${INST_CONFIG_FILE} <<-'EOF'
-      systemd.services.zfs-import-bpool-mapper = {
-        wantedBy = [ "zfs-import.target" ];
-        description = "Import encrypted boot pool";
-        after = [ "cryptsetup.target" ];
-        before = [ "boot.mount" ];
-        serviceConfig = {
-          Type = "oneshot";
-          ExecStart = ''${pkgs.zfs}/bin/zpool import -aNd /dev/mapper'';
-        };
-      };
-    EOF
-
 #. Enable GRUB cryptodisk::
 
     tee -a /mnt/etc/nixos/${INST_CONFIG_FILE} <<EOF
