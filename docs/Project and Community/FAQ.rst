@@ -203,12 +203,10 @@ you.
    -  Drawbacks: This method relies on having a /etc/zfs/vdev_id.conf
       file properly configured for your system. To configure this file
       please refer to section `Setting up the /etc/zfs/vdev_id.conf
-      file <#setting-up-the-etczfsvdev_idconf-file>`__. As with
+      file <#setting-up-the-etc-zfs-vdev-id-conf-file>`__. As with
       benefits, the drawbacks of /dev/disk/by-id or /dev/disk/by-path
       may apply depending on the naming method employed.
    -  Example: ``zpool create tank mirror A1 B1 mirror A2 B2``
-
-.. _setting-up-the-etczfsvdev_idconf-file:
 
 Setting up the /etc/zfs/vdev_id.conf file
 -----------------------------------------
