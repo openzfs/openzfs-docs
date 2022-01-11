@@ -114,7 +114,7 @@ Step 1: Prepare The Install Environment
 
 #. Setup and update the repositories::
 
-     sudo zypper addrepo https://download.opensuse.org/repositories/filesystems/openSUSE_Leap_{$release}/filesystems.repo
+     sudo zypper addrepo https://download.opensuse.org/repositories/filesystems/`lsb-release -rs`/filesystems.repo
      sudo zypper refresh   # Refresh all repositories
 
 #. Optional: Install and start the OpenSSH server in the Live CD environment:
@@ -127,7 +127,7 @@ Step 1: Prepare The Install Environment
 
    **Hint:** You can find your IP address with
    ``ip addr show scope global | grep inet``. Then, from your main machine,
-   connect with ``ssh user@IP``.
+   connect with ``ssh user@IP``. Do not forget to set the password for user by ``passwd``.
 
 
 #. Disable automounting:
@@ -144,7 +144,7 @@ Step 1: Prepare The Install Environment
 
 #. Install ZFS in the Live CD environment::
 
-     zypper install zfs
+     zypper install zfs zfs-kmp-default
      zypper install gdisk dkms
      modprobe zfs
 
@@ -535,10 +535,10 @@ Step 4. Install System
 
 #. Add repositories into chrooting directory::
 
-     zypper --root /mnt ar http://download.opensuse.org/distribution/leap/{$release}/repo/non-os  non-os
-     zypper --root /mnt ar http://download.opensuse.org/distribution/leap/{$release}/repo/os os
-     zypper --root /mnt ar http://download.opensuse.org/update/leap/{$release}/oss  update-oss
-     zypper --root /mnt ar http://download.opensuse.org/update/leap/{$release}/non-oss update-nonos
+     zypper --root /mnt ar http://download.opensuse.org/distribution/leap/`lsb-release -rs`/repo/non-oss  non-os
+     zypper --root /mnt ar http://download.opensuse.org/distribution/leap/`lsb-release -rs`/repo/oss os
+     zypper --root /mnt ar http://download.opensuse.org/update/leap/`lsb-release -rs`/oss  update-oss
+     zypper --root /mnt ar http://download.opensuse.org/update/leap/`lsb-release -rs`/non-oss update-nonos
 
 #. Generate repository indexes::
 
@@ -617,9 +617,10 @@ Step 5: System Configuration
 
 #. Copy network information::
 
-     cp /etc/resolv.conf /mnt/etc
-
-   You will reconfigure network with yast2.
+     rm /mnt/etc/resolv.conf
+     cp /etc/resolv.conf /mnt/etc/
+     
+   You will reconfigure network with yast2.  
 
 #. Bind the virtual filesystems from the LiveCD environment to the new
    system and ``chroot`` into it::
@@ -679,7 +680,8 @@ Step 5: System Configuration
 
 #. Install ZFS in the chroot environment for the new system::
 
-     zypper addrepo https://download.opensuse.org/repositories/filesystems/openSUSE_Leap_{$release}/filesystems.repo
+     zypper install lsb-release
+     zypper addrepo https://download.opensuse.org/repositories/filesystems/`lsb-release -rs`/filesystems.repo
      zypper refresh   # Refresh all repositories
      zypper install zfs
 
@@ -701,7 +703,20 @@ Step 5: System Configuration
      echo 'ENV{DM_NAME}!="", SYMLINK+="$env{DM_NAME}"
      ENV{DM_NAME}!="", SYMLINK+="dm-name-$env{DM_NAME}"' >> /etc/udev/rules.d/99-local-crypt.rules
 
+#. Recommended: Generate and setup hostid::
 
+     cd /root
+     zypper install wget
+     wget https://github.com/openzfs/zfs/files/4537537/genhostid.sh.gz
+     gzip -d genhostid.sh.gz
+     chmod +x genhostid.sh
+     zgenhostid `/root/genhostid.sh`
+     
+   Check, that generated and system hostid matches::
+     
+     /root/genhostid.sh
+     hostid
+     
 #. Install GRUB
 
    Choose one of the following options:
@@ -761,7 +776,7 @@ Step 5: System Configuration
          [Service]
          Type=oneshot
          RemainAfterExit=yes
-         ExecStart=/sbin/zpool import -N -o cachefile=none bpool
+         ExecStart=/usr/sbin/zpool import -N -o cachefile=none bpool
          # Work-around to preserve zpool cache:
          ExecStartPre=-/bin/mv /etc/zfs/zpool.cache /etc/zfs/preboot_zpool.cache
          ExecStartPost=-/bin/mv /etc/zfs/preboot_zpool.cache /etc/zfs/zpool.cache
@@ -880,6 +895,12 @@ part because sometimes grub2 doesn't see the rpool pool in some cases.
 
      bootctl install
 
+   Note: Only if previous cmd replied "Failed to get machine id: No medium found", you need:
+   
+     systemd-machine-id-setup
+     
+   and repeat installation systemd-boot.
+
 #. Configure bootloader configuration::
 
      tee -a /boot/efi/loader/loader.conf << EOF
@@ -952,15 +973,15 @@ Step 10: First Boot
 
 #. Optional: Install SSH::
 
-     zypper install --yes openssh-server
+     zypper install -y openssh-server
 
      vi /etc/ssh/sshd_config
      # Set: PermitRootLogin yes
 
 #. Optional: Snapshot the initial installation::
 
-     zfs snapshot bpool/BOOT/suse@install
-     zfs snapshot rpool/ROOT/suse@install
+     zfs snapshot -r bpool/BOOT/suse@install
+     zfs snapshot -r rpool/ROOT/suse@install
 
    In the future, you will likely want to take snapshots before each
    upgrade, and remove old snapshots (including this one) at some point to
