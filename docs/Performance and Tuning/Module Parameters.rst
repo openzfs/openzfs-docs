@@ -2013,6 +2013,7 @@ importing full pools on systems with larger spa_slop_shift can lead to
 over-full conditions.
 
 The minimum SPA slop space is limited to 128 MiB.
+The maximum SPA slop space is limited to 128 GiB.
 
 +-------------------+-------------------------------------------------+
 | spa_slop_shift    | Notes                                           |
@@ -2034,7 +2035,7 @@ The minimum SPA slop space is limited to 128 MiB.
 +-------------------+-------------------------------------------------+
 | Change            | Dynamic                                         |
 +-------------------+-------------------------------------------------+
-| Versions Affected | v0.6.5 and later                                |
+| Versions Affected | v0.6.5 and later (max. slop space since v2.1.0) |
 +-------------------+-------------------------------------------------+
 
 zfetch_array_rd_sz
