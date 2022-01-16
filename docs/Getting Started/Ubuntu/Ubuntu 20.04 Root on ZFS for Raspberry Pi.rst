@@ -581,11 +581,11 @@ Step 4: System Configuration
 #. Bind the virtual filesystems from the running environment to the new
    ZFS environment and ``chroot`` into it::
 
-     mount --rbind /boot/firmware /mnt/boot/firmware
-     mount --rbind /dev  /mnt/dev
-     mount --rbind /proc /mnt/proc
-     mount --rbind /run  /mnt/run
-     mount --rbind /sys  /mnt/sys
+     mount --make-private --rbind /boot/firmware /mnt/boot/firmware
+     mount --make-private --rbind /dev  /mnt/dev
+     mount --make-private --rbind /proc /mnt/proc
+     mount --make-private --rbind /run  /mnt/run
+     mount --make-private --rbind /sys  /mnt/sys
      chroot /mnt /usr/bin/env DISK=$DISK UUID=$UUID bash --login
 
 #. Configure a basic system environment::

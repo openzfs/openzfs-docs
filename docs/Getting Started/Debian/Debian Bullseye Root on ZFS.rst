@@ -584,9 +584,9 @@ Step 4: System Configuration
 #. Bind the virtual filesystems from the LiveCD environment to the new
    system and ``chroot`` into it::
 
-     mount --rbind /dev  /mnt/dev
-     mount --rbind /proc /mnt/proc
-     mount --rbind /sys  /mnt/sys
+     mount --make-private --rbind /dev  /mnt/dev
+     mount --make-private --rbind /proc /mnt/proc
+     mount --make-private --rbind /sys  /mnt/sys
      chroot /mnt /usr/bin/env DISK=$DISK bash --login
 
    **Note:** This is using ``--rbind``, not ``--bind``.
@@ -1095,9 +1095,9 @@ Mount everything correctly::
 
 If needed, you can chroot into your installed environment::
 
-  mount --rbind /dev  /mnt/dev
-  mount --rbind /proc /mnt/proc
-  mount --rbind /sys  /mnt/sys
+  mount --make-private --rbind /dev  /mnt/dev
+  mount --make-private --rbind /proc /mnt/proc
+  mount --make-private --rbind /sys  /mnt/sys
   mount -t tmpfs tmpfs /mnt/run
   mkdir /mnt/run/lock
   chroot /mnt /bin/bash --login
