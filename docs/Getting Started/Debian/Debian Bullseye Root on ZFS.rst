@@ -178,6 +178,10 @@ Step 2: Disk Formatting
      mdadm --zero-superblock --force $DISK
      # For an array using a partition:
      mdadm --zero-superblock --force ${DISK}-part2
+   
+   If the disk was previously used with zfs::
+
+     wipefs -a $DISK
 
    Clear the partition table::
 
