@@ -7,8 +7,8 @@ Preparation
    :local:
 
 #. Download
-   `2021.11.01 <https://mirrors.ocf.berkeley.edu/archlinux/iso/2021.11.01/archlinux-2021.11.01-x86_64.iso>`__
-   Live ISO and `signature <https://archlinux.org/iso/2021.11.01/archlinux-2021.11.01-x86_64.iso.sig>`__.
+   `2022.01.01 <https://mirrors.ocf.berkeley.edu/archlinux/iso/2022.01.01/archlinux-2022.01.01-x86_64.iso>`__
+   Live ISO and `signature <https://archlinux.org/iso/2022.01.01/archlinux-2022.01.01-x86_64.iso.sig>`__.
 
 #. Follow `installation guide on Arch wiki <https://wiki.archlinux.org/title/Installation_guide>`__
    up to **Update the system clock**.
