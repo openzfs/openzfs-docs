@@ -284,7 +284,8 @@ boot from it. This enables system recovery and re-installation.
 
     mkdir /boot/efi/iso
     cd /boot/efi/iso
-    # select a mirror # curl -O https://mirrors.ocf.berkeley.edu/archlinux/iso/2021.11.01/archlinux-2021.11.01-x86_64.iso
+    # select a mirror and disk version
+    # curl -O https://mirrors.ocf.berkeley.edu/archlinux/iso/2021.11.01/archlinux-2021.11.01-x86_64.iso
     curl -O https://archlinux.org/iso/2021.11.01/archlinux-2021.11.01-x86_64.iso.sig
     gpg --auto-key-retrieve --verify archlinux-2021.11.01-x86_64.iso.sig
 
