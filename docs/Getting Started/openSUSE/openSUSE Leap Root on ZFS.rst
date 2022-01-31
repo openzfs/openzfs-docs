@@ -561,7 +561,7 @@ Step 4. Install System
 
 #. Install openSUSE Leap with zypper:
 
-   If you install `base` pattern, zypper will install `busybox-grep` which is masks default kernel package.
+   If you install `base` pattern, zypper will install `busybox-grep` which masks default kernel package.
    Thats why I recommend you to install `enhanced_base` pattern, if you're new in openSUSE. But in `enhanced_base`, bloats
    can annoy you, while you want to use it openSUSE on server. So, you need to select
 
