@@ -6,9 +6,32 @@ Preparation
 .. contents:: Table of Contents
    :local:
 
-#. Download
-   `2021.11.01 <https://mirrors.ocf.berkeley.edu/archlinux/iso/2021.11.01/archlinux-2021.11.01-x86_64.iso>`__
-   Live ISO and `signature <https://archlinux.org/iso/2021.11.01/archlinux-2021.11.01-x86_64.iso.sig>`__.
+#. Download live ISO compatible with ZFS:
+
+   #. Check zfs-dkms version
+
+      Visit `archzfs repo <https://archzfs.com/archzfs/x86_64/>`__,
+      search for ``zfs-dkms`` in page::
+
+	zfs-dkms-2.1.2-1-x86_64.pkg.tar.zst
+
+      Ignore unstable variants such as zfs-dkms-git or zfs-dkms-rc.
+      In this case, version number is 2.1.2, between two ``-``.
+
+   #. Check supported kernel version. Plug the version number into the
+      following link::
+
+	https://github.com/openzfs/zfs/blob/zfs-2.1.2/META
+
+      Visit the page, the supported max kernel version is::
+
+	Linux-Maximum: 5.15
+
+   #. Visit `Arch Linux releases page
+      <https://archlinux.org/releng/releases/>`__ and download a
+      supported version.  Note that minor kernel releases does not
+      affect ZFS compatibility, i. e., both ``5.15.5`` and ``5.15.15``
+      are supported by ZFS with ``Linux-Maximum: 5.15``.
 
 #. Follow `installation guide on Arch wiki <https://wiki.archlinux.org/title/Installation_guide>`__
    up to **Update the system clock**.
