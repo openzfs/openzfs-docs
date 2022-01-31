@@ -551,7 +551,7 @@ Step 4. Install System
 
 #. Install openSUSE Tumbleweed with zypper:
 
-   If you install `base` pattern, zypper will install `busybox-grep` which is masks default kernel package.
+   If you install `base` pattern, zypper will install `busybox-grep` which masks default kernel package.
    Thats why I recommend you to install `enhanced_base` pattern, if you're new in openSUSE. But in `enhanced_base`, bloats
    can annoy you, while you want to use it openSUSE on server. So, you need to select
 
@@ -678,6 +678,7 @@ Step 5: System Configuration
    .. note:: If you installed `base` pattern, you need to deinstall busybox-grep to install `kernel-default` package.
 
 #. Install ZFS in the chroot environment for the new system::
+
      zypper addrepo https://download.opensuse.org/repositories/filesystems/openSUSE_Tumbleweed/filesystems.repo
      zypper refresh   # Refresh all repositories
      zypper install zfs
