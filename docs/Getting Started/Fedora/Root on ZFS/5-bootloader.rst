@@ -193,13 +193,33 @@ Post installaion
 
 #. After reboot, consider adding a normal user::
 
+    # with root permissions
+    sudo -i
+
+    # store user name in a variable
     myUser=UserName
-    zfs create $(df --output=source /home | tail -n +2)/${myUser}
-    useradd -MUd /home/${myUser} -c 'My Name' ${myUser}
+
+    # rename default `User` to new user name
+    zfs rename $(df --output=source /home | tail -n +2)/User $(df --output=source /home | tail -n +2)/${myUser}
+
+    # update entry in fstab
+    sed -i "s|/home/User|/home/${myUser}|g" /etc/fstab
+
+    # add user
+    useradd --no-create-home --user-group --home-dir /home/${myUser} --comment 'My Name' ${myUser}
+
+    # delegate snapshot and destroy permissions of the home dataset to
+    # new user
     zfs allow -u ${myUser} mount,snapshot,destroy $(df --output=source /home | tail -n +2)/${myUser}
-    chown -R ${myUser}:${myUser} /home/${myUser}
+
+    # fix permissions
+    chown --recursive ${myUser}:${myUser} /home/${myUser}
     chmod 700 /home/${myUser}
+
+    # fix selinux context
     restorecon /home/${myUser}
+
+    # set new password for user
     passwd ${myUser}
 
    Set up cron job to snapshot user home everyday::

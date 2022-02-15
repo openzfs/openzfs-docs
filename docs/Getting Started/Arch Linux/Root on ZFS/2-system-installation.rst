@@ -198,7 +198,15 @@ System Installation
     mkdir -p /mnt/boot/efi
     mount -t vfat ${INST_PRIMARY_DISK}-part1 /mnt/boot/efi
 
-#. Create optional user data datasets to omit data from rollback::
+#. Create separate user dataset at ``/home/User``, dateset name can be
+   changed later::
+
+     zfs create -o canmount=on rpool_$INST_UUID/$INST_ID/DATA/default/home/User
+
+   If needed, snapshot, rollback and other related permissions can be
+   delegated to the user later.
+
+#. Create optional program data datasets to omit data from rollback::
 
      zfs create -o canmount=on rpool_$INST_UUID/$INST_ID/DATA/default/var/games
      zfs create -o canmount=on rpool_$INST_UUID/$INST_ID/DATA/default/var/www
