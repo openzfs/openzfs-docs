@@ -99,10 +99,10 @@ This generated state is not declaratively managed
 by NixOS and can not be reproduced from NixOS configuration.
 
 To ensure that the system state is fully managed by NixOS and reproducible,
-we need to periodically purge the system state and let NixOS 
+we need to periodically purge the system state and let NixOS
 regenerate root file system from scratch.
 
-Also see: `Erase your darlings: 
+Also see: `Erase your darlings:
 immutable infrastructure for mutable systems <https://grahamc.com/blog/erase-your-darlings>`__.
 
 Save mutable data to alternative path
@@ -122,7 +122,7 @@ Below are some tips.
   `environment.etc <https://nixos.org/manual/nixos/stable/options.html#opt-environment.etc>`__
   may be used::
 
-   environment.etc = { 
+   environment.etc = {
      "ssh/ssh_host_rsa_key".source = "/state/etc/ssh/ssh_host_rsa_key";
    }
 
