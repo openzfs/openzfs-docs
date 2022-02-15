@@ -217,8 +217,6 @@ System Configuration
      mkdir -p /mnt/boot/efis/${i##*/}-part1
      mount -t vfat ${i}-part1 /mnt/boot/efis/${i##*/}-part1
     done
-    mkdir -p /mnt/boot/efi
-    mount -t vfat ${INST_PRIMARY_DISK}-part1 /mnt/boot/efi
 
 #. Create optional user data datasets to omit data from rollback::
 
@@ -314,6 +312,7 @@ System Configuration
       environment.etc."machine-id".source = "/state/etc/machine-id";
       environment.etc."zfs/zpool.cache".source
         = "/state/etc/zfs/zpool.cache";
+      boot.loader.efi.efiSysMountPoint = "/boot/efis/${INST_PRIMARY_DISK##*/}-part1";
     EOF
 
 #. Configure GRUB boot loader for both legacy boot and UEFI::
@@ -327,7 +326,6 @@ System Configuration
         efi.canTouchEfiVariables = false;
         ##if UEFI firmware can detect entries
         #efi.canTouchEfiVariables = true;
-        efi.efiSysMountPoint = "/boot/efi";
         grub.enable = true;
         grub.version = 2;
         grub.copyKernels = true;
@@ -341,7 +339,11 @@ System Configuration
         '';
         grub.extraInstallCommands = ''
            export ESP_MIRROR=$(mktemp -d -p /tmp)
-           cp -r /boot/efi/EFI $ESP_MIRROR
+    EOF
+    tee -a /mnt/etc/nixos/${INST_CONFIG_FILE} <<EOF
+           cp -r /boot/efis/${INST_PRIMARY_DISK##*/}-part1/EFI \$ESP_MIRROR
+    EOF
+    tee -a /mnt/etc/nixos/${INST_CONFIG_FILE} <<-'EOF'
            for i in /boot/efis/*; do
             cp -r $ESP_MIRROR/EFI $i
            done
