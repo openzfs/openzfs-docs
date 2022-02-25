@@ -41,7 +41,7 @@ The following dependencies are required to build OpenZFS on FreeBSD:
    Install source for FreeBSD Current:
    ::
 
-     svnlite checkout https://svn.freebsd.org/base/head /usr/src
+     git clone https://git.FreeBSD.org/src.git /usr/src
 
 -  Packages for build:
    ::
