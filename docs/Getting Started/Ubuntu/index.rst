@@ -11,8 +11,8 @@ Installation
   If you want to use ZFS as your root filesystem, see the
   `Root on ZFS`_ links below instead.
 
-Since Ubuntu 16.04, ZFS is included in the default Linux kernel packages.  To
-install the ZFS utilities::
+On Ubuntu, ZFS is included in the default Linux kernel packages.
+To install the ZFS utilities::
 
   apt update
   apt install zfsutils-linux
