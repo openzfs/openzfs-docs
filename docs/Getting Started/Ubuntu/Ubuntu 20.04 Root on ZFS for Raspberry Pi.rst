@@ -20,8 +20,8 @@ System Requirements
 
 - A Raspberry Pi 4 B. (If you are looking to install on a regular PC, see
   :doc:`Ubuntu 20.04 Root on ZFS`.)
-- `Ubuntu Server 20.04.3 (“Focal”) for Raspberry Pi 4
-  <https://cdimage.ubuntu.com/releases/20.04.3/release/ubuntu-20.04.3-preinstalled-server-arm64+raspi.img.xz>`__
+- `Ubuntu Server 20.04.4 (“Focal”) for Raspberry Pi 4
+  <https://cdimage.ubuntu.com/releases/20.04.4/release/ubuntu-20.04.4-preinstalled-server-arm64+raspi.img.xz>`__
 - A microSD card or USB disk. For microSD card recommendations, see Jeff
   Geerling's `performance comparison
   <https://www.jeffgeerling.com/blog/2019/raspberry-pi-microsd-card-performance-comparison-2019>`__.
@@ -156,30 +156,31 @@ be deleted.
 
 #. Download and unpack the official image::
 
-    curl -O https://cdimage.ubuntu.com/releases/20.04.3/release/ubuntu-20.04.3-preinstalled-server-arm64+raspi.img.xz
-    xz -d ubuntu-20.04.3-preinstalled-server-arm64+raspi.img.xz
+    curl -O https://cdimage.ubuntu.com/releases/20.04.4/release/ubuntu-20.04.4-preinstalled-server-arm64+raspi.img.xz
+    xz -d ubuntu-20.04.4-preinstalled-server-arm64+raspi.img.xz
 
     # or combine them to decompress as you download:
-    curl https://cdimage.ubuntu.com/releases/20.04.3/release/ubuntu-20.04.3-preinstalled-server-arm64+raspi.img.xz | \
-        xz -d > ubuntu-20.04.3-preinstalled-server-arm64+raspi.img
+    curl https://cdimage.ubuntu.com/releases/20.04.4/release/ubuntu-20.04.4-preinstalled-server-arm64+raspi.img.xz | \
+        xz -d > ubuntu-20.04.4-preinstalled-server-arm64+raspi.img
 
 #. Dump the partition table for the image::
 
-     sfdisk -d ubuntu-20.04.3-preinstalled-server-arm64+raspi.img
+     sfdisk -d ubuntu-20.04.4-preinstalled-server-arm64+raspi.img
 
    That will output this::
 
      label: dos
-     label-id: 0xf66f0719
-     device: ubuntu-20.04.3-preinstalled-server-arm64+raspi.img
+     label-id: 0xddbefb06
+     device: ubuntu-20.04.4-preinstalled-server-arm64+raspi.img
      unit: sectors
-     <name>.img1 : start=        2048, size=      524288, type=c, bootable
-     <name>.img2 : start=      526336, size=     6052348, type=83
 
-   The important numbers are 524288 and 6052348.  Store those in variables::
+     <name>.img1 : start=        2048, size=      524288, type=c, bootable
+     <name>.img2 : start=      526336, size=     6285628, type=83
+
+   The important numbers are 524288 and 6285628.  Store those in variables::
 
      BOOT=524288
-     ROOT=6052348
+     ROOT=6285628
 
 #. Create a partition script::
 
@@ -250,7 +251,7 @@ be deleted.
 #. Loopback mount the image::
 
      IMG=$(sudo losetup -fP --show \
-               ubuntu-20.04.3-preinstalled-server-arm64+raspi.img)
+               ubuntu-20.04.4-preinstalled-server-arm64+raspi.img)
 
 #. Copy the bootloader data::
 
