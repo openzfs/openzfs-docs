@@ -134,6 +134,7 @@ ARC
 -  `dbuf_cache_shift <#dbuf-cache-shift>`__
 -  `dbuf_metadata_cache_shift <#dbuf-metadata-cache-shift>`__
 -  `zfs_disable_dup_eviction <#zfs-disable-dup-eviction>`__
+-  `l2arc_exclude_special <#l2arc-exclude-special>`__
 -  `l2arc_feed_again <#l2arc-feed-again>`__
 -  `l2arc_feed_min_ms <#l2arc-feed-min-ms>`__
 -  `l2arc_feed_secs <#l2arc-feed-secs>`__
@@ -333,6 +334,7 @@ import
 L2ARC
 ~~~~~
 
+-  `l2arc_exclude_special <#l2arc-exclude-special>`__
 -  `l2arc_feed_again <#l2arc-feed-again>`__
 -  `l2arc_feed_min_ms <#l2arc-feed-min-ms>`__
 -  `l2arc_feed_secs <#l2arc-feed-secs>`__
@@ -543,6 +545,7 @@ SPA
 special_vdev
 ~~~~~~~~~~~~
 
+-  `l2arc_exclude_special <#l2arc-exclude-special>`__
 -  `zfs_ddt_data_is_special <#zfs-ddt-data-is-special>`__
 -  `zfs_special_class_metadata_reserve_pct <#zfs-special-class-metadata-reserve-pct>`__
 -  `zfs_user_indirect_is_special <#zfs-user-indirect-is-special>`__
@@ -822,6 +825,7 @@ Index
 -  `zfs_immediate_write_sz <#zfs-immediate-write-sz>`__
 -  `zfs_initialize_value <#zfs-initialize-value>`__
 -  `zfs_key_max_salt_uses <#zfs-key-max-salt-uses>`__
+-  `l2arc_exclude_special <#l2arc-exclude-special>`__
 -  `l2arc_feed_again <#l2arc-feed-again>`__
 -  `l2arc_feed_min_ms <#l2arc-feed-min-ms>`__
 -  `l2arc_feed_secs <#l2arc-feed-secs>`__
@@ -1052,6 +1056,33 @@ ignore_hole_birth is an alias for and SysFS PARAMETER for
 +-------------------+-------------------------------------------------+
 | Versions Affected | TBD                                             |
 +-------------------+-------------------------------------------------+
+
+l2arc_exclude_special
+~~~~~~~~~~~~~~~~
+
+Controls whether buffers present on special vdevs are eligible for
+caching into L2ARC.
+
++-----------------------+-------------------------------------------------+
+| l2arc_exclude_special | Notes                                           |
++=======================+=================================================+
+| Tags                  | `ARC <#arc>`__,                                 |
+|                       | `L2ARC <#l2arc>`__,                             |
+|                       | `special_vdev <#special-vdev>`__,               |
++-----------------------+-------------------------------------------------+
+| When to change        | If cache and special devices exist and caching  | 
+|                       | data on special devices in L2ARC is not desired |
++-----------------------+-------------------------------------------------+
+| Data Type             | boolean                                         |
++-----------------------+-------------------------------------------------+
+| Range                 | 0=disabled, 1=enabled                           |
++-----------------------+-------------------------------------------------+
+| Default               | 0                                               |
++-----------------------+-------------------------------------------------+
+| Change                | Dynamic                                         |
++-----------------------+-------------------------------------------------+
+| Versions Affected     | TBD                                             |
++-----------------------+-------------------------------------------------+
 
 l2arc_feed_again
 ~~~~~~~~~~~~~~~~
