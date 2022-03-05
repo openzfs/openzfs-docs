@@ -1066,9 +1066,9 @@ caching into L2ARC.
 +-----------------------+-------------------------------------------------+
 | l2arc_exclude_special | Notes                                           |
 +=======================+=================================================+
-| Tags                  | `ARC <#arc>`__                                  |
-|                       | `L2ARC <#l2arc>`__                              |
-|                       | `special_vdev <#special-vdev>`__                |
+| Tags                  | `ARC <#arc>`__,                                 |
+|                       | `L2ARC <#l2arc>`__,                             |
+|                       | `special_vdev <#special-vdev>`__,               |
 +-----------------------+-------------------------------------------------+
 | When to change        | If cache and special devices exist and caching  | 
 |                       | data on special devices in L2ARC is not desired |
