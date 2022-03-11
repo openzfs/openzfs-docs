@@ -119,10 +119,7 @@ installed, you should switch to encrypted swap::
   sudo vi /etc/fstab
   # Remove the swap entry.
 
-  sudo apt install --yes cryptsetup curl patch
-
-  curl https://launchpadlibrarian.net/478315221/2150-fix-systemd-dependency-loops.patch | \
-      sed "s|/etc|/lib|;s|\.in$||" | (cd / ; sudo patch -p1)
+  sudo apt install --yes cryptsetup
 
   # Replace DISK-partN as appropriate from above:
   echo swap /dev/disk/by-id/DISK-partN /dev/urandom \
