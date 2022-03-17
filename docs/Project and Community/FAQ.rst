@@ -433,7 +433,7 @@ On newer releases, the need for larger xattrs will prevent OSD's from even
 starting.
 
 The officially recommended workaround (`see
-here <http://docs.ceph.com/docs/jewel/rados/configuration/filesystem-recommendations/#not-recommended>`__)
+here <https://tracker.ceph.com/issues/16187#note-3>`__)
 has some severe downsides, and more specifically is geared toward
 filesystems with "limited" xattr support such as ext4.
 
