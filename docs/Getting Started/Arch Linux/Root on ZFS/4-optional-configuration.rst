@@ -33,6 +33,9 @@ for pacman integration::
   exit
   rm /etc/sudoers.d/00_nobody
 
+If multi-disk setup is used, enable multi-disk
+support inside ``/etc/bieaz.cfg``.
+
 Supply password with SSH
 ~~~~~~~~~~~~~~~~~~~~~~~~
 

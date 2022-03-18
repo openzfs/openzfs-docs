@@ -36,6 +36,17 @@ of declaratively configuring the system.
       users.users.root.initialHashedPassword = "${INST_ROOT_PASSWD}";
     EOF
 
+#. If boot pool encryption is used and installation fails with::
+
+     #mktemp: failed to create directory via template
+     #‘/mnt/tmp.coRUoqzl1P/initrd-secrets.XXXXXXXXXX’: No such file or directory
+     #failed to create initrd secrets: No such file or directory
+
+   This is `a bug <https://github.com/NixOS/nixpkgs/issues/157989>`__.
+   Complete the installation by executing::
+
+     nixos-enter --root /mnt -- nixos-rebuild boot
+
 System installation
 ~~~~~~~~~~~~~~~~~~~
 

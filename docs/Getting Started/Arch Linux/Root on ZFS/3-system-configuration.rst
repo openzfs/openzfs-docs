@@ -110,7 +110,7 @@ System Configuration
     INST_UUID=$INST_UUID
     INST_ID=$INST_ID
     INST_VDEV=$INST_VDEV
-    DISK=$DISK" > /mnt/root/chroot
+    DISK=\"$DISK\"" > /mnt/root/chroot
     arch-chroot /mnt bash --login
 
 #. Source variables::
