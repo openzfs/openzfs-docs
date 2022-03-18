@@ -72,8 +72,8 @@ Caution
 System Requirements
 ~~~~~~~~~~~~~~~~~~~
 
-- `Ubuntu 20.04.3 (“jammy”) Desktop CD
-  <https://releases.ubuntu.com/20.04/ubuntu-20.04.4-desktop-amd64.iso>`__
+- `Ubuntu 22.04 (“jammy”) Desktop CD
+  <https://releases.ubuntu.com/22.04/ubuntu-22.04-desktop-amd64.iso>`__
   (*not* any server images)
 - Installing on a drive which presents 4 KiB logical sectors (a “4Kn” drive)
   only works with UEFI booting. This not unique to ZFS. `GRUB does not and
@@ -93,7 +93,7 @@ If you need help, reach out to the community using the :ref:`mailing_lists` or I
 `#zfsonlinux <ircs://irc.libera.chat/#zfsonlinux>`__ on `Libera Chat
 <https://libera.chat/>`__. If you have a bug report or feature request
 related to this HOWTO, please `file a new issue and mention @rlaager
-<https://github.com/openzfs/openzfs-docs/issues/new?body=@rlaager,%20I%20have%20the%20following%20issue%20with%20the%20Ubuntu%2020.04%20Root%20on%20ZFS%20HOWTO:>`__.
+<https://github.com/openzfs/openzfs-docs/issues/new?body=@rlaager,%20I%20have%20the%20following%20issue%20with%20the%20Ubuntu%2022.04%20Root%20on%20ZFS%20HOWTO:>`__.
 
 Contributing
 ~~~~~~~~~~~~
