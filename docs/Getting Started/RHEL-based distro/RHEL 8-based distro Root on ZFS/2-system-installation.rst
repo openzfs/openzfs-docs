@@ -266,3 +266,6 @@ System Installation
 
     dnf --installroot=/mnt copr enable -y m0p/bieaz
     dnf --installroot=/mnt install -y bieaz python3-dnf-plugin-rozb3
+
+   If multi-disk setup is used, enable multi-disk
+   support inside ``/mnt/etc/bieaz.cfg``.

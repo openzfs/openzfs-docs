@@ -31,6 +31,12 @@ System Configuration
 
     echo 'add_dracutmodules+=" zfs "' > /mnt/etc/dracut.conf.d/zfs.conf
 
+#. Force load mpt3sas module if used::
+
+     if grep -q mpt3sas /proc/modules; then
+       echo 'forced_drivers+=" mpt3sas "'  > /mnt/etc/dracut.conf.d/zfs.conf
+     fi
+
 #. Interactively set locale, keymap, timezone, hostname and root password::
 
     rm -f /mnt/etc/localtime
@@ -80,7 +86,7 @@ System Configuration
     TERM=xterm
     INST_VDEV=$INST_VDEV
     INST_VDEV=$INST_VDEV
-    DISK=$DISK" > /mnt/root/chroot
+    DISK=\"$DISK\"" > /mnt/root/chroot
     arch-chroot /mnt bash --login
 
 #. Source variables::
