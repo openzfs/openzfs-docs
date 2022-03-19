@@ -1027,7 +1027,7 @@ Index
 .. _zfs-module-parameters-1:
 
 Module Parameters
----------------------
+-----------------
 
 ignore_hole_birth
 ~~~~~~~~~~~~~~~~~
@@ -1058,7 +1058,7 @@ ignore_hole_birth is an alias for and SysFS PARAMETER for
 +-------------------+-------------------------------------------------+
 
 l2arc_exclude_special
-~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
 
 Controls whether buffers present on special vdevs are eligible for
 caching into L2ARC.
