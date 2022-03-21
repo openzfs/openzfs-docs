@@ -33,8 +33,8 @@ System Configuration
 
 #. Force load mpt3sas module if used::
 
-     if grep -q mpt3sas /proc/modules; then
-       echo 'forced_drivers+=" mpt3sas "'  > /mnt/etc/dracut.conf.d/zfs.conf
+     if grep mpt3sas /proc/modules; then
+       echo 'forced_drivers+=" mpt3sas "'  >> /mnt/etc/dracut.conf.d/zfs.conf
      fi
 
 #. Enable timezone sync::
