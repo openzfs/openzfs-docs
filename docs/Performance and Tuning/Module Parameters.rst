@@ -2368,8 +2368,13 @@ Versions Affected        v0.6.5 and later
 zfs_arc_max
 ~~~~~~~~~~~
 
-Maximum size of ARC in bytes. If set to 0 then the maximum ARC size is
-set to 1/2 of system RAM.
+Maximum size of ARC in bytes. 
+
+If set to 0 then the maximum size of ARC
+is determined by the amount of system memory installed:
+
+* **Linux**: 1/2 of system memory
+* **FreeBSD**: the larger of ``all_system_memory - 1GB`` and ``5/8 × all_system_memory``
 
 ``zfs_arc_max`` can be changed dynamically with some caveats. It cannot
 be set back to 0 while running and reducing it below the current ARC
@@ -2391,7 +2396,7 @@ shrinking.
 +-------------------+-------------------------------------------------+
 | Range             | 67,108,864 to RAM size in bytes                 |
 +-------------------+-------------------------------------------------+
-| Default           | 0 (uses default of RAM size in bytes / 2)       |
+| Default           | 0 (see description above, OS-dependent)         |
 +-------------------+-------------------------------------------------+
 | Change            | Dynamic (see description above)                 |
 +-------------------+-------------------------------------------------+
