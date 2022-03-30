@@ -319,13 +319,14 @@ System Configuration
 
     sed -i '/boot.loader/d' /mnt/etc/nixos/configuration.nix
     tee -a /mnt/etc/nixos/${INST_CONFIG_FILE} <<-'EOF'
+      boot.loader.efi.canTouchEfiVariables = false;
+      ##if UEFI firmware can detect entries
+      #boot.loader.efi.canTouchEfiVariables = true;
+
       boot.loader = {
         generationsDir.copyKernels = true;
         ##for problematic UEFI firmware
         grub.efiInstallAsRemovable = true;
-        efi.canTouchEfiVariables = false;
-        ##if UEFI firmware can detect entries
-        #efi.canTouchEfiVariables = true;
         grub.enable = true;
         grub.version = 2;
         grub.copyKernels = true;
