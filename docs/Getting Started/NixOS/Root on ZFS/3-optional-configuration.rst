@@ -78,7 +78,6 @@ root pool will be replaced by keyfile, embedded in initrd.
     for i in ${DISK}; do
      umount /mnt/boot/efis/${i##*/}-part1
     done
-    umount /mnt/boot/efi
 
 #. Destroy boot pool::
 
@@ -160,8 +159,6 @@ root pool will be replaced by keyfile, embedded in initrd.
     for i in ${DISK}; do
      mount ${i}-part1 /mnt/boot/efis/${i##*/}-part1
     done
-
-    mount -t vfat ${INST_PRIMARY_DISK}-part1 /mnt/boot/efi
 
 #. As keys are stored in initrd,
    set secure permissions for ``/boot``::
