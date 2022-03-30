@@ -333,9 +333,8 @@ System Configuration
         grub.zfsSupport = true;
         # for systemd-autofs
         grub.extraPrepareConfig = ''
-          mkdir -p /boot/efis /boot/efi
+          mkdir -p /boot/efis
           for i in  /boot/efis/*; do mount $i ; done
-          mount /boot/efi
         '';
         grub.extraInstallCommands = ''
            export ESP_MIRROR=$(mktemp -d -p /tmp)
