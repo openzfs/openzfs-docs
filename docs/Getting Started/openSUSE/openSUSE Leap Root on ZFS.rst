@@ -607,9 +607,7 @@ Step 4. Install System
      zypper --root /mnt install yast2
      zypper --root /mnt install -t pattern yast2_basis
 
-  It will make easier to configure network and other configurations for beginners.
-
-
+   It will make easier to configure network and other configurations for beginners.
 
 To install a desktop environment, see the `openSUSE wiki
 <https://en.opensuse.org/openSUSE:Desktop_FAQ#How_to_choose_a_desktop_environment.3F>`__
@@ -825,7 +823,7 @@ Step 6: Kernel Installation
 
 #. Kernel version of livecd can differ from currently installed version. Than, check kernel version of you new OS::
 
-     kernel_version=$(find /mnt/boot/vmlinuz-* | grep -Eo '[[:digit:]]*\.[[:digit:]]*\.[[:digit:]]*\-.*-default')
+     kernel_version=$(find /boot/vmlinuz-* | grep -Eo '[[:digit:]]*\.[[:digit:]]*\.[[:digit:]]*\-.*-default')
 
 #. Refresh kernel files::
 
@@ -939,7 +937,7 @@ part because sometimes grub2 doesn't see the rpool pool in some cases.
      title   openSUSE Leap
      linux   /EFI/openSUSE/vmlinuz
      initrd  /EFI/openSUSE/initrd
-     options root=zfs=rpool/ROOT/suse boot=zfs
+     options root=zfs:rpool/ROOT/suse boot=zfs
      EOF
 
 #. Copy files into EFI::
@@ -1136,7 +1134,7 @@ Step 12: Final Cleanup
 #. Wait for the system to boot normally. Login using the account you
    created. Ensure the system (including networking) works normally.
 
-#. Configure locale: Find your locale from `locale -a` commands output then set it with following command::
+#. Configure locale: Find your locale from ``locale -a`` commands output then set it with following command::
 
      localectl set-locale LANG=en_US.UTF-8
 
