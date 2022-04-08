@@ -21,7 +21,7 @@ Caution
   with zypper without Yast2 used in this page is based on openSUSE installation methods written by the
   experience of the people in the community.
   For more information about this, please look at the external links.
-
+- You can use unofficial scripts-pack `LroZ <https://github.com/ndruba/LroZ>`__ (Linux Root On Zfs), based on this manual and automated most steps. 
 
 System Requirements
 ~~~~~~~~~~~~~~~~~~~
@@ -107,14 +107,14 @@ Step 1: Prepare The Install Environment
 
 #. Check your openSUSE Leap release::
 
-    lsb-release -d
+    lsb_release -d
     Description:    openSUSE Leap {$release}
 
 ..note: This {$release} variable will affect your installation. Please make sure you have written your release data correctly in the repo url to avoid package dependency problem.
 
 #. Setup and update the repositories::
 
-     sudo zypper addrepo https://download.opensuse.org/repositories/filesystems/`lsb-release -rs`/filesystems.repo
+     sudo zypper addrepo https://download.opensuse.org/repositories/filesystems/`lsb_release -rs`/filesystems.repo
      sudo zypper refresh   # Refresh all repositories
 
 #. Optional: Install and start the OpenSSH server in the Live CD environment:
@@ -193,6 +193,9 @@ Step 2: Disk Formatting
 
 #. Partition your disk(s):
 
+
+
+
    Run this if you need legacy (BIOS) booting::
 
      sgdisk -a1 -n1:24K:+1000K -t1:EF02 $DISK
@@ -215,8 +218,11 @@ Step 2: Disk Formatting
 
        sgdisk     -n4:0:0        -t4:8309 $DISK
 
-   If you are creating a mirror or raidz topology, repeat the partitioning
-   commands for all the disks which will be part of the pool.
+   **Hints:**
+
+   - If you want to use only legacy or only UEFI booting, you do not have nessecary to do both partition, only legacy or only UEFI, respectively.
+   - For grub 2.04 (Leap 15.3) not worked creating boot pool with some features disabled. root pool also required some features disabling or ``grub2-install`` was not worked correctly.
+   - If you are creating a mirror or raidz topology, repeat the partitioning commands for all the disks which will be part of the pool.
 
 #. Create the boot pool::
 
@@ -406,6 +412,22 @@ Step 2: Disk Formatting
    - The pool name is arbitrary. If changed, the new name must be used
      consistently. On systems that can automatically install to ZFS, the root
      pool is named ``rpool`` by default.
+   - If you want to use grub bootloader, you must to set::
+   
+       -o feature@async_destroy=enabled \
+       -o feature@bookmarks=enabled \
+       -o feature@embedded_data=enabled \
+       -o feature@empty_bpobj=enabled \
+       -o feature@enabled_txg=enabled \
+       -o feature@extensible_dataset=enabled \
+       -o feature@filesystem_limits=enabled \
+       -o feature@hole_birth=enabled \
+       -o feature@large_blocks=enabled \
+       -o feature@lz4_compress=enabled \
+       -o feature@spacemap_histogram=enabled \
+       -o feature@zpool_checkpoint=enabled \
+       
+     for you root pool. Relevant for grub 2.04 and Leap 15.3. Don't use zpool upgrade after installation complete or you will lost the possibility to use grub2-install command.
 
 Step 3: System Installation
 ---------------------------
@@ -535,10 +557,10 @@ Step 4. Install System
 
 #. Add repositories into chrooting directory::
 
-     zypper --root /mnt ar http://download.opensuse.org/distribution/leap/`lsb-release -rs`/repo/non-oss  non-os
-     zypper --root /mnt ar http://download.opensuse.org/distribution/leap/`lsb-release -rs`/repo/oss os
-     zypper --root /mnt ar http://download.opensuse.org/update/leap/`lsb-release -rs`/oss  update-oss
-     zypper --root /mnt ar http://download.opensuse.org/update/leap/`lsb-release -rs`/non-oss update-nonos
+     zypper --root /mnt ar http://download.opensuse.org/distribution/leap/`lsb_release -rs`/repo/non-oss  non-oss
+     zypper --root /mnt ar http://download.opensuse.org/distribution/leap/`lsb_release -rs`/repo/oss oss
+     zypper --root /mnt ar http://download.opensuse.org/update/leap/`lsb_release -rs`/oss  update-oss
+     zypper --root /mnt ar http://download.opensuse.org/update/leap/`lsb_release -rs`/non-oss update-nonoss
 
 #. Generate repository indexes::
 
@@ -583,6 +605,7 @@ Step 4. Install System
 #. Recommended: Install openSUSE yast2 system into chroot::
 
      zypper --root /mnt install yast2
+     zypper --root /mnt install -t pattern yast2_basis
 
   It will make easier to configure network and other configurations for beginners.
 
@@ -652,13 +675,6 @@ Step 5: System Configuration
    * en_US.utf8
    * POSIX
 
-   Find yout locale from `locale -a` commands output then set it with following command.
-
-   .. code-block:: text
-
-     localectl set-locale LANG=en_US.UTF-8
-
-
 #. Optional: Reinstallation for stability:
 
    After installation it may need. Some packages may have minor errors.
@@ -681,9 +697,9 @@ Step 5: System Configuration
 #. Install ZFS in the chroot environment for the new system::
 
      zypper install lsb-release
-     zypper addrepo https://download.opensuse.org/repositories/filesystems/`lsb-release -rs`/filesystems.repo
+     zypper addrepo https://download.opensuse.org/repositories/filesystems/`lsb_release -rs`/filesystems.repo
      zypper refresh   # Refresh all repositories
-     zypper install zfs
+     zypper install zfs zfs-kmp-default
 
 #. For LUKS installs only, setup ``/etc/crypttab``::
 
@@ -807,10 +823,13 @@ Step 6: Kernel Installation
 
      echo 'zfs'>> /etc/modules-load.d/zfs.conf
 
+#. Kernel version of livecd can differ from currently installed version. Than, check kernel version of you new OS::
+
+     kernel_version=$(find /mnt/boot/vmlinuz-* | grep -Eo '[[:digit:]]*\.[[:digit:]]*\.[[:digit:]]*\-.*-default')
 
 #. Refresh kernel files::
 
-     kernel-install add $(uname -r) /boot/vmlinuz-$(uname -r)
+     kernel-install add "$kernel_version" /boot/vmlinuz-"$kernel_version"
 
 #. Refresh the initrd files::
 
@@ -840,12 +859,6 @@ Step 7: Grub2 Installation
 
    then go back to `grub2-probe` step.
 
-
-#. Workaround GRUB's missing zpool-features support::
-
-     vi /etc/default/grub
-     # Set: GRUB_CMDLINE_LINUX="root=ZFS=rpool/ROOT/suse"
-
 #. Optional (but highly recommended): Make debugging GRUB easier::
 
      vi /etc/default/grub
@@ -864,7 +877,18 @@ Step 7: Grub2 Installation
    **Note:** If you have had trouble with the grub2 installation, I suggest you use systemd-boot.
    **Note:** If this command don't gives any output, use classic grub.cfg generation with following command:
    ``grub2-mkconfig -o /boot/grub2/grub.cfg``
+   
+#. Check, that ``/boot/grub2/grub.cfg`` have the menuentry have a ``root=ZFS=rpool/ROOT/suse`` in a line, like this::
 
+     linux   /boot@/vmlinuz-5.3.18-150300.59.60-default root=ZFS=rpool/ROOT/suse
+
+   If not, change ``/etc/default/grub``::
+   
+     vi /etc/default/grub
+     # Set: GRUB_CMDLINE_LINUX="root=ZFS=rpool/ROOT/suse"   
+
+   and repeat previous step.
+    
 #. Install the boot loader:
 
    #. For legacy (BIOS) booting, install GRUB to the MBR::
@@ -1074,6 +1098,16 @@ available. There is `a bug report upstream
    compression algorithm can reduce I/O. The exception is all-zero pages,
    which are dropped by ZFS; but some form of compression has to be enabled
    to get this behavior.
+   
+   **Hints:** If you saw warning about uncorrect volblocksize, recreate swap device:
+  
+   ::
+    
+     zfs destroy rpool/swap
+     zfs create -V 4G -o compression=zle \
+         -o logbias=throughput -o sync=always \
+         -o primarycache=metadata -o secondarycache=none \
+         -o com.sun:auto-snapshot=false rpool/swap   
 
 #. Configure the swap device:
 
@@ -1101,6 +1135,10 @@ Step 12: Final Cleanup
 
 #. Wait for the system to boot normally. Login using the account you
    created. Ensure the system (including networking) works normally.
+
+#. Configure locale: Find your locale from `locale -a` commands output then set it with following command::
+
+     localectl set-locale LANG=en_US.UTF-8
 
 #. Optional: Delete the snapshots of the initial installation::
 
