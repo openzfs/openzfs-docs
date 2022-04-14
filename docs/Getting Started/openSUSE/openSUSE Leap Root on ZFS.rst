@@ -21,11 +21,9 @@ Caution
   with zypper without Yast2 used in this page is based on openSUSE installation methods written by the
   experience of the people in the community.
   For more information about this, please look at the external links.
-- You can use unofficial scripts-pack `LroZ <https://github.com/ndruba/LroZ>`__ (Linux Root On Zfs), based on this manual and automated most steps. 
 
 System Requirements
 ~~~~~~~~~~~~~~~~~~~
-
 
 - `64-bit openSUSE Leap Live CD w/ GUI (e.g. gnome iso)
   <https://software.opensuse.org/distributions/leap>`__
@@ -98,11 +96,16 @@ entered at the console. Performance is good, but LUKS sits underneath ZFS, so
 if multiple disks (mirror or raidz topologies) are used, the data has to be
 encrypted once per disk.
 
+Notes
+~~~~~~~
+
+- You can use unofficial scripts-pack `LroZ <https://github.com/ndruba/LroZ>`__ (Linux Root On Zfs), based on this manual and automated most steps. 
+
 Step 1: Prepare The Install Environment
 ---------------------------------------
 
 #. Boot the openSUSE Live CD. If prompted, login with the username
-   ``live`` and password ``live``. Connect your system to the Internet as
+   ``linux`` without password. Connect your system to the Internet as
    appropriate (e.g. join your WiFi network). Open a terminal.
 
 #. Check your openSUSE Leap release::
@@ -110,11 +113,9 @@ Step 1: Prepare The Install Environment
     lsb_release -d
     Description:    openSUSE Leap {$release}
 
-..note: This {$release} variable will affect your installation. Please make sure you have written your release data correctly in the repo url to avoid package dependency problem.
-
 #. Setup and update the repositories::
 
-     sudo zypper addrepo https://download.opensuse.org/repositories/filesystems/`lsb_release -rs`/filesystems.repo
+     sudo zypper addrepo https://download.opensuse.org/repositories/filesystems/$(lsb_release -rs)/filesystems.repo
      sudo zypper refresh   # Refresh all repositories
 
 #. Optional: Install and start the OpenSSH server in the Live CD environment:
@@ -129,14 +130,12 @@ Step 1: Prepare The Install Environment
    ``ip addr show scope global | grep inet``. Then, from your main machine,
    connect with ``ssh user@IP``. Do not forget to set the password for user by ``passwd``.
 
-
 #. Disable automounting:
 
    If the disk has been used before (with partitions at the same offsets),
    previous filesystems (e.g. the ESP) will automount if not disabled::
 
      gsettings set org.gnome.desktop.media-handling automount false
-
 
 #. Become root::
 
@@ -190,11 +189,7 @@ Step 2: Disk Formatting
    If you get a message about the kernel still using the old partition table,
    reboot and start over (except that you can skip this step).
 
-
 #. Partition your disk(s):
-
-
-
 
    Run this if you need legacy (BIOS) booting::
 
@@ -221,7 +216,7 @@ Step 2: Disk Formatting
    **Hints:**
 
    - If you want to use only legacy or only UEFI booting, you do not have nessecary to do both partition, only legacy or only UEFI, respectively.
-   - For grub 2.04 (Leap 15.3) not worked creating boot pool with some features disabled. root pool also required some features disabling or ``grub2-install`` was not worked correctly.
+   - For grub 2.04 (Leap 15.3) not worked creating only boot pool with some features disabled. root pool also required some features disabling or ``grub2-install`` was not worked correctly. Because of this, creating separately pool for ``/boot`` directory dont have a reasons. 
    - If you are creating a mirror or raidz topology, repeat the partitioning commands for all the disks which will be part of the pool.
 
 #. Create the boot pool::
@@ -427,7 +422,7 @@ Step 2: Disk Formatting
        -o feature@spacemap_histogram=enabled \
        -o feature@zpool_checkpoint=enabled \
        
-     for you root pool. Relevant for grub 2.04 and Leap 15.3. Don't use zpool upgrade after installation complete or you will lost the possibility to use grub2-install command.
+     for you root pool. Relevant for grub 2.04 and Leap 15.3. Don't use zpool upgrade for this pool after installation complete or you will lost the possibility to use grub2-install command.
 
 Step 3: System Installation
 ---------------------------
@@ -557,10 +552,10 @@ Step 4. Install System
 
 #. Add repositories into chrooting directory::
 
-     zypper --root /mnt ar http://download.opensuse.org/distribution/leap/`lsb_release -rs`/repo/non-oss  non-oss
-     zypper --root /mnt ar http://download.opensuse.org/distribution/leap/`lsb_release -rs`/repo/oss oss
-     zypper --root /mnt ar http://download.opensuse.org/update/leap/`lsb_release -rs`/oss  update-oss
-     zypper --root /mnt ar http://download.opensuse.org/update/leap/`lsb_release -rs`/non-oss update-nonoss
+     zypper --root /mnt ar http://download.opensuse.org/distribution/leap/$(lsb_release -rs)/repo/non-oss  non-oss
+     zypper --root /mnt ar http://download.opensuse.org/distribution/leap/$(lsb_release -rs)/repo/oss oss
+     zypper --root /mnt ar http://download.opensuse.org/update/leap/$(lsb_release -rs)/oss  update-oss
+     zypper --root /mnt ar http://download.opensuse.org/update/leap/$(lsb_release -rs)/non-oss update-nonoss
 
 #. Generate repository indexes::
 
@@ -641,7 +636,7 @@ Step 5: System Configuration
      rm /mnt/etc/resolv.conf
      cp /etc/resolv.conf /mnt/etc/
      
-   You will reconfigure network with yast2.  
+   You will reconfigure network with yast2 later.  
 
 #. Bind the virtual filesystems from the LiveCD environment to the new
    system and ``chroot`` into it::
@@ -669,7 +664,7 @@ Step 5: System Configuration
    Output must include that languages:
 
    * C
-   * C.UTF-8
+   * C.utf8
    * en_US.utf8
    * POSIX
 
@@ -690,7 +685,7 @@ Step 5: System Configuration
 
      zypper install kernel-default kernel-firmware
 
-   .. note:: If you installed `base` pattern, you need to deinstall busybox-grep to install `kernel-default` package.
+   **Note:** If you installed `base` pattern, you need to deinstall busybox-grep to install `kernel-default` package.
 
 #. Install ZFS in the chroot environment for the new system::
 
@@ -770,7 +765,7 @@ Step 5: System Configuration
 
      passwd
 
-#. Enable importing bpool
+#. Enable importing bpool (Of cource, if you created them)
 
    This ensures that ``bpool`` is always imported, regardless of whether
    ``/etc/zfs/zpool.cache`` exists, whether it is in the cachefile or not,
