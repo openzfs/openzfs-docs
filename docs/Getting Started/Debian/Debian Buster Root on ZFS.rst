@@ -177,6 +177,7 @@ Step 2: Disk Formatting
      from ``/dev/disk/by-id``, use ``/dev/vda`` if you are using KVM with
      virtio; otherwise, read the `troubleshooting <#troubleshooting>`__
      section.
+   - For a mirror or raidz topology, use ``DISK1``, ``DISK2``, etc.
 
 #. If you are re-using a disk, clear it as necessary:
 
