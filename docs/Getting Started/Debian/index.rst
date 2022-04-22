@@ -19,12 +19,12 @@ often provides newer releases of ZFS. You can use it as follows.
 
 Add the backports repository::
 
-  vi /etc/apt/sources.list.d/buster-backports.list
+  vi /etc/apt/sources.list.d/bullseye-backports.list
 
 .. code-block:: sourceslist
 
-   deb http://deb.debian.org/debian buster-backports main contrib
-   deb-src http://deb.debian.org/debian buster-backports main contrib
+   deb http://deb.debian.org/debian bullseye-backports main contrib
+   deb-src http://deb.debian.org/debian bullseye-backports main contrib
 
 ::
 
@@ -33,7 +33,7 @@ Add the backports repository::
 .. code-block:: control
 
   Package: libnvpair1linux libnvpair3linux libuutil1linux libuutil3linux libzfs2linux libzfs4linux libzpool2linux libzpool4linux spl-dkms zfs-dkms zfs-test zfsutils-linux zfsutils-linux-dev zfs-zed
-  Pin: release n=buster-backports
+  Pin: release n=bullseye-backports
   Pin-Priority: 990
 
 Install the packages::
