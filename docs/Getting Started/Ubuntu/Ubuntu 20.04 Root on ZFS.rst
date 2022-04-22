@@ -6,6 +6,12 @@ Ubuntu 20.04 Root on ZFS
 .. contents:: Table of Contents
   :local:
 
+Newer release available
+-----------------------
+
+- See :doc:`Ubuntu 22.04 Root on ZFS <./Ubuntu 22.04 Root on ZFS>` for new
+  installs.
+
 Errata
 ------
 

@@ -9,9 +9,6 @@ Ubuntu 22.04 Root on ZFS
 Overview
 --------
 
-.. note::
-  Ubuntu 22.04 has not been released yet.  These are beta instructions.
-
 Ubuntu Installer
 ~~~~~~~~~~~~~~~~
 
