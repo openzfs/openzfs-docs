@@ -1,6 +1,6 @@
 .. highlight:: sh
 
-Ubuntu 20.04 Root on ZFS for Raspberry Pi
+Ubuntu 22.04 Root on ZFS for Raspberry Pi
 =========================================
 
 .. contents:: Table of Contents
@@ -9,11 +9,10 @@ Ubuntu 20.04 Root on ZFS for Raspberry Pi
 Overview
 --------
 
-Newer release available
-~~~~~~~~~~~~~~~~~~~~~~~
-
-- See :doc:`Ubuntu 22.04 Root on ZFS for Raspberry Pi <./Ubuntu 22.04 Root on ZFS for Raspberry Pi>` for new
-  installs.
+.. note::
+  These are beta instructions. The author still needs to test them.
+  Additionally, it may be possible to use U-Boot now, which would eliminate
+  some of the customizations.
 
 Caution
 ~~~~~~~
@@ -25,9 +24,9 @@ System Requirements
 ~~~~~~~~~~~~~~~~~~~
 
 - A Raspberry Pi 4 B. (If you are looking to install on a regular PC, see
-  :doc:`Ubuntu 20.04 Root on ZFS`.)
-- `Ubuntu Server 20.04.4 (“Focal”) for Raspberry Pi 4
-  <https://cdimage.ubuntu.com/releases/20.04.4/release/ubuntu-20.04.4-preinstalled-server-arm64+raspi.img.xz>`__
+  :doc:`Ubuntu 22.04 Root on ZFS`.)
+- `Ubuntu Server 22.04 (“Jammy”) for Raspberry Pi 4
+  <https://cdimage.ubuntu.com/releases/22.04/release/ubuntu-22.04-preinstalled-server-arm64+raspi.img.xz>`__
 - A microSD card or USB disk. For microSD card recommendations, see Jeff
   Geerling's `performance comparison
   <https://www.jeffgeerling.com/blog/2019/raspberry-pi-microsd-card-performance-comparison-2019>`__.
@@ -51,7 +50,7 @@ If you need help, reach out to the community using the :ref:`mailing_lists` or I
 `#zfsonlinux <ircs://irc.libera.chat/#zfsonlinux>`__ on `Libera Chat
 <https://libera.chat/>`__. If you have a bug report or feature request
 related to this HOWTO, please `file a new issue and mention @rlaager
-<https://github.com/openzfs/openzfs-docs/issues/new?body=@rlaager,%20I%20have%20the%20following%20issue%20with%20the%20Ubuntu%2020.04%20Root%20on%20ZFS%20for%20Raspberry%20Pi%20HOWTO:>`__.
+<https://github.com/openzfs/openzfs-docs/issues/new?body=@rlaager,%20I%20have%20the%20following%20issue%20with%20the%20Ubuntu%2022.04%20Root%20on%20ZFS%20for%20Raspberry%20Pi%20HOWTO:>`__.
 
 Contributing
 ~~~~~~~~~~~~
@@ -162,31 +161,31 @@ be deleted.
 
 #. Download and unpack the official image::
 
-    curl -O https://cdimage.ubuntu.com/releases/20.04.4/release/ubuntu-20.04.4-preinstalled-server-arm64+raspi.img.xz
-    xz -d ubuntu-20.04.4-preinstalled-server-arm64+raspi.img.xz
+    curl -O https://cdimage.ubuntu.com/releases/22.04/release/ubuntu-22.04-preinstalled-server-arm64+raspi.img.xz
+    xz -d ubuntu-22.04-preinstalled-server-arm64+raspi.img.xz
 
     # or combine them to decompress as you download:
-    curl https://cdimage.ubuntu.com/releases/20.04.4/release/ubuntu-20.04.4-preinstalled-server-arm64+raspi.img.xz | \
-        xz -d > ubuntu-20.04.4-preinstalled-server-arm64+raspi.img
+    curl https://cdimage.ubuntu.com/releases/22.04/release/ubuntu-22.04-preinstalled-server-arm64+raspi.img.xz | \
+        xz -d > ubuntu-22.04-preinstalled-server-arm64+raspi.img
 
 #. Dump the partition table for the image::
 
-     sfdisk -d ubuntu-20.04.4-preinstalled-server-arm64+raspi.img
+     sfdisk -d ubuntu-22.04-preinstalled-server-arm64+raspi.img
 
    That will output this::
 
      label: dos
-     label-id: 0xddbefb06
-     device: ubuntu-20.04.4-preinstalled-server-arm64+raspi.img
+     label-id: 0x638274e3
+     device: ubuntu-22.04-preinstalled-server-arm64+raspi.img
      unit: sectors
 
      <name>.img1 : start=        2048, size=      524288, type=c, bootable
-     <name>.img2 : start=      526336, size=     6285628, type=83
+     <name>.img2 : start=      526336, size=     7129360, type=83
 
-   The important numbers are 524288 and 6285628.  Store those in variables::
+   The important numbers are 524288 and 7129360.  Store those in variables::
 
      BOOT=524288
-     ROOT=6285628
+     ROOT=7129360
 
 #. Create a partition script::
 
@@ -257,7 +256,7 @@ be deleted.
 #. Loopback mount the image::
 
      IMG=$(sudo losetup -fP --show \
-               ubuntu-20.04.4-preinstalled-server-arm64+raspi.img)
+               ubuntu-22.04-preinstalled-server-arm64+raspi.img)
 
 #. Copy the bootloader data::
 
@@ -633,21 +632,6 @@ Step 4: System Configuration
      addgroup --system lpadmin
      addgroup --system sambashare
 
-#. Patch a dependency loop:
-
-   For ZFS native encryption or LUKS::
-
-     apt install --yes curl patch
-
-     curl https://launchpadlibrarian.net/478315221/2150-fix-systemd-dependency-loops.patch | \
-         sed "s|/etc|/lib|;s|\.in$||" | (cd / ; patch -p1)
-
-   Ignore the failure in Hunk #2 (say ``n`` twice).
-
-   This patch is from `Bug #1875577 Encrypted swap won't load on 20.04 with
-   zfs root
-   <https://bugs.launchpad.net/ubuntu/+source/zfs-linux/+bug/1875577>`__.
-
 #. Fix filesystem mount ordering:
 
    We need to activate ``zfs-mount-generator``. This makes systemd aware of
@@ -660,7 +644,6 @@ Step 4: System Configuration
 
      mkdir /etc/zfs/zfs-list.cache
      touch /etc/zfs/zfs-list.cache/rpool
-     ln -s /usr/lib/zfs-linux/zed.d/history_event-zfs-list-cacher.sh /etc/zfs/zed.d
      zed -F &
 
    Force a cache update::
