@@ -19,7 +19,7 @@ often provides newer releases of ZFS. You can use it as follows.
 
 Add the backports repository::
 
-  vi /etc/apt/sources.list.d/buster-backports.list
+  vi /etc/apt/sources.list.d/bullseye-backports.list
 
 .. code-block:: sourceslist
 
