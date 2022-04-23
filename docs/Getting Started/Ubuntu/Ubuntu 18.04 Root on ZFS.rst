@@ -142,6 +142,11 @@ especially on systems that have more than one storage pool.
   KVM with virtio; otherwise, read the
   `troubleshooting <#troubleshooting>`__ section.
 - For a mirror or raidz topology, use ``DISK1``, ``DISK2``, etc.
+- When choosing a boot pool size, consider how you will use the space. A kernel
+  and initrd may consume around 100M. If you have multiple kernels and take
+  snapshots, you may find yourself low on boot pool space, especially if you
+  need to regenerate your initramfs images, which may be around 85M each. Size
+  your boot pool appropriately for your needs.
 
 2.2 If you are re-using a disk, clear it as necessary:
 
