@@ -898,7 +898,7 @@ Step 8: Full Software Installation
 
 ::
 
-  # tasksel
+  # tasksel --new-install
 
 8.3 Optional: Disable log compression:
 
