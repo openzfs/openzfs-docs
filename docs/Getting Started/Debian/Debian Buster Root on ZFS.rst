@@ -986,7 +986,10 @@ Step 8: Full Software Installation
 
 #. Install a regular set of software::
 
-     tasksel
+     tasksel --new-install
+
+   **Note:** This will check "Debian desktop environment" and "print server"
+   by default.  If you want a server installation, unselect those.
 
 #. Optional: Disable log compression:
 

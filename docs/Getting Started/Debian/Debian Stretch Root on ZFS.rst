@@ -900,6 +900,9 @@ Step 8: Full Software Installation
 
   # tasksel
 
+**Note:** This will check "Debian desktop environment" and "print server"
+by default.  If you want a server installation, unselect those.
+
 8.3 Optional: Disable log compression:
 
 As ``/var/log`` is already compressed by ZFS, logrotate’s compression is
