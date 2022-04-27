@@ -735,6 +735,7 @@ Step 4: System Configuration
    unlocking::
 
      apt install --yes --no-install-recommends dropbear-initramfs
+     mkdir -p /etc/dropbear-initramfs
 
      # Optional: Convert OpenSSH server keys for Dropbear
      for type in ecdsa ed25519 rsa ; do
