@@ -737,6 +737,7 @@ Step 4: System Configuration
      apt install --yes --no-install-recommends dropbear-initramfs
 
      # Optional: Convert OpenSSH server keys for Dropbear
+     mkdir /etc/dropbear-initramfs
      for type in ecdsa ed25519 rsa ; do
          cp /etc/ssh/ssh_host_${type}_key /tmp/openssh.key
          ssh-keygen -p -N "" -m PEM -f /tmp/openssh.key
