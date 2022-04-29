@@ -435,8 +435,10 @@ Step 3: System Installation
 
    On Solaris systems, the root filesystem is cloned and the suffix is
    incremented for major system changes through ``pkg image-update`` or
-   ``beadm``. Similar functionality has been implemented in Ubuntu 20.04 with
-   the ``zsys`` tool, though its dataset layout is more complicated. Even
+   ``beadm``. Similar functionality was implemented in Ubuntu with the
+   ``zsys`` tool, though its dataset layout is more complicated, and ``zsys``
+   `is on life support
+   <https://bugs.launchpad.net/ubuntu/+source/ubiquity/+bug/1968150>`__. Even
    without such a tool, the `rpool/ROOT` and `bpool/BOOT` containers can still
    be used for manually created clones. That said, this HOWTO assumes a single
    filesystem for ``/boot`` for simplicity.
