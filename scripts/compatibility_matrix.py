@@ -48,11 +48,12 @@ def openzfs():
 
 def openzfsonosx():
     sources = {'master': 'https://raw.githubusercontent.com/openzfsonosx/'
-               'zfs/master/man/man5/zpool-features.5'}
-    with urlopen('https://api.github.com/repos/openzfsonosx/zfs/tags') as web:
+               'openzfs/master/man/man5/zpool-features.5'}
+    with urlopen('https://api.github.com/repos/openzfsonosx/openzfs/tags') as web:
         try:
             tags = dejson(web.read().decode('utf-8', 'ignore'))
-            tags = [x['name'].lstrip('zfs-') for x in tags]
+            tags = [x['name'].lstrip('zfs-macOS-') for x in tags]
+            tags = [tag for tag in tags if '.99' not in tag] 
             tags.sort()
             latest = tags[-1]
             tags = [tag for tag in tags if 'rc' not in tag]
@@ -63,8 +64,8 @@ def openzfsonosx():
         except Exception:
             tags = []
     for ver in tags:
-        sources[ver] = ('https://raw.githubusercontent.com/openzfsonosx/zfs/'
-                        'zfs-{}/man/man5/zpool-features.5'.format(ver))
+        sources[ver] = ('https://raw.githubusercontent.com/openzfsonosx/openzfs/'
+                        'zfs-macOS-{}/man/man5/zpool-features.5'.format(ver))
     return sources
 
 
@@ -95,7 +96,7 @@ def freebsd_pre_openzfs():
 
 def omniosce():
     sources = {'master': 'https://raw.githubusercontent.com/omniosorg/'
-               'illumos-omnios/master/usr/src/man/man5/zpool-features.5'}
+               'illumos-omnios/master/usr/src/man/man7/zpool-features.7'}
     with urlopen('https://omniosce.org/releasenotes.html') as web:
         versions = findall(r'omnios-build/blob/(r[0-9]+)',
                            web.read().decode('utf-8', 'ignore'))
@@ -110,7 +111,7 @@ def omniosce():
 
 def joyent():
     sources = {'master': 'https://raw.githubusercontent.com/joyent/'
-               'illumos-joyent/master/usr/src/man/man5/zpool-features.5'}
+               'illumos-joyent/master/usr/src/man/man7/zpool-features.7'}
     return sources
 
 
@@ -156,7 +157,7 @@ sources = {
         'Nexenta': nexenta(),
         'Illumos': {
             'master': 'https://raw.githubusercontent.com/illumos/illumos-gate/'
-                      'master/usr/src/man/man5/zpool-features.5',
+                      'master/usr/src/man/man7/zpool-features.7',
             },
         # 'OpenZFS on Windows': {
         #    'master': 'https://raw.githubusercontent.com/openzfsonwindows/ZFSin/master/ZFSin/zfs/man/man5/zpool-features.5',
