@@ -161,7 +161,9 @@ you.
       back anywhere in the system and your pool will still be
       automatically imported correctly.
    -  Drawbacks: Configuring redundancy groups based on physical
-      location becomes difficult and error prone.
+      location becomes difficult and error prone. Unreliable on many
+      personal virtual machine setups because the software does not
+      generate persistent unique names by default.
    -  Example:
       ``zpool create tank scsi-SATA_Hitachi_HTS7220071201DP1D10DGG6HMRP``
 
@@ -207,6 +209,19 @@ you.
       benefits, the drawbacks of /dev/disk/by-id or /dev/disk/by-path
       may apply depending on the naming method employed.
    -  Example: ``zpool create tank mirror A1 B1 mirror A2 B2``
+
+-  **/dev/disk/by-uuid/:** Not a great option
+  -   Summary: One might think from the use of "UUID" that this would
+      be an ideal option - however, in practice, this ends up listing
+      one device per **pool** ID, which is not very useful for importing
+      pools with multiple disks.
+
+-  **/dev/disk/by-partuuid/**/**by-partlabel:** Great for existing pools
+  -   Summary: Entries per partition unique identifier, great! 
+  -   Drawbacks: ...except you can't refer to a partition unique ID on
+      an unpartitioned disk for ``zpool replace``/``add``/``attach``,
+      now can you? Also not useful if you didn't have a mapping written
+      down ahead of time if you need to figure out which disk failed later.
 
 Setting up the /etc/zfs/vdev_id.conf file
 -----------------------------------------
