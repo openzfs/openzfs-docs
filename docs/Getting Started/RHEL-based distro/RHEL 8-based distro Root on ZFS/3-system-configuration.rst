@@ -87,6 +87,7 @@ System Configuration
     INST_VDEV=$INST_VDEV
     INST_VDEV=$INST_VDEV
     DISK=\"$DISK\"" > /mnt/root/chroot
+    history -w /mnt/home/sys-install-pre-chroot.txt
     arch-chroot /mnt bash --login
 
 #. Source variables::

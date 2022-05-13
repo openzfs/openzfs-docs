@@ -7,11 +7,11 @@ Preparation
    :local:
 
 #. Disable Secure Boot. ZFS modules can not be loaded if Secure Boot is enabled.
-#. Download a variant of Fedora 35 live image
+#. Download a variant of Fedora 36 live image
    and boot from it.
 
-   - `Fedora Workstation (GNOME) <https://download.fedoraproject.org/pub/fedora/linux/releases/35/Workstation/x86_64/iso/>`__
-   - `Fedora Spins (Xfce, i3, ...) <https://download.fedoraproject.org/pub/fedora/linux/releases/35/Spins/x86_64/iso/>`__
+   - `Fedora Workstation (GNOME) <https://download.fedoraproject.org/pub/fedora/linux/releases/36/Workstation/x86_64/iso/>`__
+   - `Fedora Spins (Xfce, i3, ...) <https://download.fedoraproject.org/pub/fedora/linux/releases/36/Spins/x86_64/iso/>`__
 
 #. Set root password or ``/root/.ssh/authorized_keys``.
 #. Start SSH server::
@@ -56,7 +56,7 @@ Preparation
 
 #. Target Fedora version::
 
-    INST_FEDORA_VER='35'
+    INST_FEDORA_VER=${VERSION_ID}
 
 #. Unique pool suffix. ZFS expects pool names to be
    unique, therefore it's recommended to create

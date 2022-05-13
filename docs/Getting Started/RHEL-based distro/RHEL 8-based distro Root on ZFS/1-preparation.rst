@@ -53,12 +53,12 @@ Preparation
 
 #. Install helper script and partition tool::
 
-    rpm -ivh --nodeps https://dl.fedoraproject.org/pub/fedora/linux/releases/35/Everything/x86_64/os/Packages/a/arch-install-scripts-24-2.fc35.noarch.rpm
+    rpm -ivh --nodeps https://dl.fedoraproject.org/pub/fedora/linux/releases/36/Everything/x86_64/os/Packages/a/arch-install-scripts-24-3.fc36.noarch.rpm
     dnf install -y gdisk dosfstools
 
-#. Set RHEL version::
+#. Set RHEL major version::
 
-    INST_RHEL_VER=8
+    INST_RHEL_VER=${VERSION_ID%%.*}
 
 #. Unique pool suffix. ZFS expects pool names to be
    unique, therefore it's recommended to create
