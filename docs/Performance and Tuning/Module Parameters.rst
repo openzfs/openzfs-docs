@@ -4532,7 +4532,7 @@ When to change                 TBD
 Data Type                      uint
 Units                          intervals
 Range                          1 to UINT_MAX
-Default                        10
+Default                        20 since v0.8, previously 10
 Change                         Dynamic
 Versions Affected              v0.7.0 and later
 ============================== ====================================
@@ -4565,7 +4565,7 @@ When to change               TBD
 Data Type                    uint
 Units                        intervals
 Range                        0 to UINT_MAX
-Default                      5
+Default                      10 since v0.8, previously 5
 Change                       Dynamic
 Versions Affected            v0.7.0 and later
 ============================ ====================================
