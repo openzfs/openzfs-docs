@@ -62,6 +62,10 @@ System installation
     zfs snapshot -r rpool_$INST_UUID/$INST_ID@install_start
     zfs snapshot -r bpool_$INST_UUID/$INST_ID@install_start
 
+#. Back up bash inputs::
+
+    history -w /mnt/home/sys-install-pre-chroot.txt
+
 #. Apply configuration
 
    If root password hash is not set::

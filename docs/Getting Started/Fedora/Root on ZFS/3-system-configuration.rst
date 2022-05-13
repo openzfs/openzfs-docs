@@ -91,6 +91,8 @@ System Configuration
     unalias -a
     INST_VDEV=$INST_VDEV
     DISK=\"$DISK\"" > /mnt/root/chroot
+    #backup bash inputs up to this point
+    history -w /mnt/home/sys-install-pre-chroot.txt
     arch-chroot /mnt bash --login
 
 #. Source variables::
