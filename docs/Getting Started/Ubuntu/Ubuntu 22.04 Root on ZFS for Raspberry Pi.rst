@@ -370,7 +370,7 @@ Step 2: Setup ZFS
        zpool create \
            -o ashift=12 \
            -O acltype=posixacl -O canmount=off -O compression=lz4 \
-           -O dnodesize=auto -O normalization=formD -O relatime=on \
+           -O dnodesize=auto -O relatime=on \
            -O xattr=sa -O mountpoint=/ -R /mnt \
            rpool ${DISKP}2
 
@@ -383,7 +383,7 @@ Step 2: Setup ZFS
            -O encryption=aes-256-gcm \
            -O keylocation=prompt -O keyformat=passphrase \
            -O acltype=posixacl -O canmount=off -O compression=lz4 \
-           -O dnodesize=auto -O normalization=formD -O relatime=on \
+           -O dnodesize=auto -O relatime=on \
            -O xattr=sa -O mountpoint=/ -R /mnt \
            rpool ${DISKP}2
 
@@ -394,7 +394,7 @@ Step 2: Setup ZFS
        zpool create \
            -o ashift=12 \
            -O acltype=posixacl -O canmount=off -O compression=lz4 \
-           -O dnodesize=auto -O normalization=formD -O relatime=on \
+           -O dnodesize=auto -O relatime=on \
            -O xattr=sa -O mountpoint=/ -R /mnt \
            rpool /dev/mapper/luks1
 
@@ -412,6 +412,8 @@ Step 2: Setup ZFS
      <https://askubuntu.com/questions/970886/journalctl-says-failed-to-search-journal-acl-operation-not-supported>`__
      Also, `disabling ACLs apparently breaks umask handling with NFSv4
      <https://bugs.launchpad.net/ubuntu/+source/nfs-utils/+bug/1779736>`__.
+     A previous version of this guide suggested this setting, but it was 
+     reverted because of those problems.
    - Setting ``normalization=formD`` eliminates some corner cases relating
      to UTF-8 filename normalization. It also implies ``utf8only=on``,
      which means that only UTF-8 filenames are allowed. If you care to

@@ -56,7 +56,6 @@ System Installation
         -O canmount=off \
         -O compression=lz4 \
         -O devices=off \
-        -O normalization=formD \
         -O relatime=on \
         -O xattr=sa \
         -O mountpoint=/boot \
@@ -89,7 +88,6 @@ System Installation
            -O canmount=off \
            -O compression=zstd \
            -O dnodesize=auto \
-           -O normalization=formD \
            -O relatime=on \
            -O xattr=sa \
            -O mountpoint=/ \
@@ -118,6 +116,8 @@ System Installation
      of why requiring UTF-8 filenames may be a bad idea, see `The problems
      with enforced UTF-8 only filenames
      <http://utcc.utoronto.ca/~cks/space/blog/linux/ForcedUTF8Filenames>`__.
+     A previous version of this guide suggested this setting, but it was 
+     reverted because of those problems.
    - ``recordsize`` is unset (leaving it at the default of 128 KiB). If you
      want to tune it (e.g. ``-o recordsize=1M``), see `these
      <https://jrs-s.net/2019/04/03/on-zfs-recordsize/>`__ `various

@@ -145,7 +145,6 @@ root pool will be replaced by keyfile, embedded in initrd.
         -O canmount=off \
         -O compression=lz4 \
         -O devices=off \
-        -O normalization=formD \
         -O relatime=on \
         -O xattr=sa \
         -O mountpoint=/boot \

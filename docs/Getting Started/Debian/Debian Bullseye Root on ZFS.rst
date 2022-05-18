@@ -242,7 +242,7 @@ Step 2: Disk Formatting
          -o feature@spacemap_histogram=enabled \
          -o feature@zpool_checkpoint=enabled \
          -O acltype=posixacl -O canmount=off -O compression=lz4 \
-         -O devices=off -O normalization=formD -O relatime=on -O xattr=sa \
+         -O devices=off -O relatime=on -O xattr=sa \
          -O mountpoint=/boot -R /mnt \
          bpool ${DISK}-part3
 
@@ -304,7 +304,7 @@ Step 2: Disk Formatting
        zpool create \
            -o ashift=12 \
            -O acltype=posixacl -O canmount=off -O compression=lz4 \
-           -O dnodesize=auto -O normalization=formD -O relatime=on \
+           -O dnodesize=auto -O relatime=on \
            -O xattr=sa -O mountpoint=/ -R /mnt \
            rpool ${DISK}-part4
 
@@ -315,7 +315,7 @@ Step 2: Disk Formatting
            -O encryption=aes-256-gcm \
            -O keylocation=prompt -O keyformat=passphrase \
            -O acltype=posixacl -O canmount=off -O compression=lz4 \
-           -O dnodesize=auto -O normalization=formD -O relatime=on \
+           -O dnodesize=auto -O relatime=on \
            -O xattr=sa -O mountpoint=/ -R /mnt \
            rpool ${DISK}-part4
 
@@ -328,7 +328,7 @@ Step 2: Disk Formatting
        zpool create \
            -o ashift=12 \
            -O acltype=posixacl -O canmount=off -O compression=lz4 \
-           -O dnodesize=auto -O normalization=formD -O relatime=on \
+           -O dnodesize=auto -O relatime=on \
            -O xattr=sa -O mountpoint=/ -R /mnt \
            rpool /dev/mapper/luks1
 
@@ -344,13 +344,6 @@ Step 2: Disk Formatting
      ``-o acltype=posixacl`` (note: lowercase “o”) to the ``zfs create``
      for ``/var/log``, as `journald requires ACLs
      <https://askubuntu.com/questions/970886/journalctl-says-failed-to-search-journal-acl-operation-not-supported>`__
-   - Setting ``normalization=formD`` eliminates some corner cases relating
-     to UTF-8 filename normalization. It also implies ``utf8only=on``,
-     which means that only UTF-8 filenames are allowed. If you care to
-     support non-UTF-8 filenames, do not use this option. For a discussion
-     of why requiring UTF-8 filenames may be a bad idea, see `The problems
-     with enforced UTF-8 only filenames
-     <http://utcc.utoronto.ca/~cks/space/blog/linux/ForcedUTF8Filenames>`__.
    - ``recordsize`` is unset (leaving it at the default of 128 KiB). If you
      want to tune it (e.g. ``-o recordsize=1M``), see `these
      <https://jrs-s.net/2019/04/03/on-zfs-recordsize/>`__ `various
@@ -414,6 +407,15 @@ Step 2: Disk Formatting
    - The pool name is arbitrary. If changed, the new name must be used
      consistently. On systems that can automatically install to ZFS, the root
      pool is named ``rpool`` by default.
+   - Setting ``normalization=formD`` eliminates some corner cases relating
+     to UTF-8 filename normalization. It also implies ``utf8only=on``,
+     which means that only UTF-8 filenames are allowed. If you care to
+     support non-UTF-8 filenames, do not use this option. For a discussion
+     of why requiring UTF-8 filenames may be a bad idea, see `The problems
+     with enforced UTF-8 only filenames
+     <http://utcc.utoronto.ca/~cks/space/blog/linux/ForcedUTF8Filenames>`__.
+     A previous version of this guide suggested this setting, but it was 
+     reverted because of those problems.
 
 Step 3: System Installation
 ---------------------------
