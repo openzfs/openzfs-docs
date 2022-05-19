@@ -911,7 +911,8 @@ Step 6: First Boot
          xargs -i{} umount -lf {}
      zpool export -a
 
-#. If this fails for rpool and in initramfs, mounting it on boot may fail and you may need to ``zpool import -f rpool``, then ``exit`` in the initamfs prompt.
+#. If this fails for rpool, mounting it on boot will fail and you will need to
+   ``zpool import -f rpool``, then ``exit`` in the initamfs prompt.
 
 #. Reboot::
 
