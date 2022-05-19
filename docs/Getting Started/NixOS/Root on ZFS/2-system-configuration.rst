@@ -172,7 +172,7 @@ System Configuration
       zfs create \
        -o canmount=off \
        -o mountpoint=none \
-       -o encryption=aes-256-gcm \
+       -o encryption=on \
        -o keylocation=prompt \
        -o keyformat=passphrase \
        rpool_$INST_UUID/$INST_ID

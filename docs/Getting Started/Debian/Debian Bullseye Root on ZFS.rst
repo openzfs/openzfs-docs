@@ -312,7 +312,7 @@ Step 2: Disk Formatting
 
        zpool create \
            -o ashift=12 \
-           -O encryption=aes-256-gcm \
+           -O encryption=on \
            -O keylocation=prompt -O keyformat=passphrase \
            -O acltype=posixacl -O canmount=off -O compression=lz4 \
            -O dnodesize=auto -O normalization=formD -O relatime=on \
