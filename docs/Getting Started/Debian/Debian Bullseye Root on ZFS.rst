@@ -870,10 +870,7 @@ Step 5: GRUB Installation
 
    If either is empty, force a cache update and check again::
 
-     zfs set canmount=off    bpool/BOOT/debian
      zfs set canmount=on     bpool/BOOT/debian
-
-     zfs set canmount=off    rpool/ROOT/debian
      zfs set canmount=noauto rpool/ROOT/debian
 
    If they are still empty, stop zed (as below), start zed (as above) and try
