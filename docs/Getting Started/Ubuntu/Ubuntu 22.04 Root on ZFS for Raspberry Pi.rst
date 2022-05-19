@@ -453,15 +453,9 @@ Step 2: Setup ZFS
    - Make sure to include the ``-part4`` portion of the drive path. If you
      forget that, you are specifying the whole disk, which ZFS will then
      re-partition, and you will lose the bootloader partition(s).
-   - ZFS native encryption defaults to ``aes-256-ccm``, but `the default has
-     changed upstream
+   - ZFS native encryption `now
      <https://github.com/openzfs/zfs/commit/31b160f0a6c673c8f926233af2ed6d5354808393>`__
-     to ``aes-256-gcm``. `AES-GCM seems to be generally preferred over AES-CCM
-     <https://crypto.stackexchange.com/questions/6842/how-to-choose-between-aes-ccm-and-aes-gcm-for-storage-volume-encryption>`__,
-     `is faster now
-     <https://github.com/zfsonlinux/zfs/pull/9749#issuecomment-569132997>`__,
-     and `will be even faster in the future
-     <https://github.com/zfsonlinux/zfs/pull/9749>`__.
+     defaults to ``aes-256-gcm``.
    - For LUKS, the key size chosen is 512 bits. However, XTS mode requires two
      keys, so the LUKS key is split in half. Thus, ``-s 512`` means AES-256.
    - Your passphrase will likely be the weakest link. Choose wisely. See
