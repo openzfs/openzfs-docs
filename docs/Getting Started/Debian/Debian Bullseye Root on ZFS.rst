@@ -227,7 +227,7 @@ Step 2: Disk Formatting
 
      zpool create \
          -o cachefile=/etc/zfs/zpool.cache \
-         -o ashift=12 -d \
+         -o ashift=12 -o autotrim=on -d \
          -o feature@async_destroy=enabled \
          -o feature@bookmarks=enabled \
          -o feature@embedded_data=enabled \
@@ -302,7 +302,7 @@ Step 2: Disk Formatting
    - Unencrypted::
 
        zpool create \
-           -o ashift=12 \
+           -o ashift=12 -o autotrim=on \
            -O acltype=posixacl -O canmount=off -O compression=lz4 \
            -O dnodesize=auto -O normalization=formD -O relatime=on \
            -O xattr=sa -O mountpoint=/ -R /mnt \
@@ -311,7 +311,7 @@ Step 2: Disk Formatting
    - ZFS native encryption::
 
        zpool create \
-           -o ashift=12 \
+           -o ashift=12 -o autotrim=on \
            -O encryption=on \
            -O keylocation=prompt -O keyformat=passphrase \
            -O acltype=posixacl -O canmount=off -O compression=lz4 \
@@ -325,7 +325,7 @@ Step 2: Disk Formatting
 
        cryptsetup luksFormat -c aes-xts-plain64 -s 512 -h sha256 ${DISK}-part4
        cryptsetup luksOpen ${DISK}-part4 luks1
-       zpool create \
+       zpool create -o autotrim=on \
            -o ashift=12 \
            -O acltype=posixacl -O canmount=off -O compression=lz4 \
            -O dnodesize=auto -O normalization=formD -O relatime=on \
