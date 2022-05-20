@@ -439,70 +439,58 @@ Step 3: System Installation
 
 #. Create datasets::
 
-     zfs create                                 rpool/home
-     zfs create -o mountpoint=/root             rpool/home/root
+     zfs create                     rpool/home
+     zfs create -o mountpoint=/root rpool/home/root
      chmod 700 /mnt/root
-     zfs create -o canmount=off                 rpool/var
-     zfs create -o canmount=off                 rpool/var/lib
-     zfs create                                 rpool/var/log
-     zfs create                                 rpool/var/spool
+     zfs create -o canmount=off     rpool/var
+     zfs create -o canmount=off     rpool/var/lib
+     zfs create                     rpool/var/log
+     zfs create                     rpool/var/spool
 
    The datasets below are optional, depending on your preferences and/or
    software choices.
 
-   If you wish to exclude these from snapshots::
+   If you wish to separate these to exclude them from snapshots::
 
-     zfs create -o com.sun:auto-snapshot=false  rpool/var/cache
-     zfs create -o com.sun:auto-snapshot=false  rpool/var/tmp
+     zfs create -o com.sun:auto-snapshot=false rpool/var/cache
+     zfs create -o com.sun:auto-snapshot=false rpool/var/lib/nfs
+     zfs create -o com.sun:auto-snapshot=false rpool/var/tmp
      chmod 1777 /mnt/var/tmp
-
-   If you use /opt on this system::
-
-     zfs create                                 rpool/opt
 
    If you use /srv on this system::
 
-     zfs create                                 rpool/srv
+     zfs create rpool/srv
 
    If you use /usr/local on this system::
 
-     zfs create -o canmount=off                 rpool/usr
-     zfs create                                 rpool/usr/local
+     zfs create -o canmount=off rpool/usr
+     zfs create                 rpool/usr/local
 
    If this system will have games installed::
 
-     zfs create                                 rpool/var/games
+     zfs create rpool/var/games
 
-   If this system will store local email in /var/mail::
+   If this system will have a GUI::
 
-     zfs create                                 rpool/var/mail
-
-   If this system will use Snap packages::
-
-     zfs create                                 rpool/var/snap
-
-   If you use /var/www on this system::
-
-     zfs create                                 rpool/var/www
-
-   If this system will use GNOME::
-
-     zfs create                                 rpool/var/lib/AccountsService
+     zfs create rpool/var/lib/AccountsService
+     zfs create rpool/var/lib/NetworkManager
 
    If this system will use Docker (which manages its own datasets &
    snapshots)::
 
-     zfs create -o com.sun:auto-snapshot=false  rpool/var/lib/docker
+     zfs create -o com.sun:auto-snapshot=false rpool/var/lib/docker
 
-   If this system will use NFS (locking)::
+   If this system will store local email in /var/mail::
 
-     zfs create -o com.sun:auto-snapshot=false  rpool/var/lib/nfs
+     zfs create rpool/var/mail
 
-   Mount a tmpfs at /run::
+   If this system will use Snap packages::
 
-     mkdir /mnt/run
-     mount -t tmpfs tmpfs /mnt/run
-     mkdir /mnt/run/lock
+     zfs create rpool/var/snap
+
+   If you use /var/www on this system::
+
+     zfs create rpool/var/www
 
    A tmpfs is recommended later, but if you want a separate dataset for
    ``/tmp``::
@@ -520,6 +508,12 @@ Step 3: System Installation
    filesystem. It also allows you to set a quota on ``rpool/tmp``, if you want
    to limit the maximum space used. Otherwise, you can use a tmpfs (RAM
    filesystem) later.
+
+#. Mount a tmpfs at /run::
+
+     mkdir /mnt/run
+     mount -t tmpfs tmpfs /mnt/run
+     mkdir /mnt/run/lock
 
 #. Install the minimal system::
 

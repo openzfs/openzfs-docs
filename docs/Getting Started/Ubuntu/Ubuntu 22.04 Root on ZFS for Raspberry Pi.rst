@@ -486,32 +486,77 @@ Step 3: System Installation
 
 #. Create datasets::
 
-     zfs create -o com.ubuntu.zsys:bootfs=no \
-         rpool/ROOT/ubuntu_$UUID/srv
      zfs create -o com.ubuntu.zsys:bootfs=no -o canmount=off \
          rpool/ROOT/ubuntu_$UUID/usr
-     zfs create rpool/ROOT/ubuntu_$UUID/usr/local
      zfs create -o com.ubuntu.zsys:bootfs=no -o canmount=off \
          rpool/ROOT/ubuntu_$UUID/var
-     zfs create rpool/ROOT/ubuntu_$UUID/var/games
      zfs create rpool/ROOT/ubuntu_$UUID/var/lib
-     zfs create rpool/ROOT/ubuntu_$UUID/var/lib/AccountsService
-     zfs create rpool/ROOT/ubuntu_$UUID/var/lib/apt
-     zfs create rpool/ROOT/ubuntu_$UUID/var/lib/dpkg
-     zfs create rpool/ROOT/ubuntu_$UUID/var/lib/NetworkManager
      zfs create rpool/ROOT/ubuntu_$UUID/var/log
-     zfs create rpool/ROOT/ubuntu_$UUID/var/mail
-     zfs create rpool/ROOT/ubuntu_$UUID/var/snap
      zfs create rpool/ROOT/ubuntu_$UUID/var/spool
-     zfs create rpool/ROOT/ubuntu_$UUID/var/www
 
      zfs create -o canmount=off -o mountpoint=/ \
          rpool/USERDATA
      zfs create -o com.ubuntu.zsys:bootfs-datasets=rpool/ROOT/ubuntu_$UUID \
          -o canmount=on -o mountpoint=/root \
          rpool/USERDATA/root_$UUID
+     chmod 700 /mnt/root
 
-   If you want a separate dataset for ``/tmp``::
+   The datasets below are optional, depending on your preferences and/or
+   software choices.
+
+   If you wish to separate these to exclude them from snapshots::
+
+     zfs create rpool/ROOT/ubuntu_$UUID/var/cache
+     zfs create rpool/ROOT/ubuntu_$UUID/var/lib/nfs
+     zfs create rpool/ROOT/ubuntu_$UUID/var/tmp
+     chmod 1777 /mnt/var/tmp
+
+   If desired (the Ubuntu installer creates these)::
+
+     zfs create rpool/ROOT/ubuntu_$UUID/var/lib/apt
+     zfs create rpool/ROOT/ubuntu_$UUID/var/lib/dpkg
+
+   If you use /srv on this system::
+
+     zfs create -o com.ubuntu.zsys:bootfs=no \
+         rpool/ROOT/ubuntu_$UUID/srv
+
+   If you use /usr/local on this system::
+
+     zfs create rpool/ROOT/ubuntu_$UUID/usr/local
+
+   If this system will have games installed::
+
+     zfs create rpool/ROOT/ubuntu_$UUID/var/games
+
+   If this system will have a GUI::
+
+     zfs create rpool/ROOT/ubuntu_$UUID/var/lib/AccountsService
+     zfs create rpool/ROOT/ubuntu_$UUID/var/lib/NetworkManager
+
+   If this system will use Docker (which manages its own datasets &
+   snapshots)::
+
+     zfs create rpool/ROOT/ubuntu_$UUID/var/lib/docker
+
+   If this system will store local email in /var/mail::
+
+     zfs create rpool/ROOT/ubuntu_$UUID/var/mail
+
+   If this system will use Snap packages::
+
+     zfs create rpool/ROOT/ubuntu_$UUID/var/snap
+
+   If you use /var/www on this system::
+
+     zfs create rpool/ROOT/ubuntu_$UUID/var/www
+
+   For a mirror or raidz topology, create a dataset for ``/boot/grub``::
+
+     zfs create -o com.ubuntu.zsys:bootfs=no bpool/grub
+
+   A tmpfs is recommended later, but if you want a separate dataset for
+   ``/tmp``::
 
      zfs create -o com.ubuntu.zsys:bootfs=no \
          rpool/ROOT/ubuntu_$UUID/tmp
