@@ -226,9 +226,9 @@ Step 2: Disk Formatting
 #. Create the boot pool::
 
      zpool create \
-         -o cachefile=/etc/zfs/zpool.cache \
          -o ashift=12 \
          -o autotrim=on -d \
+         -o cachefile=/etc/zfs/zpool.cache \
          -o feature@async_destroy=enabled \
          -o feature@bookmarks=enabled \
          -o feature@embedded_data=enabled \
@@ -242,9 +242,9 @@ Step 2: Disk Formatting
          -o feature@lz4_compress=enabled \
          -o feature@spacemap_histogram=enabled \
          -o feature@zpool_checkpoint=enabled \
+         -O devices=off \
          -O acltype=posixacl -O xattr=sa \
          -O compression=lz4 \
-         -O devices=off \
          -O normalization=formD \
          -O relatime=on \
          -O canmount=off -O mountpoint=/boot -R /mnt \
