@@ -276,14 +276,18 @@ Step 2: Disk Formatting
 #. Create the boot pool::
 
      zpool create \
+         -o ashift=12 \
+         -o autotrim=on \
          -o cachefile=/etc/zfs/zpool.cache \
-         -o ashift=12 -o autotrim=on \
          -o compatibility=grub2 \
          -o feature@livelist=enabled \
          -o feature@zpool_checkpoint=enabled \
-         -O acltype=posixacl -O canmount=off -O compression=lz4 \
-         -O devices=off -O normalization=formD -O relatime=on -O xattr=sa \
-         -O mountpoint=/boot -R /mnt \
+         -O devices=off \
+         -O acltype=posixacl -O xattr=sa \
+         -O compression=lz4 \
+         -O normalization=formD \
+         -O relatime=on \
+         -O canmount=off -O mountpoint=/boot -R /mnt \
          bpool ${DISK}-part3
 
    You should not need to customize any of the options for the boot pool.
@@ -346,21 +350,26 @@ Step 2: Disk Formatting
    - Unencrypted::
 
        zpool create \
-           -o ashift=12 -o autotrim=on \
-           -O acltype=posixacl -O canmount=off -O compression=lz4 \
-           -O dnodesize=auto -O normalization=formD -O relatime=on \
-           -O xattr=sa -O mountpoint=/ -R /mnt \
+           -o ashift=12 \
+           -o autotrim=on \
+           -O acltype=posixacl -O xattr=sa -O dnodesize=auto \
+           -O compression=lz4 \
+           -O normalization=formD \
+           -O relatime=on \
+           -O canmount=off -O mountpoint=/ -R /mnt \
            rpool ${DISK}-part4
 
    - ZFS native encryption::
 
        zpool create \
-           -o ashift=12 -o autotrim=on \
-           -O encryption=on \
-           -O keylocation=prompt -O keyformat=passphrase \
-           -O acltype=posixacl -O canmount=off -O compression=lz4 \
-           -O dnodesize=auto -O normalization=formD -O relatime=on \
-           -O xattr=sa -O mountpoint=/ -R /mnt \
+           -o ashift=12 \
+           -o autotrim=on \
+           -O encryption=on -O keylocation=prompt -O keyformat=passphrase \
+           -O acltype=posixacl -O xattr=sa -O dnodesize=auto \
+           -O compression=lz4 \
+           -O normalization=formD \
+           -O relatime=on \
+           -O canmount=off -O mountpoint=/ -R /mnt \
            rpool ${DISK}-part4
 
    - LUKS::
@@ -368,10 +377,13 @@ Step 2: Disk Formatting
        cryptsetup luksFormat -c aes-xts-plain64 -s 512 -h sha256 ${DISK}-part4
        cryptsetup luksOpen ${DISK}-part4 luks1
        zpool create \
-           -o ashift=12 -o autotrim=on \
-           -O acltype=posixacl -O canmount=off -O compression=lz4 \
-           -O dnodesize=auto -O normalization=formD -O relatime=on \
-           -O xattr=sa -O mountpoint=/ -R /mnt \
+           -o ashift=12 \
+           -o autotrim=on \
+           -O acltype=posixacl -O xattr=sa -O dnodesize=auto \
+           -O compression=lz4 \
+           -O normalization=formD \
+           -O relatime=on \
+           -O canmount=off -O mountpoint=/ -R /mnt \
            rpool /dev/mapper/luks1
 
    **Notes:**
@@ -388,6 +400,23 @@ Step 2: Disk Formatting
      <https://askubuntu.com/questions/970886/journalctl-says-failed-to-search-journal-acl-operation-not-supported>`__
      Also, `disabling ACLs apparently breaks umask handling with NFSv4
      <https://bugs.launchpad.net/ubuntu/+source/nfs-utils/+bug/1779736>`__.
+   - Setting ``xattr=sa`` `vastly improves the performance of extended
+     attributes
+     <https://github.com/zfsonlinux/zfs/commit/82a37189aac955c81a59a5ecc3400475adb56355>`__.
+     Inside ZFS, extended attributes are used to implement POSIX ACLs.
+     Extended attributes can also be used by user-space applications.
+     `They are used by some desktop GUI applications.
+     <https://en.wikipedia.org/wiki/Extended_file_attributes#Linux>`__
+     `They can be used by Samba to store Windows ACLs and DOS attributes;
+     they are required for a Samba Active Directory domain controller.
+     <https://wiki.samba.org/index.php/Setting_up_a_Share_Using_Windows_ACLs>`__
+     Note that ``xattr=sa`` is `Linux-specific
+     <https://openzfs.org/wiki/Platform_code_differences>`__. If you move your
+     ``xattr=sa`` pool to another OpenZFS implementation besides ZFS-on-Linux,
+     extended attributes will not be readable (though your data will be). If
+     portability of extended attributes is important to you, omit the
+     ``-O xattr=sa`` above. Even if you do not want ``xattr=sa`` for the whole
+     pool, it is probably fine to use it for ``/var/log``.
    - Setting ``normalization=formD`` eliminates some corner cases relating
      to UTF-8 filename normalization. It also implies ``utf8only=on``,
      which means that only UTF-8 filenames are allowed. If you care to
@@ -409,23 +438,6 @@ Step 2: Disk Formatting
      the default for other filesystems. See `RedHat’s documentation
      <https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/power_management_guide/relatime>`__
      for further information.
-   - Setting ``xattr=sa`` `vastly improves the performance of extended
-     attributes
-     <https://github.com/zfsonlinux/zfs/commit/82a37189aac955c81a59a5ecc3400475adb56355>`__.
-     Inside ZFS, extended attributes are used to implement POSIX ACLs.
-     Extended attributes can also be used by user-space applications.
-     `They are used by some desktop GUI applications.
-     <https://en.wikipedia.org/wiki/Extended_file_attributes#Linux>`__
-     `They can be used by Samba to store Windows ACLs and DOS attributes;
-     they are required for a Samba Active Directory domain controller.
-     <https://wiki.samba.org/index.php/Setting_up_a_Share_Using_Windows_ACLs>`__
-     Note that ``xattr=sa`` is `Linux-specific
-     <https://openzfs.org/wiki/Platform_code_differences>`__. If you move your
-     ``xattr=sa`` pool to another OpenZFS implementation besides ZFS-on-Linux,
-     extended attributes will not be readable (though your data will be). If
-     portability of extended attributes is important to you, omit the
-     ``-O xattr=sa`` above. Even if you do not want ``xattr=sa`` for the whole
-     pool, it is probably fine to use it for ``/var/log``.
    - Make sure to include the ``-part4`` portion of the drive path. If you
      forget that, you are specifying the whole disk, which ZFS will then
      re-partition, and you will lose the bootloader partition(s).
