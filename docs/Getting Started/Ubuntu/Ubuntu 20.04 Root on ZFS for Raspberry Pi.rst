@@ -12,8 +12,10 @@ Overview
 Newer release available
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-- See :doc:`Ubuntu 22.04 Root on ZFS for Raspberry Pi <./Ubuntu 22.04 Root on ZFS for Raspberry Pi>` for new
-  installs.
+- See :doc:`Ubuntu 22.04 Root on ZFS for Raspberry Pi
+  <./Ubuntu 22.04 Root on ZFS for Raspberry Pi>` for new installs. This guide
+  is no longer receiving most updates.  It continues to exist for reference
+  for existing installs that followed it.
 
 Caution
 ~~~~~~~

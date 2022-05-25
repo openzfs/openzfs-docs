@@ -13,7 +13,8 @@ Newer release available
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 - See :doc:`Ubuntu 20.04 Root on ZFS <./Ubuntu 20.04 Root on ZFS>` for new
-  installs.
+  installs. This guide is no longer receiving most updates.  It continues
+  to exist for reference for existing installs that followed it.
 
 Caution
 ~~~~~~~

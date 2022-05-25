@@ -13,7 +13,8 @@ Newer release available
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 - See :doc:`Debian Bullseye Root on ZFS <./Debian Bullseye Root on ZFS>` for
-  new installs.
+  new installs.  This guide is no longer receiving most updates.  It continues
+  to exist for reference for existing installs that followed it.
 
 Caution
 ~~~~~~~
