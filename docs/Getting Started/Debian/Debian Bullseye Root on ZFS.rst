@@ -530,6 +530,15 @@ Step 3: System Installation
    An alternative to using ``debootstrap`` is to copy the entirety of a
    working system into the new ZFS root.
 
+#. Verify that zpool.cache is aware of both, bpool and rpool::
+
+      strings /etc/zfs/zpool.cache | grep -P '^rpool|bpool$' | uniq
+
+   In case the command does not output both pools::
+
+      zpool set cachefile=/etc/zfs/zpool.cache rpool
+      zpool set cachefile=/etc/zfs/zpool.cache bpool
+
 #. Copy in zpool.cache::
 
      mkdir /mnt/etc/zfs
