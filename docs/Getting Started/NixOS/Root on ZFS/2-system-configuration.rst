@@ -310,10 +310,12 @@ System Configuration
     tee -a /mnt/etc/nixos/${INST_CONFIG_FILE} <<EOF
       systemd.services.zfs-mount.enable = false;
       environment.etc."machine-id".source = "/state/etc/machine-id";
+      environment.etc."aliases".source = "/state/etc/aliases";
       environment.etc."zfs/zpool.cache".source
         = "/state/etc/zfs/zpool.cache";
       boot.loader.efi.efiSysMountPoint = "/boot/efis/${INST_PRIMARY_DISK##*/}-part1";
     EOF
+    touch /state/etc/aliases
 
 #. Configure GRUB boot loader for both legacy boot and UEFI::
 

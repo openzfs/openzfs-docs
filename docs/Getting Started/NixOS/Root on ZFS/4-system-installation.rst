@@ -36,17 +36,6 @@ of declaratively configuring the system.
       users.users.root.initialHashedPassword = "${INST_ROOT_PASSWD}";
     EOF
 
-#. If boot pool encryption is used and installation fails with::
-
-     #mktemp: failed to create directory via template
-     #‘/mnt/tmp.coRUoqzl1P/initrd-secrets.XXXXXXXXXX’: No such file or directory
-     #failed to create initrd secrets: No such file or directory
-
-   This is `a bug <https://github.com/NixOS/nixpkgs/issues/157989>`__.
-   Complete the installation by executing::
-
-     nixos-enter --root /mnt -- nixos-rebuild boot
-
 System installation
 ~~~~~~~~~~~~~~~~~~~
 
@@ -78,6 +67,16 @@ System installation
 
     nixos-install -v --show-trace --no-root-passwd --root /mnt
 
+#. If boot pool encryption is used and installation fails with::
+
+     #mktemp: failed to create directory via template
+     #‘/mnt/tmp.coRUoqzl1P/initrd-secrets.XXXXXXXXXX’: No such file or directory
+     #failed to create initrd secrets: No such file or directory
+
+   This is `a bug <https://github.com/NixOS/nixpkgs/issues/157989>`__.
+   Complete the installation by executing::
+
+     nixos-enter --root /mnt -- nixos-rebuild boot
 
 Finish installation
 ~~~~~~~~~~~~~~~~~~~~
@@ -99,6 +98,44 @@ Finish installation
 #. Reboot::
 
     reboot
+
+Upgrade NixOS
+~~~~~~~~~~~~~
+
+Routine updates within the same major version
+=============================================
+
+Updates within the same major version, such as from [21.11].001 to
+[21.11].100, can be done with one of the following commands::
+
+  # take immediate effect
+  nixos-rebuild --upgrade switch
+
+  # update upon reboot
+  nixos-rebuild --upgrade boot
+
+Upgrade to a newer major version
+================================
+
+Upgrading to a newer major version involves switching software
+distribution channel.
+
+#. To view existing channels, run as root::
+
+     nix-channel --list
+     #nixos https://nixos.org/channels/nixos-21.11
+
+     #this is the major version released around November 2021
+
+#. To view available channels::
+
+     w3m https://hydra.nixos.org/project/nixos
+
+#. To switch to a newer channel (22.05)::
+
+     nix-channel --add nixos https://nixos.org/channels/nixos-22.05
+
+#. Then follow the procedures for updating witin minor versions.
 
 Immutable root file system
 ~~~~~~~~~~~~~~~~~~~~~~~~~~

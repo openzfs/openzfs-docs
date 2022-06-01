@@ -7,7 +7,7 @@ Preparation
    :local:
 
 #. Download `Minimal ISO image
-   <https://channels.nixos.org/nixos-21.11/latest-nixos-minimal-x86_64-linux.iso>`__ and boot from it.
+   <https://channels.nixos.org/nixos-22.05/latest-nixos-minimal-x86_64-linux.iso>`__ and boot from it.
 
 #. Connect to network. See `NixOS manual <https://nixos.org/manual/nixos/stable/index.html#sec-installation-booting>`__.
 
