@@ -133,7 +133,7 @@ distribution channel.
 
 #. To switch to a newer channel (22.05)::
 
-     nix-channel --add nixos https://nixos.org/channels/nixos-22.05
+     nix-channel --add https://nixos.org/channels/nixos-22.05 nixos
 
 #. Then follow the procedures for updating witin minor versions.
 
