@@ -9,6 +9,53 @@ Optional Configuration
 Skip to `System Installation <./4-system-installation.html>`__ section if
 no optional configuration is needed.
 
+Mail notification for ZFS status
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+For headless applications such as NAS, it is useful to set up mail notification
+for hardware changes and monitor for scrub results.
+
+#. Set up an alias for root account::
+
+     tee -a /state/etc/aliases <<EOF
+     root: user@example.com
+     EOF
+
+#. Set up mail transfer agent, the program that sends email::
+
+      programs.msmtp = {
+        enable = true;
+        setSendmail = true;
+        defaults = {
+          aliases = "/state/etc/aliases";
+          port = 465;
+          tls_trust_file = "/etc/ssl/certs/ca-certificates.crt";
+          tls = "on";
+          auth = "plain";
+          tls_starttls = "off";
+        };
+        accounts = {
+          default = {
+            host = "mail.example.com";
+	    # set secure permissions for password file
+            passwordeval = "cat /state/etc/emailpass.txt";
+            user = "user@example.com";
+            from = "user@example.com";
+          };
+        };
+      };
+
+#. Enable mail notification for ZFS Event Daemon::
+
+       services.zfs.zed.settings = {
+         ZED_EMAIL_ADDR = [ "root" ];
+         ZED_EMAIL_PROG = "${pkgs.msmtp}/bin/msmtp";
+         ZED_EMAIL_OPTS = "@ADDRESS@";
+         ZED_NOTIFY_VERBOSE = true;
+        };
+       # this option does not work
+       services.zfs.zed.enableMail = false;
+
 Supply password with SSH
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
