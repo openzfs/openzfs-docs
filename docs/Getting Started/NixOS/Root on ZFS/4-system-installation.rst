@@ -120,20 +120,28 @@ Upgrade to a newer major version
 Upgrading to a newer major version involves switching software
 distribution channel.
 
-#. To view existing channels, run as root::
+#. View existing channels, run as root::
 
      nix-channel --list
      #nixos https://nixos.org/channels/nixos-21.11
 
      #this is the major version released around November 2021
 
-#. To view available channels::
+#. View available channels::
 
      w3m https://hydra.nixos.org/project/nixos
 
-#. To switch to a newer channel (22.05)::
+#. Switch to a newer channel (22.05)::
 
      nix-channel --add https://nixos.org/channels/nixos-22.05 nixos
+
+#. In ``/etc/nixos/configuration.nix``::
+
+     system.stateVersion = "22.05";
+
+   If using Home Manager, in ``~/.config/nixpkgs/home.nix``::
+
+     home.stateVersion = "22.05";
 
 #. Then follow the procedures for updating witin minor versions.
 
