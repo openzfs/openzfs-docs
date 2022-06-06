@@ -15,7 +15,7 @@ updated as new versions are released. Only the current repository for each
 major release is updated with new packages. Packages are available for the
 following configurations:
 
-| **EL Releases:** 6, 7.9, 8.5
+| **EL Releases:** 6, 7.9, 8.6
 | **Architectures:** x86_64
 
 To simplify installation a *zfs-release* package is provided which includes
@@ -28,8 +28,8 @@ the fingerprint listed here.
 | **Location:** /etc/pki/rpm-gpg/RPM-GPG-KEY-zfsonlinux
 | **EL6 Package:** `zfs-release.el6.noarch.rpm`_ (zfs-0.8.x)
 | **EL7.9 Package:** `zfs-release.el7_9.noarch.rpm`_ (zfs-0.8.x)
-| **EL8.5 Package:** `zfs-release.el8_5.noarch.rpm`_ (>= zfs-2.0.5)
-| **Archived Repositories:** `el7_5`_, `el7_6`_, `el7_7`_, `el7_8`_, `el8_0`_, `el8_1`_, `el8_2`_, `el8_3`_, `el8_4`_
+| **EL8.6 Package:** `zfs-release.el8_6.noarch.rpm`_ (>= zfs-2.0.5)
+| **Archived Repositories:** `el7_5`_, `el7_6`_, `el7_7`_, `el7_8`_, `el8_0`_, `el8_1`_, `el8_2`_, `el8_3`_, `el8_4`_, `el8_5`_
 | **List of Repositories** `see repo page <https://github.com/zfsonlinux/zfsonlinux.github.com/tree/master/epel>`__
 
 | **Download from:**
@@ -162,7 +162,7 @@ RHEL 8-based distro Root on ZFS
 .. _DKMS: https://en.wikipedia.org/wiki/Dynamic_Kernel_Module_Support
 .. _zfs-release.el6.noarch.rpm: https://zfsonlinux.org/epel/zfs-release.el6.noarch.rpm
 .. _zfs-release.el7_9.noarch.rpm: https://zfsonlinux.org/epel/zfs-release.el7_9.noarch.rpm
-.. _zfs-release.el8_5.noarch.rpm: https://zfsonlinux.org/epel/zfs-release.el8_5.noarch.rpm
+.. _zfs-release.el8_6.noarch.rpm: https://zfsonlinux.org/epel/zfs-release.el8_6.noarch.rpm
 .. _el7_5: https://zfsonlinux.org/epel/zfs-release.el7_5.noarch.rpm
 .. _el7_6: https://zfsonlinux.org/epel/zfs-release.el7_6.noarch.rpm
 .. _el7_7: https://zfsonlinux.org/epel/zfs-release.el7_7.noarch.rpm
@@ -172,5 +172,6 @@ RHEL 8-based distro Root on ZFS
 .. _el8_2: https://zfsonlinux.org/epel/zfs-release.el8_2.noarch.rpm
 .. _el8_3: https://zfsonlinux.org/epel/zfs-release.el8_3.noarch.rpm
 .. _el8_4: https://zfsonlinux.org/epel/zfs-release.el8_4.noarch.rpm
+.. _el8_5: https://zfsonlinux.org/epel/zfs-release.el8_4.noarch.rpm
 
 .. _EPEL repository: https://fedoraproject.org/wiki/EPEL
