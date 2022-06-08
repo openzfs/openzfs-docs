@@ -483,7 +483,7 @@ Customize this file if the system is not a DHCP client.
   deb-src http://deb.debian.org/debian stretch-backports main contrib
 
   # vi /mnt/etc/apt/preferences.d/90_zfs
-  Package: libnvpair1linux libuutil1linux libzfs2linux libzpool2linux spl-dkms zfs-dkms zfs-test zfsutils-linux zfsutils-linux-dev zfs-zed
+  Package: src:zfsutils-linux
   Pin: release n=stretch-backports
   Pin-Priority: 990
 

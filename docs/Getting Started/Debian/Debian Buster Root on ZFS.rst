@@ -619,7 +619,7 @@ Step 4: System Configuration
 
    .. code-block:: control
 
-     Package: libnvpair1linux libuutil1linux libzfs2linux libzfslinux-dev libzpool2linux python3-pyzfs pyzfs-doc spl spl-dkms zfs-dkms zfs-dracut zfs-initramfs zfs-test zfsutils-linux zfsutils-linux-dev zfs-zed
+     Package: src:zfsutils-linux
      Pin: release n=buster-backports
      Pin-Priority: 990
 

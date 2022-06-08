@@ -32,7 +32,7 @@ Add the backports repository::
 
 .. code-block:: control
 
-  Package: libnvpair1linux libnvpair3linux libuutil1linux libuutil3linux libzfs2linux libzfs4linux libzpool2linux libzpool4linux spl-dkms zfs-dkms zfs-test zfsutils-linux zfsutils-linux-dev zfs-zed
+  Package: src:zfsutils-linux
   Pin: release n=bullseye-backports
   Pin-Priority: 990
 
