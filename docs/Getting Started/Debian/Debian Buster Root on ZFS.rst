@@ -283,7 +283,7 @@ Step 2: Disk Formatting
 
    - For raidz topologies, replace ``mirror`` in the above command with
      ``raidz``, ``raidz2``, or  ``raidz3`` and list the partitions from
-     additional disks.
+     the additional disks.
    - The pool name is arbitrary. If changed, the new name must be used
      consistently. The ``bpool`` convention originated in this HOWTO.
 
@@ -418,7 +418,7 @@ Step 2: Disk Formatting
 
    - For raidz topologies, replace ``mirror`` in the above command with
      ``raidz``, ``raidz2``, or  ``raidz3`` and list the partitions from
-     additional disks.
+     the additional disks.
    - When using LUKS with mirror or raidz topologies, use
      ``/dev/mapper/luks1``, ``/dev/mapper/luks2``, etc., which you will have
      to create using ``cryptsetup``.

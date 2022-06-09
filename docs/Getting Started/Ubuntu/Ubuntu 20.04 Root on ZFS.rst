@@ -437,7 +437,7 @@ Step 2: Disk Formatting
 
    - For raidz topologies, replace ``mirror`` in the above command with
      ``raidz``, ``raidz2``, or  ``raidz3`` and list the partitions from
-     additional disks.
+     the additional disks.
    - The boot pool name is no longer arbitrary.  It _must_ be ``bpool``.
      If you really want to rename it, edit ``/etc/grub.d/10_linux_zfs`` later,
      after GRUB is installed (and run ``update-grub``).
@@ -579,7 +579,7 @@ Step 2: Disk Formatting
 
    - For raidz topologies, replace ``mirror`` in the above command with
      ``raidz``, ``raidz2``, or  ``raidz3`` and list the partitions from
-     additional disks.
+     the additional disks.
    - When using LUKS with mirror or raidz topologies, use
      ``/dev/mapper/luks1``, ``/dev/mapper/luks2``, etc., which you will have
      to create using ``cryptsetup``.
