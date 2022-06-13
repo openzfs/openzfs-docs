@@ -619,7 +619,7 @@ Step 4: System Configuration
 
    .. code-block:: control
 
-     Package: src:zfsutils-linux
+     Package: src:zfs-linux
      Pin: release n=buster-backports
      Pin-Priority: 990
 

@@ -32,7 +32,7 @@ Add the backports repository::
 
 .. code-block:: control
 
-  Package: src:zfsutils-linux
+  Package: src:zfs-linux
   Pin: release n=bullseye-backports
   Pin-Priority: 990
 
