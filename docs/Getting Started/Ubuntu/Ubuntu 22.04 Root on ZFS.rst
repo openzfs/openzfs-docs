@@ -12,9 +12,7 @@ Overview
 Ubuntu Installer
 ~~~~~~~~~~~~~~~~
 
-The Ubuntu installer still has ZFS support, but `it was almost removed for
-22.04 <https://bugs.launchpad.net/ubuntu/+source/ubiquity/+bug/1966773>`__
-and `it no longer installs zsys
+The Ubuntu installer still has ZFS support, but `it no longer installs zsys
 <https://bugs.launchpad.net/ubuntu/+source/ubiquity/+bug/1968150>`__.  At
 the moment, this HOWTO still uses zsys, but that will be probably be removed
 in the near future.
