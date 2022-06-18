@@ -100,6 +100,14 @@ The checksum algorithm for a dataset can be changed by setting the
 |           |              |                        | ``verify``.             |
 |           |              |                        |                         |
 +-----------+--------------+------------------------+-------------------------+
+| blake3    | yes          | requires pool          | salted                  |
+|           |              | feature                | ``blake3``              |
+|           |              | ``org.openzfs:blake3`` | currently not           |
+|           |              |                        | supported for           |
+|           |              |                        | any filesystem          |
+|           |              |                        | on the boot             |
+|           |              |                        | pools                   |
++-----------+--------------+------------------------+-------------------------+
 
 Checksum Accelerators
 ^^^^^^^^^^^^^^^^^^^^^
@@ -121,6 +129,7 @@ parameters.
 Checksum  Results Filename                     ``zfs`` module parameter
 ========= ==================================== ========================
 Fletcher4 /proc/spl/kstat/zfs/fletcher_4_bench zfs_fletcher_4_impl
+all-other /proc/spl/kstat/zfs/chksum_bench     icp_blake3_impl
 ========= ==================================== ========================
 
 Disabling Checksums
