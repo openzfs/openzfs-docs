@@ -211,17 +211,19 @@ you.
    -  Example: ``zpool create tank mirror A1 B1 mirror A2 B2``
 
 -  **/dev/disk/by-uuid/:** Not a great option
+
   -   Summary: One might think from the use of "UUID" that this would
       be an ideal option - however, in practice, this ends up listing
       one device per **pool** ID, which is not very useful for importing
       pools with multiple disks.
 
--  **/dev/disk/by-partuuid/**/**by-partlabel:** Great for existing pools
-  -   Summary: Entries per partition unique identifier, great! 
-  -   Drawbacks: ...except you can't refer to a partition unique ID on
+-  **/dev/disk/by-partuuid/**/**by-partlabel:** Works only for existing partitions
+
+  -   Summary: partition UUID is generated on it's creation, so usage is limited
+  -   Drawbacks: you can't refer to a partition unique ID on
       an unpartitioned disk for ``zpool replace``/``add``/``attach``,
-      now can you? Also not useful if you didn't have a mapping written
-      down ahead of time if you need to figure out which disk failed later.
+      and you can't find failed disk easily without a mapping written
+      down ahead of time.
 
 Setting up the /etc/zfs/vdev_id.conf file
 -----------------------------------------
