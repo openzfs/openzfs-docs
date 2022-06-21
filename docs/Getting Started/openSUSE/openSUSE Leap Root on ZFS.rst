@@ -871,7 +871,7 @@ Step 7: Grub2 Installation
    **Note:** If this command don't gives any output, use classic grub.cfg generation with following command:
    ``grub2-mkconfig -o /boot/grub2/grub.cfg``
    
-#. Check, that ``/boot/grub2/grub.cfg`` have the menuentry have a ``root=ZFS=rpool/ROOT/suse`` in a line, like this::
+#. Check, that ``/boot/grub2/grub.cfg`` have the menuentry ``root=ZFS=rpool/ROOT/suse`` in a line, like this::
 
      linux   /boot@/vmlinuz-5.3.18-150300.59.60-default root=ZFS=rpool/ROOT/suse
 
