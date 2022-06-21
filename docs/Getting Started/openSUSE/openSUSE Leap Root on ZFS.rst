@@ -99,7 +99,7 @@ encrypted once per disk.
 Notes
 ~~~~~~~
 
-- You can use unofficial scripts-pack `LroZ <https://github.com/ndruba/LroZ>`__ (Linux Root On Zfs), based on this manual and automated most steps. 
+- You can use unofficial scripts `LroZ <https://github.com/ndruba/LroZ>`__ (Linux Root On Zfs), which is based on this manual and automates most steps. 
 
 Step 1: Prepare The Install Environment
 ---------------------------------------
