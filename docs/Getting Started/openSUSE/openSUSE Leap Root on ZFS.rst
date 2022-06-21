@@ -877,8 +877,7 @@ Step 7: Grub2 Installation
 
    If not, change ``/etc/default/grub``::
    
-     vi /etc/default/grub
-     # Set: GRUB_CMDLINE_LINUX="root=ZFS=rpool/ROOT/suse"   
+    GRUB_CMDLINE_LINUX="root=ZFS=rpool/ROOT/suse"   
 
    and repeat previous step.
     
