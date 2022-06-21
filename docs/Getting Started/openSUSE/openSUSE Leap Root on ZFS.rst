@@ -816,7 +816,7 @@ Step 6: Kernel Installation
 
      echo 'zfs'>> /etc/modules-load.d/zfs.conf
 
-#. Kernel version of livecd can differ from currently installed version. Than, check kernel version of you new OS::
+#. Kernel version of livecd can differ from currently installed version. Get kernel version of you new OS::
 
      kernel_version=$(find /boot/vmlinuz-* | grep -Eo '[[:digit:]]*\.[[:digit:]]*\.[[:digit:]]*\-.*-default')
 
