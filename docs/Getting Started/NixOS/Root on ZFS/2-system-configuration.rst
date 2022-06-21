@@ -315,7 +315,7 @@ System Configuration
         = "/state/etc/zfs/zpool.cache";
       boot.loader.efi.efiSysMountPoint = "/boot/efis/${INST_PRIMARY_DISK##*/}-part1";
     EOF
-    touch /state/etc/aliases
+    touch /mnt/state/etc/aliases
 
 #. Configure GRUB boot loader for both legacy boot and UEFI::
 
