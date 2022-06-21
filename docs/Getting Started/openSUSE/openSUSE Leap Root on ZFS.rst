@@ -1091,7 +1091,7 @@ available. There is `a bug report upstream
    which are dropped by ZFS; but some form of compression has to be enabled
    to get this behavior.
    
-   **Hints:** If you saw warning about uncorrect volblocksize, recreate swap device:
+   **Hints:** If you've got a warning about incorrect volblocksize, recreate swap device:
   
    ::
     
