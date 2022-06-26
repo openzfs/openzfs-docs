@@ -589,7 +589,7 @@ follows:
 -  Intel 710
 -  Intel 730
 -  Intel DC S3500/S3510/S3610/S3700/S3710
--  Kingston DC450R/DC500R/DC500M
+-  Kingston DC500R/DC500M
 -  Micron 5210 Ion
 
    -  First QLC drive on the list. High capacity with a low price per
