@@ -504,6 +504,7 @@ follows:
 
 -  Intel 750
 -  Intel DC P3500/P3600/P3608/P3700
+-  Micron 7300/7400/7450 PRO/MAX
 -  Samsung PM963 (M.2 form factor)
 -  Samsung PM1725/PM1725a
 -  Samsung XS1715
@@ -588,6 +589,7 @@ follows:
 -  Intel 710
 -  Intel 730
 -  Intel DC S3500/S3510/S3610/S3700/S3710
+-  Kingston DC450R/DC500R/DC500M
 -  Micron 5210 Ion
 
    -  First QLC drive on the list. High capacity with a low price per
@@ -700,6 +702,8 @@ a list of models that are known to perform well:
 
 -  `Intel DC
    P4800X <https://www.servethehome.com/intel-optane-hands-on-real-world-benchmark-and-test-results/>`__
+   P4801X <https://www.servethehome.com/intel-optane-dc-p4801x-review-100gb-m-2-nvme-ssd-log-option/>`__
+   P1600X <https://www.servethehome.com/intel-optane-p1600x-small-capacity-ssd-for-boot-launched/>`__
 
    -  This gives basically the highest performance you can get as of
       June 2020.
