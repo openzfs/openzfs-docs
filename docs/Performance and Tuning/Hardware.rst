@@ -701,12 +701,17 @@ need to run TRIM on them. However, they cost more per GB than NAND flash
 a list of models that are known to perform well:
 
 -  `Intel DC
-   P4800X <https://www.servethehome.com/intel-optane-hands-on-real-world-benchmark-and-test-results/>`__
+   P4800X <https://www.servethehome.com/intel-optane-hands-on-real-world-benchmark-and-test-results/>`__   
+   -  This gives basically the highest performance you can get as of June 2020.
+   
+-  `Intel DC
    P4801X <https://www.servethehome.com/intel-optane-dc-p4801x-review-100gb-m-2-nvme-ssd-log-option/>`__
+   -  This one is more affordable refurbished and as powerfull that the P4800X in June 2022.
+   
+-  `Intel DC
    P1600X <https://www.servethehome.com/intel-optane-p1600x-small-capacity-ssd-for-boot-launched/>`__
+   -  This new model is the cheaper if bought unused but an excellent alternative in June 2022.
 
-   -  This gives basically the highest performance you can get as of
-      June 2020.
 
 Also, at time of writing in June 2020, only one model is listed. This is
 due to there being few such drives on the market. The client models are
