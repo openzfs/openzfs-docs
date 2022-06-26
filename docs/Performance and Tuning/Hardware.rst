@@ -709,12 +709,6 @@ a list of models that are known to perform well:
 -  `Intel DC
    P1600X <https://www.servethehome.com/intel-optane-p1600x-small-capacity-ssd-for-boot-launched/>`__
 
-Also, at time of writing in June 2020, only one model is listed. 
-This is due to there being few such drives on the market. 
-The client models are likely to be outperformed by well configured NAND flash drives, 
-so they have not been listed (although they are likely cheaper than NAND flash). 
-More will likely be added in the future.
-
 Note that SLOG devices rarely have more than 4GB in use at any given
 time, so the smaller sized devices are generally the best choice in
 terms of cost, with larger sizes giving no benefit. Larger sizes could
