@@ -701,18 +701,13 @@ need to run TRIM on them. However, they cost more per GB than NAND flash
 a list of models that are known to perform well:
 
 -  `Intel DC
-   P4800X <https://www.servethehome.com/intel-optane-hands-on-real-world-benchmark-and-test-results/>`__
+   P4800X <https://www.servethehome.com/intel-optane-hands-on-real-world-benchmark-and-test-results/>`__   
+
+-  `Intel DC
    P4801X <https://www.servethehome.com/intel-optane-dc-p4801x-review-100gb-m-2-nvme-ssd-log-option/>`__
+   
+-  `Intel DC
    P1600X <https://www.servethehome.com/intel-optane-p1600x-small-capacity-ssd-for-boot-launched/>`__
-
-   -  This gives basically the highest performance you can get as of
-      June 2020.
-
-Also, at time of writing in June 2020, only one model is listed. This is
-due to there being few such drives on the market. The client models are
-likely to be outperformed by well configured NAND flash drives, so they
-have not been listed (although they are likely cheaper than NAND flash).
-More will likely be added in the future.
 
 Note that SLOG devices rarely have more than 4GB in use at any given
 time, so the smaller sized devices are generally the best choice in
