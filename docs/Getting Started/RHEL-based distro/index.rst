@@ -36,7 +36,7 @@ the fingerprint listed here.
 
 For RHEL/CentOS versions 6 and 7 run::
 
- yum install https://zfsonlinux.org/epel/zfs-release-el-2-1.noarch.rpm
+ yum install https://zfsonlinux.org/epel/zfs-release.el7_9.noarch.rpm
  rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-zfsonlinux
 
 And for RHEL 8::
