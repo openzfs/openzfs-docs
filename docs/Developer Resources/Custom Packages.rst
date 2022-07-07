@@ -77,6 +77,15 @@ ZFS 2.1 release:
    sudo dnf install --skip-broken epel-release gcc make autoconf automake libtool rpm-build kernel-rpm-macros libtirpc-devel libblkid-devel libuuid-devel libudev-devel openssl-devel zlib-devel libaio-devel libattr-devel elfutils-libelf-devel kernel-devel-$(uname -r) python3 python3-devel python3-setuptools python3-cffi libffi-devel ncompress
    sudo dnf install --skip-broken --enablerepo=epel --enablerepo=powertools python3-packaging dkms
 
+-  **RHEL/CentOS 9**:
+.. code:: sh
+
+   sudo dnf config-manager --set-enabled crb
+   sudo dnf install --skip-broken epel-release gcc make autoconf automake libtool rpm-build kernel-rpm-macros libtirpc-devel libblkid-devel libuuid-devel libudev-devel openssl-devel zlib-devel libaio-devel libattr-devel elfutils-libelf-devel kernel-devel-$(uname -r) python3 python3-devel python3-setuptools python3-cffi libffi-devel ncompress
+   sudo dnf install --skip-broken --enablerepo=epel python3-packaging dkms
+
+
+
 `Get the source code <#get-the-source-code>`__.
 
 DKMS
