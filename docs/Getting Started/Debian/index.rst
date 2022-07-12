@@ -39,7 +39,7 @@ Add the backports repository::
 Install the packages::
 
   apt update
-  apt install dpkg-dev linux-headers-$(uname -r) linux-image-amd64
+  apt install dpkg-dev linux-headers-generic linux-image-generic
   apt install zfs-dkms zfsutils-linux
 
 **Caution**: If you are in a poorly configured environment (e.g. certain VM or container consoles), when apt attempts to pop up a message on first install, it may fail to notice a real console is unavailable, and instead appear to hang indefinitely. To circumvent this, you can prefix the `apt install` commands with ``DEBIAN_FRONTEND=noninteractive``, like this::

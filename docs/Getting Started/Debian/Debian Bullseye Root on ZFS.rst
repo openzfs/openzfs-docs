@@ -184,7 +184,7 @@ Step 2: Disk Formatting
      mdadm --zero-superblock --force $DISK
      # For an array using a partition:
      mdadm --zero-superblock --force ${DISK}-part2
-   
+
    If the disk was previously used with zfs::
 
      wipefs -a $DISK
@@ -623,7 +623,7 @@ Step 4: System Configuration
 
 #. Install ZFS in the chroot environment for the new system::
 
-     apt install --yes dpkg-dev linux-headers-amd64 linux-image-amd64
+     apt install --yes dpkg-dev linux-headers-generic linux-image-generic
 
      apt install --yes zfs-initramfs
 

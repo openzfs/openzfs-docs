@@ -130,7 +130,7 @@ connect with ``ssh user@IP``.
 
 ::
 
-  # apt install --yes debootstrap gdisk dkms dpkg-dev linux-headers-$(uname -r)
+  # apt install --yes debootstrap gdisk dkms dpkg-dev linux-headers-amd64
   # apt install --yes -t stretch-backports zfs-dkms
   # modprobe zfs
 
