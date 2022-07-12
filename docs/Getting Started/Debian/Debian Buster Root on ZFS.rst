@@ -146,8 +146,7 @@ Step 1: Prepare The Install Environment
 
 #. Install ZFS in the Live CD environment::
 
-     apt install --yes debootstrap gdisk dkms dpkg-dev \
-         linux-headers-$(uname -r)
+     apt install --yes debootstrap gdisk dkms dpkg-dev linux-headers-amd64
 
      apt install --yes -t buster-backports --no-install-recommends zfs-dkms
 
