@@ -78,6 +78,7 @@ ZFS 2.1 release:
    sudo dnf install --skip-broken --enablerepo=epel --enablerepo=powertools python3-packaging dkms
 
 -  **RHEL/CentOS 9**:
+
 .. code:: sh
 
    sudo dnf config-manager --set-enabled crb
