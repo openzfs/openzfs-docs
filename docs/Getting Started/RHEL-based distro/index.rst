@@ -15,7 +15,7 @@ updated as new versions are released. Only the current repository for each
 major release is updated with new packages. Packages are available for the
 following configurations:
 
-| **EL Releases:** 6, 7.9, 8.6
+| **EL Releases:** 6, 7.9, 8.6, 9.0
 | **Architectures:** x86_64
 
 To simplify installation a *zfs-release* package is provided which includes
@@ -39,7 +39,7 @@ For RHEL/CentOS versions 6 and 7 run::
  yum install https://zfsonlinux.org/epel/zfs-release-el-2-1.noarch.rpm
  rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-zfsonlinux
 
-And for RHEL 8::
+And for RHEL 8 and newer::
 
  dnf install https://zfsonlinux.org/epel/zfs-release-el-2-1.noarch.rpm
  rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-zfsonlinux
