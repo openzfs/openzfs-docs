@@ -93,7 +93,7 @@ System Installation
       zfs create \
        -o canmount=off \
        -o mountpoint=none \
-       rpool/archlinux
+       rpool/redhat
 
    - Encrypted:
 
@@ -106,19 +106,19 @@ System Installation
        -o encryption=on \
        -o keylocation=prompt \
        -o keyformat=passphrase \
-       rpool/archlinux
+       rpool/redhat
 
    Create system datasets::
 
-      zfs create -o canmount=on -o mountpoint=/     rpool/archlinux/root
-      zfs create -o canmount=on -o mountpoint=/home rpool/archlinux/home
-      zfs create -o canmount=off -o mountpoint=/var  rpool/archlinux/var
-      zfs create -o canmount=on  rpool/archlinux/var/lib
-      zfs create -o canmount=on  rpool/archlinux/var/log
+      zfs create -o canmount=on -o mountpoint=/     rpool/redhat/root
+      zfs create -o canmount=on -o mountpoint=/home rpool/redhat/home
+      zfs create -o canmount=off -o mountpoint=/var  rpool/redhat/var
+      zfs create -o canmount=on  rpool/redhat/var/lib
+      zfs create -o canmount=on  rpool/redhat/var/log
 
    Create boot dataset::
 
-     zfs create -o canmount=on -o mountpoint=/boot bpool/archlinux
+     zfs create -o canmount=on -o mountpoint=/boot bpool/redhat
 
 #. Format and mount ESP::
 
@@ -133,11 +133,14 @@ System Installation
 
 #. Install packages::
 
-     pacstrap /mnt base vi mandoc grub efibootmgr mkinitcpio
+    dnf --installroot=/mnt   --releasever=$(source /etc/os-release ; echo $VERSION_ID) -y install \
+    @core  grub2-efi-x64 grub2-pc-modules grub2-efi-x64-modules shim-x64 efibootmgr kernel
 
-     CompatibleVer=$(pacman -Si zfs-linux | grep 'Depends On' | sed "s|.*linux=||" | awk '{ print $1 }')
-     pacstrap -U /mnt https://archive.archlinux.org/packages/l/linux/linux-${CompatibleVer}-x86_64.pkg.tar.zst
+    dnf --installroot=/mnt   --releasever=$(source /etc/os-release ; echo $VERSION_ID) -y install \
+    https://zfsonlinux.org/epel/zfs-release-el-2-1.noarch.rpm
 
-     pacstrap /mnt zfs-linux zfs-utils
+    dnf config-manager --installroot=/mnt --disable zfs
+    dnf config-manager --installroot=/mnt --enable zfs-kmod
 
-     pacstrap /mnt linux-firmware intel-ucode amd-ucode
+    dnf --installroot=/mnt   --releasever=$(source /etc/os-release ; echo $VERSION_ID) \
+    --nogpgcheck -y install zfs zfs-dracut

@@ -93,7 +93,7 @@ System Installation
       zfs create \
        -o canmount=off \
        -o mountpoint=none \
-       rpool/archlinux
+       rpool/nixos
 
    - Encrypted:
 
@@ -106,19 +106,19 @@ System Installation
        -o encryption=on \
        -o keylocation=prompt \
        -o keyformat=passphrase \
-       rpool/archlinux
+       rpool/nixos
 
    Create system datasets::
 
-      zfs create -o canmount=on -o mountpoint=/     rpool/archlinux/root
-      zfs create -o canmount=on -o mountpoint=/home rpool/archlinux/home
-      zfs create -o canmount=off -o mountpoint=/var  rpool/archlinux/var
-      zfs create -o canmount=on  rpool/archlinux/var/lib
-      zfs create -o canmount=on  rpool/archlinux/var/log
+      zfs create -o canmount=on -o mountpoint=/     rpool/nixos/root
+      zfs create -o canmount=on -o mountpoint=/home rpool/nixos/home
+      zfs create -o canmount=off -o mountpoint=/var  rpool/nixos/var
+      zfs create -o canmount=on  rpool/nixos/var/lib
+      zfs create -o canmount=on  rpool/nixos/var/log
 
    Create boot dataset::
 
-     zfs create -o canmount=on -o mountpoint=/boot bpool/archlinux
+     zfs create -o canmount=on -o mountpoint=/boot bpool/nixos
 
 #. Format and mount ESP::
 
@@ -130,14 +130,3 @@ System Installation
 
     mkdir -p /mnt/boot/efi
     mount -t vfat $(echo $DISK | cut -f1 -d\ )-part1 /mnt/boot/efi
-
-#. Install packages::
-
-     pacstrap /mnt base vi mandoc grub efibootmgr mkinitcpio
-
-     CompatibleVer=$(pacman -Si zfs-linux | grep 'Depends On' | sed "s|.*linux=||" | awk '{ print $1 }')
-     pacstrap -U /mnt https://archive.archlinux.org/packages/l/linux/linux-${CompatibleVer}-x86_64.pkg.tar.zst
-
-     pacstrap /mnt zfs-linux zfs-utils
-
-     pacstrap /mnt linux-firmware intel-ucode amd-ucode

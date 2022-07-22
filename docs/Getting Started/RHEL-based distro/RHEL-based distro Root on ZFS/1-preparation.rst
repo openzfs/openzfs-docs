@@ -7,12 +7,13 @@ Preparation
    :local:
 
 #. Disable Secure Boot. ZFS modules can not be loaded if Secure Boot is enabled.
-#. Download `NixOS Live Image
-   <https://channels.nixos.org/nixos-22.05/latest-nixos-gnome-x86_64-linux.iso>`__ and boot from it.
+#. Download a variant of `AlmaLinux Minimal Live ISO
+   <https://repo.almalinux.org/almalinux/9/live/x86_64/>`__ and boot from it.
 #. Connect to the Internet.
 #. Set root password or ``/root/.ssh/authorized_keys``.
 #. Start SSH server::
 
+    echo PermitRootLogin yes >> /etc/ssh/sshd_config
     systemctl restart sshd
 
 #. Connect from another computer::
@@ -46,3 +47,32 @@ Preparation
    Root pool size, use all remaining disk space if not set::
 
     INST_PARTSIZE_RPOOL=
+
+#. Temporarily set SELinux to permissive in live environment::
+
+    setenforce 0
+
+   SELinux will be enabled on the installed system.
+
+#. Add ZFS repo::
+
+    dnf install -y https://zfsonlinux.org/epel/zfs-release-el-2-1.noarch.rpm
+
+#. Check available repos::
+
+     dnf repolist --all
+
+#. Install ZFS packages::
+
+    dnf config-manager --disable zfs
+    dnf config-manager --enable zfs-kmod
+    dnf install -y zfs
+    #  if gpg import fails, add --nogpgcheck
+
+#. Load kernel modules::
+
+    modprobe zfs
+
+#. Install partition tool::
+
+    dnf install -y gdisk dosfstools
