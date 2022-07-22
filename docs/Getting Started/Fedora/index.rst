@@ -90,7 +90,7 @@ Root on ZFS
 ZFS can be used as root file system for Fedora.
 An installation guide is available.
 
-`Start here <Root%20on%20ZFS/0-overview.html>`__.
+`Start here <Root%20on%20ZFS/1-preparation.html>`__.
 
 .. toctree::
   :maxdepth: 1

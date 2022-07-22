@@ -70,17 +70,17 @@ Install GRUB
 #. If using EFI::
 
     for i in ${DISK}; do
-     efibootmgr -cgp 1 -l "\EFI\fedora\shimx64.efi" \
-     -L "fedora-${i##*/}" -d ${i}
+     efibootmgr -cgp 1 -l "\EFI\almalinux\shimx64.efi" \
+     -L "almalinux-${i##*/}" -d ${i}
     done
-    cp -r /usr/lib/grub/x86_64-efi/ /boot/efi/EFI/fedora/
+    cp -r /usr/lib/grub/x86_64-efi/ /boot/efi/EFI/almalinux/
 
 #. Generate GRUB Menu:
 
    Generate menu::
 
     grub2-mkconfig -o /boot/grub2/grub.cfg
-    cp /boot/grub2/grub.cfg /boot/efi/EFI/fedora/
+    cp /boot/grub2/grub.cfg /boot/efi/EFI/almalinux/
 
 #. For both legacy and EFI booting: mirror ESP content::
 

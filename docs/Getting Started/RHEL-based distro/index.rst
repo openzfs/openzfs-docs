@@ -146,15 +146,15 @@ And for RHEL/CentOS 8 and newer::
    Use *zfs-testing* for DKMS packages and *zfs-testing-kmod*
    kABI-tracking kmod packages.
 
-RHEL 8-based distro Root on ZFS
+RHEL-based distro Root on ZFS
 -------------------------------
-`Start here <RHEL%208-based%20distro%20Root%20on%20ZFS/0-overview.html>`__.
+`Start here <RHEL%20-based%20distro%20Root%20on%20ZFS/1-preparation.html>`__.
 
 .. toctree::
   :maxdepth: 1
   :glob:
 
-  RHEL 8-based distro Root on ZFS/*
+  RHEL-based distro Root on ZFS/*
 
 .. _kABI-tracking kmod: https://elrepoproject.blogspot.com/2016/02/kabi-tracking-kmod-packages.html
 .. _DKMS: https://en.wikipedia.org/wiki/Dynamic_Kernel_Module_Support

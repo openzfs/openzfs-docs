@@ -64,10 +64,3 @@ System Configuration
 #. Set root password::
 
     passwd
-
-#. Build ZFS modules::
-
-    for directory in /lib/modules/*; do
-      kernel_version=$(basename $directory)
-      dkms autoinstall -k $kernel_version
-    done
