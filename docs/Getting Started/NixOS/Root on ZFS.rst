@@ -1,6 +1,6 @@
 NixOS Root on ZFS
 =======================================
-`Start here <Root%20on%20ZFS/1-preparation.html>`__.
+Start from "Preparation".
 
 Contents
 --------

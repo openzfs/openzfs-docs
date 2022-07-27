@@ -52,7 +52,7 @@ Root on ZFS
 ZFS can be used as root file system for Arch Linux.
 An installation guide is available.
 
-`Start here <Root%20on%20ZFS/1-preparation.html>`__.
+Start from "Preparation".
 
 .. toctree::
   :maxdepth: 1
