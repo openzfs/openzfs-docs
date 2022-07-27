@@ -148,7 +148,7 @@ And for RHEL/CentOS 8 and newer::
 
 RHEL-based distro Root on ZFS
 -------------------------------
-`Start here <RHEL%20-based%20distro%20Root%20on%20ZFS/1-preparation.html>`__.
+Start from "Preparation".
 
 .. toctree::
   :maxdepth: 1
