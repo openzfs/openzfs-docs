@@ -118,7 +118,8 @@ System Installation
 
    Create boot dataset::
 
-     zfs create -o canmount=on -o mountpoint=/boot bpool/nixos
+     zfs create -o canmount=off -o mountpoint=none bpool/nixos
+     zfs create -o canmount=on -o mountpoint=/boot bpool/nixos/root
 
 #. Format and mount ESP::
 

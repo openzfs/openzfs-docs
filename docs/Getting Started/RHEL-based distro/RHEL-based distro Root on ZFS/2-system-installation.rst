@@ -118,7 +118,8 @@ System Installation
 
    Create boot dataset::
 
-     zfs create -o canmount=on -o mountpoint=/boot bpool/redhat
+     zfs create -o canmount=off -o mountpoint=none bpool/redhat
+     zfs create -o canmount=on -o mountpoint=/boot bpool/redhat/root
 
 #. Format and mount ESP::
 

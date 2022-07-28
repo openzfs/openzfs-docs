@@ -37,9 +37,41 @@ System Installation
 
 #. Create boot partition::
 
-    for i in ${DISK}; do
-      mkfs.ext4 -F $i-part2
-    done
+     tee -a /root/grub2 <<EOF
+     # Features which are supported by GRUB2
+     async_destroy
+     bookmarks
+     embedded_data
+     empty_bpobj
+     enabled_txg
+     extensible_dataset
+     filesystem_limits
+     hole_birth
+     large_blocks
+     lz4_compress
+     spacemap_histogram
+     EOF
+
+     zpool create \
+      -o compatibility=/root/grub2 \
+      -o ashift=12 \
+      -o autotrim=on \
+      -O acltype=posixacl \
+      -O canmount=off \
+      -O compression=lz4 \
+      -O devices=off \
+      -O normalization=formD \
+      -O relatime=on \
+      -O xattr=sa \
+      -O mountpoint=/boot \
+      -R /mnt \
+      bpool \
+      mirror \
+      $(for i in ${DISK}; do
+         printf "$i-part2 ";
+        done)
+
+   If not using a multi-disk setup, remove ``mirror``.
 
 #. Create root pool::
 
@@ -91,13 +123,16 @@ System Installation
      zfs create -o canmount=off -o mountpoint=/var  rpool/alpine/var
      zfs create -o canmount=on  rpool/alpine/var/lib
      zfs create -o canmount=on  rpool/alpine/var/log
-
-#. Mount /boot::
-
-    mkdir -p /mnt/boot
-    mount -t ext4 $(echo $DISK | cut -f1 -d\ )-part2 /mnt/boot/
+     zfs create -o canmount=off  -o mountpoint=none bpool/alpine
+     zfs create -o canmount=on  -o mountpoint=/boot bpool/alpine/root
 
 #. Format and mount ESP::
+
+    for i in ${DISK}; do
+     mkfs.vfat -n EFI ${i}-part1
+     mkdir -p /mnt/boot/efis/${i##*/}-part1
+     mount -t vfat ${i}-part1 /mnt/boot/efis/${i##*/}-part1
+    done
 
     mkdir -p /mnt/boot/efi
     mount -t vfat $(echo $DISK | cut -f1 -d\ )-part1 /mnt/boot/efi
@@ -123,22 +158,6 @@ System Installation
     for i in $m; do mount --rbind $i /mnt/$i; done
 
     chroot /mnt /usr/bin/env DISK=$DISK sh
-
-#. Apply GRUB workaround::
-
-     echo 'export ZPOOL_VDEV_NAME_PATH=YES' >> /etc/profile.d/zpool_vdev_name_path.sh
-     source /etc/profile.d/zpool_vdev_name_path.sh
-
-     sed -i "s|rpool=.*|rpool=rpool|"  /etc/grub.d/10_linux
-
-     sed -i 's|stat -f -c %T /|echo zfs|' /usr/sbin/grub-mkconfig
-
-   This workaround needs to be applied for every GRUB update, as the
-   update will overwrite the changes.
-
-#. Generate GRUB menu::
-
-     grub-mkconfig -o /boot/grub/grub.cfg
 
 #. Rebuild initrd::
 
@@ -171,15 +190,51 @@ System Installation
 #. Mount datasets with zfsutil option::
 
      sed -i 's|,posixacl|,zfsutil,posixacl|' /etc/fstab
-     
+
+#. Apply GRUB workaround::
+
+     echo 'export ZPOOL_VDEV_NAME_PATH=YES' >> /etc/profile.d/zpool_vdev_name_path.sh
+     source /etc/profile.d/zpool_vdev_name_path.sh
+
+     # GRUB fails to detect rpool name, hard code as "rpool"
+     sed -i "s|rpool=.*|rpool=rpool|"  /etc/grub.d/10_linux
+
+     # BusyBox stat does not recognize zfs, replace fs detection with ZFS
+     sed -i 's|stat -f -c %T /|echo zfs|' /usr/sbin/grub-mkconfig
+
+     # grub-probe fails to identify fs mounted at /boot
+     sed -i "s|GRUB_DEVICE_BOOT=.*|GRUB_DEVICE_BOOT=$(echo $DISK | cut -f1 -d\ )-part2|"  /usr/sbin/grub-mkconfig
+
+   This workaround needs to be applied for every GRUB update, as the
+   update will overwrite the changes.
+
 #. Install GRUB::
 
       export ZPOOL_VDEV_NAME_PATH=YES
+      mkdir -p /boot/efi/alpine/grub-bootdir/i386-pc/
+      mkdir -p /boot/efi/alpine/grub-bootdir/x86_64-efi/
       for i in ${DISK}; do
-       grub-install --target=i386-pc $i
+       grub-install --target=i386-pc --boot-directory \
+           /boot/efi/alpine/grub-bootdir/i386-pc/  $i
       done
-      grub-install --target x86_64-efi --bootloader-id alpine --removable
-      
+      grub-install --target x86_64-efi --boot-directory \
+          /boot/efi/alpine/grub-bootdir/x86_64-efi/ --efi-directory \
+	  /boot/efi --bootloader-id alpine --removable
+
+#. Generate GRUB menu::
+
+     grub-mkconfig -o /boot/efi/alpine/grub-bootdir/x86_64-efi/grub/grub.cfg
+     grub-mkconfig -o /boot/efi/alpine/grub-bootdir/i386-pc/grub/grub.cfg
+
+#. For both legacy and EFI booting: mirror ESP content::
+
+    ESP_MIRROR=$(mktemp -d)
+    cp -r /boot/efi/EFI $ESP_MIRROR
+    for i in /boot/efis/*; do
+     cp -r $ESP_MIRROR/EFI $i
+    done
+    rm -rf $ESP_MIRROR
+
 #. Unmount filesystems::
 
      exit
@@ -193,11 +248,10 @@ System Installation
    Disconnect the live media and other non-boot storage devices.
    Due to missing support of predictable device names in initrd,
    Alpine Linux will mount whichever disk appears to be /dev/sda or /dev/nvme0
-   at /boot and /boot/efi at boot.
+   at /boot/efi at boot.
 
-   Root filesystem at / is ZFS and imported via pool name thus not affected by the above restriction.
+   Root filesystem at / and /boot are ZFS and imported via pool name thus not affected by the above restriction.
 
 #. Post-install:
 
-   #. Setup mirroring of /boot partition and /boot/efi via dd.
    #. Setup swap.

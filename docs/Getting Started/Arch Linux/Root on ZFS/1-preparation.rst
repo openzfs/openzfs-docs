@@ -50,11 +50,6 @@ Preparation
 
     INST_PARTSIZE_RPOOL=
 
-#. Check kernel version::
-
-     uname -r
-     #5.18.7-arch1-1
-
 #. Add ZFS repo::
 
      curl -L https://archzfs.com/archzfs.gpg |  pacman-key -a -
@@ -69,6 +64,11 @@ Preparation
      [archzfs]
      Include = /etc/pacman.d/mirrorlist-archzfs
      EOF
+
+#. Check kernel version::
+
+     uname -r
+     #5.18.7-arch1-1
 
 #. Find a ZFS package compatible with the kernel:
 

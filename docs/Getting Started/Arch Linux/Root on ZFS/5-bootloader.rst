@@ -6,40 +6,6 @@ Bootloader
 .. contents:: Table of Contents
    :local:
 
-Apply workarounds
-~~~~~~~~~~~~~~~~~~~~
-Currently GRUB has multiple compatibility problems with ZFS,
-especially with regards to newer ZFS features.
-Workarounds have to be applied.
-
-#. grub-probe fails to get canonical path
-
-   When persistent device names ``/dev/disk/by-id/*`` are used
-   with ZFS, GRUB will fail to resolve the path of the boot pool
-   device. Error::
-
-     # /usr/bin/grub-probe: error: failed to get canonical path of `/dev/virtio-pci-0000:06:00.0-part3'.
-
-   Solution::
-
-    echo 'export ZPOOL_VDEV_NAME_PATH=YES' >> /etc/profile.d/zpool_vdev_name_path.sh
-    source /etc/profile.d/zpool_vdev_name_path.sh
-
-#. Pool name missing
-
-   See `this bug report <https://savannah.gnu.org/bugs/?59614>`__.
-   Root pool name is missing from ``root=ZFS=rpool_$INST_UUID/ROOT/default``
-   kernel cmdline in generated ``grub.cfg`` file.
-
-   A workaround is to replace the pool name detection with ``zdb``
-   command::
-
-     sed -i "s|rpool=.*|rpool=\`zdb -l \${GRUB_DEVICE} \| grep -E '[[:blank:]]name' \| cut -d\\\' -f 2\`|"  /etc/grub.d/10_linux
-
-   Caution:  this fix must be applied after every GRUB update and before generating the menu.
-
-Install GRUB
-~~~~~~~~~~~~~~~~~~~~
 #. Create empty cache file and generate initrd::
 
     rm -f /etc/zfs/zpool.cache
@@ -49,33 +15,40 @@ Install GRUB
 
     mkinitcpio -P
 
-#. If using legacy booting, install GRUB to every disk::
+#. Apply GRUB workaround::
 
-    for i in ${DISK}; do
-     grub-install --target=i386-pc $i
-    done
+     echo 'export ZPOOL_VDEV_NAME_PATH=YES' >> /etc/profile.d/zpool_vdev_name_path.sh
+     source /etc/profile.d/zpool_vdev_name_path.sh
 
-#. If using EFI::
+     # GRUB fails to detect rpool name, hard code as "rpool"
+     sed -i "s|rpool=.*|rpool=rpool|"  /etc/grub.d/10_linux
 
-     grub-install --target x86_64-efi
-     grub-install --target x86_64-efi --removable
-     for i in ${DISK}; do
-      efibootmgr -cgp 1 -l "\EFI\arch\grubx64.efi" \
-      -L "arch-${i##*/}" -d ${i}
-     done
+     echo GRUB_CMDLINE_LINUX=\"zfs_import_dir=/dev/disk/by-id/\" >> /etc/default/grub
 
-#. Generate GRUB Menu:
+   This workaround needs to be applied for every GRUB update, as the
+   update will overwrite the changes.
 
-   Generate menu::
+#. Install GRUB::
 
-    echo GRUB_CMDLINE_LINUX=\"zfs_import_dir=/dev/disk/by-id/\" >> /etc/default/grub
-    grub-mkconfig -o /boot/grub/grub.cfg
-    cp /boot/grub/grub.cfg /boot/efi/EFI/arch/
+      export ZPOOL_VDEV_NAME_PATH=YES
+      mkdir -p /boot/efi/arch/grub-bootdir/i386-pc/
+      mkdir -p /boot/efi/arch/grub-bootdir/x86_64-efi/
+      for i in ${DISK}; do
+       grub-install --target=i386-pc --boot-directory \
+           /boot/efi/arch/grub-bootdir/i386-pc/  $i
+      done
+      grub-install --target x86_64-efi --boot-directory \
+          /boot/efi/arch/grub-bootdir/x86_64-efi/ --efi-directory \
+	  /boot/efi --bootloader-id arch --removable
+
+#. Generate GRUB menu::
+
+     grub-mkconfig -o /boot/efi/arch/grub-bootdir/x86_64-efi/grub/grub.cfg
+     grub-mkconfig -o /boot/efi/arch/grub-bootdir/i386-pc/grub/grub.cfg
 
 #. For both legacy and EFI booting: mirror ESP content::
 
     ESP_MIRROR=$(mktemp -d)
-    unalias -a
     cp -r /boot/efi/EFI $ESP_MIRROR
     for i in /boot/efis/*; do
      cp -r $ESP_MIRROR/EFI $i

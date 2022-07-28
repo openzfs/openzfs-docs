@@ -8,11 +8,11 @@ System Configuration
 
 #. Disable cache, stale cache will prevent system from booting::
 
-     mkdir -p /mnt/state/etc/zfs/
-     rm -f /mnt/state/etc/zfs/zpool.cache
-     touch /mnt/state/etc/zfs/zpool.cache
-     chmod a-w /mnt/state/etc/zfs/zpool.cache
-     chattr +i /mnt/state/etc/zfs/zpool.cache
+     mkdir -p /mnt/etc/zfs/
+     rm -f /mnt/etc/zfs/zpool.cache
+     touch /mnt/etc/zfs/zpool.cache
+     chmod a-w /mnt/etc/zfs/zpool.cache
+     chattr +i /mnt/etc/zfs/zpool.cache
 
 #. Generate initial system configuration::
 

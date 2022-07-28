@@ -61,6 +61,6 @@ System Configuration
 
     fixfiles -F onboot
 
-#. Set root password::
+#. Set root password, the password set earlier does not work due to SELinux::
 
     passwd
