@@ -118,7 +118,8 @@ System Installation
 
    Create boot dataset::
 
-     zfs create -o canmount=on -o mountpoint=/boot bpool/archlinux
+     zfs create -o canmount=off -o mountpoint=none bpool/archlinux
+     zfs create -o canmount=on -o mountpoint=/boot bpool/archlinux/root
 
 #. Format and mount ESP::
 

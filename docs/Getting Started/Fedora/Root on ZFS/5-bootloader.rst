@@ -6,40 +6,6 @@ Bootloader
 .. contents:: Table of Contents
    :local:
 
-Apply workarounds
-~~~~~~~~~~~~~~~~~~~~
-Currently GRUB has multiple compatibility problems with ZFS,
-especially with regards to newer ZFS features.
-Workarounds have to be applied.
-
-#. grub2-probe fails to get canonical path
-
-   When persistent device names ``/dev/disk/by-id/*`` are used
-   with ZFS, GRUB will fail to resolve the path of the boot pool
-   device. Error::
-
-     # /usr/bin/grub2-probe: error: failed to get canonical path of `/dev/virtio-pci-0000:06:00.0-part3'.
-
-   Solution::
-
-    echo 'export ZPOOL_VDEV_NAME_PATH=YES' >> /etc/profile.d/zpool_vdev_name_path.sh
-    source /etc/profile.d/zpool_vdev_name_path.sh
-
-#. Pool name missing
-
-   See `this bug report <https://savannah.gnu.org/bugs/?59614>`__.
-   Root pool name is missing from ``root=ZFS=rpool_$INST_UUID/ROOT/default``
-   kernel cmdline in generated ``grub.cfg`` file.
-
-   A workaround is to replace the pool name detection with ``zdb``
-   command::
-
-     sed -i "s|rpool=.*|rpool=\`zdb -l \${GRUB_DEVICE} \| grep -E '[[:blank:]]name' \| cut -d\\\' -f 2\`|"  /etc/grub.d/10_linux
-
-   Caution:  this fix must be applied after every GRUB update and before generating the menu.
-
-Install GRUB
-~~~~~~~~~~~~~~~~~~~~
 
 #. If using virtio disk, add driver to initrd::
 
@@ -61,26 +27,33 @@ Install GRUB
 
     echo 'GRUB_ENABLE_BLSCFG=false' >> /etc/default/grub
 
-#. If using legacy booting, install GRUB to every disk::
+#. Apply GRUB workaround::
 
-    for i in ${DISK}; do
-     grub2-install --target=i386-pc $i
-    done
+     echo 'export ZPOOL_VDEV_NAME_PATH=YES' >> /etc/profile.d/zpool_vdev_name_path.sh
+     source /etc/profile.d/zpool_vdev_name_path.sh
 
-#. If using EFI::
+     # GRUB fails to detect rpool name, hard code as "rpool"
+     sed -i "s|rpool=.*|rpool=rpool|"  /etc/grub.d/10_linux
 
-    for i in ${DISK}; do
-     efibootmgr -cgp 1 -l "\EFI\fedora\shimx64.efi" \
-     -L "fedora-${i##*/}" -d ${i}
-    done
-    cp -r /usr/lib/grub/x86_64-efi/ /boot/efi/EFI/fedora/
+   This workaround needs to be applied for every GRUB update, as the
+   update will overwrite the changes.
 
-#. Generate GRUB Menu:
+#. Install GRUB::
 
-   Generate menu::
+      export ZPOOL_VDEV_NAME_PATH=YES
+      mkdir -p /boot/efi/fedora/grub-bootdir/i386-pc/
+      mkdir -p /boot/efi/fedora/grub-bootdir/x86_64-efi/
+      for i in ${DISK}; do
+       grub2-install --target=i386-pc --boot-directory \
+           /boot/efi/fedora/grub-bootdir/i386-pc/  $i
+      done
 
-    grub2-mkconfig -o /boot/grub2/grub.cfg
-    cp /boot/grub2/grub.cfg /boot/efi/EFI/fedora/
+      cp -r /usr/lib/grub/x86_64-efi/ /boot/efi/EFI/fedora/
+
+#. Generate GRUB menu::
+
+     grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
+     grub2-mkconfig -o /boot/efi/fedora/grub-bootdir/i386-pc/grub2/grub.cfg
 
 #. For both legacy and EFI booting: mirror ESP content::
 
