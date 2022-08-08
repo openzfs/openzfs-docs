@@ -139,6 +139,6 @@ System Installation
     kernel-devel
 
     dnf --installroot=/mnt   --releasever=$(source /etc/os-release ; echo $VERSION_ID) -y install \
-    https://zfsonlinux.org/fedora/zfs-release-fedora-2-1.noarch.rpm
+    https://zfsonlinux.org/fedora/zfs-release-2-2$(rpm --eval "%{dist}").noarch.rpm
 
     dnf --installroot=/mnt   --releasever=$(source /etc/os-release ; echo $VERSION_ID) -y install zfs zfs-dracut
