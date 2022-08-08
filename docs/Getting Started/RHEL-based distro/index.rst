@@ -15,7 +15,7 @@ updated as new versions are released. Only the current repository for each
 major release is updated with new packages. Packages are available for the
 following configurations:
 
-| **EL Releases:** 6, 7.9, 8.6
+| **EL Releases:** 6, 7.9, 8.6, 9.0
 | **Architectures:** x86_64
 
 To simplify installation a *zfs-release* package is provided which includes
@@ -30,18 +30,23 @@ the fingerprint listed here.
 | **Archived Repositories:** `el6`, `el7_5`_, `el7_6`_, `el7_7`_, `el7_8`_, `el8_0`_, `el8_1`_, `el8_2`_, `el8_3`_, `el8_4`_, `el8_5`_, `el8_6`_
 | **List of Repositories** `see repo page <https://github.com/zfsonlinux/zfsonlinux.github.com/tree/master/epel>`__
 
-| **Download from:**
+| **Signing key1 (Centos 8 and older, Fedora 36 and older)**
   `pgp.mit.edu <https://pgp.mit.edu/pks/lookup?search=0xF14AB620&op=index&fingerprint=on>`__
 | **Fingerprint:** C93A FFFD 9F3F 7B03 C310 CEB6 A9D5 A1C0 F14A B620
 
+| **Signing key2 (Centos 9+, Fedora 37+)**
+  `pgp.mit.edu <https://pgp.mit.edu/pks/lookup?search=0xA599FD5E9DB84141&op=index&fingerprint=on>`__
+| **Fingerprint:** 7DC7 299D CF7C 7FD9 CD87 701B A599 FD5E 9DB8 4141
+
+
 For RHEL/CentOS versions 6 and 7 run::
 
- yum install https://zfsonlinux.org/epel/zfs-release-el-2-1.noarch.rpm
+ yum install https://zfsonlinux.org/epel/zfs-release-2-2$(rpm --eval "%{dist}").noarch.rpm
  rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-zfsonlinux
 
-And for RHEL 8::
+And for RHEL 8-9::
 
- dnf install https://zfsonlinux.org/epel/zfs-release-el-2-1.noarch.rpm
+ dnf install https://zfsonlinux.org/epel/zfs-release-2-2$(rpm --eval "%{dist}").noarch.rpm
  rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-zfsonlinux
 
 After installing the *zfs-release* package and verifying the public key
