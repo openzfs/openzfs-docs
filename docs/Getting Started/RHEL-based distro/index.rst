@@ -42,12 +42,10 @@ the fingerprint listed here.
 For RHEL/CentOS versions 6 and 7 run::
 
  yum install https://zfsonlinux.org/epel/zfs-release-2-2$(rpm --eval "%{dist}").noarch.rpm
- rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-zfsonlinux
 
 And for RHEL 8-9::
 
  dnf install https://zfsonlinux.org/epel/zfs-release-2-2$(rpm --eval "%{dist}").noarch.rpm
- rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-zfsonlinux
 
 After installing the *zfs-release* package and verifying the public key
 users can opt to install either the DKMS or kABI-tracking kmod style packages.
