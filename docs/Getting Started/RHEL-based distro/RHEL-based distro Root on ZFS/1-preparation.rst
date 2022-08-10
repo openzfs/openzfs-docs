@@ -56,7 +56,7 @@ Preparation
 
 #. Add ZFS repo::
 
-    dnf install -y https://zfsonlinux.org/epel/zfs-release-el-2-1.noarch.rpm
+    dnf install -y https://zfsonlinux.org/epel/zfs-release-2-2$(rpm --eval "%{dist}").noarch.rpm
 
 #. Check available repos::
 
@@ -67,7 +67,6 @@ Preparation
     dnf config-manager --disable zfs
     dnf config-manager --enable zfs-kmod
     dnf install -y zfs
-    #  if gpg import fails, add --nogpgcheck
 
 #. Load kernel modules::
 
