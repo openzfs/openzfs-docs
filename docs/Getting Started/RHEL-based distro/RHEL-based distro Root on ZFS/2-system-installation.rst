@@ -138,10 +138,10 @@ System Installation
     @core  grub2-efi-x64 grub2-pc-modules grub2-efi-x64-modules shim-x64 efibootmgr kernel
 
     dnf --installroot=/mnt   --releasever=$(source /etc/os-release ; echo $VERSION_ID) -y install \
-    https://zfsonlinux.org/epel/zfs-release-el-2-1.noarch.rpm
+    https://zfsonlinux.org/epel/zfs-release-2-2$(rpm --eval "%{dist}").noarch.rpm
 
     dnf config-manager --installroot=/mnt --disable zfs
     dnf config-manager --installroot=/mnt --enable zfs-kmod
 
     dnf --installroot=/mnt   --releasever=$(source /etc/os-release ; echo $VERSION_ID) \
-    --nogpgcheck -y install zfs zfs-dracut
+    -y install zfs zfs-dracut
