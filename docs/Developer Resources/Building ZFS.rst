@@ -160,27 +160,27 @@ additional utilities must be installed.
 
 .. code:: sh
 
-   sudo yum install ksh bc fio acl sysstat mdadm lsscsi parted attr nfs-utils samba rng-tools pax perf
+   sudo yum install ksh bc bzip2 fio acl sysstat mdadm lsscsi parted attr nfs-utils samba rng-tools pax perf
    sudo yum install --enablerepo=epel dbench
 
 -  **RHEL/CentOS 8, Fedora:**
 
 .. code:: sh
 
-   sudo dnf install --skip-broken ksh bc fio acl sysstat mdadm lsscsi parted attr nfs-utils samba rng-tools pax perf
+   sudo dnf install --skip-broken ksh bc bzip2 fio acl sysstat mdadm lsscsi parted attr nfs-utils samba rng-tools pax perf
    sudo dnf install --skip-broken --enablerepo=epel dbench
 
 -  **Debian:**
 
 .. code:: sh
 
-   sudo apt install ksh bc fio acl sysstat mdadm lsscsi parted attr dbench nfs-kernel-server samba rng-tools pax linux-perf selinux-utils quota
+   sudo apt install ksh bc bzip2 fio acl sysstat mdadm lsscsi parted attr dbench nfs-kernel-server samba rng-tools pax linux-perf selinux-utils quota
 
 -  **Ubuntu:**
 
 .. code:: sh
 
-   sudo apt install ksh bc fio acl sysstat mdadm lsscsi parted attr dbench nfs-kernel-server samba rng-tools pax linux-tools-common selinux-utils quota
+   sudo apt install ksh bc bzip2 fio acl sysstat mdadm lsscsi parted attr dbench nfs-kernel-server samba rng-tools pax linux-tools-common selinux-utils quota
 
 
 There are a few helper scripts provided in the top-level scripts
