@@ -636,7 +636,7 @@ Step 4: System Configuration
 
 #. For LUKS installs only, setup ``/etc/crypttab``::
 
-     apt install --yes cryptsetup
+     apt install --yes cryptsetup cryptsetup-initramfs
 
      echo luks1 /dev/disk/by-uuid/$(blkid -s UUID -o value ${DISK}-part4) \
          none luks,discard,initramfs > /etc/crypttab
