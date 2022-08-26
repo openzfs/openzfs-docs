@@ -614,18 +614,28 @@ See
 :ref:`Sequential workloads <sequential_workloads>`
 for configuration recommendations.
 
+Samba
+~~~~~
+Windows/DOS clients doesn't support case sensitive file names.
+If your main workload won't need case sensitivity for other supported clients,
+create dataset with ``zfs create -o casesensitivity=insensitive``
+so Samba may search filenames faster in future [#FS_CASEFOLD_FL]_.
+
+See ``case sensitive`` option in
+`smb.conf(5) <https://www.samba.org/samba/docs/current/man-html/smb.conf.5.html>`__.
+
 .. _sequential_workloads:
 
 Sequential workloads
 --------------------
 
-Set recordsize=1M on datasets that are subject to sequential workloads.
+Set ``recordsize=1M`` on datasets that are subject to sequential workloads.
 Read
 :ref:`Larger record sizes <larger_record_sizes>`
 for documentation on things that should be known before setting 1M
 record sizes.
 
-Set compression=lz4 as per the general recommendation for :ref:`LZ4
+Set ``compression=lz4`` as per the general recommendation for :ref:`LZ4
 compression <lz4_compression>`.
 
 .. _video_games_directories:
@@ -667,6 +677,19 @@ Library Folder" to set the directory for steam to use to store games.
 Make sure to set it to the default by right clicking on it and clicking
 "Make Default Folder" before closing the dialogue.
 
+If you'll use Proton to run non-native games,
+create dataset with ``zfs create -o casesensitivity=insensitive``
+so Wine may search filenames faster in future [#FS_CASEFOLD_FL]_.
+
+.. _wine:
+
+Wine
+----
+
+Windows file systems' standard behavior is to be case-insensitive.
+Create dataset with ``zfs create -o casesensitivity=insensitive``
+so Wine may search filenames faster in future [#FS_CASEFOLD_FL]_.
+
 .. _virtual_machines:
 
 Virtual machines
@@ -692,3 +715,4 @@ AIO should be used to maximize IOPS when using files for guest storage.
 .. [#mysql_basic] <https://www.patpro.net/blog/index.php/2014/03/09/2617-mysql-on-zfs-on-freebsd/>
 .. [#sqlite_ps] <https://www.sqlite.org/pragma.html#pragma_page_size>
 .. [#sqlite_ps_change] <https://www.sqlite.org/pgszchng2016.html>
+.. [#FS_CASEFOLD_FL] <https://github.com/openzfs/zfs/pull/13790>
