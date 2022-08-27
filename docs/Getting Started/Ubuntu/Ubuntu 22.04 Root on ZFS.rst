@@ -35,8 +35,8 @@ Caution
 System Requirements
 ~~~~~~~~~~~~~~~~~~~
 
-- `Ubuntu 22.04 (“jammy”) Desktop CD
-  <https://releases.ubuntu.com/22.04/ubuntu-22.04-desktop-amd64.iso>`__
+- `Ubuntu 22.04.1 (“jammy”) Desktop CD
+  <https://releases.ubuntu.com/22.04.1/ubuntu-22.04.1-desktop-amd64.iso>`__
   (*not* any server images)
 - Installing on a drive which presents 4 KiB logical sectors (a “4Kn” drive)
   only works with UEFI booting. This not unique to ZFS. `GRUB does not and
