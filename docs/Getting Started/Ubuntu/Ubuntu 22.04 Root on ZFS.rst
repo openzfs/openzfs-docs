@@ -111,9 +111,10 @@ encrypted once per disk.
 Step 1: Prepare The Install Environment
 ---------------------------------------
 
-#. Boot the Ubuntu Live CD. Select Try Ubuntu. Connect your system to the
-   Internet as appropriate (e.g. join your WiFi network). Open a terminal
-   (press Ctrl-Alt-T).
+#. Boot the Ubuntu Live CD. From the GRUB boot menu, select *Try or Install Ubuntu*.
+   On the *Welcome* page, select your preferred language and *Try Ubuntu*.
+   Connect your system to the Internet as appropriate (e.g. join your WiFi network).
+   Open a terminal (press Ctrl-Alt-T).
 
 #. Setup and update the repositories::
 
@@ -181,7 +182,7 @@ Step 2: Disk Formatting
 #. If you are re-using a disk, clear it as necessary:
 
    Ensure swap partitions are not in use::
-   
+
      swapoff --all
 
    If the disk was previously used in an MD array::
