@@ -111,7 +111,7 @@ is far easier and faster than doing everything by hand.
 If you want a ZFS native encrypted, desktop install, you can `trivially edit
 the installer
 <https://linsomniac.gitlab.io/post/2020-04-09-ubuntu-2004-encrypted-zfs/>`__.
-The ``-o recordsize=1M`` there is unrelated to encryption; omit that unless
+The ``-O recordsize=1M`` there is unrelated to encryption; omit that unless
 you understand it. Make sure to use a password that is at least 8 characters
 or this hack will crash the installer. Additionally, once the system is
 installed, you should switch to encrypted swap::
@@ -518,7 +518,7 @@ Step 2: Disk Formatting
      with enforced UTF-8 only filenames
      <http://utcc.utoronto.ca/~cks/space/blog/linux/ForcedUTF8Filenames>`__.
    - ``recordsize`` is unset (leaving it at the default of 128 KiB). If you
-     want to tune it (e.g. ``-o recordsize=1M``), see `these
+     want to tune it (e.g. ``-O recordsize=1M``), see `these
      <https://jrs-s.net/2019/04/03/on-zfs-recordsize/>`__ `various
      <http://blog.programster.org/zfs-record-size>`__ `blog
      <https://utcc.utoronto.ca/~cks/space/blog/solaris/ZFSFileRecordsizeGrowth>`__

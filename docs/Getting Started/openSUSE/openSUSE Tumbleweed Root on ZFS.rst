@@ -336,7 +336,7 @@ Step 2: Disk Formatting
      with enforced UTF-8 only filenames
      <http://utcc.utoronto.ca/~cks/space/blog/linux/ForcedUTF8Filenames>`__.
    - ``recordsize`` is unset (leaving it at the default of 128 KiB). If you
-     want to tune it (e.g. ``-o recordsize=1M``), see `these
+     want to tune it (e.g. ``-O recordsize=1M``), see `these
      <https://jrs-s.net/2019/04/03/on-zfs-recordsize/>`__ `various
      <http://blog.programster.org/zfs-record-size>`__ `blog
      <https://utcc.utoronto.ca/~cks/space/blog/solaris/ZFSFileRecordsizeGrowth>`__
