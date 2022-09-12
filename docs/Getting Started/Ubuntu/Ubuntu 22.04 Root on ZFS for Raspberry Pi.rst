@@ -180,12 +180,12 @@ be deleted.
      unit: sectors
 
      <name>.img1 : start=        2048, size=      524288, type=c, bootable
-     <name>.img2 : start=      526336, size=     7129360, type=83
+     <name>.img2 : start=      526336, size=     7193932, type=83
 
-   The important numbers are 524288 and 7129360.  Store those in variables::
+   The important numbers are 524288 and 7193932.  Store those in variables::
 
      BOOT=524288
-     ROOT=7129360
+     ROOT=7193932
 
 #. Create a partition script::
 
