@@ -26,7 +26,7 @@ System Requirements
 - A Raspberry Pi 4 B. (If you are looking to install on a regular PC, see
   :doc:`Ubuntu 22.04 Root on ZFS`.)
 - `Ubuntu Server 22.04 (“Jammy”) for Raspberry Pi 4
-  <https://cdimage.ubuntu.com/releases/22.04/release/ubuntu-22.04-preinstalled-server-arm64+raspi.img.xz>`__
+  <https://cdimage.ubuntu.com/releases/22.04/release/ubuntu-22.04.1-preinstalled-server-arm64+raspi.img.xz>`__
 - A microSD card or USB disk. For microSD card recommendations, see Jeff
   Geerling's `performance comparison
   <https://www.jeffgeerling.com/blog/2019/raspberry-pi-microsd-card-performance-comparison-2019>`__.
@@ -161,22 +161,22 @@ be deleted.
 
 #. Download and unpack the official image::
 
-    curl -O https://cdimage.ubuntu.com/releases/22.04/release/ubuntu-22.04-preinstalled-server-arm64+raspi.img.xz
-    xz -d ubuntu-22.04-preinstalled-server-arm64+raspi.img.xz
+    curl -O https://cdimage.ubuntu.com/releases/22.04/release/ubuntu-22.04.1-preinstalled-server-arm64+raspi.img.xz
+    xz -d ubuntu-22.04.1-preinstalled-server-arm64+raspi.img.xz
 
     # or combine them to decompress as you download:
-    curl https://cdimage.ubuntu.com/releases/22.04/release/ubuntu-22.04-preinstalled-server-arm64+raspi.img.xz | \
-        xz -d > ubuntu-22.04-preinstalled-server-arm64+raspi.img
+    curl https://cdimage.ubuntu.com/releases/22.04/release/ubuntu-22.04.1-preinstalled-server-arm64+raspi.img.xz | \
+        xz -d > ubuntu-22.04.1-preinstalled-server-arm64+raspi.img
 
 #. Dump the partition table for the image::
 
-     sfdisk -d ubuntu-22.04-preinstalled-server-arm64+raspi.img
+     sfdisk -d ubuntu-22.04.1-preinstalled-server-arm64+raspi.img
 
    That will output this::
 
      label: dos
      label-id: 0x638274e3
-     device: ubuntu-22.04-preinstalled-server-arm64+raspi.img
+     device: ubuntu-22.04.1-preinstalled-server-arm64+raspi.img
      unit: sectors
 
      <name>.img1 : start=        2048, size=      524288, type=c, bootable
@@ -256,7 +256,7 @@ be deleted.
 #. Loopback mount the image::
 
      IMG=$(sudo losetup -fP --show \
-               ubuntu-22.04-preinstalled-server-arm64+raspi.img)
+               ubuntu-22.04.1-preinstalled-server-arm64+raspi.img)
 
 #. Copy the bootloader data::
 
