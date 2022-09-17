@@ -717,6 +717,13 @@ Step 4: System Configuration
          [Install]
          WantedBy=zfs-import.target
 
+   **Notes:**
+    
+   - For some disk configurations this service may fail with an error indicating that 
+     the ``bpool`` cannot be found/imported. In this case, adding ``-d DISK-part3`` 
+     (where ``DISK`` must be replaced with the correct device path) before ``bpool`` 
+     in the line starting with ``ExecStart`` fixes this. 
+
    ::
 
      systemctl enable zfs-import-bpool.service
