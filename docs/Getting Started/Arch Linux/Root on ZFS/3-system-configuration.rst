@@ -60,7 +60,7 @@ System Configuration
 #. Chroot::
 
     history -w /mnt/home/sys-install-pre-chroot.txt
-    arch-chroot /mnt /usr/bin/env DISK=$DISK bash
+    arch-chroot /mnt /usr/bin/env DISK="$DISK" bash
 
 #. Generate locales::
 

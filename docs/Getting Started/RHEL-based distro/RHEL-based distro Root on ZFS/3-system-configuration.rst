@@ -55,7 +55,7 @@ System Configuration
     for i in $m; do mount --rbind $i /mnt/$i; done
 
     history -w /mnt/home/sys-install-pre-chroot.txt
-    chroot /mnt /usr/bin/env DISK=$DISK bash --login
+    chroot /mnt /usr/bin/env DISK="$DISK" bash --login
 
 #. For SELinux, relabel filesystem on reboot::
 

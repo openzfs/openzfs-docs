@@ -157,7 +157,7 @@ System Installation
     m='/dev /proc /sys'
     for i in $m; do mount --rbind $i /mnt/$i; done
 
-    chroot /mnt /usr/bin/env DISK=$DISK sh
+    chroot /mnt /usr/bin/env DISK="$DISK" sh
 
 #. Rebuild initrd::
 
