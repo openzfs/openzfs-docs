@@ -721,6 +721,12 @@ Step 4: System Configuration
 
      systemctl enable zfs-import-bpool.service
 
+   **Note:** For some disk configurations (NVMe?), this service `may fail
+   <https://github.com/openzfs/openzfs-docs/issues/349>`__ with an error
+   indicating that the ``bpool`` cannot be found.  If this happens, add
+   ``-d DISK-part3`` (replace ``DISK`` with the correct device path) to the
+   ``zpool import`` command.
+
 #. Optional (but recommended): Mount a tmpfs to ``/tmp``
 
    If you chose to create a ``/tmp`` dataset above, skip this step, as they
