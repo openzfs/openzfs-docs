@@ -84,7 +84,7 @@ To build and install:
    git clone https://github.com/openzfs/zfs
    cd zfs
    ./autogen.sh
-   ./configure
+   env MAKE=gmake ./configure
    gmake -j`sysctl -n hw.ncpu`
    # as root
    gmake install
