@@ -31,12 +31,12 @@ The following dependencies are required to build OpenZFS on FreeBSD:
 
 -  FreeBSD sources in /usr/src or elsewhere specified by SYSDIR in env.
    If you don't have the sources installed you can install them with
-   svnlite.
+   git.
 
    Install source For FreeBSD 12:
    ::
 
-     svnlite checkout https://svn.freebsd.org/base/stable/12 /usr/src
+     git clone -b stable/12 https://git.FreeBSD.org/src.git /usr/src
 
    Install source for FreeBSD Current:
    ::
