@@ -103,9 +103,14 @@ def omniosce():
     versions.sort()
     versions = versions[-2:]
     for ver in versions:
+        # omnios backported man pages group change
+        if int(ver.lstrip('r')) >= 151042:
+            group = 7
+        else:
+            group = 5
         sources[ver] = ('https://raw.githubusercontent.com/omniosorg/'
-                        'illumos-omnios/{}/usr/src/man/man5/'
-                        'zpool-features.5'.format(ver))
+                        'illumos-omnios/{ver}/usr/src/man/man{group}/'
+                        'zpool-features.{group}'.format(ver=ver, group=group))
     return sources
 
 
@@ -179,7 +184,7 @@ for name, sub in sources.items():
                     continue
                 man = c.read().decode('utf-8')
         except HTTPError:
-            LOG.debug('Failed with HTTPError')
+            LOG.debug('%s (%s): %s failed with HTTPError', name, ver, url)
             continue
         found[ver] = url
         for line in man.split('\n'):
