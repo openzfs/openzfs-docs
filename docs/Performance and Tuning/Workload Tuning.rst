@@ -342,6 +342,33 @@ the whole_disk field set to true, such that a pool imported on another
 platform that was created on FreeBSD will always be treated as the whole
 disks were given to ZFS.
 
+.. _OS_specific:
+
+OS/distro-specific recommendations
+----------------------------------
+
+.. _linux_specific:
+
+Linux
+~~~~~
+
+init_on_alloc
+^^^^^^^^^^^^^
+Some Linux distributions (at least Debian, Ubuntu) enable 
+``init_on_alloc`` option as security precaution by default.
+This option can help to [#init_on_alloc]_:
+
+  prevent possible information leaks and
+  make control-flow bugs that depend on uninitialized values more
+  deterministic.
+  
+Unfortunately, it can lower ARC throughput considerably
+(see `bug <https://github.com/openzfs/zfs/issues/9910>`__).
+
+If you're ready to cope with these security risks [#init_on_alloc]_,
+you may disable it 
+by setting ``init_on_alloc=0`` in the GRUB kernel boot parameters.
+
 .. _general_recommendations:
 
 General recommendations
@@ -716,3 +743,4 @@ AIO should be used to maximize IOPS when using files for guest storage.
 .. [#sqlite_ps] <https://www.sqlite.org/pragma.html#pragma_page_size>
 .. [#sqlite_ps_change] <https://www.sqlite.org/pgszchng2016.html>
 .. [#FS_CASEFOLD_FL] <https://github.com/openzfs/zfs/pull/13790>
+.. [#init_on_alloc] <https://patchwork.kernel.org/project/linux-security-module/patch/20190626121943.131390-2-glider@google.com/#22731857>
