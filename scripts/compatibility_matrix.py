@@ -341,7 +341,7 @@ html.write('</table>\n')
 html.write('<div>\n')
 html.write('<h3>Notes:</h3>\n')
 html.write('<ol>\n')
-html.write('<li id="note_1"><a href="https://github.com/openzfs/zfs/pull/12735">Edonr support was not enabled in FreeBSD with OpenZFS up to 2.1 release included<a></li>\n')
+html.write('<li id="note_1"><a href="https://github.com/openzfs/zfs/pull/12735">Edonr support was not enabled in FreeBSD with OpenZFS up to 2.1 release included</a></li>\n')
 html.write('</ol>\n')
 html.write('</div>\n')
 now = datetime.now().isoformat() + 'Z'
