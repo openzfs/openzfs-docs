@@ -646,6 +646,24 @@ Step 4: System Configuration
 
    **Hint:** If you are creating a mirror or raidz topology, repeat the
    ``/etc/crypttab`` entries for ``luks2``, etc. adjusting for each disk.
+   
+   If you're using keyfiles to decrypt your root system at boot, then you'll have to
+   prepare a special ``crypttab`` for the initramfs.  This is necessary because
+   the boot scripts expect to find the crypttab at ``/conf/conf.d/cryptroot`` inside
+   the image, and the format of that file differs slightly to the native crypttab.  You
+   can generate the correct format with a command like this::
+   
+     awk '/^luks.*/ {print "target=" $1 ",source=" $2 ",keyscript=cat,key=/cryptroot/keyfiles/" $1 ".key"}' /etc/crypttab
+   
+   The output should be something like this::
+   
+     target=luks-zfs1,source=UUID=a1234567-b123-c456-d789-abcdef012345,keyscript=cat,key=/cryptroot/keyfiles/luks-zfs1.key
+     target=luks-zfs2,source=UUID=e7654321-f321-a654-b987-012345abcdef,keyscript=cat,key=/cryptroot/keyfiles/luks-zfs2.key
+
+   **Note:** Storing your keyfiles in your initramfs is insecure in that if the
+   initramfs image is stored on an unecrypted volume an attacker with phsyical
+   access could trivially unlock your disks.  Additionally if the initrmafs image
+   on disk is readable by other users then anyone could also extract your keys.
 
 #. Install GRUB
 
