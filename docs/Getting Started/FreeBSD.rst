@@ -128,4 +128,15 @@ Though not required, ``WITHOUT_ZFS`` is a useful build option in FreeBSD
 to avoid building and installing the legacy zfs tools and kmod - see
 ``src.conf(5)``.
 
+Some tests require fdescfs to be mount on /dev/fd.  This can be done
+temporarily with:
+::
+
+  mount -t fdescfs fdescfs /dev/fd
+
+or an entry can be added to /etc/fstab.
+::
+
+  fdescfs /dev/fd fdescfs rw 0 0
+
 .. |ZoF-logo| image:: /_static/img/logo/zof-logo.png
