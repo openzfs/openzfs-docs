@@ -97,6 +97,6 @@ Post installaion
 #. Install package groups::
 
     dnf group list --hidden -v       # query package groups
-    dnf group install @gnome-desktop
+    dnf group install gnome-desktop
 
 #. Add new user, configure swap.
