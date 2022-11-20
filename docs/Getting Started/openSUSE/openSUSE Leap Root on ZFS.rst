@@ -407,7 +407,7 @@ Step 2: Disk Formatting
    - The pool name is arbitrary. If changed, the new name must be used
      consistently. On systems that can automatically install to ZFS, the root
      pool is named ``rpool`` by default.
-   - If you want to use grub bootloader, you must to set::
+   - If you want to use grub bootloader, you must set::
    
        -o feature@async_destroy=enabled \
        -o feature@bookmarks=enabled \
