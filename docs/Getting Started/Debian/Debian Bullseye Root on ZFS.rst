@@ -647,6 +647,18 @@ Step 4: System Configuration
    **Hint:** If you are creating a mirror or raidz topology, repeat the
    ``/etc/crypttab`` entries for ``luks2``, etc. adjusting for each disk.
 
+#. Install an NTP service to synchronize time.
+   This step is specific to Bullseye which does not install the package during
+   bootstrap.
+   Although this step is not necessary for ZFS, it is useful for internet
+   browsing where local clock drift can cause login failures::
+
+     apt install systemd-timesyncd
+     timedatectl
+
+   You should now see "NTP service: active" in the above ``timedatectl``
+   output.
+
 #. Install GRUB
 
    Choose one of the following options:
