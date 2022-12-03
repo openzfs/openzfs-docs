@@ -464,7 +464,7 @@ Step 3: System Installation
 
    If this system will store local email in /var/mail::
 
-     zfs create                                 rpool/var/mail
+     zfs create                                 rpool/var/spool/mail
 
    If this system will use Snap packages::
 
