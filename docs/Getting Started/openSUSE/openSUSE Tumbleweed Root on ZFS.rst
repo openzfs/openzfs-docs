@@ -668,7 +668,7 @@ Step 5: System Configuration
 
    .. code-block:: text
 
-     zypper install -f permissions-config iputils ca-certificates  ca-certificates-mozilla pam shadow dbus libutempter0 suse-module-tools util-linux
+     zypper install -f permissions-config iputils ca-certificates  ca-certificates-mozilla pam shadow dbus-1 libutempter0 suse-module-tools util-linux
 
 
 #. Install kernel::
