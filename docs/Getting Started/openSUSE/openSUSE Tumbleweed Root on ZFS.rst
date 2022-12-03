@@ -709,9 +709,7 @@ Step 5: System Configuration
 
    - Install GRUB for legacy (BIOS) booting::
 
-       zypper install grub2-x86_64-pc
-
-     If your processor is 32bit use `grub2-i386-pc` instead of x86_64 one.
+       zypper install grub2-i386-pc
 
    - Install GRUB for UEFI booting::
 
