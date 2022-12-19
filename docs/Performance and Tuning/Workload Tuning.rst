@@ -50,7 +50,10 @@ zfs properties respectively, which can be set on both zvols and
 datasets. Possible settings are ``all``, ``none`` and ``metadata``. It
 is possible to improve performance when a zvol or dataset hosts an
 application that does its own caching by caching only metadata. One
-example is PostgreSQL. Another would be a virtual machine using ZFS.
+example would be a virtual machine using ZFS. Another would be a 
+database system which manages its own cache (Oracle for instance).
+PostgreSQL, by contrast, depends on the OS-level file cache for the 
+majority of cache.
 
 .. _alignment_shift_ashift:
 
@@ -614,9 +617,13 @@ settings must be disabled to disable AIO.
 PostgreSQL
 ~~~~~~~~~~
 
-Make separate datasets for PostgreSQL's data and WAL. Set ``recordsize=8K``
-on both to avoid expensive partial record writes. Set ``logbias=throughput``
-on PostgreSQL's data to avoid writing twice.
+Make separate datasets for PostgreSQL's data and WAL. Set 
+``compression=lz4`` and ``recordsize=32K`` (64K also work well, as 
+does the 128K default) on both. Configure ``full_page_writes = off`` 
+for PostgreSQL, as ZFS will never commit a partial write. For a database 
+with large updates, experiment with ``logbias=throughput`` on 
+PostgreSQL's data to avoid writing twice, but be aware that with this 
+setting smaller updates can cause severe fragmentation.
 
 SQLite
 ~~~~~~
