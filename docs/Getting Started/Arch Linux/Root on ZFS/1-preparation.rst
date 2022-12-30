@@ -18,7 +18,7 @@ Preparation
 
     ssh root@192.168.1.19
 
-#. Use bash shell.  Other shell not tested::
+#. Use bash shell. Other shells are not tested::
 
      bash
 
