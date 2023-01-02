@@ -42,7 +42,7 @@ Live image ships with ZFS support by default.
     { config, pkgs, ... }:
 
     { boot.supportedFilesystems = [ "zfs" ];
-      networking.hostId = "$(head -c 8 /etc/machine-id)";
+      networking.hostId = (builtins.substring 0 8 (builtins.readFile "/etc/machine-id"));
     }
     EOF
 
