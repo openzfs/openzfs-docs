@@ -580,6 +580,11 @@ Step 3: System Installation
    to limit the maximum space used. Otherwise, you can use a tmpfs (RAM
    filesystem) later.
 
+   **Note:** If you separate a directory required for booting (e.g. ``/etc``)
+   into its own dataset, you must add it to
+   ``ZFS_INITRD_ADDITIONAL_DATASETS`` in ``/etc/default/zfs``.  Datasets
+   with ``canmount=off`` (like ``rpool/usr`` above) do not matter for this.
+
 #. Mount a tmpfs at /run::
 
      mkdir /mnt/run
