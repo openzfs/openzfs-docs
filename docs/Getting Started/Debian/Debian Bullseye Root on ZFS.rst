@@ -957,7 +957,7 @@ Step 6: First Boot
 
      cp -a /etc/skel/. /home/$username
      chown -R $username:$username /home/$username
-     usermod -a -G audio,cdrom,dip,floppy,netdev,plugdev,sudo,video $username
+     usermod -a -G sudo $username
 
 #. Mirror GRUB
 
