@@ -165,6 +165,15 @@ The following compression algorithms are available:
 
    -  A very simple algorithm that only compresses zeroes.
 
+-  ZSTD (Zstandard)
+
+   -  Zstandard is a modern, high performance, general compression
+      algorithm which provides similar or better compression levels to
+      GZIP, but with much better performance. Zstandard offers a very
+      wide range of performance/compression trade-off, and is backed by
+      an extremely fast decoder.
+      It is available from `OpenZFS 2.0 version <https://github.com/openzfs/zfs/pull/10278>`__.
+
 If you want to use compression and are uncertain which to use, use LZ4.
 It averages a 2.1:1 compression ratio while gzip-1 averages 2.7:1, but
 gzip is much slower. Both figures are obtained from `testing by the LZ4
