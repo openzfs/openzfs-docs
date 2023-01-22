@@ -53,7 +53,7 @@ def openzfsonosx():
         try:
             tags = dejson(web.read().decode('utf-8', 'ignore'))
             tags = [x['name'].lstrip('zfs-macOS-') for x in tags]
-            tags = [tag for tag in tags if '.99' not in tag] 
+            tags = [tag for tag in tags if '.99' not in tag]
             tags.sort()
             latest = tags[-1]
             tags = [tag for tag in tags if 'rc' not in tag]
@@ -103,9 +103,14 @@ def omniosce():
     versions.sort()
     versions = versions[-2:]
     for ver in versions:
+        # omnios backported man pages group change
+        if int(ver.lstrip('r')) >= 151042:
+            group = 7
+        else:
+            group = 5
         sources[ver] = ('https://raw.githubusercontent.com/omniosorg/'
-                        'illumos-omnios/{}/usr/src/man/man5/'
-                        'zpool-features.5'.format(ver))
+                        'illumos-omnios/{ver}/usr/src/man/man{group}/'
+                        'zpool-features.{group}'.format(ver=ver, group=group))
     return sources
 
 
@@ -179,7 +184,7 @@ for name, sub in sources.items():
                     continue
                 man = c.read().decode('utf-8')
         except HTTPError:
-            LOG.debug('Failed with HTTPError')
+            LOG.debug('%s (%s): %s failed with HTTPError', name, ver, url)
             continue
         found[ver] = url
         for line in man.split('\n'):
@@ -321,13 +326,24 @@ for (feature, domain), names in sorted(features.items()):
         html.write('<td class="warn">no</td>')
     for name, vers in header:
         for ver in vers:
-            if (name, ver) in names:
+            # custom case for OpenZFS FreeBSD https://github.com/openzfs/zfs/pull/12735
+            if (feature == 'edonr' and name == openzfs_key and '.' in ver
+                    and (int(ver.split('.')[0]) <= 2
+                         or (int(ver.split('.')[0]) <= 1
+                             and int(ver.split('.')[1]) <= 1))):
+                html.write('<td class="yes">yes<sup><a href="#note_1">1</a></sup></td>')
+            elif (name, ver) in names:
                 html.write('<td class="yes">yes</td>')
             else:
                 html.write('<td class="no">no</td>')
     html.write('</tr>\n')
 html.write('</table>\n')
-
+html.write('<div>\n')
+html.write('<h3>Notes:</h3>\n')
+html.write('<ol>\n')
+html.write('<li id="note_1"><a href="https://github.com/openzfs/zfs/pull/12735">Edonr support was not enabled in FreeBSD with OpenZFS up to 2.1 release included</a></li>\n')
+html.write('</ol>\n')
+html.write('</div>\n')
 now = datetime.now().isoformat() + 'Z'
 html.write('<p>Table generates by parsing manpages for feature flags, and is entirely dependent on good, accurate documentation.<br />Last updated on ' + now + ' using <a href="https://github.com/openzfs/openzfs-docs/tree/master/scripts/compatibility_matrix.py">compatibility_matrix.py</a>.</p>\n')
 

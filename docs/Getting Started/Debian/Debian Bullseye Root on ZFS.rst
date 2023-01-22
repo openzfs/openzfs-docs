@@ -528,6 +528,11 @@ Step 3: System Installation
    to limit the maximum space used. Otherwise, you can use a tmpfs (RAM
    filesystem) later.
 
+   **Note:** If you separate a directory required for booting (e.g. ``/etc``)
+   into its own dataset, you must add it to
+   ``ZFS_INITRD_ADDITIONAL_DATASETS`` in ``/etc/default/zfs``.  Datasets
+   with ``canmount=off`` (like ``rpool/usr`` above) do not matter for this.
+
 #. Mount a tmpfs at /run::
 
      mkdir /mnt/run
@@ -665,6 +670,18 @@ Step 4: System Configuration
    disks.  Additionally if the initramfs image on disk is readable by other users
    then anyone could also extract your keys.  See the `official Debian cryptsetup
    documentation <https://cryptsetup-team.pages.debian.net/cryptsetup/>`_ for more information.
+
+#. Install an NTP service to synchronize time.
+   This step is specific to Bullseye which does not install the package during
+   bootstrap.
+   Although this step is not necessary for ZFS, it is useful for internet
+   browsing where local clock drift can cause login failures::
+
+     apt install systemd-timesyncd
+     timedatectl
+
+   You should now see "NTP service: active" in the above ``timedatectl``
+   output.
 
 #. Install GRUB
 

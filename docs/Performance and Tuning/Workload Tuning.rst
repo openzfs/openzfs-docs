@@ -50,7 +50,10 @@ zfs properties respectively, which can be set on both zvols and
 datasets. Possible settings are ``all``, ``none`` and ``metadata``. It
 is possible to improve performance when a zvol or dataset hosts an
 application that does its own caching by caching only metadata. One
-example is PostgreSQL. Another would be a virtual machine using ZFS.
+example would be a virtual machine using ZFS. Another would be a 
+database system which manages its own cache (Oracle for instance).
+PostgreSQL, by contrast, depends on the OS-level file cache for the 
+majority of cache.
 
 .. _alignment_shift_ashift:
 
@@ -342,6 +345,33 @@ the whole_disk field set to true, such that a pool imported on another
 platform that was created on FreeBSD will always be treated as the whole
 disks were given to ZFS.
 
+.. _OS_specific:
+
+OS/distro-specific recommendations
+----------------------------------
+
+.. _linux_specific:
+
+Linux
+~~~~~
+
+init_on_alloc
+^^^^^^^^^^^^^
+Some Linux distributions (at least Debian, Ubuntu) enable 
+``init_on_alloc`` option as security precaution by default.
+This option can help to [#init_on_alloc]_:
+
+  prevent possible information leaks and
+  make control-flow bugs that depend on uninitialized values more
+  deterministic.
+  
+Unfortunately, it can lower ARC throughput considerably
+(see `bug <https://github.com/openzfs/zfs/issues/9910>`__).
+
+If you're ready to cope with these security risks [#init_on_alloc]_,
+you may disable it 
+by setting ``init_on_alloc=0`` in the GRUB kernel boot parameters.
+
 .. _general_recommendations:
 
 General recommendations
@@ -587,9 +617,13 @@ settings must be disabled to disable AIO.
 PostgreSQL
 ~~~~~~~~~~
 
-Make separate datasets for PostgreSQL's data and WAL. Set ``recordsize=8K``
-on both to avoid expensive partial record writes. Set ``logbias=throughput``
-on PostgreSQL's data to avoid writing twice.
+Make separate datasets for PostgreSQL's data and WAL. Set 
+``compression=lz4`` and ``recordsize=32K`` (64K also work well, as 
+does the 128K default) on both. Configure ``full_page_writes = off`` 
+for PostgreSQL, as ZFS will never commit a partial write. For a database 
+with large updates, experiment with ``logbias=throughput`` on 
+PostgreSQL's data to avoid writing twice, but be aware that with this 
+setting smaller updates can cause severe fragmentation.
 
 SQLite
 ~~~~~~
@@ -716,3 +750,4 @@ AIO should be used to maximize IOPS when using files for guest storage.
 .. [#sqlite_ps] <https://www.sqlite.org/pragma.html#pragma_page_size>
 .. [#sqlite_ps_change] <https://www.sqlite.org/pgszchng2016.html>
 .. [#FS_CASEFOLD_FL] <https://github.com/openzfs/zfs/pull/13790>
+.. [#init_on_alloc] <https://patchwork.kernel.org/project/linux-security-module/patch/20190626121943.131390-2-glider@google.com/#22731857>

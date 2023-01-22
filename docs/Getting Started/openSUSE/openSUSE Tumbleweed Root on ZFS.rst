@@ -464,7 +464,7 @@ Step 3: System Installation
 
    If this system will store local email in /var/mail::
 
-     zfs create                                 rpool/var/mail
+     zfs create                                 rpool/var/spool/mail
 
    If this system will use Snap packages::
 
@@ -668,7 +668,7 @@ Step 5: System Configuration
 
    .. code-block:: text
 
-     zypper install -f permissions-config iputils ca-certificates  ca-certificates-mozilla pam shadow dbus libutempter0 suse-module-tools util-linux
+     zypper install -f permissions-config iputils ca-certificates  ca-certificates-mozilla pam shadow dbus-1 libutempter0 suse-module-tools util-linux
 
 
 #. Install kernel::
@@ -709,9 +709,7 @@ Step 5: System Configuration
 
    - Install GRUB for legacy (BIOS) booting::
 
-       zypper install grub2-x86_64-pc
-
-     If your processor is 32bit use `grub2-i386-pc` instead of x86_64 one.
+       zypper install grub2-i386-pc
 
    - Install GRUB for UEFI booting::
 

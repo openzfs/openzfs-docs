@@ -3329,7 +3329,11 @@ When to change         See section "ZFS TRANSACTION DELAY"
 Data Type              ulong
 Units                  bytes
 Range                  1 to physical RAM size
-Default                25% of physical RAM
+Default                physical_ram/4
+
+                       **since v0.7:** min(physical_ram/4, 4GiB)
+
+                       **since v2.0 for 32-bit systems:** min(physical_ram/4, 1GiB)
 Change                 Prior to zfs module load
 Versions Affected      v0.6.4 and later
 ====================== ====================================

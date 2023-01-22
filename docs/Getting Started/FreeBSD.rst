@@ -31,12 +31,12 @@ The following dependencies are required to build OpenZFS on FreeBSD:
 
 -  FreeBSD sources in /usr/src or elsewhere specified by SYSDIR in env.
    If you don't have the sources installed you can install them with
-   svnlite.
+   git.
 
    Install source For FreeBSD 12:
    ::
 
-     svnlite checkout https://svn.freebsd.org/base/stable/12 /usr/src
+     git clone -b stable/12 https://git.FreeBSD.org/src.git /usr/src
 
    Install source for FreeBSD Current:
    ::
@@ -56,8 +56,8 @@ The following dependencies are required to build OpenZFS on FreeBSD:
 -  Optional packages for build:
    ::
 
-      pkg install python38 # or your preferred Python version
-      pkg install py38-sysctl # needed for arcstat, arc_summary, dbufstat
+      pkg install python
+      pkg install devel/py-sysctl # needed for arcstat, arc_summary, dbufstat
 
 -  Packages for checks and tests:
    ::
@@ -70,8 +70,7 @@ The following dependencies are required to build OpenZFS on FreeBSD:
           hs-ShellCheck \
           ksh93 \
           pamtester \
-          py38-flake8 \
-          python38 \
+          devel/py-flake8 \
           sudo
 
    Your preferred python version may be substituted. The user for
@@ -85,7 +84,7 @@ To build and install:
    git clone https://github.com/openzfs/zfs
    cd zfs
    ./autogen.sh
-   ./configure
+   env MAKE=gmake ./configure
    gmake -j`sysctl -n hw.ncpu`
    # as root
    gmake install
@@ -128,5 +127,16 @@ unloaded and loaded without rebooting.
 Though not required, ``WITHOUT_ZFS`` is a useful build option in FreeBSD
 to avoid building and installing the legacy zfs tools and kmod - see
 ``src.conf(5)``.
+
+Some tests require fdescfs to be mount on /dev/fd.  This can be done
+temporarily with:
+::
+
+  mount -t fdescfs fdescfs /dev/fd
+
+or an entry can be added to /etc/fstab.
+::
+
+  fdescfs /dev/fd fdescfs rw 0 0
 
 .. |ZoF-logo| image:: /_static/img/logo/zof-logo.png
