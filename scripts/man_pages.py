@@ -84,16 +84,20 @@ def run(in_dir, out_dir):
             out_section_dir = os.path.join(out_dir, build_dir, section)
             os.makedirs(out_section_dir, exist_ok=True)
             for page in os.listdir(os.path.join(subdir, section)):
-                if not page.endswith(section_suffix):
+                if not (page.endswith(section_suffix) or
+                        page.endswith(section_suffix + '.in')):
                     continue
                 LOG.debug('Generate %s page', page)
-                pages[section_num].append(page)
-                page_file = os.path.join(out_section_dir, page + '.html')
+                stripped_page = page.rstrip('.in')
+                page_file = os.path.join(out_section_dir,
+                                         stripped_page + '.html')
                 with open(page_file, "w") as f:
                     subprocess.run(
                         ['mandoc', '-T', 'html', '-O', 'fragment',
                          os.path.join(subdir, section, page)], stdout=f,
                         check=True)
+
+                pages[section_num].append(stripped_page)
         break
 
     man_path = os.path.join(out_dir, man_section_dir)
