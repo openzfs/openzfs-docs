@@ -71,9 +71,9 @@ Contributing
 Encryption
 ~~~~~~~~~~
 
-This guide supports three different encryption options: unencrypted, ZFS
-native encryption, and LUKS. With any option, all ZFS features are fully
-available.
+This guide supports four different encryption options: unencrypted, ZFS
+native encryption, LUKS and per-user encrypted homedirs. With any option,
+all ZFS features are fully available.
 
 Unencrypted does not encrypt anything, of course. With no encryption
 happening, this option naturally has the best performance.
@@ -303,7 +303,7 @@ Step 2: Disk Formatting
 
    Choose one of the following options:
 
-   - Unencrypted::
+   - Unencrypted (choose this if you want per-user encyprtion later on)::
 
        zpool create \
            -o ashift=12 \
