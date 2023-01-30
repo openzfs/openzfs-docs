@@ -952,16 +952,16 @@ Step 6: First Boot
 
      username=YOUR_USERNAME
      
-     Choose one of the following:
+   Choose one of the following:
      
-     - Unencrypted homedir or whole-disk encryption
+   - Unencrypted homedir or whole-disk encryption
      
        ::
 
          zfs create rpool/home/$username
          adduser $username
        
-     - Encrypted homdir per user, automatic decryption on login
+   - Encrypted homdir per user, automatic decryption on login
      
        ::
        
@@ -970,6 +970,46 @@ Step 6: First Boot
          adduser $username
          
        **Note**: Use the same strong password for ZFS encryption and user password. Please note: After a breach of your password changing the ZFS password does not restore protection.
+       
+       Tell PAM to unlock the dataset key on login::
+       
+         printf "auth [success=1 default=ignore] pam_succeed_if.so service = sudo quiet\n\
+                 auth optional pam_exec.so expose_authtok /usr/local/sbin/unlock-key-zfs-homedir\n"\
+           >> /etc/pam.d/common-auth
+           
+       The second line calls a new unlock-script, the first line disables it if we just sudo.
+       
+       Create the unlock-script::
+       
+         touch /usr/local/sbin/unlock-key-zfs-homedir 
+         chmod a+x /usr/local/sbin/unlock-key-zfs-homedir 
+         vi /usr/local/sbin/unlock-key-zfs-homedir 
+       
+       and put into it::
+       
+         #!/bin/bash
+
+         set -e
+
+         # called from PAM common_auth to unlock
+         # we get the login password (must be the same as ZFS password) on stdin
+
+         # exit if root
+         [ "$PAM_USER" == "root" ] && exit 0 
+         
+         # do nothing if no dataset exists
+         zfs list rpool/home/$PAM_USER || exit 0
+
+         # exit if our dataset is not encrypted
+         [ `zfs list rpool/home/$PAM_USER -o encryption -H` == off ] && exit 0
+
+         # exit if already mounted for some reason
+         findmnt "/home/$PAM_USER" && exit 0
+
+         # still here? unlock now
+         zfs load-key "rpool/home/$PAM_USER" < /dev/stdin
+
+
      
    In either case, continue::
      
