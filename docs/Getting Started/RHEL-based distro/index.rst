@@ -9,38 +9,37 @@ Contents
 
   *
 
-`DKMS`_ or `kABI-tracking kmod`_ style packages are provided for RHEL and
-CentOS based distributions from the OpenZFS repository. These packages are
-updated as new versions are released. Only the current repository for each
-major release is updated with new packages. Packages are available for the
-following configurations:
+`DKMS`_ and `kABI-tracking kmod`_ style packages are provided for x86_64 RHEL-
+and CentOS-based distributions from the OpenZFS repository.  These packages
+are updated as new versions are released.  Only the repository for the current
+minor version of each current major release is updated with new packages.
 
-| **EL Releases:** 6, 7.9, 8.6, 9.0
-| **Architectures:** x86_64
-
-To simplify installation a *zfs-release* package is provided which includes
+To simplify installation, a *zfs-release* package is provided which includes
 a zfs.repo configuration file and public signing key. All official OpenZFS
 packages are signed using this key, and by default yum or dnf will verify a
 package's signature before allowing it be to installed. Users are strongly
-encouraged to verify the authenticity of the ZFS on Linux public key using
+encouraged to verify the authenticity of the OpenZFS public key using
 the fingerprint listed here.
 
-| **Location:** /etc/pki/rpm-gpg/RPM-GPG-KEY-zfsonlinux
-| **Archived Repositories:** `see repo page <https://github.com/zfsonlinux/zfsonlinux.github.com/tree/master/epel>`__
+| **Key location:** /etc/pki/rpm-gpg/RPM-GPG-KEY-openzfs (previously -zfsonlinux)
+| **Current release packages:** `EL7`_, `EL8`_, `EL9`_
+| **Archived release packages:** `see repo page <https://github.com/zfsonlinux/zfsonlinux.github.com/tree/master/epel>`__
 
-| **Signing key1 (Centos 8 and older, Fedora 36 and older)**
+| **Signing key1 (EL8 and older, Fedora 36 and older)**
+  `pgp.mit.edu <https://pgp.mit.edu/pks/lookup?search=0xF14AB620&op=index&fingerprint=on>`__ /
   `direct link <https://raw.githubusercontent.com/zfsonlinux/zfsonlinux.github.com/master/zfs-release/RPM-GPG-KEY-openzfs-key1>`__
 | **Fingerprint:** C93A FFFD 9F3F 7B03 C310 CEB6 A9D5 A1C0 F14A B620
 
-| **Signing key2 (Centos 9+, Fedora 37+)**
+| **Signing key2 (EL9+, Fedora 37+)**
+  `pgp.mit.edu <https://pgp.mit.edu/pks/lookup?search=0xA599FD5E9DB84141&op=index&fingerprint=on>`__ /
   `direct link <https://raw.githubusercontent.com/zfsonlinux/zfsonlinux.github.com/master/zfs-release/RPM-GPG-KEY-openzfs-key2>`__
 | **Fingerprint:** 7DC7 299D CF7C 7FD9 CD87 701B A599 FD5E 9DB8 4141
 
-For RHEL/CentOS versions 6 and 7 run::
+For EL7 run::
 
  yum install https://zfsonlinux.org/epel/zfs-release-2-2$(rpm --eval "%{dist}").noarch.rpm
 
-And for RHEL 8-9::
+and for EL8 and 9::
 
  dnf install https://zfsonlinux.org/epel/zfs-release-2-2$(rpm --eval "%{dist}").noarch.rpm
 
@@ -60,17 +59,27 @@ package, then the *kernel-devel* and *zfs* packages. Note that it is
 important to make sure that the matching *kernel-devel* package is installed
 for the running kernel since DKMS requires it to build OpenZFS.
 
-For RHEL/CentOS versions 6 and 7, separately run::
+For EL6 and 7, separately run::
 
  yum install -y epel-release
  yum install -y kernel-devel
  yum install -y zfs
 
-And for RHEL/CentOS 8 and newer, separately run::
+And for EL8 and newer, separately run::
 
  dnf install -y epel-release
  dnf install -y kernel-devel
  dnf install -y zfs
+
+It might be necessary to rebuild the ZFS modules::
+
+ for directory in /lib/modules/*; do
+   kernel_version=$(basename $directory)
+   dkms autoinstall -k $kernel_version
+ done
+
+If for some reason, the ZFS kernel modules are not successfully built,
+you can also run the above command to debug the problem.
 
 .. note::
    When switching from DKMS to kABI-tracking kmods first uninstall the
@@ -85,15 +94,15 @@ By default the *zfs-release* package is configured to install DKMS style
 packages so they will work with a wide range of kernels. In order to
 install the kABI-tracking kmods the default repository must be switched
 from *zfs* to *zfs-kmod*. Keep in mind that the kABI-tracking kmods are
-only verified to work with the distribution provided kernel.
+only verified to work with the distribution-provided, non-Stream kernel.
 
-For RHEL/CentOS versions 6 and 7 run::
+For EL6 and 7 run::
 
  yum-config-manager --disable zfs
  yum-config-manager --enable zfs-kmod
  yum install zfs
 
-And for RHEL/CentOS 8 and newer::
+And for EL8 and newer::
 
  dnf config-manager --disable zfs
  dnf config-manager --enable zfs-kmod
@@ -101,25 +110,45 @@ And for RHEL/CentOS 8 and newer::
 
 By default the OpenZFS kernel modules are automatically loaded when a ZFS
 pool is detected. If you would prefer to always load the modules at boot
-time you must create an ``/etc/modules-load.d/zfs.conf`` file::
+time you can create such configuration in ``/etc/modules-load.d``::
 
  echo zfs >/etc/modules-load.d/zfs.conf
 
 .. note::
-   When updating to a new RHEL/CentOS minor release the existing kmod
+   When updating to a new EL minor release the existing kmod
    packages may not work due to upstream kABI changes in the kernel.
-   After upgrading users must uninstall OpenZFS and then reinstall it
-   from the matching repository as described in this section.
+   The configuration of the current release package may have already made an
+   updated package available, but the package manager may not know to install
+   that package if the version number isn't newer.  When upgrading, users
+   should verify that the *kmod-zfs* package is providing suitable kernel
+   modules, reinstalling the *kmod-zfs* package if necessary.
 
-It might be necessary to rebuild ZFS module::
+Previous minor EL releases
+--------------------------
 
- for directory in /lib/modules/*; do
-   kernel_version=$(basename $directory)
-   dkms autoinstall -k $kernel_version
- done
+The current release package uses `$releasever` rather than specify a particular
+minor release as previous release packages did.  Typically `$releasever` will
+resolve to just the major version (e.g. `8`), and the resulting repository URL
+will be aliased to the current minor version (e.g. `8.7`), but you can specify
+`--releasever` to use previous repositories. ::
 
-If for some reason, ZFS kernel module is not successfully built,
-you can also run the above command to debug the problem.
+  [vagrant@localhost ~]$ dnf list available --showduplicates kmod-zfs
+  Last metadata expiration check: 0:00:08 ago on tor 31 jan 2023 17:50:05 UTC.
+  Available Packages
+  kmod-zfs.x86_64                          2.1.6-1.el8                          zfs-kmod
+  kmod-zfs.x86_64                          2.1.7-1.el8                          zfs-kmod
+  kmod-zfs.x86_64                          2.1.8-1.el8                          zfs-kmod
+  kmod-zfs.x86_64                          2.1.9-1.el8                          zfs-kmod
+  [vagrant@localhost ~]$ dnf list available --showduplicates --releasever=8.6 kmod-zfs
+  Last metadata expiration check: 0:16:13 ago on tor 31 jan 2023 17:34:10 UTC.
+  Available Packages
+  kmod-zfs.x86_64                          2.1.4-1.el8                          zfs-kmod
+  kmod-zfs.x86_64                          2.1.5-1.el8                          zfs-kmod
+  kmod-zfs.x86_64                          2.1.5-2.el8                          zfs-kmod
+  kmod-zfs.x86_64                          2.1.6-1.el8                          zfs-kmod
+  [vagrant@localhost ~]$
+
+In the above example, the former packages were built for EL8.7, and the latter for EL8.6.
 
 Testing Repositories
 --------------------
@@ -132,19 +161,19 @@ the functionality and stability of upcoming releases. These packages
 **should not** be used on production systems. Packages from the testing
 repository can be installed as follows.
 
-For RHEL/CentOS versions 6 and 7 run::
+For EL6 and 7 run::
 
  yum-config-manager --enable zfs-testing
  yum install kernel-devel zfs
 
-And for RHEL/CentOS 8 and newer::
+And for EL8 and newer::
 
  dnf config-manager --enable zfs-testing
  dnf install kernel-devel zfs
 
 .. note::
    Use *zfs-testing* for DKMS packages and *zfs-testing-kmod*
-   kABI-tracking kmod packages.
+   for kABI-tracking kmod packages.
 
 RHEL-based distro Root on ZFS
 -------------------------------
@@ -158,5 +187,7 @@ Start from "Preparation".
 
 .. _kABI-tracking kmod: https://elrepoproject.blogspot.com/2016/02/kabi-tracking-kmod-packages.html
 .. _DKMS: https://en.wikipedia.org/wiki/Dynamic_Kernel_Module_Support
-
+.. _EL7: https://zfsonlinux.org/epel/zfs-release-2-2.el7.noarch.rpm
+.. _EL8: https://zfsonlinux.org/epel/zfs-release-2-2.el8.noarch.rpm
+.. _EL9: https://zfsonlinux.org/epel/zfs-release-2-2.el9.noarch.rpm
 .. _EPEL repository: https://fedoraproject.org/wiki/EPEL
