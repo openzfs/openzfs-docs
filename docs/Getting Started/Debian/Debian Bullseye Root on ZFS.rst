@@ -93,6 +93,11 @@ entered at the console. Performance is good, but LUKS sits underneath ZFS, so
 if multiple disks (mirror or raidz topologies) are used, the data has to be
 encrypted once per disk.
 
+Per-user encrypted homdirs encrypts only the datasets for each user. The system
+boots without the need to enter a passphrase. No user-data is accessible until
+the user logs in. The homdirs-datasets are automatically unlocked on login and
+locked on last logout. Mixing encrypted and non-encrypted homdirs is supported.
+
 Step 1: Prepare The Install Environment
 ---------------------------------------
 
