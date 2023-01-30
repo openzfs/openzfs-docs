@@ -970,7 +970,7 @@ Step 6: First Boot
      
        ::
        
-         zfs create rpool/home/$username -o encryption=on -o keyformat=passphrase -o keylocation=prompt -o canmount=noauto
+         zfs create rpool/home/$username -o encryption=on -o keyformat=passphrase -o keylocation=prompt -o canmount=noauto -o org.openzfs.systemd:ignore=on
          zfs mount rpool/home/$username
          adduser $username
          
