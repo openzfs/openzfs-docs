@@ -951,10 +951,28 @@ Step 6: First Boot
    Replace ``YOUR_USERNAME`` with your desired username::
 
      username=YOUR_USERNAME
+     
+     Choose one of the following:
+     
+     - Unencrypted homedir or whole-disk encryption
+     
+       ::
 
-     zfs create rpool/home/$username
-     adduser $username
-
+         zfs create rpool/home/$username
+         adduser $username
+       
+     - Encrypted homdir per user, automatic decryption on login
+     
+       ::
+       
+         zfs create rpool/home/$username -o encryption=on -o keyformat=passphrase -o keylocation=prompt -o canmount=noauto
+         zfs mount rpool/home/$username
+         adduser $username
+         
+       **Note**: Use the same strong password for ZFS encryption and user password. Please note: After a breach of your password changing the ZFS password does not restore protection.
+     
+   In either case, continue::
+     
      cp -a /etc/skel/. /home/$username
      chown -R $username:$username /home/$username
      usermod -a -G audio,cdrom,dip,floppy,netdev,plugdev,sudo,video $username
