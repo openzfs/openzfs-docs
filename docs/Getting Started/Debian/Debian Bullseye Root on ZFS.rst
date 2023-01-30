@@ -1008,6 +1008,77 @@ Step 6: First Boot
 
          # still here? unlock now
          zfs load-key "rpool/home/$PAM_USER" < /dev/stdin
+         
+       Now create a systemd service to mount our unlocked dataset::
+       
+         mkdir -p /etc/systemd/system/user@.service.d/
+         printf "[Unit]\n\
+                 Requires=user-zfs-mount@%%i.service\n"\
+           > local-mount-zfs.conf
+           
+       Write the service definition::
+       
+         vi /etc/systemd/system/user-zfs-mount@.service
+         
+       with this content::
+       
+         # local service to mount encrypted homdirs
+
+         [Unit]
+         Description=User ZFS mount /home/ for UID %i
+         After=dbus.service
+         StopWhenUnneeded=yes
+         IgnoreOnIsolate=yes
+
+         [Service]
+         ExecStart=/usr/local/sbin/mount-zfs-homedir start %i
+         ExecStop=/usr/local/sbin/mount-zfs-homedir stop %i
+         Type=oneshot
+         RemainAfterExit=yes
+         Slice=user-%i.slice
+         
+       Finally, create the helper script::
+       
+         touch /usr/local/sbin/mount-zfs-homedir
+         chmod a+x /usr/local/sbin/mount-zfs-homedir
+         vi /usr/local/sbin/mount-zfs-homedir
+         
+       And put into it::
+       
+         #!/bin/bash
+
+         set -e
+
+         # called from systemd via /etc/systemd/system/user-zfs-mount@.service
+         # to mount/unmount
+         # we get: $1 - start/stop, $2 - UID
+
+         # get username from UID passed to us by systemd
+         USERNAME=$(id -nu $2)
+
+         # gracefully exit if no such dataset exists
+         zfs list rpool/home/$USERNAME || exit 0
+
+         case $1 in
+         start)
+           # exit if already mounted
+           findmnt "/home/$USERNAME" && exit 0
+
+           # Mount homedir of user we are logging in as
+           zfs mount "rpool/home/$USERNAME"
+         ;;
+
+         stop)
+           # if the dataset of the user logging out is not encrypted, leave it alone
+           [ `zfs list rpool/home/$PAM_USER -o encryption -H` == off ] && exit 0
+         
+           zfs umount "rpool/home/$USERNAME"
+           zfs unload-key "rpool/home/$USERNAME"
+         ;;
+
+         esac
+
+
 
 
      
