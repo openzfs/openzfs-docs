@@ -72,13 +72,13 @@ Encryption
 ~~~~~~~~~~
 
 This guide supports four different encryption options: unencrypted, ZFS
-native encryption, LUKS and per-user encrypted homedirs. With any option,
+native encryption, LUKS, and per-user encrypted home directories. With any option,
 all ZFS features are fully available.
 
-Unencrypted does not encrypt anything, of course. With no encryption
+**Unencrypted** does not encrypt anything, of course. With no encryption
 happening, this option naturally has the best performance.
 
-ZFS native encryption encrypts the data and most metadata in the root
+**ZFS native encryption** encrypts the data and most metadata in the root
 pool. It does not encrypt dataset or snapshot names or properties. The
 boot pool is not encrypted at all, but it only contains the bootloader,
 kernel, and initrd. (Unless you put a password in ``/etc/fstab``, the
@@ -87,16 +87,16 @@ without the passphrase being entered at the console. Performance is
 good. As the encryption happens in ZFS, even if multiple disks (mirror
 or raidz topologies) are used, the data only has to be encrypted once.
 
-LUKS encrypts almost everything. The only unencrypted data is the bootloader,
+**LUKS** encrypts almost everything. The only unencrypted data is the bootloader,
 kernel, and initrd. The system cannot boot without the passphrase being
 entered at the console. Performance is good, but LUKS sits underneath ZFS, so
 if multiple disks (mirror or raidz topologies) are used, the data has to be
 encrypted once per disk.
 
-Per-user encrypted homdirs encrypts only the datasets for each user. The system
-boots without the need to enter a passphrase. No user-data is accessible until
-the user logs in. The homdirs-datasets are automatically unlocked on login and
-locked on last logout. Mixing encrypted and non-encrypted homdirs is supported.
+**Per-user encrypted home directory** encrypts only the datasets for each user. The system
+boots without the need to enter a passphrase. No userdata is accessible until
+the user logs in. The home directory dataset is automatically unlocked on login and
+locked on last logout. Mixing encrypted and non-encrypted home directories is supported.
 
 Step 1: Prepare The Install Environment
 ---------------------------------------
@@ -308,7 +308,7 @@ Step 2: Disk Formatting
 
    Choose one of the following options:
 
-   - Unencrypted (choose this if you want per-user encyprtion later on)::
+   - Unencrypted or Per-User Encrypted Home Directories::
 
        zpool create \
            -o ashift=12 \
@@ -959,14 +959,14 @@ Step 6: First Boot
      
    Choose one of the following:
      
-   - Unencrypted homedir or whole-disk encryption
+   - Unencrypted, ZFS native encryption, or LUKS:
      
        ::
 
          zfs create rpool/home/$username
          adduser $username
        
-   - Encrypted homdir per user, automatic decryption on login
+   - Per-User Encrypted Home Directories:
      
        ::
        
@@ -974,13 +974,16 @@ Step 6: First Boot
          zfs mount rpool/home/$username
          adduser $username
          
-       **Note**: Use the same strong password for ZFS encryption and user password. Please note: After a breach of your password changing the ZFS password does not restore protection.
+       **Note**: Use the same strong password for ZFS encryption and user password. Please note: After a breach of your password, changing the ZFS password does not restore protection.
        
        Tell PAM to unlock the dataset key on login::
        
-         printf "auth [success=1 default=ignore] pam_succeed_if.so service = sudo quiet\n\
-                 auth optional pam_exec.so expose_authtok /usr/local/sbin/unlock-key-zfs-homedir\n"\
-           >> /etc/pam.d/common-auth
+         vi /etc/pam.d/common-auth
+         
+       Append after the last line::  
+         
+         auth [success=1 default=ignore] pam_succeed_if.so service = sudo quiet
+         auth optional pam_exec.so expose_authtok /usr/local/sbin/unlock-key-zfs-homedir 
            
        The second line calls a new unlock-script, the first line disables it if we just sudo.
        
@@ -1017,10 +1020,13 @@ Step 6: First Boot
        Now create a systemd service to mount our unlocked dataset::
        
          mkdir -p /etc/systemd/system/user@.service.d/
-         printf "[Unit]\n\
-                 Requires=user-zfs-mount@%%i.service\n"\
-           > local-mount-zfs.conf
-           
+         vi /etc/systemd/system/user@.service.d/local-mount-zfs.conf
+         
+       In the file, request our new service::   
+         
+         [Unit]
+         Requires=user-zfs-mount@%i.service
+
        Write the service definition::
        
          vi /etc/systemd/system/user-zfs-mount@.service
@@ -1069,7 +1075,7 @@ Step 6: First Boot
            # exit if already mounted
            findmnt "/home/$USERNAME" && exit 0
 
-           # Mount homedir of user we are logging in as
+           # Mount home directory of user we are logging in as
            zfs mount "rpool/home/$USERNAME"
          ;;
 
