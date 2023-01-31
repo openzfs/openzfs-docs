@@ -989,13 +989,11 @@ Step 6: First Boot
        
        Create the unlock-script::
        
-         touch /usr/local/sbin/unlock-key-zfs-homedir 
-         chmod a+x /usr/local/sbin/unlock-key-zfs-homedir 
          vi /usr/local/sbin/unlock-key-zfs-homedir 
        
        and put into it::
        
-         #!/bin/bash
+         #!/bin/sh
 
          set -e
 
@@ -1003,19 +1001,19 @@ Step 6: First Boot
          # we get the login password (must be the same as ZFS password) on stdin
 
          # exit if root
-         [ "$PAM_USER" == "root" ] && exit 0 
+         [ "$PAM_USER" = "root" ] && exit 0 
          
          # do nothing if no dataset exists
-         zfs list rpool/home/$PAM_USER || exit 0
+         zfs list "rpool/home/$PAM_USER" || exit 0
 
          # exit if our dataset is not encrypted
-         [ `zfs list rpool/home/$PAM_USER -o encryption -H` == off ] && exit 0
+         [ "$(zfs list "rpool/home/$PAM_USER" -o encryption -H)" = off ] && exit 0
 
          # exit if already mounted for some reason
          findmnt "/home/$PAM_USER" && exit 0
 
-         # still here? unlock now
-         zfs load-key "rpool/home/$PAM_USER" < /dev/stdin
+         # still here? unlock now, zfs reads the passwd from STDIN
+         zfs load-key "rpool/home/$PAM_USER"
          
        Now create a systemd service to mount our unlocked dataset::
        
@@ -1050,13 +1048,11 @@ Step 6: First Boot
          
        Finally, create the helper script::
        
-         touch /usr/local/sbin/mount-zfs-homedir
-         chmod a+x /usr/local/sbin/mount-zfs-homedir
          vi /usr/local/sbin/mount-zfs-homedir
          
        And put into it::
        
-         #!/bin/bash
+         #!/bin/sh
 
          set -e
 
@@ -1065,10 +1061,10 @@ Step 6: First Boot
          # we get: $1 - start/stop, $2 - UID
 
          # get username from UID passed to us by systemd
-         USERNAME=$(id -nu $2)
+         USERNAME=$(id -nu "$2")
 
          # gracefully exit if no such dataset exists
-         zfs list rpool/home/$USERNAME || exit 0
+         zfs list "rpool/home/$USERNAME" || exit 0
 
          case $1 in
          start)
@@ -1081,7 +1077,7 @@ Step 6: First Boot
 
          stop)
            # if the dataset of the user logging out is not encrypted, leave it alone
-           [ `zfs list rpool/home/$USERNAME -o encryption -H` == off ] && exit 0
+           [ "$(zfs list "rpool/home/$USERNAME" -o encryption -H)" = off ] && exit 0
          
            zfs umount "rpool/home/$USERNAME"
            zfs unload-key "rpool/home/$USERNAME"
@@ -1089,7 +1085,11 @@ Step 6: First Boot
 
          esac
 
-
+       Don't forget to make the new scripts executable::
+       
+         chmod a+x /usr/local/sbin/unlock-key-zfs-homedir 
+         chmod a+x /usr/local/sbin/mount-zfs-homedir
+         
 
 
      
