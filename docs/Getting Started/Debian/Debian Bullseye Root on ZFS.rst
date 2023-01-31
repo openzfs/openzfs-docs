@@ -1081,7 +1081,7 @@ Step 6: First Boot
 
          stop)
            # if the dataset of the user logging out is not encrypted, leave it alone
-           [ `zfs list rpool/home/$PAM_USER -o encryption -H` == off ] && exit 0
+           [ `zfs list rpool/home/$USERNAME -o encryption -H` == off ] && exit 0
          
            zfs umount "rpool/home/$USERNAME"
            zfs unload-key "rpool/home/$USERNAME"
