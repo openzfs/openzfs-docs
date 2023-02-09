@@ -28,8 +28,10 @@ System Configuration
 
     sed -i '/boot.loader/d' /mnt/etc/nixos/configuration.nix
     sed -i '/services.xserver/d' /mnt/etc/nixos/configuration.nix
+    tee -a /mnt/etc/nixos/zfs.nix <<EOF
+    boot.loader.efi.efiSysMountPoint = "/boot/efis/$(echo $DISK | cut -f1 -d\ | sed 's|/dev/disk/by-id/||')-part1";
+    EOF
     tee -a /mnt/etc/nixos/zfs.nix <<-'EOF'
-    boot.loader.efi.efiSysMountPoint = "/boot/efi";
     boot.loader.efi.canTouchEfiVariables = false;
     boot.loader.generationsDir.copyKernels = true;
     boot.loader.grub.efiInstallAsRemovable = true;
@@ -38,16 +40,9 @@ System Configuration
     boot.loader.grub.copyKernels = true;
     boot.loader.grub.efiSupport = true;
     boot.loader.grub.zfsSupport = true;
-    boot.loader.grub.extraPrepareConfig = ''
-      mkdir -p /boot/efis
-      for i in  /boot/efis/*; do mount $i ; done
-
-      mkdir -p /boot/efi
-      mount /boot/efi
-    '';
     boot.loader.grub.extraInstallCommands = ''
     ESP_MIRROR=$(mktemp -d)
-    cp -r /boot/efi/EFI $ESP_MIRROR
+    cp -r ${config.boot.loader.efi.efiSysMountPoint}/EFI $ESP_MIRROR
     for i in /boot/efis/*; do
      cp -r $ESP_MIRROR/EFI $i
     done
@@ -67,6 +62,11 @@ System Configuration
 #. Mount datasets with zfsutil option::
 
      sed -i 's|fsType = "zfs";|fsType = "zfs"; options = [ "zfsutil" "X-mount.mkdir" ];|g' \
+     /mnt/etc/nixos/hardware-configuration.nix
+
+#. Mount EFI partitions on demand::
+
+     sed -i 's|fsType = "vfat";|fsType = "vfat"; options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" "nofail" ];|g' \
      /mnt/etc/nixos/hardware-configuration.nix
 
 #. Set root password::
