@@ -128,6 +128,3 @@ System Installation
      mkdir -p /mnt/boot/efis/${i##*/}-part1
      mount -t vfat ${i}-part1 /mnt/boot/efis/${i##*/}-part1
     done
-
-    mkdir -p /mnt/boot/efi
-    mount -t vfat $(echo $DISK | cut -f1 -d\ )-part1 /mnt/boot/efi
