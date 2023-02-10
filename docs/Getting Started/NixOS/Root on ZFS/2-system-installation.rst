@@ -16,7 +16,7 @@ System Installation
 
      sgdisk -n2:0:+4G -t2:BE00 $i
 
-     test -z $INST_PARTSIZE_SWAP || sgdisk -n4:0:+${INST_PARTSIZE_SWAP}G -t4:8200 $i
+     sgdisk -n4:0:+${INST_PARTSIZE_SWAP}G -t4:8200 $i
 
      if test -z $INST_PARTSIZE_RPOOL; then
          sgdisk -n3:0:0   -t3:BF00 $i
@@ -25,6 +25,12 @@ System Installation
      fi
 
      sgdisk -a1 -n5:24K:+1000K -t5:EF02 $i
+
+     sync && udevadm settle && sleep 3 
+
+     cryptsetup open --type plain --key-file /dev/random $i-part4 ${i##*/}-part4
+     mkswap /dev/mapper/${i##*/}-part4
+     swapon /dev/mapper/${i##*/}-part4 
      done
 
 #. Create boot pool::
@@ -84,9 +90,7 @@ System Installation
 
    If not using a multi-disk setup, remove ``mirror``.
 
-#. This section implements dataset layout as described in `overview <1-preparation.html>`__.
-
-   Create root system container:
+#. Create root system container:
 
    - Unencrypted::
 
@@ -108,18 +112,25 @@ System Installation
        -o keyformat=passphrase \
        rpool/nixos
 
-   Create system datasets::
+   You can automate this step (insecure) with: ``echo POOLPASS | zfs create ...``.
 
-      zfs create -o canmount=on -o mountpoint=/     rpool/nixos/root
-      zfs create -o canmount=on -o mountpoint=/home rpool/nixos/home
-      zfs create -o canmount=off -o mountpoint=/var  rpool/nixos/var
-      zfs create -o canmount=on  rpool/nixos/var/lib
-      zfs create -o canmount=on  rpool/nixos/var/log
+   Create system datasets, let NixOS declaratively
+   manage mountpoints with ``mountpoint=legacy``::
 
-   Create boot dataset::
-
-     zfs create -o canmount=off -o mountpoint=none bpool/nixos
-     zfs create -o canmount=on -o mountpoint=/boot bpool/nixos/root
+      zfs create -o mountpoint=legacy     rpool/nixos/root
+      mount -t zfs rpool/nixos/root /mnt/
+      zfs create -o mountpoint=legacy rpool/nixos/home
+      mkdir /mnt/home
+      mount -t zfs  rpool/nixos/home /mnt/home
+      zfs create -o mountpoint=legacy  rpool/nixos/var
+      zfs create -o mountpoint=legacy rpool/nixos/var/lib
+      zfs create -o mountpoint=legacy rpool/nixos/var/log
+      zfs create -o mountpoint=none bpool/nixos
+      zfs create -o mountpoint=legacy bpool/nixos/root
+      mkdir /mnt/boot
+      mount -t zfs bpool/nixos/root /mnt/boot
+      zfs create -o mountpoint=legacy rpool/nixos/empty
+      zfs snapshot rpool/nixos/empty@start
 
 #. Format and mount ESP::
 
