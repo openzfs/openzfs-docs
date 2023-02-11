@@ -1020,10 +1020,11 @@ Step 6: First Boot
          mkdir -p /etc/systemd/system/user@.service.d/
          vi /etc/systemd/system/user@.service.d/local-mount-zfs.conf
          
-       In the file, request our new service::   
+       In the file, request our new service (Requires) and instruct systemd to wait for completion before continuing (After)::   
          
          [Unit]
          Requires=user-zfs-mount@%i.service
+         After=user-zfs-mount@%i.service
 
        Write the service definition::
        
@@ -1070,17 +1071,25 @@ Step 6: First Boot
          start)
            # exit if already mounted
            findmnt "/home/$USERNAME" && exit 0
+           
+           # prevent race condition with PAM unlock: If key is not yet available, wait for it
+           [ "$(zfs get keystatus -H -o value rpool/home/"$USERNAME")" != available ] && sleep 1
 
            # Mount home directory of user we are logging in as
            zfs mount "rpool/home/$USERNAME"
+           
          ;;
 
          stop)
            # if the dataset of the user logging out is not encrypted, leave it alone
            [ "$(zfs list "rpool/home/$USERNAME" -o encryption -H)" = off ] && exit 0
-         
-           zfs umount "rpool/home/$USERNAME"
-           zfs unload-key "rpool/home/$USERNAME"
+           
+           # unmount and unload key (-u)
+           zfs umount -u "rpool/home/$USERNAME"
+           
+           # optional: uncomment the next two lines to take a snapshot upon logout
+           # zfs destroy "rpool/home/$USERNAME@last-logout" || true
+           # zfs snapshot "rpool/home/$USERNAME@last-logout"
          ;;
 
          esac
