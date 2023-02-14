@@ -244,9 +244,11 @@ in {
   boot.loader.grub.devices =
     (map (diskName: zfsRoot.devNodes + diskName) zfsRoot.bootDevices);
   boot.initrd.postDeviceCommands = ''
-    zpool import -Nf rpool
-    zfs rollback -r rpool/nixos/empty@start
-    zpool export -a
+    if ! grep -q zfs_no_rollback /proc/cmdline; then
+      zpool import -N rpool
+      zfs rollback -r rpool/nixos/empty@start
+      zpool export -a
+    fi
   '';
 }
 
