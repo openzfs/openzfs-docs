@@ -10,6 +10,11 @@ System Installation
 
      for i in ${DISK}; do
 
+     # wipe flash-based storage device to improve
+     # performance.
+     # ALL DATA WILL BE LOST
+     # blkdiscard -f $i
+
      sgdisk --zap-all $i
 
      sgdisk -n1:1M:+1G -t1:EF00 $i
