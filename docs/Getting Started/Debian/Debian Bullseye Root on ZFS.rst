@@ -189,6 +189,11 @@ Step 2: Disk Formatting
 
      wipefs -a $DISK
 
+   For flash-based storage, if the disk was previously used, you may wish to
+   do a full-disk discard (TRIM/UNMAP), which can improve performance::
+
+     blkdiscard -f $DISK
+
    Clear the partition table::
 
      sgdisk --zap-all $DISK
