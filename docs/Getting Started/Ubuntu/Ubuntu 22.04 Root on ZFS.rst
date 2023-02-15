@@ -199,6 +199,10 @@ Step 2: Disk Formatting
      # For an array using a partition (e.g. a swap partition per this HOWTO):
      mdadm --zero-superblock --force ${DISK}-part2
 
+   If the disk was previously used with zfs::
+
+     wipefs -a $DISK
+
    Clear the partition table::
 
      sgdisk --zap-all $DISK
