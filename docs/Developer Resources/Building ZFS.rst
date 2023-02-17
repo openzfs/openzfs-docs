@@ -56,6 +56,12 @@ The following dependencies should be installed to build the latest ZFS
 
    sudo apt install build-essential autoconf automake libtool gawk alien fakeroot dkms libblkid-dev uuid-dev libudev-dev libssl-dev zlib1g-dev libaio-dev libattr1-dev libelf-dev linux-headers-generic python3 python3-dev python3-setuptools python3-cffi libffi-dev python3-packaging git libcurl4-openssl-dev
 
+-  **FreeBSD**:
+
+.. code:: sh
+
+   pkg install autoconf automake autotools git gmake python devel/py-sysctl sudo
+    
 Build Options
 ~~~~~~~~~~~~~
 
@@ -181,6 +187,12 @@ additional utilities must be installed.
 .. code:: sh
 
    sudo apt install ksh bc bzip2 fio acl sysstat mdadm lsscsi parted attr dbench nfs-kernel-server samba rng-tools pax linux-tools-common selinux-utils quota
+
+-  **FreeBSD**:
+
+.. code:: sh
+
+   pkg install base64 bash checkbashisms fio hs-ShellCheck ksh93 pamtester devel/py-flake8 sudo
 
 
 There are a few helper scripts provided in the top-level scripts
