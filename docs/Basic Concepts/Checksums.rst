@@ -129,7 +129,9 @@ parameters.
 Checksum  Results Filename                     ``zfs`` module parameter
 ========= ==================================== ========================
 Fletcher4 /proc/spl/kstat/zfs/fletcher_4_bench zfs_fletcher_4_impl
-all-other /proc/spl/kstat/zfs/chksum_bench     zfs_blake3_impl
+all-other /proc/spl/kstat/zfs/chksum_bench     zfs_blake3_impl,
+                                               zfs_sha256_impl,
+                                               zfs_sha512_impl
 ========= ==================================== ========================
 
 Disabling Checksums
