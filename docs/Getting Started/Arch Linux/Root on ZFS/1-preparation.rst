@@ -26,9 +26,9 @@ Preparation
 
    List available disks with::
 
-    ls /dev/disk/by-id/*
+    find /dev/disk/by-id/
 
-   If using virtio as disk bus, use ``/dev/disk/by-path/*``.
+   If using virtio as disk bus, use ``/dev/disk/by-path/``.
 
    Declare disk array::
 
@@ -40,11 +40,10 @@ Preparation
 
 #. Set partition size:
 
-   Set swap size. It's `recommended <https://chrisdown.name/2018/01/02/in-defence-of-swap.html>`__
-   to setup a swap partition. If you intend to use hibernation,
-   the minimum should be no less than RAM size. Skip if swap is not needed::
+   Set swap size, set to 1 if you don't want swap to
+   take up too much space::
 
-    INST_PARTSIZE_SWAP=8
+    INST_PARTSIZE_SWAP=4
 
    Root pool size, use all remaining disk space if not set::
 
@@ -54,7 +53,7 @@ Preparation
 
      curl -L https://archzfs.com/archzfs.gpg |  pacman-key -a -
      pacman-key --lsign-key $(curl -L https://git.io/JsfVS)
-     curl -L https://git.io/Jsfw2 > /etc/pacman.d/mirrorlist-archzfs
+     curl -L https://raw.githubusercontent.com/openzfs/openzfs-docs/master/docs/Getting%20Started/Arch%20Linux/archzfs-repo/mirrorlist-archzfs > /etc/pacman.d/mirrorlist-archzfs
 
      tee -a /etc/pacman.conf <<- 'EOF'
 
@@ -77,11 +76,25 @@ Preparation
    * https://archzfs.com/archive_archzfs/
    * https://archzfs.com/archzfs/x86_64/
 
+   ::
+      curl -L https://archzfs.com/archive_archzfs/ \
+      | grep zfs-linux-[0-9] \
+      | grep -v src.tar \
+      | grep "5.18.7"
+      # ...<a href="zfs-linux-2.1.5_5.18.7.arch1.1-1-x86_64.pkg.tar.zst">...
+
    Result: https/.../archive_archzfs/zfs-linux-2.1.5_5.18.7.arch1.1-1-x86_64.pkg.tar.zst
 
 #. Find compatible zfs-utils package:
 
    Search ZFS version string (e.g. 2.1.5) in both pages above.
+
+   ::
+      curl -L https://archzfs.com/archzfs/x86_64/ \
+      | grep zfs-utils-2.1.5 \
+      | grep -v src.tar
+      # ...<a href="zfs-utils-2.1.5-1-x86_64.pkg.tar.zst">...
+
 
    Result: https/.../archzfs/x86_64/zfs-utils-2.1.5-2-x86_64.pkg.tar.zst
 

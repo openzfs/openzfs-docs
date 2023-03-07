@@ -26,18 +26,15 @@ encouraged to verify the authenticity of the ZFS on Linux public key using
 the fingerprint listed here.
 
 | **Location:** /etc/pki/rpm-gpg/RPM-GPG-KEY-zfsonlinux
-| **EL6-8 Packages:** `zfs-release-el-2-1.noarch.rpm`
-| **Archived Repositories:** `el6`, `el7_5`_, `el7_6`_, `el7_7`_, `el7_8`_, `el8_0`_, `el8_1`_, `el8_2`_, `el8_3`_, `el8_4`_, `el8_5`_, `el8_6`_
-| **List of Repositories** `see repo page <https://github.com/zfsonlinux/zfsonlinux.github.com/tree/master/epel>`__
+| **Archived Repositories:** `see repo page <https://github.com/zfsonlinux/zfsonlinux.github.com/tree/master/epel>`__
 
 | **Signing key1 (Centos 8 and older, Fedora 36 and older)**
-  `pgp.mit.edu <https://pgp.mit.edu/pks/lookup?search=0xF14AB620&op=index&fingerprint=on>`__
+  `direct link <https://raw.githubusercontent.com/zfsonlinux/zfsonlinux.github.com/master/zfs-release/RPM-GPG-KEY-openzfs-key1>`__
 | **Fingerprint:** C93A FFFD 9F3F 7B03 C310 CEB6 A9D5 A1C0 F14A B620
 
 | **Signing key2 (Centos 9+, Fedora 37+)**
-  `pgp.mit.edu <https://pgp.mit.edu/pks/lookup?search=0xA599FD5E9DB84141&op=index&fingerprint=on>`__
+  `direct link <https://raw.githubusercontent.com/zfsonlinux/zfsonlinux.github.com/master/zfs-release/RPM-GPG-KEY-openzfs-key2>`__
 | **Fingerprint:** 7DC7 299D CF7C 7FD9 CD87 701B A599 FD5E 9DB8 4141
-
 
 For RHEL/CentOS versions 6 and 7 run::
 
@@ -161,19 +158,5 @@ Start from "Preparation".
 
 .. _kABI-tracking kmod: https://elrepoproject.blogspot.com/2016/02/kabi-tracking-kmod-packages.html
 .. _DKMS: https://en.wikipedia.org/wiki/Dynamic_Kernel_Module_Support
-.. _zfs-release-el-2-1.noarch.rpm: https://zfsonlinux.org/epel/zfs-release-el-2-1.noarch.rpm
-.. _el6: https://zfsonlinux.org/epel/zfs-release.el6.noarch.rpm
-.. _el7_5: https://zfsonlinux.org/epel/zfs-release.el7_5.noarch.rpm
-.. _el7_6: https://zfsonlinux.org/epel/zfs-release.el7_6.noarch.rpm
-.. _el7_7: https://zfsonlinux.org/epel/zfs-release.el7_7.noarch.rpm
-.. _el7_8: https://zfsonlinux.org/epel/zfs-release.el7_8.noarch.rpm
-.. _el7_9: https://zfsonlinux.org/epel/zfs-release.el7_9.noarch.rpm
-.. _el8_0: https://zfsonlinux.org/epel/zfs-release.el8_0.noarch.rpm
-.. _el8_1: https://zfsonlinux.org/epel/zfs-release.el8_1.noarch.rpm
-.. _el8_2: https://zfsonlinux.org/epel/zfs-release.el8_2.noarch.rpm
-.. _el8_3: https://zfsonlinux.org/epel/zfs-release.el8_3.noarch.rpm
-.. _el8_4: https://zfsonlinux.org/epel/zfs-release.el8_4.noarch.rpm
-.. _el8_5: https://zfsonlinux.org/epel/zfs-release.el8_5.noarch.rpm
-.. _el8_6: https://zfsonlinux.org/epel/zfs-release.el8_6.noarch.rpm
 
 .. _EPEL repository: https://fedoraproject.org/wiki/EPEL

@@ -8,7 +8,8 @@ Preparation
 
 #. Disable Secure Boot. ZFS modules can not be loaded if Secure Boot is enabled.
 #. Download a variant of `AlmaLinux Minimal Live ISO
-   <https://repo.almalinux.org/almalinux/9/live/x86_64/>`__ and boot from it.
+   <https://repo.almalinux.org/almalinux/9.1/live/x86_64/>`__
+   and boot from it.
 #. Connect to the Internet.
 #. Set root password or ``/root/.ssh/authorized_keys``.
 #. Start SSH server::
@@ -24,9 +25,9 @@ Preparation
 
    List available disks with::
 
-    ls /dev/disk/by-id/*
+    find /dev/disk/by-id/
 
-   If using virtio as disk bus, use ``/dev/disk/by-path/*``.
+   If using virtio as disk bus, use ``/dev/disk/by-path/``.
 
    Declare disk array::
 
@@ -38,11 +39,10 @@ Preparation
 
 #. Set partition size:
 
-   Set swap size. It's `recommended <https://chrisdown.name/2018/01/02/in-defence-of-swap.html>`__
-   to setup a swap partition. If you intend to use hibernation,
-   the minimum should be no less than RAM size. Skip if swap is not needed::
+   Set swap size, set to 1 if you don't want swap to
+   take up too much space::
 
-    INST_PARTSIZE_SWAP=8
+    INST_PARTSIZE_SWAP=4
 
    Root pool size, use all remaining disk space if not set::
 
@@ -54,24 +54,21 @@ Preparation
 
    SELinux will be enabled on the installed system.
 
-#. Add ZFS repo::
+#. Add ZFS repo and install ZFS inside live system::
 
     dnf install -y https://zfsonlinux.org/epel/zfs-release-2-2$(rpm --eval "%{dist}").noarch.rpm
-
-#. Check available repos::
-
-     dnf repolist --all
-
-#. Install ZFS packages::
-
+    rpm -e --nodeps zfs-fuse || true
+    source /etc/os-release
+    export VERSION_ID
     dnf config-manager --disable zfs
     dnf config-manager --enable zfs-kmod
     dnf install -y zfs
-
-#. Load kernel modules::
-
     modprobe zfs
 
-#. Install partition tool::
+#. Install partition tool and arch-install-scripts::
 
-    dnf install -y gdisk dosfstools
+    dnf install -y epel-release
+    dnf install -y gdisk dosfstools arch-install-scripts
+    dnf download arch-install-scripts
+    rpm -i --nodeps arch-install-scripts*.rpm
+    dnf remove -y epel-release

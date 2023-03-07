@@ -10,13 +10,18 @@ System Installation
 
      for i in ${DISK}; do
 
+     # wipe flash-based storage device to improve
+     # performance.
+     # ALL DATA WILL BE LOST
+     # blkdiscard -f $i
+
      sgdisk --zap-all $i
 
      sgdisk -n1:1M:+1G -t1:EF00 $i
 
      sgdisk -n2:0:+4G -t2:BE00 $i
 
-     test -z $INST_PARTSIZE_SWAP || sgdisk -n4:0:+${INST_PARTSIZE_SWAP}G -t4:8200 $i
+     sgdisk -n4:0:+${INST_PARTSIZE_SWAP}G -t4:8200 $i
 
      if test -z $INST_PARTSIZE_RPOOL; then
          sgdisk -n3:0:0   -t3:BF00 $i
@@ -25,17 +30,15 @@ System Installation
      fi
 
      sgdisk -a1 -n5:24K:+1000K -t5:EF02 $i
+
+     sync && udevadm settle && sleep 3 
+
+     cryptsetup open --type plain --key-file /dev/random $i-part4 ${i##*/}-part4
+     mkswap /dev/mapper/${i##*/}-part4
+     swapon /dev/mapper/${i##*/}-part4 
      done
 
-#. Probe new partitions::
-
-    for i in ${DISK}; do
-      partprobe $i
-    done
-    udevadm settle
-    sync
-
-#. Create boot partition::
+#. Create boot pool::
 
      tee -a /root/grub2 <<EOF
      # Features which are supported by GRUB2
@@ -52,26 +55,38 @@ System Installation
      spacemap_histogram
      EOF
 
-     zpool create \
-      -o compatibility=/root/grub2 \
-      -o ashift=12 \
-      -o autotrim=on \
-      -O acltype=posixacl \
-      -O canmount=off \
-      -O compression=lz4 \
-      -O devices=off \
-      -O normalization=formD \
-      -O relatime=on \
-      -O xattr=sa \
-      -O mountpoint=/boot \
-      -R /mnt \
-      bpool \
-      mirror \
-      $(for i in ${DISK}; do
-         printf "$i-part2 ";
-        done)
-
+      zpool create \
+          -o compatibility=/root/grub2 \
+          -o ashift=12 \
+          -o autotrim=on \
+          -O acltype=posixacl \
+          -O canmount=off \
+          -O compression=lz4 \
+          -O devices=off \
+          -O normalization=formD \
+          -O relatime=on \
+          -O xattr=sa \
+          -O mountpoint=/boot \
+          -R /mnt \
+          bpool \
+  	mirror \
+          $(for i in ${DISK}; do
+             printf "$i-part2 ";
+            done)
+  
    If not using a multi-disk setup, remove ``mirror``.
+
+   You should not need to customize any of the options for the boot pool.
+
+   GRUB does not support all of the zpool features. See ``spa_feature_names``
+   in `grub-core/fs/zfs/zfs.c
+   <http://git.savannah.gnu.org/cgit/grub.git/tree/grub-core/fs/zfs/zfs.c#n276>`__.
+   This step creates a separate boot pool for ``/boot`` with the features
+   limited to only those that GRUB supports, allowing the root pool to use
+   any/all features.
+
+   Features enabled with ``-o compatibility=grub2`` can be seen
+   `here <https://github.com/openzfs/zfs/blob/master/cmd/zpool/compatibility.d/grub2>`__.
 
 #. Create root pool::
 
@@ -95,18 +110,19 @@ System Installation
 
    If not using a multi-disk setup, remove ``mirror``.
 
-#. This section implements dataset layout as described in `overview <1-preparation.html>`__.
-
-   Create root system container:
+#. Create root system container:
 
    - Unencrypted::
 
       zfs create \
        -o canmount=off \
        -o mountpoint=none \
-       rpool/alpine
+       rpool/alpinelinux
 
-   - Encrypted::
+   - Encrypted:
+
+     Pick a strong password. Once compromised, changing password will not keep your
+     data safe. See ``zfs-change-key(8)`` for more info::
 
       zfs create \
        -o canmount=off \
@@ -114,17 +130,39 @@ System Installation
        -o encryption=on \
        -o keylocation=prompt \
        -o keyformat=passphrase \
-       rpool/alpine
+       rpool/alpinelinux
 
-#. Create datasets::
+   You can automate this step (insecure) with: ``echo POOLPASS | zfs create ...``.
 
-     zfs create -o canmount=on -o mountpoint=/     rpool/alpine/root
-     zfs create -o canmount=on -o mountpoint=/home rpool/alpine/home
-     zfs create -o canmount=off -o mountpoint=/var  rpool/alpine/var
-     zfs create -o canmount=on  rpool/alpine/var/lib
-     zfs create -o canmount=on  rpool/alpine/var/log
-     zfs create -o canmount=off  -o mountpoint=none bpool/alpine
-     zfs create -o canmount=on  -o mountpoint=/boot bpool/alpine/root
+   Create system datasets, let Alpinelinux declaratively
+   manage mountpoints with ``mountpoint=legacy``::
+
+      zfs create -o mountpoint=legacy     rpool/alpinelinux/root
+      mount -t zfs rpool/alpinelinux/root /mnt/
+      zfs create -o mountpoint=legacy rpool/alpinelinux/home
+      mkdir /mnt/home
+      mount -t zfs  rpool/alpinelinux/home /mnt/home
+      mkdir -p /mnt/var/lib
+      mkdir -p /mnt/var/log
+      zfs create -o mountpoint=legacy  rpool/alpinelinux/var
+      zfs create -o mountpoint=legacy rpool/alpinelinux/var/lib
+      zfs create -o mountpoint=legacy rpool/alpinelinux/var/log
+      zfs create -o mountpoint=none bpool/alpinelinux
+      zfs create -o mountpoint=legacy bpool/alpinelinux/root
+      mkdir /mnt/boot
+      mount -t zfs bpool/alpinelinux/root /mnt/boot
+
+#. mkinitfs requires root dataset to have a mountpoint
+   other than legacy::
+
+      umount -Rl /mnt
+      zfs set canmount=noauto  rpool/alpinelinux/root
+      zfs set mountpoint=/     rpool/alpinelinux/root
+      mount -t zfs -o zfsutil  rpool/alpinelinux/root /mnt
+      mount -t zfs  rpool/alpinelinux/home /mnt/home
+      mount -t zfs bpool/alpinelinux/root /mnt/boot
+      mount -t zfs rpool/alpinelinux/var/lib /mnt/var/lib
+      mount -t zfs rpool/alpinelinux/var/log /mnt/var/log
 
 #. Format and mount ESP::
 
@@ -152,6 +190,10 @@ System Installation
 
    GRUB installation will fail and will be reinstalled later.
 
+#. Allow EFI system partition to fail at boot::
+
+    sed -i "s|vfat.*rw|vfat rw,nofail|" /mnt/etc/fstab
+
 #. Chroot::
 
     m='/dev /proc /sys'
@@ -161,35 +203,11 @@ System Installation
 
 #. Rebuild initrd::
 
-    mkdir -p /etc/zfs
-    rm -f /etc/zfs/zpool.cache
-    touch /etc/zfs/zpool.cache
-    chmod a-w /etc/zfs/zpool.cache
-    chattr +i /etc/zfs/zpool.cache
-
     sed -i 's|zfs|nvme zfs|' /etc/mkinitfs/mkinitfs.conf
     for directory in /lib/modules/*; do
       kernel_version=$(basename $directory)
       mkinitfs $kernel_version
     done
-
-#. Enable dataset mounting at boot::
-
-     rc-update add zfs-mount sysinit
-
-#. Replace predictable disk path with traditional disk path:
-
-   For SATA drives::
-
-     sed -i 's|/dev/disk/by-id/ata-.*-part|/dev/sda|' /etc/fstab
-
-   For NVMe drives::
-
-     sed -i 's|/dev/disk/by-id/nvme-.*-part|/dev/nvme0n1p|' /etc/fstab
-
-#. Mount datasets with zfsutil option::
-
-     sed -i 's|,posixacl|,zfsutil,posixacl|' /etc/fstab
 
 #. Apply GRUB workaround::
 
@@ -210,7 +228,6 @@ System Installation
 
 #. Install GRUB::
 
-      export ZPOOL_VDEV_NAME_PATH=YES
       mkdir -p /boot/efi/alpine/grub-bootdir/i386-pc/
       mkdir -p /boot/efi/alpine/grub-bootdir/x86_64-efi/
       for i in ${DISK}; do
@@ -243,15 +260,15 @@ System Installation
 
 #. Reboot::
 
-     poweroff
+     reboot
 
-   Disconnect the live media and other non-boot storage devices.
-   Due to missing support of predictable device names in initrd,
-   Alpine Linux will mount whichever disk appears to be /dev/sda or /dev/nvme0
-   at /boot/efi at boot.
+Post installaion
+~~~~~~~~~~~~~~~~
 
-   Root filesystem at / and /boot are ZFS and imported via pool name thus not affected by the above restriction.
+#. Setup graphical desktop::
 
-#. Post-install:
+     setup-desktop
 
-   #. Setup swap.
+#. You can create a snapshot of the newly installed
+   system for later rollback,
+   see `this page <https://openzfs.github.io/openzfs-docs/Getting%20Started/Arch%20Linux/Root%20on%20ZFS/6-create-boot-environment.html>`__.
