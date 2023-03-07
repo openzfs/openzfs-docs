@@ -11,7 +11,7 @@ System Configuration
     mkdir -p /mnt/etc/
     for i in ${DISK}; do
        echo UUID=$(blkid -s UUID -o value ${i}-part1) /boot/efis/${i##*/}-part1 vfat \
-       umask=0022,fmask=0022,dmask=0022 0 1 >> /mnt/etc/fstab
+       umask=0022,fmask=0022,dmask=0022,x-systemd.requires=zfs-mount.service 0 1 >> /mnt/etc/fstab
     done
     echo $(echo $DISK | cut -f1 -d\ )-part1 /boot/efi vfat \
        noauto,umask=0022,fmask=0022,dmask=0022 0 1 >> /mnt/etc/fstab
