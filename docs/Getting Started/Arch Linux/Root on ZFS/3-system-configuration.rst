@@ -8,13 +8,28 @@ System Configuration
 
 #. Generate fstab::
 
+    mkdir -p /mnt/var/log
+    mkdir -p /mnt/var/lib
+    mount -t zfs rpool/archlinux/var/lib /mnt/var/lib
+    mount -t zfs rpool/archlinux/var/log /mnt/var/log
     mkdir -p /mnt/etc/
-    for i in ${DISK}; do
-       echo UUID=$(blkid -s UUID -o value ${i}-part1) /boot/efis/${i##*/}-part1 vfat \
-       umask=0022,fmask=0022,dmask=0022 0 1 >> /mnt/etc/fstab
-    done
-    echo $(echo $DISK | cut -f1 -d\ )-part1 /boot/efi vfat \
-       noauto,umask=0022,fmask=0022,dmask=0022 0 1 >> /mnt/etc/fstab
+    genfstab -t PARTUUID /mnt | grep -v swap > /mnt/etc/fstab
+    sed -i "s|vfat.*rw|vfat rw,x-systemd.idle-timeout=1min,x-systemd.automount,noauto,nofail|" /mnt/etc/fstab
+
+#. Install packages::
+
+     pacstrap /mnt base mg mandoc grub efibootmgr mkinitcpio
+
+     CompatibleVer=$(pacman -Si zfs-linux \
+     | grep 'Depends On' \
+     | sed "s|.*linux=||" \
+     | awk '{ print $1 }')
+
+     pacstrap -U /mnt https://archive.archlinux.org/packages/l/linux/linux-${CompatibleVer}-x86_64.pkg.tar.zst
+
+     pacstrap /mnt zfs-linux zfs-utils
+
+     pacstrap /mnt linux-firmware intel-ucode amd-ucode
 
 #. Configure mkinitcpio::
 
@@ -28,18 +43,9 @@ System Configuration
      hwclock --systohc
      systemctl enable systemd-timesyncd --root=/mnt
 
-#. Set locale, keymap, timezone, hostname and root password::
-
-    rm -f /mnt/etc/localtime
-    systemd-firstboot --root=/mnt --prompt --force
-
 #. Generate host id::
 
     zgenhostid -f -o /mnt/etc/hostid
-
-#. Enable ZFS services::
-
-    systemctl enable zfs-import-scan.service zfs-mount zfs-import.target zfs-zed zfs.target --root=/mnt
 
 #. Add archzfs repo::
 
@@ -66,3 +72,16 @@ System Configuration
 
     echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
     locale-gen
+
+#. Generate initrd::
+
+    mkinitcpio -P
+
+#. Import from by-id::
+
+     echo GRUB_CMDLINE_LINUX=\"zfs_import_dir=/dev/disk/by-id/\" >> /etc/default/grub
+
+#. Set locale, keymap, timezone, hostname and root password::
+
+    rm -f /etc/localtime
+    systemd-firstboot --prompt --force

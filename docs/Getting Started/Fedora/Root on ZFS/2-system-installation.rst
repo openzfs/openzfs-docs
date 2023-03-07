@@ -10,13 +10,18 @@ System Installation
 
      for i in ${DISK}; do
 
+     # wipe flash-based storage device to improve
+     # performance.
+     # ALL DATA WILL BE LOST
+     # blkdiscard -f $i
+
      sgdisk --zap-all $i
 
      sgdisk -n1:1M:+1G -t1:EF00 $i
 
      sgdisk -n2:0:+4G -t2:BE00 $i
 
-     test -z $INST_PARTSIZE_SWAP || sgdisk -n4:0:+${INST_PARTSIZE_SWAP}G -t4:8200 $i
+     sgdisk -n4:0:+${INST_PARTSIZE_SWAP}G -t4:8200 $i
 
      if test -z $INST_PARTSIZE_RPOOL; then
          sgdisk -n3:0:0   -t3:BF00 $i
@@ -25,6 +30,12 @@ System Installation
      fi
 
      sgdisk -a1 -n5:24K:+1000K -t5:EF02 $i
+
+     sync && udevadm settle && sleep 3 
+
+     cryptsetup open --type plain --key-file /dev/random $i-part4 ${i##*/}-part4
+     mkswap /dev/mapper/${i##*/}-part4
+     swapon /dev/mapper/${i##*/}-part4 
      done
 
 #. Create boot pool::
@@ -84,16 +95,14 @@ System Installation
 
    If not using a multi-disk setup, remove ``mirror``.
 
-#. This section implements dataset layout as described in `overview <1-preparation.html>`__.
-
-   Create root system container:
+#. Create root system container:
 
    - Unencrypted::
 
       zfs create \
        -o canmount=off \
        -o mountpoint=none \
-       rpool/redhat
+       rpool/fedora
 
    - Encrypted:
 
@@ -106,20 +115,36 @@ System Installation
        -o encryption=on \
        -o keylocation=prompt \
        -o keyformat=passphrase \
-       rpool/redhat
+       rpool/fedora
 
-   Create system datasets::
+   You can automate this step (insecure) with: ``echo POOLPASS | zfs create ...``.
 
-      zfs create -o canmount=on -o mountpoint=/     rpool/redhat/root
-      zfs create -o canmount=on -o mountpoint=/home rpool/redhat/home
-      zfs create -o canmount=off -o mountpoint=/var  rpool/redhat/var
-      zfs create -o canmount=on  rpool/redhat/var/lib
-      zfs create -o canmount=on  rpool/redhat/var/log
+   Create system datasets, let Fedora declaratively
+   manage mountpoints with ``mountpoint=legacy``::
 
-   Create boot dataset::
+      zfs create -o mountpoint=legacy     rpool/fedora/root
+      mount -t zfs rpool/fedora/root /mnt/
+      zfs create -o mountpoint=legacy rpool/fedora/home
+      mkdir /mnt/home
+      mount -t zfs  rpool/fedora/home /mnt/home
+      zfs create -o mountpoint=legacy  rpool/fedora/var
+      zfs create -o mountpoint=legacy rpool/fedora/var/lib
+      zfs create -o mountpoint=legacy rpool/fedora/var/log
+      zfs create -o mountpoint=none bpool/fedora
+      zfs create -o mountpoint=legacy bpool/fedora/root
+      mkdir /mnt/boot
+      mount -t zfs bpool/fedora/root /mnt/boot
 
-     zfs create -o canmount=off -o mountpoint=none bpool/redhat
-     zfs create -o canmount=on -o mountpoint=/boot bpool/redhat/root
+#. zfs-dracut requires root dataset to have a mountpoint
+   other than legacy::
+
+      umount -Rl /mnt
+      zfs set canmount=noauto  rpool/fedora/root
+      zfs set mountpoint=/     rpool/fedora/root
+      mount -t zfs -o zfsutil rpool/fedora/root /mnt
+      mount -t zfs  rpool/fedora/home /mnt/home
+      mount -t zfs bpool/fedora/root /mnt/boot
+
 
 #. Format and mount ESP::
 
@@ -131,14 +156,3 @@ System Installation
 
     mkdir -p /mnt/boot/efi
     mount -t vfat $(echo $DISK | cut -f1 -d\ )-part1 /mnt/boot/efi
-
-#. Install packages::
-
-    dnf --installroot=/mnt   --releasever=$(source /etc/os-release ; echo $VERSION_ID) -y install \
-    @core  grub2-efi-x64 grub2-pc-modules grub2-efi-x64-modules shim-x64 efibootmgr kernel \
-    kernel-devel
-
-    dnf --installroot=/mnt   --releasever=$(source /etc/os-release ; echo $VERSION_ID) -y install \
-    https://zfsonlinux.org/fedora/zfs-release-2-2$(rpm --eval "%{dist}").noarch.rpm
-
-    dnf --installroot=/mnt   --releasever=$(source /etc/os-release ; echo $VERSION_ID) -y install zfs zfs-dracut

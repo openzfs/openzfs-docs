@@ -6,30 +6,42 @@ System Configuration
 .. contents:: Table of Contents
    :local:
 
+
 #. Generate fstab::
 
+    mkdir -p /mnt/var/log
+    mkdir -p /mnt/var/lib
+    mount -t zfs rpool/fedora/var/lib /mnt/var/lib
+    mount -t zfs rpool/fedora/var/log /mnt/var/log
     mkdir -p /mnt/etc/
-    for i in ${DISK}; do
-       echo UUID=$(blkid -s UUID -o value ${i}-part1) /boot/efis/${i##*/}-part1 vfat \
-       umask=0022,fmask=0022,dmask=0022 0 1 >> /mnt/etc/fstab
-    done
-    echo $(echo $DISK | cut -f1 -d\ )-part1 /boot/efi vfat \
-       noauto,umask=0022,fmask=0022,dmask=0022 0 1 >> /mnt/etc/fstab
+    genfstab -t PARTUUID /mnt | grep -v swap > /mnt/etc/fstab
+    sed -i "s|vfat.*rw|vfat rw,x-systemd.idle-timeout=1min,x-systemd.automount,noauto,nofail|" /mnt/etc/fstab
+
+#. Install basic system packages::
+
+    dnf --installroot=/mnt \
+    --releasever=$VERSION_ID -y install \
+    @core  grub2-efi-x64 \
+    grub2-pc-modules grub2-efi-x64-modules \
+    shim-x64  efibootmgr \
+    kernel kernel-devel
+
+    dnf --installroot=/mnt \
+    --releasever=$VERSION_ID -y install \
+    https://zfsonlinux.org/fedora/zfs-release-2-2$(rpm --eval "%{dist}").noarch.rpm
+
+    dnf --installroot=/mnt --releasever=$VERSION_ID \
+    -y install zfs zfs-dracut
 
 #. Configure dracut::
 
     echo 'add_dracutmodules+=" zfs "' > /mnt/etc/dracut.conf.d/zfs.conf
-
-#. Force load mpt3sas module if used::
-
-     if grep mpt3sas /proc/modules; then
-       echo 'forced_drivers+=" mpt3sas "'  >> /mnt/etc/dracut.conf.d/zfs.conf
-     fi
-
-#. Set locale, keymap, timezone, hostname and root password::
-
-    rm -f /mnt/etc/localtime
-    systemd-firstboot --root=/mnt --prompt --root-password=PASSWORD --force
+    if grep mpt3sas /proc/modules; then
+      echo 'forced_drivers+=" mpt3sas "'  >> /mnt/etc/dracut.conf.d/zfs.conf
+    fi
+    if grep virtio_blk /proc/modules; then
+      echo 'filesystems+=" virtio_blk "' >> /mnt/etc/dracut.conf.d/fs.conf
+    fi
 
 #. Generate host id::
 
@@ -39,10 +51,6 @@ System Configuration
 
     dnf --installroot=/mnt install -y glibc-minimal-langpack glibc-langpack-en
 
-#. Enable ZFS services::
-
-    systemctl enable zfs-import-scan.service zfs-mount zfs-import.target zfs-zed zfs.target --root=/mnt
-
 #. By default SSH server is enabled, allowing root login by password,
    disable SSH server::
 
@@ -51,19 +59,12 @@ System Configuration
 
 #. Chroot::
 
-    m='/dev /proc /sys'
-    for i in $m; do mount --rbind $i /mnt/$i; done
-
-    history -w /mnt/home/sys-install-pre-chroot.txt
-    chroot /mnt /usr/bin/env DISK="$DISK" bash --login
+     history -w /mnt/home/sys-install-pre-chroot.txt
+     arch-chroot /mnt /usr/bin/env DISK="$DISK" bash --login
 
 #. For SELinux, relabel filesystem on reboot::
 
     fixfiles -F onboot
-
-#. Set root password, the password set earlier does not work due to SELinux::
-
-    passwd
 
 #. Build ZFS modules::
 
@@ -71,3 +72,20 @@ System Configuration
       kernel_version=$(basename $directory)
       dkms autoinstall -k $kernel_version
     done
+
+
+#. Generate initrd::
+
+    for directory in /lib/modules/*; do
+      kernel_version=$(basename $directory)
+      dracut --force --kver $kernel_version
+    done
+
+#. Set locale, keymap, timezone, hostname and root password::
+
+    rm -f /etc/localtime
+    systemd-firstboot --prompt --root-password=PASSWORD --force
+
+#. Set root password, the password set earlier does not work due to SELinux::
+
+    passwd
