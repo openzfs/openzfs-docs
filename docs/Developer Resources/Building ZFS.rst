@@ -54,7 +54,7 @@ The following dependencies should be installed to build the latest ZFS
 
 .. code:: sh
 
-   sudo apt install build-essential autoconf automake libtool gawk alien fakeroot dkms libblkid-dev uuid-dev libudev-dev libssl-dev zlib1g-dev libaio-dev libattr1-dev libelf-dev linux-headers-generic python3 python3-dev python3-setuptools python3-cffi libffi-dev python3-packaging git libcurl4-openssl-dev
+   sudo apt install build-essential autoconf automake libtool gawk alien fakeroot dkms libblkid-dev uuid-dev libudev-dev libssl-dev zlib1g-dev libaio-dev libattr1-dev libelf-dev linux-headers-generic python3 python3-dev python3-setuptools python3-cffi libffi-dev python3-packaging git libcurl4-openssl-dev debhelper-compat dh-python po-debconf python3-all-dev python3-sphinx
 
 Build Options
 ~~~~~~~~~~~~~
@@ -131,7 +131,20 @@ the ZFS and SPL source in the traditional autotools fashion.
 
 ::
 
-   make deb #example for Debian/Ubuntu
+   make rpm #Builds RPM packages for CentOS/Fedora
+   make deb #Builds RPM converted DEB packages for Debian/Ubuntu
+   make native-deb #Builds native DEB packages for Debian/Ubuntu
+
+| **tip:** Native Debian packages build with pre-configured paths for
+  Debian and Ubuntu. It's best not to override the paths during
+  configure.
+| **tip:** For native Debain packages, ``KVERS``, ``KSRC`` and ``KOBJ``
+  environment variables can be exported to specify the kernel installed
+  in non-default location.
+
+.. note::
+   Support for native Debian packaging will be available starting from
+   openzfs-2.2 release.
 
 Install
 ^^^^^^^
