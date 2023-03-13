@@ -144,7 +144,7 @@ Make sure that the required packages are installed:
 
 .. code:: sh
 
-   sudo apt install build-essential autoconf automake libtool gawk alien fakeroot dkms libblkid-dev uuid-dev libudev-dev libssl-dev zlib1g-dev libaio-dev libattr1-dev libelf-dev linux-headers-generic python3 python3-dev python3-setuptools python3-cffi libffi-dev python3-packaging
+   sudo apt install build-essential autoconf automake libtool gawk alien fakeroot dkms libblkid-dev uuid-dev libudev-dev libssl-dev zlib1g-dev libaio-dev libattr1-dev libelf-dev linux-headers-generic python3 python3-dev python3-setuptools python3-cffi libffi-dev python3-packaging debhelper-compat dh-python po-debconf python3-all-dev python3-sphinx
 
 `Get the source code <#get-the-source-code>`__.
 
@@ -161,6 +161,8 @@ headers, or you want to build against a different kernel, you must
 specify the exact path with the *--with-linux* and *--with-linux-obj*
 options.
 
+To build RPM converted Debian packages:
+
 .. code:: sh
 
    $ cd zfs
@@ -168,12 +170,29 @@ options.
    $ make -j1 deb-utils deb-kmod
    $ for file in *.deb; do sudo gdebi -q --non-interactive $file; done
 
+Starting from openzfs-2.2 release, native Debian packages can be built
+as follows:
+
+.. code:: sh
+
+   $ cd zfs
+   $ ./configure
+   $ make native-deb-utils native-deb-kmod
+   $ rm ../openzfs-zfs-dkms_*.deb
+   $ for file in ../*.deb; do sudo gdebi -q --non-interactive $file; done
+
+Native Debian packages build with pre-configured paths for Debian and
+Ubuntu. It's best not to override the paths during configure.
+``KVERS``, ``KSRC`` and ``KOBJ`` environment variables can be exported
+to specify the kernel installed in non-default location.
+
 .. _dkms-1:
 
 DKMS
 ~~~~
 
-Building deb-based DKMS and user packages can be done as follows:
+Building RPM converted deb-based DKMS and user packages can be done as
+follows:
 
 .. code:: sh
 
@@ -182,6 +201,17 @@ Building deb-based DKMS and user packages can be done as follows:
    $ ./configure --enable-systemd
    $ make -j1 deb-utils deb-dkms
    $ for file in *.deb; do sudo gdebi -q --non-interactive $file; done
+
+Starting from openzfs-2.2 release, native deb-based DKMS and user
+packages can be built as follows:
+
+.. code:: sh
+
+   $ sudo apt-get install dkms
+   $ cd zfs
+   $ ./configure
+   $ make native-deb-utils
+   $ for file in ../*.deb; do sudo gdebi -q --non-interactive $file; done
 
 Get the Source Code
 -------------------
