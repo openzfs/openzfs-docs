@@ -68,7 +68,7 @@ Preparation
 #. Install partition tool and arch-install-scripts::
 
     dnf install -y epel-release
-    dnf install -y gdisk dosfstools arch-install-scripts
+    dnf install -y gdisk dosfstools cryptsetup
     dnf download arch-install-scripts
     rpm -i --nodeps arch-install-scripts*.rpm
     dnf remove -y epel-release

@@ -122,11 +122,11 @@ System Installation
    Create system datasets, let Fedora declaratively
    manage mountpoints with ``mountpoint=legacy``::
 
-      zfs create -o mountpoint=legacy     rpool/fedora/root
-      mount -t zfs rpool/fedora/root /mnt/
+      zfs create -o mountpoint=/ -o canmount=noauto rpool/fedora/root
+      zfs mount rpool/fedora/root
       zfs create -o mountpoint=legacy rpool/fedora/home
       mkdir /mnt/home
-      mount -t zfs  rpool/fedora/home /mnt/home
+      mount -t zfs rpool/fedora/home /mnt/home
       zfs create -o mountpoint=legacy  rpool/fedora/var
       zfs create -o mountpoint=legacy rpool/fedora/var/lib
       zfs create -o mountpoint=legacy rpool/fedora/var/log
@@ -134,17 +134,10 @@ System Installation
       zfs create -o mountpoint=legacy bpool/fedora/root
       mkdir /mnt/boot
       mount -t zfs bpool/fedora/root /mnt/boot
-
-#. zfs-dracut requires root dataset to have a mountpoint
-   other than legacy::
-
-      umount -Rl /mnt
-      zfs set canmount=noauto  rpool/fedora/root
-      zfs set mountpoint=/     rpool/fedora/root
-      mount -t zfs -o zfsutil rpool/fedora/root /mnt
-      mount -t zfs  rpool/fedora/home /mnt/home
-      mount -t zfs bpool/fedora/root /mnt/boot
-
+      mkdir -p /mnt/var/log
+      mkdir -p /mnt/var/lib
+      mount -t zfs rpool/fedora/var/lib /mnt/var/lib
+      mount -t zfs rpool/fedora/var/log /mnt/var/log
 
 #. Format and mount ESP::
 

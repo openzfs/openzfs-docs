@@ -26,7 +26,7 @@ see below.
 
 Root on ZFS
 -----------
-ZFS can be used as root file system for Fedora.
+ZFS can be used as root file system for Alpine Linux.
 An installation guide is available.
 
 Start from "Preparation".

@@ -40,23 +40,18 @@ System Installation
 
 #. Create boot pool::
 
-     tee -a /root/grub2 <<EOF
-     # Features which are supported by GRUB2
-     async_destroy
-     bookmarks
-     embedded_data
-     empty_bpobj
-     enabled_txg
-     extensible_dataset
-     filesystem_limits
-     hole_birth
-     large_blocks
-     lz4_compress
-     spacemap_histogram
-     EOF
-
-      zpool create \
-          -o compatibility=/root/grub2 \
+      zpool create -d \
+          -o feature@async_destroy=enabled \
+          -o feature@bookmarks=enabled \
+          -o feature@embedded_data=enabled \
+          -o feature@empty_bpobj=enabled \
+          -o feature@enabled_txg=enabled \
+          -o feature@extensible_dataset=enabled \
+          -o feature@filesystem_limits=enabled \
+          -o feature@hole_birth=enabled \
+          -o feature@large_blocks=enabled \
+          -o feature@lz4_compress=enabled \
+          -o feature@spacemap_histogram=enabled \
           -o ashift=12 \
           -o autotrim=on \
           -O acltype=posixacl \
@@ -137,13 +132,11 @@ System Installation
    Create system datasets, let Alpinelinux declaratively
    manage mountpoints with ``mountpoint=legacy``::
 
-      zfs create -o mountpoint=legacy     rpool/alpinelinux/root
-      mount -t zfs rpool/alpinelinux/root /mnt/
+      zfs create -o mountpoint=/ -o canmount=noauto rpool/alpinelinux/root
+      zfs mount rpool/alpinelinux/root
       zfs create -o mountpoint=legacy rpool/alpinelinux/home
       mkdir /mnt/home
-      mount -t zfs  rpool/alpinelinux/home /mnt/home
-      mkdir -p /mnt/var/lib
-      mkdir -p /mnt/var/log
+      mount -t zfs rpool/alpinelinux/home /mnt/home
       zfs create -o mountpoint=legacy  rpool/alpinelinux/var
       zfs create -o mountpoint=legacy rpool/alpinelinux/var/lib
       zfs create -o mountpoint=legacy rpool/alpinelinux/var/log
@@ -151,16 +144,8 @@ System Installation
       zfs create -o mountpoint=legacy bpool/alpinelinux/root
       mkdir /mnt/boot
       mount -t zfs bpool/alpinelinux/root /mnt/boot
-
-#. mkinitfs requires root dataset to have a mountpoint
-   other than legacy::
-
-      umount -Rl /mnt
-      zfs set canmount=noauto  rpool/alpinelinux/root
-      zfs set mountpoint=/     rpool/alpinelinux/root
-      mount -t zfs -o zfsutil  rpool/alpinelinux/root /mnt
-      mount -t zfs  rpool/alpinelinux/home /mnt/home
-      mount -t zfs bpool/alpinelinux/root /mnt/boot
+      mkdir -p /mnt/var/log
+      mkdir -p /mnt/var/lib
       mount -t zfs rpool/alpinelinux/var/lib /mnt/var/lib
       mount -t zfs rpool/alpinelinux/var/log /mnt/var/log
 
@@ -252,9 +237,12 @@ System Installation
     done
     rm -rf $ESP_MIRROR
 
-#. Unmount filesystems::
+#. Exit chroot::
 
      exit
+
+#. Unmount filesystems::
+
      cut -f2 -d\  /proc/mounts | grep ^/mnt | tac | while read i; do umount -l $i; done
      zpool export -a
 
@@ -268,6 +256,8 @@ Post installaion
 #. Setup graphical desktop::
 
      setup-desktop
+
+#. Configure swap.
 
 #. You can create a snapshot of the newly installed
    system for later rollback,

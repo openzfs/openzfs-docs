@@ -122,11 +122,11 @@ System Installation
    Create system datasets, let Archlinux declaratively
    manage mountpoints with ``mountpoint=legacy``::
 
-      zfs create -o mountpoint=legacy     rpool/archlinux/root
-      mount -t zfs rpool/archlinux/root /mnt/
+      zfs create -o mountpoint=/ -o canmount=noauto rpool/archlinux/root
+      zfs mount rpool/archlinux/root
       zfs create -o mountpoint=legacy rpool/archlinux/home
       mkdir /mnt/home
-      mount -t zfs  rpool/archlinux/home /mnt/home
+      mount -t zfs rpool/archlinux/home /mnt/home
       zfs create -o mountpoint=legacy  rpool/archlinux/var
       zfs create -o mountpoint=legacy rpool/archlinux/var/lib
       zfs create -o mountpoint=legacy rpool/archlinux/var/log
@@ -134,17 +134,10 @@ System Installation
       zfs create -o mountpoint=legacy bpool/archlinux/root
       mkdir /mnt/boot
       mount -t zfs bpool/archlinux/root /mnt/boot
-
-#. zfs-mkinitcpio requires root dataset to have a mountpoint
-   other than legacy::
-
-      umount -Rl /mnt
-      zfs set canmount=noauto  rpool/archlinux/root
-      zfs set mountpoint=/     rpool/archlinux/root
-      mount -t zfs -o zfsutil rpool/archlinux/root /mnt
-      mount -t zfs  rpool/archlinux/home /mnt/home
-      mount -t zfs bpool/archlinux/root /mnt/boot
-
+      mkdir -p /mnt/var/log
+      mkdir -p /mnt/var/lib
+      mount -t zfs rpool/archlinux/var/lib /mnt/var/lib
+      mount -t zfs rpool/archlinux/var/log /mnt/var/log
 
 #. Format and mount ESP::
 
