@@ -6,18 +6,25 @@ System Configuration
 .. contents:: Table of Contents
    :local:
 
-#. Download system configuration from this repo::
+#. Enter ephemeral nix-shell with git support::
 
-     mkdir -p /mnt/etc/nixos/
-     curl -o /mnt/etc/nixos/configuration.nix -L \
-     https://github.com/openzfs/openzfs-docs/raw/master/docs/Getting%20Started/NixOS/Root%20on%20ZFS/configuration.nix
+     mkdir -p /mnt/etc/
+     echo DISK=$DISK > ~/disk
+
+     nix-shell -p git
+
+#. Clone template flake configuration::
+
+     source ~/disk
+     git clone https://github.com/ne9z/dotfiles-flake.git /mnt/etc/nixos
+     git -C /mnt/etc/nixos checkout openzfs-guide
 
 #. Customize configuration to your hardware::
 
      for i in $DISK; do
        sed -i \
-       "s|PLACEHOLDER_FOR_DEV_NODE_PATH|\"${i%/*}/\"|" \
-       /mnt/etc/nixos/configuration.nix
+       "s|/dev/disk/by-id/|${i%/*}/|" \
+       /mnt/etc/nixos/hosts/exampleHost/default.nix
        break
      done
 
@@ -25,11 +32,12 @@ System Configuration
      for i in $DISK; do
        diskNames="$diskNames \"${i##*/}\""
      done
-     tee -a /mnt/etc/nixos/machine.nix <<EOF
-     {
-       bootDevices = [ $diskNames ];
-     }
-     EOF
+
+     sed -i "s|\"bootDevices_placeholder\"|$diskNames|g" \
+       /mnt/etc/nixos/hosts/exampleHost/default.nix
+
+     sed -i "s|\"hostId_placeholder\"|\"$(head -c4 /dev/urandom | od -A none -t x4| sed 's| ||g')\"|g" \
+       /mnt/etc/nixos/hosts/exampleHost/default.nix
 
 #. Set root password::
 
@@ -38,16 +46,42 @@ System Configuration
    Declare password in configuration::
 
      sed -i \
-     "s|PLACEHOLDER_FOR_ROOT_PWD_HASH|\""${rootPwd}"\"|" \
-     /mnt/etc/nixos/configuration.nix
+     "s|rootHash_placeholder|${rootPwd}|" \
+     /mnt/etc/nixos/hosts/exampleHost/default.nix
 
-#. Optional: enable NetworkManager for easier wireless configuration and enable desktop
-   environments.  See ``man configuration.nix`` for details.  By default, the system is
-   installed without any other software.
+#. If using a system architecture other than amd64 (x86_64-linux), such as
+   ``aarch64-linux``, change architecture in
+   ``/mnt/etc/nixos/flake.nix``.
+
+#. Optional: add SSH public key for root and change host name in
+   ``/mnt/etc/nixos/hosts/exampleHost/default.nix``.
+
+#. From now on, the complete configuration of the system will be
+   tracked by git, set a user name and email address to continue::
+
+     git -C /mnt/etc/nixos config user.email "you@example.com"
+     git -C /mnt/etc/nixos config user.name "Alice Q. Nixer"
+
+#. Commit changes to local repo::
+
+     git -C /mnt/etc/nixos commit -asm 'initial installation'
+
+#. Exit ephemeral nix shell with git::
+
+     exit
+
+#. Update flake lock file to track latest system version::
+
+     nix \
+       --extra-experimental-features 'nix-command flakes' \
+       flake update --commit-lock-file \
+       "git+file:///mnt/etc/nixos"
 
 #. Install system and apply configuration::
 
-     nixos-install --no-root-passwd --root /mnt
+     nixos-install --no-root-passwd --flake "git+file:///mnt/etc/nixos#exampleHost"
+
+   If the host name was changed, use the new host name in this command.
 
 #. Unmount filesystems::
 
@@ -58,12 +92,13 @@ System Configuration
 
      reboot
 
-#. Optional: manage system configuration with git.
+#. NetworkManager is enabled by default.  To manage network
+   connections, execute::
 
-#. Optional: immutable root filesystem can be enabled by
-   using this `configuration file
-   <https://github.com/openzfs/openzfs-docs/raw/master/docs/Getting%20Started/NixOS/Root%20on%20ZFS/configuration-immutable.nix>`__.
-   Apply your own hardware configuration in this file,
+     nmtui
+
+#. Optional: immutable root filesystem can be enabled by setting
+   ``my.boot.immutable`` option to ``true``.
    then execute::
 
      nixos-rebuild boot
@@ -161,9 +196,10 @@ replaced with the following procedure.
 
    Let the new disk resilver.  Check status with ``zpool status``.
 
-#. Update NixOS system configuration::
+#. Update NixOS system configuration and commit changes to git repo::
 
-     sed -i "s|${BAD##*/}|${NEW##*/}|" /etc/nixos/machine.nix
+     sed -i "s|${BAD##*/}|${NEW##*/}|" /etc/nixos/hosts/exampleHost/default.nix
+     git -C /etc/nixos commit
 
 #. Apply the updated NixOS system configuration, reinstall bootloader, then reboot::
 

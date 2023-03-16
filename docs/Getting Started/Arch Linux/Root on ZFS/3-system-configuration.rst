@@ -8,10 +8,6 @@ System Configuration
 
 #. Generate fstab::
 
-    mkdir -p /mnt/var/log
-    mkdir -p /mnt/var/lib
-    mount -t zfs rpool/archlinux/var/lib /mnt/var/lib
-    mount -t zfs rpool/archlinux/var/log /mnt/var/log
     mkdir -p /mnt/etc/
     genfstab -t PARTUUID /mnt | grep -v swap > /mnt/etc/fstab
     sed -i "s|vfat.*rw|vfat rw,x-systemd.idle-timeout=1min,x-systemd.automount,noauto,nofail|" /mnt/etc/fstab

@@ -42,6 +42,9 @@ Preparation
 
     INST_PARTSIZE_SWAP=4
 
+   It is recommeneded to set this value higher if your computer has
+   less than 8GB of memory, otherwise ZFS might fail to build.
+
    Root pool size, use all remaining disk space if not set::
 
     INST_PARTSIZE_RPOOL=

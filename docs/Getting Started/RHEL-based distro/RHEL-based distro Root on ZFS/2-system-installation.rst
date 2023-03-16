@@ -122,11 +122,11 @@ System Installation
    Create system datasets, let Alma declaratively
    manage mountpoints with ``mountpoint=legacy``::
 
-      zfs create -o mountpoint=legacy     rpool/alma/root
-      mount -t zfs rpool/alma/root /mnt/
+      zfs create -o mountpoint=/ -o canmount=noauto rpool/alma/root
+      zfs mount rpool/alma/root
       zfs create -o mountpoint=legacy rpool/alma/home
       mkdir /mnt/home
-      mount -t zfs -o zfsutil rpool/alma/home /mnt/home
+      mount -t zfs rpool/alma/home /mnt/home
       zfs create -o mountpoint=legacy  rpool/alma/var
       zfs create -o mountpoint=legacy rpool/alma/var/lib
       zfs create -o mountpoint=legacy rpool/alma/var/log
@@ -134,16 +134,10 @@ System Installation
       zfs create -o mountpoint=legacy bpool/alma/root
       mkdir /mnt/boot
       mount -t zfs bpool/alma/root /mnt/boot
-
-#. zfs-dracut requires root dataset to have a mountpoint
-   other than legacy::
-
-      umount -Rl /mnt
-      zfs set canmount=noauto  rpool/alma/root
-      zfs set mountpoint=/     rpool/alma/root
-      mount -t zfs  rpool/alma/root /mnt
-      mount -t zfs  rpool/alma/home /mnt/home
-      mount -t zfs bpool/alma/root /mnt/boot
+      mkdir -p /mnt/var/log
+      mkdir -p /mnt/var/lib
+      mount -t zfs rpool/alma/var/lib /mnt/var/lib
+      mount -t zfs rpool/alma/var/log /mnt/var/log
 
 #. Format and mount ESP::
 
@@ -155,17 +149,3 @@ System Installation
 
     mkdir -p /mnt/boot/efi
     mount -t vfat $(echo $DISK | cut -f1 -d\ )-part1 /mnt/boot/efi
-
-#. Install packages::
-
-    dnf --installroot=/mnt   --releasever=$(source /etc/os-release ; echo $VERSION_ID) -y install \
-    @core  grub2-efi-x64 grub2-pc-modules grub2-efi-x64-modules shim-x64 efibootmgr kernel
-
-    dnf --installroot=/mnt   --releasever=$(source /etc/os-release ; echo $VERSION_ID) -y install \
-    https://zfsonlinux.org/epel/zfs-release-2-2$(rpm --eval "%{dist}").noarch.rpm
-
-    dnf config-manager --installroot=/mnt --disable zfs
-    dnf config-manager --installroot=/mnt --enable zfs-kmod
-
-    dnf --installroot=/mnt   --releasever=$(source /etc/os-release ; echo $VERSION_ID) \
-    -y install zfs zfs-dracut
