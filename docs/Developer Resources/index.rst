@@ -6,6 +6,7 @@ Developer Resources
    :caption: Contents:
    :glob:
 
+   User friendly, zero to hero, build from source till working guide
    Custom Packages
    Building ZFS
    Buildbot Status <http://build.zfsonlinux.org/tgrid?length=100&branch=master&category=Platforms&rev_order=desc>

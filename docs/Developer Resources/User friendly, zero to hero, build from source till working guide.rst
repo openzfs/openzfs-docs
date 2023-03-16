@@ -1,5 +1,5 @@
 User friendly, zero to hero, build from source till working guide (Ubuntu based)
-============
+================================================================================
 
 GitHub Repositories
 ~~~~~~~~~~~~~~~~~~~
@@ -29,7 +29,7 @@ The following dependencies should be installed to build the latest ZFS release.
 
 -  **Ansible**:
 
-.. code:: ansible
+.. code:: sh
 
   - ansible.builtin.package:
       name:
@@ -63,7 +63,7 @@ The following dependencies should be installed to build the latest ZFS release.
     become: true
 
 Getting the sources
-~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~
 
 Clone from GitHub
 ^^^^^^^^^^^^^^^^^
@@ -83,7 +83,7 @@ matching release branches.
 
 -  **Ansible**:
 
-.. code:: ansible
+.. code:: sh
 
   - ansible.builtin.file:
       path: /opt
@@ -101,7 +101,7 @@ matching release branches.
       version: "{{ json_reponse.json.tag_name | default('master') }}"
 
 Preparing the rest of the system
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Now pay attention to how your distribution handles kernel modules. On Ubuntu,
 for example, the modules from this repository install in the ``extra`` kernel
@@ -117,7 +117,7 @@ for the duration of your testing, edit ``/etc/depmod.d/ubuntu.conf`` and add
 
 -  **Ansible**:
 
-.. code:: ansible
+.. code:: sh
 
   - ansible.builtin.lineinfile:
       dest: /etc/depmod.d/ubuntu.conf
@@ -127,7 +127,7 @@ for the duration of your testing, edit ``/etc/depmod.d/ubuntu.conf`` and add
     become: true
 
 Building
-~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~
 
 The ZFS build system is based on GNU Autoconf and GNU Automake. So the
 first step is to run the ``autogen.sh`` script to generate the
@@ -146,7 +146,7 @@ modules.
 
 - **Ansible**:
 
-.. code:: ansible
+.. code:: sh
 
   - ansible.builtin.shell: |
       git clean -fx
@@ -173,9 +173,9 @@ modules.
       chdir: /opt/zfs
 
 Installing
-~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~
 
-The ZFS packages are built using the `Debian Package`_ format. The
+The ZFS packages are built using the `Debian Package` format. The
 packages are built using the ``make deb-utils deb-dkms`` command. The
 ``deb-utils`` package contains the ``zfs`` and ``zpool`` user space
 utilities. The ``deb-dkms`` package contains the ZFS kernel modules
@@ -190,6 +190,8 @@ and install the kernel modules when a new kernel is installed.
 
 - **Ansible**:
 
+.. code:: sh
+
   - ansible.builtin.shell: |
       shopt -s extglob
       apt install ./*.deb
@@ -199,7 +201,7 @@ and install the kernel modules when a new kernel is installed.
     become: true
 
 Post Install
-~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
 
 After installing the ZFS packages, the ZFS services must be enabled
 and started. The ``zfs-import-cache`` service is responsible for
@@ -222,7 +224,7 @@ convenience target that will start the ``zfs-import-cache`` and
 
 - **Ansible**:
 
-.. code:: ansible
+.. code:: sh
 
   - ansible.builtin.service:
       name:
@@ -238,6 +240,6 @@ convenience target that will start the ``zfs-import-cache`` and
     become: true
 
 Final step
-~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~
 
 Now reboot, and you should be able to use ZFS.
