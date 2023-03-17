@@ -91,6 +91,7 @@ Start by cloning the ZFS repository from GitHub. The repository has a **master**
 
 .. code:: sh
 
+  sudo chmod 777 /opt
   git clone https://github.com/openzfs/zfs
 
 -  **Ansible**:
@@ -102,15 +103,10 @@ Start by cloning the ZFS repository from GitHub. The repository has a **master**
       mode: '0777'
     become: true
 
-  - ansible.builtin.uri:
-      url: https://api.github.com/repos/openzfs/zfs/releases/latest
-      return_content: true
-    register: json_reponse
-
   - ansible.builtin.git:
       repo: https://github.com/openzfs/zfs.git
       dest: /opt/zfs
-      version: "{{ json_reponse.json.tag_name | default('master') }}"
+      version: master
 
 Preparing the rest of the system
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
