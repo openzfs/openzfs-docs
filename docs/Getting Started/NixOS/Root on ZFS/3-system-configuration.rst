@@ -9,7 +9,7 @@ System Configuration
 #. Enter ephemeral nix-shell with git support::
 
      mkdir -p /mnt/etc/
-     echo DISK=$DISK > ~/disk
+     echo DISK=\"$DISK\" > ~/disk
 
      nix-shell -p git
 
