@@ -39,6 +39,9 @@ System Configuration
      sed -i "s|\"hostId_placeholder\"|\"$(head -c4 /dev/urandom | od -A none -t x4| sed 's| ||g')\"|g" \
        /mnt/etc/nixos/hosts/exampleHost/default.nix
 
+     sed -i "s|\"systemType_placeholder\"|\"$(uname -m)-linux\"|g" \
+       /mnt/etc/nixos/flake.nix
+
 #. Set root password::
 
      rootPwd=$(mkpasswd -m SHA-512 -s)
@@ -48,10 +51,6 @@ System Configuration
      sed -i \
      "s|rootHash_placeholder|${rootPwd}|" \
      /mnt/etc/nixos/hosts/exampleHost/default.nix
-
-#. If using a system architecture other than amd64 (x86_64-linux), such as
-   ``aarch64-linux``, change architecture in
-   ``/mnt/etc/nixos/flake.nix``.
 
 #. Optional: add SSH public key for root and change host name in
    ``/mnt/etc/nixos/hosts/exampleHost/default.nix``.
@@ -66,10 +65,6 @@ System Configuration
 
      git -C /mnt/etc/nixos commit -asm 'initial installation'
 
-#. Exit ephemeral nix shell with git::
-
-     exit
-
 #. Update flake lock file to track latest system version::
 
      nix \
@@ -82,6 +77,10 @@ System Configuration
      nixos-install --no-root-passwd --flake "git+file:///mnt/etc/nixos#exampleHost"
 
    If the host name was changed, use the new host name in this command.
+
+#. Exit ephemeral nix shell with git::
+
+     exit
 
 #. Unmount filesystems::
 
