@@ -76,7 +76,8 @@ Preparation
    * https://archzfs.com/archive_archzfs/
    * https://archzfs.com/archzfs/x86_64/
 
-   ::
+   Such as::
+
       curl -L https://archzfs.com/archive_archzfs/ \
       | grep zfs-linux-[0-9] \
       | grep -v src.tar \
@@ -87,14 +88,12 @@ Preparation
 
 #. Find compatible zfs-utils package:
 
-   Search ZFS version string (e.g. 2.1.5) in both pages above.
+   Search ZFS version string (e.g. 2.1.5) in both pages above::
 
-   ::
       curl -L https://archzfs.com/archzfs/x86_64/ \
       | grep zfs-utils-2.1.5 \
       | grep -v src.tar
       # ...<a href="zfs-utils-2.1.5-1-x86_64.pkg.tar.zst">...
-
 
    Result: https/.../archzfs/x86_64/zfs-utils-2.1.5-2-x86_64.pkg.tar.zst
 

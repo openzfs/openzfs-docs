@@ -8,33 +8,31 @@ System Configuration
 
 #. Generate fstab::
 
-    mkdir -p /mnt/var/log
-    mkdir -p /mnt/var/lib
-    mount -t zfs rpool/alma/var/lib /mnt/var/lib
-    mount -t zfs rpool/alma/var/log /mnt/var/log
     mkdir -p /mnt/etc/
     genfstab -t PARTUUID /mnt | grep -v swap > /mnt/etc/fstab
     sed -i "s|vfat.*rw|vfat rw,x-systemd.idle-timeout=1min,x-systemd.automount,noauto,nofail|" /mnt/etc/fstab
 
 #. Install basic system packages::
 
-    dnf --installroot=/mnt \
-    --releasever=$VERSION_ID -y install \
-    @core  grub2-efi-x64 \
-    grub2-pc-modules grub2-efi-x64-modules \
-    shim-x64  efibootmgr \
-    kernel
-    dnf --installroot=/mnt \
-    --releasever=$VERSION_ID -y install \
-    https://zfsonlinux.org/epel/zfs-release-2-2$(rpm --eval "%{dist}").noarch.rpm
-    dnf config-manager --installroot=/mnt --disable zfs
-    dnf config-manager --installroot=/mnt --enable zfs-kmod
-    dnf --installroot=/mnt --releasever=$VERSION_ID \
-    -y install zfs zfs-dracut
+     dnf --installroot=/mnt \
+     --releasever=$VERSION_ID -y install \
+     @core  grub2-efi-x64 \
+     grub2-pc-modules grub2-efi-x64-modules \
+     shim-x64  efibootmgr \
+     kernel-$(uname -r)
+
+     dnf --installroot=/mnt \
+     --releasever=$VERSION_ID -y install \
+     https://zfsonlinux.org/epel/zfs-release-2-2$(rpm --eval "%{dist}").noarch.rpm
+     dnf config-manager --installroot=/mnt --disable zfs
+     dnf config-manager --installroot=/mnt --enable zfs-kmod
+     dnf --installroot=/mnt --releasever=$VERSION_ID \
+     -y install zfs zfs-dracut
 
 #. Configure dracut::
 
-    echo 'add_dracutmodules+=" zfs "' > /mnt/etc/dracut.conf.d/zfs.conf
+    echo 'add_dracutmodules+=" zfs "' >> /mnt/etc/dracut.conf.d/zfs.conf
+    echo 'forced_drivers+=" zfs "' >> /mnt/etc/dracut.conf.d/zfs.conf
     if grep mpt3sas /proc/modules; then
       echo 'forced_drivers+=" mpt3sas "'  >> /mnt/etc/dracut.conf.d/zfs.conf
     fi

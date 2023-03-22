@@ -9,10 +9,6 @@ System Configuration
 
 #. Generate fstab::
 
-    mkdir -p /mnt/var/log
-    mkdir -p /mnt/var/lib
-    mount -t zfs rpool/fedora/var/lib /mnt/var/lib
-    mount -t zfs rpool/fedora/var/log /mnt/var/log
     mkdir -p /mnt/etc/
     genfstab -t PARTUUID /mnt | grep -v swap > /mnt/etc/fstab
     sed -i "s|vfat.*rw|vfat rw,x-systemd.idle-timeout=1min,x-systemd.automount,noauto,nofail|" /mnt/etc/fstab
@@ -35,7 +31,8 @@ System Configuration
 
 #. Configure dracut::
 
-    echo 'add_dracutmodules+=" zfs "' > /mnt/etc/dracut.conf.d/zfs.conf
+    echo 'add_dracutmodules+=" zfs "' >> /mnt/etc/dracut.conf.d/zfs.conf
+    echo 'forced_drivers+=" zfs "' >> /mnt/etc/dracut.conf.d/zfs.conf
     if grep mpt3sas /proc/modules; then
       echo 'forced_drivers+=" mpt3sas "'  >> /mnt/etc/dracut.conf.d/zfs.conf
     fi
