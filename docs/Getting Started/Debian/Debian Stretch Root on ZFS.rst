@@ -346,7 +346,7 @@ manually created clones.
 
 ::
 
-  # zfs create -o canmount=noauto -o mountpoint=/ rpool/ROOT/debian
+  # zfs create -p -o canmount=noauto -o mountpoint=/ rpool/ROOT/debian
   # zfs mount rpool/ROOT/debian
 
   # zfs create -o canmount=noauto -o mountpoint=/boot bpool/BOOT/debian
