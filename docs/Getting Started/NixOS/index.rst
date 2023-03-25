@@ -30,6 +30,10 @@ see below.
 
 Live image ships with ZFS support by default.
 
+Note that you need to apply these settings even if you don't need
+to boot from ZFS.  The kernel module 'zfs.ko' will not be available
+to modprobe until you make these changes and reboot.
+
 #. Import separate configration file for ZFS options::
 
     vim /etc/nixos/configuration.nix
