@@ -30,6 +30,8 @@ Bootloader
       cp -r /usr/lib/grub/x86_64-efi/ /boot/efi/EFI/fedora/
       grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
       grub2-mkconfig -o /boot/efi/fedora/grub-bootdir/i386-pc/grub2/grub.cfg
+      mkdir -p /boot/grub2
+      grub2-mkconfig -o /boot/grub2/grub.cfg
 
 #. For both legacy and EFI booting: mirror ESP content::
 
@@ -47,6 +49,7 @@ Bootloader
 
       grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
       grub2-mkconfig -o /boot/efi/fedora/grub-bootdir/i386-pc/grub2/grub.cfg
+      grub2-mkconfig -o /boot/grub2/grub.cfg
 
 Finish Installation
 ~~~~~~~~~~~~~~~~~~~~

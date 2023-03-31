@@ -30,6 +30,8 @@ Bootloader
 	  /boot/efi --bootloader-id arch --removable
       grub-mkconfig -o /boot/efi/arch/grub-bootdir/x86_64-efi/grub/grub.cfg
       grub-mkconfig -o /boot/efi/arch/grub-bootdir/i386-pc/grub/grub.cfg
+      mkdir -p /boot/grub
+      grub-mkconfig -o /boot/grub/grub.cfg
 
 #. For both legacy and EFI booting: mirror ESP content::
 

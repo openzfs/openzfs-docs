@@ -126,7 +126,7 @@ System Installation
       mount -t zfs rpool/nixos/root /mnt/
       zfs create -o mountpoint=legacy rpool/nixos/home
       mkdir /mnt/home
-      mount -t zfs  rpool/nixos/home /mnt/home
+      mount -t zfs rpool/nixos/home /mnt/home
       zfs create -o mountpoint=legacy  rpool/nixos/var
       zfs create -o mountpoint=legacy rpool/nixos/var/lib
       zfs create -o mountpoint=legacy rpool/nixos/var/log
@@ -134,6 +134,10 @@ System Installation
       zfs create -o mountpoint=legacy bpool/nixos/root
       mkdir /mnt/boot
       mount -t zfs bpool/nixos/root /mnt/boot
+      mkdir -p /mnt/var/log
+      mkdir -p /mnt/var/lib
+      mount -t zfs rpool/nixos/var/lib /mnt/var/lib
+      mount -t zfs rpool/nixos/var/log /mnt/var/log
       zfs create -o mountpoint=legacy rpool/nixos/empty
       zfs snapshot rpool/nixos/empty@start
 

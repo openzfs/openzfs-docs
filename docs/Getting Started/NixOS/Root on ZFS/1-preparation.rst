@@ -6,16 +6,15 @@ Preparation
 .. contents:: Table of Contents
    :local:
 
-This guide supports x86_64 and arm64-efi architectures.
+**Note for arm64**
 
-**Note for Tow-Boot**
+Currently there is a bug with the grub installation script.  See `here
+<https://github.com/NixOS/nixpkgs/issues/222491>`__ for details.
 
-`Tow-Boot firmware <https://tow-boot.org/>`__
-enables UEFI boot on many affordable arm64 based computers.  If
-using Tow-Boot, NixOS and Tow-Boot must be on separate disks.
-Example, Tow-Boot is installed to an SD card.  Then the SD card
-should not be also shared with NixOS.  Install NixOS to an external
-disk instead.
+**Note for Immutable Root**
+
+Immutable root can be enabled or disabled by setting
+``zfs-root.boot.immutable`` option inside per-host configuration.
 
 #. Disable Secure Boot. ZFS modules can not be loaded if Secure Boot is enabled.
 #. Download `NixOS Live Image
