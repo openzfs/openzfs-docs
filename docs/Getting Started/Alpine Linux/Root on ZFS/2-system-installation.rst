@@ -80,9 +80,6 @@ System Installation
    limited to only those that GRUB supports, allowing the root pool to use
    any/all features.
 
-   Features enabled with ``-o compatibility=grub2`` can be seen
-   `here <https://github.com/openzfs/zfs/blob/master/cmd/zpool/compatibility.d/grub2>`__.
-
 #. Create root pool::
 
        zpool create \
@@ -158,7 +155,7 @@ System Installation
     done
 
     mkdir -p /mnt/boot/efi
-    mount -t vfat $(echo $DISK | cut -f1 -d\ )-part1 /mnt/boot/efi
+    mount -t vfat $(echo $DISK | cut -f1 -d' ')-part1 /mnt/boot/efi
 
 #. By default ``setup-disk`` command does not support zfs and will refuse to run,
    add zfs support::
@@ -186,14 +183,6 @@ System Installation
 
     chroot /mnt /usr/bin/env DISK="$DISK" sh
 
-#. Rebuild initrd::
-
-    sed -i 's|zfs|nvme zfs|' /etc/mkinitfs/mkinitfs.conf
-    for directory in /lib/modules/*; do
-      kernel_version=$(basename $directory)
-      mkinitfs $kernel_version
-    done
-
 #. Apply GRUB workaround::
 
      echo 'export ZPOOL_VDEV_NAME_PATH=YES' >> /etc/profile.d/zpool_vdev_name_path.sh
@@ -206,10 +195,11 @@ System Installation
      sed -i 's|stat -f -c %T /|echo zfs|' /usr/sbin/grub-mkconfig
 
      # grub-probe fails to identify fs mounted at /boot
-     sed -i "s|GRUB_DEVICE_BOOT=.*|GRUB_DEVICE_BOOT=$(echo $DISK | cut -f1 -d\ )-part2|"  /usr/sbin/grub-mkconfig
+     BOOT_DEVICE=$(zpool status -P bpool | grep -- -part2 | head -n1 | sed  "s|.*/dev*|/dev|" | sed "s|part2.*|part2|")
+     sed -i "s|GRUB_DEVICE_BOOT=.*|GRUB_DEVICE_BOOT=${BOOT_DEVICE}|"  /usr/sbin/grub-mkconfig
 
-   This workaround needs to be applied for every GRUB update, as the
-   update will overwrite the changes.
+   The ``sed`` workaround for ``grub-mkconfig`` needs to be applied
+   for every GRUB update, as the update will overwrite the changes.
 
 #. Install GRUB::
 
@@ -227,6 +217,8 @@ System Installation
 
      grub-mkconfig -o /boot/efi/alpine/grub-bootdir/x86_64-efi/grub/grub.cfg
      grub-mkconfig -o /boot/efi/alpine/grub-bootdir/i386-pc/grub/grub.cfg
+     mkdir -p /boot/grub
+     grub-mkconfig -o /boot/grub/grub.cfg
 
 #. For both legacy and EFI booting: mirror ESP content::
 
@@ -243,7 +235,7 @@ System Installation
 
 #. Unmount filesystems::
 
-     cut -f2 -d\  /proc/mounts | grep ^/mnt | tac | while read i; do umount -l $i; done
+     umount -Rl /mnt
      zpool export -a
 
 #. Reboot::

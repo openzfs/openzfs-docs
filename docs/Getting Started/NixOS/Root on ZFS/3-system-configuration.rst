@@ -36,10 +36,10 @@ System Configuration
      sed -i "s|\"bootDevices_placeholder\"|$diskNames|g" \
        /mnt/etc/nixos/hosts/exampleHost/default.nix
 
-     sed -i "s|\"hostId_placeholder\"|\"$(head -c4 /dev/urandom | od -A none -t x4| sed 's| ||g')\"|g" \
+     sed -i "s|\"abcd1234\"|\"$(head -c4 /dev/urandom | od -A none -t x4| sed 's| ||g')\"|g" \
        /mnt/etc/nixos/hosts/exampleHost/default.nix
 
-     sed -i "s|\"systemType_placeholder\"|\"$(uname -m)-linux\"|g" \
+     sed -i "s|\"x86_64-linux\"|\"$(uname -m)-linux\"|g" \
        /mnt/etc/nixos/flake.nix
 
 #. Set root password::
@@ -52,8 +52,8 @@ System Configuration
      "s|rootHash_placeholder|${rootPwd}|" \
      /mnt/etc/nixos/hosts/exampleHost/default.nix
 
-#. Optional: add SSH public key for root and change host name in
-   ``/mnt/etc/nixos/hosts/exampleHost/default.nix``.
+#. You can enable NetworkManager for wireless networks and GNOME
+   desktop environment in ``configuration.nix``.
 
 #. From now on, the complete configuration of the system will be
    tracked by git, set a user name and email address to continue::
@@ -76,8 +76,6 @@ System Configuration
 
      nixos-install --no-root-passwd --flake "git+file:///mnt/etc/nixos#exampleHost"
 
-   If the host name was changed, use the new host name in this command.
-
 #. Exit ephemeral nix shell with git::
 
      exit
@@ -90,22 +88,6 @@ System Configuration
 #. Reboot::
 
      reboot
-
-#. NetworkManager is enabled by default.  To manage network
-   connections, execute::
-
-     nmtui
-
-#. Optional: immutable root filesystem can be enabled by setting
-   ``my.boot.immutable`` option to ``true``.
-   then execute::
-
-     nixos-rebuild boot
-
-   Then reboot.  You may need to make certain
-   adjustments to where configuration files are stored,
-   see `NixOS wiki <https://nixos.wiki/wiki/ZFS>`__ for
-   details.
 
 Replace a failed disk
 =====================

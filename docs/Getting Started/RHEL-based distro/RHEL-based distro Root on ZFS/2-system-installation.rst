@@ -148,4 +148,4 @@ System Installation
     done
 
     mkdir -p /mnt/boot/efi
-    mount -t vfat $(echo $DISK | cut -f1 -d\ )-part1 /mnt/boot/efi
+    mount -t vfat $(echo $DISK | cut -f1 -d' ')-part1 /mnt/boot/efi
