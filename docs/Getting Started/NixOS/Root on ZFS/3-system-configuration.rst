@@ -91,22 +91,6 @@ System Configuration
 
      reboot
 
-#. NetworkManager is enabled by default.  To manage network
-   connections, execute::
-
-     nmtui
-
-#. Optional: immutable root filesystem can be enabled by setting
-   ``my.boot.immutable`` option to ``true``.
-   then execute::
-
-     nixos-rebuild boot
-
-   Then reboot.  You may need to make certain
-   adjustments to where configuration files are stored,
-   see `NixOS wiki <https://nixos.wiki/wiki/ZFS>`__ for
-   details.
-
 Replace a failed disk
 =====================
 
