@@ -29,10 +29,7 @@ System Configuration
 
 #. Configure mkinitcpio::
 
-     mv /mnt/etc/mkinitcpio.conf /mnt/etc/mkinitcpio.conf.original
-     tee /mnt/etc/mkinitcpio.conf <<EOF
-     HOOKS=(base udev autodetect modconf block keyboard zfs filesystems)
-     EOF
+     sed -i 's|filesystems|zfs filesystems|' /mnt/etc/mkinitcpio.conf
 
 #. Enable internet time synchronisation::
 

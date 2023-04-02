@@ -7,7 +7,9 @@ Preparation
    :local:
 
 #. Disable Secure Boot. ZFS modules can not be loaded if Secure Boot is enabled.
-#. Download latest `Arch Linux live image  <https://archlinux.org/download/>`__ and boot from it.
+#. Download an older `Arch Linux live image
+   <https://geo.mirror.pkgbuild.com/iso/>`__ and boot from it.  Latest
+   image may lack a compatible kernel.
 #. Connect to the Internet.
 #. Set root password or ``/root/.ssh/authorized_keys``.
 #. Start SSH server::
@@ -81,7 +83,7 @@ Preparation
       curl -L https://archzfs.com/archive_archzfs/ \
       | grep zfs-linux-[0-9] \
       | grep -v src.tar \
-      | grep "5.18.7"
+      | grep --color "5.18.7"
       # ...<a href="zfs-linux-2.1.5_5.18.7.arch1.1-1-x86_64.pkg.tar.zst">...
 
    Result: https/.../archive_archzfs/zfs-linux-2.1.5_5.18.7.arch1.1-1-x86_64.pkg.tar.zst
@@ -91,8 +93,8 @@ Preparation
    Search ZFS version string (e.g. 2.1.5) in both pages above::
 
       curl -L https://archzfs.com/archzfs/x86_64/ \
-      | grep zfs-utils-2.1.5 \
-      | grep -v src.tar
+      | grep -v src.tar \
+      | grep --color zfs-utils-2.1.5
       # ...<a href="zfs-utils-2.1.5-1-x86_64.pkg.tar.zst">...
 
    Result: https/.../archzfs/x86_64/zfs-utils-2.1.5-2-x86_64.pkg.tar.zst
