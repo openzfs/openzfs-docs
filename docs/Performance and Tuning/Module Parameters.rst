@@ -2,7 +2,7 @@ Module Parameters
 =================
 
 Most of the ZFS kernel module parameters are accessible in the SysFS
-``/sys/module/zfs/parameters`` directory. Current value can be observed
+``/sys/module/zfs/parameters`` directory. Current values can be observed
 by
 
 .. code:: shell
@@ -68,7 +68,7 @@ Tags
 ----
 
 The list of parameters is quite large and resists hierarchical
-representation. To assist in quickly finding relevant information
+representation. To assist in finding relevant information
 quickly, each module parameter has a "Tags" row with keywords for
 frequent searches.
 
