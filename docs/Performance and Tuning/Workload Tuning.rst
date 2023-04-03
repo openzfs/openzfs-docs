@@ -145,7 +145,7 @@ The following compression algorithms are available:
       significantly superior to LZJB in all metrics tested. It is `new
       default compression algorithm <https://github.com/illumos/illumos-gate/commit/db1741f555ec79def5e9846e6bfd132248514ffe>`__
       (compression=on) in OpenZFS.
-      It is available on all platforms have as of 2020.
+      It is available on all platforms as of 2020.
 
 -  LZJB
 
@@ -153,7 +153,7 @@ The following compression algorithms are available:
       It was created to satisfy the desire for a compression algorithm
       suitable for use in filesystems. Specifically, that it provides
       fair compression, has a high compression speed, has a high
-      decompression speed and detects incompressible data detection
+      decompression speed and detects incompressible data
       quickly.
 
 -  GZIP (1 through 9)

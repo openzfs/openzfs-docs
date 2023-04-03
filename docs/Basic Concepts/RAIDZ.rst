@@ -18,7 +18,7 @@ vdev type specifies a double-parity raidz group; and the ``raidz3`` vdev type
 specifies a triple-parity raidz group. The ``raidz`` vdev type is an alias for
 raidz1.
 
-A raidz group with N disks of size X with P parity disks can hold
+A raidz group of N disks of size X with P parity disks can hold
 approximately (N-P)*X bytes and can withstand P devices failing without
 losing data. The minimum number of devices in a raidz group is one more
 than the number of parity disks. The recommended number is between 3 and 9
@@ -53,7 +53,7 @@ we will allocate on disk:
 
 - one 4K padding block
 
-, and usable space ratio will be 50%, same as with double mirror.
+and usable space ratio will be 50%, same as with double mirror.
 
 
 Another example for ``ashift=12`` and ``recordsize=128K`` for raidz1 of 3 disks:
@@ -64,11 +64,11 @@ Another example for ``ashift=12`` and ``recordsize=128K`` for raidz1 of 3 disks:
 
 - we will have 128K/2 = 64 stripes with 8K of data and 4K of parity each
 
-, so usable space ratio in this case will be 66%.
+so usable space ratio in this case will be 66%.
 
 
-If RAIDZ will have more disks, it's stripe width will be larger, and space
-efficiency better too.
+The more disks RAIDZ has, the wider the stripe, the greater the space
+efficiency.
 
 You can find actual parity cost per RAIDZ size here:
 

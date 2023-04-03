@@ -189,14 +189,15 @@ not be as reliable as it would be on its own.
    is set or the RAID array is part of a mirror/raid-z vdev within ZFS.
 
 -  Sector size information is not necessarily passed correctly by
-   hardware RAID on RAID 1 and cannot be passed correctly on RAID 5/6.
+   hardware RAID on RAID 1. Sector size information cannot be passed
+   correctly on RAID 5/6.
    Hardware RAID 1 is more likely to experience read-modify-write
-   overhead from partial sector writes and Hardware RAID 5/6 will almost
+   overhead from partial sector writes while Hardware RAID 5/6 will almost
    certainty suffer from partial stripe writes (i.e. the RAID write
-   hole). Using ZFS with the disks directly will allow it to obtain the
+   hole). ZFS using the disks natively allows it to obtain the
    sector size information reported by the disks to avoid
-   read-modify-write on sectors while ZFS avoids partial stripe writes
-   on RAID-Z by desing from using copy-on-write.
+   read-modify-write on sectors, while ZFS avoids partial stripe writes
+   on RAID-Z by design from using copy-on-write.
 
    -  There can be sector alignment problems on ZFS when a drive
       misreports its sector size. Such drives are typically NAND-flash
@@ -209,7 +210,7 @@ not be as reliable as it would be on its own.
       actual drive, such that manual correction of sector alignment at
       vdev creation does not solve the problem.
 
--  Controller failures can require that the controller be replaced with
+-  RAID controller failures can require that the controller be replaced with
    the same model, or in less extreme cases, a model from the same
    manufacturer. Using ZFS by itself allows any controller to be used.
 
@@ -231,8 +232,8 @@ not be as reliable as it would be on its own.
    data is undefined. There are reports of RAID 5 and 6 arrays being
    lost during reconstruction when the controller encounters silent
    corruption. ZFS' checksums allow it to avoid this situation by
-   determining if not enough information exists to reconstruct data. In
-   which case, the file is listed as damaged in zpool status and the
+   determining whether enough information exists to reconstruct data. If
+   not, the file is listed as damaged in zpool status and the
    system administrator has the opportunity to restore it from a backup.
 
 -  IO response times will be reduced whenever the OS blocks on IO
@@ -254,10 +255,10 @@ not be as reliable as it would be on its own.
       interaction between the hardware RAID controller and the OS might
       rename arrays C and D to look like arrays B and C respectively.
       This can fault pools verbatim imported from the cachefile.
-   -  Not all RAID controllers behave this way. However, this issue has
+   -  Not all RAID controllers behave this way. This issue has
       been observed on both Linux and FreeBSD when system administrators
-      used single drive RAID 0 arrays. It has also been observed with
-      controllers from different vendors.
+      used single drive RAID 0 arrays, however. It has also been observed
+      with controllers from different vendors.
 
 One might be inclined to try using single-drive RAID 0 arrays to try to
 use a RAID controller like a HBA, but this is not recommended for many
