@@ -22,7 +22,7 @@ import sphinx_rtd_theme
 # -- Project information -----------------------------------------------------
 
 project = u'OpenZFS'
-copyright = u'2021, OpenZFS'
+copyright = u'2023, OpenZFS'
 author = u'OpenZFS'
 
 # The short X.Y version
@@ -44,6 +44,7 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.githubpages',
     'sphinx.ext.intersphinx',
+    'sphinx.ext.ifconfig',
     "sphinx_issues",
     "sphinx_rtd_theme",
     "notfound.extension"
@@ -69,7 +70,7 @@ master_doc = 'index'
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = None
+language = 'en'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -78,6 +79,14 @@ exclude_patterns = [u'_build', 'Thumbs.db', '.DS_Store']
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = None
+
+
+# https://www.sphinx-doc.org/en/master/usage/extensions/ifconfig.html
+# hide commands for tests in user documentation
+def setup(app):
+    app.add_config_value('zfs_root_test', default=True, rebuild='env')
+
+zfs_root_test = False
 
 
 # -- Options for HTML output -------------------------------------------------

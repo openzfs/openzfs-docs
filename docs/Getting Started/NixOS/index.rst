@@ -45,8 +45,10 @@ to modprobe until you make these changes and reboot.
     tee -a /etc/nixos/zfs.nix <<EOF
     { config, pkgs, ... }:
 
-    { boot.supportedFilesystems = [ "zfs" ];
-      networking.hostId = (builtins.substring 0 8 (builtins.readFile "/etc/machine-id"));
+    {
+      boot.supportedFilesystems = [ "zfs" ];
+      networking.hostId = "$(head -c4 /dev/urandom | od -A none -t x4 | sed 's| ||g')";
+      boot.zfs.forceImportRoot = false;
     }
     EOF
 
@@ -56,40 +58,8 @@ to modprobe until you make these changes and reboot.
 
 Root on ZFS
 -----------
-ZFS can be used as root file system for NixOS.
-An installation guide is available.
-
-Start from "Preparation".
-
 .. toctree::
-  :maxdepth: 1
-  :glob:
+   :maxdepth: 1
+   :glob:
 
-  Root on ZFS/*
-
-Contribute
-----------
-#. Fork and clone `this repo <https://github.com/openzfs/openzfs-docs>`__.
-
-#. Launch an ephemeral nix-shell with the following packages::
-
-    nix-shell -p python39 python39Packages.pip gnumake \
-        python39Packages.setuptools
-
-#. Create python virtual environment and install packages::
-
-    cd openzfs-docs
-    python -m venv .venv
-    source .venv/bin/activate
-
-    pip install -r docs/requirements.txt
-
-#. Make your changes.
-
-#. Test::
-
-    make html
-    sensible-browser _build/html/index.html
-
-#. ``git commit --signoff`` to a branch, ``git push``, and create a pull
-   request. Mention @ne9z.
+   *
