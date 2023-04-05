@@ -61,12 +61,6 @@ An installation guide is available.
 
 Start from "Preparation".
 
-.. toctree::
-  :maxdepth: 1
-  :glob:
-
-  Root on ZFS/*
-
 Contribute
 ----------
 #. Fork and clone `this repo <https://github.com/openzfs/openzfs-docs>`__.

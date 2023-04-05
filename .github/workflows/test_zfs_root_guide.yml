@@ -1,0 +1,23 @@
+name: "Test ZFS root guides"
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: cachix/install-nix-action@v20
+        with:
+          nix_path: nixpkgs=channel:nixos-22.11
+      - name: Test ZFS Root guides
+        run: |
+         git clone https://github.com/ne9z/nixos-live
+         cd nixos-live
+         nix build '.#nixosConfigurations.exampleHost.config.system.build.isoImage'
+         nix develop './#guide-tests' --command './qemu.sh'
