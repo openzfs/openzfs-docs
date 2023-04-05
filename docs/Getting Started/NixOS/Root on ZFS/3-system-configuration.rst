@@ -50,7 +50,7 @@ System Configuration
 
      sed -i \
      "s|rootHash_placeholder|${rootPwd}|" \
-     /mnt/etc/nixos/hosts/exampleHost/default.nix
+     /mnt/etc/nixos/configuration.nix
 
 #. You can enable NetworkManager for wireless networks and GNOME
    desktop environment in ``configuration.nix``.
