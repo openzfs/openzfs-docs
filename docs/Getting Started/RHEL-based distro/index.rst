@@ -71,16 +71,6 @@ And for EL8 and newer, separately run::
  dnf install -y kernel-devel
  dnf install -y zfs
 
-It might be necessary to rebuild the ZFS modules::
-
- for directory in /lib/modules/*; do
-   kernel_version=$(basename $directory)
-   dkms autoinstall -k $kernel_version
- done
-
-If for some reason, the ZFS kernel modules are not successfully built,
-you can also run the above command to debug the problem.
-
 .. note::
    When switching from DKMS to kABI-tracking kmods first uninstall the
    existing DKMS packages. This should remove the kernel modules for all
@@ -126,8 +116,8 @@ time you can create such configuration in ``/etc/modules-load.d``::
 Previous minor EL releases
 --------------------------
 
-The current release package uses `$releasever` rather than specify a particular
-minor release as previous release packages did.  Typically `$releasever` will
+The current release package uses `"${releasever}"` rather than specify a particular
+minor release as previous release packages did.  Typically `"${releasever}"` will
 resolve to just the major version (e.g. `8`), and the resulting repository URL
 will be aliased to the current minor version (e.g. `8.7`), but you can specify
 `--releasever` to use previous repositories. ::
@@ -175,15 +165,13 @@ And for EL8 and newer::
    Use *zfs-testing* for DKMS packages and *zfs-testing-kmod*
    for kABI-tracking kmod packages.
 
-RHEL-based distro Root on ZFS
--------------------------------
-Start from "Preparation".
-
+Root on ZFS
+-----------
 .. toctree::
-  :maxdepth: 1
-  :glob:
+   :maxdepth: 1
+   :glob:
 
-  RHEL-based distro Root on ZFS/*
+   *
 
 .. _kABI-tracking kmod: https://elrepoproject.blogspot.com/2016/02/kabi-tracking-kmod-packages.html
 .. _DKMS: https://en.wikipedia.org/wiki/Dynamic_Kernel_Module_Support

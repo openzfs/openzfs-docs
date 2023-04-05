@@ -26,13 +26,8 @@ see below.
 
 Root on ZFS
 -----------
-ZFS can be used as root file system for Alpine Linux.
-An installation guide is available.
-
-Start from "Preparation".
-
 .. toctree::
-  :maxdepth: 1
-  :glob:
+   :maxdepth: 1
+   :glob:
 
-  Root on ZFS/*
+   *

@@ -31,34 +31,18 @@ ZFS support is provided by third-party `archzfs repo <https://github.com/archzfs
 Installation
 ------------
 
-Note: this is for installing ZFS on an existing Arch
-Linux installation. To use ZFS as root file system,
-see below.
-
-#. `Add archzfs repo to pacman <0-archzfs-repo.html>`__.
-
-#. Install `zfs-linux* <1-zfs-linux.html>`__
-   or `zfs-dkms <2-zfs-dkms.html>`__ depending on your needs.
-   See the respective pages for details.
-
-Live image
-----------
-Kernel package shipped with latest live image might
-not be compatible with ZFS, user should check kernel version
-following instructions `here <3-live.html>`__.
+See `Archlinux Wiki <https://wiki.archlinux.org/title/ZFS>`__.
 
 Root on ZFS
 -----------
 ZFS can be used as root file system for Arch Linux.
 An installation guide is available.
 
-Start from "Preparation".
-
 .. toctree::
   :maxdepth: 1
   :glob:
 
-  Root on ZFS/*
+  *
 
 Contribute
 ----------
@@ -70,8 +54,8 @@ Contribute
 
     pip3 install -r docs/requirements.txt
 
-    # Add ~/.local/bin to your $PATH, e.g. by adding this to ~/.bashrc:
-    [ -d $HOME/.local/bin ] && export PATH=$HOME/.local/bin:$PATH
+    # Add ~/.local/bin to your "${PATH}", e.g. by adding this to ~/.bashrc:
+    [ -d "${HOME}"/.local/bin ] && export PATH="${HOME}"/.local/bin:"${PATH}"
 
 #. Make your changes.
 
