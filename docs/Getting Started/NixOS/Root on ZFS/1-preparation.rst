@@ -1,60 +1,6 @@
-.. highlight:: sh
+:orphan:
 
-Preparation
-======================
+RHEL and CentOS
+=======================
 
-.. contents:: Table of Contents
-   :local:
-
-**Note for arm64**
-
-Currently there is a bug with the grub installation script.  See `here
-<https://github.com/NixOS/nixpkgs/issues/222491>`__ for details.
-
-**Note for Immutable Root**
-
-Immutable root can be enabled or disabled by setting
-``zfs-root.boot.immutable`` option inside per-host configuration.
-
-#. Disable Secure Boot. ZFS modules can not be loaded if Secure Boot is enabled.
-#. Download `NixOS Live Image
-   <https://nixos.org/download.html#download-nixos>`__ and boot from it.
-#. Connect to the Internet.
-#. Set root password or ``/root/.ssh/authorized_keys``.
-#. Start SSH server::
-
-    systemctl restart sshd
-
-#. Connect from another computer::
-
-    ssh root@192.168.1.91
-
-#. Target disk
-
-   List available disks with::
-
-    find /dev/disk/by-id/
-
-   If using virtio as disk bus, use ``/dev/disk/by-path/``.
-
-   Declare disk array::
-
-    DISK='/dev/disk/by-id/ata-FOO /dev/disk/by-id/nvme-BAR'
-
-   For single disk installation, use::
-
-    DISK='/dev/disk/by-id/disk1'
-
-#. Set partition size:
-
-   Set swap size, set to 1 if you don't want swap to
-   take up too much space::
-
-    INST_PARTSIZE_SWAP=4
-
-   It is recommeneded to set this value higher if your computer has
-   less than 8GB of memory, otherwise ZFS might fail to build.
-
-   Root pool size, use all remaining disk space if not set::
-
-    INST_PARTSIZE_RPOOL=
+This page has been moved to `Root on ZFS <../Root%20on%20ZFS.html>`__.
