@@ -28,25 +28,25 @@ Note: this is for installing ZFS on an existing
 NixOS installation. To use ZFS as root file system,
 see below.
 
-Live image ships with ZFS support by default.
+NixOS live images ship with ZFS support by default.
 
 Note that you need to apply these settings even if you don't need
-to boot from ZFS.  The kernel module 'zfs.ko' will not be available
+to boot from ZFS. The kernel module 'zfs.ko' will not be available
 to modprobe until you make these changes and reboot.
 
-#. Import separate configration file for ZFS options::
+#. Import separate configration file for ZFS options
+  add './zfs.nix' to 'imports' in /etc/nixos/configuration.nix::
 
-    vim /etc/nixos/configuration.nix
-    ##add './zfs.nix' to 'imports'
-    # imports = [ ./zfs.nix ];
+    imports = [ ./zfs.nix ];
 
-#. Configure ZFS options::
+#. Configure ZFS options
+  To get the hostId string run: `head -c 8 /etc/machine-id`::
 
     tee -a /etc/nixos/zfs.nix <<EOF
-    { config, pkgs, ... }:
+    { ... }:
 
     { boot.supportedFilesystems = [ "zfs" ];
-      networking.hostId = (builtins.substring 0 8 (builtins.readFile "/etc/machine-id"));
+      networking.hostId = "7b5489cd";
     }
     EOF
 
@@ -73,8 +73,7 @@ Contribute
 
 #. Launch an ephemeral nix-shell with the following packages::
 
-    nix-shell -p python39 python39Packages.pip gnumake \
-        python39Packages.setuptools
+    nix-shell -p python3 python3Packages.pip gnumake python3Packages.setuptools
 
 #. Create python virtual environment and install packages::
 
@@ -89,7 +88,7 @@ Contribute
 #. Test::
 
     make html
-    sensible-browser _build/html/index.html
+    xdg-open _build/html/index.html
 
 #. ``git commit --signoff`` to a branch, ``git push``, and create a pull
    request. Mention @ne9z.
