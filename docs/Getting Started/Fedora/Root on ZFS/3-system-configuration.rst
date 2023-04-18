@@ -32,9 +32,9 @@ System Configuration
 #. Configure dracut::
 
     echo 'add_dracutmodules+=" zfs "' >> /mnt/etc/dracut.conf.d/zfs.conf
-    echo 'forced_drivers+=" zfs "' >> /mnt/etc/dracut.conf.d/zfs.conf
+    echo 'force_drivers+=" zfs "' >> /mnt/etc/dracut.conf.d/zfs.conf
     if grep mpt3sas /proc/modules; then
-      echo 'forced_drivers+=" mpt3sas "'  >> /mnt/etc/dracut.conf.d/zfs.conf
+      echo 'force_drivers+=" mpt3sas "'  >> /mnt/etc/dracut.conf.d/zfs.conf
     fi
     if grep virtio_blk /proc/modules; then
       echo 'filesystems+=" virtio_blk "' >> /mnt/etc/dracut.conf.d/fs.conf
