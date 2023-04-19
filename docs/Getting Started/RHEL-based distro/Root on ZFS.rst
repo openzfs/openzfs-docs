@@ -454,7 +454,7 @@ System Configuration
     grub2-pc grub2-pc-modules grub2-efi-x64-modules shim-x64  \
     efibootmgr kernel-core
 
-    .. ifconfig:: zfs_root_test
+   .. ifconfig:: zfs_root_test
 
      # skip installing firmware in test
      dnf -y install --allowerasing --setopt=install_weak_deps=False \

@@ -28,33 +28,30 @@ Note: this is for installing ZFS on an existing
 NixOS installation. To use ZFS as root file system,
 see below.
 
-Live image ships with ZFS support by default.
+NixOS live image ships with ZFS support by default.
 
 Note that you need to apply these settings even if you don't need
 to boot from ZFS.  The kernel module 'zfs.ko' will not be available
 to modprobe until you make these changes and reboot.
 
-#. Import separate configration file for ZFS options::
+#. Edit ``/etc/nixos/configuration.nix`` and add the following
+   options::
 
-    vim /etc/nixos/configuration.nix
-    ##add './zfs.nix' to 'imports'
-    # imports = [ ./zfs.nix ];
+    boot.supportedFilesystems = [ "zfs" ];
+    boot.zfs.forceImportRoot = false;
+    networking.hostId = "yourHostId";
 
-#. Configure ZFS options::
+   Where hostID can be generated with::
 
-    tee -a /etc/nixos/zfs.nix <<EOF
-    { config, pkgs, ... }:
-
-    {
-      boot.supportedFilesystems = [ "zfs" ];
-      networking.hostId = "$(head -c4 /dev/urandom | od -A none -t x4 | sed 's| ||g')";
-      boot.zfs.forceImportRoot = false;
-    }
-    EOF
+     head -c4 /dev/urandom | od -A none -t x4
 
 #. Apply configuation changes::
 
-    nixos-rebuild switch
+    nixos-rebuild boot
+
+#. Reboot::
+
+     reboot
 
 Root on ZFS
 -----------
@@ -63,3 +60,27 @@ Root on ZFS
    :glob:
 
    *
+
+Contribute
+----------
+
+You can contribute to this documentation.  Fork this repo, edit the
+documentation, then opening a pull request.
+
+#. To test your changes locally, use the devShell in this repo::
+
+    git clone https://github.com/ne9z/nixos-live openzfs-docs-dev
+    cd openzfs-docs-dev
+    nix develop ./openzfs-docs-dev/#docs
+
+#. Inside the openzfs-docs repo, build pages::
+
+     make html
+
+#. Look for errors and warnings in the make output. If there is no
+   errors::
+
+     xdg-open _build/html/index.html
+
+#. ``git commit --signoff`` to a branch, ``git push``, and create a
+   pull request. Mention @ne9z.
