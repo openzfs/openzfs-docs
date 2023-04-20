@@ -762,9 +762,9 @@ Virtual machines
 
 Virtual machine images on ZFS should be stored using either zvols or raw
 files to avoid unnecessary overhead. The recordsize/volblocksize and
-guest filesystem should be configured to match to avoid overhead from
-partial record modification. This would typically be 4K. If raw files
-are used, a separate dataset should be used to make it easy to configure
+guest filesystem may be configured to match to avoid overhead from
+partial record modification, see :ref:`zvol volblocksize <zvol_volblocksize>`. 
+If raw files are used, a separate dataset should be used to make it easy to configure
 recordsize independently of other things stored on ZFS.
 
 .. _qemu_kvm_xen:
