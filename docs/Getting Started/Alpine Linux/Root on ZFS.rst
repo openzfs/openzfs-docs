@@ -203,12 +203,12 @@ System Installation
    especially those with existing ZFS pools or mdraid and those that have been used as live media.
    Those data structures may interfere with boot process.
 
-   For flash-based storage, this can be done by uncommenting the blkdiscard command below:
+   For flash-based storage, this can be done by the blkdiscard command below:
    ::
 
      partition_disk () {
       local disk="${1}"
-      #blkdiscard -f "${disk}"
+      blkdiscard -f "${disk}" || true
 
       parted --script --align=optimal  "${disk}" -- \
       mklabel gpt \
