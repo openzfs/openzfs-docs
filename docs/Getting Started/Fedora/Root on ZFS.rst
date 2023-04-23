@@ -204,12 +204,12 @@ System Installation
    especially those with existing ZFS pools or mdraid and those that have been used as live media.
    Those data structures may interfere with boot process.
 
-   For flash-based storage, this can be done by uncommenting the blkdiscard command below:
+   For flash-based storage, this can be done by the blkdiscard command below:
    ::
 
      partition_disk () {
       local disk="${1}"
-      #blkdiscard -f "${disk}"
+      blkdiscard -f "${disk}" || true
 
       parted --script --align=optimal  "${disk}" -- \
       mklabel gpt \
@@ -399,10 +399,10 @@ System Configuration
 
      apk add curl
      curl --fail-early --fail -L \
-     https://dl.fedoraproject.org/pub/fedora/linux/releases/38/Container/x86_64/images/Fedora-Container-Base-38-1.6.x86_64.tar.xz \
+     https://dl.fedoraproject.org/pub/fedora/linux/releases/37/Container/x86_64/images/Fedora-Container-Base-37-1.7.x86_64.tar.xz \
      -o rootfs.tar.gz
      curl --fail-early --fail -L \
-     https://dl.fedoraproject.org/pub/fedora/linux/releases/38/Container/x86_64/images/Fedora-Container-38-1.6-x86_64-CHECKSUM \
+     https://dl.fedoraproject.org/pub/fedora/linux/releases/37/Container/x86_64/images/Fedora-Container-37-1.7-x86_64-CHECKSUM \
      -o checksum
 
      # BusyBox sha256sum treats all lines in the checksum file
@@ -478,7 +478,7 @@ System Configuration
    .. code-block:: sh
 
     dnf -y install \
-    https://zfsonlinux.org/fedora/zfs-release-2-2$(rpm --eval "%{dist}").noarch.rpm
+    https://zfsonlinux.org/fedora/zfs-release-2-2"$(rpm --eval "%{dist}"||true)".noarch.rpm
 
     dnf -y install zfs zfs-dracut
 
@@ -486,6 +486,9 @@ System Configuration
 
     # this step will build zfs modules and fail
     # no need to test building in chroot
+
+    dnf -y install \
+    https://zfsonlinux.org/fedora/zfs-release-2-2"$(rpm --eval "%{dist}"||true)".noarch.rpm
 
 #. Check whether ZFS modules are successfully built
 

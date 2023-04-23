@@ -48,10 +48,14 @@ see below.
    An option is to an LTS kernel from COPR, provided by a third-party.
    Use it at your own risk::
 
-    # kwizart/kernel-longterm-5.10
-    # kwizart/kernel-longterm-4.19
-    dnf copr enable -y kwizart/kernel-longterm-5.4
-    dnf install -y kernel-longterm kernel-longterm-devel
+     # this is a third-party repo!
+     # you have been warned.
+     #
+     # select a kernel from
+     # https://copr.fedorainfracloud.org/coprs/kwizart/
+
+     dnf copr enable -y kwizart/kernel-longterm-VERSION
+     dnf install -y kernel-longterm kernel-longterm-devel
 
    Reboot to new LTS kernel, then load kernel module::
 
