@@ -303,6 +303,9 @@ Step 2: Disk Formatting
      should be compatible in theory, but in practice, GRUB can fail with an
      “invalid dnode type” error. This feature does not matter for ``/boot``
      anyway.
+   - Starting in ZoL 2.1.0, available in ``bullseye-backports`` and upcoming 
+     ``bookworm``, you use ``-o compatibility=grub2`` to more easily track 
+     feature compatibility between grub and ZoL. 
 
 #. Create the root pool:
 
