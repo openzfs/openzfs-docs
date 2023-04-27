@@ -45,7 +45,7 @@ to modprobe until you make these changes and reboot.
 
      head -c4 /dev/urandom | od -A none -t x4
 
-#. Apply configuation changes::
+#. Apply configuration changes::
 
     nixos-rebuild boot
 
