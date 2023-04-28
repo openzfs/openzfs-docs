@@ -37,11 +37,11 @@ the fingerprint listed here.
 
 For EL7 run::
 
- yum install https://zfsonlinux.org/epel/zfs-release-2-2$(rpm --eval "%{dist}").noarch.rpm
+ yum install https://zfsonlinux.org/epel/zfs-release-2-3$(rpm --eval "%{dist}").noarch.rpm
 
 and for EL8 and 9::
 
- dnf install https://zfsonlinux.org/epel/zfs-release-2-2$(rpm --eval "%{dist}").noarch.rpm
+ dnf install https://zfsonlinux.org/epel/zfs-release-2-3$(rpm --eval "%{dist}").noarch.rpm
 
 After installing the *zfs-release* package and verifying the public key
 users can opt to install either the DKMS or kABI-tracking kmod style packages.
