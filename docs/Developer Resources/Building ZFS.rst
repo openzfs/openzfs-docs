@@ -128,10 +128,9 @@ the ZFS and SPL source in the traditional autotools fashion.
 
 | **tip:** ``--with-linux=PATH`` and ``--with-linux-obj=PATH`` can be
   passed to configure to specify a kernel installed in a non-default
-  location. This option is also supported when building ZFS.
-| **tip:** ``--enable-debug`` can be set to enable all ASSERTs and
-  additional correctness tests. This option is also supported when
-  building ZFS.
+  location.
+| **tip:** ``--enable-debug`` can be passed to configure to enable all ASSERTs and
+  additional correctness tests.
 
 **Optional** Build packages
 
