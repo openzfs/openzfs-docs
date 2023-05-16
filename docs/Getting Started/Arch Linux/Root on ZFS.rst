@@ -42,8 +42,8 @@ Preparation
 
    Download latest extended variant of `Alpine Linux
    live image
-   <https://dl-cdn.alpinelinux.org/alpine/v3.17/releases/x86_64/alpine-extended-3.17.3-x86_64.iso>`__,
-   verify `checksum <https://dl-cdn.alpinelinux.org/alpine/v3.17/releases/x86_64/alpine-extended-3.17.3-x86_64.iso.asc>`__
+   <https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/x86_64/alpine-extended-3.18.0-x86_64.iso>`__,
+   verify `checksum <https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/x86_64/alpine-extended-3.18.0-x86_64.iso.asc>`__
    and boot from it.
 
    .. code-block:: sh
@@ -395,10 +395,10 @@ System Configuration
      apk add curl
 
      curl --fail-early --fail -L \
-     https://america.archive.pkgbuild.com/iso/2023.04.01/archlinux-bootstrap-x86_64.tar.gz \
+     https://america.archive.pkgbuild.com/iso/2023.05.03/archlinux-bootstrap-x86_64.tar.gz \
      -o rootfs.tar.gz
      curl --fail-early --fail -L \
-     https://america.archive.pkgbuild.com/iso/2023.04.01/archlinux-bootstrap-x86_64.tar.gz.sig \
+     https://america.archive.pkgbuild.com/iso/2023.05.03/archlinux-bootstrap-x86_64.tar.gz.sig \
      -o rootfs.tar.gz.sig
 
      apk add gnupg
