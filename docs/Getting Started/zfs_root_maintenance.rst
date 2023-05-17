@@ -140,8 +140,9 @@ and other maintenance operations and is thus currently not supported.
    ::
 
       set -x
-      new_boot_dataset="${boot_dataset%/*}"/"${my_boot_env}"
       boot_dataset=$(df -P /boot | tail -n1 | cut -f1 -d' ' || true )
+      root_dataset=$(df -P / | tail -n1 | cut -f1 -d' ' || true )
+      new_boot_dataset="${boot_dataset%/*}"/"${my_boot_env}"
       rm_boot_dataset=$(head -n1 new_boot_env_entry_"${new_boot_dataset##*/}" | sed 's|^# *||' || true )
 
       if [ "${boot_dataset}" = "${rm_boot_dataset}" ]; then

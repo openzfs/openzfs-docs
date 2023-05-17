@@ -40,8 +40,8 @@ Preparation
 
    Download latest extended variant of `Alpine Linux
    live image
-   <https://dl-cdn.alpinelinux.org/alpine/v3.17/releases/x86_64/alpine-extended-3.17.3-x86_64.iso>`__,
-   verify `checksum <https://dl-cdn.alpinelinux.org/alpine/v3.17/releases/x86_64/alpine-extended-3.17.3-x86_64.iso.asc>`__
+   <https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/x86_64/alpine-extended-3.18.0-x86_64.iso>`__,
+   verify `checksum <https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/x86_64/alpine-extended-3.18.0-x86_64.iso.asc>`__
    and boot from it.
 
    .. code-block:: sh
@@ -393,10 +393,10 @@ System Configuration
 
      apk add curl
      curl --fail-early --fail -L \
-     https://dl.rockylinux.org/pub/rocky/9/images/x86_64/Rocky-9-Container-Base-9.1-20230215.0.x86_64.tar.xz \
+     https://dl.rockylinux.org/pub/rocky/9.2/images/x86_64/Rocky-9-Container-Base-9.2-20230513.0.x86_64.tar.xz \
      -o rootfs.tar.gz
      curl --fail-early --fail -L \
-     https://dl.rockylinux.org/pub/rocky/9/images/x86_64/Rocky-9-Container-Base-9.1-20230215.0.x86_64.tar.xz.CHECKSUM \
+     https://dl.rockylinux.org/pub/rocky/9.2/images/x86_64/Rocky-9-Container-Base-9.2-20230513.0.x86_64.tar.xz.CHECKSUM \
      -o checksum
 
      # BusyBox sha256sum treats all lines in the checksum file
@@ -464,7 +464,7 @@ System Configuration
 
 #. Install ZFS packages::
 
-    dnf install -y https://zfsonlinux.org/epel/zfs-release-2-2"$(rpm --eval "%{dist}"|| true)".noarch.rpm
+    dnf install -y https://zfsonlinux.org/epel/zfs-release-2-3"$(rpm --eval "%{dist}"|| true)".noarch.rpm
     dnf config-manager --disable zfs
     dnf config-manager --enable zfs-kmod
     dnf install -y zfs zfs-dracut

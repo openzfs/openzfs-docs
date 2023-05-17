@@ -43,8 +43,8 @@ Preparation
 
    Download latest extended variant of `Alpine Linux
    live image
-   <https://dl-cdn.alpinelinux.org/alpine/v3.17/releases/x86_64/alpine-extended-3.17.3-x86_64.iso>`__,
-   verify `checksum <https://dl-cdn.alpinelinux.org/alpine/v3.17/releases/x86_64/alpine-extended-3.17.3-x86_64.iso.asc>`__
+   <https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/x86_64/alpine-extended-3.18.0-x86_64.iso>`__,
+   verify `checksum <https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/x86_64/alpine-extended-3.18.0-x86_64.iso.asc>`__
    and boot from it.
 
    .. code-block:: sh
@@ -399,10 +399,10 @@ System Configuration
 
      apk add curl
      curl --fail-early --fail -L \
-     https://dl.fedoraproject.org/pub/fedora/linux/releases/37/Container/x86_64/images/Fedora-Container-Base-37-1.7.x86_64.tar.xz \
+     https://dl.fedoraproject.org/pub/fedora/linux/releases/38/Container/x86_64/images/Fedora-Container-Base-38-1.6.x86_64.tar.xz \
      -o rootfs.tar.gz
      curl --fail-early --fail -L \
-     https://dl.fedoraproject.org/pub/fedora/linux/releases/37/Container/x86_64/images/Fedora-Container-37-1.7-x86_64-CHECKSUM \
+     https://dl.fedoraproject.org/pub/fedora/linux/releases/38/Container/x86_64/images/Fedora-Container-38-1.6-x86_64-CHECKSUM \
      -o checksum
 
      # BusyBox sha256sum treats all lines in the checksum file
@@ -478,7 +478,7 @@ System Configuration
    .. code-block:: sh
 
     dnf -y install \
-    https://zfsonlinux.org/fedora/zfs-release-2-2"$(rpm --eval "%{dist}"||true)".noarch.rpm
+    https://zfsonlinux.org/fedora/zfs-release-2-3"$(rpm --eval "%{dist}"||true)".noarch.rpm
 
     dnf -y install zfs zfs-dracut
 
@@ -488,7 +488,7 @@ System Configuration
     # no need to test building in chroot
 
     dnf -y install \
-    https://zfsonlinux.org/fedora/zfs-release-2-2"$(rpm --eval "%{dist}"||true)".noarch.rpm
+    https://zfsonlinux.org/fedora/zfs-release-2-3"$(rpm --eval "%{dist}"||true)".noarch.rpm
 
 #. Check whether ZFS modules are successfully built
 

@@ -34,8 +34,8 @@ Preparation
 #. Disable Secure Boot. ZFS modules can not be loaded if Secure Boot is enabled.
 #. Download latest extended variant of `Alpine Linux
    live image
-   <https://dl-cdn.alpinelinux.org/alpine/v3.17/releases/x86_64/alpine-extended-3.17.3-x86_64.iso>`__,
-   verify `checksum <https://dl-cdn.alpinelinux.org/alpine/v3.17/releases/x86_64/alpine-extended-3.17.3-x86_64.iso.asc>`__
+   <https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/x86_64/alpine-extended-3.18.0-x86_64.iso>`__,
+   verify `checksum <https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/x86_64/alpine-extended-3.18.0-x86_64.iso.asc>`__
    and boot from it.
 
    .. code-block:: sh
@@ -48,8 +48,8 @@ Preparation
 
       # check whether the download page exists
       # alpine version must be in sync with ci/cd test chroot tarball
-      curl --head --fail https://dl-cdn.alpinelinux.org/alpine/v3.17/releases/x86_64/alpine-extended-3.17.3-x86_64.iso
-      curl --head --fail https://dl-cdn.alpinelinux.org/alpine/v3.17/releases/x86_64/alpine-extended-3.17.3-x86_64.iso.asc
+      curl --head --fail https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/x86_64/alpine-extended-3.18.0-x86_64.iso
+      curl --head --fail https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/x86_64/alpine-extended-3.18.0-x86_64.iso.asc
 
 #. Login as root user.  There is no password.
 #. Configure Internet
