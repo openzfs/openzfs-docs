@@ -438,7 +438,7 @@ benefit from large recordsize (128K-1M).
 
 .. _ceph-configuration-cephconf:
 
-CEPH Configuration (ceph.conf}
+CEPH Configuration (ceph.conf)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Additionally CEPH sets various values internally for handling xattrs
