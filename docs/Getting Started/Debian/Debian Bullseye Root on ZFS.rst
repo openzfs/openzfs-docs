@@ -9,6 +9,14 @@ Debian Bullseye Root on ZFS
 Overview
 --------
 
+Newer release available
+~~~~~~~~~~~~~~~~~~~~~~~
+
+- See :doc:`Debian Bookworm Root on ZFS <./Debian Bookworm Root on ZFS>` for
+  new installs.  This guide is no longer receiving most updates.  It continues
+  to exist for reference for existing installs that followed it.
+
+
 Caution
 ~~~~~~~
 

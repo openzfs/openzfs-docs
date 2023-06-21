@@ -1,6 +1,6 @@
 .. highlight:: sh
 
-Debian Bullseye Root on ZFS
+Debian Bookworm Root on ZFS
 ===========================
 
 .. contents:: Table of Contents
@@ -19,7 +19,7 @@ Caution
 System Requirements
 ~~~~~~~~~~~~~~~~~~~
 
-- `64-bit Debian GNU/Linux Bullseye Live CD w/ GUI (e.g. gnome iso)
+- `64-bit Debian GNU/Linux Bookworm Live CD w/ GUI (e.g. gnome iso)
   <https://cdimage.debian.org/mirror/cdimage/release/current-live/amd64/iso-hybrid/>`__
 - `A 64-bit kernel is strongly encouraged.
   <https://github.com/zfsonlinux/zfs/wiki/FAQ#32-bit-vs-64-bit-systems>`__
@@ -41,7 +41,7 @@ If you need help, reach out to the community using the :ref:`mailing_lists` or I
 `#zfsonlinux <ircs://irc.libera.chat/#zfsonlinux>`__ on `Libera Chat
 <https://libera.chat/>`__. If you have a bug report or feature request
 related to this HOWTO, please `file a new issue and mention @rlaager
-<https://github.com/openzfs/openzfs-docs/issues/new?body=@rlaager,%20I%20have%20the%20following%20issue%20with%20the%20Debian%20Bullseye%20Root%20on%20ZFS%20HOWTO:>`__.
+<https://github.com/openzfs/openzfs-docs/issues/new?body=@rlaager,%20I%20have%20the%20following%20issue%20with%20the%20Debian%20Bookworm%20Root%20on%20ZFS%20HOWTO:>`__.
 
 Contributing
 ~~~~~~~~~~~~
@@ -106,7 +106,7 @@ Step 1: Prepare The Install Environment
 
    .. code-block:: sourceslist
 
-     deb http://deb.debian.org/debian bullseye main contrib
+     deb http://deb.debian.org/debian bookworm main contrib
 
    ::
 
@@ -546,7 +546,7 @@ Step 3: System Installation
 
 #. Install the minimal system::
 
-     debootstrap bullseye /mnt
+     debootstrap bookworm /mnt
 
    The ``debootstrap`` command leaves the new system in an unconfigured state.
    An alternative to using ``debootstrap`` is to copy the entirety of a
@@ -600,14 +600,14 @@ Step 4: System Configuration
 
    .. code-block:: sourceslist
 
-     deb http://deb.debian.org/debian bullseye main contrib
-     deb-src http://deb.debian.org/debian bullseye main contrib
+     deb http://deb.debian.org/debian bookworm main contrib
+     deb-src http://deb.debian.org/debian bookworm main contrib
 
-     deb http://deb.debian.org/debian-security bullseye-security main contrib
-     deb-src http://deb.debian.org/debian-security bullseye-security main contrib
+     deb http://deb.debian.org/debian-security bookworm-security main contrib
+     deb-src http://deb.debian.org/debian-security bookworm-security main contrib
 
-     deb http://deb.debian.org/debian bullseye-updates main contrib
-     deb-src http://deb.debian.org/debian bullseye-updates main contrib
+     deb http://deb.debian.org/debian bookworm-updates main contrib
+     deb-src http://deb.debian.org/debian bookworm-updates main contrib
 
 #. Bind the virtual filesystems from the LiveCD environment to the new
    system and ``chroot`` into it::
@@ -658,7 +658,7 @@ Step 4: System Configuration
    ``/etc/crypttab`` entries for ``luks2``, etc. adjusting for each disk.
 
 #. Install an NTP service to synchronize time.
-   This step is specific to Bullseye which does not install the package during
+   This step is specific to Bookworm which does not install the package during
    bootstrap.
    Although this step is not necessary for ZFS, it is useful for internet
    browsing where local clock drift can cause login failures::
