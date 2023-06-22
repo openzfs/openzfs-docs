@@ -673,8 +673,6 @@ Step 4: System Configuration
 
        apt install --yes grub-pc
 
-     Select (using the space bar) all of the disks (not partitions) in your
-     pool.
 
    - Install GRUB for UEFI booting::
 
