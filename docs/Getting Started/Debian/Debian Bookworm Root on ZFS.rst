@@ -106,7 +106,7 @@ Step 1: Prepare The Install Environment
 
    .. code-block:: sourceslist
 
-     deb http://deb.debian.org/debian bookworm main contrib
+     deb http://deb.debian.org/debian bookworm main contrib non-free-firmware
 
    ::
 
@@ -156,7 +156,8 @@ Step 2: Disk Formatting
    - ``ls -la /dev/disk/by-id`` will list the aliases.
    - Are you doing this in a virtual machine? If your virtual disk is missing
      from ``/dev/disk/by-id``, use ``/dev/vda`` if you are using KVM with
-     virtio; otherwise, read the `troubleshooting <#troubleshooting>`__
+     virtio.  Also when using /dev/vda, the partitions used later will be named
+     differently. Otherwise, read the `troubleshooting <#troubleshooting>`__
      section.
    - For a mirror or raidz topology, use ``DISK1``, ``DISK2``, etc.
    - When choosing a boot pool size, consider how you will use the space. A
@@ -600,14 +601,14 @@ Step 4: System Configuration
 
    .. code-block:: sourceslist
 
-     deb http://deb.debian.org/debian bookworm main contrib
-     deb-src http://deb.debian.org/debian bookworm main contrib
+     deb http://deb.debian.org/debian bookworm main contrib non-free-firmware
+     deb-src http://deb.debian.org/debian bookworm main contrib non-free-firmware
 
-     deb http://deb.debian.org/debian-security bookworm-security main contrib
-     deb-src http://deb.debian.org/debian-security bookworm-security main contrib
+     deb http://deb.debian.org/debian-security bookworm-security main contrib non-free-firmware
+     deb-src http://deb.debian.org/debian-security bookworm-security main contrib non-free-firmware
 
-     deb http://deb.debian.org/debian bookworm-updates main contrib
-     deb-src http://deb.debian.org/debian bookworm-updates main contrib
+     deb http://deb.debian.org/debian bookworm-updates main contrib non-free-firmware
+     deb-src http://deb.debian.org/debian bookworm-updates main contrib non-free-firmware
 
 #. Bind the virtual filesystems from the LiveCD environment to the new
    system and ``chroot`` into it::
@@ -771,7 +772,7 @@ Step 4: System Configuration
    unlocking::
 
      apt install --yes --no-install-recommends dropbear-initramfs
-     mkdir -p /etc/dropbear-initramfs
+     mkdir -p /etc/dropbear/initramfs
 
      # Optional: Convert OpenSSH server keys for Dropbear
      for type in ecdsa ed25519 rsa ; do
@@ -779,12 +780,12 @@ Step 4: System Configuration
          ssh-keygen -p -N "" -m PEM -f /tmp/openssh.key
          dropbearconvert openssh dropbear \
              /tmp/openssh.key \
-             /etc/dropbear-initramfs/dropbear_${type}_host_key
+             /etc/dropbear/initramfs/dropbear_${type}_host_key
      done
      rm /tmp/openssh.key
 
      # Add user keys in the same format as ~/.ssh/authorized_keys
-     vi /etc/dropbear-initramfs/authorized_keys
+     vi /etc/dropbear/initramfs/authorized_keys
 
      # If using a static IP, set it for the initramfs environment:
      vi /etc/initramfs-tools/initramfs.conf
