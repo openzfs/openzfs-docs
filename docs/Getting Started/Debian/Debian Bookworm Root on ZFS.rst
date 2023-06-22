@@ -622,7 +622,6 @@ Step 4: System Configuration
 
 #. Configure a basic system environment::
 
-     ln -s /proc/self/mounts /etc/mtab
      apt update
 
      apt install --yes console-setup locales
