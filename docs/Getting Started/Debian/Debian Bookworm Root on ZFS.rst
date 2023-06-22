@@ -664,10 +664,6 @@ Step 4: System Configuration
    browsing where local clock drift can cause login failures::
 
      apt install systemd-timesyncd
-     timedatectl
-
-   You should now see "NTP service: active" in the above ``timedatectl``
-   output.
 
 #. Install GRUB
 
