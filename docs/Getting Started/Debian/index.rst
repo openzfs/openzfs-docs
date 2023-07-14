@@ -19,12 +19,12 @@ often provides newer releases of ZFS. You can use it as follows.
 
 Add the backports repository::
 
-  vi /etc/apt/sources.list.d/bullseye-backports.list
+  vi /etc/apt/sources.list.d/bookworm-backports.list
 
 .. code-block:: sourceslist
 
-   deb http://deb.debian.org/debian bullseye-backports main contrib
-   deb-src http://deb.debian.org/debian bullseye-backports main contrib
+   deb http://deb.debian.org/debian bookworm-backports main contrib
+   deb-src http://deb.debian.org/debian bookworm-backports main contrib
 
 ::
 
@@ -33,7 +33,7 @@ Add the backports repository::
 .. code-block:: control
 
   Package: src:zfs-linux
-  Pin: release n=bullseye-backports
+  Pin: release n=bookworm-backports
   Pin-Priority: 990
 
 Install the packages::
