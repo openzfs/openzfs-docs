@@ -175,7 +175,7 @@ Root on ZFS
 
 .. _kABI-tracking kmod: https://elrepoproject.blogspot.com/2016/02/kabi-tracking-kmod-packages.html
 .. _DKMS: https://en.wikipedia.org/wiki/Dynamic_Kernel_Module_Support
-.. _EL7: https://zfsonlinux.org/epel/zfs-release-2-2.el7.noarch.rpm
-.. _EL8: https://zfsonlinux.org/epel/zfs-release-2-2.el8.noarch.rpm
-.. _EL9: https://zfsonlinux.org/epel/zfs-release-2-2.el9.noarch.rpm
+.. _EL7: https://zfsonlinux.org/epel/zfs-release-2-3.el7.noarch.rpm
+.. _EL8: https://zfsonlinux.org/epel/zfs-release-2-3.el8.noarch.rpm
+.. _EL9: https://zfsonlinux.org/epel/zfs-release-2-3.el9.noarch.rpm
 .. _EPEL repository: https://fedoraproject.org/wiki/EPEL
