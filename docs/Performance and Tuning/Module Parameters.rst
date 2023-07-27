@@ -42,11 +42,12 @@ boot time by changing the ``/etc/modprobe.d/icp.conf`` file.
 
 See the man page for *modprobe.d* for more information.
 
-zfs-module-parameters Manual Page
----------------------------------
+Manual Pages
+------------
 
-The `zfs-module-parameters(5) <../man/5/zfs-module-parameters.5.html>`_
-man page contains brief descriptions of
+The `zfs(4) <../man/4/zfs.4.html>`_ and `spl(4) <../man/4/spl.4.html>`_ man
+pages (previously ``zfs-`` and ``spl-module-parameters(5)``, respectively,
+prior to OpenZFS 2.1) contain brief descriptions of
 the module parameters. Alas, man pages are not as suitable for quick
 reference as documentation pages. This page is intended to be a better
 cross-reference and capture some of the wisdom of ZFS developers and
