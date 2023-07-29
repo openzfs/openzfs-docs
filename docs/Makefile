@@ -28,11 +28,11 @@ ZFS_GIT_DIR = ./_build/zfs
 .PHONY: man
 man:
 	if [ ! -d $(ZFS_GIT_DIR) ]; then \
-		git clone --depth=1 $(ZFS_GIT_REPO) ./_build/zfs ; \
+		git clone $(ZFS_GIT_REPO) ./_build/zfs ; \
 	else \
-		git -C $(ZFS_GIT_DIR) pull ; \
+		git -C $(ZFS_GIT_DIR) fetch --all && git -C $(ZFS_GIT_DIR) fetch --tags --force ; \
 	fi
-	../scripts/man_pages.py ./_build/zfs/man ./
+	../scripts/man_pages.py ./
 
 .PHONY: feature_matrix
 feature_matrix:
