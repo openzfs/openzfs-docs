@@ -6,7 +6,9 @@
 # full list see the documentation:
 # http://www.sphinx-doc.org/en/master/config
 
-import sphinx_rtd_theme
+from pathlib import Path
+
+import sphinx_rtd_theme  # noqa
 
 # -- Path setup --------------------------------------------------------------
 
@@ -47,7 +49,8 @@ extensions = [
     'sphinx.ext.ifconfig',
     "sphinx_issues",
     "sphinx_rtd_theme",
-    "notfound.extension"
+    "notfound.extension",
+    "sphinxext.rediraffe",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -228,3 +231,22 @@ issues_commit_uri = "https://github.com/openzfs/zfs/commit/{commit}"
 
 # Get absolute paths in 404
 notfound_urls_prefix = '/openzfs-docs/'
+
+# Redirects
+rediraffe_redirects = {}
+
+# Old man pages location -> to new master branch location
+redirect_folders = {
+    "man/1/": "man/master/1/",
+    "man/4/": "man/master/4/",
+    "man/5/": "man/master/5/",
+    "man/7/": "man/master/7/",
+    "man/8/": "man/master/8/",
+}
+
+# rediraffe doesn't support wildcards or regex, so fill redirects manually
+for old, new in redirect_folders.items():
+    for newpath in Path(new).rglob("**/*"):
+        if newpath.suffix in [".rst"]:
+            oldpath = str(newpath).replace(new, old, 1)
+            rediraffe_redirects[oldpath] = str(newpath)
