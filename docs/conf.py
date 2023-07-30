@@ -119,6 +119,7 @@ html_static_path = ['_static']
 
 html_context = {
     'css_files': [
+        '_static/css/theme.css',  # set explicitly for local tests
         '_static/css/theme_overrides.css',  # override wide tables in RTD theme
         '_static/css/mandoc.css',
         ],
