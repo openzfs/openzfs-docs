@@ -473,7 +473,7 @@ workaround.
 Other General Guidelines
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Use a separate journal device. Do not don't collocate CEPH journal on
+-  Use a separate journal device. Do not collocate CEPH journal on
    ZFS dataset if at all possible, this will quickly lead to terrible
    fragmentation, not to mention terrible performance upfront even
    before fragmentation (CEPH journal does a dsync for every write).
