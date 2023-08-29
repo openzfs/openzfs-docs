@@ -5857,14 +5857,23 @@ gaps where the gap is less than ``zfs_vdev_write_gap_limit``
 zfs_vdev_scheduler
 ~~~~~~~~~~~~~~~~~~
 
-When the pool is imported, for whole disk vdevs, the block device I/O
-scheduler is set to ``zfs_vdev_scheduler``. The most common schedulers
-are: *noop*, *cfq*, *bfq*, and *deadline*.
+Prior to version 0.8.3, when the pool is imported, for whole disk vdevs,
+the block device I/O scheduler is set to ``zfs_vdev_scheduler``.
+The most common schedulers are: *noop*, *cfq*, *bfq*, and *deadline*.
+In some cases, the scheduler is not changeable using this method.
+Known schedulers that cannot be changed are: *scsi_mq* and *none*.
+In these cases, the scheduler is unchanged and an error message can be
+reported to logs.
 
-In some cases, the scheduler is not changeable using this method. Known
-schedulers that cannot be changed are: *scsi_mq* and *none*. In these
-cases, the scheduler is unchanged and an error message can be reported
-to logs.
+The parameter was disabled in v0.8.3 but left in place to avoid breaking
+loading of the ``zfs`` module if the parameter is specified in modprobe
+configuration on existing installations.  It is recommended that users
+leave the default scheduler "`unless you're encountering a specific
+problem, or have clearly measured a performance improvement for your
+workload
+<https://github.com/openzfs/zfs/issues/9778#issuecomment-569347505>`__,"
+and if so, to change it via the ``/sys/block/<device>/queue/scheduler``
+interface and/or udev rule.
 
 +--------------------+------------------------------------------------+
 | zfs_vdev_scheduler | Notes                                          |
@@ -5885,7 +5894,7 @@ to logs.
 | Change             | Dynamic, but takes effect upon pool creation   |
 |                    | or import                                      |
 +--------------------+------------------------------------------------+
-| Versions Affected  | all                                            |
+| Versions Affected  | all, but no effect since v0.8.3                |
 +--------------------+------------------------------------------------+
 
 zfs_vdev_raidz_impl
