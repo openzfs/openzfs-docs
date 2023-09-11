@@ -66,6 +66,13 @@ see below.
 
     echo zfs > /etc/modules-load.d/zfs.conf
 
+#. By default ZFS may be removed by kernel package updates.
+   To lock the kernel version to only ones supported by ZFS to prevent this::
+    echo 'zfs' > /etc/dnf/protected.d/zfs.conf
+
+   Pending non-kernel updates can still be applied::
+    dnf update --exclude=kernel*
+
 Testing Repo
 --------------------
 
