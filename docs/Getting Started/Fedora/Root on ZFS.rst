@@ -43,8 +43,8 @@ Preparation
 
    Download latest extended variant of `Alpine Linux
    live image
-   <https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/x86_64/alpine-extended-3.18.0-x86_64.iso>`__,
-   verify `checksum <https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/x86_64/alpine-extended-3.18.0-x86_64.iso.asc>`__
+   <https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/x86_64/alpine-extended-3.18.4-x86_64.iso>`__,
+   verify `checksum <https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/x86_64/alpine-extended-3.18.4-x86_64.iso.asc>`__
    and boot from it.
 
    .. code-block:: sh
@@ -200,9 +200,7 @@ System Installation
 
 #. Partition the disks.
 
-   Note: you must clear all existing partition tables and data structures from the disks,
-   especially those with existing ZFS pools or mdraid and those that have been used as live media.
-   Those data structures may interfere with boot process.
+   Note: you must clear all existing partition tables and data structures from target disks.
 
    For flash-based storage, this can be done by the blkdiscard command below:
    ::
@@ -582,12 +580,13 @@ System Configuration
    ::
 
     rm -f /etc/localtime
+    rm -f /etc/hostname
     systemd-firstboot \
     --force \
     --locale=en_US.UTF-8 \
     --timezone=Etc/UTC \
     --hostname=testhost \
-    --keymap=us
+    --keymap=us || true
 
 #. Set root passwd
    ::
@@ -718,6 +717,16 @@ Bootloader
 
      # chroot ends here
      ZFS_ROOT_GUIDE_TEST
+
+#. On first reboot, SELinux policies will be applied, albeit
+   incompletely.  The computer will then reboot with incomplete
+   policies and fail to mount ``/run``, resulting in a failure.
+
+   Workaround is to append ``enforcing=0`` to kernel command line in
+   the GRUB menu, as many times as necessary, until the system
+   complete one successful boot.  The author of this guide has not
+   found out a way to solve this issue during installation.  Help is
+   appreciated.
 
 Post installaion
 ---------------------------

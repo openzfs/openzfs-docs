@@ -42,8 +42,8 @@ Preparation
 
    Download latest extended variant of `Alpine Linux
    live image
-   <https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/x86_64/alpine-extended-3.18.0-x86_64.iso>`__,
-   verify `checksum <https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/x86_64/alpine-extended-3.18.0-x86_64.iso.asc>`__
+   <https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/x86_64/alpine-extended-3.18.4-x86_64.iso>`__,
+   verify `checksum <https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/x86_64/alpine-extended-3.18.4-x86_64.iso.asc>`__
    and boot from it.
 
    .. code-block:: sh
@@ -196,9 +196,7 @@ System Installation
 
 #. Partition the disks.
 
-   Note: you must clear all existing partition tables and data structures from the disks,
-   especially those with existing ZFS pools or mdraid and those that have been used as live media.
-   Those data structures may interfere with boot process.
+   Note: you must clear all existing partition tables and data structures from target disks.
 
    For flash-based storage, this can be done by the blkdiscard command below:
    ::
@@ -395,10 +393,10 @@ System Configuration
      apk add curl
 
      curl --fail-early --fail -L \
-     https://america.archive.pkgbuild.com/iso/2023.05.03/archlinux-bootstrap-x86_64.tar.gz \
+     https://america.archive.pkgbuild.com/iso/2023.09.01/archlinux-bootstrap-x86_64.tar.gz \
      -o rootfs.tar.gz
      curl --fail-early --fail -L \
-     https://america.archive.pkgbuild.com/iso/2023.05.03/archlinux-bootstrap-x86_64.tar.gz.sig \
+     https://america.archive.pkgbuild.com/iso/2023.09.01/archlinux-bootstrap-x86_64.tar.gz.sig \
      -o rootfs.tar.gz.sig
 
      apk add gnupg

@@ -147,9 +147,7 @@ System Installation
 
 #. Partition the disks.
 
-   Note: you must clear all existing partition tables and data structures from the disks,
-   especially those with existing ZFS pools or mdraid and those that have been used as live media.
-   Those data structures may interfere with boot process.
+   Note: you must clear all existing partition tables and data structures from target disks.
 
    For flash-based storage, this can be done by the blkdiscard command below:
    ::
@@ -302,7 +300,7 @@ System Installation
       zfs create -o mountpoint=legacy rpool/nixos/home
       mkdir "${MNT}"/home
       mount -t zfs rpool/nixos/home "${MNT}"/home
-      zfs create -o mountpoint=legacy  rpool/nixos/var
+      zfs create -o mountpoint=none   rpool/nixos/var
       zfs create -o mountpoint=legacy rpool/nixos/var/lib
       zfs create -o mountpoint=legacy rpool/nixos/var/log
       zfs create -o mountpoint=none bpool/nixos
@@ -384,6 +382,10 @@ System Configuration
      sed -i "s|\"x86_64-linux\"|\"$(uname -m || true)-linux\"|g" \
        "${MNT}"/etc/nixos/flake.nix
 
+#. Detect kernel modules needed for boot
+
+   .. code-block:: sh
+
      cp "$(command -v nixos-generate-config || true)" ./nixos-generate-config
 
      chmod a+rw ./nixos-generate-config
@@ -398,10 +400,13 @@ System Configuration
 
    .. ifconfig:: zfs_root_test
 
-        ::
+     ::
 
-           # show generated config
-           cat  "${MNT}"/etc/nixos/hosts/exampleHost/default.nix
+       sed -i "s|\"kernelModules_placeholder\"|\"nvme\"|g" \
+         "${MNT}"/etc/nixos/hosts/exampleHost/default.nix
+
+       # show generated config
+       cat  "${MNT}"/etc/nixos/hosts/exampleHost/default.nix
 
 #. Set root password
 

@@ -34,8 +34,8 @@ Preparation
 #. Disable Secure Boot. ZFS modules can not be loaded if Secure Boot is enabled.
 #. Download latest extended variant of `Alpine Linux
    live image
-   <https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/x86_64/alpine-extended-3.18.0-x86_64.iso>`__,
-   verify `checksum <https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/x86_64/alpine-extended-3.18.0-x86_64.iso.asc>`__
+   <https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/x86_64/alpine-extended-3.18.4-x86_64.iso>`__,
+   verify `checksum <https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/x86_64/alpine-extended-3.18.4-x86_64.iso.asc>`__
    and boot from it.
 
    .. code-block:: sh
@@ -48,8 +48,8 @@ Preparation
 
       # check whether the download page exists
       # alpine version must be in sync with ci/cd test chroot tarball
-      curl --head --fail https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/x86_64/alpine-extended-3.18.0-x86_64.iso
-      curl --head --fail https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/x86_64/alpine-extended-3.18.0-x86_64.iso.asc
+      curl --head --fail https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/x86_64/alpine-extended-3.18.4-x86_64.iso
+      curl --head --fail https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/x86_64/alpine-extended-3.18.4-x86_64.iso.asc
 
 #. Login as root user.  There is no password.
 #. Configure Internet
@@ -199,9 +199,7 @@ System Installation
 
 #. Partition the disks.
 
-   Note: you must clear all existing partition tables and data structures from the disks,
-   especially those with existing ZFS pools or mdraid and those that have been used as live media.
-   Those data structures may interfere with boot process.
+   Note: you must clear all existing partition tables and data structures from target disks.
 
    For flash-based storage, this can be done by the blkdiscard command below:
    ::
