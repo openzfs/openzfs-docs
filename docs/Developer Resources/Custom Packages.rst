@@ -168,7 +168,7 @@ To build RPM converted Debian packages:
    $ cd zfs
    $ ./configure --enable-systemd
    $ make -j1 deb-utils deb-kmod
-   $ for file in *.deb; do sudo gdebi -q --non-interactive $file; done
+   $ sudo apt-get install --fix-missing ./*.deb
 
 Starting from openzfs-2.2 release, native Debian packages can be built
 as follows:
@@ -179,7 +179,7 @@ as follows:
    $ ./configure
    $ make native-deb-utils native-deb-kmod
    $ rm ../openzfs-zfs-dkms_*.deb
-   $ for file in ../*.deb; do sudo gdebi -q --non-interactive $file; done
+   $ sudo apt-get install --fix-missing ../*.deb
 
 Native Debian packages build with pre-configured paths for Debian and
 Ubuntu. It's best not to override the paths during configure.
@@ -196,22 +196,21 @@ follows:
 
 .. code:: sh
 
-   $ sudo apt-get install dkms
    $ cd zfs
    $ ./configure --enable-systemd
    $ make -j1 deb-utils deb-dkms
-   $ for file in *.deb; do sudo gdebi -q --non-interactive $file; done
+   $ sudo apt-get install --fix-missing ./*.deb
 
 Starting from openzfs-2.2 release, native deb-based DKMS and user
 packages can be built as follows:
 
 .. code:: sh
 
-   $ sudo apt-get install dkms
+   $ sudo apt-get install dh-dkms
    $ cd zfs
    $ ./configure
    $ make native-deb-utils
-   $ for file in ../*.deb; do sudo gdebi -q --non-interactive $file; done
+   $ sudo apt-get install --fix-missing ../*.deb
 
 Get the Source Code
 -------------------
