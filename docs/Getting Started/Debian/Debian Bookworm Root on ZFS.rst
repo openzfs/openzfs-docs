@@ -1,6 +1,6 @@
 .. highlight:: sh
 
-Debian Bullseye Root on ZFS
+Debian Bookworm Root on ZFS
 ===========================
 
 .. contents:: Table of Contents
@@ -8,14 +8,6 @@ Debian Bullseye Root on ZFS
 
 Overview
 --------
-
-Newer release available
-~~~~~~~~~~~~~~~~~~~~~~~
-
-- See :doc:`Debian Bookworm Root on ZFS <./Debian Bookworm Root on ZFS>` for
-  new installs.  This guide is no longer receiving most updates.  It continues
-  to exist for reference for existing installs that followed it.
-
 
 Caution
 ~~~~~~~
@@ -27,7 +19,7 @@ Caution
 System Requirements
 ~~~~~~~~~~~~~~~~~~~
 
-- `64-bit Debian GNU/Linux Bullseye Live CD w/ GUI (e.g. gnome iso)
+- `64-bit Debian GNU/Linux Bookworm Live CD w/ GUI (e.g. gnome iso)
   <https://cdimage.debian.org/mirror/cdimage/release/current-live/amd64/iso-hybrid/>`__
 - `A 64-bit kernel is strongly encouraged.
   <https://github.com/zfsonlinux/zfs/wiki/FAQ#32-bit-vs-64-bit-systems>`__
@@ -49,7 +41,7 @@ If you need help, reach out to the community using the :ref:`mailing_lists` or I
 `#zfsonlinux <ircs://irc.libera.chat/#zfsonlinux>`__ on `Libera Chat
 <https://libera.chat/>`__. If you have a bug report or feature request
 related to this HOWTO, please `file a new issue and mention @rlaager
-<https://github.com/openzfs/openzfs-docs/issues/new?body=@rlaager,%20I%20have%20the%20following%20issue%20with%20the%20Debian%20Bullseye%20Root%20on%20ZFS%20HOWTO:>`__.
+<https://github.com/openzfs/openzfs-docs/issues/new?body=@rlaager,%20I%20have%20the%20following%20issue%20with%20the%20Debian%20Bookworm%20Root%20on%20ZFS%20HOWTO:>`__.
 
 Contributing
 ~~~~~~~~~~~~
@@ -114,7 +106,7 @@ Step 1: Prepare The Install Environment
 
    .. code-block:: sourceslist
 
-     deb http://deb.debian.org/debian bullseye main contrib
+     deb http://deb.debian.org/debian bookworm main contrib non-free-firmware
 
    ::
 
@@ -164,7 +156,8 @@ Step 2: Disk Formatting
    - ``ls -la /dev/disk/by-id`` will list the aliases.
    - Are you doing this in a virtual machine? If your virtual disk is missing
      from ``/dev/disk/by-id``, use ``/dev/vda`` if you are using KVM with
-     virtio; otherwise, read the `troubleshooting <#troubleshooting>`__
+     virtio.  Also when using /dev/vda, the partitions used later will be named
+     differently. Otherwise, read the `troubleshooting <#troubleshooting>`__
      section.
    - For a mirror or raidz topology, use ``DISK1``, ``DISK2``, etc.
    - When choosing a boot pool size, consider how you will use the space. A
@@ -554,7 +547,7 @@ Step 3: System Installation
 
 #. Install the minimal system::
 
-     debootstrap bullseye /mnt
+     debootstrap bookworm /mnt
 
    The ``debootstrap`` command leaves the new system in an unconfigured state.
    An alternative to using ``debootstrap`` is to copy the entirety of a
@@ -608,14 +601,14 @@ Step 4: System Configuration
 
    .. code-block:: sourceslist
 
-     deb http://deb.debian.org/debian bullseye main contrib
-     deb-src http://deb.debian.org/debian bullseye main contrib
+     deb http://deb.debian.org/debian bookworm main contrib non-free-firmware
+     deb-src http://deb.debian.org/debian bookworm main contrib non-free-firmware
 
-     deb http://deb.debian.org/debian-security bullseye-security main contrib
-     deb-src http://deb.debian.org/debian-security bullseye-security main contrib
+     deb http://deb.debian.org/debian-security bookworm-security main contrib non-free-firmware
+     deb-src http://deb.debian.org/debian-security bookworm-security main contrib non-free-firmware
 
-     deb http://deb.debian.org/debian bullseye-updates main contrib
-     deb-src http://deb.debian.org/debian bullseye-updates main contrib
+     deb http://deb.debian.org/debian bookworm-updates main contrib non-free-firmware
+     deb-src http://deb.debian.org/debian bookworm-updates main contrib non-free-firmware
 
 #. Bind the virtual filesystems from the LiveCD environment to the new
    system and ``chroot`` into it::
@@ -629,7 +622,6 @@ Step 4: System Configuration
 
 #. Configure a basic system environment::
 
-     ln -s /proc/self/mounts /etc/mtab
      apt update
 
      apt install --yes console-setup locales
@@ -666,16 +658,12 @@ Step 4: System Configuration
    ``/etc/crypttab`` entries for ``luks2``, etc. adjusting for each disk.
 
 #. Install an NTP service to synchronize time.
-   This step is specific to Bullseye which does not install the package during
+   This step is specific to Bookworm which does not install the package during
    bootstrap.
    Although this step is not necessary for ZFS, it is useful for internet
    browsing where local clock drift can cause login failures::
 
      apt install systemd-timesyncd
-     timedatectl
-
-   You should now see "NTP service: active" in the above ``timedatectl``
-   output.
 
 #. Install GRUB
 
@@ -685,8 +673,6 @@ Step 4: System Configuration
 
        apt install --yes grub-pc
 
-     Select (using the space bar) all of the disks (not partitions) in your
-     pool.
 
    - Install GRUB for UEFI booting::
 
@@ -779,7 +765,7 @@ Step 4: System Configuration
    unlocking::
 
      apt install --yes --no-install-recommends dropbear-initramfs
-     mkdir -p /etc/dropbear-initramfs
+     mkdir -p /etc/dropbear/initramfs
 
      # Optional: Convert OpenSSH server keys for Dropbear
      for type in ecdsa ed25519 rsa ; do
@@ -787,12 +773,12 @@ Step 4: System Configuration
          ssh-keygen -p -N "" -m PEM -f /tmp/openssh.key
          dropbearconvert openssh dropbear \
              /tmp/openssh.key \
-             /etc/dropbear-initramfs/dropbear_${type}_host_key
+             /etc/dropbear/initramfs/dropbear_${type}_host_key
      done
      rm /tmp/openssh.key
 
      # Add user keys in the same format as ~/.ssh/authorized_keys
-     vi /etc/dropbear-initramfs/authorized_keys
+     vi /etc/dropbear/initramfs/authorized_keys
 
      # If using a static IP, set it for the initramfs environment:
      vi /etc/initramfs-tools/initramfs.conf
