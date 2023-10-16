@@ -136,8 +136,8 @@ Step 1: Prepare The Install Environment
 
 #. Install ZFS in the Live CD environment::
 
-     zypper install zfs
-     zypper install gdisk dkms
+     zypper install zfs zfs-kmp-default
+     zypper install gdisk
      modprobe zfs
 
 Step 2: Disk Formatting
