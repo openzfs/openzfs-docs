@@ -244,15 +244,15 @@ Step 2: Disk Formatting
          -O canmount=off -O mountpoint=/boot -R /mnt \
          bpool ${DISK}-part3
 
-   You should not need to customize any of the options for the boot pool.
+   *Note:* GRUB does not support all zpool features (see
+   ``spa_feature_names`` in
+   `grub-core/fs/zfs/zfs.c <https://git.savannah.gnu.org/cgit/grub.git/tree/grub-core/fs/zfs/zfs.c#288>`_).
+   We create a separate zpool for ``/boot`` here, specifying the
+   ``-o compatibility=grub2`` property which restricts the pool to only those
+   features that GRUB supports, allowing the root pool to use any/all features.
 
-   GRUB does not support all of the zpool features. See ``spa_feature_names``
-   in `grub-core/fs/zfs/zfs.c
-   <http://git.savannah.gnu.org/cgit/grub.git/tree/grub-core/fs/zfs/zfs.c#n276>`__.
-   This step creates a separate boot pool for ``/boot`` with the features
-   limited to only those that GRUB supports, allowing the root pool to use
-   any/all features. Note that GRUB opens the pool read-only, so all
-   read-only compatible features are “supported” by GRUB.
+   See the section on ``Compatibility feature sets`` in the ``zpool-features``
+   man page for more information.
 
    **Hints:**
 
