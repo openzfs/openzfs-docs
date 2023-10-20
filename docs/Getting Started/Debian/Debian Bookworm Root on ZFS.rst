@@ -270,29 +270,6 @@ Step 2: Disk Formatting
    - The pool name is arbitrary. If changed, the new name must be used
      consistently. The ``bpool`` convention originated in this HOWTO.
 
-   **Feature Notes:**
-
-   - The ``allocation_classes`` feature should be safe to use. However, unless
-     one is using it (i.e. a ``special`` vdev), there is no point to enabling
-     it. It is extremely unlikely that someone would use this feature for a
-     boot pool. If one cares about speeding up the boot pool, it would make
-     more sense to put the whole pool on the faster disk rather than using it
-     as a ``special`` vdev.
-   - The ``device_rebuild`` feature should be safe to use (except on raidz,
-     which it is incompatible with), but the boot pool is small, so this does
-     not matter in practice.
-   - The ``log_spacemap`` and ``spacemap_v2`` features have been tested and
-     are safe to use. The boot pool is small, so these do not matter in
-     practice.
-   - The ``project_quota`` feature has been tested and is safe to use. This
-     feature is extremely unlikely to matter for the boot pool.
-   - The ``resilver_defer`` should be safe but the boot pool is small enough
-     that it is unlikely to be necessary.
-   - As a read-only compatible feature, the ``userobj_accounting`` feature
-     should be compatible in theory, but in practice, GRUB can fail with an
-     “invalid dnode type” error. This feature does not matter for ``/boot``
-     anyway.
-
 #. Create the root pool:
 
    Choose one of the following options:
