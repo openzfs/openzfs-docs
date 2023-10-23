@@ -29,6 +29,15 @@ Immutable root can be enabled or disabled by setting
 Unless stated otherwise, it is not recommended to customize system
 configuration before reboot.
 
+**No encrypted send/recv**
+
+Multiple kernel crashes have been reported for send/recv operation of
+encrypted datasets.  If you want to transfer data from encrypted
+datasets, use non-ZFS based solution such as ``rsync`` instead.  See
+`[1] <https://github.com/openzfs/zfs/issues/12014>`__, `[2]
+<https://github.com/openzfs/zfs/issues/11679>`__.
+
+
 Preparation
 ---------------------------
 
@@ -206,13 +215,11 @@ System Installation
    ::
 
       # shellcheck disable=SC2046
-      zpool create \
-          -o compatibility=grub2 \
+      zpool create -d \
           -o ashift=12 \
           -o autotrim=on \
           -O acltype=posixacl \
           -O canmount=off \
-          -O compression=lz4 \
           -O devices=off \
           -O normalization=formD \
           -O relatime=on \
