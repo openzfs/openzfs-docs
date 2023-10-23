@@ -273,7 +273,7 @@ System Installation
    ::
 
       # shellcheck disable=SC2046
-      zpool create -d \
+      zpool create -o compatibility=legacy  \
           -o ashift=12 \
           -o autotrim=on \
           -O acltype=posixacl \
