@@ -35,7 +35,8 @@ Multiple kernel crashes have been reported for send/recv operation of
 encrypted datasets.  If you want to transfer data from encrypted
 datasets, use non-ZFS based solution such as ``rsync`` instead.  See
 `[1] <https://github.com/openzfs/zfs/issues/12014>`__, `[2]
-<https://github.com/openzfs/zfs/issues/11679>`__.
+<https://github.com/openzfs/zfs/issues/11679>`__, `[3]
+<https://ol.reddit.com/r/zfs/comments/10n8fsn/does_openzfs_have_a_new_developer_for_the_native/j6b8k1m/>`__.
 
 
 Preparation
