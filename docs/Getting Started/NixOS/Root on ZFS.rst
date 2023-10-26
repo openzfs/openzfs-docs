@@ -29,6 +29,10 @@ Immutable root can be enabled or disabled by setting
 Unless stated otherwise, it is not recommended to customize system
 configuration before reboot.
 
+**Only use well-tested pool features**
+
+You should only use well-tested pool features.  Avoid using new features if data integrity is paramount.  See, for example, `this comment <https://github.com/openzfs/openzfs-docs/pull/464#issuecomment-1776918481>`__.
+
 Preparation
 ---------------------------
 
