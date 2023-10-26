@@ -206,13 +206,11 @@ System Installation
    ::
 
       # shellcheck disable=SC2046
-      zpool create \
-          -o compatibility=grub2 \
+      zpool create -o compatibility=legacy  \
           -o ashift=12 \
           -o autotrim=on \
           -O acltype=posixacl \
           -O canmount=off \
-          -O compression=lz4 \
           -O devices=off \
           -O normalization=formD \
           -O relatime=on \
