@@ -29,6 +29,10 @@ Immutable root can be enabled or disabled by setting
 Unless stated otherwise, it is not recommended to customize system
 configuration before reboot.
 
+**Only use well-tested pool features**
+
+You should only use well-tested pool features.  Avoid using new features if data integrity is paramount.  See, for example, `this comment <https://github.com/openzfs/openzfs-docs/pull/464#issuecomment-1776918481>`__.
+
 Preparation
 ---------------------------
 
@@ -130,7 +134,6 @@ Preparation
    ::
 
       if ! command -v git; then nix-env -f '<nixpkgs>' -iA git; fi
-      if ! command -v jq;  then nix-env -f '<nixpkgs>' -iA jq; fi
       if ! command -v partprobe;  then nix-env -f '<nixpkgs>' -iA parted; fi
 
    .. ifconfig:: zfs_root_test
@@ -202,17 +205,23 @@ System Installation
         swapon /dev/mapper/"${i##*/}"-part4
      done
 
+#. **LUKS only**: Setup encrypted LUKS container for root pool::
+
+     for i in ${DISK}; do
+        # see PASSPHRASE PROCESSING section in cryptsetup(8)
+        printf "YOUR_PASSWD" | cryptsetup luksFormat --type luks2 "${i}"-part3 -
+        printf "YOUR_PASSWD" | cryptsetup luksOpen "${i}"-part3 luks-rpool-"${i##*/}"-part3 -
+     done
+
 #. Create boot pool
    ::
 
       # shellcheck disable=SC2046
-      zpool create \
-          -o compatibility=grub2 \
+      zpool create -o compatibility=legacy  \
           -o ashift=12 \
           -o autotrim=on \
           -O acltype=posixacl \
           -O canmount=off \
-          -O compression=lz4 \
           -O devices=off \
           -O normalization=formD \
           -O relatime=on \
@@ -240,7 +249,10 @@ System Installation
    `here <https://github.com/openzfs/zfs/blob/master/cmd/zpool/compatibility.d/grub2>`__.
 
 #. Create root pool
-   ::
+
+   - Unencrypted
+
+     .. code-block:: sh
 
        # shellcheck disable=SC2046
        zpool create \
@@ -261,6 +273,29 @@ System Installation
              printf '%s ' "${i}-part3";
             done)
 
+   - LUKS encrypted
+
+     ::
+
+       # shellcheck disable=SC2046
+       zpool create \
+           -o ashift=12 \
+           -o autotrim=on \
+           -R "${MNT}" \
+           -O acltype=posixacl \
+           -O canmount=off \
+           -O compression=zstd \
+           -O dnodesize=auto \
+           -O normalization=formD \
+           -O relatime=on \
+           -O xattr=sa \
+           -O mountpoint=/ \
+           rpool \
+           mirror \
+          $(for i in ${DISK}; do
+             printf '/dev/mapper/luks-rpool-%s ' "${i##*/}-part3";
+            done)
+
    If not using a multi-disk setup, remove ``mirror``.
 
 #. Create root system container:
@@ -276,20 +311,10 @@ System Installation
 
    - Encrypted:
 
-     Pick a strong password. Once compromised, changing password will not keep your
-     data safe. See ``zfs-change-key(8)`` for more info
-
-     .. code-block:: sh
-
-      zfs create \
-        -o canmount=off \
-               -o mountpoint=none \
-               -o encryption=on \
-               -o keylocation=prompt \
-               -o keyformat=passphrase \
-      rpool/nixos
-
-   You can automate this step (insecure) with: ``echo POOLPASS | zfs create ...``.
+     Avoid ZFS send/recv when using native encryption, see `a ZFS developer's comment on
+     this issue`__ and `this spreadsheet of bugs`__.  In short, if you
+     care about your data, don't use native encryption.  This section
+     has been removed, use LUKS encryption instead.
 
    Create system datasets,
    manage mountpoints with ``mountpoint=legacy``
@@ -381,6 +406,10 @@ System Configuration
 
      sed -i "s|\"x86_64-linux\"|\"$(uname -m || true)-linux\"|g" \
        "${MNT}"/etc/nixos/flake.nix
+
+#. **LUKS only**: Enable LUKS support::
+
+     sed -i 's|luks.enable = false|luks.enable = true|' "${MNT}"/etc/nixos/hosts/exampleHost/default.nix
 
 #. Detect kernel modules needed for boot
 
