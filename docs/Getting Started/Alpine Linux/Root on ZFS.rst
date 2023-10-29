@@ -22,6 +22,18 @@ Alpine Linux Root on ZFS
     apk update
     apk add alpine-conf curl
 
+**ZFSBootMenu**
+
+This tutorial is based on the GRUB bootloader.  Due to its independent
+implementation of a read-only ZFS driver, GRUB only supports a subset
+of ZFS features on the boot pool. [In general, bootloader treat disks
+as read-only to minimize the risk of damaging on-disk data.]
+
+`ZFSBootMenu <https://zfsbootmenu.org>`__ is an alternative bootloader
+free of such limitations and has support for boot environments. Do not
+follow instructions on this page if you plan to use ZBM,
+as the layouts are not compatible.  Refer
+to their site for installation details.
 
 **Customization**
 
