@@ -221,10 +221,14 @@ Larger record sizes
 
 Record sizes of up to 16M are supported with the large_blocks pool
 feature, which is enabled by default on new pools on systems that
-support it. However, record sizes larger than 1M is disabled by default
-unless the zfs_max_recordsize kernel module parameter is set to allow
-sizes higher than 1M. Larger record sizes than 1M are not well tested as
-1M, although they should work. \`zfs send\` operations must specify -L
+support it.
+
+Record sizes larger than 1M were disabled by default
+before openZFS v2.2,
+unless the zfs_max_recordsize kernel module parameter was set to allow
+sizes higher than 1M.
+
+\`zfs send\` operations must specify -L
 to ensure that larger than 128KB blocks are sent and the receiving pools
 must support the large_blocks feature.
 
