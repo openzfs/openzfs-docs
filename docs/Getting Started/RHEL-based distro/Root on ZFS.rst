@@ -349,7 +349,7 @@ System Installation
 
    - Encrypted:
 
-     Pick a strong password. Once compromised, changing password will not keep your
+     Avoid ZFS send/recv when using native encryption, see `a ZFS developer's comment on this issue`__ and `this spreadsheet of bugs`__.    A LUKS-based guide has yet to be written. Once compromised, changing password will not keep your
      data safe. See ``zfs-change-key(8)`` for more info
 
      .. code-block:: sh
@@ -671,3 +671,6 @@ Post installaion
     dnf group install gnome-desktop
 
 #. Add new user, configure swap.
+
+.. _a ZFS developer's comment on this issue: https://ol.reddit.com/r/zfs/comments/10n8fsn/does_openzfs_have_a_new_developer_for_the_native/j6b8k1m/
+.. _this spreadsheet of bugs: https://docs.google.com/spreadsheets/d/1OfRSXibZ2nIE9DGK6swwBZXgXwdCPKgp4SbPZwTexCg/htmlview
