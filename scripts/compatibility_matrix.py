@@ -48,7 +48,7 @@ def openzfs():
 
 def openzfsonosx():
     sources = {'main': 'https://raw.githubusercontent.com/openzfsonosx/'
-               'openzfs-fork/main/man/man7/zpool-features.7'}
+               'openzfs-fork/macOS/man/man7/zpool-features.7'}
     with urlopen('https://api.github.com/repos/openzfsonosx/openzfs-fork/tags') as web:
         try:
             tags = dejson(web.read().decode('utf-8', 'ignore'))
