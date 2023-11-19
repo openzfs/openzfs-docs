@@ -47,14 +47,22 @@ def openzfs():
 
 
 def openzfsonosx():
-    sources = {'master': 'https://raw.githubusercontent.com/openzfsonosx/'
-               'openzfs/master/man/man5/zpool-features.5'}
-    with urlopen('https://api.github.com/repos/openzfsonosx/openzfs/tags') as web:
+    sources = {'main': 'https://raw.githubusercontent.com/openzfsonosx/'
+               'openzfs-fork/main/man/man7/zpool-features.7'}
+    with urlopen('https://api.github.com/repos/openzfsonosx/openzfs-fork/tags') as web:
         try:
             tags = dejson(web.read().decode('utf-8', 'ignore'))
-            tags = [x['name'].lstrip('zfs-macOS-') for x in tags]
+            tags = [x['name'].lstrip('zfs-macOS-') for x in tags if 'zfs-macOS-' in x['name']]
             tags = [tag for tag in tags if '.99' not in tag]
-            tags.sort()
+            def version_key(tag):
+                if 'rc' in tag:
+                    # fix inconsistent versioning
+                    tag = tag.replace('-','')
+                    version, rc = tag.split('rc')
+                    return (version, int(rc))
+                else:
+                    return (tag, 99)
+            tags.sort(key=version_key)
             latest = tags[-1]
             tags = [tag for tag in tags if 'rc' not in tag]
             if 'rc' not in latest:
@@ -64,8 +72,8 @@ def openzfsonosx():
         except Exception:
             tags = []
     for ver in tags:
-        sources[ver] = ('https://raw.githubusercontent.com/openzfsonosx/openzfs/'
-                        'zfs-macOS-{}/man/man5/zpool-features.5'.format(ver))
+        sources[ver] = ('https://raw.githubusercontent.com/openzfsonosx/openzfs-fork/'
+                        'zfs-macOS-{}/man/man7/zpool-features.7'.format(ver))
     return sources
 
 
