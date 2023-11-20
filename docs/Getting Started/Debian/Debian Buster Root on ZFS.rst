@@ -1096,7 +1096,7 @@ If needed, you can chroot into your installed environment::
   mount -t tmpfs tmpfs /mnt/run
   mkdir /mnt/run/lock
   chroot /mnt /bin/bash --login
-  mount /boot
+  mount /boot/efi
   mount -a
 
 Do whatever you need to do to fix your system.

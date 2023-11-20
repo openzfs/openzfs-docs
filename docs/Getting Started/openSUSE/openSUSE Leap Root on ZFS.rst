@@ -1198,7 +1198,7 @@ If needed, you can chroot into your installed environment::
   mount --make-private --rbind /proc /mnt/proc
   mount --make-private --rbind /sys  /mnt/sys
   chroot /mnt /bin/bash --login
-  mount /boot
+  mount /boot/efi
   mount -a
 
 Do whatever you need to do to fix your system.
