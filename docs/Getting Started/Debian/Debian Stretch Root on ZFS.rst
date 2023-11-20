@@ -1008,7 +1008,7 @@ If needed, you can chroot into your installed environment:
   # mount --rbind /proc /mnt/proc
   # mount --rbind /sys  /mnt/sys
   # chroot /mnt /bin/bash --login
-  # mount /boot
+  # mount /boot/efi
   # mount -a
 
 Do whatever you need to do to fix your system.
