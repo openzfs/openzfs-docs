@@ -53,6 +53,8 @@ we will allocate on disk:
 
 - one 4K padding block
 
+- one 4k partiy block
+
 and usable space ratio will be 50%, same as with double mirror.
 
 
@@ -60,11 +62,15 @@ Another example for ``ashift=12`` and ``recordsize=128K`` for raidz1 of 3 disks:
 
 - total stripe width is 3
 
-- one stripe can have up to 2 data parts of 4K size because of 1 parity blocks
+- one stripe can have up to 2 data parts of 4K size and 1 parity block
 
-- we will have 128K/2 = 64 stripes with 8K of data and 4K of parity each
+- we have 128k (recordsize) diveded by 8k (two 4k data parts) = 16 stripes
 
-so usable space ratio in this case will be 66%.
+- Each of these 16 stripes, has 8k of data and 4k of parity
+
+
+16 stripes * 12k (data + parity) = 192k. 
+We write 192k to store 128k, so usable space ratio in this case will be 66%.
 
 
 The more disks RAIDZ has, the wider the stripe, the greater the space
