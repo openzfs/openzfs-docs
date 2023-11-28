@@ -66,7 +66,6 @@ Another example for ``ashift=12`` and ``recordsize=128K`` for RAIDZ1 of 3 disks:
 
 - Each of these 16 stripes, has 8k of data and 4k of parity
 
-
 16 stripes * 12k (data + parity) = 192k. 
 We write 192k to store 128k, so usable space ratio in this case will be 66%.
 
