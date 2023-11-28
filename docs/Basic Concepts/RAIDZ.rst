@@ -56,11 +56,11 @@ we will allocate on disk:
 and usable space ratio will be 50%, same as with double mirror.
 
 
-Another example for ``ashift=12`` and ``recordsize=128K`` for raidz1 of 3 disks:
+Another example for ``ashift=12`` and ``recordsize=128K`` for RAIDZ1 of 3 disks:
 
 - total stripe width is 3
 
-- one stripe can have up to 2 data parts of 4K size and 1 parity block
+- one stripe can have up to 2 data parts and 1 parity block, each 4k in size
 
 - we have 128k (recordsize) diveded by 8k (two 4k data parts) = 16 stripes
 
