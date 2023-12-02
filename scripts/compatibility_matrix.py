@@ -47,8 +47,21 @@ def openzfs():
 
 
 def openzfsonosx():
-    sources = {'main': 'https://raw.githubusercontent.com/openzfsonosx/'
-               'openzfs-fork/macOS/man/man7/zpool-features.7'}
+    with urlopen('https://api.github.com/repos/openzfsonosx/openzfs-fork/branches?per_page=100') as web:
+        try:
+            def is_date(date_str):
+                try:
+                    datetime.strptime(date_str, '%Y%m%d')
+                    return True
+                except ValueError:
+                    return False
+            branches = dejson(web.read().decode('utf-8', 'ignore'))
+            branches = [x['name'].lstrip('macOS_') for x in branches if 'macOS_' in x['name']]
+            branches = [x for x in branches if is_date(x)]
+            sources = {'main':('https://raw.githubusercontent.com/openzfsonosx/openzfs-fork/'
+                        'macOS_{}/man/man7/zpool-features.7'.format(max(branches)))}
+        except Exception:
+            sources = {}
     with urlopen('https://api.github.com/repos/openzfsonosx/openzfs-fork/tags') as web:
         try:
             tags = dejson(web.read().decode('utf-8', 'ignore'))
