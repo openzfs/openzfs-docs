@@ -62,7 +62,7 @@ Another example for ``ashift=12`` and ``recordsize=128K`` for raidz1 of 3 disks:
 
 - one stripe can have up to 2 data parts of 4K size because of 1 parity blocks
 
-- we will have 128K/2 = 64 stripes with 8K of data and 4K of parity each
+- we will have 128K/8k = 16 stripes with 8K of data and 4K of parity each
 
 so usable space ratio in this case will be 66%.
 
