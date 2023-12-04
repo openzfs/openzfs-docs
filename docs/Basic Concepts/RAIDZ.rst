@@ -51,7 +51,7 @@ we will allocate on disk:
 
 - one 4K block of data
 
-- one 4K padding block
+- one 4K parity block
 
 and usable space ratio will be 50%, same as with double mirror.
 
