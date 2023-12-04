@@ -3,13 +3,8 @@
 Slackware
 =========
 
-Contents
---------
-.. toctree::
-  :maxdepth: 1
-  :glob:
-
-  *
+.. contents:: Table of Contents
+  :local:
 
 Installation
 ------------
@@ -20,11 +15,12 @@ openzfs SlackBuild script (for 15.0, it's at https://slackbuilds.org/repository/
 
 Root on ZFS
 -----------
+
 ZFS can be used as root file system for Slackware.
-An installation guide is available.
+An installation guide is available here:
 
 .. toctree::
   :maxdepth: 1
   :glob:
 
-  *
+  *Root on ZFS
