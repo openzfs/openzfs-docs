@@ -207,10 +207,13 @@ System Installation
 
 #. **LUKS only**: Setup encrypted LUKS container for root pool::
 
+     # Use this short bash script to load your password in a variable.
+     read -p "Password: " -rs P; echo; read -p "Password (repeat): " -rs Q; echo; if [ "$P" == "$Q" ]; then YOUR_PASSWD=$P;  else echo "Try again. Passwords are not the same."; fi; unset P Q
+
      for i in ${DISK}; do
         # see PASSPHRASE PROCESSING section in cryptsetup(8)
-        printf "YOUR_PASSWD" | cryptsetup luksFormat --type luks2 "${i}"-part3 -
-        printf "YOUR_PASSWD" | cryptsetup luksOpen "${i}"-part3 luks-rpool-"${i##*/}"-part3 -
+        printf "$YOUR_PASSWD" | cryptsetup luksFormat --type luks2 "${i}"-part3 -
+        printf "$YOUR_PASSWD" | cryptsetup luksOpen "${i}"-part3 luks-rpool-"${i##*/}"-part3 -
      done
 
 #. Create boot pool
