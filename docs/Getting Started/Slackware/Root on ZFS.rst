@@ -3,14 +3,14 @@ Slackware Root on ZFS
 
 This page shows some possible ways to configure Slackware to use zfs for the root filesystem.
 
-There are countless different ways to achieve such setup, particularly with the flexibility that zfs allows. I'm only showing you a simple recipe and giving pointers for further customization.
+There are countless different ways to achieve such setup, particularly with the flexibility that zfs allows. We'll show only a simple recipe and give pointers for further customization.
 
 Kernel considerations
 ---------------------
 
 For this mini-HOWTO we'll be using the generic kernel and customize the stock initrd.
 
-If you use the huge kernel, you may want to switch to the generic kernel first, and install both the kernel-generic and mkinitrd packages. This makes things easier since we'll need an initrd (see below for other options).
+If you use the huge kernel, you may want to switch to the generic kernel first, and install both the kernel-generic and mkinitrd packages. This makes things easier since we'll need an initrd.
 
 If you absolutely do not want to use an initrd, see "Other options" further down.
 
@@ -26,16 +26,15 @@ In order to have the root filesystem on zfs, two problems need to be addressed:
 
 The second problem is relatively easy to deal with, and only requires slight modifications to the default Slackware initrd scripts.
 
-For the first problem, however, a variety of scenarios are possible; on a PC,
-for example, you might be booting:
+For the first problem, however, a variety of scenarios are possible; on a PC, for example, you might be booting:
 
 #. In UEFI mode, via an additional bootloader like elilo: here, the kernel and its initrd are on (read: have been copied to) the ESP, and the additional bootloader doesn't need to understand zfs.
 
 #. In UEFI mode, by booting the kernel straight from the firmware. All Slackware kernels are built with EFI_STUB=Y, so if you copy your kernel and initrd to the ESP and configure a boot entry with efibootmgr, you are all set (note that the kernel image must have a .efi extension).
 
-#. In legacy BIOS mode, using lilo or grub or similar: lilo doesn't understand zfs and even the latest grub understands it with some limitations (for example, no zstd compression). I wasn't able to get grub to work reliably. If you're stuck with legacy BIOS mode, the best option is to put /boot on a separate partition that your loader understands (for example, ext4).
+#. In legacy BIOS mode, using lilo or grub or similar: lilo doesn't understand zfs and even the latest grub understands it with some limitations (for example, no zstd compression). If you're stuck with legacy BIOS mode, the best option is to put /boot on a separate partition that your loader understands (for example, ext4).
 
-Outside the PC world, the only other platform supported by Slackware that I run is a Raspberry PI: in this case you have a situation similar to UEFI on the PC, where the firmware loads kernel and initrd from a filesystem that it knows about (FAT32 in this case), so again nothing to worry about.
+If you are not using a PC, things will likely be quite different, so refer to relevant hardware documentation for your platform; on a Raspberry PI, for example, the firmware loads kernel and initrd from a FAT32 partition, so the situation is similar to a PC booting in UEFI mode.
 
 The simplest setup, discussed in this recipe, is the one using UEFI. As said above, if you boot in legacy BIOS mode, you will have to ensure that the boot loader of your choice can load the kernel image.
 
@@ -45,7 +44,7 @@ Partition layout
 
 Repartitioning an existing system disk in order to make room for a zfs root partition is left as an exercise to the reader (there's nothing specific to zfs).
 
-On my laptop, I resized the ext4 filesystem to half of available space, used sfdisk to relocate into the second half of the disk, inserted a ZFS partition before it, and copied stuff across. This approach has the benefit of providing some kind of recovery mechanism in case stuff goes wrong. When everything is okay, I then deleted the ext4 partition and enlarged the ZFS one.
+As a pointer: if you're starting from a whole-disk ext4 filesystem, you could use resize2fs to shrink it to half of disk size and then relocate it to the second half of the disk with sfdisk. After that, you could create a ZFS partition before it, and copy stuff across using cp or rsync. This approach has the benefit of providing some kind of recovery mechanism in case stuff goes wrong. When you are happy about the final setup, you can then delete the ext4 partition and enlarge the ZFS one.
 
 In any case you will want to have a rescue cdrom at hand, and one that supports zfs out of the box. A Ubuntu live CD will do.
 
@@ -60,7 +59,7 @@ For this recipe, we'll be assuming that we're booting in UEFI mode and there's a
 
 Since we are creating a zpool inside a disk partition (as opposed to using up a whole disk), make sure that the partition type is set correctly (for GPT, 54 or 67 are good choices).
 
-When creating the zfs filesystem, we want to set "mountpoint=legacy" so that the filesystem can be mounted with "mount" in a traditional way; Slackware startup and shutdown scripts expect that.
+When creating the zfs filesystem, you will want to set "mountpoint=legacy" so that the filesystem can be mounted with "mount" in a traditional way; Slackware startup and shutdown scripts expect that.
 
 Back to our recipe, this is a working example:
 
@@ -75,9 +74,7 @@ Back to our recipe, this is a working example:
 
 ..
 
-Tweak options to taste; "mountpoint=legacy" is required for the root filesystem, and (at least on Slackware) I like to apply it to all my zfs filesystems.
-
-Also, as a personal preference, I like to set "mountpoint=none" on the pool itself so it's not mounted anywhere by default (do note that zpool's "mountpoint=none" wants an uppercase "-O").
+Tweak options to taste; while "mountpoint=legacy" is required for the root filesystem, it is not required for any additional filesystems. In the example above we applied it to all of them, but that's a matter of personal preference, as is setting "mountpoint=none" on the pool itself so it's not mounted anywhere by default (do note that zpool's "mountpoint=none" wants an uppercase "-O").
 
 You can check your setup with:
 
@@ -141,9 +138,9 @@ Replace the three cases with:
 
 ..
 
-This in allows us to specify "root=tank/root" (you could then collapse the /dev/*, LABEL=*, UUID=* and the newly-added case into a single one).
+This allows us to specify something like "root=tank/root" (if you look carefully at the script, you will notice that you can collapse the /dev/*, LABEL=*, UUID=* and the newly-added case into a single one).
 
-Further down in the script, before the section that handles RESUMEDEV ("# Resume state from swap"), insert the following:
+Further down in the script, locate the section that handles RESUMEDEV ("# Resume state from swap"), and insert the following just before it:
 
 .. code-block:: sh
 
