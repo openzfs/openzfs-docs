@@ -325,10 +325,10 @@ System Configuration
 
      apk add curl
      curl --fail-early --fail -L \
-     https://dl.rockylinux.org/vault/rocky/9.3/images/x86_64/Rocky-9-Container-Base-9.3-20231119.0.x86_64.tar.xz \
+     https://dl.rockylinux.org/vault/rocky/9.2/images/x86_64/Rocky-9-Container-Base-9.2-20230513.0.x86_64.tar.xz \
      -o rootfs.tar.gz
      curl --fail-early --fail -L \
-     https://dl.rockylinux.org/vault/rocky/9.3/images/x86_64/Rocky-9-Container-Base-9.3-20231119.0.x86_64.tar.xz.CHECKSUM \
+     https://dl.rockylinux.org/vault/rocky/9.2/images/x86_64/Rocky-9-Container-Base-9.2-20230513.0.x86_64.tar.xz.CHECKSUM \
      -o checksum
 
      # BusyBox sha256sum treats all lines in the checksum file
