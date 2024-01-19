@@ -21,4 +21,3 @@ documentation <https://pthree.org/2012/04/17/install-zfs-on-debian-gnulinux/>`__
    openSUSE/index
    RHEL-based distro/index
    Ubuntu/index
-   zfs_root_maintenance

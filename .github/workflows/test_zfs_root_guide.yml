@@ -51,12 +51,15 @@ jobs:
           sudo apt install --yes git jq parted
           sudo apt install --yes whois curl
           sudo apt install --yes arch-install-scripts
+      - uses: cachix/install-nix-action@v20
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+      - name: Test NixOS guide
+        run: |
+          sudo PATH="${PATH}" NIX_PATH="${NIX_PATH}" ./scripts/zfs_root_guide_test.sh nixos
       - name: Test Alpine Linux guide
         run: |
           sudo ./scripts/zfs_root_guide_test.sh alpine
-      - name: Test Root on ZFS maintenance guide
-        run: |
-          sudo ./scripts/zfs_root_guide_test.sh maintenance
       - name: Test Arch Linux guide
         run: |
           sudo ./scripts/zfs_root_guide_test.sh archlinux
@@ -66,12 +69,6 @@ jobs:
       - name: Test RHEL guide
         run: |
          sudo ./scripts/zfs_root_guide_test.sh rhel
-      - uses: cachix/install-nix-action@v20
-        with:
-          nix_path: nixpkgs=channel:nixos-unstable
-      - name: Test NixOS guide
-        run: |
-          sudo PATH="${PATH}" NIX_PATH="${NIX_PATH}" ./scripts/zfs_root_guide_test.sh nixos
       - uses: actions/upload-artifact@v3
         with:
           name: installation-scripts

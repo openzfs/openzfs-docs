@@ -22,8 +22,8 @@ losetup --detach-all
 # it is easier to install rhel with Alpine Linux live media
 # which has native zfs support
 if ! test -f rootfs.tar.gz; then
-    curl --fail-early --fail -Lo rootfs.tar.gz https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/x86_64/alpine-minirootfs-3.18.4-x86_64.tar.gz
-    curl --fail-early --fail -Lo rootfs.tar.gz.sig https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/x86_64/alpine-minirootfs-3.18.4-x86_64.tar.gz.asc
+    curl --fail-early --fail -Lo rootfs.tar.gz https://dl-cdn.alpinelinux.org/alpine/v3.19/releases/x86_64/alpine-minirootfs-3.19.0-x86_64.tar.gz
+    curl --fail-early --fail -Lo rootfs.tar.gz.sig https://dl-cdn.alpinelinux.org/alpine/v3.19/releases/x86_64/alpine-minirootfs-3.19.0-x86_64.tar.gz.asc
     gpg --auto-key-retrieve --keyserver hkps://keyserver.ubuntu.com --verify rootfs.tar.gz.sig
 fi
 mkdir rootfs-"${distro}"

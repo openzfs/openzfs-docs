@@ -24,11 +24,6 @@ Alpine Linux Root on ZFS
 
 **ZFSBootMenu**
 
-This tutorial is based on the GRUB bootloader.  Due to its independent
-implementation of a read-only ZFS driver, GRUB only supports a subset
-of ZFS features on the boot pool. [In general, bootloader treat disks
-as read-only to minimize the risk of damaging on-disk data.]
-
 `ZFSBootMenu <https://zfsbootmenu.org>`__ is an alternative bootloader
 free of such limitations and has support for boot environments. Do not
 follow instructions on this page if you plan to use ZBM,
@@ -44,14 +39,18 @@ configuration before reboot.
 
 You should only use well-tested pool features.  Avoid using new features if data integrity is paramount.  See, for example, `this comment <https://github.com/openzfs/openzfs-docs/pull/464#issuecomment-1776918481>`__.
 
+**UEFI support only**
+
+Only UEFI is supported by this guide.
+
 Preparation
 ---------------------------
 
 #. Disable Secure Boot. ZFS modules can not be loaded if Secure Boot is enabled.
 #. Download latest extended variant of `Alpine Linux
    live image
-   <https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/x86_64/alpine-extended-3.18.4-x86_64.iso>`__,
-   verify `checksum <https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/x86_64/alpine-extended-3.18.4-x86_64.iso.asc>`__
+   <https://dl-cdn.alpinelinux.org/alpine/v3.19/releases/x86_64/alpine-extended-3.19.0-x86_64.iso>`__,
+   verify `checksum <https://dl-cdn.alpinelinux.org/alpine/v3.19/releases/x86_64/alpine-extended-3.19.0-x86_64.iso.asc>`__
    and boot from it.
 
    .. code-block:: sh
@@ -64,8 +63,8 @@ Preparation
 
       # check whether the download page exists
       # alpine version must be in sync with ci/cd test chroot tarball
-      curl --head --fail https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/x86_64/alpine-extended-3.18.4-x86_64.iso
-      curl --head --fail https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/x86_64/alpine-extended-3.18.4-x86_64.iso.asc
+      curl --head --fail https://dl-cdn.alpinelinux.org/alpine/v3.19/releases/x86_64/alpine-extended-3.19.0-x86_64.iso
+      curl --head --fail https://dl-cdn.alpinelinux.org/alpine/v3.19/releases/x86_64/alpine-extended-3.19.0-x86_64.iso.asc
 
 #. Login as root user.  There is no password.
 #. Configure Internet
@@ -208,7 +207,7 @@ Preparation
 #. Install bootloader programs and partition tool
    ::
 
-      apk add grub-bios grub-efi parted e2fsprogs cryptsetup util-linux
+      apk add parted e2fsprogs cryptsetup util-linux
 
 System Installation
 ---------------------------
@@ -226,14 +225,10 @@ System Installation
 
       parted --script --align=optimal  "${disk}" -- \
       mklabel gpt \
-      mkpart EFI 2MiB 1GiB \
-      mkpart bpool 1GiB 5GiB \
-      mkpart rpool 5GiB -$((SWAPSIZE + RESERVE))GiB \
+      mkpart EFI 1MiB 4GiB \
+      mkpart rpool 4GiB -$((SWAPSIZE + RESERVE))GiB \
       mkpart swap  -$((SWAPSIZE + RESERVE))GiB -"${RESERVE}"GiB \
-      mkpart BIOS 1MiB 2MiB \
       set 1 esp on \
-      set 5 bios_grub on \
-      set 5 legacy_boot on
 
       partprobe "${disk}"
      }
@@ -260,14 +255,16 @@ System Installation
          done
        done
 
-#. Setup encrypted swap.  This is useful if the available memory is
-   small::
+
+#. Setup temporary encrypted swap for this installation only.  This is
+   useful if the available memory is small::
 
      for i in ${DISK}; do
-        cryptsetup open --type plain --key-file /dev/random "${i}"-part4 "${i##*/}"-part4
-        mkswap /dev/mapper/"${i##*/}"-part4
-        swapon /dev/mapper/"${i##*/}"-part4
+        cryptsetup open --type plain --key-file /dev/random "${i}"-part3 "${i##*/}"-part3
+        mkswap /dev/mapper/"${i##*/}"-part3
+        swapon /dev/mapper/"${i##*/}"-part3
      done
+
 
 #. Load ZFS kernel module
 
@@ -275,40 +272,9 @@ System Installation
 
        modprobe zfs
 
-#. Create boot pool
-   ::
-
-      # shellcheck disable=SC2046
-      zpool create -o compatibility=legacy  \
-          -o ashift=12 \
-          -o autotrim=on \
-          -O acltype=posixacl \
-          -O canmount=off \
-          -O devices=off \
-          -O normalization=formD \
-          -O relatime=on \
-          -O xattr=sa \
-          -O mountpoint=/boot \
-          -R "${MNT}" \
-          bpool \
-                 mirror \
-          $(for i in ${DISK}; do
-             printf '%s ' "${i}-part2";
-            done)
-
-   If not using a multi-disk setup, remove ``mirror``.
-
-   You should not need to customize any of the options for the boot pool.
-
-   GRUB does not support all of the zpool features. See ``spa_feature_names``
-   in `grub-core/fs/zfs/zfs.c
-   <http://git.savannah.gnu.org/cgit/grub.git/tree/grub-core/fs/zfs/zfs.c#n276>`__.
-   This step creates a separate boot pool for ``/boot`` with the features
-   limited to only those that GRUB supports, allowing the root pool to use
-   any/all features.
-
 #. Create root pool
-   ::
+
+   - Unencrypted::
 
        # shellcheck disable=SC2046
        zpool create \
@@ -317,233 +283,83 @@ System Installation
            -R "${MNT}" \
            -O acltype=posixacl \
            -O canmount=off \
-           -O compression=zstd \
            -O dnodesize=auto \
            -O normalization=formD \
            -O relatime=on \
            -O xattr=sa \
-           -O mountpoint=/ \
+           -O mountpoint=none \
            rpool \
            mirror \
           $(for i in ${DISK}; do
-             printf '%s ' "${i}-part3";
+             printf '%s ' "${i}-part2";
             done)
-
-   If not using a multi-disk setup, remove ``mirror``.
 
 #. Create root system container:
 
-   - Unencrypted
-
      ::
 
-      zfs create \
-       -o canmount=off \
-       -o mountpoint=none \
-      rpool/alpinelinux
-
-   - Encrypted:
-
-     Avoid ZFS send/recv when using native encryption, see `a ZFS developer's comment on this issue`__ and `this spreadsheet of bugs`__.    A LUKS-based guide has yet to be written. Once compromised, changing password will not keep your
-     data safe. See ``zfs-change-key(8)`` for more info
-
-     .. code-block:: sh
-
-      zfs create \
-        -o canmount=off \
-               -o mountpoint=none \
-               -o encryption=on \
-               -o keylocation=prompt \
-               -o keyformat=passphrase \
-      rpool/alpinelinux
-
-   You can automate this step (insecure) with: ``echo POOLPASS | zfs create ...``.
+      zfs create -o canmount=noauto -o mountpoint=legacy rpool/root
 
    Create system datasets,
    manage mountpoints with ``mountpoint=legacy``
    ::
 
-      zfs create -o canmount=noauto -o mountpoint=/  rpool/alpinelinux/root
-      zfs mount rpool/alpinelinux/root
-      zfs create -o mountpoint=legacy rpool/alpinelinux/home
-      mkdir "${MNT}"/home
-      mount -t zfs rpool/alpinelinux/home "${MNT}"/home
-      zfs create -o mountpoint=legacy  rpool/alpinelinux/var
-      zfs create -o mountpoint=legacy rpool/alpinelinux/var/lib
-      zfs create -o mountpoint=legacy rpool/alpinelinux/var/log
-      zfs create -o mountpoint=none bpool/alpinelinux
-      zfs create -o mountpoint=legacy bpool/alpinelinux/root
-      mkdir "${MNT}"/boot
-      mount -t zfs bpool/alpinelinux/root "${MNT}"/boot
-      mkdir -p "${MNT}"/var/log
-      mkdir -p "${MNT}"/var/lib
-      mount -t zfs rpool/alpinelinux/var/lib "${MNT}"/var/lib
-      mount -t zfs rpool/alpinelinux/var/log "${MNT}"/var/log
+      zfs create -o mountpoint=legacy rpool/home
+      mount -o X-mount.mkdir -t zfs rpool/root "${MNT}"
+      mount -o X-mount.mkdir -t zfs rpool/home "${MNT}"/home
 
-#. Format and mount ESP
+#. Format and mount ESP.  Only one of them is used as /boot, you need to set up mirroring afterwards
    ::
 
      for i in ${DISK}; do
       mkfs.vfat -n EFI "${i}"-part1
-      mkdir -p "${MNT}"/boot/efis/"${i##*/}"-part1
-      mount -t vfat -o iocharset=iso8859-1 "${i}"-part1 "${MNT}"/boot/efis/"${i##*/}"-part1
      done
 
-     mkdir -p "${MNT}"/boot/efi
-     mount -t vfat -o iocharset=iso8859-1 "$(echo "${DISK}" | sed "s|^ *||"  | cut -f1 -d' '|| true)"-part1 "${MNT}"/boot/efi
+     for i in ${DISK}; do
+      mount -t vfat -o fmask=0077,dmask=0077,iocharset=iso8859-1,X-mount.mkdir "${i}"-part1 "${MNT}"/boot
+      break
+     done
 
 
 System Configuration 
 ---------------------------
 
-#. Workaround for GRUB to recognize predictable disk names::
-
-     export ZPOOL_VDEV_NAME_PATH=YES
-
 #. Install system to disk
 
    .. code-block:: sh
 
-     BOOTLOADER=grub setup-disk -k lts -v "${MNT}"
+     BOOTLOADER=none setup-disk -k lts -v "${MNT}"
 
-   GRUB installation will fail and will be reinstalled later.
    The error message about ZFS kernel module can be ignored.
 
    .. ifconfig:: zfs_root_test
 
      # lts kernel will pull in tons of firmware
-     BOOTLOADER=grub setup-disk -k virt -v "${MNT}"
+     BOOTLOADER=none setup-disk -k virt -v "${MNT}"
 
-#. Allow EFI system partition to fail at boot::
+#. Install rEFInd boot loader::
 
-    sed -i "s|vfat.*rw|vfat rw,nofail|" "${MNT}"/etc/fstab
+     # from http://www.rodsbooks.com/refind/getting.html
+     # use Binary Zip File option
+     apk add curl
+     curl -L http://sourceforge.net/projects/refind/files/0.14.0.2/refind-bin-0.14.0.2.zip/download --output refind.zip
+     unzip refind
 
-#. Chroot
+     mkdir -p "${MNT}"/boot/EFI/BOOT
+     find ./refind-bin-0.14.0.2/ -name 'refind_x64.efi' -print0 \
+     | xargs -0I{} mv {} "${MNT}"/boot/EFI/BOOT/BOOTX64.EFI
+     rm -rf refind.zip refind-bin-0.14.0.2
 
-   .. code-block:: sh
+#. Add boot entry::
 
-    for i in /dev /proc /sys; do mkdir -p "${MNT}"/"${i}"; mount --rbind "${i}" "${MNT}"/"${i}"; done
-    chroot "${MNT}" /usr/bin/env DISK="${DISK}" sh
+     tee -a "${MNT}"/boot/refind-linux.conf <<EOF
+     "Alpine Linux" "root=ZFS=rpool/root"
+     EOF
 
-   .. ifconfig:: zfs_root_test
-
-     ::
-
-       for i in /dev /proc /sys; do mkdir -p "${MNT}"/"${i}"; mount --rbind "${i}" "${MNT}"/"${i}"; done
-       chroot "${MNT}" /usr/bin/env DISK="${DISK}" sh <<-'ZFS_ROOT_NESTED_CHROOT'
-
-       set -vxeuf
-
-#. Apply GRUB workaround
-
-   ::
-
-     echo 'export ZPOOL_VDEV_NAME_PATH=YES' >> /etc/profile.d/zpool_vdev_name_path.sh
-     # shellcheck disable=SC1091
-     . /etc/profile.d/zpool_vdev_name_path.sh
-
-     # GRUB fails to detect rpool name, hard code as "rpool"
-     sed -i "s|rpool=.*|rpool=rpool|"  /etc/grub.d/10_linux
-
-     # BusyBox stat does not recognize zfs, replace fs detection with ZFS
-     sed -i 's|stat -f -c %T /|echo zfs|' /usr/sbin/grub-mkconfig
-
-     # grub-probe fails to identify fs mounted at /boot
-     BOOT_DEVICE=$(zpool status -P bpool | grep -- -part2 | head -n1 | sed  "s|.*/dev*|/dev|" | sed "s|part2.*|part2|")
-     sed -i "s|GRUB_DEVICE_BOOT=.*|GRUB_DEVICE_BOOT=${BOOT_DEVICE}|"  /usr/sbin/grub-mkconfig
-
-   The ``sed`` workaround for ``grub-mkconfig`` needs to be applied
-   for every GRUB update, as the update will overwrite the changes.
-
-#. Install GRUB::
-
-      mkdir -p /boot/efi/alpine/grub-bootdir/i386-pc/
-      mkdir -p /boot/efi/alpine/grub-bootdir/x86_64-efi/
-      for i in ${DISK}; do
-       grub-install --target=i386-pc --boot-directory \
-           /boot/efi/alpine/grub-bootdir/i386-pc/  "${i}"
-      done
-      grub-install --target x86_64-efi --boot-directory \
-        /boot/efi/alpine/grub-bootdir/x86_64-efi/ --efi-directory \
-        /boot/efi --bootloader-id alpine --removable
-      if test -d /sys/firmware/efi/efivars/; then
-        apk add efibootmgr
-        grub-install --target x86_64-efi --boot-directory \
-          /boot/efi/alpine/grub-bootdir/x86_64-efi/ --efi-directory \
-          /boot/efi --bootloader-id alpine
-      fi
-
-#. Generate GRUB menu::
-
-     mkdir -p /boot/grub
-     grub-mkconfig -o /boot/grub/grub.cfg
-     cp /boot/grub/grub.cfg \
-      /boot/efi/alpine/grub-bootdir/x86_64-efi/grub/grub.cfg
-     cp /boot/grub/grub.cfg \
-      /boot/efi/alpine/grub-bootdir/i386-pc/grub/grub.cfg
-
-   .. ifconfig:: zfs_root_test
-
-      ::
-
-         find /boot/efis/ -name "grub.cfg" -print0 \
-         | xargs -t -0I '{}' grub-script-check -v '{}'
-
-#. For both legacy and EFI booting: mirror ESP content::
-
-    espdir=$(mktemp -d)
-    find /boot/efi/ -maxdepth 1 -mindepth 1 -type d -print0 \
-    | xargs -t -0I '{}' cp -r '{}' "${espdir}"
-    find "${espdir}" -maxdepth 1 -mindepth 1 -type d -print0 \
-    | xargs -t -0I '{}' sh -vxc "find /boot/efis/ -maxdepth 1 -mindepth 1 -type d -print0 | xargs -t -0I '[]' cp -r '{}' '[]'"
-
-   .. ifconfig:: zfs_root_test
-
-     ::
-
-      ##################################################
-      #
-      #
-      #         MAINTENANCE SCRIPT ENTRY POINT
-      #                 DO NOT TOUCH
-      #
-      #
-      #################################################
-
-#. Exit chroot
-
-   .. code-block:: sh
-
-     exit
-
-   .. ifconfig:: zfs_root_test
-
-      # nested chroot ends here
-      ZFS_ROOT_NESTED_CHROOT
-
-   .. ifconfig:: zfs_root_test
-
-    ::
-
-     # list contents of boot dir to confirm
-     # that the mirroring succeeded
-     find "${MNT}"/boot/efis/ -type d > list_of_efi_dirs
-     for i in ${DISK}; do
-       if ! grep "${i##*/}-part1/efi\|${i##*/}-part1/EFI" list_of_efi_dirs; then
-          echo "disk ${i} not found in efi system partition, installation error";
-          cat list_of_efi_dirs
-          exit 1
-       fi
-     done
-
-#. Unmount filesystems and create initial system snapshot
-   You can later create a boot environment from this snapshot.
-   See `Root on ZFS maintenance page <../zfs_root_maintenance.html>`__.
-   ::
+#. Unmount filesystems and create initial system snapshot::
 
     umount -Rl "${MNT}"
     zfs snapshot -r rpool@initial-installation
-    zfs snapshot -r bpool@initial-installation
     zpool export -a
 
 #. Reboot
@@ -552,10 +368,5 @@ System Configuration
 
      reboot
 
-   .. ifconfig:: zfs_root_test
-
-     # chroot ends here
-     ZFS_ROOT_GUIDE_TEST
-
-.. _a ZFS developer's comment on this issue: https://ol.reddit.com/r/zfs/comments/10n8fsn/does_openzfs_have_a_new_developer_for_the_native/j6b8k1m/
-.. _this spreadsheet of bugs: https://docs.google.com/spreadsheets/d/1OfRSXibZ2nIE9DGK6swwBZXgXwdCPKgp4SbPZwTexCg/htmlview
+#. Mount other EFI system partitions then set up a service for syncing
+   their contents.
