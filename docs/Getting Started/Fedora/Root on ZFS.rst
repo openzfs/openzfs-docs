@@ -28,6 +28,11 @@
 Fedora Root on ZFS
 =======================================
 
+Notes
+~~~~~
+
+- As an alternative to the below method of installing Fedora Linux on a ZFS root filesystem, you can use the unofficial script `fedora-on-zfs <https://github.com/gregory-lee-bartholomew/fedora-on-zfs>`__, which is more automated and can generate a Fedora Linux installation that is closer to an official Fedora Linux configuration. The fedora-on-zfs script is different from the below method in that it uses one of Fedora's official kickstarts (`fedora-disk-minimal.ks`, `fedora-disk-workstation.ks`, `fedora-disk-kde.ks`, etc.) to guide the installation, but with a few overrides to add the ZFS functionality. Bug reports should be submitted to Greg's fedora-on-zfs GitHub repo.
+
 **ZFSBootMenu**
 
 `ZFSBootMenu <https://zfsbootmenu.org>`__ is an alternative bootloader
