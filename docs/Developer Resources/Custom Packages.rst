@@ -144,7 +144,7 @@ Make sure that the required packages are installed:
 
 .. code:: sh
 
-   sudo apt install build-essential autoconf automake libtool gawk alien fakeroot dkms libblkid-dev uuid-dev libudev-dev libssl-dev zlib1g-dev libaio-dev libattr1-dev libelf-dev linux-headers-generic python3 python3-dev python3-setuptools python3-cffi libffi-dev python3-packaging debhelper-compat dh-python po-debconf python3-all-dev python3-sphinx
+   sudo apt install build-essential autoconf automake libtool gawk alien fakeroot dkms libblkid-dev uuid-dev libudev-dev libssl-dev zlib1g-dev libaio-dev libattr1-dev libelf-dev linux-headers-generic python3 python3-dev python3-setuptools python3-cffi libffi-dev python3-packaging debhelper-compat dh-python po-debconf python3-all-dev python3-sphinx libpam0g-dev
 
 `Get the source code <#get-the-source-code>`__.
 
