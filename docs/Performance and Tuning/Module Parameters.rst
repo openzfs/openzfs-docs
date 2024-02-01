@@ -8249,7 +8249,7 @@ zfs_special_class_metadata_reserve_pct
 
 ``zfs_special_class_metadata_reserve_pct`` sets a threshold for space in
 special vdevs to be reserved exclusively for metadata. This prevents
-small blocks or dedup table from completely consuming a special vdev.
+small data blocks from completely consuming a special vdev.
 
 ====================================== ================================
 zfs_special_class_metadata_reserve_pct Notes
