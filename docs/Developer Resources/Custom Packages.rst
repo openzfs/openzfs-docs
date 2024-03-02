@@ -179,7 +179,7 @@ as follows:
    $ ./configure
    $ make native-deb-utils native-deb-kmod
    $ rm ../openzfs-zfs-dkms_*.deb
-   $ rm ./openzfs-zfs-dracut_*.deb  # deb-based systems usually use initramfs
+   $ rm ../openzfs-zfs-dracut_*.deb  # deb-based systems usually use initramfs
    $ sudo apt-get install --fix-missing ../*.deb
 
 Native Debian packages build with pre-configured paths for Debian and
@@ -211,7 +211,7 @@ packages can be built as follows:
    $ cd zfs
    $ ./configure
    $ make native-deb-utils
-   $ rm ./openzfs-zfs-dracut_*.deb  # deb-based systems usually use initramfs
+   $ rm ../openzfs-zfs-dracut_*.deb  # deb-based systems usually use initramfs
    $ sudo apt-get install --fix-missing ../*.deb
 
 Get the Source Code
