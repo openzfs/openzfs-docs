@@ -29,11 +29,6 @@ Arch Linux Root on ZFS
 
 **ZFSBootMenu**
 
-This tutorial is based on the GRUB bootloader.  Due to its independent
-implementation of a read-only ZFS driver, GRUB only supports a subset
-of ZFS features on the boot pool. [In general, bootloader treat disks
-as read-only to minimize the risk of damaging on-disk data.]
-
 `ZFSBootMenu <https://zfsbootmenu.org>`__ is an alternative bootloader
 free of such limitations and has support for boot environments. Do not
 follow instructions on this page if you plan to use ZBM,
@@ -49,6 +44,10 @@ configuration before reboot.
 
 You should only use well-tested pool features.  Avoid using new features if data integrity is paramount.  See, for example, `this comment <https://github.com/openzfs/openzfs-docs/pull/464#issuecomment-1776918481>`__.
 
+**UEFI support only**
+
+Only UEFI is supported by this guide.
+
 Preparation
 ---------------------------
 
@@ -59,8 +58,8 @@ Preparation
 
    Download latest extended variant of `Alpine Linux
    live image
-   <https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/x86_64/alpine-extended-3.18.4-x86_64.iso>`__,
-   verify `checksum <https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/x86_64/alpine-extended-3.18.4-x86_64.iso.asc>`__
+   <https://dl-cdn.alpinelinux.org/alpine/v3.19/releases/x86_64/alpine-extended-3.19.0-x86_64.iso>`__,
+   verify `checksum <https://dl-cdn.alpinelinux.org/alpine/v3.19/releases/x86_64/alpine-extended-3.19.0-x86_64.iso.asc>`__
    and boot from it.
 
    .. code-block:: sh
@@ -224,14 +223,10 @@ System Installation
 
       parted --script --align=optimal  "${disk}" -- \
       mklabel gpt \
-      mkpart EFI 2MiB 1GiB \
-      mkpart bpool 1GiB 5GiB \
-      mkpart rpool 5GiB -$((SWAPSIZE + RESERVE))GiB \
+      mkpart EFI 1MiB 4GiB \
+      mkpart rpool 4GiB -$((SWAPSIZE + RESERVE))GiB \
       mkpart swap  -$((SWAPSIZE + RESERVE))GiB -"${RESERVE}"GiB \
-      mkpart BIOS 1MiB 2MiB \
       set 1 esp on \
-      set 5 bios_grub on \
-      set 5 legacy_boot on
 
       partprobe "${disk}"
      }
@@ -242,7 +237,7 @@ System Installation
 
    .. ifconfig:: zfs_root_test
 
-     ::
+      ::
 
        # When working with GitHub chroot runners, we are using loop
        # devices as installation target.  However, the alias support for
@@ -258,14 +253,16 @@ System Installation
          done
        done
 
-#. Setup encrypted swap.  This is useful if the available memory is
-   small::
+
+#. Setup temporary encrypted swap for this installation only.  This is
+   useful if the available memory is small::
 
      for i in ${DISK}; do
-        cryptsetup open --type plain --key-file /dev/random "${i}"-part4 "${i##*/}"-part4
-        mkswap /dev/mapper/"${i##*/}"-part4
-        swapon /dev/mapper/"${i##*/}"-part4
+        cryptsetup open --type plain --key-file /dev/random "${i}"-part3 "${i##*/}"-part3
+        mkswap /dev/mapper/"${i##*/}"-part3
+        swapon /dev/mapper/"${i##*/}"-part3
      done
+
 
 #. Load ZFS kernel module
 
@@ -273,40 +270,9 @@ System Installation
 
        modprobe zfs
 
-#. Create boot pool
-   ::
-
-      # shellcheck disable=SC2046
-      zpool create -o compatibility=legacy  \
-          -o ashift=12 \
-          -o autotrim=on \
-          -O acltype=posixacl \
-          -O canmount=off \
-          -O devices=off \
-          -O normalization=formD \
-          -O relatime=on \
-          -O xattr=sa \
-          -O mountpoint=/boot \
-          -R "${MNT}" \
-          bpool \
-                 mirror \
-          $(for i in ${DISK}; do
-             printf '%s ' "${i}-part2";
-            done)
-
-   If not using a multi-disk setup, remove ``mirror``.
-
-   You should not need to customize any of the options for the boot pool.
-
-   GRUB does not support all of the zpool features. See ``spa_feature_names``
-   in `grub-core/fs/zfs/zfs.c
-   <http://git.savannah.gnu.org/cgit/grub.git/tree/grub-core/fs/zfs/zfs.c#n276>`__.
-   This step creates a separate boot pool for ``/boot`` with the features
-   limited to only those that GRUB supports, allowing the root pool to use
-   any/all features.
-
 #. Create root pool
-   ::
+
+   - Unencrypted::
 
        # shellcheck disable=SC2046
        zpool create \
@@ -315,80 +281,42 @@ System Installation
            -R "${MNT}" \
            -O acltype=posixacl \
            -O canmount=off \
-           -O compression=zstd \
            -O dnodesize=auto \
            -O normalization=formD \
            -O relatime=on \
            -O xattr=sa \
-           -O mountpoint=/ \
+           -O mountpoint=none \
            rpool \
            mirror \
           $(for i in ${DISK}; do
-             printf '%s ' "${i}-part3";
+             printf '%s ' "${i}-part2";
             done)
-
-   If not using a multi-disk setup, remove ``mirror``.
 
 #. Create root system container:
 
-   - Unencrypted
-
      ::
 
-      zfs create \
-       -o canmount=off \
-       -o mountpoint=none \
-      rpool/archlinux
-
-   - Encrypted:
-
-     Avoid ZFS send/recv when using native encryption, see `a ZFS developer's comment on this issue`__ and `this spreadsheet of bugs`__.    A LUKS-based guide has yet to be written. Once compromised, changing password will not keep your
-     data safe. See ``zfs-change-key(8)`` for more info
-
-     .. code-block:: sh
-
-      zfs create \
-        -o canmount=off \
-               -o mountpoint=none \
-               -o encryption=on \
-               -o keylocation=prompt \
-               -o keyformat=passphrase \
-      rpool/archlinux
-
-   You can automate this step (insecure) with: ``echo POOLPASS | zfs create ...``.
+      zfs create -o canmount=noauto -o mountpoint=legacy rpool/root
 
    Create system datasets,
    manage mountpoints with ``mountpoint=legacy``
    ::
 
-      zfs create -o canmount=noauto -o mountpoint=/  rpool/archlinux/root
-      zfs mount rpool/archlinux/root
-      zfs create -o mountpoint=legacy rpool/archlinux/home
-      mkdir "${MNT}"/home
-      mount -t zfs rpool/archlinux/home "${MNT}"/home
-      zfs create -o mountpoint=legacy  rpool/archlinux/var
-      zfs create -o mountpoint=legacy rpool/archlinux/var/lib
-      zfs create -o mountpoint=legacy rpool/archlinux/var/log
-      zfs create -o mountpoint=none bpool/archlinux
-      zfs create -o mountpoint=legacy bpool/archlinux/root
-      mkdir "${MNT}"/boot
-      mount -t zfs bpool/archlinux/root "${MNT}"/boot
-      mkdir -p "${MNT}"/var/log
-      mkdir -p "${MNT}"/var/lib
-      mount -t zfs rpool/archlinux/var/lib "${MNT}"/var/lib
-      mount -t zfs rpool/archlinux/var/log "${MNT}"/var/log
+      zfs create -o mountpoint=legacy rpool/home
+      mount -o X-mount.mkdir -t zfs rpool/root "${MNT}"
+      mount -o X-mount.mkdir -t zfs rpool/home "${MNT}"/home
 
-#. Format and mount ESP
+#. Format and mount ESP.  Only one of them is used as /boot, you need to set up mirroring afterwards
    ::
 
      for i in ${DISK}; do
       mkfs.vfat -n EFI "${i}"-part1
-      mkdir -p "${MNT}"/boot/efis/"${i##*/}"-part1
-      mount -t vfat -o iocharset=iso8859-1 "${i}"-part1 "${MNT}"/boot/efis/"${i##*/}"-part1
      done
 
-     mkdir -p "${MNT}"/boot/efi
-     mount -t vfat -o iocharset=iso8859-1 "$(echo "${DISK}" | sed "s|^ *||"  | cut -f1 -d' '|| true)"-part1 "${MNT}"/boot/efi
+     for i in ${DISK}; do
+      mount -t vfat -o fmask=0077,dmask=0077,iocharset=iso8859-1,X-mount.mkdir "${i}"-part1 "${MNT}"/boot
+      break
+     done
 
 System Configuration 
 ---------------------------
@@ -398,10 +326,10 @@ System Configuration
      apk add curl
 
      curl --fail-early --fail -L \
-     https://america.archive.pkgbuild.com/iso/2023.09.01/archlinux-bootstrap-x86_64.tar.gz \
+     https://america.archive.pkgbuild.com/iso/2024.01.01/archlinux-bootstrap-x86_64.tar.gz \
      -o rootfs.tar.gz
      curl --fail-early --fail -L \
-     https://america.archive.pkgbuild.com/iso/2023.09.01/archlinux-bootstrap-x86_64.tar.gz.sig \
+     https://america.archive.pkgbuild.com/iso/2024.01.01/archlinux-bootstrap-x86_64.tar.gz.sig \
      -o rootfs.tar.gz.sig
 
      apk add gnupg
@@ -493,7 +421,7 @@ System Configuration
 #. Install base packages::
 
      pacman -Sy
-     pacman -S --noconfirm mg mandoc grub efibootmgr mkinitcpio
+     pacman -S --noconfirm mg mandoc efibootmgr mkinitcpio
 
      kernel_compatible_with_zfs="$(pacman -Si zfs-linux \
      | grep 'Depends On' \
@@ -504,7 +432,6 @@ System Configuration
 #. Install zfs packages::
 
      pacman -S --noconfirm zfs-linux zfs-utils
-
 
 #. Configure mkinitcpio::
 
@@ -550,66 +477,24 @@ System Configuration
 Bootloader
 ---------------------------
 
+#. Install rEFInd boot loader::
 
-#. Apply GRUB workaround
+     # from http://www.rodsbooks.com/refind/getting.html
+     # use Binary Zip File option
+     pacman -S --noconfirm unzip
+     curl -L http://sourceforge.net/projects/refind/files/0.14.0.2/refind-bin-0.14.0.2.zip/download --output refind.zip
 
-   ::
+     unzip refind.zip
+     mkdir -p /boot/EFI/BOOT
+     find ./refind-bin-0.14.0.2/ -name 'refind_x64.efi' -print0 \
+     | xargs -0I{} mv {} /boot/EFI/BOOT/BOOTX64.EFI
+     rm -rf refind.zip refind-bin-0.14.0.2
 
-     echo 'export ZPOOL_VDEV_NAME_PATH=YES' >> /etc/profile.d/zpool_vdev_name_path.sh
-     # shellcheck disable=SC1091
-     . /etc/profile.d/zpool_vdev_name_path.sh
+#. Add boot entry::
 
-     # GRUB fails to detect rpool name, hard code as "rpool"
-     sed -i "s|rpool=.*|rpool=rpool|"  /etc/grub.d/10_linux
-
-   This workaround needs to be applied for every GRUB update, as the
-   update will overwrite the changes.
-
-#. Install GRUB::
-
-      mkdir -p /boot/efi/archlinux/grub-bootdir/i386-pc/
-      mkdir -p /boot/efi/archlinux/grub-bootdir/x86_64-efi/
-      for i in ${DISK}; do
-       grub-install --target=i386-pc --boot-directory \
-           /boot/efi/archlinux/grub-bootdir/i386-pc/  "${i}"
-      done
-      grub-install --target x86_64-efi --boot-directory \
-       /boot/efi/archlinux/grub-bootdir/x86_64-efi/ --efi-directory \
-       /boot/efi --bootloader-id archlinux --removable
-      if test -d /sys/firmware/efi/efivars/; then
-         grub-install --target x86_64-efi --boot-directory \
-          /boot/efi/archlinux/grub-bootdir/x86_64-efi/ --efi-directory \
-          /boot/efi --bootloader-id archlinux
-      fi
-
-
-#. Import both bpool and rpool at boot::
-
-     echo 'GRUB_CMDLINE_LINUX="zfs_import_dir=/dev/"' >> /etc/default/grub
-
-#. Generate GRUB menu::
-
-     mkdir -p /boot/grub
-     grub-mkconfig -o /boot/grub/grub.cfg
-     cp /boot/grub/grub.cfg \
-      /boot/efi/archlinux/grub-bootdir/x86_64-efi/grub/grub.cfg
-     cp /boot/grub/grub.cfg \
-      /boot/efi/archlinux/grub-bootdir/i386-pc/grub/grub.cfg
-
-   .. ifconfig:: zfs_root_test
-
-      ::
-
-         find /boot/efis/ -name "grub.cfg" -print0 \
-         | xargs -t -0I '{}' grub-script-check -v '{}'
-
-#. For both legacy and EFI booting: mirror ESP content::
-
-    espdir=$(mktemp -d)
-    find /boot/efi/ -maxdepth 1 -mindepth 1 -type d -print0 \
-    | xargs -t -0I '{}' cp -r '{}' "${espdir}"
-    find "${espdir}" -maxdepth 1 -mindepth 1 -type d -print0 \
-    | xargs -t -0I '{}' sh -vxc "find /boot/efis/ -maxdepth 1 -mindepth 1 -type d -print0 | xargs -t -0I '[]' cp -r '{}' '[]'"
+     tee -a /boot/refind-linux.conf <<EOF
+     "Arch Linux" "root=ZFS=rpool/root rw zfs_import_dir=/dev/"
+     EOF
 
 #. Exit chroot
 
@@ -622,29 +507,12 @@ Bootloader
      # nested chroot ends here
      ZFS_ROOT_NESTED_CHROOT
 
-   .. ifconfig:: zfs_root_test
-
-    ::
-
-     # list contents of boot dir to confirm
-     # that the mirroring succeeded
-     find "${MNT}"/boot/efis/ -type d > list_of_efi_dirs
-     for i in ${DISK}; do
-       if ! grep "${i##*/}-part1/efi\|${i##*/}-part1/EFI" list_of_efi_dirs; then
-          echo "disk ${i} not found in efi system partition, installation error";
-          cat list_of_efi_dirs
-          exit 1
-       fi
-     done
 
 #. Unmount filesystems and create initial system snapshot
-   You can later create a boot environment from this snapshot.
-   See `Root on ZFS maintenance page <../zfs_root_maintenance.html>`__.
    ::
 
     umount -Rl "${MNT}"
     zfs snapshot -r rpool@initial-installation
-    zfs snapshot -r bpool@initial-installation
 
 #. Export all pools
 
@@ -668,5 +536,5 @@ Bootloader
      # chroot ends here
      ZFS_ROOT_GUIDE_TEST
 
-.. _a ZFS developer's comment on this issue: https://ol.reddit.com/r/zfs/comments/10n8fsn/does_openzfs_have_a_new_developer_for_the_native/j6b8k1m/
-.. _this spreadsheet of bugs: https://docs.google.com/spreadsheets/d/1OfRSXibZ2nIE9DGK6swwBZXgXwdCPKgp4SbPZwTexCg/htmlview
+#. Mount other EFI system partitions then set up a service for syncing
+   their contents.

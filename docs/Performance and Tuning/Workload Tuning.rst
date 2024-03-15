@@ -134,7 +134,7 @@ Internally, ZFS allocates data using multiples of the device's sector
 size, typically either 512 bytes or 4KB (see above). When compression is
 enabled, a smaller number of sectors can be allocated for each block.
 The uncompressed block size is set by the ``recordsize`` (defaults to
-128KB) or ``volblocksize`` (defaults to 8KB) property (for filesystems
+128KB) or ``volblocksize`` (defaults to 16KB since v2.2) property (for filesystems
 vs volumes).
 
 The following compression algorithms are available:

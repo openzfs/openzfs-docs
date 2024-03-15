@@ -23,7 +23,7 @@ Raspberry Pi
 ~~~~~~~~~~~~
 
 If you are looking to install on a Raspberry Pi, see
-:doc:`Ubuntu 20.04 Root on ZFS for Raspberry Pi`.
+:doc:`Ubuntu 22.04 Root on ZFS for Raspberry Pi`.
 
 Caution
 ~~~~~~~

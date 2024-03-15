@@ -27,11 +27,6 @@ Rocky Linux Root on ZFS
 
 **ZFSBootMenu**
 
-This tutorial is based on the GRUB bootloader.  Due to its independent
-implementation of a read-only ZFS driver, GRUB only supports a subset
-of ZFS features on the boot pool. [In general, bootloader treat disks
-as read-only to minimize the risk of damaging on-disk data.]
-
 `ZFSBootMenu <https://zfsbootmenu.org>`__ is an alternative bootloader
 free of such limitations and has support for boot environments. Do not
 follow instructions on this page if you plan to use ZBM,
@@ -47,6 +42,10 @@ configuration before reboot.
 
 You should only use well-tested pool features.  Avoid using new features if data integrity is paramount.  See, for example, `this comment <https://github.com/openzfs/openzfs-docs/pull/464#issuecomment-1776918481>`__.
 
+**UEFI support only**
+
+Only UEFI is supported by this guide.
+
 Preparation
 ---------------------------
 
@@ -57,8 +56,8 @@ Preparation
 
    Download latest extended variant of `Alpine Linux
    live image
-   <https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/x86_64/alpine-extended-3.18.4-x86_64.iso>`__,
-   verify `checksum <https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/x86_64/alpine-extended-3.18.4-x86_64.iso.asc>`__
+   <https://dl-cdn.alpinelinux.org/alpine/v3.19/releases/x86_64/alpine-extended-3.19.0-x86_64.iso>`__,
+   verify `checksum <https://dl-cdn.alpinelinux.org/alpine/v3.19/releases/x86_64/alpine-extended-3.19.0-x86_64.iso.asc>`__
    and boot from it.
 
    .. code-block:: sh
@@ -223,14 +222,10 @@ System Installation
 
       parted --script --align=optimal  "${disk}" -- \
       mklabel gpt \
-      mkpart EFI 2MiB 1GiB \
-      mkpart bpool 1GiB 5GiB \
-      mkpart rpool 5GiB -$((SWAPSIZE + RESERVE))GiB \
+      mkpart EFI 1MiB 4GiB \
+      mkpart rpool 4GiB -$((SWAPSIZE + RESERVE))GiB \
       mkpart swap  -$((SWAPSIZE + RESERVE))GiB -"${RESERVE}"GiB \
-      mkpart BIOS 1MiB 2MiB \
       set 1 esp on \
-      set 5 bios_grub on \
-      set 5 legacy_boot on
 
       partprobe "${disk}"
      }
@@ -241,7 +236,7 @@ System Installation
 
    .. ifconfig:: zfs_root_test
 
-     ::
+      ::
 
        # When working with GitHub chroot runners, we are using loop
        # devices as installation target.  However, the alias support for
@@ -257,14 +252,16 @@ System Installation
          done
        done
 
-#. Setup encrypted swap.  This is useful if the available memory is
-   small::
+
+#. Setup temporary encrypted swap for this installation only.  This is
+   useful if the available memory is small::
 
      for i in ${DISK}; do
-        cryptsetup open --type plain --key-file /dev/random "${i}"-part4 "${i##*/}"-part4
-        mkswap /dev/mapper/"${i##*/}"-part4
-        swapon /dev/mapper/"${i##*/}"-part4
+        cryptsetup open --type plain --key-file /dev/random "${i}"-part3 "${i##*/}"-part3
+        mkswap /dev/mapper/"${i##*/}"-part3
+        swapon /dev/mapper/"${i##*/}"-part3
      done
+
 
 #. Load ZFS kernel module
 
@@ -272,40 +269,9 @@ System Installation
 
        modprobe zfs
 
-#. Create boot pool
-   ::
-
-      # shellcheck disable=SC2046
-      zpool create -o compatibility=legacy  \
-          -o ashift=12 \
-          -o autotrim=on \
-          -O acltype=posixacl \
-          -O canmount=off \
-          -O devices=off \
-          -O normalization=formD \
-          -O relatime=on \
-          -O xattr=sa \
-          -O mountpoint=/boot \
-          -R "${MNT}" \
-          bpool \
-                 mirror \
-          $(for i in ${DISK}; do
-             printf '%s ' "${i}-part2";
-            done)
-
-   If not using a multi-disk setup, remove ``mirror``.
-
-   You should not need to customize any of the options for the boot pool.
-
-   GRUB does not support all of the zpool features. See ``spa_feature_names``
-   in `grub-core/fs/zfs/zfs.c
-   <http://git.savannah.gnu.org/cgit/grub.git/tree/grub-core/fs/zfs/zfs.c#n276>`__.
-   This step creates a separate boot pool for ``/boot`` with the features
-   limited to only those that GRUB supports, allowing the root pool to use
-   any/all features.
-
 #. Create root pool
-   ::
+
+   - Unencrypted::
 
        # shellcheck disable=SC2046
        zpool create \
@@ -314,80 +280,43 @@ System Installation
            -R "${MNT}" \
            -O acltype=posixacl \
            -O canmount=off \
-           -O compression=zstd \
            -O dnodesize=auto \
            -O normalization=formD \
            -O relatime=on \
            -O xattr=sa \
-           -O mountpoint=/ \
+           -O mountpoint=none \
            rpool \
            mirror \
           $(for i in ${DISK}; do
-             printf '%s ' "${i}-part3";
+             printf '%s ' "${i}-part2";
             done)
-
-   If not using a multi-disk setup, remove ``mirror``.
 
 #. Create root system container:
 
-   - Unencrypted
-
      ::
 
-      zfs create \
-       -o canmount=off \
-       -o mountpoint=none \
-      rpool/rhel
-
-   - Encrypted:
-
-     Avoid ZFS send/recv when using native encryption, see `a ZFS developer's comment on this issue`__ and `this spreadsheet of bugs`__.    A LUKS-based guide has yet to be written. Once compromised, changing password will not keep your
-     data safe. See ``zfs-change-key(8)`` for more info
-
-     .. code-block:: sh
-
-      zfs create \
-        -o canmount=off \
-               -o mountpoint=none \
-               -o encryption=on \
-               -o keylocation=prompt \
-               -o keyformat=passphrase \
-      rpool/rhel
-
-   You can automate this step (insecure) with: ``echo POOLPASS | zfs create ...``.
+      # dracut demands system root dataset to have non-legacy mountpoint
+      zfs create -o canmount=noauto -o mountpoint=/ rpool/root
 
    Create system datasets,
    manage mountpoints with ``mountpoint=legacy``
    ::
 
-      zfs create -o canmount=noauto -o mountpoint=/      rpool/rhel/root
-      zfs mount rpool/rhel/root
-      zfs create -o mountpoint=legacy rpool/rhel/home
-      mkdir "${MNT}"/home
-      mount -t zfs rpool/rhel/home "${MNT}"/home
-      zfs create -o mountpoint=legacy  rpool/rhel/var
-      zfs create -o mountpoint=legacy rpool/rhel/var/lib
-      zfs create -o mountpoint=legacy rpool/rhel/var/log
-      zfs create -o mountpoint=none bpool/rhel
-      zfs create -o mountpoint=legacy bpool/rhel/root
-      mkdir "${MNT}"/boot
-      mount -t zfs bpool/rhel/root "${MNT}"/boot
-      mkdir -p "${MNT}"/var/log
-      mkdir -p "${MNT}"/var/lib
-      mount -t zfs rpool/rhel/var/lib "${MNT}"/var/lib
-      mount -t zfs rpool/rhel/var/log "${MNT}"/var/log
+      zfs create -o mountpoint=legacy rpool/home
+      zfs mount rpool/root
+      mount -o X-mount.mkdir -t zfs rpool/home "${MNT}"/home
 
-#. Format and mount ESP
+#. Format and mount ESP.  Only one of them is used as /boot, you need to set up mirroring afterwards
    ::
 
      for i in ${DISK}; do
       mkfs.vfat -n EFI "${i}"-part1
-      mkdir -p "${MNT}"/boot/efis/"${i##*/}"-part1
-      mount -t vfat -o iocharset=iso8859-1 "${i}"-part1 "${MNT}"/boot/efis/"${i##*/}"-part1
      done
 
-     mkdir -p "${MNT}"/boot/efi
-     mount -t vfat -o iocharset=iso8859-1 "$(echo "${DISK}" | sed "s|^ *||"  | cut -f1 -d' '|| true)"-part1 "${MNT}"/boot/efi
+     for i in ${DISK}; do
+      mount -t vfat -o fmask=0077,dmask=0077,iocharset=iso8859-1,X-mount.mkdir "${i}"-part1 "${MNT}"/boot
+      break
+     done
 
 System Configuration 
 ---------------------------
@@ -396,10 +325,10 @@ System Configuration
 
      apk add curl
      curl --fail-early --fail -L \
-     https://dl.rockylinux.org/pub/rocky/9.2/images/x86_64/Rocky-9-Container-Base-9.2-20230513.0.x86_64.tar.xz \
+     https://dl.rockylinux.org/vault/rocky/9.2/images/x86_64/Rocky-9-Container-Base-9.2-20230513.0.x86_64.tar.xz \
      -o rootfs.tar.gz
      curl --fail-early --fail -L \
-     https://dl.rockylinux.org/pub/rocky/9.2/images/x86_64/Rocky-9-Container-Base-9.2-20230513.0.x86_64.tar.xz.CHECKSUM \
+     https://dl.rockylinux.org/vault/rocky/9.2/images/x86_64/Rocky-9-Container-Base-9.2-20230513.0.x86_64.tar.xz.CHECKSUM \
      -o checksum
 
      # BusyBox sha256sum treats all lines in the checksum file
@@ -453,17 +382,13 @@ System Configuration
 
    .. code-block:: sh
 
-    dnf -y install --allowerasing @core grub2-efi-x64 \
-    grub2-pc grub2-pc-modules grub2-efi-x64-modules shim-x64  \
-    efibootmgr kernel-core
+    dnf -y install --allowerasing @core kernel-core
 
    .. ifconfig:: zfs_root_test
 
      # skip installing firmware in test
      dnf -y install --allowerasing --setopt=install_weak_deps=False \
-     @core grub2-efi-x64 \
-     grub2-pc grub2-pc-modules grub2-efi-x64-modules shim-x64  \
-     efibootmgr kernel-core
+     @core kernel-core
 
 #. Install ZFS packages::
 
@@ -528,63 +453,24 @@ System Configuration
 Bootloader
 ---------------------------
 
+#. Install rEFInd boot loader::
 
-#. Apply GRUB workaround
+     # from http://www.rodsbooks.com/refind/getting.html
+     # use Binary Zip File option
+     curl -L http://sourceforge.net/projects/refind/files/0.14.0.2/refind-bin-0.14.0.2.zip/download --output refind.zip
 
-   ::
+     dnf install -y unzip
+     unzip refind.zip
+     mkdir -p /boot/EFI/BOOT
+     find ./refind-bin-0.14.0.2/ -name 'refind_x64.efi' -print0 \
+     | xargs -0I{} mv {} /boot/EFI/BOOT/BOOTX64.EFI
+     rm -rf refind.zip refind-bin-0.14.0.2
 
-     echo 'export ZPOOL_VDEV_NAME_PATH=YES' >> /etc/profile.d/zpool_vdev_name_path.sh
-     # shellcheck disable=SC1091
-     . /etc/profile.d/zpool_vdev_name_path.sh
+#. Add boot entry::
 
-     # GRUB fails to detect rpool name, hard code as "rpool"
-     sed -i "s|rpool=.*|rpool=rpool|"  /etc/grub.d/10_linux
-
-   This workaround needs to be applied for every GRUB update, as the
-   update will overwrite the changes.
-
-#. RHEL uses Boot Loader Specification module for GRUB,
-   which does not support ZFS.  Disable it::
-
-      echo 'GRUB_ENABLE_BLSCFG=false' >> /etc/default/grub
-
-   This means that you need to regenerate GRUB menu and mirror them
-   after every kernel update, otherwise computer will still boot old
-   kernel on reboot.
-
-#. Install GRUB::
-
-      mkdir -p /boot/efi/rocky/grub-bootdir/i386-pc/
-      for i in ${DISK}; do
-       grub2-install --target=i386-pc --boot-directory \
-           /boot/efi/rocky/grub-bootdir/i386-pc/  "${i}"
-      done
-      dnf reinstall -y grub2-efi-x64 shim-x64
-      cp -r /usr/lib/grub/x86_64-efi/ /boot/efi/EFI/rocky/
-
-#. Generate GRUB menu::
-
-     mkdir -p /boot/grub2
-     grub2-mkconfig -o /boot/grub2/grub.cfg
-     cp /boot/grub2/grub.cfg \
-      /boot/efi/efi/rocky/grub.cfg
-     cp /boot/grub2/grub.cfg \
-      /boot/efi/rocky/grub-bootdir/i386-pc/grub2/grub.cfg
-
-   .. ifconfig:: zfs_root_test
-
-      ::
-
-         find /boot/efis/ -name "grub.cfg" -print0 \
-         | xargs -t -0I '{}' grub2-script-check -v '{}'
-
-#. For both legacy and EFI booting: mirror ESP content::
-
-    espdir=$(mktemp -d)
-    find /boot/efi/ -maxdepth 1 -mindepth 1 -type d -print0 \
-    | xargs -t -0I '{}' cp -r '{}' "${espdir}"
-    find "${espdir}" -maxdepth 1 -mindepth 1 -type d -print0 \
-    | xargs -t -0I '{}' sh -vxc "find /boot/efis/ -maxdepth 1 -mindepth 1 -type d -print0 | xargs -t -0I '[]' cp -r '{}' '[]'"
+     tee -a /boot/refind-linux.conf <<EOF
+     "Rocky Linux" "root=ZFS=rpool/root"
+     EOF
 
 #. Exit chroot
 
@@ -597,21 +483,6 @@ Bootloader
      # nested chroot ends here
      ZFS_ROOT_NESTED_CHROOT
 
-   .. ifconfig:: zfs_root_test
-
-    ::
-
-     # list contents of boot dir to confirm
-     # that the mirroring succeeded
-     find "${MNT}"/boot/efis/ -type d > list_of_efi_dirs
-     for i in ${DISK}; do
-       if ! grep "${i##*/}-part1/efi\|${i##*/}-part1/EFI" list_of_efi_dirs; then
-          echo "disk ${i} not found in efi system partition, installation error";
-          cat list_of_efi_dirs
-          exit 1
-       fi
-     done
-
 #. Unmount filesystems and create initial system snapshot
    You can later create a boot environment from this snapshot.
    See `Root on ZFS maintenance page <../zfs_root_maintenance.html>`__.
@@ -619,7 +490,6 @@ Bootloader
 
     umount -Rl "${MNT}"
     zfs snapshot -r rpool@initial-installation
-    zfs snapshot -r bpool@initial-installation
 
 #. Export all pools
 
@@ -638,15 +508,6 @@ Bootloader
 
      reboot
 
-#. For BIOS-legacy boot users only: the GRUB bootloader installed
-   might be unusable.  In this case, see Bootloader Recovery section
-   in `Root on ZFS maintenance page <../zfs_root_maintenance.html>`__.
-
-   This issue is not related to Alpine Linux chroot, as Arch Linux
-   installed with this method does not have this issue.
-
-   UEFI bootloader is not affected by this issue.
-
    .. ifconfig:: zfs_root_test
 
      # chroot ends here
@@ -664,5 +525,5 @@ Post installaion
 
 #. Add new user, configure swap.
 
-.. _a ZFS developer's comment on this issue: https://ol.reddit.com/r/zfs/comments/10n8fsn/does_openzfs_have_a_new_developer_for_the_native/j6b8k1m/
-.. _this spreadsheet of bugs: https://docs.google.com/spreadsheets/d/1OfRSXibZ2nIE9DGK6swwBZXgXwdCPKgp4SbPZwTexCg/htmlview
+#. Mount other EFI system partitions then set up a service for syncing
+   their contents.

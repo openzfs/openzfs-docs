@@ -11,12 +11,12 @@ git repository for the project is the `zfs
 
 There are two main components in this repository:
 
-- **ZFS**: The ZFS repository contains a copy of the upstream OpenZFS
+-  **ZFS**: The ZFS repository contains a copy of the upstream OpenZFS
    code which has been adapted and extended for Linux and FreeBSD. The
    vast majority of the core OpenZFS code is self-contained and can be
    used without modification.
 
-- **SPL**: The SPL is a thin shim layer which is responsible for
+-  **SPL**: The SPL is a thin shim layer which is responsible for
    implementing the fundamental interfaces required by OpenZFS. It's
    this layer which allows OpenZFS to be used across multiple
    platforms. SPL used to be maintained in a separate repository, but
@@ -54,7 +54,7 @@ The following dependencies should be installed to build the latest ZFS
 
 .. code:: sh
 
-   sudo apt install build-essential autoconf automake libtool gawk alien fakeroot dkms libblkid-dev uuid-dev libudev-dev libssl-dev zlib1g-dev libaio-dev libattr1-dev libelf-dev linux-headers-generic python3 python3-dev python3-setuptools python3-cffi libffi-dev python3-packaging git libcurl4-openssl-dev debhelper-compat dh-python po-debconf python3-all-dev python3-sphinx
+   sudo apt install build-essential autoconf automake libtool gawk alien fakeroot dkms libblkid-dev uuid-dev libudev-dev libssl-dev zlib1g-dev libaio-dev libattr1-dev libelf-dev linux-headers-generic python3 python3-dev python3-setuptools python3-cffi libffi-dev python3-packaging git libcurl4-openssl-dev debhelper-compat dh-python po-debconf python3-all-dev python3-sphinx parallel
 
 -  **FreeBSD**:
 
@@ -74,7 +74,7 @@ depends on your requirements.
    downside to using packages it is greatly increases the time required
    to build, install, and test a change.
 
-- **In-tree**: Development can be done entirely in the SPL/ZFS source
+-  **In-tree**: Development can be done entirely in the SPL/ZFS source
    tree. This speeds up development by allowing developers to rapidly
    iterate on a patch. When working in-tree developers can leverage
    incremental builds, load/unload kernel modules, execute utilities,
