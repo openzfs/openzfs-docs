@@ -20,4 +20,5 @@ documentation <https://pthree.org/2012/04/17/install-zfs-on-debian-gnulinux/>`__
    NixOS/index
    openSUSE/index
    RHEL-based distro/index
+   Slackware/index
    Ubuntu/index
