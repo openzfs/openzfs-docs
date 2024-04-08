@@ -626,7 +626,7 @@ writes and leave recordsize=128K on the log files. Set
 caching [#mysql_basic]_.
 Set ``logbias=throughput`` on the data to stop ZIL from writing twice.
 
-Set ``skip-innodb_doublewrite`` in my.cnf to prevent innodb from writing
+Set ``innodb_doublewrite=0`` in my.cnf to prevent innodb from writing
 twice. The double writes are a data integrity feature meant to protect
 against corruption from partially-written records, but those are not
 possible on ZFS. It should be noted that `Percona’s
