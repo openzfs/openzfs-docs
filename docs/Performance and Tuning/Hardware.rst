@@ -505,6 +505,7 @@ follows:
 
 -  Intel 750
 -  Intel DC P3500/P3600/P3608/P3700
+-  Kingston DC100B (M.2 2280 form factor, fits into most laptops)
 -  Micron 7300/7400/7450 PRO/MAX
 -  Samsung PM963 (M.2 form factor)
 -  Samsung PM1725/PM1725a
