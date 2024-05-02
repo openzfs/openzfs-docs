@@ -24,7 +24,7 @@ see below.
 
 #. Add ZFS repo::
 
-    dnf install -y https://zfsonlinux.org/fedora/zfs-release-2-4$(rpm --eval "%{dist}").noarch.rpm
+    dnf install -y https://zfsonlinux.org/fedora/zfs-release-2-5$(rpm --eval "%{dist}").noarch.rpm
 
    List of repos is available `here <https://github.com/zfsonlinux/zfsonlinux.github.com/tree/master/fedora>`__.
 
