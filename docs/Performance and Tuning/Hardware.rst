@@ -96,7 +96,7 @@ which bit is flipped:
       write-out, ZFS will detect it, but it might not be able to correct
       it.
    -  Recovery from such an event will depend on what was corrupted. In
-      the worst, case, a pool could be rendered unimportable.
+      the worst case, a pool could be rendered unimportable.
 
       -  All filesystems have poor reliability in their absolute worst
          case bit-flip failure scenarios. Such scenarios should be
@@ -142,7 +142,7 @@ USB Hard Drives and/or Adapters
 -------------------------------
 
 These have problems involving sector size reporting, SMART passthrough,
-the ability to set ERC and other areas. ZFS will perform as well on such
+the ability to set ERC, and other areas. ZFS will perform as well on such
 devices as they are capable of allowing, but try to avoid them. They
 should not be expected to have the same up-time as SAS and SATA drives
 and should be considered unreliable.
@@ -184,9 +184,9 @@ not be as reliable as it would be on its own.
    checksum failure on one disk can be corrected by treating the disk
    containing the sector as bad for the purpose of reconstructing the
    original information. This cannot be done when a RAID controller
-   handles the redundancy unless a duplicate copy is stored by ZFS in
-   the case that the corruption involving as metadata, the copies flag
-   is set or the RAID array is part of a mirror/raid-z vdev within ZFS.
+   handles the redundancy unless a duplicate copy is stored by ZFS. If
+   the copies flag is set or the RAID is part of a mirror/raid-z vdev
+   within ZFS then metadata corruption may be repairable.
 
 -  Sector size information is not necessarily passed correctly by
    hardware RAID on RAID 1. Sector size information cannot be passed
@@ -236,7 +236,7 @@ not be as reliable as it would be on its own.
    not, the file is listed as damaged in zpool status and the
    system administrator has the opportunity to restore it from a backup.
 
--  IO response times will be reduced whenever the OS blocks on IO
+-  IO response times will be increased (i.e. reduced performance) whenever the OS blocks on IO
    operations because the system CPU blocks on a much weaker embedded
    CPU used in the RAID controller. This lowers IOPS relative to what
    ZFS could have achieved.
@@ -296,7 +296,7 @@ compatibility.
 As of 2014, there are still 512-byte and 4096-byte drives on the market,
 but they are known to properly identify themselves unless behind a USB
 to SATA controller. Replacing a 512-byte sector drive with a 4096-byte
-sector drives in a vdev created with 512-byte sector drives will
+sector drive in a vdev created with 512-byte sector drives will
 adversely affect performance. Replacing a 4096-byte sector drive with a
 512-byte sector drive will have no negative effect on performance.
 
@@ -306,7 +306,7 @@ Error recovery control
 ----------------------
 
 ZFS is said to be able to use cheap drives. This was true when it was
-introduced and hard drives supported Error recovery control. Since ZFS'
+introduced and hard drives supported error recovery control. Since ZFS'
 introduction, error recovery control has been removed from low-end
 drives from certain manufacturers, most notably Western Digital.
 Consistent performance requires hard drives that support error recovery
@@ -317,7 +317,7 @@ control.
 Background
 ~~~~~~~~~~
 
-Hard drives store data using small polarized regions a magnetic surface.
+Hard drives store data using small polarized regions on a magnetic surface.
 Reading from and/or writing to this surface poses a few reliability
 problems. One is that imperfections in the surface can corrupt bits.
 Another is that vibrations can cause drive heads to miss their targets.
@@ -335,7 +335,7 @@ time and consequently, IO to the drive will stall.
 
 Enterprise hard drives and some consumer hard drives implement a feature
 called Time-Limited Error Recovery (TLER) by Western Digital, Error
-Recovery Control (ERC) by Seagate and Command Completion Time Limit by
+Recovery Control (ERC) by Seagate, and Command Completion Time Limit by
 Hitachi and Samsung, which permits the time drives are willing to spend
 on such events to be limited by the system administrator.
 
@@ -381,7 +381,7 @@ Command Queuing
 Drives with command queues are able to reorder IO operations to increase
 IOPS. This is called Native Command Queuing on SATA and Tagged Command
 Queuing on PATA/SCSI/SAS. ZFS stores objects in metaslabs and it can use
-several metastabs at any given time. Consequently, ZFS is not only
+several metaslabs at any given time. Consequently, ZFS is not only
 designed to take advantage of command queuing, but good ZFS performance
 requires command queuing. Almost all drives manufactured within the past
 10 years can be expected to support command queuing. The exceptions are:
@@ -520,7 +520,7 @@ follows:
       `manual <https://www.seagate.com/www-content/support-content/enterprise-storage/solid-state-drives/nytro-5000/_shared/docs/nytro-5000-mp2-pm-100810195d.pdf>`__
       for this drive specifies airflow requirements. If the drive does
       not receive sufficient airflow from case fans, it will overheat at
-      idle. It's thermal throttling will severely degrade performance
+      idle. Its thermal throttling will severely degrade performance
       such that write throughput performance will be limited to 1/10 of
       the specification and read latencies will reach several hundred
       milliseconds. Under continuous load, the device will continue to
@@ -742,7 +742,7 @@ PSUs are supposed to deassert a PWR_OK signal to indicate that provided
 voltages are no longer within the rated specification. This should force
 an immediate shutdown. However, the system clock of a developer
 workstation was observed to significantly deviate from the expected
-value following during a series of ~1 second brown outs. This machine
+value during a series of ~1 second brown outs. This machine
 did not use a UPS at the time. However, the PWR_OK mechanism should have
 protected against this. The observation of the PWR_OK signal failing to
 force a shutdown with adverse consequences (to the system clock in this
