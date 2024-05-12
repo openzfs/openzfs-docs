@@ -164,7 +164,8 @@ duration of your testing, edit ``/etc/depmod.d/ubuntu.conf`` and add
 
 You may then install using
 ``sudo make install; sudo ldconfig; sudo depmod``. You'd uninstall with
-``sudo make uninstall; sudo ldconfig; sudo depmod``.
+``sudo make uninstall; sudo ldconfig; sudo depmod``. You can install just
+the kernel modules with ``sudo make -C modules/ install``.
 
 .. _running-zloopsh-and-zfs-testssh:
 
