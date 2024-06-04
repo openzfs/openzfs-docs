@@ -87,5 +87,5 @@ Performance considerations
 Write
 ^^^^^
 
-Because of full stripe width, one block write will write stripe part on each disk.
-One RAIDZ vdev has a write IOPS of one slowest disk because of that in worst case.
+A stripe spans across all drives in the array. A one block write will write the stripe part onto each disk.
+A RAIDZ vdev has a write IOPS of the slowest disk in the array in the worst case because the write operation of all stripe parts must be completed on each disk.
