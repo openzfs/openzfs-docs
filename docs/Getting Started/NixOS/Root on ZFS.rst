@@ -25,6 +25,9 @@ configuration before reboot.
 Only UEFI is supported by this guide.  Make sure your computer is
 booted in UEFI mode.
 
+# TODO document nvme id-ns -H $DISK | grep "Relative Performance"
+# and  lsblk -o NAME,PHY-SeC for discovering phsical sectors
+
 Preparation
 ---------------------------
 
