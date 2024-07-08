@@ -53,10 +53,10 @@ TAG_REGEX = re.compile(
     r'zfs-(?P<version>'
     r'(?P<major>[0-9]+)\.(?P<minor>[0-9]+)\.(?P<fix>[0-9]+))')
 
-LINKS_REGEX_TEMPLATE = ('<a(?P<href_place> )class=\"Xr\"(?P<title>.*?)>%s'
-                        '\((?P<num>[1-9])\)<\/a>')
-LINKS_FINAL_REGEX = ('<a href="../\g<num>/\g<name>.\g<num>.html" class="Xr"'
-                     '>\g<name>(\g<num>)</a>')
+LINKS_REGEX_TEMPLATE = (r'<a(?P<href_place> )class=\"Xr\"(?P<title>.*?)>%s'
+                        r'\((?P<num>[1-9])\)<\/a>')
+LINKS_FINAL_REGEX = (r'<a href="../\g<num>/\g<name>.\g<num>.html" class="Xr"'
+                     r'>\g<name>(\g<num>)</a>')
 
 
 def add_hyperlinks(out_dir, version, pages):
