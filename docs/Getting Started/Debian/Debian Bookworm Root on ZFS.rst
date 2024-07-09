@@ -24,7 +24,7 @@ System Requirements
 - `A 64-bit kernel is strongly encouraged.
   <https://github.com/zfsonlinux/zfs/wiki/FAQ#32-bit-vs-64-bit-systems>`__
 - Installing on a drive which presents 4 KiB logical sectors (a “4Kn” drive)
-  only works with UEFI booting. This not unique to ZFS. `GRUB does not and
+  only works with UEFI booting. This is not unique to ZFS. `GRUB does not and
   will not work on 4Kn with legacy (BIOS) booting.
   <http://savannah.gnu.org/bugs/?46700>`__
 
