@@ -146,7 +146,9 @@ Step 1: Prepare The Install Environment
 
 #. Install ZFS in the Live CD environment::
 
-     apt install --yes debootstrap gdisk zfsutils-linux
+     apt install dkms
+     apt install zfs-dkms --no-install-recommends
+     apt install debootstrap gdisk zfsutils-linux
 
 Step 2: Disk Formatting
 -----------------------
