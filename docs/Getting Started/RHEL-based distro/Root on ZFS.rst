@@ -382,7 +382,7 @@ System Configuration
 
    .. code-block:: sh
 
-    dnf -y install --allowerasing @core kernel-core
+    dnf -y install --allowerasing @core kernel-core kernel-modules
 
    .. ifconfig:: zfs_root_test
 
@@ -457,7 +457,7 @@ Bootloader
 
      # from http://www.rodsbooks.com/refind/getting.html
      # use Binary Zip File option
-     curl -L http://sourceforge.net/projects/refind/files/0.14.0.2/refind-bin-0.14.0.2.zip/download --output refind.zip
+     curl -L https://sourceforge.net/projects/refind/files/0.14.0.2/refind-bin-0.14.0.2.zip/download --output refind.zip
 
      dnf install -y unzip
      unzip refind.zip
