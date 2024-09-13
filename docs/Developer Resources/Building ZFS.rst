@@ -143,7 +143,7 @@ the ZFS and SPL source in the traditional autotools fashion.
 | **tip:** Native Debian packages build with pre-configured paths for
   Debian and Ubuntu. It's best not to override the paths during
   configure.
-| **tip:** For native Debain packages, ``KVERS``, ``KSRC`` and ``KOBJ``
+| **tip:** For native Debian packages, ``KVERS``, ``KSRC`` and ``KOBJ``
   environment variables can be exported to specify the kernel installed
   in non-default location.
 
