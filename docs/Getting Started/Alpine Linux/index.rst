@@ -24,6 +24,21 @@ see below.
 
     modprobe zfs
 
+Automatic zpool importing and mount
+-----------------------------------
+
+To avoid needing to manually import and mount zpools
+after the system boots, be sure to enable the
+related services.
+
+#. Import pools on boot::
+
+    rc-update add zfs-import default
+
+#. Mount pools on boot::
+
+    rc-update add zfs-mount default
+
 Root on ZFS
 -----------
 .. toctree::
