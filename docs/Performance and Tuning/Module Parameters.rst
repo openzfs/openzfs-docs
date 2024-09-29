@@ -6294,7 +6294,7 @@ therefore require recompiling the kernel module to adjust.
 | Range               | 1 to 100, fractional number of CPUs are       |
 |                     | rounded down                                  |
 +---------------------+-----------------------------------------------+
-| Default             | 75                                            |
+| Default             | 75 for versions before v.2.2.0, 80 after      |
 +---------------------+-----------------------------------------------+
 | Change              | Prior to zfs module load                      |
 +---------------------+-----------------------------------------------+
