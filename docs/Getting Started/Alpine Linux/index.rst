@@ -25,7 +25,7 @@ see below.
     modprobe zfs
 
 Automatic zpool importing and mount
-------------
+-----------------------------------
 
 To avoid needing to manually import and mount zpools
 after the system boots, be sure to enable the
