@@ -154,6 +154,57 @@ option must be passed to configure.
    $ make -j1 rpm-utils rpm-kmod
    $ sudo dnf install *.$(uname -m).rpm *.noarch.rpm
 
+Fedora 41 secure boot with kmod
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The zfs kernel module will fail to load on modern computers that use
+UEFI and secure boot:
+
+.. code::
+
+   $ sudo modprobe zfs
+   modprobe: ERROR: could not insert 'zfs': Key was rejected by service
+
+Either disable secure boot or create a custom machine owner key (MOK)
+**once** and manually sign your current and future modules using that key:
+
+.. code:: sh
+
+   $ sudo mkdir /etc/pki/mok
+   $ cd /etc/pki/mok
+   $ sudo openssl req -new -x509 -newkey rsa:2048 -keyout LOCALMOK.priv -outform DER -out LOCALMOK.der -nodes -days 36500 -subj "/CN=LOCALMOK/"
+   $ sudo mokutil --import LOCALMOK.der
+
+Mokutil asks for a password that you have to create and remember,
+then reboot your machine and UEFI will ask to import your key:
+
+.. code::
+
+   Select "Enroll MOK", "Continue", "Yes", enter mokutil's password, "Reboot"
+
+This MOK can then be used to manually sign your zfs kernel modules:
+
+.. code::
+
+   $ rpm -ql kmod-zfs-$(uname -r) | grep .ko
+   /lib/modules/6.11.8-300.fc41.x86_64/extra/zfs/spl.ko
+   /lib/modules/6.11.8-300.fc41.x86_64/extra/zfs/zfs.ko
+
+.. code:: sh
+
+   $ sudo /usr/src/kernels/$(uname -r)/scripts/sign-file sha256 /etc/pki/mok/LOCALMOK.priv /etc/pki/mok/LOCALMOK.der /lib/modules/$(uname -r)/extra/zfs/spl.ko
+   $ sudo /usr/src/kernels/$(uname -r)/scripts/sign-file sha256 /etc/pki/mok/LOCALMOK.priv /etc/pki/mok/LOCALMOK.der /lib/modules/$(uname -r)/extra/zfs/zfs.ko
+
+Load the module and verify it is active:
+
+.. code::
+
+   $ sudo modprobe zfs
+
+   $ lsmod | grep zfs
+   zfs                  6930432  0
+   spl                   155648  1 zfs
+
 Debian and Ubuntu
 -----------------
 
