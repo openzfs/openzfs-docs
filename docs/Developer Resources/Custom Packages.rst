@@ -70,7 +70,7 @@ ZFS 2.1 release:
    sudo yum install epel-release gcc make autoconf automake libtool rpm-build libtirpc-devel libblkid-devel libuuid-devel libudev-devel openssl-devel zlib-devel libaio-devel libattr-devel elfutils-libelf-devel kernel-devel-$(uname -r) python python2-devel python-setuptools python-cffi libffi-devel ncompress
    sudo yum install --enablerepo=epel dkms python-packaging
 
--  **RHEL/CentOS 8, Fedora**:
+-  **RHEL/CentOS 8**:
 
 .. code:: sh
 
@@ -84,6 +84,13 @@ ZFS 2.1 release:
    sudo dnf config-manager --set-enabled crb
    sudo dnf install --skip-broken epel-release gcc make autoconf automake libtool rpm-build kernel-rpm-macros libtirpc-devel libblkid-devel libuuid-devel libudev-devel openssl-devel zlib-devel libaio-devel libattr-devel elfutils-libelf-devel kernel-devel-$(uname -r) kernel-abi-stablelists-$(uname -r | sed 's/\.[^.]\+$//') python3 python3-devel python3-setuptools python3-cffi libffi-devel
    sudo dnf install --skip-broken --enablerepo=epel python3-packaging dkms
+
+-  **Fedora 41**:
+
+.. code:: sh
+
+  sudo dnf install gcc make autoconf automake libtool rpm-build kernel-rpm-macros libtirpc-devel libblkid-devel libuuid-devel systemd-devel openssl-devel zlib-ng-compat-devel libaio-devel libattr-devel libffi-devel libunwind-devel kernel-devel-$(uname -r) python3 python3-devel openssl ncompress
+  sudo dnf install python3-packaging dkms
 
 
 
