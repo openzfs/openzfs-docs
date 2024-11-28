@@ -128,6 +128,14 @@ options.
    $ make -j1 rpm-utils rpm-kmod
    $ sudo dnf install *.$(uname -m).rpm *.noarch.rpm
 
+**NOTE:** Fedora 41 Workstation includes the rpm package zfs-fuse
+which will prevent the installation of your own packages. Remove
+that single package before dnf install:
+
+.. code:: sh
+
+   $ sudo rpm -e --nodeps zfs-fuse
+
 kABI-tracking kmod
 ~~~~~~~~~~~~~~~~~~
 
