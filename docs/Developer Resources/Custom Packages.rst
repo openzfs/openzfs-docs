@@ -69,8 +69,10 @@ ZFS 2.1 release:
 
    sudo yum install epel-release gcc make autoconf automake libtool rpm-build libtirpc-devel libblkid-devel libuuid-devel libudev-devel openssl-devel zlib-devel libaio-devel libattr-devel elfutils-libelf-devel kernel-devel-$(uname -r) python python2-devel python-setuptools python-cffi libffi-devel ncompress
    sudo yum install --enablerepo=epel dkms python-packaging
+ 
+**NOTE:** RHEL/CentOS 7 is end of life. Use yum instead of dnf for install instructions below.
 
--  **RHEL/CentOS 8, Fedora**:
+-  **RHEL/CentOS 8**:
 
 .. code:: sh
 
@@ -84,6 +86,13 @@ ZFS 2.1 release:
    sudo dnf config-manager --set-enabled crb
    sudo dnf install --skip-broken epel-release gcc make autoconf automake libtool rpm-build kernel-rpm-macros libtirpc-devel libblkid-devel libuuid-devel libudev-devel openssl-devel zlib-devel libaio-devel libattr-devel elfutils-libelf-devel kernel-devel-$(uname -r) kernel-abi-stablelists-$(uname -r | sed 's/\.[^.]\+$//') python3 python3-devel python3-setuptools python3-cffi libffi-devel
    sudo dnf install --skip-broken --enablerepo=epel python3-packaging dkms
+
+-  **Fedora 41**:
+
+.. code:: sh
+
+  sudo dnf install gcc make autoconf automake libtool rpm-build kernel-rpm-macros libtirpc-devel libblkid-devel libuuid-devel systemd-devel openssl-devel zlib-ng-compat-devel libaio-devel libattr-devel libffi-devel libunwind-devel kernel-devel-$(uname -r) python3 python3-devel openssl ncompress
+  sudo dnf install python3-packaging dkms
 
 
 
@@ -99,7 +108,7 @@ Building rpm-based DKMS and user packages can be done as follows:
    $ cd zfs
    $ ./configure
    $ make -j1 rpm-utils rpm-dkms
-   $ sudo yum localinstall *.$(uname -p).rpm *.noarch.rpm
+   $ sudo dnf install *.$(uname -m).rpm *.noarch.rpm
 
 kmod
 ~~~~
@@ -117,7 +126,15 @@ options.
    $ cd zfs
    $ ./configure
    $ make -j1 rpm-utils rpm-kmod
-   $ sudo yum localinstall *.$(uname -p).rpm
+   $ sudo dnf install *.$(uname -m).rpm *.noarch.rpm
+
+**NOTE:** Fedora 41 Workstation includes the rpm package zfs-fuse
+which will prevent the installation of your own packages. Remove
+that single package before dnf install:
+
+.. code:: sh
+
+   $ sudo rpm -e --nodeps zfs-fuse
 
 kABI-tracking kmod
 ~~~~~~~~~~~~~~~~~~
@@ -135,7 +152,58 @@ option must be passed to configure.
    $ cd zfs
    $ ./configure --with-spec=redhat
    $ make -j1 rpm-utils rpm-kmod
-   $ sudo yum localinstall *.$(uname -p).rpm
+   $ sudo dnf install *.$(uname -m).rpm *.noarch.rpm
+
+Fedora 41 secure boot with kmod
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The zfs kernel module will fail to load on modern computers that use
+UEFI and secure boot:
+
+.. code::
+
+   $ sudo modprobe zfs
+   modprobe: ERROR: could not insert 'zfs': Key was rejected by service
+
+Either disable secure boot or create a custom machine owner key (MOK)
+**once** and manually sign your current and future modules using that key:
+
+.. code:: sh
+
+   $ sudo mkdir /etc/pki/mok
+   $ cd /etc/pki/mok
+   $ sudo openssl req -new -x509 -newkey rsa:2048 -keyout LOCALMOK.priv -outform DER -out LOCALMOK.der -nodes -days 36500 -subj "/CN=LOCALMOK/"
+   $ sudo mokutil --import LOCALMOK.der
+
+Mokutil asks for a password that you have to create and remember,
+then reboot your machine and UEFI will ask to import your key:
+
+.. code::
+
+   Select "Enroll MOK", "Continue", "Yes", enter mokutil's password, "Reboot"
+
+This MOK can then be used to manually sign your zfs kernel modules:
+
+.. code::
+
+   $ rpm -ql kmod-zfs-$(uname -r) | grep .ko
+   /lib/modules/6.11.8-300.fc41.x86_64/extra/zfs/spl.ko
+   /lib/modules/6.11.8-300.fc41.x86_64/extra/zfs/zfs.ko
+
+.. code:: sh
+
+   $ sudo /usr/src/kernels/$(uname -r)/scripts/sign-file sha256 /etc/pki/mok/LOCALMOK.priv /etc/pki/mok/LOCALMOK.der /lib/modules/$(uname -r)/extra/zfs/spl.ko
+   $ sudo /usr/src/kernels/$(uname -r)/scripts/sign-file sha256 /etc/pki/mok/LOCALMOK.priv /etc/pki/mok/LOCALMOK.der /lib/modules/$(uname -r)/extra/zfs/zfs.ko
+
+Load the module and verify it is active:
+
+.. code::
+
+   $ sudo modprobe zfs
+
+   $ lsmod | grep zfs
+   zfs                  6930432  0
+   spl                   155648  1 zfs
 
 Debian and Ubuntu
 -----------------
