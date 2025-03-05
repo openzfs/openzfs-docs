@@ -828,10 +828,10 @@ Step 5: GRUB Installation
 
         grub-install $DISK
 
-   Note that you are installing GRUB to the whole disk, not a partition.
+      Note that you are installing GRUB to the whole disk, not a partition.
 
-   If you are creating a mirror or raidz topology, repeat the ``grub-install``
-   command for each disk in the pool.
+      If you are creating a mirror or raidz topology, repeat the ``grub-install``
+      command for each disk in the pool.
 
    #. For UEFI booting, install GRUB to the ESP::
 
