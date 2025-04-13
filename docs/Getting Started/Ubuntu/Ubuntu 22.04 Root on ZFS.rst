@@ -988,6 +988,14 @@ Step 5: GRUB Installation
          xargs -i{} umount -lf {}
      zpool export -a
 
+#. If export failed due to `busy` error, try to kill everything that might be using it::
+
+     grep [p]ool /proc/*/mounts | cut -d/ -f3 | uniq | xargs kill
+     zpool export -a
+
+#. If even after that your pool is busy, mounting it on boot will fail and you will need to
+   ``zpool import -f rpool``, then ``exit`` in the initramfs prompt.
+
 #. Reboot::
 
      reboot
