@@ -56,8 +56,8 @@ Preparation
 
    Download latest extended variant of `Alpine Linux
    live image
-   <https://dl-cdn.alpinelinux.org/alpine/v3.19/releases/x86_64/alpine-extended-3.19.0-x86_64.iso>`__,
-   verify `checksum <https://dl-cdn.alpinelinux.org/alpine/v3.19/releases/x86_64/alpine-extended-3.19.0-x86_64.iso.asc>`__
+   <https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/x86_64/alpine-extended-3.18.4-x86_64.iso>`__,
+   verify `checksum <https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/x86_64/alpine-extended-3.18.4-x86_64.iso.asc>`__
    and boot from it.
 
    .. code-block:: sh
