@@ -23,6 +23,7 @@ distributions of ZFS.
    :glob:
 
    Admin Documentation
+   Donate
    FAQ
    Mailing Lists
    Signing Keys
