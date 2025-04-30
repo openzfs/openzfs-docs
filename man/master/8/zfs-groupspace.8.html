@@ -1,0 +1,391 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>zfs-groupspace.8 &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
+      <script src="../../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="zfs-hold.8" href="zfs-hold.8.html" />
+    <link rel="prev" title="zfs-get.8" href="zfs-get.8.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Basic%20Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Man Pages</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">master</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../1/index.html">User Commands (1)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../4/index.html">Devices and Special Files (4)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../5/index.html">File Formats and Conventions (5)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../7/index.html">Miscellaneous (7)</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">System Administration Commands (8)</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="fsck.zfs.8.html">fsck.zfs.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mount.zfs.8.html">mount.zfs.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vdev_id.8.html">vdev_id.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zdb.8.html">zdb.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zed.8.html">zed.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-allow.8.html">zfs-allow.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-bookmark.8.html">zfs-bookmark.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-change-key.8.html">zfs-change-key.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-clone.8.html">zfs-clone.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-create.8.html">zfs-create.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-destroy.8.html">zfs-destroy.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-diff.8.html">zfs-diff.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-get.8.html">zfs-get.8</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">zfs-groupspace.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-hold.8.html">zfs-hold.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-inherit.8.html">zfs-inherit.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-jail.8.html">zfs-jail.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-list.8.html">zfs-list.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-load-key.8.html">zfs-load-key.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-mount-generator.8.html">zfs-mount-generator.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-mount.8.html">zfs-mount.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-program.8.html">zfs-program.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-project.8.html">zfs-project.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-projectspace.8.html">zfs-projectspace.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-promote.8.html">zfs-promote.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-receive.8.html">zfs-receive.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-recv.8.html">zfs-recv.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-redact.8.html">zfs-redact.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-release.8.html">zfs-release.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-rename.8.html">zfs-rename.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-rollback.8.html">zfs-rollback.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-send.8.html">zfs-send.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-set.8.html">zfs-set.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-share.8.html">zfs-share.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-snapshot.8.html">zfs-snapshot.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-unallow.8.html">zfs-unallow.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-unjail.8.html">zfs-unjail.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-unload-key.8.html">zfs-unload-key.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-unmount.8.html">zfs-unmount.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-unzone.8.html">zfs-unzone.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-upgrade.8.html">zfs-upgrade.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-userspace.8.html">zfs-userspace.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-wait.8.html">zfs-wait.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-zone.8.html">zfs-zone.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs.8.html">zfs.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs_ids_to_path.8.html">zfs_ids_to_path.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs_prepare_disk.8.html">zfs_prepare_disk.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zgenhostid.8.html">zgenhostid.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zinject.8.html">zinject.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-add.8.html">zpool-add.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-attach.8.html">zpool-attach.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-checkpoint.8.html">zpool-checkpoint.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-clear.8.html">zpool-clear.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-create.8.html">zpool-create.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-ddtprune.8.html">zpool-ddtprune.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-destroy.8.html">zpool-destroy.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-detach.8.html">zpool-detach.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-events.8.html">zpool-events.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-export.8.html">zpool-export.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-get.8.html">zpool-get.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-history.8.html">zpool-history.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-import.8.html">zpool-import.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-initialize.8.html">zpool-initialize.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-iostat.8.html">zpool-iostat.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-labelclear.8.html">zpool-labelclear.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-list.8.html">zpool-list.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-offline.8.html">zpool-offline.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-online.8.html">zpool-online.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-prefetch.8.html">zpool-prefetch.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-reguid.8.html">zpool-reguid.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-remove.8.html">zpool-remove.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-reopen.8.html">zpool-reopen.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-replace.8.html">zpool-replace.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-resilver.8.html">zpool-resilver.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-scrub.8.html">zpool-scrub.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-set.8.html">zpool-set.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-split.8.html">zpool-split.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-status.8.html">zpool-status.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-sync.8.html">zpool-sync.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-trim.8.html">zpool-trim.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-upgrade.8.html">zpool-upgrade.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-wait.8.html">zpool-wait.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool.8.html">zpool.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool_influxdb.8.html">zpool_influxdb.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zstream.8.html">zstream.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zstreamdump.8.html">zstreamdump.8</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.3/index.html">v2.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.2/index.html">v2.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.1/index.html">v2.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.0/index.html">v2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.8/index.html">v0.8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.7/index.html">v0.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.6/index.html">v0.6</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Man Pages</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">master</a></li>
+          <li class="breadcrumb-item"><a href="index.html">System Administration Commands (8)</a></li>
+      <li class="breadcrumb-item active">zfs-groupspace.8</li>
+      <li class="wy-breadcrumbs-aside">
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/openzfs/zfs/blob/master/man/man8/zfs-groupspace.8" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="zfs-groupspace-8">
+<h1>zfs-groupspace.8<a class="headerlink" href="#zfs-groupspace-8" title="Permalink to this heading"></a></h1>
+<div class="man_container"><table class="head">
+  <tr>
+    <td class="head-ltitle">ZFS-USERSPACE(8)</td>
+    <td class="head-vol">System Manager's Manual</td>
+    <td class="head-rtitle">ZFS-USERSPACE(8)</td>
+  </tr>
+</table>
+<div class="manual-text">
+<section class="Sh">
+<h1 class="Sh" id="NAME"><a class="permalink" href="#NAME">NAME</a></h1>
+<p class="Pp"><code class="Nm">zfs-userspace</code> &#x2014;
+    <span class="Nd">display space and quotas of ZFS dataset</span></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SYNOPSIS"><a class="permalink" href="#SYNOPSIS">SYNOPSIS</a></h1>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zfs</code></td>
+    <td><code class="Cm">userspace</code> [<code class="Fl">-Hinp</code>]
+      [<code class="Fl">-o</code>
+      <var class="Ar">field</var>[,<var class="Ar">field</var>]&#x2026;]
+      [<code class="Fl">-s</code> <var class="Ar">field</var>]&#x2026;
+      [<code class="Fl">-S</code> <var class="Ar">field</var>]&#x2026;
+      [<code class="Fl">-t</code>
+      <var class="Ar">type</var>[,<var class="Ar">type</var>]&#x2026;]
+      <var class="Ar">filesystem</var>|<var class="Ar">snapshot</var>|<var class="Ar">path</var></td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zfs</code></td>
+    <td><code class="Cm">groupspace</code> [<code class="Fl">-Hinp</code>]
+      [<code class="Fl">-o</code>
+      <var class="Ar">field</var>[,<var class="Ar">field</var>]&#x2026;]
+      [<code class="Fl">-s</code> <var class="Ar">field</var>]&#x2026;
+      [<code class="Fl">-S</code> <var class="Ar">field</var>]&#x2026;
+      [<code class="Fl">-t</code>
+      <var class="Ar">type</var>[,<var class="Ar">type</var>]&#x2026;]
+      <var class="Ar">filesystem</var>|<var class="Ar">snapshot</var>|<var class="Ar">path</var></td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zfs</code></td>
+    <td><code class="Cm">projectspace</code> [<code class="Fl">-Hp</code>]
+      [<code class="Fl">-o</code>
+      <var class="Ar">field</var>[,<var class="Ar">field</var>]&#x2026;]
+      [<code class="Fl">-s</code> <var class="Ar">field</var>]&#x2026;
+      [<code class="Fl">-S</code> <var class="Ar">field</var>]&#x2026;
+      <var class="Ar">filesystem</var>|<var class="Ar">snapshot</var>|<var class="Ar">path</var></td>
+  </tr>
+</table>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h1>
+<dl class="Bl-tag">
+  <dt id="userused@"><code class="Nm">zfs</code>
+    <code class="Cm">userspace</code> [<code class="Fl">-Hinp</code>]
+    [<code class="Fl">-o</code>
+    <var class="Ar">field</var>[,<var class="Ar">field</var>]&#x2026;]
+    [<code class="Fl">-s</code> <var class="Ar">field</var>]&#x2026;
+    [<code class="Fl">-S</code> <var class="Ar">field</var>]&#x2026;
+    [<code class="Fl">-t</code>
+    <var class="Ar">type</var>[,<var class="Ar">type</var>]&#x2026;]
+    <var class="Ar">filesystem</var>|<var class="Ar">snapshot</var>|<var class="Ar">path</var></dt>
+  <dd>Displays space consumed by, and quotas on, each user in the specified
+      filesystem, snapshot, or path. If a path is given, the filesystem that
+      contains that path will be used. This corresponds to the
+      <a class="permalink" href="#userused@"><b class="Sy">userused@</b></a><i class="Em">user</i>,
+      <a class="permalink" href="#userobjused@"><b class="Sy" id="userobjused@">userobjused@</b></a><i class="Em">user</i>,
+      <a class="permalink" href="#userquota@"><b class="Sy" id="userquota@">userquota@</b></a><i class="Em">user</i>,
+      and
+      <a class="permalink" href="#userobjquota@"><b class="Sy" id="userobjquota@">userobjquota@</b></a><i class="Em">user</i>
+      properties.
+    <dl class="Bl-tag">
+      <dt id="H"><a class="permalink" href="#H"><code class="Fl">-H</code></a></dt>
+      <dd>Do not print headers, use tab-delimited output.</dd>
+      <dt id="S"><a class="permalink" href="#S"><code class="Fl">-S</code></a>
+        <var class="Ar">field</var></dt>
+      <dd>Sort by this field in reverse order. See
+        <code class="Fl">-s</code>.</dd>
+      <dt id="i"><a class="permalink" href="#i"><code class="Fl">-i</code></a></dt>
+      <dd>Translate SID to POSIX ID. The POSIX ID may be ephemeral if no mapping
+          exists. Normal POSIX interfaces (like <a class="Xr">stat(2)</a>,
+          <code class="Nm">ls</code> <code class="Fl">-l</code>) perform this
+          translation, so the <code class="Fl">-i</code> option allows the
+          output from <code class="Nm">zfs</code>
+          <code class="Cm">userspace</code> to be compared directly with those
+          utilities. However, <code class="Fl">-i</code> may lead to confusion
+          if some files were created by an SMB user before a SMB-to-POSIX name
+          mapping was established. In such a case, some files will be owned by
+          the SMB entity and some by the POSIX entity. However, the
+          <code class="Fl">-i</code> option will report that the POSIX entity
+          has the total usage and quota for both.</dd>
+      <dt id="n"><a class="permalink" href="#n"><code class="Fl">-n</code></a></dt>
+      <dd>Print numeric ID instead of user/group name.</dd>
+      <dt id="o"><a class="permalink" href="#o"><code class="Fl">-o</code></a>
+        <var class="Ar">field</var>[,<var class="Ar">field</var>]&#x2026;</dt>
+      <dd>Display only the specified fields from the following set:
+          <b class="Sy">type</b>, <b class="Sy">name</b>,
+          <a class="permalink" href="#used"><b class="Sy" id="used">used</b></a>,
+          <a class="permalink" href="#quota"><b class="Sy" id="quota">quota</b></a>.
+          The default is to display all fields.</dd>
+      <dt id="p"><a class="permalink" href="#p"><code class="Fl">-p</code></a></dt>
+      <dd>Use exact (parsable) numeric output.</dd>
+      <dt id="s"><a class="permalink" href="#s"><code class="Fl">-s</code></a>
+        <var class="Ar">field</var></dt>
+      <dd>Sort output by this field. The <code class="Fl">-s</code> and
+          <code class="Fl">-S</code> flags may be specified multiple times to
+          sort first by one field, then by another. The default is
+          <code class="Fl">-s</code> <b class="Sy">type</b>
+          <code class="Fl">-s</code> <b class="Sy">name</b>.</dd>
+      <dt id="t"><a class="permalink" href="#t"><code class="Fl">-t</code></a>
+        <var class="Ar">type</var>[,<var class="Ar">type</var>]&#x2026;</dt>
+      <dd>Print only the specified types from the following set:
+          <a class="permalink" href="#all"><b class="Sy" id="all">all</b></a>,
+          <b class="Sy">posixuser</b>, <b class="Sy">smbuser</b>,
+          <b class="Sy">posixgroup</b>, <b class="Sy">smbgroup</b>. The default
+          is <code class="Fl">-t</code>
+          <b class="Sy">posixuser</b>,<b class="Sy">smbuser</b>. The default can
+          be changed to include group types.</dd>
+    </dl>
+  </dd>
+  <dt><code class="Nm">zfs</code> <code class="Cm">groupspace</code>
+    [<code class="Fl">-Hinp</code>] [<code class="Fl">-o</code>
+    <var class="Ar">field</var>[,<var class="Ar">field</var>]&#x2026;]
+    [<code class="Fl">-s</code> <var class="Ar">field</var>]&#x2026;
+    [<code class="Fl">-S</code> <var class="Ar">field</var>]&#x2026;
+    [<code class="Fl">-t</code>
+    <var class="Ar">type</var>[,<var class="Ar">type</var>]&#x2026;]
+    <var class="Ar">filesystem</var>|<var class="Ar">snapshot</var></dt>
+  <dd>Displays space consumed by, and quotas on, each group in the specified
+      filesystem or snapshot. This subcommand is identical to
+      <code class="Cm">userspace</code>, except that the default types to
+      display are <code class="Fl">-t</code>
+      <b class="Sy">posixgroup</b>,<b class="Sy">smbgroup</b>.</dd>
+  <dt><code class="Nm">zfs</code> <code class="Cm">projectspace</code>
+    [<code class="Fl">-Hp</code>] [<code class="Fl">-o</code>
+    <var class="Ar">field</var>[,<var class="Ar">field</var>]&#x2026;]
+    [<code class="Fl">-s</code> <var class="Ar">field</var>]&#x2026;
+    [<code class="Fl">-S</code> <var class="Ar">field</var>]&#x2026;
+    <var class="Ar">filesystem</var>|<var class="Ar">snapshot</var>|<var class="Ar">path</var></dt>
+  <dd>Displays space consumed by, and quotas on, each project in the specified
+      filesystem or snapshot. This subcommand is identical to
+      <code class="Cm">userspace</code>, except that the project identifier is a
+      numeral, not a name. So need neither the option <code class="Fl">-i</code>
+      for SID to POSIX ID nor <code class="Fl">-n</code> for numeric ID, nor
+      <code class="Fl">-t</code> for types.</dd>
+</dl>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SEE_ALSO"><a class="permalink" href="#SEE_ALSO">SEE
+  ALSO</a></h1>
+<p class="Pp"><a href="../7/zfsprops.7.html" class="Xr">zfsprops(7)</a>, <a href="../8/zfs-set.8.html" class="Xr">zfs-set(8)</a></p>
+</section>
+</div>
+<table class="foot">
+  <tr>
+    <td class="foot-date">June 30, 2019</td>
+    <td class="foot-os">Debian</td>
+  </tr>
+</table>
+</div></section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="zfs-get.8.html" class="btn btn-neutral float-left" title="zfs-get.8" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="zfs-hold.8.html" class="btn btn-neutral float-right" title="zfs-hold.8" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, OpenZFS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

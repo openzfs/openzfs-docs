@@ -1,0 +1,1248 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>zpool-features.7 &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
+      <script src="../../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="zpoolconcepts.7" href="zpoolconcepts.7.html" />
+    <link rel="prev" title="zfsprops.7" href="zfsprops.7.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Basic%20Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Man Pages</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../master/index.html">master</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.3/index.html">v2.3</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">v2.2</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../1/index.html">User Commands (1)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../4/index.html">Devices and Special Files (4)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../5/index.html">File Formats and Conventions (5)</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">Miscellaneous (7)</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="dracut.zfs.7.html">dracut.zfs.7</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vdevprops.7.html">vdevprops.7</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfsconcepts.7.html">zfsconcepts.7</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfsprops.7.html">zfsprops.7</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">zpool-features.7</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpoolconcepts.7.html">zpoolconcepts.7</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpoolprops.7.html">zpoolprops.7</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../8/index.html">System Administration Commands (8)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.1/index.html">v2.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.0/index.html">v2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.8/index.html">v0.8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.7/index.html">v0.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.6/index.html">v0.6</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Man Pages</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">v2.2</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Miscellaneous (7)</a></li>
+      <li class="breadcrumb-item active">zpool-features.7</li>
+      <li class="wy-breadcrumbs-aside">
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/openzfs/zfs/blob/zfs-2.2.7/man/man7/zpool-features.7" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="zpool-features-7">
+<h1>zpool-features.7<a class="headerlink" href="#zpool-features-7" title="Permalink to this heading"></a></h1>
+<div class="man_container"><table class="head">
+  <tr>
+    <td class="head-ltitle">ZPOOL-FEATURES(7)</td>
+    <td class="head-vol">Miscellaneous Information Manual</td>
+    <td class="head-rtitle">ZPOOL-FEATURES(7)</td>
+  </tr>
+</table>
+<div class="manual-text">
+<section class="Sh">
+<h1 class="Sh" id="NAME"><a class="permalink" href="#NAME">NAME</a></h1>
+<p class="Pp"><code class="Nm">zpool-features</code> &#x2014;
+    <span class="Nd">description of ZFS pool features</span></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h1>
+<p class="Pp">ZFS pool on-disk format versions are specified via
+    &#x201C;features&#x201D; which replace the old on-disk format numbers (the
+    last supported on-disk format number is 28). To enable a feature on a pool
+    use the <code class="Nm">zpool</code> <code class="Cm">upgrade</code>, or
+    set the <b class="Sy">feature</b>@<var class="Ar">feature-name</var>
+    property to <b class="Sy">enabled</b>. Please also see the
+    <a class="Sx" href="#Compatibility_feature_sets">Compatibility feature
+    sets</a> section for information on how sets of features may be enabled
+    together.</p>
+<p class="Pp">The pool format does not affect file system version compatibility
+    or the ability to send file systems between pools.</p>
+<p class="Pp">Since most features can be enabled independently of each other,
+    the on-disk format of the pool is specified by the set of all features
+    marked as <b class="Sy">active</b> on the pool. If the pool was created by
+    another software version this set may include unsupported features.</p>
+<section class="Ss">
+<h2 class="Ss" id="Identifying_features"><a class="permalink" href="#Identifying_features">Identifying
+  features</a></h2>
+<p class="Pp">Every feature has a GUID of the form
+    <var class="Ar">com.example</var>:<var class="Ar">feature-name</var>. The
+    reversed DNS name ensures that the feature's GUID is unique across all ZFS
+    implementations. When unsupported features are encountered on a pool they
+    will be identified by their GUIDs. Refer to the documentation for the ZFS
+    implementation that created the pool for information about those
+  features.</p>
+<p class="Pp">Each supported feature also has a short name. By convention a
+    feature's short name is the portion of its GUID which follows the
+    &#x2018;:&#x2019; (i.e.
+    <var class="Ar">com.example</var>:<var class="Ar">feature-name</var> would
+    have the short name <var class="Ar">feature-name</var>), however a feature's
+    short name may differ across ZFS implementations if following the convention
+    would result in name conflicts.</p>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="Feature_states"><a class="permalink" href="#Feature_states">Feature
+  states</a></h2>
+<p class="Pp">Features can be in one of three states:</p>
+<dl class="Bl-tag">
+  <dt id="active"><a class="permalink" href="#active"><b class="Sy">active</b></a></dt>
+  <dd>This feature's on-disk format changes are in effect on the pool. Support
+      for this feature is required to import the pool in read-write mode. If
+      this feature is not read-only compatible, support is also required to
+      import the pool in read-only mode (see
+      <a class="Sx" href="#Read_only_compatibility">Read-only
+      compatibility</a>).</dd>
+  <dt id="enabled"><a class="permalink" href="#enabled"><b class="Sy">enabled</b></a></dt>
+  <dd>An administrator has marked this feature as enabled on the pool, but the
+      feature's on-disk format changes have not been made yet. The pool can
+      still be imported by software that does not support this feature, but
+      changes may be made to the on-disk format at any time which will move the
+      feature to the <b class="Sy">active</b> state. Some features may support
+      returning to the <b class="Sy">enabled</b> state after becoming
+      <b class="Sy">active</b>. See feature-specific documentation for
+    details.</dd>
+  <dt id="disabled"><a class="permalink" href="#disabled"><b class="Sy">disabled</b></a></dt>
+  <dd>This feature's on-disk format changes have not been made and will not be
+      made unless an administrator moves the feature to the
+      <b class="Sy">enabled</b> state. Features cannot be disabled once they
+      have been enabled.</dd>
+</dl>
+<p class="Pp">The state of supported features is exposed through pool properties
+    of the form <b class="Sy">feature</b>@<var class="Ar">short-name</var>.</p>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="Read-only_compatibility"><a class="permalink" href="#Read-only_compatibility">Read-only
+  compatibility</a></h2>
+<p class="Pp">Some features may make on-disk format changes that do not
+    interfere with other software's ability to read from the pool. These
+    features are referred to as &#x201C;read-only compatible&#x201D;. If all
+    unsupported features on a pool are read-only compatible, the pool can be
+    imported in read-only mode by setting the <b class="Sy">readonly</b>
+    property during import (see <a href="../8/zpool-import.8.html" class="Xr">zpool-import(8)</a> for details on
+    importing pools).</p>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="Unsupported_features"><a class="permalink" href="#Unsupported_features">Unsupported
+  features</a></h2>
+<p class="Pp">For each unsupported feature enabled on an imported pool, a pool
+    property named
+    <a class="permalink" href="#unsupported"><b class="Sy" id="unsupported">unsupported</b></a>@<var class="Ar">feature-name</var>
+    will indicate why the import was allowed despite the unsupported feature.
+    Possible values for this property are:</p>
+<dl class="Bl-tag">
+  <dt id="inactive"><a class="permalink" href="#inactive"><b class="Sy">inactive</b></a></dt>
+  <dd>The feature is in the <b class="Sy">enabled</b> state and therefore the
+      pool's on-disk format is still compatible with software that does not
+      support this feature.</dd>
+  <dt id="readonly"><a class="permalink" href="#readonly"><b class="Sy">readonly</b></a></dt>
+  <dd>The feature is read-only compatible and the pool has been imported in
+      read-only mode.</dd>
+</dl>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="Feature_dependencies"><a class="permalink" href="#Feature_dependencies">Feature
+  dependencies</a></h2>
+<p class="Pp">Some features depend on other features being enabled in order to
+    function. Enabling a feature will automatically enable any features it
+    depends on.</p>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="Compatibility_feature_sets"><a class="permalink" href="#Compatibility_feature_sets">Compatibility
+  feature sets</a></h2>
+<p class="Pp">It is sometimes necessary for a pool to maintain compatibility
+    with a specific on-disk format, by enabling and disabling particular
+    features. The <b class="Sy">compatibility</b> feature facilitates this by
+    allowing feature sets to be read from text files. When set to
+    <a class="permalink" href="#off"><b class="Sy" id="off">off</b></a> (the
+    default), compatibility feature sets are disabled (i.e. all features are
+    enabled); when set to <b class="Sy">legacy</b>, no features are enabled.
+    When set to a comma-separated list of filenames (each filename may either be
+    an absolute path, or relative to
+    <span class="Pa">/etc/zfs/compatibility.d</span> or
+    <span class="Pa">/usr/share/zfs/compatibility.d</span>), the lists of
+    requested features are read from those files, separated by whitespace and/or
+    commas. Only features present in all files are enabled.</p>
+<p class="Pp">Simple sanity checks are applied to the files: they must be
+    between 1 B and 16 KiB in size, and must end with a newline character.</p>
+<p class="Pp">The requested features are applied when a pool is created using
+    <code class="Nm">zpool</code> <code class="Cm">create</code>
+    <code class="Fl">-o</code>
+    <b class="Sy">compatibility</b>=<var class="Ar">&#x2026;</var> and controls
+    which features are enabled when using <code class="Nm">zpool</code>
+    <code class="Cm">upgrade</code>. <code class="Nm">zpool</code>
+    <code class="Cm">status</code> will not show a warning about disabled
+    features which are not part of the requested feature set.</p>
+<p class="Pp">The special value <b class="Sy">legacy</b> prevents any features
+    from being enabled, either via <code class="Nm">zpool</code>
+    <code class="Cm">upgrade</code> or <code class="Nm">zpool</code>
+    <code class="Cm">set</code>
+    <b class="Sy">feature</b>@<var class="Ar">feature-name</var>=<b class="Sy">enabled</b>.
+    This setting also prevents pools from being upgraded to newer on-disk
+    versions. This is a safety measure to prevent new features from being
+    accidentally enabled, breaking compatibility.</p>
+<p class="Pp">By convention, compatibility files in
+    <span class="Pa">/usr/share/zfs/compatibility.d</span> are provided by the
+    distribution, and include feature sets supported by important versions of
+    popular distributions, and feature sets commonly supported at the start of
+    each year. Compatibility files in
+    <span class="Pa">/etc/zfs/compatibility.d</span>, if present, will take
+    precedence over files with the same name in
+    <span class="Pa">/usr/share/zfs/compatibility.d</span>.</p>
+<p class="Pp">If an unrecognized feature is found in these files, an error
+    message will be shown. If the unrecognized feature is in a file in
+    <span class="Pa">/etc/zfs/compatibility.d</span>, this is treated as an
+    error and processing will stop. If the unrecognized feature is under
+    <span class="Pa">/usr/share/zfs/compatibility.d</span>, this is treated as a
+    warning and processing will continue. This difference is to allow
+    distributions to include features which might not be recognized by the
+    currently-installed binaries.</p>
+<p class="Pp">Compatibility files may include comments: any text from
+    &#x2018;#&#x2019; to the end of the line is ignored.</p>
+<p class="Pp" id="Example"><a class="permalink" href="#Example"><b class="Sy">Example</b></a>:</p>
+<div class="Bd Bd-indent Li">
+<pre><span class="No">example#</span> <code class="Nm">cat</code> <span class="Pa">/usr/share/zfs/compatibility.d/grub2</span>
+# Features which are supported by GRUB2 versions from v2.12 onwards.
+allocation_classes
+async_destroy
+block_cloning
+bookmarks
+device_rebuild
+embedded_data
+empty_bpobj
+enabled_txg
+extensible_dataset
+filesystem_limits
+hole_birth
+large_blocks
+livelist
+log_spacemap
+lz4_compress
+project_quota
+resilver_defer
+spacemap_histogram
+spacemap_v2
+userobj_accounting
+zilsaxattr
+zpool_checkpoint
+
+<span class="No">example#</span> <code class="Nm">cat</code> <span class="Pa">/usr/share/zfs/compatibility.d/grub2-2.06</span>
+# Features which are supported by GRUB2 versions prior to v2.12.
+#
+# GRUB is not able to detect ZFS pool if snaphsot of top level boot pool
+# is created. This issue is observed with GRUB versions before v2.12 if
+# extensible_dataset feature is enabled on ZFS boot pool.
+#
+# This file lists all read-only comaptible features except
+# extensible_dataset and any other feature that depends on it.
+#
+allocation_classes
+async_destroy
+block_cloning
+device_rebuild
+embedded_data
+empty_bpobj
+enabled_txg
+hole_birth
+log_spacemap
+lz4_compress
+resilver_defer
+spacemap_histogram
+spacemap_v2
+zpool_checkpoint
+
+<span class="No">example#</span> <code class="Nm">zpool</code> <code class="Cm">create</code> <code class="Fl">-o</code> <b class="Sy">compatibility</b>=<var class="Ar">grub2</var> <var class="Ar">bootpool</var> <var class="Ar">vdev</var></pre>
+</div>
+<p class="Pp">See <a href="../8/zpool-create.8.html" class="Xr">zpool-create(8)</a> and
+    <a href="../8/zpool-upgrade.8.html" class="Xr">zpool-upgrade(8)</a> for more information on how these
+    commands are affected by feature sets.</p>
+</section>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="FEATURES"><a class="permalink" href="#FEATURES">FEATURES</a></h1>
+<p class="Pp">The following features are supported on this system:</p>
+<dl class="Bl-tag">
+  <dt id="allocation_classes"><a class="permalink" href="#allocation_classes"><b class="Sy">allocation_classes</b></a></dt>
+  <dd>
+    <dl class="Bl-tag Bl-compact">
+      <dt id="org.zfsonlinux:allocation_classes">GUID</dt>
+      <dd><a class="permalink" href="#org.zfsonlinux:allocation_classes"><b class="Sy">org.zfsonlinux:allocation_classes</b></a></dd>
+      <dt>READ-ONLY COMPATIBLE</dt>
+      <dd>yes</dd>
+    </dl>
+    <p class="Pp">This feature enables support for separate allocation
+      classes.</p>
+    <p class="Pp">This feature becomes <b class="Sy">active</b> when a dedicated
+        allocation class vdev (dedup or special) is created with the
+        <code class="Nm">zpool</code> <code class="Cm">create</code>
+        <span class="No">or</span> <code class="Nm">zpool</code>
+        <code class="Cm">add</code> <span class="No">commands</span>. With
+        device removal, it can be returned to the <b class="Sy">enabled</b>
+        state if all the dedicated allocation class vdevs are removed.</p>
+  </dd>
+  <dt id="async_destroy"><a class="permalink" href="#async_destroy"><b class="Sy">async_destroy</b></a></dt>
+  <dd>
+    <dl class="Bl-tag Bl-compact">
+      <dt id="com.delphix:async_destroy">GUID</dt>
+      <dd><a class="permalink" href="#com.delphix:async_destroy"><b class="Sy">com.delphix:async_destroy</b></a></dd>
+      <dt>READ-ONLY COMPATIBLE</dt>
+      <dd>yes</dd>
+    </dl>
+    <p class="Pp">Destroying a file system requires traversing all of its data
+        in order to return its used space to the pool. Without
+        <b class="Sy">async_destroy</b>, the file system is not fully removed
+        until all space has been reclaimed. If the destroy operation is
+        interrupted by a reboot or power outage, the next attempt to open the
+        pool will need to complete the destroy operation synchronously.</p>
+    <p class="Pp">When <b class="Sy">async_destroy</b> is enabled, the file
+        system's data will be reclaimed by a background process, allowing the
+        destroy operation to complete without traversing the entire file system.
+        The background process is able to resume interrupted destroys after the
+        pool has been opened, eliminating the need to finish interrupted
+        destroys as part of the open operation. The amount of space remaining to
+        be reclaimed by the background process is available through the
+        <b class="Sy">freeing</b> property.</p>
+    <p class="Pp">This feature is only <b class="Sy">active</b> while
+        <b class="Sy">freeing</b> is non-zero.</p>
+  </dd>
+  <dt id="blake3"><a class="permalink" href="#blake3"><b class="Sy">blake3</b></a></dt>
+  <dd>
+    <dl class="Bl-tag Bl-compact">
+      <dt id="org.openzfs:blake3">GUID</dt>
+      <dd><a class="permalink" href="#org.openzfs:blake3"><b class="Sy">org.openzfs:blake3</b></a></dd>
+      <dt>DEPENDENCIES</dt>
+      <dd><b>extensible_dataset</b></dd>
+      <dt>READ-ONLY COMPATIBLE</dt>
+      <dd>no</dd>
+    </dl>
+    <p class="Pp">This feature enables the use of the BLAKE3 hash algorithm for
+        checksum and dedup. BLAKE3 is a secure hash algorithm focused on high
+        performance.</p>
+    <p class="Pp">When the <b class="Sy">blake3</b> feature is set to
+        <b class="Sy">enabled</b>, the administrator can turn on the
+        <b class="Sy">blake3</b> checksum on any dataset using
+        <code class="Nm">zfs</code> <code class="Cm">set</code>
+        <b class="Sy">checksum</b>=<b class="Sy">blake3</b>
+        <var class="Ar">dset</var> (see <a href="../8/zfs-set.8.html" class="Xr">zfs-set(8)</a>). This
+        feature becomes <b class="Sy">active</b> once a
+        <b class="Sy">checksum</b> property has been set to
+        <b class="Sy">blake3</b>, and will return to being
+        <b class="Sy">enabled</b> once all filesystems that have ever had their
+        checksum set to <b class="Sy">blake3</b> are destroyed.</p>
+  </dd>
+  <dt id="block_cloning"><a class="permalink" href="#block_cloning"><b class="Sy">block_cloning</b></a></dt>
+  <dd>
+    <dl class="Bl-tag Bl-compact">
+      <dt id="com.fudosecurity:block_cloning">GUID</dt>
+      <dd><a class="permalink" href="#com.fudosecurity:block_cloning"><b class="Sy">com.fudosecurity:block_cloning</b></a></dd>
+      <dt>READ-ONLY COMPATIBLE</dt>
+      <dd>yes</dd>
+    </dl>
+    <p class="Pp" id="copy_file_range">When this feature is enabled ZFS will use
+        block cloning for operations like
+        <a class="permalink" href="#copy_file_range"><code class="Fn">copy_file_range</code></a>(<var class="Fa">2</var>).
+        Block cloning allows to create multiple references to a single block. It
+        is much faster than copying the data (as the actual data is neither read
+        nor written) and takes no additional space. Blocks can be cloned across
+        datasets under some conditions (like equal
+        <code class="Nm">recordsize</code>, the same master encryption key,
+        etc.). ZFS tries its best to clone across datasets including encrypted
+        ones. This is limited for various (nontrivial) reasons depending on the
+        OS and/or ZFS internals.</p>
+    <p class="Pp">This feature becomes <b class="Sy">active</b> when first block
+        is cloned. When the last cloned block is freed, it goes back to the
+        enabled state.</p>
+  </dd>
+  <dt id="bookmarks"><a class="permalink" href="#bookmarks"><b class="Sy">bookmarks</b></a></dt>
+  <dd>
+    <dl class="Bl-tag Bl-compact">
+      <dt id="com.delphix:bookmarks">GUID</dt>
+      <dd><a class="permalink" href="#com.delphix:bookmarks"><b class="Sy">com.delphix:bookmarks</b></a></dd>
+      <dt>DEPENDENCIES</dt>
+      <dd><b>extensible_dataset</b></dd>
+      <dt>READ-ONLY COMPATIBLE</dt>
+      <dd>yes</dd>
+    </dl>
+    <p class="Pp">This feature enables use of the <code class="Nm">zfs</code>
+        <code class="Cm">bookmark</code> command.</p>
+    <p class="Pp" id="bookmark">This feature is <b class="Sy">active</b> while
+        any bookmarks exist in the pool. All bookmarks in the pool can be listed
+        by running <code class="Nm">zfs</code> <code class="Cm">list</code>
+        <code class="Fl">-t</code>
+        <a class="permalink" href="#bookmark"><b class="Sy">bookmark</b></a>
+        <code class="Fl">-r</code> <var class="Ar">poolname</var>.</p>
+  </dd>
+  <dt id="bookmark_v2"><a class="permalink" href="#bookmark_v2"><b class="Sy">bookmark_v2</b></a></dt>
+  <dd>
+    <dl class="Bl-tag Bl-compact">
+      <dt id="com.datto:bookmark_v2">GUID</dt>
+      <dd><a class="permalink" href="#com.datto:bookmark_v2"><b class="Sy">com.datto:bookmark_v2</b></a></dd>
+      <dt>DEPENDENCIES</dt>
+      <dd><b>bookmark</b>, <b>extensible_dataset</b></dd>
+      <dt>READ-ONLY COMPATIBLE</dt>
+      <dd>no</dd>
+    </dl>
+    <p class="Pp">This feature enables the creation and management of larger
+        bookmarks which are needed for other features in ZFS.</p>
+    <p class="Pp">This feature becomes <b class="Sy">active</b> when a v2
+        bookmark is created and will be returned to the
+        <b class="Sy">enabled</b> state when all v2 bookmarks are destroyed.</p>
+  </dd>
+  <dt id="bookmark_written"><a class="permalink" href="#bookmark_written"><b class="Sy">bookmark_written</b></a></dt>
+  <dd>
+    <dl class="Bl-tag Bl-compact">
+      <dt id="com.delphix:bookmark_written">GUID</dt>
+      <dd><a class="permalink" href="#com.delphix:bookmark_written"><b class="Sy">com.delphix:bookmark_written</b></a></dd>
+      <dt>DEPENDENCIES</dt>
+      <dd><b>bookmark</b>, <b>extensible_dataset</b>, <b>bookmark_v2</b></dd>
+      <dt>READ-ONLY COMPATIBLE</dt>
+      <dd>no</dd>
+    </dl>
+    <p class="Pp" id="written">This feature enables additional bookmark
+        accounting fields, enabling the
+        <a class="permalink" href="#written"><b class="Sy">written</b></a>#<var class="Ar">bookmark</var>
+        property (space written since a bookmark) and estimates of send stream
+        sizes for incrementals from bookmarks.</p>
+    <p class="Pp">This feature becomes <b class="Sy">active</b> when a bookmark
+        is created and will be returned to the <b class="Sy">enabled</b> state
+        when all bookmarks with these fields are destroyed.</p>
+  </dd>
+  <dt id="device_rebuild"><a class="permalink" href="#device_rebuild"><b class="Sy">device_rebuild</b></a></dt>
+  <dd>
+    <dl class="Bl-tag Bl-compact">
+      <dt id="org.openzfs:device_rebuild">GUID</dt>
+      <dd><a class="permalink" href="#org.openzfs:device_rebuild"><b class="Sy">org.openzfs:device_rebuild</b></a></dd>
+      <dt>READ-ONLY COMPATIBLE</dt>
+      <dd>yes</dd>
+    </dl>
+    <p class="Pp">This feature enables the ability for the
+        <code class="Nm">zpool</code> <code class="Cm">attach</code> and
+        <code class="Nm">zpool</code> <code class="Cm">replace</code> commands
+        to perform sequential reconstruction (instead of healing reconstruction)
+        when resilvering.</p>
+    <p class="Pp">Sequential reconstruction resilvers a device in LBA order
+        without immediately verifying the checksums. Once complete, a scrub is
+        started, which then verifies the checksums. This approach allows full
+        redundancy to be restored to the pool in the minimum amount of time.
+        This two-phase approach will take longer than a healing resilver when
+        the time to verify the checksums is included. However, unless there is
+        additional pool damage, no checksum errors should be reported by the
+        scrub. This feature is incompatible with raidz configurations. This
+        feature becomes <b class="Sy">active</b> while a sequential resilver is
+        in progress, and returns to <b class="Sy">enabled</b> when the resilver
+        completes.</p>
+  </dd>
+  <dt id="device_removal"><a class="permalink" href="#device_removal"><b class="Sy">device_removal</b></a></dt>
+  <dd>
+    <dl class="Bl-tag Bl-compact">
+      <dt id="com.delphix:device_removal">GUID</dt>
+      <dd><a class="permalink" href="#com.delphix:device_removal"><b class="Sy">com.delphix:device_removal</b></a></dd>
+      <dt>READ-ONLY COMPATIBLE</dt>
+      <dd>no</dd>
+    </dl>
+    <p class="Pp">This feature enables the <code class="Nm">zpool</code>
+        <code class="Cm">remove</code> command to remove top-level vdevs,
+        evacuating them to reduce the total size of the pool.</p>
+    <p class="Pp">This feature becomes <b class="Sy">active</b> when the
+        <code class="Nm">zpool</code> <code class="Cm">remove</code> command is
+        used on a top-level vdev, and will never return to being
+        <b class="Sy">enabled</b>.</p>
+  </dd>
+  <dt id="draid"><a class="permalink" href="#draid"><b class="Sy">draid</b></a></dt>
+  <dd>
+    <dl class="Bl-tag Bl-compact">
+      <dt id="org.openzfs:draid">GUID</dt>
+      <dd><a class="permalink" href="#org.openzfs:draid"><b class="Sy">org.openzfs:draid</b></a></dd>
+      <dt>READ-ONLY COMPATIBLE</dt>
+      <dd>no</dd>
+    </dl>
+    <p class="Pp">This feature enables use of the <b class="Sy">draid</b> vdev
+        type. dRAID is a variant of RAID-Z which provides integrated distributed
+        hot spares that allow faster resilvering while retaining the benefits of
+        RAID-Z. Data, parity, and spare space are organized in redundancy groups
+        and distributed evenly over all of the devices.</p>
+    <p class="Pp">This feature becomes <b class="Sy">active</b> when creating a
+        pool which uses the <b class="Sy">draid</b> vdev type, or when adding a
+        new <b class="Sy">draid</b> vdev to an existing pool.</p>
+  </dd>
+  <dt id="edonr"><a class="permalink" href="#edonr"><b class="Sy">edonr</b></a></dt>
+  <dd>
+    <dl class="Bl-tag Bl-compact">
+      <dt id="org.illumos:edonr">GUID</dt>
+      <dd><a class="permalink" href="#org.illumos:edonr"><b class="Sy">org.illumos:edonr</b></a></dd>
+      <dt>DEPENDENCIES</dt>
+      <dd><b>extensible_dataset</b></dd>
+      <dt>READ-ONLY COMPATIBLE</dt>
+      <dd>no</dd>
+    </dl>
+    <p class="Pp" id="dedup">This feature enables the use of the Edon-R hash
+        algorithm for checksum, including for nopwrite (if compression is also
+        enabled, an overwrite of a block whose checksum matches the data being
+        written will be ignored). In an abundance of caution, Edon-R requires
+        verification when used with dedup: <code class="Nm">zfs</code>
+        <code class="Cm">set</code>
+        <a class="permalink" href="#dedup"><b class="Sy">dedup</b></a>=<b class="Sy">edonr</b>,<a class="permalink" href="#verify"><b class="Sy" id="verify">verify</b></a>
+        (see <a href="../8/zfs-set.8.html" class="Xr">zfs-set(8)</a>).</p>
+    <p class="Pp">Edon-R is a very high-performance hash algorithm that was part
+        of the NIST SHA-3 competition. It provides extremely high hash
+        performance (over 350% faster than SHA-256), but was not selected
+        because of its unsuitability as a general purpose secure hash algorithm.
+        This implementation utilizes the new salted checksumming functionality
+        in ZFS, which means that the checksum is pre-seeded with a secret
+        256-bit random key (stored on the pool) before being fed the data block
+        to be checksummed. Thus the produced checksums are unique to a given
+        pool, preventing hash collision attacks on systems with dedup.</p>
+    <p class="Pp">When the <b class="Sy">edonr</b> feature is set to
+        <b class="Sy">enabled</b>, the administrator can turn on the
+        <b class="Sy">edonr</b> checksum on any dataset using
+        <code class="Nm">zfs</code> <code class="Cm">set</code>
+        <b class="Sy">checksum</b>=<b class="Sy">edonr</b>
+        <var class="Ar">dset</var> (see <a href="../8/zfs-set.8.html" class="Xr">zfs-set(8)</a>). This
+        feature becomes <b class="Sy">active</b> once a
+        <b class="Sy">checksum</b> property has been set to
+        <b class="Sy">edonr</b>, and will return to being
+        <b class="Sy">enabled</b> once all filesystems that have ever had their
+        checksum set to <b class="Sy">edonr</b> are destroyed.</p>
+  </dd>
+  <dt id="embedded_data"><a class="permalink" href="#embedded_data"><b class="Sy">embedded_data</b></a></dt>
+  <dd>
+    <dl class="Bl-tag Bl-compact">
+      <dt id="com.delphix:embedded_data">GUID</dt>
+      <dd><a class="permalink" href="#com.delphix:embedded_data"><b class="Sy">com.delphix:embedded_data</b></a></dd>
+      <dt>READ-ONLY COMPATIBLE</dt>
+      <dd>no</dd>
+    </dl>
+    <p class="Pp">This feature improves the performance and compression ratio of
+        highly-compressible blocks. Blocks whose contents can compress to 112
+        bytes or smaller can take advantage of this feature.</p>
+    <p class="Pp">When this feature is enabled, the contents of
+        highly-compressible blocks are stored in the block
+        &#x201C;pointer&#x201D; itself (a misnomer in this case, as it contains
+        the compressed data, rather than a pointer to its location on disk).
+        Thus the space of the block (one sector, typically 512 B or 4 KiB) is
+        saved, and no additional I/O is needed to read and write the data block.
+        <span class="No">This feature becomes</span> <b class="Sy">active</b>
+        <span class="No">as soon as it is enabled and will never return to
+        being</span> <b class="Sy">enabled</b>.</p>
+  </dd>
+  <dt id="empty_bpobj"><a class="permalink" href="#empty_bpobj"><b class="Sy">empty_bpobj</b></a></dt>
+  <dd>
+    <dl class="Bl-tag Bl-compact">
+      <dt id="com.delphix:empty_bpobj">GUID</dt>
+      <dd><a class="permalink" href="#com.delphix:empty_bpobj"><b class="Sy">com.delphix:empty_bpobj</b></a></dd>
+      <dt>READ-ONLY COMPATIBLE</dt>
+      <dd>yes</dd>
+    </dl>
+    <p class="Pp">This feature increases the performance of creating and using a
+        large number of snapshots of a single filesystem or volume, and also
+        reduces the disk space required.</p>
+    <p class="Pp">When there are many snapshots, each snapshot uses many Block
+        Pointer Objects (bpobjs) to track blocks associated with that snapshot.
+        However, in common use cases, most of these bpobjs are empty. This
+        feature allows us to create each bpobj on-demand, thus eliminating the
+        empty bpobjs.</p>
+    <p class="Pp">This feature is <b class="Sy">active</b> while there are any
+        filesystems, volumes, or snapshots which were created after enabling
+        this feature.</p>
+  </dd>
+  <dt id="enabled_txg"><a class="permalink" href="#enabled_txg"><b class="Sy">enabled_txg</b></a></dt>
+  <dd>
+    <dl class="Bl-tag Bl-compact">
+      <dt id="com.delphix:enabled_txg">GUID</dt>
+      <dd><a class="permalink" href="#com.delphix:enabled_txg"><b class="Sy">com.delphix:enabled_txg</b></a></dd>
+      <dt>READ-ONLY COMPATIBLE</dt>
+      <dd>yes</dd>
+    </dl>
+    <p class="Pp">Once this feature is enabled, ZFS records the transaction
+        group number in which new features are enabled. This has no user-visible
+        impact, but other features may depend on this feature.</p>
+    <p class="Pp">This feature becomes <b class="Sy">active</b> as soon as it is
+        enabled and will never return to being <b class="Sy">enabled</b>.</p>
+  </dd>
+  <dt id="encryption"><a class="permalink" href="#encryption"><b class="Sy">encryption</b></a></dt>
+  <dd>
+    <dl class="Bl-tag Bl-compact">
+      <dt id="com.datto:encryption">GUID</dt>
+      <dd><a class="permalink" href="#com.datto:encryption"><b class="Sy">com.datto:encryption</b></a></dd>
+      <dt>DEPENDENCIES</dt>
+      <dd><b>bookmark_v2</b>, <b>extensible_dataset</b></dd>
+      <dt>READ-ONLY COMPATIBLE</dt>
+      <dd>no</dd>
+    </dl>
+    <p class="Pp">This feature enables the creation and management of natively
+        encrypted datasets.</p>
+    <p class="Pp">This feature becomes <b class="Sy">active</b> when an
+        encrypted dataset is created and will be returned to the
+        <b class="Sy">enabled</b> state when all datasets that use this feature
+        are destroyed.</p>
+  </dd>
+  <dt id="extensible_dataset"><a class="permalink" href="#extensible_dataset"><b class="Sy">extensible_dataset</b></a></dt>
+  <dd>
+    <dl class="Bl-tag Bl-compact">
+      <dt id="com.delphix:extensible_dataset">GUID</dt>
+      <dd><a class="permalink" href="#com.delphix:extensible_dataset"><b class="Sy">com.delphix:extensible_dataset</b></a></dd>
+      <dt>READ-ONLY COMPATIBLE</dt>
+      <dd>no</dd>
+    </dl>
+    <p class="Pp">This feature allows more flexible use of internal ZFS data
+        structures, and exists for other features to depend on.</p>
+    <p class="Pp">This feature will be <b class="Sy">active</b> when the first
+        dependent feature uses it, and will be returned to the
+        <b class="Sy">enabled</b> state when all datasets that use this feature
+        are destroyed.</p>
+  </dd>
+  <dt id="filesystem_limits"><a class="permalink" href="#filesystem_limits"><b class="Sy">filesystem_limits</b></a></dt>
+  <dd>
+    <dl class="Bl-tag Bl-compact">
+      <dt id="com.joyent:filesystem_limits">GUID</dt>
+      <dd><a class="permalink" href="#com.joyent:filesystem_limits"><b class="Sy">com.joyent:filesystem_limits</b></a></dd>
+      <dt>DEPENDENCIES</dt>
+      <dd><b>extensible_dataset</b></dd>
+      <dt>READ-ONLY COMPATIBLE</dt>
+      <dd>yes</dd>
+    </dl>
+    <p class="Pp">This feature enables filesystem and snapshot limits. These
+        limits can be used to control how many filesystems and/or snapshots can
+        be created at the point in the tree on which the limits are set.</p>
+    <p class="Pp">This feature is <b class="Sy">active</b> once either of the
+        limit properties has been set on a dataset and will never return to
+        being <b class="Sy">enabled</b>.</p>
+  </dd>
+  <dt id="head_errlog"><a class="permalink" href="#head_errlog"><b class="Sy">head_errlog</b></a></dt>
+  <dd>
+    <dl class="Bl-tag Bl-compact">
+      <dt id="com.delphix:head_errlog">GUID</dt>
+      <dd><a class="permalink" href="#com.delphix:head_errlog"><b class="Sy">com.delphix:head_errlog</b></a></dd>
+      <dt>READ-ONLY COMPATIBLE</dt>
+      <dd>no</dd>
+    </dl>
+    <p class="Pp">This feature enables the upgraded version of errlog, which
+        required an on-disk error log format change. Now the error log of each
+        head dataset is stored separately in the zap object and keyed by the
+        head id. With this feature enabled, every dataset affected by an error
+        block is listed in the output of <code class="Nm">zpool</code>
+        <code class="Cm">status</code>. In case of encrypted filesystems with
+        unloaded keys we are unable to check their snapshots or clones for
+        errors and these will not be reported. An &quot;access denied&quot;
+        error will be reported.</p>
+    <p class="Pp"><span class="No">This feature becomes</span>
+        <b class="Sy">active</b> <span class="No">as soon as it is enabled and
+        will never return to being</span> <b class="Sy">enabled</b>.</p>
+  </dd>
+  <dt id="hole_birth"><a class="permalink" href="#hole_birth"><b class="Sy">hole_birth</b></a></dt>
+  <dd>
+    <dl class="Bl-tag Bl-compact">
+      <dt id="com.delphix:hole_birth">GUID</dt>
+      <dd><a class="permalink" href="#com.delphix:hole_birth"><b class="Sy">com.delphix:hole_birth</b></a></dd>
+      <dt>DEPENDENCIES</dt>
+      <dd><b>enabled_txg</b></dd>
+      <dt>READ-ONLY COMPATIBLE</dt>
+      <dd>no</dd>
+    </dl>
+    <p class="Pp" id="send_holes_without_birth_time">This feature has/had bugs,
+        the result of which is that, if you do a <code class="Nm">zfs</code>
+        <code class="Cm">send</code> <code class="Fl">-i</code> (or
+        <code class="Fl">-R</code>, <span class="No">since it uses</span>
+        <code class="Fl">-i</code>) from an affected dataset, the receiving
+        party will not see any checksum or other errors, but the resulting
+        destination snapshot will not match the source. Its use by
+        <code class="Nm">zfs</code> <code class="Cm">send</code>
+        <code class="Fl">-i</code> has been disabled by default (see
+        <a class="permalink" href="#send_holes_without_birth_time"><b class="Sy">send_holes_without_birth_time</b></a>
+        in <a href="../4/zfs.4.html" class="Xr">zfs(4)</a>).</p>
+    <p class="Pp">This feature improves performance of incremental sends
+        (<code class="Nm">zfs</code> <code class="Cm">send</code>
+        <code class="Fl">-i</code>) and receives for objects with many holes.
+        The most common case of hole-filled objects is zvols.</p>
+    <p class="Pp">An incremental send stream from snapshot <b class="Sy">A</b>
+        <span class="No">to snapshot</span> <b class="Sy">B</b> contains
+        information about every block that changed between <b class="Sy">A</b>
+        <span class="No">and</span> <b class="Sy">B</b>. Blocks which did not
+        change between those snapshots can be identified and omitted from the
+        stream using a piece of metadata called the &#x201C;block birth
+        time&#x201D;, but birth times are not recorded for holes (blocks filled
+        only with zeroes). Since holes created after <b class="Sy">A</b>
+        <span class="No">cannot be distinguished from holes created
+        before</span> <b class="Sy">A</b>, information about every hole in the
+        entire filesystem or zvol is included in the send stream.</p>
+    <p class="Pp">For workloads where holes are rare this is not a problem.
+        However, when incrementally replicating filesystems or zvols with many
+        holes (for example a zvol formatted with another filesystem) a lot of
+        time will be spent sending and receiving unnecessary information about
+        holes that already exist on the receiving side.</p>
+    <p class="Pp">Once the <b class="Sy">hole_birth</b> feature has been enabled
+        the block birth times of all new holes will be recorded. Incremental
+        sends between snapshots created after this feature is enabled will use
+        this new metadata to avoid sending information about holes that already
+        exist on the receiving side.</p>
+    <p class="Pp"><span class="No">This feature becomes</span>
+        <b class="Sy">active</b> <span class="No">as soon as it is enabled and
+        will never return to being</span> <b class="Sy">enabled</b>.</p>
+  </dd>
+  <dt id="large_blocks"><a class="permalink" href="#large_blocks"><b class="Sy">large_blocks</b></a></dt>
+  <dd>
+    <dl class="Bl-tag Bl-compact">
+      <dt id="org.open-zfs:large_blocks">GUID</dt>
+      <dd><a class="permalink" href="#org.open-zfs:large_blocks"><b class="Sy">org.open-zfs:large_blocks</b></a></dd>
+      <dt>DEPENDENCIES</dt>
+      <dd><b>extensible_dataset</b></dd>
+      <dt>READ-ONLY COMPATIBLE</dt>
+      <dd>no</dd>
+    </dl>
+    <p class="Pp">This feature allows the record size on a dataset to be set
+        larger than 128 KiB.</p>
+    <p class="Pp">This feature becomes <b class="Sy">active</b> once a dataset
+        contains a file with a block size larger than 128 KiB, and will return
+        to being <b class="Sy">enabled</b> once all filesystems that have ever
+        had their recordsize larger than 128 KiB are destroyed.</p>
+  </dd>
+  <dt id="large_dnode"><a class="permalink" href="#large_dnode"><b class="Sy">large_dnode</b></a></dt>
+  <dd>
+    <dl class="Bl-tag Bl-compact">
+      <dt id="org.zfsonlinux:large_dnode">GUID</dt>
+      <dd><a class="permalink" href="#org.zfsonlinux:large_dnode"><b class="Sy">org.zfsonlinux:large_dnode</b></a></dd>
+      <dt>DEPENDENCIES</dt>
+      <dd><b>extensible_dataset</b></dd>
+      <dt>READ-ONLY COMPATIBLE</dt>
+      <dd>no</dd>
+    </dl>
+    <p class="Pp" id="dnodesize">This feature allows the size of dnodes in a
+        dataset to be set larger than 512 B. This feature becomes
+        <b class="Sy">active</b> once a dataset contains an object with a dnode
+        larger than 512 B, which occurs as a result of setting the
+        <a class="permalink" href="#dnodesize"><b class="Sy">dnodesize</b></a>
+        dataset property to a value other than <b class="Sy">legacy</b>. The
+        feature will return to being <b class="Sy">enabled</b> once all
+        filesystems that have ever contained a dnode larger than 512 B are
+        destroyed. Large dnodes allow more data to be stored in the bonus
+        buffer, thus potentially improving performance by avoiding the use of
+        spill blocks.</p>
+  </dd>
+  <dt id="livelist"><a class="permalink" href="#livelist"><b class="Sy">livelist</b></a></dt>
+  <dd>
+    <dl class="Bl-tag Bl-compact">
+      <dt id="com.delphix:livelist">GUID</dt>
+      <dd><a class="permalink" href="#com.delphix:livelist"><b class="Sy">com.delphix:livelist</b></a></dd>
+      <dt>DEPENDENCIES</dt>
+      <dd><b>extensible_dataset</b></dd>
+      <dt>READ-ONLY COMPATIBLE</dt>
+      <dd>yes</dd>
+    </dl>
+    <p class="Pp">This feature allows clones to be deleted faster than the
+        traditional method when a large number of random/sparse writes have been
+        made to the clone. All blocks allocated and freed after a clone is
+        created are tracked by the the clone's livelist which is referenced
+        during the deletion of the clone. The feature is activated when a clone
+        is created and remains <b class="Sy">active</b> until all clones have
+        been destroyed.</p>
+  </dd>
+  <dt id="log_spacemap"><a class="permalink" href="#log_spacemap"><b class="Sy">log_spacemap</b></a></dt>
+  <dd>
+    <dl class="Bl-tag Bl-compact">
+      <dt id="com.delphix:log_spacemap">GUID</dt>
+      <dd><a class="permalink" href="#com.delphix:log_spacemap"><b class="Sy">com.delphix:log_spacemap</b></a></dd>
+      <dt>DEPENDENCIES</dt>
+      <dd><b>com.delphix:spacemap_v2</b></dd>
+      <dt>READ-ONLY COMPATIBLE</dt>
+      <dd>yes</dd>
+    </dl>
+    <p class="Pp">This feature improves performance for heavily-fragmented
+        pools, especially when workloads are heavy in random-writes. It does so
+        by logging all the metaslab changes on a single spacemap every TXG
+        instead of scattering multiple writes to all the metaslab spacemaps.</p>
+    <p class="Pp"><span class="No">This feature becomes</span>
+        <b class="Sy">active</b> <span class="No">as soon as it is enabled and
+        will never return to being</span> <b class="Sy">enabled</b>.</p>
+  </dd>
+  <dt id="lz4_compress"><a class="permalink" href="#lz4_compress"><b class="Sy">lz4_compress</b></a></dt>
+  <dd>
+    <dl class="Bl-tag Bl-compact">
+      <dt id="org.illumos:lz4_compress">GUID</dt>
+      <dd><a class="permalink" href="#org.illumos:lz4_compress"><b class="Sy">org.illumos:lz4_compress</b></a></dd>
+      <dt>READ-ONLY COMPATIBLE</dt>
+      <dd>no</dd>
+    </dl>
+    <p class="Pp"><b class="Sy">lz4</b> is a high-performance real-time
+        compression algorithm that features significantly faster compression and
+        decompression as well as a higher compression ratio than the older
+        <b class="Sy">lzjb</b> compression. Typically, <b class="Sy">lz4</b>
+        compression is approximately 50% faster on compressible data and 200%
+        faster on incompressible data than <b class="Sy">lzjb</b>. It is also
+        approximately 80% faster on decompression, while giving approximately a
+        10% better compression ratio.</p>
+    <p class="Pp">When the <b class="Sy">lz4_compress</b> feature is set to
+        <b class="Sy">enabled</b>, the administrator can turn on
+        <b class="Sy">lz4</b> compression on any dataset on the pool using the
+        <a href="../8/zfs-set.8.html" class="Xr">zfs-set(8)</a> command. All newly written metadata will be
+        compressed with the <b class="Sy">lz4</b> algorithm.</p>
+    <p class="Pp"><span class="No">This feature becomes</span>
+        <b class="Sy">active</b> <span class="No">as soon as it is enabled and
+        will never return to being</span> <b class="Sy">enabled</b>.</p>
+  </dd>
+  <dt id="multi_vdev_crash_dump"><a class="permalink" href="#multi_vdev_crash_dump"><b class="Sy">multi_vdev_crash_dump</b></a></dt>
+  <dd>
+    <dl class="Bl-tag Bl-compact">
+      <dt id="com.joyent:multi_vdev_crash_dump">GUID</dt>
+      <dd><a class="permalink" href="#com.joyent:multi_vdev_crash_dump"><b class="Sy">com.joyent:multi_vdev_crash_dump</b></a></dd>
+      <dt>READ-ONLY COMPATIBLE</dt>
+      <dd>no</dd>
+    </dl>
+    <p class="Pp">This feature allows a dump device to be configured with a pool
+        comprised of multiple vdevs. Those vdevs may be arranged in any mirrored
+        or raidz configuration.</p>
+    <p class="Pp">When the <b class="Sy">multi_vdev_crash_dump</b> feature is
+        set to <b class="Sy">enabled</b>, the administrator can use
+        <a class="Xr">dumpadm(8)</a> to configure a dump device on a pool
+        comprised of multiple vdevs.</p>
+    <p class="Pp">Under <span class="Ux">FreeBSD</span> and Linux this feature
+        is unused, but registered for compatibility. New pools created on these
+        systems will have the feature <b class="Sy">enabled</b> but will never
+        transition to <b class="Sy">active</b>, as this functionality is not
+        required for crash dump support. Existing pools where this feature is
+        <b class="Sy">active</b> can be imported.</p>
+  </dd>
+  <dt id="obsolete_counts"><a class="permalink" href="#obsolete_counts"><b class="Sy">obsolete_counts</b></a></dt>
+  <dd>
+    <dl class="Bl-tag Bl-compact">
+      <dt id="com.delphix:obsolete_counts">GUID</dt>
+      <dd><a class="permalink" href="#com.delphix:obsolete_counts"><b class="Sy">com.delphix:obsolete_counts</b></a></dd>
+      <dt>DEPENDENCIES</dt>
+      <dd><b>device_removal</b></dd>
+      <dt>READ-ONLY COMPATIBLE</dt>
+      <dd>yes</dd>
+    </dl>
+    <p class="Pp">This feature is an enhancement of
+        <b class="Sy">device_removal</b>, which will over time reduce the memory
+        used to track removed devices. When indirect blocks are freed or
+        remapped, we note that their part of the indirect mapping is
+        &#x201C;obsolete&#x201D; &#x2013; no longer needed.</p>
+    <p class="Pp">This feature becomes <b class="Sy">active</b> when the
+        <code class="Nm">zpool</code> <code class="Cm">remove</code> command is
+        used on a top-level vdev, and will never return to being
+        <b class="Sy">enabled</b>.</p>
+  </dd>
+  <dt id="project_quota"><a class="permalink" href="#project_quota"><b class="Sy">project_quota</b></a></dt>
+  <dd>
+    <dl class="Bl-tag Bl-compact">
+      <dt id="org.zfsonlinux:project_quota">GUID</dt>
+      <dd><a class="permalink" href="#org.zfsonlinux:project_quota"><b class="Sy">org.zfsonlinux:project_quota</b></a></dd>
+      <dt>DEPENDENCIES</dt>
+      <dd><b>extensible_dataset</b></dd>
+      <dt>READ-ONLY COMPATIBLE</dt>
+      <dd>yes</dd>
+    </dl>
+    <p class="Pp">This feature allows administrators to account the spaces and
+        objects usage information against the project identifier (ID).</p>
+    <p class="Pp" id="_+-_P">The project ID is an object-based attribute. When
+        upgrading an existing filesystem, objects without a project ID will be
+        assigned a zero project ID. When this feature is enabled, newly created
+        objects inherit their parent directories' project ID if the parent's
+        inherit flag is set (via <code class="Nm">chattr</code>
+        <a class="permalink" href="#_+-_P"><b class="Sy">[+-]P</b></a>
+        <span class="No">or</span> <code class="Nm">zfs</code>
+        <code class="Cm">project</code>
+        <code class="Fl">-s</code>|<code class="Fl">-C</code>). Otherwise, the
+        new object's project ID will be zero. An object's project ID can be
+        changed at any time by the owner (or privileged user) via
+        <code class="Nm">chattr</code> <code class="Fl">-p</code>
+        <var class="Ar">prjid</var> or <code class="Nm">zfs</code>
+        <code class="Cm">project</code> <code class="Fl">-p</code>
+        <var class="Ar">prjid</var>.</p>
+    <p class="Pp">This feature will become <b class="Sy">active</b> as soon as
+        it is enabled and will never return to being <b class="Sy">disabled</b>.
+        <span class="No">Each filesystem will be upgraded automatically when
+        remounted, or when a new file is created under that filesystem. The
+        upgrade can also be triggered on filesystems via</span>
+        <code class="Nm">zfs</code> <code class="Cm">set</code>
+        <b class="Sy">version</b>=<b class="Sy">current</b>
+        <var class="Ar">fs</var>. <span class="No">The upgrade process runs in
+        the background and may take a while to complete for filesystems
+        containing large amounts of files</span>.</p>
+  </dd>
+  <dt id="redaction_bookmarks"><a class="permalink" href="#redaction_bookmarks"><b class="Sy">redaction_bookmarks</b></a></dt>
+  <dd>
+    <dl class="Bl-tag Bl-compact">
+      <dt id="com.delphix:redaction_bookmarks">GUID</dt>
+      <dd><a class="permalink" href="#com.delphix:redaction_bookmarks"><b class="Sy">com.delphix:redaction_bookmarks</b></a></dd>
+      <dt>DEPENDENCIES</dt>
+      <dd><b>bookmarks</b>, <b>extensible_dataset</b></dd>
+      <dt>READ-ONLY COMPATIBLE</dt>
+      <dd>no</dd>
+    </dl>
+    <p class="Pp">This feature enables the use of redacted
+        <code class="Nm">zfs</code> <code class="Cm">send</code>s, which create
+        redaction bookmarks storing the list of blocks redacted by the send that
+        created them. For more information about redacted sends, see
+        <a href="../8/zfs-send.8.html" class="Xr">zfs-send(8)</a>.</p>
+  </dd>
+  <dt id="redacted_datasets"><a class="permalink" href="#redacted_datasets"><b class="Sy">redacted_datasets</b></a></dt>
+  <dd>
+    <dl class="Bl-tag Bl-compact">
+      <dt id="com.delphix:redacted_datasets">GUID</dt>
+      <dd><a class="permalink" href="#com.delphix:redacted_datasets"><b class="Sy">com.delphix:redacted_datasets</b></a></dd>
+      <dt>DEPENDENCIES</dt>
+      <dd><b>extensible_dataset</b></dd>
+      <dt>READ-ONLY COMPATIBLE</dt>
+      <dd>no</dd>
+    </dl>
+    <p class="Pp">This feature enables the receiving of redacted
+        <code class="Nm">zfs</code> <code class="Cm">send</code> streams, which
+        create redacted datasets when received. These datasets are missing some
+        of their blocks, and so cannot be safely mounted, and their contents
+        cannot be safely read. For more information about redacted receives, see
+        <a href="../8/zfs-send.8.html" class="Xr">zfs-send(8)</a>.</p>
+  </dd>
+  <dt id="resilver_defer"><a class="permalink" href="#resilver_defer"><b class="Sy">resilver_defer</b></a></dt>
+  <dd>
+    <dl class="Bl-tag Bl-compact">
+      <dt id="com.datto:resilver_defer">GUID</dt>
+      <dd><a class="permalink" href="#com.datto:resilver_defer"><b class="Sy">com.datto:resilver_defer</b></a></dd>
+      <dt>READ-ONLY COMPATIBLE</dt>
+      <dd>yes</dd>
+    </dl>
+    <p class="Pp">This feature allows ZFS to postpone new resilvers if an
+        existing one is already in progress. Without this feature, any new
+        resilvers will cause the currently running one to be immediately
+        restarted from the beginning.</p>
+    <p class="Pp">This feature becomes <b class="Sy">active</b> once a resilver
+        has been deferred, and returns to being <b class="Sy">enabled</b> when
+        the deferred resilver begins.</p>
+  </dd>
+  <dt id="sha512"><a class="permalink" href="#sha512"><b class="Sy">sha512</b></a></dt>
+  <dd>
+    <dl class="Bl-tag Bl-compact">
+      <dt id="org.illumos:sha512">GUID</dt>
+      <dd><a class="permalink" href="#org.illumos:sha512"><b class="Sy">org.illumos:sha512</b></a></dd>
+      <dt>DEPENDENCIES</dt>
+      <dd><b>extensible_dataset</b></dd>
+      <dt>READ-ONLY COMPATIBLE</dt>
+      <dd>no</dd>
+    </dl>
+    <p class="Pp">This feature enables the use of the SHA-512/256 truncated hash
+        algorithm (FIPS 180-4) for checksum and dedup. The native 64-bit
+        arithmetic of SHA-512 provides an approximate 50% performance boost over
+        SHA-256 on 64-bit hardware and is thus a good minimum-change replacement
+        candidate for systems where hash performance is important, but these
+        systems cannot for whatever reason utilize the faster
+        <b class="Sy">skein</b> <span class="No">and</span>
+        <b class="Sy">edonr</b> algorithms.</p>
+    <p class="Pp">When the <b class="Sy">sha512</b> feature is set to
+        <b class="Sy">enabled</b>, the administrator can turn on the
+        <b class="Sy">sha512</b> checksum on any dataset using
+        <code class="Nm">zfs</code> <code class="Cm">set</code>
+        <b class="Sy">checksum</b>=<b class="Sy">sha512</b>
+        <var class="Ar">dset</var> (see <a href="../8/zfs-set.8.html" class="Xr">zfs-set(8)</a>). This
+        feature becomes <b class="Sy">active</b> once a
+        <b class="Sy">checksum</b> property has been set to
+        <b class="Sy">sha512</b>, and will return to being
+        <b class="Sy">enabled</b> once all filesystems that have ever had their
+        checksum set to <b class="Sy">sha512</b> are destroyed.</p>
+  </dd>
+  <dt id="skein"><a class="permalink" href="#skein"><b class="Sy">skein</b></a></dt>
+  <dd>
+    <dl class="Bl-tag Bl-compact">
+      <dt id="org.illumos:skein">GUID</dt>
+      <dd><a class="permalink" href="#org.illumos:skein"><b class="Sy">org.illumos:skein</b></a></dd>
+      <dt>DEPENDENCIES</dt>
+      <dd><b>extensible_dataset</b></dd>
+      <dt>READ-ONLY COMPATIBLE</dt>
+      <dd>no</dd>
+    </dl>
+    <p class="Pp">This feature enables the use of the Skein hash algorithm for
+        checksum and dedup. Skein is a high-performance secure hash algorithm
+        that was a finalist in the NIST SHA-3 competition. It provides a very
+        high security margin and high performance on 64-bit hardware (80% faster
+        than SHA-256). This implementation also utilizes the new salted
+        checksumming functionality in ZFS, which means that the checksum is
+        pre-seeded with a secret 256-bit random key (stored on the pool) before
+        being fed the data block to be checksummed. Thus the produced checksums
+        are unique to a given pool, preventing hash collision attacks on systems
+        with dedup.</p>
+    <p class="Pp">When the <b class="Sy">skein</b> feature is set to
+        <b class="Sy">enabled</b>, the administrator can turn on the
+        <b class="Sy">skein</b> checksum on any dataset using
+        <code class="Nm">zfs</code> <code class="Cm">set</code>
+        <b class="Sy">checksum</b>=<b class="Sy">skein</b>
+        <var class="Ar">dset</var> (see <a href="../8/zfs-set.8.html" class="Xr">zfs-set(8)</a>). This
+        feature becomes <b class="Sy">active</b> once a
+        <b class="Sy">checksum</b> property has been set to
+        <b class="Sy">skein</b>, and will return to being
+        <b class="Sy">enabled</b> once all filesystems that have ever had their
+        checksum set to <b class="Sy">skein</b> are destroyed.</p>
+  </dd>
+  <dt id="spacemap_histogram"><a class="permalink" href="#spacemap_histogram"><b class="Sy">spacemap_histogram</b></a></dt>
+  <dd>
+    <dl class="Bl-tag Bl-compact">
+      <dt id="com.delphix:spacemap_histogram">GUID</dt>
+      <dd><a class="permalink" href="#com.delphix:spacemap_histogram"><b class="Sy">com.delphix:spacemap_histogram</b></a></dd>
+      <dt>READ-ONLY COMPATIBLE</dt>
+      <dd>yes</dd>
+    </dl>
+    <p class="Pp">This features allows ZFS to maintain more information about
+        how free space is organized within the pool. If this feature is
+        <b class="Sy">enabled</b>, it will be activated when a new space map
+        object is created, or an existing space map is upgraded to the new
+        format, and never returns back to being <b class="Sy">enabled</b>.</p>
+  </dd>
+  <dt id="spacemap_v2"><a class="permalink" href="#spacemap_v2"><b class="Sy">spacemap_v2</b></a></dt>
+  <dd>
+    <dl class="Bl-tag Bl-compact">
+      <dt id="com.delphix:spacemap_v2">GUID</dt>
+      <dd><a class="permalink" href="#com.delphix:spacemap_v2"><b class="Sy">com.delphix:spacemap_v2</b></a></dd>
+      <dt>READ-ONLY COMPATIBLE</dt>
+      <dd>yes</dd>
+    </dl>
+    <p class="Pp">This feature enables the use of the new space map encoding
+        which consists of two words (instead of one) whenever it is
+        advantageous. The new encoding allows space maps to represent large
+        regions of space more efficiently on-disk while also increasing their
+        maximum addressable offset.</p>
+    <p class="Pp">This feature becomes <b class="Sy">active</b> once it is
+        <b class="Sy">enabled</b>, and never returns back to being
+        <b class="Sy">enabled</b>.</p>
+  </dd>
+  <dt id="userobj_accounting"><a class="permalink" href="#userobj_accounting"><b class="Sy">userobj_accounting</b></a></dt>
+  <dd>
+    <dl class="Bl-tag Bl-compact">
+      <dt id="org.zfsonlinux:userobj_accounting">GUID</dt>
+      <dd><a class="permalink" href="#org.zfsonlinux:userobj_accounting"><b class="Sy">org.zfsonlinux:userobj_accounting</b></a></dd>
+      <dt>DEPENDENCIES</dt>
+      <dd><b>extensible_dataset</b></dd>
+      <dt>READ-ONLY COMPATIBLE</dt>
+      <dd>yes</dd>
+    </dl>
+    <p class="Pp">This feature allows administrators to account the object usage
+        information by user and group.</p>
+    <p class="Pp"><span class="No">This feature becomes</span>
+        <b class="Sy">active</b> <span class="No">as soon as it is enabled and
+        will never return to being</span> <b class="Sy">enabled</b>.
+        <span class="No">Each filesystem will be upgraded automatically when
+        remounted, or when a new file is created under that filesystem. The
+        upgrade can also be triggered on filesystems via</span>
+        <code class="Nm">zfs</code> <code class="Cm">set</code>
+        <b class="Sy">version</b>=<b class="Sy">current</b>
+        <var class="Ar">fs</var>. <span class="No">The upgrade process runs in
+        the background and may take a while to complete for filesystems
+        containing large amounts of files</span>.</p>
+  </dd>
+  <dt id="vdev_zaps_v2"><a class="permalink" href="#vdev_zaps_v2"><b class="Sy">vdev_zaps_v2</b></a></dt>
+  <dd>
+    <dl class="Bl-tag Bl-compact">
+      <dt id="com.klarasystems:vdev_zaps_v2">GUID</dt>
+      <dd><a class="permalink" href="#com.klarasystems:vdev_zaps_v2"><b class="Sy">com.klarasystems:vdev_zaps_v2</b></a></dd>
+      <dt>READ-ONLY COMPATIBLE</dt>
+      <dd>no</dd>
+    </dl>
+    <p class="Pp">This feature creates a ZAP object for the root vdev.</p>
+    <p class="Pp" id="root">This feature becomes active after the next
+        <code class="Nm">zpool</code> <code class="Cm">import</code> or
+        <code class="Nm">zpool reguid</code>. Properties can be retrieved or set
+        on the root vdev using <code class="Nm">zpool</code>
+        <code class="Cm">get</code> and <code class="Nm">zpool</code>
+        <code class="Cm">set</code> with
+        <a class="permalink" href="#root"><b class="Sy">root</b></a> as the vdev
+        name which is an alias for
+        <a class="permalink" href="#root-0"><b class="Sy" id="root-0">root-0</b></a>.</p>
+  </dd>
+  <dt id="zilsaxattr"><a class="permalink" href="#zilsaxattr"><b class="Sy">zilsaxattr</b></a></dt>
+  <dd>
+    <dl class="Bl-tag Bl-compact">
+      <dt id="org.openzfs:zilsaxattr">GUID</dt>
+      <dd><a class="permalink" href="#org.openzfs:zilsaxattr"><b class="Sy">org.openzfs:zilsaxattr</b></a></dd>
+      <dt>DEPENDENCIES</dt>
+      <dd><b>extensible_dataset</b></dd>
+      <dt>READ-ONLY COMPATIBLE</dt>
+      <dd>yes</dd>
+    </dl>
+    <p class="Pp" id="xattrdir">This feature enables
+        <b class="Sy">xattr</b>=<b class="Sy">sa</b> extended attribute logging
+        in the ZIL. If enabled, extended attribute changes (both
+        <a class="permalink" href="#xattrdir"><b class="Sy">xattrdir</b></a>=<a class="permalink" href="#dir"><b class="Sy" id="dir">dir</b></a>
+        <span class="No">and</span>
+        <b class="Sy">xattr</b>=<b class="Sy">sa</b>) are guaranteed to be
+        durable if either the dataset had
+        <a class="permalink" href="#sync"><b class="Sy" id="sync">sync</b></a>=<a class="permalink" href="#always"><b class="Sy" id="always">always</b></a>
+        set at the time the changes were made, or <a class="Xr">sync(2)</a> is
+        called on the dataset after the changes were made.</p>
+    <p class="Pp">This feature becomes <b class="Sy">active</b> when a ZIL is
+        created for at least one dataset and will be returned to the
+        <b class="Sy">enabled</b> state when it is destroyed for all datasets
+        that use this feature.</p>
+  </dd>
+  <dt id="zpool_checkpoint"><a class="permalink" href="#zpool_checkpoint"><b class="Sy">zpool_checkpoint</b></a></dt>
+  <dd>
+    <dl class="Bl-tag Bl-compact">
+      <dt id="com.delphix:zpool_checkpoint">GUID</dt>
+      <dd><a class="permalink" href="#com.delphix:zpool_checkpoint"><b class="Sy">com.delphix:zpool_checkpoint</b></a></dd>
+      <dt>READ-ONLY COMPATIBLE</dt>
+      <dd>yes</dd>
+    </dl>
+    <p class="Pp">This feature enables the <code class="Nm">zpool</code>
+        <code class="Cm">checkpoint</code> command that can checkpoint the state
+        of the pool at the time it was issued and later rewind back to it or
+        discard it.</p>
+    <p class="Pp">This feature becomes <b class="Sy">active</b> when the
+        <code class="Nm">zpool</code> <code class="Cm">checkpoint</code> command
+        is used to checkpoint the pool. The feature will only return back to
+        being <b class="Sy">enabled</b> when the pool is rewound or the
+        checkpoint has been discarded.</p>
+  </dd>
+  <dt id="zstd_compress"><a class="permalink" href="#zstd_compress"><b class="Sy">zstd_compress</b></a></dt>
+  <dd>
+    <dl class="Bl-tag Bl-compact">
+      <dt id="org.freebsd:zstd_compress">GUID</dt>
+      <dd><a class="permalink" href="#org.freebsd:zstd_compress"><b class="Sy">org.freebsd:zstd_compress</b></a></dd>
+      <dt>DEPENDENCIES</dt>
+      <dd><b>extensible_dataset</b></dd>
+      <dt>READ-ONLY COMPATIBLE</dt>
+      <dd>no</dd>
+    </dl>
+    <p class="Pp" id="gzip"><b class="Sy">zstd</b> is a high-performance
+        compression algorithm that features a combination of high compression
+        ratios and high speed. Compared to
+        <a class="permalink" href="#gzip"><b class="Sy">gzip</b></a>,
+        <b class="Sy">zstd</b> offers slightly better compression at much higher
+        speeds. Compared to <b class="Sy">lz4</b>, <b class="Sy">zstd</b> offers
+        much better compression while being only modestly slower. Typically,
+        <b class="Sy">zstd</b> compression speed ranges from 250 to 500 MB/s per
+        thread and decompression speed is over 1 GB/s per thread.</p>
+    <p class="Pp">When the <b class="Sy">zstd</b> feature is set to
+        <b class="Sy">enabled</b>, the administrator can turn on
+        <b class="Sy">zstd</b> compression of any dataset using
+        <code class="Nm">zfs</code> <code class="Cm">set</code>
+        <b class="Sy">compress</b>=<b class="Sy">zstd</b>
+        <var class="Ar">dset</var> (see <a href="../8/zfs-set.8.html" class="Xr">zfs-set(8)</a>). This
+        feature becomes <b class="Sy">active</b> once a
+        <b class="Sy">compress</b> property has been set to
+        <b class="Sy">zstd</b>, and will return to being
+        <b class="Sy">enabled</b> once all filesystems that have ever had their
+        <b class="Sy">compress</b> property set to <b class="Sy">zstd</b> are
+        destroyed.</p>
+  </dd>
+</dl>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SEE_ALSO"><a class="permalink" href="#SEE_ALSO">SEE
+  ALSO</a></h1>
+<p class="Pp"><a href="../8/zfs.8.html" class="Xr">zfs(8)</a>, <a href="../8/zpool.8.html" class="Xr">zpool(8)</a></p>
+</section>
+</div>
+<table class="foot">
+  <tr>
+    <td class="foot-date">June 23, 2022</td>
+    <td class="foot-os">Debian</td>
+  </tr>
+</table>
+</div></section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="zfsprops.7.html" class="btn btn-neutral float-left" title="zfsprops.7" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="zpoolconcepts.7.html" class="btn btn-neutral float-right" title="zpoolconcepts.7" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, OpenZFS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

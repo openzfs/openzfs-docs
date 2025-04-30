@@ -1,0 +1,624 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>zfs-set.8 &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
+      <script src="../../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="zfs-share.8" href="zfs-share.8.html" />
+    <link rel="prev" title="zfs-send.8" href="zfs-send.8.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Basic%20Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Man Pages</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">master</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../1/index.html">User Commands (1)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../4/index.html">Devices and Special Files (4)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../5/index.html">File Formats and Conventions (5)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../7/index.html">Miscellaneous (7)</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">System Administration Commands (8)</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="fsck.zfs.8.html">fsck.zfs.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mount.zfs.8.html">mount.zfs.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vdev_id.8.html">vdev_id.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zdb.8.html">zdb.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zed.8.html">zed.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-allow.8.html">zfs-allow.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-bookmark.8.html">zfs-bookmark.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-change-key.8.html">zfs-change-key.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-clone.8.html">zfs-clone.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-create.8.html">zfs-create.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-destroy.8.html">zfs-destroy.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-diff.8.html">zfs-diff.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-get.8.html">zfs-get.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-groupspace.8.html">zfs-groupspace.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-hold.8.html">zfs-hold.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-inherit.8.html">zfs-inherit.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-jail.8.html">zfs-jail.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-list.8.html">zfs-list.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-load-key.8.html">zfs-load-key.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-mount-generator.8.html">zfs-mount-generator.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-mount.8.html">zfs-mount.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-program.8.html">zfs-program.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-project.8.html">zfs-project.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-projectspace.8.html">zfs-projectspace.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-promote.8.html">zfs-promote.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-receive.8.html">zfs-receive.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-recv.8.html">zfs-recv.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-redact.8.html">zfs-redact.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-release.8.html">zfs-release.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-rename.8.html">zfs-rename.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-rollback.8.html">zfs-rollback.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-send.8.html">zfs-send.8</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">zfs-set.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-share.8.html">zfs-share.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-snapshot.8.html">zfs-snapshot.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-unallow.8.html">zfs-unallow.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-unjail.8.html">zfs-unjail.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-unload-key.8.html">zfs-unload-key.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-unmount.8.html">zfs-unmount.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-unzone.8.html">zfs-unzone.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-upgrade.8.html">zfs-upgrade.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-userspace.8.html">zfs-userspace.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-wait.8.html">zfs-wait.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-zone.8.html">zfs-zone.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs.8.html">zfs.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs_ids_to_path.8.html">zfs_ids_to_path.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs_prepare_disk.8.html">zfs_prepare_disk.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zgenhostid.8.html">zgenhostid.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zinject.8.html">zinject.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-add.8.html">zpool-add.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-attach.8.html">zpool-attach.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-checkpoint.8.html">zpool-checkpoint.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-clear.8.html">zpool-clear.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-create.8.html">zpool-create.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-ddtprune.8.html">zpool-ddtprune.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-destroy.8.html">zpool-destroy.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-detach.8.html">zpool-detach.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-events.8.html">zpool-events.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-export.8.html">zpool-export.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-get.8.html">zpool-get.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-history.8.html">zpool-history.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-import.8.html">zpool-import.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-initialize.8.html">zpool-initialize.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-iostat.8.html">zpool-iostat.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-labelclear.8.html">zpool-labelclear.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-list.8.html">zpool-list.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-offline.8.html">zpool-offline.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-online.8.html">zpool-online.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-prefetch.8.html">zpool-prefetch.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-reguid.8.html">zpool-reguid.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-remove.8.html">zpool-remove.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-reopen.8.html">zpool-reopen.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-replace.8.html">zpool-replace.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-resilver.8.html">zpool-resilver.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-scrub.8.html">zpool-scrub.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-set.8.html">zpool-set.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-split.8.html">zpool-split.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-status.8.html">zpool-status.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-sync.8.html">zpool-sync.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-trim.8.html">zpool-trim.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-upgrade.8.html">zpool-upgrade.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-wait.8.html">zpool-wait.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool.8.html">zpool.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool_influxdb.8.html">zpool_influxdb.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zstream.8.html">zstream.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zstreamdump.8.html">zstreamdump.8</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.3/index.html">v2.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.2/index.html">v2.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.1/index.html">v2.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.0/index.html">v2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.8/index.html">v0.8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.7/index.html">v0.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.6/index.html">v0.6</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Man Pages</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">master</a></li>
+          <li class="breadcrumb-item"><a href="index.html">System Administration Commands (8)</a></li>
+      <li class="breadcrumb-item active">zfs-set.8</li>
+      <li class="wy-breadcrumbs-aside">
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/openzfs/zfs/blob/master/man/man8/zfs-set.8" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="zfs-set-8">
+<h1>zfs-set.8<a class="headerlink" href="#zfs-set-8" title="Permalink to this heading"></a></h1>
+<div class="man_container"><table class="head">
+  <tr>
+    <td class="head-ltitle">ZFS-SET(8)</td>
+    <td class="head-vol">System Manager's Manual</td>
+    <td class="head-rtitle">ZFS-SET(8)</td>
+  </tr>
+</table>
+<div class="manual-text">
+<section class="Sh">
+<h1 class="Sh" id="NAME"><a class="permalink" href="#NAME">NAME</a></h1>
+<p class="Pp"><code class="Nm">zfs-set</code> &#x2014; <span class="Nd">set
+    properties on ZFS datasets</span></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SYNOPSIS"><a class="permalink" href="#SYNOPSIS">SYNOPSIS</a></h1>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zfs</code></td>
+    <td><code class="Cm">set</code> [<code class="Fl">-u</code>]
+      <var class="Ar">property</var>=<var class="Ar">value</var>
+      [<var class="Ar">property</var>=<var class="Ar">value</var>]&#x2026;
+      <var class="Ar">filesystem</var>|<var class="Ar">volume</var>|<var class="Ar">snapshot</var>&#x2026;</td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zfs</code></td>
+    <td><code class="Cm">get</code>
+      [<code class="Fl">-r</code>|<code class="Fl">-d</code>
+      <var class="Ar">depth</var>] [<code class="Fl">-Hp</code>]
+      [<code class="Fl">-j</code> [<var class="Ar">--json-int</var>]]
+      [<code class="Fl">-o</code>
+      <var class="Ar">field</var>[,<var class="Ar">field</var>]&#x2026;]
+      [<code class="Fl">-s</code>
+      <var class="Ar">source</var>[,<var class="Ar">source</var>]&#x2026;]
+      [<code class="Fl">-t</code>
+      <var class="Ar">type</var>[,<var class="Ar">type</var>]&#x2026;]
+      <code class="Cm">all</code>|<var class="Ar">property</var>[,<var class="Ar">property</var>]&#x2026;
+      [<var class="Ar">filesystem</var>|<var class="Ar">volume</var>|<var class="Ar">snapshot</var>|<var class="Ar">bookmark</var>]&#x2026;</td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zfs</code></td>
+    <td><code class="Cm">inherit</code> [<code class="Fl">-rS</code>]
+      <var class="Ar">property</var>
+      <var class="Ar">filesystem</var>|<var class="Ar">volume</var>|<var class="Ar">snapshot</var>&#x2026;</td>
+  </tr>
+</table>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h1>
+<dl class="Bl-tag">
+  <dt id="B"><code class="Nm">zfs</code> <code class="Cm">set</code>
+    [<code class="Fl">-u</code>]
+    <var class="Ar">property</var>=<var class="Ar">value</var>
+    [<var class="Ar">property</var>=<var class="Ar">value</var>]&#x2026;
+    <var class="Ar">filesystem</var>|<var class="Ar">volume</var>|<var class="Ar">snapshot</var>&#x2026;</dt>
+  <dd>Only some properties can be edited. See <a href="../7/zfsprops.7.html" class="Xr">zfsprops(7)</a> for
+      more information on what properties can be set and acceptable values.
+      Numeric values can be specified as exact values, or in a human-readable
+      form with a suffix of
+      <a class="permalink" href="#B"><b class="Sy">B</b></a>,
+      <a class="permalink" href="#K"><b class="Sy" id="K">K</b></a>,
+      <a class="permalink" href="#M"><b class="Sy" id="M">M</b></a>,
+      <a class="permalink" href="#G"><b class="Sy" id="G">G</b></a>,
+      <a class="permalink" href="#T"><b class="Sy" id="T">T</b></a>,
+      <a class="permalink" href="#P"><b class="Sy" id="P">P</b></a>,
+      <a class="permalink" href="#E"><b class="Sy" id="E">E</b></a>,
+      <a class="permalink" href="#Z"><b class="Sy" id="Z">Z</b></a> (for bytes,
+      kilobytes, megabytes, gigabytes, terabytes, petabytes, exabytes, or
+      zettabytes, respectively). User properties can be set on snapshots. For
+      more information, see the
+      <a class="permalink" href="#User"><i class="Em" id="User">User
+      Properties</i></a> section of <a href="../7/zfsprops.7.html" class="Xr">zfsprops(7)</a>.
+    <dl class="Bl-tag">
+      <dt id="u"><a class="permalink" href="#u"><code class="Fl">-u</code></a></dt>
+      <dd>Update mountpoint, sharenfs, sharesmb property but do not mount or
+          share the dataset.</dd>
+    </dl>
+  </dd>
+  <dt><code class="Nm">zfs</code> <code class="Cm">get</code>
+    [<code class="Fl">-r</code>|<code class="Fl">-d</code>
+    <var class="Ar">depth</var>] [<code class="Fl">-Hp</code>]
+    [<code class="Fl">-j</code> [<var class="Ar">--json-int</var>]]
+    [<code class="Fl">-o</code>
+    <var class="Ar">field</var>[,<var class="Ar">field</var>]&#x2026;]
+    [<code class="Fl">-s</code>
+    <var class="Ar">source</var>[,<var class="Ar">source</var>]&#x2026;]
+    [<code class="Fl">-t</code>
+    <var class="Ar">type</var>[,<var class="Ar">type</var>]&#x2026;]
+    <code class="Cm">all</code>|<var class="Ar">property</var>[,<var class="Ar">property</var>]&#x2026;
+    [<var class="Ar">filesystem</var>|<var class="Ar">volume</var>|<var class="Ar">snapshot</var>|<var class="Ar">bookmark</var>]&#x2026;</dt>
+  <dd>Displays properties for the given datasets. If no datasets are specified,
+      then the command displays properties for all datasets on the system. For
+      each property, the following columns are displayed:
+    <div class="Bd-indent">
+    <dl class="Bl-tag Bl-compact">
+      <dt id="name"><a class="permalink" href="#name"><b class="Sy">name</b></a></dt>
+      <dd>Dataset name</dd>
+      <dt id="property"><a class="permalink" href="#property"><b class="Sy">property</b></a></dt>
+      <dd>Property name</dd>
+      <dt id="value"><a class="permalink" href="#value"><b class="Sy">value</b></a></dt>
+      <dd>Property value</dd>
+      <dt id="source"><a class="permalink" href="#source"><b class="Sy">source</b></a></dt>
+      <dd>Property source <b class="Sy">local</b>, <b class="Sy">default</b>,
+          <b class="Sy">inherited</b>, <b class="Sy">temporary</b>,
+          <b class="Sy">received</b>, <span class="No">or</span>
+          <b class="Sy">-</b> (none).</dd>
+    </dl>
+    </div>
+    <p class="Pp">All columns are displayed by default, though this can be
+        controlled by using the <code class="Fl">-o</code> option. This command
+        takes a comma-separated list of properties as described in the
+        <a class="Sx" href="#Native_Properties">Native Properties</a> and
+        <a class="Sx" href="#User_Properties">User Properties</a> sections of
+        <a href="../7/zfsprops.7.html" class="Xr">zfsprops(7)</a>.</p>
+    <p class="Pp">The value <b class="Sy">all</b> can be used to display all
+        properties that apply to the given dataset's type
+        (<b class="Sy">filesystem</b>, <b class="Sy">volume</b>,
+        <b class="Sy">snapshot</b>, <span class="No">or</span>
+        <b class="Sy">bookmark</b>).</p>
+    <dl class="Bl-tag">
+      <dt id="j"><a class="permalink" href="#j"><code class="Fl">-j</code></a>,
+        <code class="Fl">--json</code> [<var class="Ar">--json-int</var>]</dt>
+      <dd>Display the output in JSON format. Specify
+          <a class="permalink" href="#-json-int"><b class="Sy" id="-json-int">--json-int</b></a>
+          to display numbers in integer format instead of strings for JSON
+          output.</dd>
+      <dt id="H"><a class="permalink" href="#H"><code class="Fl">-H</code></a></dt>
+      <dd>Display output in a form more easily parsed by scripts. Any headers
+          are omitted, and fields are explicitly separated by a single tab
+          instead of an arbitrary amount of space.</dd>
+      <dt id="d"><a class="permalink" href="#d"><code class="Fl">-d</code></a>
+        <var class="Ar">depth</var></dt>
+      <dd>Recursively display any children of the dataset, limiting the
+          recursion to <var class="Ar">depth</var>. A depth of
+          <a class="permalink" href="#1"><b class="Sy" id="1">1</b></a> will
+          display only the dataset and its direct children.</dd>
+      <dt id="o"><a class="permalink" href="#o"><code class="Fl">-o</code></a>
+        <var class="Ar">field</var></dt>
+      <dd>A comma-separated list of columns to display, defaults to
+          <b class="Sy">name</b>,<b class="Sy">property</b>,<b class="Sy">value</b>,<b class="Sy">source</b>.</dd>
+      <dt id="p"><a class="permalink" href="#p"><code class="Fl">-p</code></a></dt>
+      <dd>Display numbers in parsable (exact) values.</dd>
+      <dt id="r"><a class="permalink" href="#r"><code class="Fl">-r</code></a></dt>
+      <dd>Recursively display properties for any children.</dd>
+      <dt id="s"><a class="permalink" href="#s"><code class="Fl">-s</code></a>
+        <var class="Ar">source</var></dt>
+      <dd>A comma-separated list of sources to display. Those properties coming
+          from a source other than those in this list are ignored. Each source
+          must be one of the following: <b class="Sy">local</b>,
+          <b class="Sy">default</b>, <b class="Sy">inherited</b>,
+          <b class="Sy">temporary</b>, <b class="Sy">received</b>,
+          <span class="No">or</span>
+          <a class="permalink" href="#none"><b class="Sy" id="none">none</b></a>.
+          The default value is all sources.</dd>
+      <dt id="t"><a class="permalink" href="#t"><code class="Fl">-t</code></a>
+        <var class="Ar">type</var></dt>
+      <dd>A comma-separated list of types to display, where
+          <var class="Ar">type</var> is one of <b class="Sy">filesystem</b>,
+          <b class="Sy">snapshot</b>, <b class="Sy">volume</b>,
+          <b class="Sy">bookmark</b>, <span class="No">or</span>
+          <b class="Sy">all</b>.
+          <a class="permalink" href="#fs"><b class="Sy" id="fs">fs</b></a>,
+          <a class="permalink" href="#snap"><b class="Sy" id="snap">snap</b></a>,
+          or <a class="permalink" href="#vol"><b class="Sy" id="vol">vol</b></a>
+          can be used as aliases for <b class="Sy">filesystem</b>,
+          <b class="Sy">snapshot</b>, or <b class="Sy">volume</b>.</dd>
+    </dl>
+  </dd>
+  <dt><code class="Nm">zfs</code> <code class="Cm">inherit</code>
+    [<code class="Fl">-rS</code>] <var class="Ar">property</var>
+    <var class="Ar">filesystem</var>|<var class="Ar">volume</var>|<var class="Ar">snapshot</var>&#x2026;</dt>
+  <dd>Clears the specified property, causing it to be inherited from an
+      ancestor, restored to default if no ancestor has the property set, or with
+      the <code class="Fl">-S</code> option reverted to the received value if
+      one exists. See <a href="../7/zfsprops.7.html" class="Xr">zfsprops(7)</a> for a listing of default
+      values, and details on which properties can be inherited.
+    <dl class="Bl-tag">
+      <dt id="r~2"><a class="permalink" href="#r~2"><code class="Fl">-r</code></a></dt>
+      <dd>Recursively inherit the given property for all children.</dd>
+      <dt id="S"><a class="permalink" href="#S"><code class="Fl">-S</code></a></dt>
+      <dd>Revert the property to the received value, if one exists; otherwise,
+          for non-inheritable properties, to the default; otherwise, operate as
+          if the <code class="Fl">-S</code> option was not specified.</dd>
+    </dl>
+  </dd>
+</dl>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="EXAMPLES"><a class="permalink" href="#EXAMPLES">EXAMPLES</a></h1>
+<section class="Ss">
+<h2 class="Ss" id="Example_1_:_Creating_a_ZFS_File_System_Hierarchy"><a class="permalink" href="#Example_1_:_Creating_a_ZFS_File_System_Hierarchy">Example
+  1: <span class="No">Creating a ZFS File System Hierarchy</span></a></h2>
+<p class="Pp">The following commands create a file system named
+    <var class="Ar">pool/home</var> and a file system named
+    <var class="Ar">pool/home/bob</var>. The mount point
+    <span class="Pa">/export/home</span> is set for the parent file system, and
+    is automatically inherited by the child file system.</p>
+<div class="Bd Bd-indent"><code class="Li"># <code class="Nm">zfs</code>
+  <code class="Cm">create</code> <var class="Ar">pool/home</var></code></div>
+<div class="Bd Bd-indent"><code class="Li"># <code class="Nm">zfs</code>
+  <code class="Cm">set</code>
+  <b class="Sy">mountpoint</b>=<var class="Ar">/export/home
+  pool/home</var></code></div>
+<div class="Bd Bd-indent"><code class="Li"># <code class="Nm">zfs</code>
+  <code class="Cm">create</code>
+  <var class="Ar">pool/home/bob</var></code></div>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="Example_2_:_Disabling_and_Enabling_File_System_Compression"><a class="permalink" href="#Example_2_:_Disabling_and_Enabling_File_System_Compression">Example
+  2: <span class="No">Disabling and Enabling File System
+  Compression</span></a></h2>
+<p class="Pp">The following command disables the <b class="Sy">compression</b>
+    property for all file systems under <var class="Ar">pool/home</var>. The
+    next command explicitly enables <b class="Sy">compression</b> for
+    <var class="Ar">pool/home/anne</var>.</p>
+<div class="Bd Bd-indent"><code class="Li"># <code class="Nm">zfs</code>
+  <code class="Cm">set</code>
+  <b class="Sy">compression</b>=<a class="permalink" href="#off"><b class="Sy" id="off">off</b></a>
+  <var class="Ar">pool/home</var></code></div>
+<div class="Bd Bd-indent"><code class="Li"># <code class="Nm">zfs</code>
+  <code class="Cm">set</code>
+  <b class="Sy">compression</b>=<a class="permalink" href="#on"><b class="Sy" id="on">on</b></a>
+  <var class="Ar">pool/home/anne</var></code></div>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="Example_3_:_Setting_a_Quota_on_a_ZFS_File_System"><a class="permalink" href="#Example_3_:_Setting_a_Quota_on_a_ZFS_File_System">Example
+  3: <span class="No">Setting a Quota on a ZFS File System</span></a></h2>
+<p class="Pp">The following command sets a quota of 50 Gbytes for
+    <var class="Ar">pool/home/bob</var>:</p>
+<div class="Bd Bd-indent"><code class="Li"># <code class="Nm">zfs</code>
+  <code class="Cm">set</code>
+  <a class="permalink" href="#quota"><b class="Sy" id="quota">quota</b></a>=<var class="Ar">50G
+  pool/home/bob</var></code></div>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="Example_4_:_Listing_ZFS_Properties"><a class="permalink" href="#Example_4_:_Listing_ZFS_Properties">Example
+  4: <span class="No">Listing ZFS Properties</span></a></h2>
+<p class="Pp">The following command lists all properties for
+    <var class="Ar">pool/home/bob</var>:</p>
+<div class="Bd Bd-indent Li">
+<pre><span class="No">#</span> <code class="Nm">zfs</code> <code class="Cm">get</code> <b class="Sy">all</b> <var class="Ar">pool/home/bob</var>
+NAME           PROPERTY              VALUE                  SOURCE
+pool/home/bob  type                  filesystem             -
+pool/home/bob  creation              Tue Jul 21 15:53 2009  -
+pool/home/bob  used                  21K                    -
+pool/home/bob  available             20.0G                  -
+pool/home/bob  referenced            21K                    -
+pool/home/bob  compressratio         1.00x                  -
+pool/home/bob  mounted               yes                    -
+pool/home/bob  quota                 20G                    local
+pool/home/bob  reservation           none                   default
+pool/home/bob  recordsize            128K                   default
+pool/home/bob  mountpoint            /pool/home/bob         default
+pool/home/bob  sharenfs              off                    default
+pool/home/bob  checksum              on                     default
+pool/home/bob  compression           on                     local
+pool/home/bob  atime                 on                     default
+pool/home/bob  devices               on                     default
+pool/home/bob  exec                  on                     default
+pool/home/bob  setuid                on                     default
+pool/home/bob  readonly              off                    default
+pool/home/bob  zoned                 off                    default
+pool/home/bob  snapdir               hidden                 default
+pool/home/bob  acltype               off                    default
+pool/home/bob  aclmode               discard                default
+pool/home/bob  aclinherit            restricted             default
+pool/home/bob  canmount              on                     default
+pool/home/bob  xattr                 on                     default
+pool/home/bob  copies                1                      default
+pool/home/bob  version               4                      -
+pool/home/bob  utf8only              off                    -
+pool/home/bob  normalization         none                   -
+pool/home/bob  casesensitivity       sensitive              -
+pool/home/bob  vscan                 off                    default
+pool/home/bob  nbmand                off                    default
+pool/home/bob  sharesmb              off                    default
+pool/home/bob  refquota              none                   default
+pool/home/bob  refreservation        none                   default
+pool/home/bob  primarycache          all                    default
+pool/home/bob  secondarycache        all                    default
+pool/home/bob  usedbysnapshots       0                      -
+pool/home/bob  usedbydataset         21K                    -
+pool/home/bob  usedbychildren        0                      -
+pool/home/bob  usedbyrefreservation  0                      -</pre>
+</div>
+<p class="Pp">The following command gets a single property value:</p>
+<div class="Bd Bd-indent Li">
+<pre><span class="No">#</span> <code class="Nm">zfs</code> <code class="Cm">get</code> <code class="Fl">-H</code> <code class="Fl">-o</code> <b class="Sy">value compression</b> <var class="Ar">pool/home/bob</var>
+on</pre>
+</div>
+<p class="Pp">The following command gets a single property value recursively in
+    JSON format:</p>
+<div class="Bd Bd-indent Li">
+<pre><span class="No">#</span> <code class="Nm">zfs</code> <code class="Cm">get</code> <code class="Fl">-j</code> <code class="Fl">-r</code> <b class="Sy">mountpoint</b> <var class="Ar">pool/home</var> | <code class="Nm">jq</code>
+{
+  &quot;output_version&quot;: {
+    &quot;command&quot;: &quot;zfs get&quot;,
+    &quot;vers_major&quot;: 0,
+    &quot;vers_minor&quot;: 1
+  },
+  &quot;datasets&quot;: {
+    &quot;pool/home&quot;: {
+      &quot;name&quot;: &quot;pool/home&quot;,
+      &quot;type&quot;: &quot;FILESYSTEM&quot;,
+      &quot;pool&quot;: &quot;pool&quot;,
+      &quot;createtxg&quot;: &quot;10&quot;,
+      &quot;properties&quot;: {
+        &quot;mountpoint&quot;: {
+          &quot;value&quot;: &quot;/pool/home&quot;,
+          &quot;source&quot;: {
+            &quot;type&quot;: &quot;DEFAULT&quot;,
+            &quot;data&quot;: &quot;-&quot;
+          }
+        }
+      }
+    },
+    &quot;pool/home/bob&quot;: {
+      &quot;name&quot;: &quot;pool/home/bob&quot;,
+      &quot;type&quot;: &quot;FILESYSTEM&quot;,
+      &quot;pool&quot;: &quot;pool&quot;,
+      &quot;createtxg&quot;: &quot;1176&quot;,
+      &quot;properties&quot;: {
+        &quot;mountpoint&quot;: {
+          &quot;value&quot;: &quot;/pool/home/bob&quot;,
+          &quot;source&quot;: {
+            &quot;type&quot;: &quot;DEFAULT&quot;,
+            &quot;data&quot;: &quot;-&quot;
+          }
+        }
+      }
+    }
+  }
+}</pre>
+</div>
+<p class="Pp">The following command lists all properties with local settings for
+    <var class="Ar">pool/home/bob</var>:</p>
+<div class="Bd Bd-indent Li">
+<pre><span class="No">#</span> <code class="Nm">zfs</code> <code class="Cm">get</code> <code class="Fl">-r</code> <code class="Fl">-s</code> <b class="Sy">local</b> <code class="Fl">-o</code> <b class="Sy">name</b>,<b class="Sy">property</b>,<b class="Sy">value all</b> <var class="Ar">pool/home/bob</var>
+NAME           PROPERTY              VALUE
+pool/home/bob  quota                 20G
+pool/home/bob  compression           on</pre>
+</div>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="Example_5_:_Inheriting_ZFS_Properties"><a class="permalink" href="#Example_5_:_Inheriting_ZFS_Properties">Example
+  5: <span class="No">Inheriting ZFS Properties</span></a></h2>
+<p class="Pp">The following command causes <var class="Ar">pool/home/bob</var>
+    <span class="No">and</span> <var class="Ar">pool/home/anne</var> to inherit
+    the <b class="Sy">checksum</b> property from their parent.</p>
+<div class="Bd Bd-indent"><code class="Li"># <code class="Nm">zfs</code>
+  <code class="Cm">inherit</code> <b class="Sy">checksum</b>
+  <var class="Ar">pool/home/bob pool/home/anne</var></code></div>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="Example_6_:_Setting_User_Properties"><a class="permalink" href="#Example_6_:_Setting_User_Properties">Example
+  6: <span class="No">Setting User Properties</span></a></h2>
+<p class="Pp">The following example sets the user-defined
+    <var class="Ar">com.example</var>:<var class="Ar">department</var> property
+    for a dataset:</p>
+<div class="Bd Bd-indent"><code class="Li"># <code class="Nm">zfs</code>
+  <code class="Cm">set</code>
+  <var class="Ar">com.example</var>:<var class="Ar">department</var>=<var class="Ar">12345
+  tank/accounting</var></code></div>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="Example_7_:_Setting_sharenfs_Property_Options_on_a_ZFS_File_System"><a class="permalink" href="#Example_7_:_Setting_sharenfs_Property_Options_on_a_ZFS_File_System">Example
+  7: <span class="No">Setting sharenfs Property Options on a ZFS File
+  System</span></a></h2>
+<p class="Pp">The following commands show how to set <b class="Sy">sharenfs</b>
+    property options to enable read-write access for a set of IP addresses and
+    to enable root access for system &quot;neo&quot; on the
+    <var class="Ar">tank/home</var> file system:</p>
+<div class="Bd Bd-indent"><code class="Li"># <code class="Nm">zfs</code>
+  <code class="Cm">set</code>
+  <b class="Sy">sharenfs</b>='<var class="Ar">rw</var>=@123.123.0.0/16:[::1],root=<var class="Ar">neo</var>'
+  tank/home</code></div>
+<p class="Pp">If you are using DNS for host name resolution, specify the
+    fully-qualified hostname.</p>
+</section>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SEE_ALSO"><a class="permalink" href="#SEE_ALSO">SEE
+  ALSO</a></h1>
+<p class="Pp"><a href="../7/zfsprops.7.html" class="Xr">zfsprops(7)</a>, <a href="../8/zfs-list.8.html" class="Xr">zfs-list(8)</a></p>
+</section>
+</div>
+<table class="foot">
+  <tr>
+    <td class="foot-date">April 20, 2024</td>
+    <td class="foot-os">Debian</td>
+  </tr>
+</table>
+</div></section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="zfs-send.8.html" class="btn btn-neutral float-left" title="zfs-send.8" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="zfs-share.8.html" class="btn btn-neutral float-right" title="zfs-share.8" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, OpenZFS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

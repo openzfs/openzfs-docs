@@ -1,0 +1,378 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ztest.1 &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
+      <script src="../../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="zvol_wait.1" href="zvol_wait.1.html" />
+    <link rel="prev" title="zhack.1" href="zhack.1.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Basic%20Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Man Pages</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../master/index.html">master</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.3/index.html">v2.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.2/index.html">v2.2</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">v2.1</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">User Commands (1)</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="arcstat.1.html">arcstat.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cstyle.1.html">cstyle.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="raidz_test.1.html">raidz_test.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zhack.1.html">zhack.1</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">ztest.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zvol_wait.1.html">zvol_wait.1</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../4/index.html">Devices and Special Files (4)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../5/index.html">File Formats and Conventions (5)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../7/index.html">Miscellaneous (7)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../8/index.html">System Administration Commands (8)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.0/index.html">v2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.8/index.html">v0.8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.7/index.html">v0.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.6/index.html">v0.6</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Man Pages</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">v2.1</a></li>
+          <li class="breadcrumb-item"><a href="index.html">User Commands (1)</a></li>
+      <li class="breadcrumb-item active">ztest.1</li>
+      <li class="wy-breadcrumbs-aside">
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/openzfs/zfs/blob/zfs-2.1.16/man/man1/ztest.1" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ztest-1">
+<h1>ztest.1<a class="headerlink" href="#ztest-1" title="Permalink to this heading"></a></h1>
+<div class="man_container"><table class="head">
+  <tr>
+    <td class="head-ltitle">ZTEST(1)</td>
+    <td class="head-vol">General Commands Manual</td>
+    <td class="head-rtitle">ZTEST(1)</td>
+  </tr>
+</table>
+<div class="manual-text">
+<section class="Sh">
+<h1 class="Sh" id="NAME"><a class="permalink" href="#NAME">NAME</a></h1>
+<p class="Pp"><code class="Nm">ztest</code> &#x2014; <span class="Nd">was
+    written by the ZFS Developers as a ZFS unit test</span></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SYNOPSIS"><a class="permalink" href="#SYNOPSIS">SYNOPSIS</a></h1>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">ztest</code></td>
+    <td>[<code class="Fl">-VEG</code>] [<code class="Fl">-v</code>
+      <var class="Ar">vdevs</var>] [<code class="Fl">-s</code>
+      <var class="Ar">size_of_each_vdev</var>] [<code class="Fl">-a</code>
+      <var class="Ar">alignment_shift</var>] [<code class="Fl">-m</code>
+      <var class="Ar">mirror_copies</var>] [<code class="Fl">-r</code>
+      <var class="Ar">raidz_disks/draid_disks</var>] [<code class="Fl">-R</code>
+      <var class="Ar">raid_parity</var>] [<code class="Fl">-K</code>
+      <var class="Ar">raid_kind</var>] [<code class="Fl">-D</code>
+      <var class="Ar">draid_data</var>] [<code class="Fl">-S</code>
+      <var class="Ar">draid_spares</var>] [<code class="Fl">-C</code>
+      <var class="Ar">vdev_class_state</var>] [<code class="Fl">-d</code>
+      <var class="Ar">datasets</var>] [<code class="Fl">-t</code>
+      <var class="Ar">threads</var>] [<code class="Fl">-g</code>
+      <var class="Ar">gang_block_threshold</var>] [<code class="Fl">-i</code>
+      <var class="Ar">initialize_pool_i_times</var>] [<code class="Fl">-k</code>
+      <var class="Ar">kill_percentage</var>] [<code class="Fl">-p</code>
+      <var class="Ar">pool_name</var>] [<code class="Fl">-T</code>
+      <var class="Ar">time</var>] [<code class="Fl">-z</code>
+      <var class="Ar">zil_failure_rate</var>]</td>
+  </tr>
+</table>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h1>
+<p class="Pp"><code class="Nm">ztest</code> was written by the ZFS Developers as
+    a ZFS unit test. The tool was developed in tandem with the ZFS functionality
+    and was executed nightly as one of the many regression test against the
+    daily build. As features were added to ZFS, unit tests were also added to
+    <code class="Nm">ztest</code>. In addition, a separate test development team
+    wrote and executed more functional and stress tests.</p>
+<p class="Pp">By default <code class="Nm">ztest</code> runs for ten minutes and
+    uses block files (stored in <span class="Pa">/tmp</span>) to create pools
+    rather than using physical disks. Block files afford
+    <code class="Nm">ztest</code> its flexibility to play around with zpool
+    components without requiring large hardware configurations. However, storing
+    the block files in <span class="Pa">/tmp</span> may not work for you if you
+    have a small tmp directory.</p>
+<p class="Pp">By default is non-verbose. This is why entering the command above
+    will result in <code class="Nm">ztest</code> quietly executing for 5
+    minutes. The <code class="Fl">-V</code> option can be used to increase the
+    verbosity of the tool. Adding multiple <code class="Fl">-V</code> options is
+    allowed and the more you add the more chatty <code class="Nm">ztest</code>
+    becomes.</p>
+<p class="Pp">After the <code class="Nm">ztest</code> run completes, you should
+    notice many <span class="Pa">ztest.*</span> files lying around. Once the run
+    completes you can safely remove these files. Note that you shouldn't remove
+    these files during a run. You can re-use these files in your next
+    <code class="Nm">ztest</code> run by using the <code class="Fl">-E</code>
+    option.</p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="OPTIONS"><a class="permalink" href="#OPTIONS">OPTIONS</a></h1>
+<dl class="Bl-tag">
+  <dt id="h"><a class="permalink" href="#h"><code class="Fl">-h</code></a>,
+    <code class="Fl">-?</code>, <code class="Fl">--help</code></dt>
+  <dd>Print a help summary.</dd>
+  <dt id="v"><a class="permalink" href="#v"><code class="Fl">-v</code></a>,
+    <code class="Fl">--vdevs</code>= (default:
+    <a class="permalink" href="#5"><b class="Sy" id="5">5</b></a>)</dt>
+  <dd>Number of vdevs.</dd>
+  <dt id="s"><a class="permalink" href="#s"><code class="Fl">-s</code></a>,
+    <code class="Fl">--vdev-size</code>= (default:
+    <a class="permalink" href="#64M"><b class="Sy" id="64M">64M</b></a>)</dt>
+  <dd>Size of each vdev.</dd>
+  <dt id="a"><a class="permalink" href="#a"><code class="Fl">-a</code></a>,
+    <code class="Fl">--alignment-shift</code>= (default:
+    <a class="permalink" href="#9"><b class="Sy" id="9">9</b></a>)
+    <span class="No">(use</span>
+    <a class="permalink" href="#0"><b class="Sy" id="0">0</b></a>
+    <span class="No">for random)</span></dt>
+  <dd>Alignment shift used in test.</dd>
+  <dt id="m"><a class="permalink" href="#m"><code class="Fl">-m</code></a>,
+    <code class="Fl">--mirror-copies</code>= (default:
+    <a class="permalink" href="#2"><b class="Sy" id="2">2</b></a>)</dt>
+  <dd>Number of mirror copies.</dd>
+  <dt id="r"><a class="permalink" href="#r"><code class="Fl">-r</code></a>,
+    <code class="Fl">--raid-disks</code>= (default: <b class="Sy">4</b>
+    <span class="No">for
+    raidz/</span><a class="permalink" href="#16"><b class="Sy" id="16">16</b></a>
+    <span class="No">for draid)</span></dt>
+  <dd>Number of raidz/draid disks.</dd>
+  <dt id="R"><a class="permalink" href="#R"><code class="Fl">-R</code></a>,
+    <code class="Fl">--raid-parity</code>= (default: <b class="Sy">1</b>)</dt>
+  <dd>Raid parity (raidz &amp; draid).</dd>
+  <dt id="K"><a class="permalink" href="#K"><code class="Fl">-K</code></a>,
+    <code class="Fl">--raid-kind</code>=<a class="permalink" href="#raidz"><b class="Sy" id="raidz">raidz</b></a>|<a class="permalink" href="#draid"><b class="Sy" id="draid">draid</b></a>|<b class="Sy">random</b>
+    <span class="No">(default:</span> <b class="Sy">random</b>)</dt>
+  <dd>The kind of RAID config to use. With <b class="Sy">random</b> the kind
+      alternates between raidz and draid.</dd>
+  <dt id="D"><a class="permalink" href="#D"><code class="Fl">-D</code></a>,
+    <code class="Fl">--draid-data</code>= (default: <b class="Sy">4</b>)</dt>
+  <dd>Number of data disks in a dRAID redundancy group.</dd>
+  <dt id="S"><a class="permalink" href="#S"><code class="Fl">-S</code></a>,
+    <code class="Fl">--draid-spares</code>= (default: <b class="Sy">1</b>)</dt>
+  <dd>Number of dRAID distributed spare disks.</dd>
+  <dt id="d"><a class="permalink" href="#d"><code class="Fl">-d</code></a>,
+    <code class="Fl">--datasets</code>= (default:
+    <a class="permalink" href="#7"><b class="Sy" id="7">7</b></a>)</dt>
+  <dd>Number of datasets.</dd>
+  <dt id="t"><a class="permalink" href="#t"><code class="Fl">-t</code></a>,
+    <code class="Fl">--threads</code>= (default:
+    <a class="permalink" href="#23"><b class="Sy" id="23">23</b></a>)</dt>
+  <dd>Number of threads.</dd>
+  <dt id="g"><a class="permalink" href="#g"><code class="Fl">-g</code></a>,
+    <code class="Fl">--gang-block-threshold</code>= (default:
+    <b class="Sy">32K</b>)</dt>
+  <dd>Gang block threshold.</dd>
+  <dt id="i"><a class="permalink" href="#i"><code class="Fl">-i</code></a>,
+    <code class="Fl">--init-count</code>= (default: <b class="Sy">1</b>)</dt>
+  <dd>Number of pool initializations.</dd>
+  <dt id="k"><a class="permalink" href="#k"><code class="Fl">-k</code></a>,
+    <code class="Fl">--kill-percentage</code>= (default:
+    <a class="permalink" href="#70_"><b class="Sy" id="70_">70%</b></a>)</dt>
+  <dd>Kill percentage.</dd>
+  <dt id="p"><a class="permalink" href="#p"><code class="Fl">-p</code></a>,
+    <code class="Fl">--pool-name</code>= (default:
+    <a class="permalink" href="#ztest"><b class="Sy" id="ztest">ztest</b></a>)</dt>
+  <dd>Pool name.</dd>
+  <dt id="f"><a class="permalink" href="#f"><code class="Fl">-f</code></a>,
+    <code class="Fl">--vdev-file-directory</code>= (default:
+    <span class="Pa">/tmp</span>)</dt>
+  <dd>File directory for vdev files.</dd>
+  <dt id="M"><a class="permalink" href="#M"><code class="Fl">-M</code></a>,
+    <code class="Fl">--multi-host</code></dt>
+  <dd>Multi-host; simulate pool imported on remote host.</dd>
+  <dt id="E"><a class="permalink" href="#E"><code class="Fl">-E</code></a>,
+    <code class="Fl">--use-existing-pool</code></dt>
+  <dd>Use existing pool (use existing pool instead of creating new one).</dd>
+  <dt id="T"><a class="permalink" href="#T"><code class="Fl">-T</code></a>,
+    <code class="Fl">--run-time</code>= (default:
+    <a class="permalink" href="#300"><b class="Sy" id="300">300</b></a>s)</dt>
+  <dd>Total test run time.</dd>
+  <dt id="P"><a class="permalink" href="#P"><code class="Fl">-P</code></a>,
+    <code class="Fl">--pass-time</code>= (default:
+    <a class="permalink" href="#60"><b class="Sy" id="60">60</b></a>s)</dt>
+  <dd>Time per pass.</dd>
+  <dt id="F"><a class="permalink" href="#F"><code class="Fl">-F</code></a>,
+    <code class="Fl">--freeze-loops</code>= (default:
+    <a class="permalink" href="#50"><b class="Sy" id="50">50</b></a>)</dt>
+  <dd>Max loops in
+      <a class="permalink" href="#spa_freeze"><code class="Fn" id="spa_freeze">spa_freeze</code></a>().</dd>
+  <dt id="B"><a class="permalink" href="#B"><code class="Fl">-B</code></a>,
+    <code class="Fl">--alt-ztest</code>=</dt>
+  <dd>Alternate ztest path.</dd>
+  <dt id="C"><a class="permalink" href="#C"><code class="Fl">-C</code></a>,
+    <code class="Fl">--vdev-class-state</code>=<a class="permalink" href="#on"><b class="Sy" id="on">on</b></a>|<a class="permalink" href="#off"><b class="Sy" id="off">off</b></a>|<b class="Sy">random</b>
+    <span class="No">(default:</span> <b class="Sy">random</b>)</dt>
+  <dd>The vdev allocation class state.</dd>
+  <dt id="o"><a class="permalink" href="#o"><code class="Fl">-o</code></a>,
+    <code class="Fl">--option</code>=<var class="Ar">variable</var>=<var class="Ar">value</var></dt>
+  <dd>Set global <var class="Ar">variable</var> to an unsigned 32-bit integer
+      <var class="Ar">value</var> (little-endian only).</dd>
+  <dt id="G"><a class="permalink" href="#G"><code class="Fl">-G</code></a>,
+    <code class="Fl">--dump-debug</code></dt>
+  <dd>Dump zfs_dbgmsg buffer before exiting due to an error.</dd>
+  <dt id="V"><a class="permalink" href="#V"><code class="Fl">-V</code></a>,
+    <code class="Fl">--verbose</code></dt>
+  <dd>Verbose (use multiple times for ever more verbosity).</dd>
+</dl>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="EXAMPLES"><a class="permalink" href="#EXAMPLES">EXAMPLES</a></h1>
+<p class="Pp">To override <span class="Pa">/tmp</span> as your location for
+    block files, you can use the <code class="Fl">-f</code> option:</p>
+<div class="Bd Bd-indent"><code class="Li"># ztest -f /</code></div>
+<p class="Pp">To get an idea of what <code class="Nm">ztest</code> is actually
+    testing try this:</p>
+<div class="Bd Bd-indent"><code class="Li"># ztest -f / -VVV</code></div>
+<p class="Pp">Maybe you'd like to run <code class="Nm">ztest</code> for longer?
+    To do so simply use the <code class="Fl">-T</code> option and specify the
+    runlength in seconds like so:</p>
+<div class="Bd Bd-indent"><code class="Li"># ztest -f / -V -T 120</code></div>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="ENVIRONMENT_VARIABLES"><a class="permalink" href="#ENVIRONMENT_VARIABLES">ENVIRONMENT
+  VARIABLES</a></h1>
+<dl class="Bl-tag">
+  <dt id="ZFS_HOSTID"><a class="permalink" href="#ZFS_HOSTID"><code class="Ev">ZFS_HOSTID</code></a>=<i class="Em">id</i></dt>
+  <dd>Use <i class="Em">id</i> instead of the SPL hostid to identify this host.
+      Intended for use with <code class="Nm">ztest</code>, but this environment
+      variable will affect any utility which uses libzpool, including
+      <a href="../8/zpool.8.html" class="Xr">zpool(8)</a>. Since the kernel is unaware of this setting,
+      results with utilities other than ztest are undefined.</dd>
+  <dt id="ZFS_STACK_SIZE"><a class="permalink" href="#ZFS_STACK_SIZE"><code class="Ev">ZFS_STACK_SIZE</code></a>=<i class="Em">stacksize</i></dt>
+  <dd>Limit the default stack size to <i class="Em">stacksize</i> bytes for the
+      purpose of detecting and debugging kernel stack overflows. This value
+      defaults to <i class="Em">32K</i> which is double the default
+      <a class="permalink" href="#16K"><i class="Em" id="16K">16K</i></a> Linux
+      kernel stack size.
+    <p class="Pp">In practice, setting the stack size slightly higher is needed
+        because differences in stack usage between kernel and user space can
+        lead to spurious stack overflows (especially when debugging is enabled).
+        The specified value will be rounded up to a floor of PTHREAD_STACK_MIN
+        which is the minimum stack required for a NULL procedure in user
+      space.</p>
+    <p class="Pp" id="256K">By default the stack size is limited to
+        <a class="permalink" href="#256K"><i class="Em">256K</i></a>.</p>
+  </dd>
+</dl>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SEE_ALSO"><a class="permalink" href="#SEE_ALSO">SEE
+  ALSO</a></h1>
+<p class="Pp"><a href="../1/zdb.1.html" class="Xr">zdb(1)</a>, <a href="../1/zfs.1.html" class="Xr">zfs(1)</a>,
+    <a href="../1/zpool.1.html" class="Xr">zpool(1)</a>, <a href="../4/spl.4.html" class="Xr">spl(4)</a></p>
+</section>
+</div>
+<table class="foot">
+  <tr>
+    <td class="foot-date">May 26, 2021</td>
+    <td class="foot-os">Debian</td>
+  </tr>
+</table>
+</div></section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="zhack.1.html" class="btn btn-neutral float-left" title="zhack.1" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="zvol_wait.1.html" class="btn btn-neutral float-right" title="zvol_wait.1" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, OpenZFS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

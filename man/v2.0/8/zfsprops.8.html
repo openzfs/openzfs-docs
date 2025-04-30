@@ -1,0 +1,1533 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>zfsprops.8 &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
+      <script src="../../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="zgenhostid.8" href="zgenhostid.8.html" />
+    <link rel="prev" title="zfsconcepts.8" href="zfsconcepts.8.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Basic%20Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Man Pages</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../master/index.html">master</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.3/index.html">v2.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.2/index.html">v2.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.1/index.html">v2.1</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">v2.0</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../1/index.html">User Commands (1)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../5/index.html">File Formats and Conventions (5)</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">System Administration Commands (8)</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="fsck.zfs.8.html">fsck.zfs.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mount.zfs.8.html">mount.zfs.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vdev_id.8.html">vdev_id.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zdb.8.html">zdb.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zed.8.html">zed.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-allow.8.html">zfs-allow.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-bookmark.8.html">zfs-bookmark.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-change-key.8.html">zfs-change-key.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-clone.8.html">zfs-clone.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-create.8.html">zfs-create.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-destroy.8.html">zfs-destroy.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-diff.8.html">zfs-diff.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-get.8.html">zfs-get.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-groupspace.8.html">zfs-groupspace.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-hold.8.html">zfs-hold.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-inherit.8.html">zfs-inherit.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-jail.8.html">zfs-jail.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-list.8.html">zfs-list.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-load-key.8.html">zfs-load-key.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-mount-generator.8.html">zfs-mount-generator.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-mount.8.html">zfs-mount.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-program.8.html">zfs-program.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-project.8.html">zfs-project.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-projectspace.8.html">zfs-projectspace.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-promote.8.html">zfs-promote.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-receive.8.html">zfs-receive.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-recv.8.html">zfs-recv.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-redact.8.html">zfs-redact.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-release.8.html">zfs-release.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-rename.8.html">zfs-rename.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-rollback.8.html">zfs-rollback.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-send.8.html">zfs-send.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-set.8.html">zfs-set.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-share.8.html">zfs-share.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-snapshot.8.html">zfs-snapshot.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-unallow.8.html">zfs-unallow.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-unjail.8.html">zfs-unjail.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-unload-key.8.html">zfs-unload-key.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-unmount.8.html">zfs-unmount.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-upgrade.8.html">zfs-upgrade.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-userspace.8.html">zfs-userspace.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-wait.8.html">zfs-wait.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs.8.html">zfs.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs_ids_to_path.8.html">zfs_ids_to_path.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfsconcepts.8.html">zfsconcepts.8</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">zfsprops.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zgenhostid.8.html">zgenhostid.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zinject.8.html">zinject.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-add.8.html">zpool-add.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-attach.8.html">zpool-attach.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-checkpoint.8.html">zpool-checkpoint.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-clear.8.html">zpool-clear.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-create.8.html">zpool-create.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-destroy.8.html">zpool-destroy.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-detach.8.html">zpool-detach.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-events.8.html">zpool-events.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-export.8.html">zpool-export.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-get.8.html">zpool-get.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-history.8.html">zpool-history.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-import.8.html">zpool-import.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-initialize.8.html">zpool-initialize.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-iostat.8.html">zpool-iostat.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-labelclear.8.html">zpool-labelclear.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-list.8.html">zpool-list.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-offline.8.html">zpool-offline.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-online.8.html">zpool-online.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-reguid.8.html">zpool-reguid.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-remove.8.html">zpool-remove.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-reopen.8.html">zpool-reopen.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-replace.8.html">zpool-replace.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-resilver.8.html">zpool-resilver.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-scrub.8.html">zpool-scrub.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-set.8.html">zpool-set.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-split.8.html">zpool-split.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-status.8.html">zpool-status.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-sync.8.html">zpool-sync.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-trim.8.html">zpool-trim.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-upgrade.8.html">zpool-upgrade.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-wait.8.html">zpool-wait.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool.8.html">zpool.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpoolconcepts.8.html">zpoolconcepts.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpoolprops.8.html">zpoolprops.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zstream.8.html">zstream.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zstreamdump.8.html">zstreamdump.8</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.8/index.html">v0.8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.7/index.html">v0.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.6/index.html">v0.6</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Man Pages</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">v2.0</a></li>
+          <li class="breadcrumb-item"><a href="index.html">System Administration Commands (8)</a></li>
+      <li class="breadcrumb-item active">zfsprops.8</li>
+      <li class="wy-breadcrumbs-aside">
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/openzfs/zfs/blob/zfs-2.0.7/man/man8/zfsprops.8" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="zfsprops-8">
+<h1>zfsprops.8<a class="headerlink" href="#zfsprops-8" title="Permalink to this heading"></a></h1>
+<div class="man_container"><table class="head">
+  <tr>
+    <td class="head-ltitle">ZFSPROPS(8)</td>
+    <td class="head-vol">System Manager's Manual</td>
+    <td class="head-rtitle">ZFSPROPS(8)</td>
+  </tr>
+</table>
+<div class="manual-text">
+<section class="Sh">
+<h1 class="Sh" id="NAME"><a class="permalink" href="#NAME">NAME</a></h1>
+<p class="Pp"><code class="Nm">zfsprops</code> &#x2014; <span class="Nd">Native
+    properties and user-defined of ZFS datasets.</span></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h1>
+<p class="Pp">Properties are divided into two types, native properties and
+    user-defined (or &quot;user&quot;) properties. Native properties either
+    export internal statistics or control ZFS behavior. In addition, native
+    properties are either editable or read-only. User properties have no effect
+    on ZFS behavior, but you can use them to annotate datasets in a way that is
+    meaningful in your environment. For more information about user properties,
+    see the <a class="Sx" href="#User_Properties">User Properties</a> section,
+    below.</p>
+<section class="Ss">
+<h2 class="Ss" id="Native_Properties"><a class="permalink" href="#Native_Properties">Native
+  Properties</a></h2>
+<p class="Pp">Every dataset has a set of properties that export statistics about
+    the dataset as well as control various behaviors. Properties are inherited
+    from the parent unless overridden by the child. Some properties apply only
+    to certain types of datasets (file systems, volumes, or snapshots).</p>
+<p class="Pp" id="k">The values of numeric properties can be specified using
+    human-readable suffixes (for example,
+    <a class="permalink" href="#k"><b class="Sy">k</b></a>,
+    <a class="permalink" href="#KB"><b class="Sy" id="KB">KB</b></a>,
+    <a class="permalink" href="#M"><b class="Sy" id="M">M</b></a>,
+    <a class="permalink" href="#Gb"><b class="Sy" id="Gb">Gb</b></a>, and so
+    forth, up to <a class="permalink" href="#Z"><b class="Sy" id="Z">Z</b></a>
+    for zettabyte). The following are all valid (and equal) specifications:
+    <code class="Li">1536M, 1.5g, 1.50GB</code>.</p>
+<p class="Pp">The values of non-numeric properties are case sensitive and must
+    be lowercase, except for <b class="Sy">mountpoint</b>,
+    <b class="Sy">sharenfs</b>, and <b class="Sy">sharesmb</b>.</p>
+<p class="Pp">The following native properties consist of read-only statistics
+    about the dataset. These properties can be neither set, nor inherited.
+    Native properties apply to all dataset types unless otherwise noted.</p>
+<dl class="Bl-tag">
+  <dt id="available"><a class="permalink" href="#available"><b class="Sy">available</b></a></dt>
+  <dd>The amount of space available to the dataset and all its children,
+      assuming that there is no other activity in the pool. Because space is
+      shared within a pool, availability can be limited by any number of
+      factors, including physical pool size, quotas, reservations, or other
+      datasets within the pool.
+    <p class="Pp" id="avail">This property can also be referred to by its
+        shortened column name,
+        <a class="permalink" href="#avail"><b class="Sy">avail</b></a>.</p>
+  </dd>
+  <dt id="compressratio"><a class="permalink" href="#compressratio"><b class="Sy">compressratio</b></a></dt>
+  <dd>For non-snapshots, the compression ratio achieved for the
+      <b class="Sy">used</b> space of this dataset, expressed as a multiplier.
+      The <b class="Sy">used</b> property includes descendant datasets, and, for
+      clones, does not include the space shared with the origin snapshot. For
+      snapshots, the <b class="Sy">compressratio</b> is the same as the
+      <b class="Sy">refcompressratio</b> property. Compression can be turned on
+      by running: <code class="Nm">zfs</code> <code class="Cm">set</code>
+      <b class="Sy">compression</b>=<b class="Sy">on</b>
+      <var class="Ar">dataset</var>. The default value is
+    <b class="Sy">off</b>.</dd>
+  <dt id="createtxg"><a class="permalink" href="#createtxg"><b class="Sy">createtxg</b></a></dt>
+  <dd>The transaction group (txg) in which the dataset was created. Bookmarks
+      have the same <b class="Sy">createtxg</b> as the snapshot they are
+      initially tied to. This property is suitable for ordering a list of
+      snapshots, e.g. for incremental send and receive.</dd>
+  <dt id="creation"><a class="permalink" href="#creation"><b class="Sy">creation</b></a></dt>
+  <dd>The time this dataset was created.</dd>
+  <dt id="clones"><a class="permalink" href="#clones"><b class="Sy">clones</b></a></dt>
+  <dd>For snapshots, this property is a comma-separated list of filesystems or
+      volumes which are clones of this snapshot. The clones'
+      <b class="Sy">origin</b> property is this snapshot. If the
+      <b class="Sy">clones</b> property is not empty, then this snapshot can not
+      be destroyed (even with the <code class="Fl">-r</code> or
+      <code class="Fl">-f</code> options). The roles of origin and clone can be
+      swapped by promoting the clone with the <code class="Nm">zfs</code>
+      <code class="Cm">promote</code> command.</dd>
+  <dt id="defer_destroy"><a class="permalink" href="#defer_destroy"><b class="Sy">defer_destroy</b></a></dt>
+  <dd>This property is <b class="Sy">on</b> if the snapshot has been marked for
+      deferred destroy by using the <code class="Nm">zfs</code>
+      <code class="Cm">destroy</code> <code class="Fl">-d</code> command.
+      Otherwise, the property is <b class="Sy">off</b>.</dd>
+  <dt id="encryptionroot"><a class="permalink" href="#encryptionroot"><b class="Sy">encryptionroot</b></a></dt>
+  <dd>For encrypted datasets, indicates where the dataset is currently
+      inheriting its encryption key from. Loading or unloading a key for the
+      <b class="Sy">encryptionroot</b> will implicitly load / unload the key for
+      any inheriting datasets (see <code class="Nm">zfs</code>
+      <code class="Cm">load-key</code> and <code class="Nm">zfs</code>
+      <code class="Cm">unload-key</code> for details). Clones will always share
+      an encryption key with their origin. See the <i class="Em">Encryption</i>
+      section of <a href="../8/zfs-load-key.8.html" class="Xr">zfs-load-key(8)</a> for details.</dd>
+  <dt id="filesystem_count"><a class="permalink" href="#filesystem_count"><b class="Sy">filesystem_count</b></a></dt>
+  <dd>The total number of filesystems and volumes that exist under this location
+      in the dataset tree. This value is only available when a
+      <b class="Sy">filesystem_limit</b> has been set somewhere in the tree
+      under which the dataset resides.</dd>
+  <dt id="keystatus"><a class="permalink" href="#keystatus"><b class="Sy">keystatus</b></a></dt>
+  <dd>Indicates if an encryption key is currently loaded into ZFS. The possible
+      values are <b class="Sy">none</b>, <b class="Sy">available</b>, and
+      <a class="permalink" href="#unavailable"><b class="Sy" id="unavailable">unavailable</b></a>.
+      See <code class="Nm">zfs</code> <code class="Cm">load-key</code> and
+      <code class="Nm">zfs</code> <code class="Cm">unload-key</code>.</dd>
+  <dt id="guid"><a class="permalink" href="#guid"><b class="Sy">guid</b></a></dt>
+  <dd>The 64 bit GUID of this dataset or bookmark which does not change over its
+      entire lifetime. When a snapshot is sent to another pool, the received
+      snapshot has the same GUID. Thus, the <b class="Sy">guid</b> is suitable
+      to identify a snapshot across pools.</dd>
+  <dt id="logicalreferenced"><a class="permalink" href="#logicalreferenced"><b class="Sy">logicalreferenced</b></a></dt>
+  <dd>The amount of space that is &quot;logically&quot; accessible by this
+      dataset. See the <b class="Sy">referenced</b> property. The logical space
+      ignores the effect of the <b class="Sy">compression</b> and
+      <b class="Sy">copies</b> properties, giving a quantity closer to the
+      amount of data that applications see. However, it does include space
+      consumed by metadata.
+    <p class="Pp" id="lrefer">This property can also be referred to by its
+        shortened column name,
+        <a class="permalink" href="#lrefer"><b class="Sy">lrefer</b></a>.</p>
+  </dd>
+  <dt id="logicalused"><a class="permalink" href="#logicalused"><b class="Sy">logicalused</b></a></dt>
+  <dd>The amount of space that is &quot;logically&quot; consumed by this dataset
+      and all its descendents. See the <b class="Sy">used</b> property. The
+      logical space ignores the effect of the <b class="Sy">compression</b> and
+      <b class="Sy">copies</b> properties, giving a quantity closer to the
+      amount of data that applications see. However, it does include space
+      consumed by metadata.
+    <p class="Pp" id="lused">This property can also be referred to by its
+        shortened column name,
+        <a class="permalink" href="#lused"><b class="Sy">lused</b></a>.</p>
+  </dd>
+  <dt id="mounted"><a class="permalink" href="#mounted"><b class="Sy">mounted</b></a></dt>
+  <dd>For file systems, indicates whether the file system is currently mounted.
+      This property can be either
+      <a class="permalink" href="#yes"><b class="Sy" id="yes">yes</b></a> or
+      <a class="permalink" href="#no"><b class="Sy" id="no">no</b></a>.</dd>
+  <dt id="objsetid"><a class="permalink" href="#objsetid"><b class="Sy">objsetid</b></a></dt>
+  <dd>A unique identifier for this dataset within the pool. Unlike the dataset's
+      <b class="Sy">guid</b> , the <b class="Sy">objsetid</b> of a dataset is
+      not transferred to other pools when the snapshot is copied with a
+      send/receive operation. The <b class="Sy">objsetid</b> can be reused (for
+      a new dataset) after the dataset is deleted.</dd>
+  <dt id="origin"><a class="permalink" href="#origin"><b class="Sy">origin</b></a></dt>
+  <dd>For cloned file systems or volumes, the snapshot from which the clone was
+      created. See also the <b class="Sy">clones</b> property.</dd>
+  <dt id="receive_resume_token"><a class="permalink" href="#receive_resume_token"><b class="Sy">receive_resume_token</b></a></dt>
+  <dd>For filesystems or volumes which have saved partially-completed state from
+      <b class="Sy">zfs receive -s</b>, this opaque token can be provided to
+      <b class="Sy">zfs send -t</b> to resume and complete the <b class="Sy">zfs
+      receive</b>.</dd>
+  <dt id="redact_snaps"><a class="permalink" href="#redact_snaps"><b class="Sy">redact_snaps</b></a></dt>
+  <dd>For bookmarks, this is the list of snapshot guids the bookmark contains a
+      redaction list for. For snapshots, this is the list of snapshot guids the
+      snapshot is redacted with respect to.</dd>
+  <dt id="referenced"><a class="permalink" href="#referenced"><b class="Sy">referenced</b></a></dt>
+  <dd>The amount of data that is accessible by this dataset, which may or may
+      not be shared with other datasets in the pool. When a snapshot or clone is
+      created, it initially references the same amount of space as the file
+      system or snapshot it was created from, since its contents are identical.
+    <p class="Pp" id="refer">This property can also be referred to by its
+        shortened column name,
+        <a class="permalink" href="#refer"><b class="Sy">refer</b></a>.</p>
+  </dd>
+  <dt id="refcompressratio"><a class="permalink" href="#refcompressratio"><b class="Sy">refcompressratio</b></a></dt>
+  <dd>The compression ratio achieved for the <b class="Sy">referenced</b> space
+      of this dataset, expressed as a multiplier. See also the
+      <b class="Sy">compressratio</b> property.</dd>
+  <dt id="snapshot_count"><a class="permalink" href="#snapshot_count"><b class="Sy">snapshot_count</b></a></dt>
+  <dd>The total number of snapshots that exist under this location in the
+      dataset tree. This value is only available when a
+      <b class="Sy">snapshot_limit</b> has been set somewhere in the tree under
+      which the dataset resides.</dd>
+  <dt id="type"><a class="permalink" href="#type"><b class="Sy">type</b></a></dt>
+  <dd>The type of dataset: <b class="Sy">filesystem</b>,
+      <a class="permalink" href="#volume"><b class="Sy" id="volume">volume</b></a>,
+      <b class="Sy">snapshot</b>, or
+      <a class="permalink" href="#bookmark"><b class="Sy" id="bookmark">bookmark</b></a>.</dd>
+  <dt id="used"><a class="permalink" href="#used"><b class="Sy">used</b></a></dt>
+  <dd>The amount of space consumed by this dataset and all its descendents. This
+      is the value that is checked against this dataset's quota and reservation.
+      The space used does not include this dataset's reservation, but does take
+      into account the reservations of any descendent datasets. The amount of
+      space that a dataset consumes from its parent, as well as the amount of
+      space that is freed if this dataset is recursively destroyed, is the
+      greater of its space used and its reservation.
+    <p class="Pp">The used space of a snapshot (see the
+        <i class="Em">Snapshots</i> section of <a href="../8/zfsconcepts.8.html" class="Xr">zfsconcepts(8)</a>)
+        is space that is referenced exclusively by this snapshot. If this
+        snapshot is destroyed, the amount of <b class="Sy">used</b> space will
+        be freed. Space that is shared by multiple snapshots isn't accounted for
+        in this metric. When a snapshot is destroyed, space that was previously
+        shared with this snapshot can become unique to snapshots adjacent to it,
+        thus changing the used space of those snapshots. The used space of the
+        latest snapshot can also be affected by changes in the file system. Note
+        that the <b class="Sy">used</b> space of a snapshot is a subset of the
+        <b class="Sy">written</b> space of the snapshot.</p>
+    <p class="Pp">The amount of space used, available, or referenced does not
+        take into account pending changes. Pending changes are generally
+        accounted for within a few seconds. Committing a change to a disk using
+        <a class="Xr">fsync(2)</a> or <code class="Dv">O_SYNC</code> does not
+        necessarily guarantee that the space usage information is updated
+        immediately.</p>
+  </dd>
+  <dt id="usedby*"><a class="permalink" href="#usedby*"><b class="Sy">usedby*</b></a></dt>
+  <dd>The <b class="Sy">usedby*</b> properties decompose the
+      <b class="Sy">used</b> properties into the various reasons that space is
+      used. Specifically, <b class="Sy">used</b> <span class="No">=</span>
+      <b class="Sy">usedbychildren</b> <span class="No">+</span>
+      <b class="Sy">usedbydataset</b> <span class="No">+</span>
+      <b class="Sy">usedbyrefreservation</b> <span class="No">+</span>
+      <b class="Sy">usedbysnapshots</b>. These properties are only available for
+      datasets created on <code class="Nm">zpool</code> &quot;version 13&quot;
+      pools.</dd>
+  <dt id="usedbychildren"><a class="permalink" href="#usedbychildren"><b class="Sy">usedbychildren</b></a></dt>
+  <dd>The amount of space used by children of this dataset, which would be freed
+      if all the dataset's children were destroyed.</dd>
+  <dt id="usedbydataset"><a class="permalink" href="#usedbydataset"><b class="Sy">usedbydataset</b></a></dt>
+  <dd>The amount of space used by this dataset itself, which would be freed if
+      the dataset were destroyed (after first removing any
+      <b class="Sy">refreservation</b> and destroying any necessary snapshots or
+      descendents).</dd>
+  <dt id="usedbyrefreservation"><a class="permalink" href="#usedbyrefreservation"><b class="Sy">usedbyrefreservation</b></a></dt>
+  <dd>The amount of space used by a <b class="Sy">refreservation</b> set on this
+      dataset, which would be freed if the <b class="Sy">refreservation</b> was
+      removed.</dd>
+  <dt id="usedbysnapshots"><a class="permalink" href="#usedbysnapshots"><b class="Sy">usedbysnapshots</b></a></dt>
+  <dd>The amount of space consumed by snapshots of this dataset. In particular,
+      it is the amount of space that would be freed if all of this dataset's
+      snapshots were destroyed. Note that this is not simply the sum of the
+      snapshots' <b class="Sy">used</b> properties because space can be shared
+      by multiple snapshots.</dd>
+  <dt id="userused"><a class="permalink" href="#userused"><b class="Sy">userused</b></a>@<i class="Em">user</i></dt>
+  <dd>The amount of space consumed by the specified user in this dataset. Space
+      is charged to the owner of each file, as displayed by
+      <code class="Nm">ls</code> <code class="Fl">-l</code>. The amount of space
+      charged is displayed by <code class="Nm">du</code> and
+      <code class="Nm">ls</code> <code class="Fl">-s</code>. See the
+      <code class="Nm">zfs</code> <code class="Cm">userspace</code> subcommand
+      for more information.
+    <p class="Pp">Unprivileged users can access only their own space usage. The
+        root user, or a user who has been granted the <b class="Sy">userused</b>
+        privilege with <code class="Nm">zfs</code>
+        <code class="Cm">allow</code>, can access everyone's usage.</p>
+    <p class="Pp">The <b class="Sy">userused</b>@<i class="Em">...</i>
+        properties are not displayed by <code class="Nm">zfs</code>
+        <code class="Cm">get</code> <b class="Sy">all</b>. The user's name must
+        be appended after the @ symbol, using one of the following forms:</p>
+    <ul class="Bl-bullet">
+      <li id="POSIX"><a class="permalink" href="#POSIX"><i class="Em">POSIX
+          name</i></a> (for example, <b class="Sy">joe</b>)</li>
+      <li id="POSIX~2"><a class="permalink" href="#POSIX~2"><i class="Em">POSIX
+          numeric ID</i></a> (for example, <b class="Sy">789</b>)</li>
+      <li id="SID"><a class="permalink" href="#SID"><i class="Em">SID
+          name</i></a> (for example, <b class="Sy">joe.smith@mydomain</b>)</li>
+      <li id="SID~2"><a class="permalink" href="#SID~2"><i class="Em">SID
+          numeric ID</i></a> (for example,
+        <b class="Sy">S-1-123-456-789</b>)</li>
+    </ul>
+    <p class="Pp">Files created on Linux always have POSIX owners.</p>
+  </dd>
+  <dt id="userobjused"><a class="permalink" href="#userobjused"><b class="Sy">userobjused</b></a>@<i class="Em">user</i></dt>
+  <dd>The <b class="Sy">userobjused</b> property is similar to
+      <b class="Sy">userused</b> but instead it counts the number of objects
+      consumed by a user. This property counts all objects allocated on behalf
+      of the user, it may differ from the results of system tools such as
+      <code class="Nm">df</code> <code class="Fl">-i</code>.
+    <p class="Pp">When the property <b class="Sy">xattr=on</b> is set on a file
+        system additional objects will be created per-file to store extended
+        attributes. These additional objects are reflected in the
+        <b class="Sy">userobjused</b> value and are counted against the user's
+        <b class="Sy">userobjquota</b>. When a file system is configured to use
+        <b class="Sy">xattr=sa</b> no additional internal objects are normally
+        required.</p>
+  </dd>
+  <dt id="userrefs"><a class="permalink" href="#userrefs"><b class="Sy">userrefs</b></a></dt>
+  <dd>This property is set to the number of user holds on this snapshot. User
+      holds are set by using the <code class="Nm">zfs</code>
+      <code class="Cm">hold</code> command.</dd>
+  <dt id="groupused"><a class="permalink" href="#groupused"><b class="Sy">groupused</b></a>@<i class="Em">group</i></dt>
+  <dd>The amount of space consumed by the specified group in this dataset. Space
+      is charged to the group of each file, as displayed by
+      <code class="Nm">ls</code> <code class="Fl">-l</code>. See the
+      <b class="Sy">userused</b>@<i class="Em">user</i> property for more
+      information.
+    <p class="Pp">Unprivileged users can only access their own groups' space
+        usage. The root user, or a user who has been granted the
+        <b class="Sy">groupused</b> privilege with <code class="Nm">zfs</code>
+        <code class="Cm">allow</code>, can access all groups' usage.</p>
+  </dd>
+  <dt id="groupobjused"><a class="permalink" href="#groupobjused"><b class="Sy">groupobjused</b></a>@<i class="Em">group</i></dt>
+  <dd>The number of objects consumed by the specified group in this dataset.
+      Multiple objects may be charged to the group for each file when extended
+      attributes are in use. See the
+      <b class="Sy">userobjused</b>@<i class="Em">user</i> property for more
+      information.
+    <p class="Pp">Unprivileged users can only access their own groups' space
+        usage. The root user, or a user who has been granted the
+        <b class="Sy">groupobjused</b> privilege with
+        <code class="Nm">zfs</code> <code class="Cm">allow</code>, can access
+        all groups' usage.</p>
+  </dd>
+  <dt id="projectused"><a class="permalink" href="#projectused"><b class="Sy">projectused</b></a>@<i class="Em">project</i></dt>
+  <dd>The amount of space consumed by the specified project in this dataset.
+      Project is identified via the project identifier (ID) that is object-based
+      numeral attribute. An object can inherit the project ID from its parent
+      object (if the parent has the flag of inherit project ID that can be set
+      and changed via <code class="Nm">chattr</code>
+      <code class="Fl">-/+P</code> or <code class="Nm">zfs project</code>
+      <code class="Fl">-s</code>) when being created. The privileged user can
+      set and change object's project ID via <code class="Nm">chattr</code>
+      <code class="Fl">-p</code> or <code class="Nm">zfs project</code>
+      <code class="Fl">-s</code> anytime. Space is charged to the project of
+      each file, as displayed by <code class="Nm">lsattr</code>
+      <code class="Fl">-p</code> or <code class="Nm">zfs project</code>. See the
+      <b class="Sy">userused</b>@<i class="Em">user</i> property for more
+      information.
+    <p class="Pp">The root user, or a user who has been granted the
+        <b class="Sy">projectused</b> privilege with <code class="Nm">zfs
+        allow</code>, can access all projects' usage.</p>
+  </dd>
+  <dt id="projectobjused"><a class="permalink" href="#projectobjused"><b class="Sy">projectobjused</b></a>@<i class="Em">project</i></dt>
+  <dd>The <b class="Sy">projectobjused</b> is similar to
+      <b class="Sy">projectused</b> but instead it counts the number of objects
+      consumed by project. When the property <b class="Sy">xattr=on</b> is set
+      on a fileset, ZFS will create additional objects per-file to store
+      extended attributes. These additional objects are reflected in the
+      <b class="Sy">projectobjused</b> value and are counted against the
+      project's <b class="Sy">projectobjquota</b>. When a filesystem is
+      configured to use <b class="Sy">xattr=sa</b> no additional internal
+      objects are required. See the
+      <b class="Sy">userobjused</b>@<i class="Em">user</i> property for more
+      information.
+    <p class="Pp">The root user, or a user who has been granted the
+        <b class="Sy">projectobjused</b> privilege with <code class="Nm">zfs
+        allow</code>, can access all projects' objects usage.</p>
+  </dd>
+  <dt id="volblocksize"><a class="permalink" href="#volblocksize"><b class="Sy">volblocksize</b></a></dt>
+  <dd>For volumes, specifies the block size of the volume. The
+      <b class="Sy">blocksize</b> cannot be changed once the volume has been
+      written, so it should be set at volume creation time. The default
+      <b class="Sy">blocksize</b> for volumes is 8 Kbytes. Any power of 2 from
+      512 bytes to 128 Kbytes is valid.
+    <p class="Pp" id="volblock">This property can also be referred to by its
+        shortened column name,
+        <a class="permalink" href="#volblock"><b class="Sy">volblock</b></a>.</p>
+  </dd>
+  <dt id="written"><a class="permalink" href="#written"><b class="Sy">written</b></a></dt>
+  <dd>The amount of space <b class="Sy">referenced</b> by this dataset, that was
+      written since the previous snapshot (i.e. that is not referenced by the
+      previous snapshot).</dd>
+  <dt id="written~2"><a class="permalink" href="#written~2"><b class="Sy">written</b></a>@<i class="Em">snapshot</i></dt>
+  <dd>The amount of <b class="Sy">referenced</b> space written to this dataset
+      since the specified snapshot. This is the space that is referenced by this
+      dataset but was not referenced by the specified snapshot.
+    <p class="Pp">The <i class="Em">snapshot</i> may be specified as a short
+        snapshot name (just the part after the <b class="Sy">@</b>), in which
+        case it will be interpreted as a snapshot in the same filesystem as this
+        dataset. The <i class="Em">snapshot</i> may be a full snapshot name
+        (<i class="Em">filesystem</i>@<i class="Em">snapshot</i>), which for
+        clones may be a snapshot in the origin's filesystem (or the origin of
+        the origin's filesystem, etc.)</p>
+  </dd>
+</dl>
+<p class="Pp">The following native properties can be used to change the behavior
+    of a ZFS dataset.</p>
+<dl class="Bl-tag">
+  <dt id="aclinherit"><a class="permalink" href="#aclinherit"><b class="Sy">aclinherit</b></a>=<b class="Sy">discard</b>|<b class="Sy">noallow</b>|<b class="Sy">restricted</b>|<b class="Sy">passthrough</b>|<b class="Sy">passthrough-x</b></dt>
+  <dd>Controls how ACEs are inherited when files and directories are created.
+    <dl class="Bl-tag">
+      <dt id="discard"><a class="permalink" href="#discard"><b class="Sy">discard</b></a></dt>
+      <dd>does not inherit any ACEs.</dd>
+      <dt id="noallow"><a class="permalink" href="#noallow"><b class="Sy">noallow</b></a></dt>
+      <dd>only inherits inheritable ACEs that specify &quot;deny&quot;
+          permissions.</dd>
+      <dt id="restricted"><a class="permalink" href="#restricted"><b class="Sy">restricted</b></a></dt>
+      <dd>default, removes the
+          <a class="permalink" href="#write_acl"><b class="Sy" id="write_acl">write_acl</b></a>
+          and
+          <a class="permalink" href="#write_owner"><b class="Sy" id="write_owner">write_owner</b></a>
+          permissions when the ACE is inherited.</dd>
+      <dt id="passthrough"><a class="permalink" href="#passthrough"><b class="Sy">passthrough</b></a></dt>
+      <dd>inherits all inheritable ACEs without any modifications.</dd>
+      <dt id="passthrough-x"><a class="permalink" href="#passthrough-x"><b class="Sy">passthrough-x</b></a></dt>
+      <dd>same meaning as <b class="Sy">passthrough</b>, except that the
+          <a class="permalink" href="#owner@"><b class="Sy" id="owner@">owner@</b></a>,
+          <a class="permalink" href="#group@"><b class="Sy" id="group@">group@</b></a>,
+          and
+          <a class="permalink" href="#everyone@"><b class="Sy" id="everyone@">everyone@</b></a>
+          ACEs inherit the execute permission only if the file creation mode
+          also requests the execute bit.</dd>
+    </dl>
+    <p class="Pp">When the property value is set to
+        <b class="Sy">passthrough</b>, files are created with a mode determined
+        by the inheritable ACEs. If no inheritable ACEs exist that affect the
+        mode, then the mode is set in accordance to the requested mode from the
+        application.</p>
+    <p class="Pp">The <b class="Sy">aclinherit</b> property does not apply to
+        POSIX ACLs.</p>
+  </dd>
+  <dt id="aclmode"><a class="permalink" href="#aclmode"><b class="Sy">aclmode</b></a>=<b class="Sy">discard</b>|<b class="Sy">groupmask</b>|<b class="Sy">passthrough</b>|<b class="Sy">restricted</b></dt>
+  <dd>Controls how an ACL is modified during chmod(2) and how inherited ACEs are
+      modified by the file creation mode.
+    <dl class="Bl-tag">
+      <dt id="discard~2"><a class="permalink" href="#discard~2"><b class="Sy">discard</b></a></dt>
+      <dd>default, deletes all
+          <a class="permalink" href="#ACEs"><b class="Sy" id="ACEs">ACEs</b></a>
+          except for those representing the mode of the file or directory
+          requested by <a class="Xr">chmod(2)</a>.</dd>
+      <dt id="groupmask"><a class="permalink" href="#groupmask"><b class="Sy">groupmask</b></a></dt>
+      <dd>reduces permissions granted in all
+          <a class="permalink" href="#ALLOW"><b class="Sy" id="ALLOW">ALLOW</b></a>
+          entries found in the
+          <a class="permalink" href="#ACL"><b class="Sy" id="ACL">ACL</b></a>
+          such that they are no greater than the group permissions specified by
+          <a class="Xr">chmod(2)</a>.</dd>
+      <dt id="passthrough~2"><a class="permalink" href="#passthrough~2"><b class="Sy">passthrough</b></a></dt>
+      <dd>indicates that no changes are made to the ACL other than creating or
+          updating the necessary ACL entries to represent the new mode of the
+          file or directory.</dd>
+      <dt id="restricted~2"><a class="permalink" href="#restricted~2"><b class="Sy">restricted</b></a></dt>
+      <dd>will cause the <a class="Xr">chmod(2)</a> operation to return an error
+          when used on any file or directory which has a non-trivial ACL whose
+          entries can not be represented by a mode. <a class="Xr">chmod(2)</a>
+          is required to change the set user ID, set group ID, or sticky bits on
+          a file or directory, as they do not have equivalent ACL entries. In
+          order to use <a class="Xr">chmod(2)</a> on a file or directory with a
+          non-trivial ACL when <b class="Sy">aclmode</b> is set to
+          <b class="Sy">restricted</b>, you must first remove all ACL entries
+          which do not represent the current mode.</dd>
+    </dl>
+  </dd>
+  <dt id="acltype"><a class="permalink" href="#acltype"><b class="Sy">acltype</b></a>=<b class="Sy">off</b>|<b class="Sy">nfsv4</b>|<b class="Sy">posix</b></dt>
+  <dd>Controls whether ACLs are enabled and if so what type of ACL to use. When
+      this property is set to a type of ACL not supported by the current
+      platform, the behavior is the same as if it were set to
+      <b class="Sy">off</b>.
+    <dl class="Bl-tag">
+      <dt id="off"><a class="permalink" href="#off"><b class="Sy">off</b></a></dt>
+      <dd>default on Linux, when a file system has the <b class="Sy">acltype</b>
+          property set to off then ACLs are disabled.</dd>
+      <dt id="noacl"><a class="permalink" href="#noacl"><b class="Sy">noacl</b></a></dt>
+      <dd>an alias for <b class="Sy">off</b></dd>
+      <dt id="nfsv4"><a class="permalink" href="#nfsv4"><b class="Sy">nfsv4</b></a></dt>
+      <dd>default on FreeBSD, indicates that NFSv4-style ZFS ACLs should be
+          used. These ACLs can be managed with the <a class="Xr">getfacl(1)</a>
+          and <a class="Xr">setfacl(1)</a> commands on FreeBSD. The
+          <b class="Sy">nfsv4</b> ZFS ACL type is not yet supported on
+        Linux.</dd>
+      <dt id="posix"><a class="permalink" href="#posix"><b class="Sy">posix</b></a></dt>
+      <dd>indicates POSIX ACLs should be used. POSIX ACLs are specific to Linux
+          and are not functional on other platforms. POSIX ACLs are stored as an
+          extended attribute and therefore will not overwrite any existing NFSv4
+          ACLs which may be set.</dd>
+      <dt id="posixacl"><a class="permalink" href="#posixacl"><b class="Sy">posixacl</b></a></dt>
+      <dd>an alias for <b class="Sy">posix</b></dd>
+    </dl>
+    <p class="Pp">To obtain the best performance when setting
+        <b class="Sy">posix</b> users are strongly encouraged to set the
+        <b class="Sy">xattr=sa</b> property. This will result in the POSIX ACL
+        being stored more efficiently on disk. But as a consequence, all new
+        extended attributes will only be accessible from OpenZFS implementations
+        which support the <b class="Sy">xattr=sa</b> property. See the
+        <b class="Sy">xattr</b> property for more details.</p>
+  </dd>
+  <dt id="atime"><a class="permalink" href="#atime"><b class="Sy">atime</b></a>=<b class="Sy">on</b>|<b class="Sy">off</b></dt>
+  <dd>Controls whether the access time for files is updated when they are read.
+      Turning this property off avoids producing write traffic when reading
+      files and can result in significant performance gains, though it might
+      confuse mailers and other similar utilities. The values
+      <b class="Sy">on</b> and <b class="Sy">off</b> are equivalent to the
+      <b class="Sy">atime</b> and
+      <a class="permalink" href="#noatime"><b class="Sy" id="noatime">noatime</b></a>
+      mount options. The default value is <b class="Sy">on</b>. See also
+      <b class="Sy">relatime</b> below.</dd>
+  <dt id="canmount"><a class="permalink" href="#canmount"><b class="Sy">canmount</b></a>=<b class="Sy">on</b>|<b class="Sy">off</b>|<b class="Sy">noauto</b></dt>
+  <dd>If this property is set to <b class="Sy">off</b>, the file system cannot
+      be mounted, and is ignored by <code class="Nm">zfs</code>
+      <code class="Cm">mount</code> <code class="Fl">-a</code>. Setting this
+      property to <b class="Sy">off</b> is similar to setting the
+      <b class="Sy">mountpoint</b> property to <b class="Sy">none</b>, except
+      that the dataset still has a normal <b class="Sy">mountpoint</b> property,
+      which can be inherited. Setting this property to <b class="Sy">off</b>
+      allows datasets to be used solely as a mechanism to inherit properties.
+      One example of setting <b class="Sy">canmount</b>=<b class="Sy">off</b> is
+      to have two datasets with the same <b class="Sy">mountpoint</b>, so that
+      the children of both datasets appear in the same directory, but might have
+      different inherited characteristics.
+    <p class="Pp">When set to <b class="Sy">noauto</b>, a dataset can only be
+        mounted and unmounted explicitly. The dataset is not mounted
+        automatically when the dataset is created or imported, nor is it mounted
+        by the <code class="Nm">zfs</code> <code class="Cm">mount</code>
+        <code class="Fl">-a</code> command or unmounted by the
+        <code class="Nm">zfs</code> <code class="Cm">unmount</code>
+        <code class="Fl">-a</code> command.</p>
+    <p class="Pp">This property is not inherited.</p>
+  </dd>
+  <dt id="checksum"><a class="permalink" href="#checksum"><b class="Sy">checksum</b></a>=<b class="Sy">on</b>|<b class="Sy">off</b>|<a class="permalink" href="#fletcher2"><b class="Sy" id="fletcher2">fletcher2</b></a>|<b class="Sy">fletcher4</b>|<b class="Sy">sha256</b>|<b class="Sy">noparity</b>|<b class="Sy">sha512</b>|<b class="Sy">skein</b>|<b class="Sy">edonr</b></dt>
+  <dd>Controls the checksum used to verify data integrity. The default value is
+      <b class="Sy">on</b>, which automatically selects an appropriate algorithm
+      (currently, <b class="Sy">fletcher4</b>, but this may change in future
+      releases). The value <b class="Sy">off</b> disables integrity checking on
+      user data. The value <b class="Sy">noparity</b> not only disables
+      integrity but also disables maintaining parity for user data. This setting
+      is used internally by a dump device residing on a RAID-Z pool and should
+      not be used by any other dataset. Disabling checksums is
+      <b class="Sy">NOT</b> a recommended practice.
+    <p class="Pp">The <b class="Sy">sha512</b>, <b class="Sy">skein</b>, and
+        <b class="Sy">edonr</b> checksum algorithms require enabling the
+        appropriate features on the pool. FreeBSD does not support the
+        <b class="Sy">edonr</b> algorithm.</p>
+    <p class="Pp">Please see <a href="../5/zpool-features.5.html" class="Xr">zpool-features(5)</a> for more
+        information on these algorithms.</p>
+    <p class="Pp">Changing this property affects only newly-written data.</p>
+  </dd>
+  <dt id="compression"><a class="permalink" href="#compression"><b class="Sy">compression</b></a>=<b class="Sy">on</b>|<b class="Sy">off</b>|<b class="Sy">gzip</b>|<b class="Sy">gzip-</b><i class="Em">N</i>|<b class="Sy">lz4</b>|<b class="Sy">lzjb</b>|<b class="Sy">zle</b>|<b class="Sy">zstd</b>|<b class="Sy">zstd-</b><i class="Em">N</i>|<b class="Sy">zstd-fast</b>|<b class="Sy">zstd-fast-</b><i class="Em">N</i></dt>
+  <dd>Controls the compression algorithm used for this dataset.
+    <p class="Pp">Setting compression to <b class="Sy">on</b> indicates that the
+        current default compression algorithm should be used. The default
+        balances compression and decompression speed, with compression ratio and
+        is expected to work well on a wide variety of workloads. Unlike all
+        other settings for this property, <b class="Sy">on</b> does not select a
+        fixed compression type. As new compression algorithms are added to ZFS
+        and enabled on a pool, the default compression algorithm may change. The
+        current default compression algorithm is either <b class="Sy">lzjb</b>
+        or, if the <b class="Sy">lz4_compress</b> feature is enabled,
+        <b class="Sy">lz4</b>.</p>
+    <p class="Pp" id="enabled">The <b class="Sy">lz4</b> compression algorithm
+        is a high-performance replacement for the <b class="Sy">lzjb</b>
+        algorithm. It features significantly faster compression and
+        decompression, as well as a moderately higher compression ratio than
+        <b class="Sy">lzjb</b>, but can only be used on pools with the
+        <b class="Sy">lz4_compress</b> feature set to
+        <a class="permalink" href="#enabled"><b class="Sy">enabled</b></a>. See
+        <a href="../5/zpool-features.5.html" class="Xr">zpool-features(5)</a> for details on ZFS feature flags and
+        the <b class="Sy">lz4_compress</b> feature.</p>
+    <p class="Pp">The <b class="Sy">lzjb</b> compression algorithm is optimized
+        for performance while providing decent data compression.</p>
+    <p class="Pp" id="gzip-6">The <b class="Sy">gzip</b> compression algorithm
+        uses the same compression as the <a class="Xr">gzip(1)</a> command. You
+        can specify the <b class="Sy">gzip</b> level by using the value
+        <b class="Sy">gzip-</b><i class="Em">N</i>, where <i class="Em">N</i> is
+        an integer from 1 (fastest) to 9 (best compression ratio). Currently,
+        <b class="Sy">gzip</b> is equivalent to
+        <a class="permalink" href="#gzip-6"><b class="Sy">gzip-6</b></a> (which
+        is also the default for <a class="Xr">gzip(1)</a>).</p>
+    <p class="Pp" id="zstd-3">The <b class="Sy">zstd</b> compression algorithm
+        provides both high compression ratios and good performance. You can
+        specify the <b class="Sy">zstd</b> level by using the value
+        <b class="Sy">zstd-</b><i class="Em">N</i>, where <i class="Em">N</i> is
+        an integer from 1 (fastest) to 19 (best compression ratio).
+        <b class="Sy">zstd</b> is equivalent to
+        <a class="permalink" href="#zstd-3"><b class="Sy">zstd-3</b></a>.</p>
+    <p class="Pp" id="zstd-fast-1">Faster speeds at the cost of the compression
+        ratio can be requested by setting a negative <b class="Sy">zstd</b>
+        level. This is done using
+        <b class="Sy">zstd-fast-</b><i class="Em">N</i>, where
+        <i class="Em">N</i> is an integer in [1-9,10,20,30,...,100,500,1000]
+        which maps to a negative <b class="Sy">zstd</b> level. The lower the
+        level the faster the compression - 1000 provides the fastest compression
+        and lowest compression ratio. <b class="Sy">zstd-fast</b> is equivalent
+        to
+        <a class="permalink" href="#zstd-fast-1"><b class="Sy">zstd-fast-1</b></a>.</p>
+    <p class="Pp">The <b class="Sy">zle</b> compression algorithm compresses
+        runs of zeros.</p>
+    <p class="Pp" id="compress">This property can also be referred to by its
+        shortened column name
+        <a class="permalink" href="#compress"><b class="Sy">compress</b></a>.
+        Changing this property affects only newly-written data.</p>
+    <p class="Pp">When any setting except <b class="Sy">off</b> is selected,
+        compression will explicitly check for blocks consisting of only zeroes
+        (the NUL byte). When a zero-filled block is detected, it is stored as a
+        hole and not compressed using the indicated compression algorithm.</p>
+    <p class="Pp">Any block being compressed must be no larger than 7/8 of its
+        original size after compression, otherwise the compression will not be
+        considered worthwhile and the block saved uncompressed. Note that when
+        the logical block is less than 8 times the disk sector size this
+        effectively reduces the necessary compression ratio; for example 8k
+        blocks on disks with 4k disk sectors must compress to 1/2 or less of
+        their original size.</p>
+  </dd>
+  <dt id="context"><a class="permalink" href="#context"><b class="Sy">context</b></a>=<b class="Sy">none</b>|<i class="Em">SELinux_User:SElinux_Role:Selinux_Type:Sensitivity_Level</i></dt>
+  <dd>This flag sets the SELinux context for all files in the file system under
+      a mount point for that file system. See <a class="Xr">selinux(8)</a> for
+      more information.</dd>
+  <dt id="fscontext"><a class="permalink" href="#fscontext"><b class="Sy">fscontext</b></a>=<b class="Sy">none</b>|<i class="Em">SELinux_User:SElinux_Role:Selinux_Type:Sensitivity_Level</i></dt>
+  <dd>This flag sets the SELinux context for the file system file system being
+      mounted. See <a class="Xr">selinux(8)</a> for more information.</dd>
+  <dt id="defcontext"><a class="permalink" href="#defcontext"><b class="Sy">defcontext</b></a>=<b class="Sy">none</b>|<i class="Em">SELinux_User:SElinux_Role:Selinux_Type:Sensitivity_Level</i></dt>
+  <dd>This flag sets the SELinux default context for unlabeled files. See
+      <a class="Xr">selinux(8)</a> for more information.</dd>
+  <dt id="rootcontext"><a class="permalink" href="#rootcontext"><b class="Sy">rootcontext</b></a>=<b class="Sy">none</b>|<i class="Em">SELinux_User:SElinux_Role:Selinux_Type:Sensitivity_Level</i></dt>
+  <dd>This flag sets the SELinux context for the root inode of the file system.
+      See <a class="Xr">selinux(8)</a> for more information.</dd>
+  <dt id="copies"><a class="permalink" href="#copies"><b class="Sy">copies</b></a>=<a class="permalink" href="#1"><b class="Sy" id="1">1</b></a>|<a class="permalink" href="#2"><b class="Sy" id="2">2</b></a>|<b class="Sy">3</b></dt>
+  <dd>Controls the number of copies of data stored for this dataset. These
+      copies are in addition to any redundancy provided by the pool, for
+      example, mirroring or RAID-Z. The copies are stored on different disks, if
+      possible. The space used by multiple copies is charged to the associated
+      file and dataset, changing the <b class="Sy">used</b> property and
+      counting against quotas and reservations.
+    <p class="Pp">Changing this property only affects newly-written data.
+        Therefore, set this property at file system creation time by using the
+        <code class="Fl">-o</code>
+        <b class="Sy">copies</b>=<var class="Ar">N</var> option.</p>
+    <p class="Pp" id="copies=2">Remember that ZFS will not import a pool with a
+        missing top-level vdev. Do <b class="Sy">NOT</b> create, for example a
+        two-disk striped pool and set
+        <a class="permalink" href="#copies=2"><b class="Sy">copies=2</b></a> on
+        some datasets thinking you have setup redundancy for them. When a disk
+        fails you will not be able to import the pool and will have lost all of
+        your data.</p>
+    <p class="Pp">Encrypted datasets may not have
+        <b class="Sy">copies</b>=<i class="Em">3</i> since the implementation
+        stores some encryption metadata where the third copy would normally
+      be.</p>
+  </dd>
+  <dt id="devices"><a class="permalink" href="#devices"><b class="Sy">devices</b></a>=<b class="Sy">on</b>|<b class="Sy">off</b></dt>
+  <dd>Controls whether device nodes can be opened on this file system. The
+      default value is <b class="Sy">on</b>. The values <b class="Sy">on</b> and
+      <b class="Sy">off</b> are equivalent to the <b class="Sy">dev</b> and
+      <a class="permalink" href="#nodev"><b class="Sy" id="nodev">nodev</b></a>
+      mount options.</dd>
+  <dt id="dedup"><a class="permalink" href="#dedup"><b class="Sy">dedup</b></a>=<b class="Sy">off</b>|<b class="Sy">on</b>|<b class="Sy">verify</b>|<a class="permalink" href="#sha256_,verify_"><b class="Sy" id="sha256_,verify_">sha256[,verify]</b></a>|<a class="permalink" href="#sha512_,verify_"><b class="Sy" id="sha512_,verify_">sha512[,verify]</b></a>|<a class="permalink" href="#skein_,verify_"><b class="Sy" id="skein_,verify_">skein[,verify]</b></a>|<a class="permalink" href="#edonr,verify"><b class="Sy" id="edonr,verify">edonr,verify</b></a></dt>
+  <dd>Configures deduplication for a dataset. The default value is
+      <b class="Sy">off</b>. The default deduplication checksum is
+      <b class="Sy">sha256</b> (this may change in the future). When
+      <b class="Sy">dedup</b> is enabled, the checksum defined here overrides
+      the <b class="Sy">checksum</b> property. Setting the value to
+      <b class="Sy">verify</b> has the same effect as the setting
+      <a class="permalink" href="#sha256,verify."><b class="Sy" id="sha256,verify.">sha256,verify.</b></a>
+    <p class="Pp">If set to <b class="Sy">verify</b>, ZFS will do a byte-to-byte
+        comparison in case of two blocks having the same signature to make sure
+        the block contents are identical. Specifying <b class="Sy">verify</b> is
+        mandatory for the <b class="Sy">edonr</b> algorithm.</p>
+    <p class="Pp" id="Deduplication">Unless necessary, deduplication should NOT
+        be enabled on a system. See the
+        <a class="permalink" href="#Deduplication"><i class="Em">Deduplication</i></a>
+        section of <a href="../8/zfsconcepts.8.html" class="Xr">zfsconcepts(8)</a>.</p>
+  </dd>
+  <dt id="dnodesize"><a class="permalink" href="#dnodesize"><b class="Sy">dnodesize</b></a>=<b class="Sy">legacy</b>|<b class="Sy">auto</b>|<a class="permalink" href="#1k"><b class="Sy" id="1k">1k</b></a>|<a class="permalink" href="#2k"><b class="Sy" id="2k">2k</b></a>|<a class="permalink" href="#4k"><b class="Sy" id="4k">4k</b></a>|<a class="permalink" href="#8k"><b class="Sy" id="8k">8k</b></a>|<a class="permalink" href="#16k"><b class="Sy" id="16k">16k</b></a></dt>
+  <dd>Specifies a compatibility mode or literal value for the size of dnodes in
+      the file system. The default value is <b class="Sy">legacy</b>. Setting
+      this property to a value other than <b class="Sy">legacy</b> requires the
+      large_dnode pool feature to be enabled.
+    <p class="Pp">Consider setting <b class="Sy">dnodesize</b> to
+        <b class="Sy">auto</b> if the dataset uses the
+        <b class="Sy">xattr=sa</b> property setting and the workload makes heavy
+        use of extended attributes. This may be applicable to SELinux-enabled
+        systems, Lustre servers, and Samba servers, for example. Literal values
+        are supported for cases where the optimal size is known in advance and
+        for performance testing.</p>
+    <p class="Pp">Leave <b class="Sy">dnodesize</b> set to
+        <b class="Sy">legacy</b> if you need to receive a send stream of this
+        dataset on a pool that doesn't enable the large_dnode feature, or if you
+        need to import this pool on a system that doesn't support the
+        large_dnode feature.</p>
+    <p class="Pp" id="dnsize">This property can also be referred to by its
+        shortened column name,
+        <a class="permalink" href="#dnsize"><b class="Sy">dnsize</b></a>.</p>
+  </dd>
+  <dt id="encryption"><a class="permalink" href="#encryption"><b class="Sy">encryption</b></a>=<b class="Sy">off</b>|<b class="Sy">on</b>|<a class="permalink" href="#aes-128-ccm"><b class="Sy" id="aes-128-ccm">aes-128-ccm</b></a>|<a class="permalink" href="#aes-192-ccm"><b class="Sy" id="aes-192-ccm">aes-192-ccm</b></a>|<a class="permalink" href="#aes-256-ccm"><b class="Sy" id="aes-256-ccm">aes-256-ccm</b></a>|<a class="permalink" href="#aes-128-gcm"><b class="Sy" id="aes-128-gcm">aes-128-gcm</b></a>|<a class="permalink" href="#aes-192-gcm"><b class="Sy" id="aes-192-gcm">aes-192-gcm</b></a>|<b class="Sy">aes-256-gcm</b></dt>
+  <dd>Controls the encryption cipher suite (block cipher, key length, and mode)
+      used for this dataset. Requires the <b class="Sy">encryption</b> feature
+      to be enabled on the pool. Requires a <b class="Sy">keyformat</b> to be
+      set at dataset creation time.
+    <p class="Pp">Selecting <b class="Sy">encryption</b>=<b class="Sy">on</b>
+        when creating a dataset indicates that the default encryption suite will
+        be selected, which is currently <b class="Sy">aes-256-gcm</b>. In order
+        to provide consistent data protection, encryption must be specified at
+        dataset creation time and it cannot be changed afterwards.</p>
+    <p class="Pp">For more details and caveats about encryption see the
+        <i class="Em">Encryption</i> section of
+        <a href="../8/zfs-load-key.8.html" class="Xr">zfs-load-key(8)</a>.</p>
+  </dd>
+  <dt id="keyformat"><a class="permalink" href="#keyformat"><b class="Sy">keyformat</b></a>=<a class="permalink" href="#raw"><b class="Sy" id="raw">raw</b></a>|<a class="permalink" href="#hex"><b class="Sy" id="hex">hex</b></a>|<b class="Sy">passphrase</b></dt>
+  <dd>Controls what format the user's encryption key will be provided as. This
+      property is only set when the dataset is encrypted.
+    <p class="Pp">Raw keys and hex keys must be 32 bytes long (regardless of the
+        chosen encryption suite) and must be randomly generated. A raw key can
+        be generated with the following command:</p>
+    <div class="Bd Pp Li">
+    <pre># dd if=/dev/urandom of=/path/to/output/key bs=32 count=1</pre>
+    </div>
+    <p class="Pp">Passphrases must be between 8 and 512 bytes long and will be
+        processed through PBKDF2 before being used (see the
+        <b class="Sy">pbkdf2iters</b> property). Even though the encryption
+        suite cannot be changed after dataset creation, the keyformat can be
+        with <code class="Nm">zfs</code> <code class="Cm">change-key</code>.</p>
+  </dd>
+  <dt id="keylocation"><a class="permalink" href="#keylocation"><b class="Sy">keylocation</b></a>=<b class="Sy">prompt</b>|<a class="permalink" href="#file://"><b class="Sy" id="file://">file://</b></a><a class="permalink" href="#_/absolute/file/path_"><i class="Em" id="_/absolute/file/path_">&lt;/absolute/file/path&gt;</i></a></dt>
+  <dd>Controls where the user's encryption key will be loaded from by default
+      for commands such as <code class="Nm">zfs</code>
+      <code class="Cm">load-key</code> and <code class="Nm">zfs</code>
+      <code class="Cm">mount</code> <code class="Cm">-l</code>. This property is
+      only set for encrypted datasets which are encryption roots. If
+      unspecified, the default is
+      <a class="permalink" href="#prompt."><b class="Sy" id="prompt.">prompt.</b></a>
+    <p class="Pp">Even though the encryption suite cannot be changed after
+        dataset creation, the keylocation can be with either
+        <code class="Nm">zfs</code> <code class="Cm">set</code> or
+        <code class="Nm">zfs</code> <code class="Cm">change-key</code>. If
+        <b class="Sy">prompt</b> is selected ZFS will ask for the key at the
+        command prompt when it is required to access the encrypted data (see
+        <code class="Nm">zfs</code> <code class="Cm">load-key</code> for
+        details). This setting will also allow the key to be passed in via
+        STDIN, but users should be careful not to place keys which should be
+        kept secret on the command line. If a file URI is selected, the key will
+        be loaded from the specified absolute file path.</p>
+  </dd>
+  <dt id="pbkdf2iters"><a class="permalink" href="#pbkdf2iters"><b class="Sy">pbkdf2iters</b></a>=<var class="Ar">iterations</var></dt>
+  <dd>Controls the number of PBKDF2 iterations that a
+      <b class="Sy">passphrase</b> encryption key should be run through when
+      processing it into an encryption key. This property is only defined when
+      encryption is enabled and a keyformat of <b class="Sy">passphrase</b> is
+      selected. The goal of PBKDF2 is to significantly increase the
+      computational difficulty needed to brute force a user's passphrase. This
+      is accomplished by forcing the attacker to run each passphrase through a
+      computationally expensive hashing function many times before they arrive
+      at the resulting key. A user who actually knows the passphrase will only
+      have to pay this cost once. As CPUs become better at processing, this
+      number should be raised to ensure that a brute force attack is still not
+      possible. The current default is
+      <a class="permalink" href="#350000"><b class="Sy" id="350000">350000</b></a>
+      and the minimum is
+      <a class="permalink" href="#100000"><b class="Sy" id="100000">100000</b></a>.
+      This property may be changed with <code class="Nm">zfs</code>
+      <code class="Cm">change-key</code>.</dd>
+  <dt id="exec"><a class="permalink" href="#exec"><b class="Sy">exec</b></a>=<b class="Sy">on</b>|<b class="Sy">off</b></dt>
+  <dd>Controls whether processes can be executed from within this file system.
+      The default value is <b class="Sy">on</b>. The values <b class="Sy">on</b>
+      and <b class="Sy">off</b> are equivalent to the <b class="Sy">exec</b> and
+      <a class="permalink" href="#noexec"><b class="Sy" id="noexec">noexec</b></a>
+      mount options.</dd>
+  <dt id="filesystem_limit"><a class="permalink" href="#filesystem_limit"><b class="Sy">filesystem_limit</b></a>=<i class="Em">count</i>|<b class="Sy">none</b></dt>
+  <dd>Limits the number of filesystems and volumes that can exist under this
+      point in the dataset tree. The limit is not enforced if the user is
+      allowed to change the limit. Setting a <b class="Sy">filesystem_limit</b>
+      to <b class="Sy">on</b> a descendent of a filesystem that already has a
+      <b class="Sy">filesystem_limit</b> does not override the ancestor's
+      <b class="Sy">filesystem_limit</b>, but rather imposes an additional
+      limit. This feature must be enabled to be used (see
+      <a href="../5/zpool-features.5.html" class="Xr">zpool-features(5)</a>).</dd>
+  <dt id="special_small_blocks"><a class="permalink" href="#special_small_blocks"><b class="Sy">special_small_blocks</b></a>=<i class="Em">size</i></dt>
+  <dd>This value represents the threshold block size for including small file
+      blocks into the special allocation class. Blocks smaller than or equal to
+      this value will be assigned to the special allocation class while greater
+      blocks will be assigned to the regular class. Valid values are zero or a
+      power of two from 512B up to 1M. The default size is 0 which means no
+      small file blocks will be allocated in the special class.
+    <p class="Pp">Before setting this property, a special class vdev must be
+        added to the pool. See <a href="../8/zpoolconcepts.8.html" class="Xr">zpoolconcepts(8)</a> for more
+        details on the special allocation class.</p>
+  </dd>
+  <dt id="mountpoint"><a class="permalink" href="#mountpoint"><b class="Sy">mountpoint</b></a>=<span class="Pa">path</span>|<b class="Sy">none</b>|<b class="Sy">legacy</b></dt>
+  <dd>Controls the mount point used for this file system. See the
+      <a class="permalink" href="#Mount"><i class="Em" id="Mount">Mount
+      Points</i></a> section of <a href="../8/zfsconcepts.8.html" class="Xr">zfsconcepts(8)</a> for more
+      information on how this property is used.
+    <p class="Pp">When the <b class="Sy">mountpoint</b> property is changed for
+        a file system, the file system and any children that inherit the mount
+        point are unmounted. If the new value is <b class="Sy">legacy</b>, then
+        they remain unmounted. Otherwise, they are automatically remounted in
+        the new location if the property was previously <b class="Sy">legacy</b>
+        or <b class="Sy">none</b>, or if they were mounted before the property
+        was changed. In addition, any shared file systems are unshared and
+        shared in the new location.</p>
+  </dd>
+  <dt id="nbmand"><a class="permalink" href="#nbmand"><b class="Sy">nbmand</b></a>=<b class="Sy">on</b>|<b class="Sy">off</b></dt>
+  <dd>Controls whether the file system should be mounted with
+      <b class="Sy">nbmand</b> (Non Blocking mandatory locks). This is used for
+      SMB clients. Changes to this property only take effect when the file
+      system is umounted and remounted. See <a class="Xr">mount(8)</a> for more
+      information on <b class="Sy">nbmand</b> mounts. This property is not used
+      on Linux.</dd>
+  <dt id="overlay"><a class="permalink" href="#overlay"><b class="Sy">overlay</b></a>=<b class="Sy">on</b>|<b class="Sy">off</b></dt>
+  <dd>Allow mounting on a busy directory or a directory which already contains
+      files or directories. This is the default mount behavior for Linux and
+      FreeBSD file systems. On these platforms the property is
+      <b class="Sy">on</b> by default. Set to <b class="Sy">off</b> to disable
+      overlay mounts for consistency with OpenZFS on other platforms.</dd>
+  <dt id="primarycache"><a class="permalink" href="#primarycache"><b class="Sy">primarycache</b></a>=<b class="Sy">all</b>|<b class="Sy">none</b>|<b class="Sy">metadata</b></dt>
+  <dd>Controls what is cached in the primary cache (ARC). If this property is
+      set to <b class="Sy">all</b>, then both user data and metadata is cached.
+      If this property is set to <b class="Sy">none</b>, then neither user data
+      nor metadata is cached. If this property is set to
+      <b class="Sy">metadata</b>, then only metadata is cached. The default
+      value is <b class="Sy">all</b>.</dd>
+  <dt id="quota"><a class="permalink" href="#quota"><b class="Sy">quota</b></a>=<i class="Em">size</i>|<b class="Sy">none</b></dt>
+  <dd>Limits the amount of space a dataset and its descendents can consume. This
+      property enforces a hard limit on the amount of space used. This includes
+      all space consumed by descendents, including file systems and snapshots.
+      Setting a quota on a descendent of a dataset that already has a quota does
+      not override the ancestor's quota, but rather imposes an additional limit.
+    <p class="Pp">Quotas cannot be set on volumes, as the
+        <b class="Sy">volsize</b> property acts as an implicit quota.</p>
+  </dd>
+  <dt id="snapshot_limit"><a class="permalink" href="#snapshot_limit"><b class="Sy">snapshot_limit</b></a>=<i class="Em">count</i>|<b class="Sy">none</b></dt>
+  <dd>Limits the number of snapshots that can be created on a dataset and its
+      descendents. Setting a <b class="Sy">snapshot_limit</b> on a descendent of
+      a dataset that already has a <b class="Sy">snapshot_limit</b> does not
+      override the ancestor's <b class="Sy">snapshot_limit</b>, but rather
+      imposes an additional limit. The limit is not enforced if the user is
+      allowed to change the limit. For example, this means that recursive
+      snapshots taken from the global zone are counted against each delegated
+      dataset within a zone. This feature must be enabled to be used (see
+      <a href="../5/zpool-features.5.html" class="Xr">zpool-features(5)</a>).</dd>
+  <dt id="userquota@"><a class="permalink" href="#userquota@"><b class="Sy">userquota@</b></a><i class="Em">user</i>=<i class="Em">size</i>|<b class="Sy">none</b></dt>
+  <dd>Limits the amount of space consumed by the specified user. User space
+      consumption is identified by the
+      <a class="permalink" href="#userspace@"><b class="Sy" id="userspace@">userspace@</b></a><i class="Em">user</i>
+      property.
+    <p class="Pp">Enforcement of user quotas may be delayed by several seconds.
+        This delay means that a user might exceed their quota before the system
+        notices that they are over quota and begins to refuse additional writes
+        with the <code class="Er">EDQUOT</code> error message. See the
+        <code class="Nm">zfs</code> <code class="Cm">userspace</code> subcommand
+        for more information.</p>
+    <p class="Pp">Unprivileged users can only access their own groups' space
+        usage. The root user, or a user who has been granted the
+        <b class="Sy">userquota</b> privilege with <code class="Nm">zfs</code>
+        <code class="Cm">allow</code>, can get and set everyone's quota.</p>
+    <p class="Pp">This property is not available on volumes, on file systems
+        before version 4, or on pools before version 15. The
+        <b class="Sy">userquota@</b><i class="Em">...</i> properties are not
+        displayed by <code class="Nm">zfs</code> <code class="Cm">get</code>
+        <b class="Sy">all</b>. The user's name must be appended after the
+        <b class="Sy">@</b> symbol, using one of the following forms:</p>
+    <ul class="Bl-bullet">
+      <li id="POSIX~3"><a class="permalink" href="#POSIX~3"><i class="Em">POSIX
+          name</i></a> (for example, <b class="Sy">joe</b>)</li>
+      <li id="POSIX~4"><a class="permalink" href="#POSIX~4"><i class="Em">POSIX
+          numeric ID</i></a> (for example, <b class="Sy">789</b>)</li>
+      <li id="SID~3"><a class="permalink" href="#SID~3"><i class="Em">SID
+          name</i></a> (for example, <b class="Sy">joe.smith@mydomain</b>)</li>
+      <li id="SID~4"><a class="permalink" href="#SID~4"><i class="Em">SID
+          numeric ID</i></a> (for example,
+        <b class="Sy">S-1-123-456-789</b>)</li>
+    </ul>
+    <p class="Pp">Files created on Linux always have POSIX owners.</p>
+  </dd>
+  <dt id="userobjquota@"><a class="permalink" href="#userobjquota@"><b class="Sy">userobjquota@</b></a><i class="Em">user</i>=<i class="Em">size</i>|<b class="Sy">none</b></dt>
+  <dd>The <b class="Sy">userobjquota</b> is similar to
+      <b class="Sy">userquota</b> but it limits the number of objects a user can
+      create. Please refer to <b class="Sy">userobjused</b> for more information
+      about how objects are counted.</dd>
+  <dt id="groupquota@"><a class="permalink" href="#groupquota@"><b class="Sy">groupquota@</b></a><i class="Em">group</i>=<i class="Em">size</i>|<b class="Sy">none</b></dt>
+  <dd>Limits the amount of space consumed by the specified group. Group space
+      consumption is identified by the
+      <a class="permalink" href="#groupused@"><b class="Sy" id="groupused@">groupused@</b></a><i class="Em">group</i>
+      property.
+    <p class="Pp">Unprivileged users can access only their own groups' space
+        usage. The root user, or a user who has been granted the
+        <b class="Sy">groupquota</b> privilege with <code class="Nm">zfs</code>
+        <code class="Cm">allow</code>, can get and set all groups' quotas.</p>
+  </dd>
+  <dt id="groupobjquota@"><a class="permalink" href="#groupobjquota@"><b class="Sy">groupobjquota@</b></a><i class="Em">group</i>=<i class="Em">size</i>|<b class="Sy">none</b></dt>
+  <dd>The
+      <a class="permalink" href="#groupobjquota"><b class="Sy" id="groupobjquota">groupobjquota</b></a>
+      is similar to <b class="Sy">groupquota</b> but it limits number of objects
+      a group can consume. Please refer to <b class="Sy">userobjused</b> for
+      more information about how objects are counted.</dd>
+  <dt id="projectquota@"><a class="permalink" href="#projectquota@"><b class="Sy">projectquota@</b></a><i class="Em">project</i>=<i class="Em">size</i>|<b class="Sy">none</b></dt>
+  <dd>Limits the amount of space consumed by the specified project. Project
+      space consumption is identified by the
+      <a class="permalink" href="#projectused@"><b class="Sy" id="projectused@">projectused@</b></a><i class="Em">project</i>
+      property. Please refer to <b class="Sy">projectused</b> for more
+      information about how project is identified and set/changed.
+    <p class="Pp">The root user, or a user who has been granted the
+        <b class="Sy">projectquota</b> privilege with <code class="Nm">zfs
+        allow</code>, can access all projects' quota.</p>
+  </dd>
+  <dt id="projectobjquota@"><a class="permalink" href="#projectobjquota@"><b class="Sy">projectobjquota@</b></a><i class="Em">project</i>=<i class="Em">size</i>|<b class="Sy">none</b></dt>
+  <dd>The <b class="Sy">projectobjquota</b> is similar to
+      <b class="Sy">projectquota</b> but it limits number of objects a project
+      can consume. Please refer to <b class="Sy">userobjused</b> for more
+      information about how objects are counted.</dd>
+  <dt id="readonly"><a class="permalink" href="#readonly"><b class="Sy">readonly</b></a>=<b class="Sy">on</b>|<b class="Sy">off</b></dt>
+  <dd>Controls whether this dataset can be modified. The default value is
+      <b class="Sy">off</b>. The values <b class="Sy">on</b> and
+      <b class="Sy">off</b> are equivalent to the
+      <a class="permalink" href="#ro"><b class="Sy" id="ro">ro</b></a> and
+      <a class="permalink" href="#rw"><b class="Sy" id="rw">rw</b></a> mount
+      options.
+    <p class="Pp" id="rdonly">This property can also be referred to by its
+        shortened column name,
+        <a class="permalink" href="#rdonly"><b class="Sy">rdonly</b></a>.</p>
+  </dd>
+  <dt id="recordsize"><a class="permalink" href="#recordsize"><b class="Sy">recordsize</b></a>=<i class="Em">size</i></dt>
+  <dd>Specifies a suggested block size for files in the file system. This
+      property is designed solely for use with database workloads that access
+      files in fixed-size records. ZFS automatically tunes block sizes according
+      to internal algorithms optimized for typical access patterns.
+    <p class="Pp">For databases that create very large files but access them in
+        small random chunks, these algorithms may be suboptimal. Specifying a
+        <b class="Sy">recordsize</b> greater than or equal to the record size of
+        the database can result in significant performance gains. Use of this
+        property for general purpose file systems is strongly discouraged, and
+        may adversely affect performance.</p>
+    <p class="Pp" id="large_blocks">The size specified must be a power of two
+        greater than or equal to 512 and less than or equal to 128 Kbytes. If
+        the
+        <a class="permalink" href="#large_blocks"><b class="Sy">large_blocks</b></a>
+        feature is enabled on the pool, the size may be up to 1 Mbyte. See
+        <a href="../5/zpool-features.5.html" class="Xr">zpool-features(5)</a> for details on ZFS feature
+      flags.</p>
+    <p class="Pp">Changing the file system's <b class="Sy">recordsize</b>
+        affects only files created afterward; existing files are unaffected.</p>
+    <p class="Pp" id="recsize">This property can also be referred to by its
+        shortened column name,
+        <a class="permalink" href="#recsize"><b class="Sy">recsize</b></a>.</p>
+  </dd>
+  <dt id="redundant_metadata"><a class="permalink" href="#redundant_metadata"><b class="Sy">redundant_metadata</b></a>=<b class="Sy">all</b>|<b class="Sy">most</b></dt>
+  <dd>Controls what types of metadata are stored redundantly. ZFS stores an
+      extra copy of metadata, so that if a single block is corrupted, the amount
+      of user data lost is limited. This extra copy is in addition to any
+      redundancy provided at the pool level (e.g. by mirroring or RAID-Z), and
+      is in addition to an extra copy specified by the <b class="Sy">copies</b>
+      property (up to a total of 3 copies). For example if the pool is mirrored,
+      <b class="Sy">copies</b>=2, and
+      <b class="Sy">redundant_metadata</b>=<b class="Sy">most</b>, then ZFS
+      stores 6 copies of most metadata, and 4 copies of data and some metadata.
+    <p class="Pp">When set to <b class="Sy">all</b>, ZFS stores an extra copy of
+        all metadata. If a single on-disk block is corrupt, at worst a single
+        block of user data (which is <b class="Sy">recordsize</b> bytes long)
+        can be lost.</p>
+    <p class="Pp">When set to <b class="Sy">most</b>, ZFS stores an extra copy
+        of most types of metadata. This can improve performance of random
+        writes, because less metadata must be written. In practice, at worst
+        about 100 blocks (of <b class="Sy">recordsize</b> bytes each) of user
+        data can be lost if a single on-disk block is corrupt. The exact
+        behavior of which metadata blocks are stored redundantly may change in
+        future releases.</p>
+    <p class="Pp">The default value is <b class="Sy">all</b>.</p>
+  </dd>
+  <dt id="refquota"><a class="permalink" href="#refquota"><b class="Sy">refquota</b></a>=<i class="Em">size</i>|<b class="Sy">none</b></dt>
+  <dd>Limits the amount of space a dataset can consume. This property enforces a
+      hard limit on the amount of space used. This hard limit does not include
+      space used by descendents, including file systems and snapshots.</dd>
+  <dt id="refreservation"><a class="permalink" href="#refreservation"><b class="Sy">refreservation</b></a>=<i class="Em">size</i>|<b class="Sy">none</b>|<b class="Sy">auto</b></dt>
+  <dd>The minimum amount of space guaranteed to a dataset, not including its
+      descendents. When the amount of space used is below this value, the
+      dataset is treated as if it were taking up the amount of space specified
+      by <b class="Sy">refreservation</b>. The <b class="Sy">refreservation</b>
+      reservation is accounted for in the parent datasets' space used, and
+      counts against the parent datasets' quotas and reservations.
+    <p class="Pp">If <b class="Sy">refreservation</b> is set, a snapshot is only
+        allowed if there is enough free pool space outside of this reservation
+        to accommodate the current number of &quot;referenced&quot; bytes in the
+        dataset.</p>
+    <p class="Pp">If <b class="Sy">refreservation</b> is set to
+        <b class="Sy">auto</b>, a volume is thick provisioned (or &quot;not
+        sparse&quot;). <b class="Sy">refreservation</b>=<b class="Sy">auto</b>
+        is only supported on volumes. See <b class="Sy">volsize</b> in the
+        <a class="Sx" href="#Native_Properties">Native Properties</a> section
+        for more information about sparse volumes.</p>
+    <p class="Pp" id="refreserv">This property can also be referred to by its
+        shortened column name,
+        <a class="permalink" href="#refreserv"><b class="Sy">refreserv</b></a>.</p>
+  </dd>
+  <dt id="relatime"><a class="permalink" href="#relatime"><b class="Sy">relatime</b></a>=<b class="Sy">on</b>|<b class="Sy">off</b></dt>
+  <dd>Controls the manner in which the access time is updated when
+      <a class="permalink" href="#atime=on"><b class="Sy" id="atime=on">atime=on</b></a>
+      is set. Turning this property on causes the access time to be updated
+      relative to the modify or change time. Access time is only updated if the
+      previous access time was earlier than the current modify or change time or
+      if the existing access time hasn't been updated within the past 24 hours.
+      The default value is <b class="Sy">off</b>. The values
+      <b class="Sy">on</b> and <b class="Sy">off</b> are equivalent to the
+      <b class="Sy">relatime</b> and
+      <a class="permalink" href="#norelatime"><b class="Sy" id="norelatime">norelatime</b></a>
+      mount options.</dd>
+  <dt id="reservation"><a class="permalink" href="#reservation"><b class="Sy">reservation</b></a>=<i class="Em">size</i>|<b class="Sy">none</b></dt>
+  <dd>The minimum amount of space guaranteed to a dataset and its descendants.
+      When the amount of space used is below this value, the dataset is treated
+      as if it were taking up the amount of space specified by its reservation.
+      Reservations are accounted for in the parent datasets' space used, and
+      count against the parent datasets' quotas and reservations.
+    <p class="Pp" id="reserv">This property can also be referred to by its
+        shortened column name,
+        <a class="permalink" href="#reserv"><b class="Sy">reserv</b></a>.</p>
+  </dd>
+  <dt id="secondarycache"><a class="permalink" href="#secondarycache"><b class="Sy">secondarycache</b></a>=<b class="Sy">all</b>|<b class="Sy">none</b>|<b class="Sy">metadata</b></dt>
+  <dd>Controls what is cached in the secondary cache (L2ARC). If this property
+      is set to <b class="Sy">all</b>, then both user data and metadata is
+      cached. If this property is set to <b class="Sy">none</b>, then neither
+      user data nor metadata is cached. If this property is set to
+      <b class="Sy">metadata</b>, then only metadata is cached. The default
+      value is <b class="Sy">all</b>.</dd>
+  <dt id="setuid"><a class="permalink" href="#setuid"><b class="Sy">setuid</b></a>=<b class="Sy">on</b>|<b class="Sy">off</b></dt>
+  <dd>Controls whether the setuid bit is respected for the file system. The
+      default value is <b class="Sy">on</b>. The values <b class="Sy">on</b> and
+      <b class="Sy">off</b> are equivalent to the
+      <a class="permalink" href="#suid"><b class="Sy" id="suid">suid</b></a> and
+      <b class="Sy">nosuid</b> mount options.</dd>
+  <dt id="sharesmb"><a class="permalink" href="#sharesmb"><b class="Sy">sharesmb</b></a>=<b class="Sy">on</b>|<b class="Sy">off</b>|<i class="Em">opts</i></dt>
+  <dd>Controls whether the file system is shared by using
+      <a class="permalink" href="#Samba"><b class="Sy" id="Samba">Samba
+      USERSHARES</b></a> and what options are to be used. Otherwise, the file
+      system is automatically shared and unshared with the
+      <code class="Nm">zfs</code> <code class="Cm">share</code> and
+      <code class="Nm">zfs</code> <code class="Cm">unshare</code> commands. If
+      the property is set to on, the <a class="Xr">net(8)</a> command is invoked
+      to create a
+      <a class="permalink" href="#USERSHARE"><b class="Sy" id="USERSHARE">USERSHARE</b></a>.
+    <p class="Pp">Because SMB shares requires a resource name, a unique resource
+        name is constructed from the dataset name. The constructed name is a
+        copy of the dataset name except that the characters in the dataset name,
+        which would be invalid in the resource name, are replaced with
+        underscore (_) characters. Linux does not currently support additional
+        options which might be available on Solaris.</p>
+    <p class="Pp">If the <b class="Sy">sharesmb</b> property is set to
+        <b class="Sy">off</b>, the file systems are unshared.</p>
+    <p class="Pp">The share is created with the ACL (Access Control List)
+        &quot;Everyone:F&quot; (&quot;F&quot; stands for &quot;full
+        permissions&quot;, ie. read and write permissions) and no guest access
+        (which means Samba must be able to authenticate a real user, system
+        passwd/shadow, LDAP or smbpasswd based) by default. This means that any
+        additional access control (disallow specific user specific access etc)
+        must be done on the underlying file system.</p>
+  </dd>
+  <dt id="sharenfs"><a class="permalink" href="#sharenfs"><b class="Sy">sharenfs</b></a>=<b class="Sy">on</b>|<b class="Sy">off</b>|<i class="Em">opts</i></dt>
+  <dd>Controls whether the file system is shared via NFS, and what options are
+      to be used. A file system with a <b class="Sy">sharenfs</b> property of
+      <b class="Sy">off</b> is managed with the <a class="Xr">exportfs(8)</a>
+      command and entries in the
+      <a class="permalink" href="#/etc/exports"><i class="Em" id="/etc/exports">/etc/exports</i></a>
+      file. Otherwise, the file system is automatically shared and unshared with
+      the <code class="Nm">zfs</code> <code class="Cm">share</code> and
+      <code class="Nm">zfs</code> <code class="Cm">unshare</code> commands. If
+      the property is set to <b class="Sy">on</b>, the dataset is shared using
+      the default options:
+    <p class="Pp" id="sec=sys,rw,crossmnt,no_subtree_check"><a class="permalink" href="#sec=sys,rw,crossmnt,no_subtree_check"><i class="Em">sec=sys,rw,crossmnt,no_subtree_check</i></a></p>
+    <p class="Pp">See <a class="Xr">exports(5)</a> for the meaning of the
+        default options. Otherwise, the <a class="Xr">exportfs(8)</a> command is
+        invoked with options equivalent to the contents of this property.</p>
+    <p class="Pp">When the <b class="Sy">sharenfs</b> property is changed for a
+        dataset, the dataset and any children inheriting the property are
+        re-shared with the new options, only if the property was previously
+        <b class="Sy">off</b>, or if they were shared before the property was
+        changed. If the new property is <b class="Sy">off</b>, the file systems
+        are unshared.</p>
+  </dd>
+  <dt id="logbias"><a class="permalink" href="#logbias"><b class="Sy">logbias</b></a>=<b class="Sy">latency</b>|<b class="Sy">throughput</b></dt>
+  <dd>Provide a hint to ZFS about handling of synchronous requests in this
+      dataset. If <b class="Sy">logbias</b> is set to <b class="Sy">latency</b>
+      (the default), ZFS will use pool log devices (if configured) to handle the
+      requests at low latency. If <b class="Sy">logbias</b> is set to
+      <b class="Sy">throughput</b>, ZFS will not use configured pool log
+      devices. ZFS will instead optimize synchronous operations for global pool
+      throughput and efficient use of resources.</dd>
+  <dt id="snapdev"><a class="permalink" href="#snapdev"><b class="Sy">snapdev</b></a>=<b class="Sy">hidden</b>|<b class="Sy">visible</b></dt>
+  <dd>Controls whether the volume snapshot devices under
+      <a class="permalink" href="#/dev/zvol/_pool_"><i class="Em" id="/dev/zvol/_pool_">/dev/zvol/&lt;pool&gt;</i></a>
+      are hidden or visible. The default value is <b class="Sy">hidden</b>.</dd>
+  <dt id="snapdir"><a class="permalink" href="#snapdir"><b class="Sy">snapdir</b></a>=<b class="Sy">hidden</b>|<b class="Sy">visible</b></dt>
+  <dd>Controls whether the <span class="Pa">.zfs</span> directory is hidden or
+      visible in the root of the file system as discussed in the
+      <i class="Em">Snapshots</i> section of <a href="../8/zfsconcepts.8.html" class="Xr">zfsconcepts(8)</a>.
+      The default value is <b class="Sy">hidden</b>.</dd>
+  <dt id="sync"><a class="permalink" href="#sync"><b class="Sy">sync</b></a>=<b class="Sy">standard</b>|<b class="Sy">always</b>|<b class="Sy">disabled</b></dt>
+  <dd>Controls the behavior of synchronous requests (e.g. fsync, O_DSYNC).
+      <b class="Sy">standard</b> is the POSIX specified behavior of ensuring all
+      synchronous requests are written to stable storage and all devices are
+      flushed to ensure data is not cached by device controllers (this is the
+      default). <b class="Sy">always</b> causes every file system transaction to
+      be written and flushed before its system call returns. This has a large
+      performance penalty. <b class="Sy">disabled</b> disables synchronous
+      requests. File system transactions are only committed to stable storage
+      periodically. This option will give the highest performance. However, it
+      is very dangerous as ZFS would be ignoring the synchronous transaction
+      demands of applications such as databases or NFS. Administrators should
+      only use this option when the risks are understood.</dd>
+  <dt id="version"><a class="permalink" href="#version"><b class="Sy">version</b></a>=<i class="Em">N</i>|<a class="permalink" href="#current"><b class="Sy" id="current">current</b></a></dt>
+  <dd>The on-disk version of this file system, which is independent of the pool
+      version. This property can only be set to later supported versions. See
+      the <code class="Nm">zfs</code> <code class="Cm">upgrade</code>
+    command.</dd>
+  <dt id="volsize"><a class="permalink" href="#volsize"><b class="Sy">volsize</b></a>=<i class="Em">size</i></dt>
+  <dd>For volumes, specifies the logical size of the volume. By default,
+      creating a volume establishes a reservation of equal size. For storage
+      pools with a version number of 9 or higher, a
+      <b class="Sy">refreservation</b> is set instead. Any changes to
+      <b class="Sy">volsize</b> are reflected in an equivalent change to the
+      reservation (or <b class="Sy">refreservation</b>). The
+      <b class="Sy">volsize</b> can only be set to a multiple of
+      <b class="Sy">volblocksize</b>, and cannot be zero.
+    <p class="Pp">The reservation is kept equal to the volume's logical size to
+        prevent unexpected behavior for consumers. Without the reservation, the
+        volume could run out of space, resulting in undefined behavior or data
+        corruption, depending on how the volume is used. These effects can also
+        occur when the volume size is changed while it is in use (particularly
+        when shrinking the size). Extreme care should be used when adjusting the
+        volume size.</p>
+    <p class="Pp" id="refreservation.">Though not recommended, a &quot;sparse
+        volume&quot; (also known as &quot;thin provisioned&quot;) can be created
+        by specifying the <code class="Fl">-s</code> option to the
+        <code class="Nm">zfs</code> <code class="Cm">create</code>
+        <code class="Fl">-V</code> command, or by changing the value of the
+        <b class="Sy">refreservation</b> property (or
+        <b class="Sy">reservation</b> property on pool version 8 or earlier)
+        after the volume has been created. A &quot;sparse volume&quot; is a
+        volume where the value of <b class="Sy">refreservation</b> is less than
+        the size of the volume plus the space required to store its metadata.
+        Consequently, writes to a sparse volume can fail with
+        <code class="Er">ENOSPC</code> when the pool is low on space. For a
+        sparse volume, changes to <b class="Sy">volsize</b> are not reflected in
+        the
+        <a class="permalink" href="#refreservation."><b class="Sy">refreservation.</b></a>
+        A volume that is not sparse is said to be &quot;thick provisioned&quot;.
+        A sparse volume can become thick provisioned by setting
+        <b class="Sy">refreservation</b> to <b class="Sy">auto</b>.</p>
+  </dd>
+  <dt id="volmode"><a class="permalink" href="#volmode"><b class="Sy">volmode</b></a>=<code class="Cm">default</code>
+    |
+    <a class="permalink" href="#full"><code class="Cm" id="full">full</code></a>
+    |
+    <a class="permalink" href="#geom"><code class="Cm" id="geom">geom</code></a>
+    | <a class="permalink" href="#dev"><code class="Cm" id="dev">dev</code></a>
+    |
+    <a class="permalink" href="#none"><code class="Cm" id="none">none</code></a></dt>
+  <dd>This property specifies how volumes should be exposed to the OS. Setting
+      it to <b class="Sy">full</b> exposes volumes as fully fledged block
+      devices, providing maximal functionality. The value <b class="Sy">geom</b>
+      is just an alias for <b class="Sy">full</b> and is kept for compatibility.
+      Setting it to <b class="Sy">dev</b> hides its partitions. Volumes with
+      property set to <b class="Sy">none</b> are not exposed outside ZFS, but
+      can be snapshotted, cloned, replicated, etc, that can be suitable for
+      backup purposes. Value
+      <a class="permalink" href="#default"><b class="Sy" id="default">default</b></a>
+      means that volumes exposition is controlled by system-wide tunable
+      <var class="Va">zvol_volmode</var>, where <b class="Sy">full</b>,
+      <b class="Sy">dev</b> and <b class="Sy">none</b> are encoded as 1, 2 and 3
+      respectively. The default value is <b class="Sy">full</b>.</dd>
+  <dt id="vscan"><a class="permalink" href="#vscan"><b class="Sy">vscan</b></a>=<b class="Sy">on</b>|<b class="Sy">off</b></dt>
+  <dd>Controls whether regular files should be scanned for viruses when a file
+      is opened and closed. In addition to enabling this property, the virus
+      scan service must also be enabled for virus scanning to occur. The default
+      value is <b class="Sy">off</b>. This property is not used on Linux.</dd>
+  <dt id="xattr"><a class="permalink" href="#xattr"><b class="Sy">xattr</b></a>=<b class="Sy">on</b>|<b class="Sy">off</b>|<b class="Sy">sa</b></dt>
+  <dd>Controls whether extended attributes are enabled for this file system. Two
+      styles of extended attributes are supported: either directory based or
+      system attribute based.
+    <p class="Pp">The default value of <b class="Sy">on</b> enables directory
+        based extended attributes. This style of extended attribute imposes no
+        practical limit on either the size or number of attributes which can be
+        set on a file. Although under Linux the <a class="Xr">getxattr(2)</a>
+        and <a class="Xr">setxattr(2)</a> system calls limit the maximum size to
+        64K. This is the most compatible style of extended attribute and is
+        supported by all ZFS implementations.</p>
+    <p class="Pp">System attribute based xattrs can be enabled by setting the
+        value to <b class="Sy">sa</b>. The key advantage of this type of xattr
+        is improved performance. Storing extended attributes as system
+        attributes significantly decreases the amount of disk IO required. Up to
+        64K of data may be stored per-file in the space reserved for system
+        attributes. If there is not enough space available for an extended
+        attribute then it will be automatically written as a directory based
+        xattr. System attribute based extended attributes are not accessible on
+        platforms which do not support the <b class="Sy">xattr=sa</b> feature.
+        OpenZFS supports <b class="Sy">xattr=sa</b> on both FreeBSD and
+      Linux.</p>
+    <p class="Pp">The use of system attribute based xattrs is strongly
+        encouraged for users of SELinux or POSIX ACLs. Both of these features
+        heavily rely on extended attributes and benefit significantly from the
+        reduced access time.</p>
+    <p class="Pp" id="noxattr">The values <b class="Sy">on</b> and
+        <b class="Sy">off</b> are equivalent to the <b class="Sy">xattr</b> and
+        <a class="permalink" href="#noxattr"><b class="Sy">noxattr</b></a> mount
+        options.</p>
+  </dd>
+  <dt id="jailed"><a class="permalink" href="#jailed"><b class="Sy">jailed</b></a>=<b class="Sy">off</b>|<b class="Sy">on</b></dt>
+  <dd>Controls whether the dataset is managed from a jail. See the
+      &quot;<a class="Sx" href="#Jails">Jails</a>&quot; section in
+      <a href="../8/zfs.8.html" class="Xr">zfs(8)</a> for more information. Jails are a FreeBSD feature
+      and are not relevant on other platforms. The default value is
+      <code class="Cm">off</code>.</dd>
+  <dt id="zoned"><a class="permalink" href="#zoned"><b class="Sy">zoned</b></a>=<b class="Sy">on</b>|<b class="Sy">off</b></dt>
+  <dd>Controls whether the dataset is managed from a non-global zone. Zones are
+      a Solaris feature and are not relevant on other platforms. The default
+      value is <b class="Sy">off</b>.</dd>
+</dl>
+<p class="Pp">The following three properties cannot be changed after the file
+    system is created, and therefore, should be set when the file system is
+    created. If the properties are not set with the <code class="Nm">zfs</code>
+    <code class="Cm">create</code> or <code class="Nm">zpool</code>
+    <code class="Cm">create</code> commands, these properties are inherited from
+    the parent dataset. If the parent dataset lacks these properties due to
+    having been created prior to these features being supported, the new file
+    system will have the default values for these properties.</p>
+<dl class="Bl-tag">
+  <dt id="casesensitivity"><a class="permalink" href="#casesensitivity"><b class="Sy">casesensitivity</b></a>=<b class="Sy">sensitive</b>|<a class="permalink" href="#insensitive"><b class="Sy" id="insensitive">insensitive</b></a>|<b class="Sy">mixed</b></dt>
+  <dd>Indicates whether the file name matching algorithm used by the file system
+      should be case-sensitive, case-insensitive, or allow a combination of both
+      styles of matching. The default value for the
+      <b class="Sy">casesensitivity</b> property is <b class="Sy">sensitive</b>.
+      Traditionally, <span class="Ux">UNIX</span> and POSIX file systems have
+      case-sensitive file names.
+    <p class="Pp">The <b class="Sy">mixed</b> value for the
+        <b class="Sy">casesensitivity</b> property indicates that the file
+        system can support requests for both case-sensitive and case-insensitive
+        matching behavior. Currently, case-insensitive matching behavior on a
+        file system that supports mixed behavior is limited to the SMB server
+        product. For more information about the <b class="Sy">mixed</b> value
+        behavior, see the &quot;ZFS Administration Guide&quot;.</p>
+  </dd>
+  <dt id="normalization"><a class="permalink" href="#normalization"><b class="Sy">normalization</b></a>=<b class="Sy">none</b>|<a class="permalink" href="#formC"><b class="Sy" id="formC">formC</b></a>|<a class="permalink" href="#formD"><b class="Sy" id="formD">formD</b></a>|<a class="permalink" href="#formKC"><b class="Sy" id="formKC">formKC</b></a>|<a class="permalink" href="#formKD"><b class="Sy" id="formKD">formKD</b></a></dt>
+  <dd>Indicates whether the file system should perform a
+      <a class="permalink" href="#unicode"><b class="Sy" id="unicode">unicode</b></a>
+      normalization of file names whenever two file names are compared, and
+      which normalization algorithm should be used. File names are always stored
+      unmodified, names are normalized as part of any comparison process. If
+      this property is set to a legal value other than <b class="Sy">none</b>,
+      and the <b class="Sy">utf8only</b> property was left unspecified, the
+      <b class="Sy">utf8only</b> property is automatically set to
+      <b class="Sy">on</b>. The default value of the
+      <b class="Sy">normalization</b> property is <b class="Sy">none</b>. This
+      property cannot be changed after the file system is created.</dd>
+  <dt id="utf8only"><a class="permalink" href="#utf8only"><b class="Sy">utf8only</b></a>=<b class="Sy">on</b>|<b class="Sy">off</b></dt>
+  <dd>Indicates whether the file system should reject file names that include
+      characters that are not present in the
+      <a class="permalink" href="#UTF-8"><b class="Sy" id="UTF-8">UTF-8</b></a>
+      character code set. If this property is explicitly set to
+      <b class="Sy">off</b>, the normalization property must either not be
+      explicitly set or be set to <b class="Sy">none</b>. The default value for
+      the <b class="Sy">utf8only</b> property is <b class="Sy">off</b>. This
+      property cannot be changed after the file system is created.</dd>
+</dl>
+<p class="Pp">The <b class="Sy">casesensitivity</b>,
+    <b class="Sy">normalization</b>, and <b class="Sy">utf8only</b> properties
+    are also new permissions that can be assigned to non-privileged users by
+    using the ZFS delegated administration feature.</p>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="Temporary_Mount_Point_Properties"><a class="permalink" href="#Temporary_Mount_Point_Properties">Temporary
+  Mount Point Properties</a></h2>
+<p class="Pp">When a file system is mounted, either through
+    <a class="Xr">mount(8)</a> for legacy mounts or the
+    <code class="Nm">zfs</code> <code class="Cm">mount</code> command for normal
+    file systems, its mount options are set according to its properties. The
+    correlation between properties and mount options is as follows:</p>
+<div class="Bd Pp Li">
+<pre>    PROPERTY                MOUNT OPTION
+    atime                   atime/noatime
+    canmount                auto/noauto
+    devices                 dev/nodev
+    exec                    exec/noexec
+    readonly                ro/rw
+    relatime                relatime/norelatime
+    setuid                  suid/nosuid
+    xattr                   xattr/noxattr</pre>
+</div>
+<p class="Pp" id="nodevices">In addition, these options can be set on a
+    per-mount basis using the <code class="Fl">-o</code> option, without
+    affecting the property that is stored on disk. The values specified on the
+    command line override the values stored in the dataset. The
+    <b class="Sy">nosuid</b> option is an alias for
+    <a class="permalink" href="#nodevices"><b class="Sy">nodevices</b></a>,<a class="permalink" href="#nosetuid"><b class="Sy" id="nosetuid">nosetuid</b></a>.
+    These properties are reported as &quot;temporary&quot; by the
+    <code class="Nm">zfs</code> <code class="Cm">get</code> command. If the
+    properties are changed while the dataset is mounted, the new setting
+    overrides any temporary settings.</p>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="User_Properties"><a class="permalink" href="#User_Properties">User
+  Properties</a></h2>
+<p class="Pp">In addition to the standard native properties, ZFS supports
+    arbitrary user properties. User properties have no effect on ZFS behavior,
+    but applications or administrators can use them to annotate datasets (file
+    systems, volumes, and snapshots).</p>
+<p class="Pp" id=".">User property names must contain a colon
+    (&quot;<b class="Sy">:</b>&quot;) character to distinguish them from native
+    properties. They may contain lowercase letters, numbers, and the following
+    punctuation characters: colon (&quot;<b class="Sy">:</b>&quot;), dash
+    (&quot;<b class="Sy">-</b>&quot;), period
+    (&quot;<a class="permalink" href="#."><b class="Sy">.</b></a>&quot;), and
+    underscore
+    (&quot;<a class="permalink" href="#_"><b class="Sy" id="_">_</b></a>&quot;).
+    The expected convention is that the property name is divided into two
+    portions such as
+    <i class="Em">module</i>:<a class="permalink" href="#property"><i class="Em" id="property">property</i></a>,
+    but this namespace is not enforced by ZFS. User property names can be at
+    most 256 characters, and cannot begin with a dash
+    (&quot;<b class="Sy">-</b>&quot;).</p>
+<p class="Pp" id="DNS">When making programmatic use of user properties, it is
+    strongly suggested to use a reversed
+    <a class="permalink" href="#DNS"><b class="Sy">DNS</b></a> domain name for
+    the <i class="Em">module</i> component of property names to reduce the
+    chance that two independently-developed packages use the same property name
+    for different purposes.</p>
+<p class="Pp">The values of user properties are arbitrary strings, are always
+    inherited, and are never validated. All of the commands that operate on
+    properties (<code class="Nm">zfs</code> <code class="Cm">list</code>,
+    <code class="Nm">zfs</code> <code class="Cm">get</code>,
+    <code class="Nm">zfs</code> <code class="Cm">set</code>, and so forth) can
+    be used to manipulate both native properties and user properties. Use the
+    <code class="Nm">zfs</code> <code class="Cm">inherit</code> command to clear
+    a user property. If the property is not defined in any parent dataset, it is
+    removed entirely. Property values are limited to 8192 bytes.</p>
+</section>
+</section>
+</div>
+<table class="foot">
+  <tr>
+    <td class="foot-date">May 5, 2021</td>
+    <td class="foot-os">Debian</td>
+  </tr>
+</table>
+</div></section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="zfsconcepts.8.html" class="btn btn-neutral float-left" title="zfsconcepts.8" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="zgenhostid.8.html" class="btn btn-neutral float-right" title="zgenhostid.8" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, OpenZFS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
