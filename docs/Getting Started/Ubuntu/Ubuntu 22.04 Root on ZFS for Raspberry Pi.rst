@@ -198,6 +198,21 @@ be deleted.
      3 : start=$((2048+BOOT+ROOT)), size=$ROOT, type=83
      EOF
 
+   This prepares partition 1 for the boot loader, partition 2 for the initial
+   ZFS pool (sized same as the original image), and temporarily a partition 3
+   for the original image itself; the rest of the disk is not partitioned at
+   this time.
+
+   To recap, below we would populate partitions 1 and 3 with adapted replicas
+   of partitions from the image downloaded above, then we would prepare the ZFS
+   pool and dataset layout on partition 2 and transfer the files from partition 3
+   (it should fit well, more so if you enable ZFS compression).
+
+   Finally, we would remove partition 3 and expand the ZFS pool (and partition 2)
+   to consume all the disk after it.
+
+   Let's go!
+
 #. Connect the disk:
 
    Connect the disk to a machine other than the target Raspberry Pi.  If any
