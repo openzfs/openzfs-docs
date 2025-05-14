@@ -142,9 +142,9 @@ def joyent():
 
 
 def netbsd():
-    url = ('http://cvsweb.netbsd.org/bsdweb.cgi/~checkout~/src/external/'
-           'cddl/osnet/dist/cmd/zpool/zpool-features.7'
-           '?content-type=text/plain&only_with_tag={}')
+    url = ('http://cvsweb.netbsd.org/bsdweb.cgi/src/external/'
+           'cddl/osnet/dist/cmd/zpool/zpool-features.7?rev=1.1;'
+           'content-type=text%2Fplain;only_with_tag={}')
     sources = {'main': url.format('MAIN')}
     with urlopen('https://netbsd.org/releases/') as web:
         tags = findall(r'href="formal-.+?/NetBSD-(.+?)\.html',
