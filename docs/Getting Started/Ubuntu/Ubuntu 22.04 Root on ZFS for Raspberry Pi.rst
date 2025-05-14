@@ -199,19 +199,17 @@ be deleted.
      EOF
 
    This prepares partition 1 for the boot loader, partition 2 for the initial
-   ZFS pool (sized same as the original image), and temporarily a partition 3
-   for the original image itself; the rest of the disk is not partitioned at
-   this time.
+   ZFS pool (sized the same as the original image), and partition 3 for the
+   original image itself. The rest of the disk is left unpartitioned for now.
 
-   To recap, below we would populate partitions 1 and 3 with adapted replicas
-   of partitions from the image downloaded above, then we would prepare the ZFS
-   pool and dataset layout on partition 2 and transfer the files from partition 3
-   (it should fit well, more so if you enable ZFS compression).
+   Below, we populate partitions 1 and 3 from the image downloaded above,
+   create the ZFS pool on partition 2, and transfer the files from partition 3
+   to the pool.  As the ZFS partition is sized the same as the original image,
+   everything should fit; while filesystem overhead may be different, the
+   original image is not completely full, and ZFS has compression enabled.
 
-   Finally, we would remove partition 3 and expand the ZFS pool (and partition 2)
-   to consume all the disk after it.
-
-   Let's go!
+   Finally, we remove partition 3 and expand partition 2 and the ZFS pool to
+   consume the rest of the disk.
 
 #. Connect the disk:
 
