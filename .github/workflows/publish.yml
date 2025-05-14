@@ -5,6 +5,9 @@ on:
     branches:
       - master
   workflow_dispatch:
+  schedule:
+    # every night, we have external data (man pages, feature matrix, etc)
+    - cron: "5 3 * * *"
 
 jobs:
   deploy:
