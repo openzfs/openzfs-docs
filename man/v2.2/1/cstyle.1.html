@@ -1,0 +1,292 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cstyle.1 &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
+      <script src="../../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="raidz_test.1" href="raidz_test.1.html" />
+    <link rel="prev" title="arcstat.1" href="arcstat.1.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Basic%20Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Man Pages</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../master/index.html">master</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.3/index.html">v2.3</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">v2.2</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">User Commands (1)</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="arcstat.1.html">arcstat.1</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">cstyle.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="raidz_test.1.html">raidz_test.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="test-runner.1.html">test-runner.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zhack.1.html">zhack.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ztest.1.html">ztest.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zvol_wait.1.html">zvol_wait.1</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../4/index.html">Devices and Special Files (4)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../5/index.html">File Formats and Conventions (5)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../7/index.html">Miscellaneous (7)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../8/index.html">System Administration Commands (8)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.1/index.html">v2.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.0/index.html">v2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.8/index.html">v0.8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.7/index.html">v0.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.6/index.html">v0.6</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Man Pages</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">v2.2</a></li>
+          <li class="breadcrumb-item"><a href="index.html">User Commands (1)</a></li>
+      <li class="breadcrumb-item active">cstyle.1</li>
+      <li class="wy-breadcrumbs-aside">
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/openzfs/zfs/blob/zfs-2.2.7/man/man1/cstyle.1" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="cstyle-1">
+<h1>cstyle.1<a class="headerlink" href="#cstyle-1" title="Permalink to this heading"></a></h1>
+<div class="man_container"><table class="head">
+  <tr>
+    <td class="head-ltitle">CSTYLE(1)</td>
+    <td class="head-vol">General Commands Manual</td>
+    <td class="head-rtitle">CSTYLE(1)</td>
+  </tr>
+</table>
+<div class="manual-text">
+<section class="Sh">
+<h1 class="Sh" id="NAME"><a class="permalink" href="#NAME">NAME</a></h1>
+<p class="Pp"><code class="Nm">cstyle</code> &#x2014; <span class="Nd">check for
+    some common stylistic errors in C source files</span></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SYNOPSIS"><a class="permalink" href="#SYNOPSIS">SYNOPSIS</a></h1>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">cstyle</code></td>
+    <td>[<code class="Fl">-chpvCP</code>]
+      [<var class="Ar">file</var>]&#x2026;</td>
+  </tr>
+</table>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h1>
+<p class="Pp"><code class="Nm">cstyle</code> inspects C source files (*.c and
+    *.h) for common stylistic errors. It attempts to check for the cstyle
+    documented in
+    <a class="Lk" href="http://www.cis.upenn.edu/~lee/06cse480/data/cstyle.ms.pdf">http://www.cis.upenn.edu/~lee/06cse480/data/cstyle.ms.pdf</a>.
+    Note that there is much in that document that
+    <a class="permalink" href="#cannot"><i class="Em" id="cannot">cannot</i></a>
+    be checked for; just because your code is
+    <code class="Nm">cstyle</code>-clean does not mean that you've followed
+    Sun's C style.
+    <a class="permalink" href="#Caveat"><i class="Em" id="Caveat">Caveat
+    emptor</i></a>.</p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="OPTIONS"><a class="permalink" href="#OPTIONS">OPTIONS</a></h1>
+<dl class="Bl-tag">
+  <dt id="c"><a class="permalink" href="#c"><code class="Fl">-c</code></a></dt>
+  <dd>Check continuation line indentation inside of functions. Sun's C style
+      states that all statements must be indented to an appropriate tab stop,
+      and any continuation lines after them must be indented
+      <a class="permalink" href="#exactly"><i class="Em" id="exactly">exactly</i></a>
+      four spaces from the start line. This option enables a series of checks
+      designed to find continuation line problems within functions only. The
+      checks have some limitations; see
+      <a class="permalink" href="#CONTINUATION"><b class="Sy" id="CONTINUATION">CONTINUATION
+      CHECKING</b></a>, below.</dd>
+  <dt id="p"><a class="permalink" href="#p"><code class="Fl">-p</code></a></dt>
+  <dd>Performs some of the more picky checks. Includes ANSI
+      <a class="permalink" href="#_else"><b class="Sy" id="_else">#else</b></a>
+      and
+      <a class="permalink" href="#_endif"><b class="Sy" id="_endif">#endif</b></a>
+      rules, and tries to detect spaces after casts. Used as part of the putback
+      checks.</dd>
+  <dt id="v"><a class="permalink" href="#v"><code class="Fl">-v</code></a></dt>
+  <dd>Verbose output; includes the text of the line of error, and, for
+      <code class="Fl">-c</code>, the first statement in the current
+      continuation block.</dd>
+  <dt id="P"><a class="permalink" href="#P"><code class="Fl">-P</code></a></dt>
+  <dd>Check for use of non-POSIX types. Historically, types like
+      <a class="permalink" href="#u_int"><b class="Sy" id="u_int">u_int</b></a>
+      and
+      <a class="permalink" href="#u_long"><b class="Sy" id="u_long">u_long</b></a>
+      were used, but they are now deprecated in favor of the POSIX types
+      <a class="permalink" href="#uint_t"><b class="Sy" id="uint_t">uint_t</b></a>,
+      <a class="permalink" href="#ulong_t"><b class="Sy" id="ulong_t">ulong_t</b></a>,
+      etc. This detects any use of the deprecated types. Used as part of the
+      putback checks.</dd>
+  <dt id="g"><a class="permalink" href="#g"><code class="Fl">-g</code></a></dt>
+  <dd>Also print GitHub-Actions-style <code class="Li">::error</code>
+    output.</dd>
+</dl>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="ENVIRONMENT"><a class="permalink" href="#ENVIRONMENT">ENVIRONMENT</a></h1>
+<dl class="Bl-tag Bl-compact">
+  <dt id="CI"><a class="permalink" href="#CI"><code class="Ev">CI</code></a></dt>
+  <dd>If set and nonempty, equivalent to <code class="Fl">-g</code>.</dd>
+</dl>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="CONTINUATION_CHECKING"><a class="permalink" href="#CONTINUATION_CHECKING">CONTINUATION
+  CHECKING</a></h1>
+<p class="Pp">The continuation checker is a reasonably simple state machine that
+    knows something about how C is laid out, and can match parenthesis, etc.
+    over multiple lines. It does have some limitations:</p>
+<ol class="Bl-enum">
+  <li id="_if">Preprocessor macros which cause unmatched parenthesis will
+      confuse the checker for that line. To fix this, you'll need to make sure
+      that each branch of the
+      <a class="permalink" href="#_if"><b class="Sy">#if</b></a> statement has
+      balanced parenthesis.</li>
+  <li id="must">Some <a class="Xr">cpp(1)</a> macros do not require
+      <b class="Sy">;</b>s after them. Any such macros
+      <a class="permalink" href="#must"><i class="Em">must</i></a> be ALL_CAPS;
+      any lower case letters will cause bad output.
+    <p class="Pp" id="_">The bad output will generally be corrected after the
+        next <b class="Sy">;</b>,
+        <a class="permalink" href="#_"><b class="Sy">{</b></a>,
+        <span class="No">or</span>
+        <a class="permalink" href="#_~2"><b class="Sy" id="_~2">}</b></a>.</p>
+  </li>
+</ol>
+Some continuation error messages deserve some additional explanation:
+<dl class="Bl-tag">
+  <dt id="multiple"><a class="permalink" href="#multiple"><b class="Sy">multiple
+    statements continued over multiple lines</b></a></dt>
+  <dd>A multi-line statement which is not broken at statement boundaries. For
+      example:
+    <div class="Bd Bd-indent Li">
+    <pre>if (this_is_a_long_variable == another_variable) a =
+    b + c;</pre>
+    </div>
+    <p class="Pp">Will trigger this error. Instead, do:</p>
+    <div class="Bd Bd-indent Li">
+    <pre>if (this_is_a_long_variable == another_variable)
+    a = b + c;</pre>
+    </div>
+  </dd>
+  <dt id="empty"><a class="permalink" href="#empty"><b class="Sy">empty
+    if/for/while body not on its own line</b></a></dt>
+  <dd>For visibility, empty bodies for if, for, and while statements should be
+      on their own line. For example:
+    <div class="Bd Bd-indent Li">
+    <pre>while (do_something(&amp;x) == 0);</pre>
+    </div>
+    <p class="Pp">Will trigger this error. Instead, do:</p>
+    <div class="Bd Bd-indent Li">
+    <pre>while (do_something(&amp;x) == 0)
+    ;</pre>
+    </div>
+  </dd>
+</dl>
+</section>
+</div>
+<table class="foot">
+  <tr>
+    <td class="foot-date">May 26, 2021</td>
+    <td class="foot-os">Debian</td>
+  </tr>
+</table>
+</div></section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="arcstat.1.html" class="btn btn-neutral float-left" title="arcstat.1" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="raidz_test.1.html" class="btn btn-neutral float-right" title="raidz_test.1" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, OpenZFS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

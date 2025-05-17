@@ -1,0 +1,375 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>zfsconcepts.8 &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
+      <script src="../../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="zfsprops.8" href="zfsprops.8.html" />
+    <link rel="prev" title="zfs_ids_to_path.8" href="zfs_ids_to_path.8.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Basic%20Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Man Pages</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../master/index.html">master</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.3/index.html">v2.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.2/index.html">v2.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.1/index.html">v2.1</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">v2.0</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../1/index.html">User Commands (1)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../5/index.html">File Formats and Conventions (5)</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">System Administration Commands (8)</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="fsck.zfs.8.html">fsck.zfs.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mount.zfs.8.html">mount.zfs.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vdev_id.8.html">vdev_id.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zdb.8.html">zdb.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zed.8.html">zed.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-allow.8.html">zfs-allow.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-bookmark.8.html">zfs-bookmark.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-change-key.8.html">zfs-change-key.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-clone.8.html">zfs-clone.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-create.8.html">zfs-create.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-destroy.8.html">zfs-destroy.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-diff.8.html">zfs-diff.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-get.8.html">zfs-get.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-groupspace.8.html">zfs-groupspace.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-hold.8.html">zfs-hold.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-inherit.8.html">zfs-inherit.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-jail.8.html">zfs-jail.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-list.8.html">zfs-list.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-load-key.8.html">zfs-load-key.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-mount-generator.8.html">zfs-mount-generator.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-mount.8.html">zfs-mount.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-program.8.html">zfs-program.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-project.8.html">zfs-project.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-projectspace.8.html">zfs-projectspace.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-promote.8.html">zfs-promote.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-receive.8.html">zfs-receive.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-recv.8.html">zfs-recv.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-redact.8.html">zfs-redact.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-release.8.html">zfs-release.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-rename.8.html">zfs-rename.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-rollback.8.html">zfs-rollback.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-send.8.html">zfs-send.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-set.8.html">zfs-set.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-share.8.html">zfs-share.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-snapshot.8.html">zfs-snapshot.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-unallow.8.html">zfs-unallow.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-unjail.8.html">zfs-unjail.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-unload-key.8.html">zfs-unload-key.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-unmount.8.html">zfs-unmount.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-upgrade.8.html">zfs-upgrade.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-userspace.8.html">zfs-userspace.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-wait.8.html">zfs-wait.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs.8.html">zfs.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs_ids_to_path.8.html">zfs_ids_to_path.8</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">zfsconcepts.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfsprops.8.html">zfsprops.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zgenhostid.8.html">zgenhostid.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zinject.8.html">zinject.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-add.8.html">zpool-add.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-attach.8.html">zpool-attach.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-checkpoint.8.html">zpool-checkpoint.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-clear.8.html">zpool-clear.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-create.8.html">zpool-create.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-destroy.8.html">zpool-destroy.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-detach.8.html">zpool-detach.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-events.8.html">zpool-events.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-export.8.html">zpool-export.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-get.8.html">zpool-get.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-history.8.html">zpool-history.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-import.8.html">zpool-import.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-initialize.8.html">zpool-initialize.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-iostat.8.html">zpool-iostat.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-labelclear.8.html">zpool-labelclear.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-list.8.html">zpool-list.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-offline.8.html">zpool-offline.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-online.8.html">zpool-online.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-reguid.8.html">zpool-reguid.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-remove.8.html">zpool-remove.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-reopen.8.html">zpool-reopen.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-replace.8.html">zpool-replace.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-resilver.8.html">zpool-resilver.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-scrub.8.html">zpool-scrub.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-set.8.html">zpool-set.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-split.8.html">zpool-split.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-status.8.html">zpool-status.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-sync.8.html">zpool-sync.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-trim.8.html">zpool-trim.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-upgrade.8.html">zpool-upgrade.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-wait.8.html">zpool-wait.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool.8.html">zpool.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpoolconcepts.8.html">zpoolconcepts.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpoolprops.8.html">zpoolprops.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zstream.8.html">zstream.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zstreamdump.8.html">zstreamdump.8</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.8/index.html">v0.8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.7/index.html">v0.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.6/index.html">v0.6</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Man Pages</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">v2.0</a></li>
+          <li class="breadcrumb-item"><a href="index.html">System Administration Commands (8)</a></li>
+      <li class="breadcrumb-item active">zfsconcepts.8</li>
+      <li class="wy-breadcrumbs-aside">
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/openzfs/zfs/blob/zfs-2.0.7/man/man8/zfsconcepts.8" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="zfsconcepts-8">
+<h1>zfsconcepts.8<a class="headerlink" href="#zfsconcepts-8" title="Permalink to this heading"></a></h1>
+<div class="man_container"><table class="head">
+  <tr>
+    <td class="head-ltitle">ZFSCONCEPTS(8)</td>
+    <td class="head-vol">System Manager's Manual</td>
+    <td class="head-rtitle">ZFSCONCEPTS(8)</td>
+  </tr>
+</table>
+<div class="manual-text">
+<section class="Sh">
+<h1 class="Sh" id="NAME"><a class="permalink" href="#NAME">NAME</a></h1>
+<p class="Pp"><code class="Nm">zfsconcepts</code> &#x2014; <span class="Nd">An
+    overview of ZFS concepts.</span></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h1>
+<section class="Ss">
+<h2 class="Ss" id="ZFS_File_System_Hierarchy"><a class="permalink" href="#ZFS_File_System_Hierarchy">ZFS
+  File System Hierarchy</a></h2>
+<p class="Pp">A ZFS storage pool is a logical collection of devices that provide
+    space for datasets. A storage pool is also the root of the ZFS file system
+    hierarchy.</p>
+<p class="Pp">The root of the pool can be accessed as a file system, such as
+    mounting and unmounting, taking snapshots, and setting properties. The
+    physical storage characteristics, however, are managed by the
+    <a href="../8/zpool.8.html" class="Xr">zpool(8)</a> command.</p>
+<p class="Pp">See <a href="../8/zpool.8.html" class="Xr">zpool(8)</a> for more information on creating
+    and administering pools.</p>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="Snapshots"><a class="permalink" href="#Snapshots">Snapshots</a></h2>
+<p class="Pp">A snapshot is a read-only copy of a file system or volume.
+    Snapshots can be created extremely quickly, and initially consume no
+    additional space within the pool. As data within the active dataset changes,
+    the snapshot consumes more data than would otherwise be shared with the
+    active dataset.</p>
+<p class="Pp" id="snapdev">Snapshots can have arbitrary names. Snapshots of
+    volumes can be cloned or rolled back, visibility is determined by the
+    <a class="permalink" href="#snapdev"><b class="Sy">snapdev</b></a> property
+    of the parent volume.</p>
+<p class="Pp" id="snapdir">File system snapshots can be accessed under the
+    <span class="Pa">.zfs/snapshot</span> directory in the root of the file
+    system. Snapshots are automatically mounted on demand and may be unmounted
+    at regular intervals. The visibility of the <span class="Pa">.zfs</span>
+    directory can be controlled by the
+    <a class="permalink" href="#snapdir"><b class="Sy">snapdir</b></a>
+  property.</p>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="Bookmarks"><a class="permalink" href="#Bookmarks">Bookmarks</a></h2>
+<p class="Pp">A bookmark is like a snapshot, a read-only copy of a file system
+    or volume. Bookmarks can be created extremely quickly, compared to
+    snapshots, and they consume no additional space within the pool. Bookmarks
+    can also have arbitrary names, much like snapshots.</p>
+<p class="Pp">Unlike snapshots, bookmarks can not be accessed through the
+    filesystem in any way. From a storage standpoint a bookmark just provides a
+    way to reference when a snapshot was created as a distinct object. Bookmarks
+    are initially tied to a snapshot, not the filesystem or volume, and they
+    will survive if the snapshot itself is destroyed. Since they are very light
+    weight there's little incentive to destroy them.</p>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="Clones"><a class="permalink" href="#Clones">Clones</a></h2>
+<p class="Pp">A clone is a writable volume or file system whose initial contents
+    are the same as another dataset. As with snapshots, creating a clone is
+    nearly instantaneous, and initially consumes no additional space.</p>
+<p class="Pp" id="origin">Clones can only be created from a snapshot. When a
+    snapshot is cloned, it creates an implicit dependency between the parent and
+    child. Even though the clone is created somewhere else in the dataset
+    hierarchy, the original snapshot cannot be destroyed as long as a clone
+    exists. The <a class="permalink" href="#origin"><b class="Sy">origin</b></a>
+    property exposes this dependency, and the <code class="Cm">destroy</code>
+    command lists any such dependencies, if they exist.</p>
+<p class="Pp">The clone parent-child dependency relationship can be reversed by
+    using the <code class="Cm">promote</code> subcommand. This causes the
+    &quot;origin&quot; file system to become a clone of the specified file
+    system, which makes it possible to destroy the file system that the clone
+    was created from.</p>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="Mount_Points"><a class="permalink" href="#Mount_Points">Mount
+  Points</a></h2>
+<p class="Pp">Creating a ZFS file system is a simple operation, so the number of
+    file systems per system is likely to be numerous. To cope with this, ZFS
+    automatically manages mounting and unmounting file systems without the need
+    to edit the <span class="Pa">/etc/fstab</span> file. All automatically
+    managed file systems are mounted by ZFS at boot time.</p>
+<p class="Pp">By default, file systems are mounted under
+    <span class="Pa">/path</span>, where <var class="Ar">path</var> is the name
+    of the file system in the ZFS namespace. Directories are created and
+    destroyed as needed.</p>
+<p class="Pp" id="pool/home">A file system can also have a mount point set in
+    the <b class="Sy">mountpoint</b> property. This directory is created as
+    needed, and ZFS automatically mounts the file system when the
+    <code class="Nm">zfs</code> <code class="Cm">mount</code>
+    <code class="Fl">-a</code> command is invoked (without editing
+    <span class="Pa">/etc/fstab</span>). The <b class="Sy">mountpoint</b>
+    property can be inherited, so if
+    <a class="permalink" href="#pool/home"><i class="Em">pool/home</i></a> has a
+    mount point of <span class="Pa">/export/stuff</span>, then
+    <a class="permalink" href="#pool/home/user"><i class="Em" id="pool/home/user">pool/home/user</i></a>
+    automatically inherits a mount point of
+    <span class="Pa">/export/stuff/user</span>.</p>
+<p class="Pp" id="none">A file system <b class="Sy">mountpoint</b> property of
+    <a class="permalink" href="#none"><b class="Sy">none</b></a> prevents the
+    file system from being mounted.</p>
+<p class="Pp" id="legacy">If needed, ZFS file systems can also be managed with
+    traditional tools (<code class="Nm">mount</code>,
+    <code class="Nm">umount</code>, <span class="Pa">/etc/fstab</span>). If a
+    file system's mount point is set to
+    <a class="permalink" href="#legacy"><b class="Sy">legacy</b></a>, ZFS makes
+    no attempt to manage the file system, and the administrator is responsible
+    for mounting and unmounting the file system. Because pools must be imported
+    before a legacy mount can succeed, administrators should ensure that legacy
+    mounts are only attempted after the zpool import process finishes at boot
+    time. For example, on machines using systemd, the mount option</p>
+<p class="Pp"><code class="Nm">x-systemd.requires=zfs-import.target</code></p>
+<p class="Pp">will ensure that the zfs-import completes before systemd attempts
+    mounting the filesystem. See systemd.mount(5) for details.</p>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="Deduplication"><a class="permalink" href="#Deduplication">Deduplication</a></h2>
+<p class="Pp">Deduplication is the process for removing redundant data at the
+    block level, reducing the total amount of data stored. If a file system has
+    the
+    <a class="permalink" href="#dedup"><b class="Sy" id="dedup">dedup</b></a>
+    property enabled, duplicate data blocks are removed synchronously. The
+    result is that only unique data is stored and common components are shared
+    among files.</p>
+<p class="Pp">Deduplicating data is a very resource-intensive operation. It is
+    generally recommended that you have at least 1.25 GiB of RAM per 1 TiB of
+    storage when you enable deduplication. Calculating the exact requirement
+    depends heavily on the type of data stored in the pool.</p>
+<p class="Pp">Enabling deduplication on an improperly-designed system can result
+    in performance issues (slow IO and administrative operations). It can
+    potentially lead to problems importing a pool due to memory exhaustion.
+    Deduplication can consume significant processing power (CPU) and memory as
+    well as generate additional disk IO.</p>
+<p class="Pp" id="compression=on">Before creating a pool with deduplication
+    enabled, ensure that you have planned your hardware requirements
+    appropriately and implemented appropriate recovery practices, such as
+    regular backups. As an alternative to deduplication consider using
+    <a class="permalink" href="#compression=on"><b class="Sy">compression=on</b></a>,
+    as a less resource-intensive alternative.</p>
+</section>
+</section>
+</div>
+<table class="foot">
+  <tr>
+    <td class="foot-date">June 30, 2019</td>
+    <td class="foot-os">Debian</td>
+  </tr>
+</table>
+</div></section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="zfs_ids_to_path.8.html" class="btn btn-neutral float-left" title="zfs_ids_to_path.8" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="zfsprops.8.html" class="btn btn-neutral float-right" title="zfsprops.8" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, OpenZFS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

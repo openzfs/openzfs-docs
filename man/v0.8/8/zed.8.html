@@ -1,0 +1,379 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>zed.8 &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
+      <script src="../../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="zfs-mount-generator.8" href="zfs-mount-generator.8.html" />
+    <link rel="prev" title="zdb.8" href="zdb.8.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Basic%20Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Man Pages</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../master/index.html">master</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.3/index.html">v2.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.2/index.html">v2.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.1/index.html">v2.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.0/index.html">v2.0</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">v0.8</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../1/index.html">User Commands (1)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../5/index.html">File Formats and Conventions (5)</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">System Administration Commands (8)</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="fsck.zfs.8.html">fsck.zfs.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mount.zfs.8.html">mount.zfs.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vdev_id.8.html">vdev_id.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zdb.8.html">zdb.8</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">zed.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-mount-generator.8.html">zfs-mount-generator.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-program.8.html">zfs-program.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs.8.html">zfs.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfsprops.8.html">zfsprops.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zgenhostid.8.html">zgenhostid.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zinject.8.html">zinject.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool.8.html">zpool.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zstreamdump.8.html">zstreamdump.8</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.7/index.html">v0.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.6/index.html">v0.6</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Man Pages</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">v0.8</a></li>
+          <li class="breadcrumb-item"><a href="index.html">System Administration Commands (8)</a></li>
+      <li class="breadcrumb-item active">zed.8</li>
+      <li class="wy-breadcrumbs-aside">
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/openzfs/zfs/blob/zfs-0.8.6/man/man8/zed.8" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="zed-8">
+<h1>zed.8<a class="headerlink" href="#zed-8" title="Permalink to this heading"></a></h1>
+<div class="man_container"><table class="head">
+  <tr>
+    <td class="head-ltitle">ZED(8)</td>
+    <td class="head-vol">System Administration Commands</td>
+    <td class="head-rtitle">ZED(8)</td>
+  </tr>
+</table>
+<div class="manual-text">
+<p class="Pp"></p>
+<section class="Sh">
+<h1 class="Sh" id="NAME"><a class="permalink" href="#NAME">NAME</a></h1>
+<p class="Pp">ZED - ZFS Event Daemon</p>
+<p class="Pp"></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SYNOPSIS"><a class="permalink" href="#SYNOPSIS">SYNOPSIS</a></h1>
+<p class="Pp HP"><b>zed</b> [<b>-d</b> <i>zedletdir</i>] [<b>-f</b>] [<b>-F</b>]
+    [<b>-h</b>] [<b>-L</b>] [<b>-M</b>] [<b>-p</b> <i>pidfile</i>] [<b>-P</b>
+    <i>path</i>] [<b>-s</b> <i>statefile</i>] [<b>-v</b>] [<b>-V</b>]
+    [<b>-Z</b>]</p>
+<p class="Pp"></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h1>
+<p class="Pp"><b>ZED</b> (ZFS Event Daemon) monitors events generated by the ZFS
+    kernel module. When a zevent (ZFS Event) is posted, <b>ZED</b> will run any
+    ZEDLETs (ZFS Event Daemon Linkage for Executable Tasks) that have been
+    enabled for the corresponding zevent class.</p>
+<p class="Pp"></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="OPTIONS"><a class="permalink" href="#OPTIONS">OPTIONS</a></h1>
+<dl class="Bl-tag">
+  <dt id="h"><a class="permalink" href="#h"><b>-h</b></a></dt>
+  <dd>Display a summary of the command-line options.</dd>
+  <dt id="L"><a class="permalink" href="#L"><b>-L</b></a></dt>
+  <dd>Display license information.</dd>
+  <dt id="V"><a class="permalink" href="#V"><b>-V</b></a></dt>
+  <dd>Display version information.</dd>
+  <dt id="v"><a class="permalink" href="#v"><b>-v</b></a></dt>
+  <dd>Be verbose.</dd>
+  <dt id="f"><a class="permalink" href="#f"><b>-f</b></a></dt>
+  <dd>Force the daemon to run if at all possible, disabling security checks and
+      throwing caution to the wind. Not recommended for use in production.</dd>
+  <dt id="F"><a class="permalink" href="#F"><b>-F</b></a></dt>
+  <dd>Run the daemon in the foreground.</dd>
+  <dt id="M"><a class="permalink" href="#M"><b>-M</b></a></dt>
+  <dd>Lock all current and future pages in the virtual memory address space.
+      This may help the daemon remain responsive when the system is under heavy
+      memory pressure.</dd>
+  <dt id="Z"><a class="permalink" href="#Z"><b>-Z</b></a></dt>
+  <dd>Zero the daemon's state, thereby allowing zevents still within the kernel
+      to be reprocessed.</dd>
+  <dt id="d"><a class="permalink" href="#d"><b>-d&#x00A0;</b><i>zedletdir</i></a></dt>
+  <dd>Read the enabled ZEDLETs from the specified directory.</dd>
+  <dt id="p"><a class="permalink" href="#p"><b>-p&#x00A0;</b><i>pidfile</i></a></dt>
+  <dd>Write the daemon's process ID to the specified file.</dd>
+  <dt id="P"><a class="permalink" href="#P"><b>-P&#x00A0;</b><i>path</i></a></dt>
+  <dd>Custom $PATH for zedlets to use. Normally zedlets run in a locked-down
+      environment, with hardcoded paths to the ZFS commands ($ZFS, $ZPOOL, $ZED,
+      ...), and a hardcoded $PATH. This is done for security reasons. However,
+      the ZFS test suite uses a custom PATH for its ZFS commands, and passes it
+      to zed with -P. In short, -P is only to be used by the ZFS test suite;
+      never use it in production!</dd>
+  <dt id="s"><a class="permalink" href="#s"><b>-s&#x00A0;</b><i>statefile</i></a></dt>
+  <dd>Write the daemon's state to the specified file.</dd>
+</dl>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="ZEVENTS"><a class="permalink" href="#ZEVENTS">ZEVENTS</a></h1>
+<p class="Pp">A zevent is comprised of a list of nvpairs (name/value pairs).
+    Each zevent contains an EID (Event IDentifier) that uniquely identifies it
+    throughout the lifetime of the loaded ZFS kernel module; this EID is a
+    monotonically increasing integer that resets to 1 each time the kernel
+    module is loaded. Each zevent also contains a class string that identifies
+    the type of event. For brevity, a subclass string is defined that omits the
+    leading components of the class string. Additional nvpairs exist to provide
+    event details.</p>
+<p class="Pp">The kernel maintains a list of recent zevents that can be viewed
+    (along with their associated lists of nvpairs) using the &quot;<b>zpool
+    events -v</b>&quot; command.</p>
+<p class="Pp"></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="CONFIGURATION"><a class="permalink" href="#CONFIGURATION">CONFIGURATION</a></h1>
+<p class="Pp">ZEDLETs to be invoked in response to zevents are located in the
+    <i>enabled-zedlets</i> directory. These can be symlinked or copied from the
+    <i>installed-zedlets</i> directory; symlinks allow for automatic updates
+    from the installed ZEDLETs, whereas copies preserve local modifications. As
+    a security measure, ZEDLETs must be owned by root. They must have execute
+    permissions for the user, but they must not have write permissions for group
+    or other. Dotfiles are ignored.</p>
+<p class="Pp">ZEDLETs are named after the zevent class for which they should be
+    invoked. In particular, a ZEDLET will be invoked for a given zevent if
+    either its class or subclass string is a prefix of its filename (and is
+    followed by a non-alphabetic character). As a special case, the prefix
+    &quot;all&quot; matches all zevents. Multiple ZEDLETs may be invoked for a
+    given zevent.</p>
+<p class="Pp"></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="ZEDLETS"><a class="permalink" href="#ZEDLETS">ZEDLETS</a></h1>
+<p class="Pp">ZEDLETs are executables invoked by the ZED in response to a given
+    zevent. They should be written under the presumption they can be invoked
+    concurrently, and they should use appropriate locking to access any shared
+    resources. Common variables used by ZEDLETs can be stored in the default rc
+    file which is sourced by scripts; these variables should be prefixed with
+    &quot;ZED_&quot;.</p>
+<p class="Pp">The zevent nvpairs are passed to ZEDLETs as environment variables.
+    Each nvpair name is converted to an environment variable in the following
+    manner: 1) it is prefixed with &quot;ZEVENT_&quot;, 2) it is converted to
+    uppercase, and 3) each non-alphanumeric character is converted to an
+    underscore. Some additional environment variables have been defined to
+    present certain nvpair values in a more convenient form. An incomplete list
+    of zevent environment variables is as follows:</p>
+<dl class="Bl-tag">
+  <dt id="ZEVENT_EID"><a class="permalink" href="#ZEVENT_EID"><b>ZEVENT_EID</b></a></dt>
+  <dd>The Event IDentifier.</dd>
+  <dt id="ZEVENT_CLASS"><a class="permalink" href="#ZEVENT_CLASS"><b>ZEVENT_CLASS</b></a></dt>
+  <dd>The zevent class string.</dd>
+  <dt id="ZEVENT_SUBCLASS"><a class="permalink" href="#ZEVENT_SUBCLASS"><b>ZEVENT_SUBCLASS</b></a></dt>
+  <dd>The zevent subclass string.</dd>
+  <dt id="ZEVENT_TIME"><a class="permalink" href="#ZEVENT_TIME"><b>ZEVENT_TIME</b></a></dt>
+  <dd>The time at which the zevent was posted as
+      &quot;<i>seconds</i>&#x00A0;<i>nanoseconds</i>&quot; since the Epoch.</dd>
+  <dt id="ZEVENT_TIME_SECS"><a class="permalink" href="#ZEVENT_TIME_SECS"><b>ZEVENT_TIME_SECS</b></a></dt>
+  <dd>The <i>seconds</i> component of ZEVENT_TIME.</dd>
+  <dt id="ZEVENT_TIME_NSECS"><a class="permalink" href="#ZEVENT_TIME_NSECS"><b>ZEVENT_TIME_NSECS</b></a></dt>
+  <dd>The <i>nanoseconds</i> component of ZEVENT_TIME.</dd>
+  <dt id="ZEVENT_TIME_STRING"><a class="permalink" href="#ZEVENT_TIME_STRING"><b>ZEVENT_TIME_STRING</b></a></dt>
+  <dd>An almost-RFC3339-compliant string for ZEVENT_TIME.</dd>
+</dl>
+<p class="Pp">Additionally, the following ZED &amp; ZFS variables are
+  defined:</p>
+<dl class="Bl-tag">
+  <dt id="ZED_PID"><a class="permalink" href="#ZED_PID"><b>ZED_PID</b></a></dt>
+  <dd>The daemon's process ID.</dd>
+  <dt id="ZED_ZEDLET_DIR"><a class="permalink" href="#ZED_ZEDLET_DIR"><b>ZED_ZEDLET_DIR</b></a></dt>
+  <dd>The daemon's current <i>enabled-zedlets</i> directory.</dd>
+  <dt id="ZFS_ALIAS"><a class="permalink" href="#ZFS_ALIAS"><b>ZFS_ALIAS</b></a></dt>
+  <dd>The ZFS alias (<i>name-version-release</i>) string used to build the
+      daemon.</dd>
+  <dt id="ZFS_VERSION"><a class="permalink" href="#ZFS_VERSION"><b>ZFS_VERSION</b></a></dt>
+  <dd>The ZFS version used to build the daemon.</dd>
+  <dt id="ZFS_RELEASE"><a class="permalink" href="#ZFS_RELEASE"><b>ZFS_RELEASE</b></a></dt>
+  <dd>The ZFS release used to build the daemon.</dd>
+</dl>
+<p class="Pp">ZEDLETs may need to call other ZFS commands. The installation
+    paths of the following executables are defined: <b>ZDB</b>, <b>ZED</b>,
+    <b>ZFS</b>, <b>ZINJECT</b>, and <b>ZPOOL</b>. These variables can be
+    overridden in the rc file if needed.</p>
+<p class="Pp"></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="FILES"><a class="permalink" href="#FILES">FILES</a></h1>
+<dl class="Bl-tag">
+  <dt><i>@sysconfdir@/zfs/zed.d</i></dt>
+  <dd>The default directory for enabled ZEDLETs.</dd>
+  <dt><i>@sysconfdir@/zfs/zed.d/zed.rc</i></dt>
+  <dd>The default rc file for common variables used by ZEDLETs.</dd>
+  <dt><i>@zfsexecdir@/zed.d</i></dt>
+  <dd>The default directory for installed ZEDLETs.</dd>
+  <dt><i>@runstatedir@/zed.pid</i></dt>
+  <dd>The default file containing the daemon's process ID.</dd>
+  <dt><i>@runstatedir@/zed.state</i></dt>
+  <dd>The default file containing the daemon's state.
+    <p class="Pp"></p>
+  </dd>
+</dl>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SIGNALS"><a class="permalink" href="#SIGNALS">SIGNALS</a></h1>
+<dl class="Bl-tag">
+  <dt id="HUP"><a class="permalink" href="#HUP"><b>HUP</b></a></dt>
+  <dd>Reconfigure the daemon and rescan the directory for enabled ZEDLETs.</dd>
+  <dt id="TERM"><a class="permalink" href="#TERM"><b>TERM</b></a></dt>
+  <dd>Terminate the daemon.
+    <p class="Pp"></p>
+  </dd>
+</dl>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="NOTES"><a class="permalink" href="#NOTES">NOTES</a></h1>
+<p class="Pp"><b>ZED</b> requires root privileges.</p>
+<p class="Pp"></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="BUGS"><a class="permalink" href="#BUGS">BUGS</a></h1>
+<p class="Pp">Events are processed synchronously by a single thread. This can
+    delay the processing of simultaneous zevents.</p>
+<p class="Pp">There is no maximum timeout for ZEDLET execution. Consequently, a
+    misbehaving ZEDLET can delay the processing of subsequent zevents.</p>
+<p class="Pp">The ownership and permissions of the <i>enabled-zedlets</i>
+    directory (along with all parent directories) are not checked. If any of
+    these directories are improperly owned or permissioned, an unprivileged user
+    could insert a ZEDLET to be executed as root. The requirement that ZEDLETs
+    be owned by root mitigates this to some extent.</p>
+<p class="Pp">ZEDLETs are unable to return state/status information to the
+    kernel.</p>
+<p class="Pp">Some zevent nvpair types are not handled. These are denoted by
+    zevent environment variables having a &quot;_NOT_IMPLEMENTED_&quot;
+  value.</p>
+<p class="Pp">Internationalization support via gettext has not been added.</p>
+<p class="Pp">The configuration file is not yet implemented.</p>
+<p class="Pp">The diagnosis engine is not yet implemented.</p>
+<p class="Pp"></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="LICENSE"><a class="permalink" href="#LICENSE">LICENSE</a></h1>
+<p class="Pp"><b>ZED</b> (ZFS Event Daemon) is distributed under the terms of
+    the Common Development and Distribution License Version 1.0 (CDDL-1.0).</p>
+<p class="Pp">Developed at Lawrence Livermore National Laboratory
+    (LLNL-CODE-403049).</p>
+<p class="Pp"></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SEE_ALSO"><a class="permalink" href="#SEE_ALSO">SEE
+  ALSO</a></h1>
+<p class="Pp"><b>zfs</b>(8), <b>zpool</b>(8)</p>
+</section>
+</div>
+<table class="foot">
+  <tr>
+    <td class="foot-date">Octember 1, 2013</td>
+    <td class="foot-os">ZFS on Linux</td>
+  </tr>
+</table>
+</div></section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="zdb.8.html" class="btn btn-neutral float-left" title="zdb.8" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="zfs-mount-generator.8.html" class="btn btn-neutral float-right" title="zfs-mount-generator.8" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, OpenZFS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

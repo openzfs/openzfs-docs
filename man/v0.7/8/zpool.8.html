@@ -1,0 +1,2222 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>zpool.8 &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
+      <script src="../../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="zstreamdump.8" href="zstreamdump.8.html" />
+    <link rel="prev" title="zinject.8" href="zinject.8.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Basic%20Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Man Pages</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../master/index.html">master</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.3/index.html">v2.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.2/index.html">v2.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.1/index.html">v2.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.0/index.html">v2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.8/index.html">v0.8</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">v0.7</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../1/index.html">User Commands (1)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../5/index.html">File Formats and Conventions (5)</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">System Administration Commands (8)</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="fsck.zfs.8.html">fsck.zfs.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mount.zfs.8.html">mount.zfs.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vdev_id.8.html">vdev_id.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zdb.8.html">zdb.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zed.8.html">zed.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs.8.html">zfs.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zgenhostid.8.html">zgenhostid.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zinject.8.html">zinject.8</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">zpool.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zstreamdump.8.html">zstreamdump.8</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.6/index.html">v0.6</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Man Pages</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">v0.7</a></li>
+          <li class="breadcrumb-item"><a href="index.html">System Administration Commands (8)</a></li>
+      <li class="breadcrumb-item active">zpool.8</li>
+      <li class="wy-breadcrumbs-aside">
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/openzfs/zfs/blob/zfs-0.7.13/man/man8/zpool.8" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="zpool-8">
+<h1>zpool.8<a class="headerlink" href="#zpool-8" title="Permalink to this heading"></a></h1>
+<div class="man_container"><table class="head">
+  <tr>
+    <td class="head-ltitle">ZPOOL(8)</td>
+    <td class="head-vol">System Manager's Manual (smm)</td>
+    <td class="head-rtitle">ZPOOL(8)</td>
+  </tr>
+</table>
+<div class="manual-text">
+<section class="Sh">
+<h1 class="Sh" id="NAME"><a class="permalink" href="#NAME">NAME</a></h1>
+<p class="Pp"><code class="Nm">zpool</code> &#x2014; <span class="Nd">configure
+    ZFS storage pools</span></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SYNOPSIS"><a class="permalink" href="#SYNOPSIS">SYNOPSIS</a></h1>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zpool</code></td>
+    <td><code class="Fl">-</code>?</td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zpool</code></td>
+    <td><code class="Cm">add</code> [<code class="Fl">-fgLnP</code>]
+      [<code class="Fl">-o</code>
+      <var class="Ar">property</var>=<var class="Ar">value</var>]
+      <var class="Ar">pool vdev</var>...</td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zpool</code></td>
+    <td><code class="Cm">attach</code> [<code class="Fl">-f</code>]
+      [<code class="Fl">-o</code>
+      <var class="Ar">property</var>=<var class="Ar">value</var>]
+      <var class="Ar">pool device new_device</var></td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zpool</code></td>
+    <td><code class="Cm">clear</code> <var class="Ar">pool</var>
+      [<var class="Ar">device</var>]</td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zpool</code></td>
+    <td><code class="Cm">create</code> [<code class="Fl">-dfn</code>]
+      [<code class="Fl">-m</code> <var class="Ar">mountpoint</var>]
+      [<code class="Fl">-o</code>
+      <var class="Ar">property</var>=<var class="Ar">value</var>]...
+      [<code class="Fl">-o</code>
+      <var class="Ar">feature@feature</var>=<var class="Ar">value</var>]
+      [<code class="Fl">-O</code>
+      <var class="Ar">file-system-property</var>=<var class="Ar">value</var>]...
+      [<code class="Fl">-R</code> <var class="Ar">root</var>]
+      <var class="Ar">pool vdev</var>...</td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zpool</code></td>
+    <td><code class="Cm">destroy</code> [<code class="Fl">-f</code>]
+      <var class="Ar">pool</var></td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zpool</code></td>
+    <td><code class="Cm">detach</code> <var class="Ar">pool device</var></td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zpool</code></td>
+    <td><code class="Cm">events</code> [<code class="Fl">-vHfc</code>]
+      [<var class="Ar">pool</var>]</td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zpool</code></td>
+    <td><code class="Cm">export</code> [<code class="Fl">-a</code>]
+      [<code class="Fl">-f</code>] <var class="Ar">pool</var>...</td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zpool</code></td>
+    <td><code class="Cm">get</code> [<code class="Fl">-Hp</code>]
+      [<code class="Fl">-o</code>
+      <var class="Ar">field</var>[,<var class="Ar">field</var>]...]
+      <b class="Sy">all</b>|<var class="Ar">property</var>[,<var class="Ar">property</var>]...
+      <var class="Ar">pool</var>...</td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zpool</code></td>
+    <td><code class="Cm">history</code> [<code class="Fl">-il</code>]
+      [<var class="Ar">pool</var>]...</td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zpool</code></td>
+    <td><code class="Cm">import</code> [<code class="Fl">-D</code>]
+      [<code class="Fl">-c</code>
+      <var class="Ar">cachefile</var>|<code class="Fl">-d</code>
+      <var class="Ar">dir</var>]</td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zpool</code></td>
+    <td><code class="Cm">import</code> <code class="Fl">-a</code>
+      [<code class="Fl">-DfmN</code>] [<code class="Fl">-F</code>
+      [<code class="Fl">-n</code>] [<code class="Fl">-T</code>]
+      [<code class="Fl">-X</code>]] [<code class="Fl">-c</code>
+      <var class="Ar">cachefile</var>|<code class="Fl">-d</code>
+      <var class="Ar">dir</var>] [<code class="Fl">-o</code>
+      <var class="Ar">mntopts</var>] [<code class="Fl">-o</code>
+      <var class="Ar">property</var>=<var class="Ar">value</var>]...
+      [<code class="Fl">-R</code> <var class="Ar">root</var>]</td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zpool</code></td>
+    <td><code class="Cm">import</code> [<code class="Fl">-Dfm</code>]
+      [<code class="Fl">-F</code> [<code class="Fl">-n</code>]
+      [<code class="Fl">-T</code>] [<code class="Fl">-X</code>]]
+      [<code class="Fl">-c</code>
+      <var class="Ar">cachefile</var>|<code class="Fl">-d</code>
+      <var class="Ar">dir</var>] [<code class="Fl">-o</code>
+      <var class="Ar">mntopts</var>] [<code class="Fl">-o</code>
+      <var class="Ar">property</var>=<var class="Ar">value</var>]...
+      [<code class="Fl">-R</code> <var class="Ar">root</var>]
+      [<code class="Fl">-s</code>]
+      <var class="Ar">pool</var>|<var class="Ar">id</var>
+      [<var class="Ar">newpool</var> [<code class="Fl">-t</code>]]</td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zpool</code></td>
+    <td><code class="Cm">iostat</code> [[[<code class="Fl">-c</code>
+      <var class="Ar">SCRIPT</var>]
+      [<code class="Fl">-lq</code>]]|<code class="Fl">-rw</code>]
+      [<code class="Fl">-T</code> <b class="Sy">u</b>|<b class="Sy">d</b>]
+      [<code class="Fl">-ghHLpPvy</code>]
+      [[<var class="Ar">pool</var>...]|[<var class="Ar">pool
+      vdev</var>...]|[<var class="Ar">vdev</var>...]]
+      [<var class="Ar">interval</var> [<var class="Ar">count</var>]]</td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zpool</code></td>
+    <td><code class="Cm">labelclear</code> [<code class="Fl">-f</code>]
+      <var class="Ar">device</var></td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zpool</code></td>
+    <td><code class="Cm">list</code> [<code class="Fl">-HgLpPv</code>]
+      [<code class="Fl">-o</code>
+      <var class="Ar">property</var>[,<var class="Ar">property</var>]...]
+      [<code class="Fl">-T</code> <b class="Sy">u</b>|<b class="Sy">d</b>]
+      [<var class="Ar">pool</var>]... [<var class="Ar">interval</var>
+      [<var class="Ar">count</var>]]</td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zpool</code></td>
+    <td><code class="Cm">offline</code> [<code class="Fl">-f</code>]
+      [<code class="Fl">-t</code>] <var class="Ar">pool</var>
+      <var class="Ar">device</var>...</td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zpool</code></td>
+    <td><code class="Cm">online</code> [<code class="Fl">-e</code>]
+      <var class="Ar">pool</var> <var class="Ar">device</var>...</td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zpool</code></td>
+    <td><code class="Cm">reguid</code> <var class="Ar">pool</var></td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zpool</code></td>
+    <td><code class="Cm">reopen</code> <var class="Ar">pool</var></td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zpool</code></td>
+    <td><code class="Cm">remove</code> <var class="Ar">pool</var>
+      <var class="Ar">device</var>...</td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zpool</code></td>
+    <td><code class="Cm">replace</code> [<code class="Fl">-f</code>]
+      [<code class="Fl">-o</code>
+      <var class="Ar">property</var>=<var class="Ar">value</var>]
+      <var class="Ar">pool</var> <var class="Ar">device</var>
+      [<var class="Ar">new_device</var>]</td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zpool</code></td>
+    <td><code class="Cm">scrub</code> [<code class="Fl">-s</code> |
+      <code class="Fl">-p</code>] <var class="Ar">pool</var>...</td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zpool</code></td>
+    <td><code class="Cm">set</code>
+      <var class="Ar">property</var>=<var class="Ar">value</var>
+      <var class="Ar">pool</var></td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zpool</code></td>
+    <td><code class="Cm">split</code> [<code class="Fl">-gLnP</code>]
+      [<code class="Fl">-o</code>
+      <var class="Ar">property</var>=<var class="Ar">value</var>]...
+      [<code class="Fl">-R</code> <var class="Ar">root</var>]
+      <var class="Ar">pool newpool</var> [<var class="Ar">device</var>]...</td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zpool</code></td>
+    <td><code class="Cm">status</code> [<code class="Fl">-c</code>
+      <var class="Ar">SCRIPT</var>] [<code class="Fl">-gLPvxD</code>]
+      [<code class="Fl">-T</code> <b class="Sy">u</b>|<b class="Sy">d</b>]
+      [<var class="Ar">pool</var>]... [<var class="Ar">interval</var>
+      [<var class="Ar">count</var>]]</td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zpool</code></td>
+    <td><code class="Cm">sync</code> [<var class="Ar">pool</var>]...</td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zpool</code></td>
+    <td><code class="Cm">upgrade</code></td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zpool</code></td>
+    <td><code class="Cm">upgrade</code> <code class="Fl">-v</code></td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zpool</code></td>
+    <td><code class="Cm">upgrade</code> [<code class="Fl">-V</code>
+      <var class="Ar">version</var>]
+      <code class="Fl">-a</code>|<var class="Ar">pool</var>...</td>
+  </tr>
+</table>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h1>
+<p class="Pp">The <code class="Nm">zpool</code> command configures ZFS storage
+    pools. A storage pool is a collection of devices that provides physical
+    storage and data replication for ZFS datasets. All datasets within a storage
+    pool share the same space. See <a href="../8/zfs.8.html" class="Xr">zfs(8)</a> for information on
+    managing datasets.</p>
+<section class="Ss">
+<h2 class="Ss" id="Virtual_Devices_(vdevs)"><a class="permalink" href="#Virtual_Devices_(vdevs)">Virtual
+  Devices (vdevs)</a></h2>
+<p class="Pp">A &quot;virtual device&quot; describes a single device or a
+    collection of devices organized according to certain performance and fault
+    characteristics. The following virtual devices are supported:</p>
+<dl class="Bl-tag">
+  <dt id="disk"><a class="permalink" href="#disk"><b class="Sy">disk</b></a></dt>
+  <dd>A block device, typically located under <span class="Pa">/dev</span>. ZFS
+      can use individual slices or partitions, though the recommended mode of
+      operation is to use whole disks. A disk can be specified by a full path,
+      or it can be a shorthand name (the relative portion of the path under
+      <span class="Pa">/dev</span>). A whole disk can be specified by omitting
+      the slice or partition designation. For example,
+      <span class="Pa">sda</span> is equivalent to
+      <span class="Pa">/dev/sda</span>. When given a whole disk, ZFS
+      automatically labels the disk, if necessary.</dd>
+  <dt id="file"><a class="permalink" href="#file"><b class="Sy">file</b></a></dt>
+  <dd>A regular file. The use of files as a backing store is strongly
+      discouraged. It is designed primarily for experimental purposes, as the
+      fault tolerance of a file is only as good as the file system of which it
+      is a part. A file must be specified by a full path.</dd>
+  <dt id="mirror"><a class="permalink" href="#mirror"><b class="Sy">mirror</b></a></dt>
+  <dd>A mirror of two or more devices. Data is replicated in an identical
+      fashion across all components of a mirror. A mirror with N disks of size X
+      can hold X bytes and can withstand (N-1) devices failing before data
+      integrity is compromised.</dd>
+  <dt id="raidz"><a class="permalink" href="#raidz"><b class="Sy">raidz</b></a>,
+    <b class="Sy">raidz1</b>, <b class="Sy">raidz2</b>,
+    <b class="Sy">raidz3</b></dt>
+  <dd>A variation on RAID-5 that allows for better distribution of parity and
+      eliminates the RAID-5 &quot;write hole&quot; (in which data and parity
+      become inconsistent after a power loss). Data and parity is striped across
+      all disks within a raidz group.
+    <p class="Pp">A raidz group can have single-, double-, or triple-parity,
+        meaning that the raidz group can sustain one, two, or three failures,
+        respectively, without losing any data. The <b class="Sy">raidz1</b> vdev
+        type specifies a single-parity raidz group; the <b class="Sy">raidz2</b>
+        vdev type specifies a double-parity raidz group; and the
+        <b class="Sy">raidz3</b> vdev type specifies a triple-parity raidz
+        group. The <b class="Sy">raidz</b> vdev type is an alias for
+        <b class="Sy">raidz1</b>.</p>
+    <p class="Pp">A raidz group with N disks of size X with P parity disks can
+        hold approximately (N-P)*X bytes and can withstand P device(s) failing
+        before data integrity is compromised. The minimum number of devices in a
+        raidz group is one more than the number of parity disks. The recommended
+        number is between 3 and 9 to help increase performance.</p>
+  </dd>
+  <dt id="spare"><a class="permalink" href="#spare"><b class="Sy">spare</b></a></dt>
+  <dd>A special pseudo-vdev which keeps track of available hot spares for a
+      pool. For more information, see the <a class="Sx" href="#Hot_Spares">Hot
+      Spares</a> section.</dd>
+  <dt id="log"><a class="permalink" href="#log"><b class="Sy">log</b></a></dt>
+  <dd>A separate intent log device. If more than one log device is specified,
+      then writes are load-balanced between devices. Log devices can be
+      mirrored. However, raidz vdev types are not supported for the intent log.
+      For more information, see the <a class="Sx" href="#Intent_Log">Intent
+      Log</a> section.</dd>
+  <dt id="cache"><a class="permalink" href="#cache"><b class="Sy">cache</b></a></dt>
+  <dd>A device used to cache storage pool data. A cache device cannot be
+      configured as a mirror or raidz group. For more information, see the
+      <a class="Sx" href="#Cache_Devices">Cache Devices</a> section.</dd>
+</dl>
+<p class="Pp">Virtual devices cannot be nested, so a mirror or raidz virtual
+    device can only contain files or disks. Mirrors of mirrors (or other
+    combinations) are not allowed.</p>
+<p class="Pp">A pool can have any number of virtual devices at the top of the
+    configuration (known as &quot;root vdevs&quot;). Data is dynamically
+    distributed across all top-level devices to balance data among devices. As
+    new virtual devices are added, ZFS automatically places data on the newly
+    available devices.</p>
+<p class="Pp">Virtual devices are specified one at a time on the command line,
+    separated by whitespace. The keywords <b class="Sy">mirror</b> and
+    <b class="Sy">raidz</b> are used to distinguish where a group ends and
+    another begins. For example, the following creates two root vdevs, each a
+    mirror of two disks:</p>
+<div class="Bd Pp Li">
+<pre># zpool create mypool mirror sda sdb mirror sdc sdd</pre>
+</div>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="Device_Failure_and_Recovery"><a class="permalink" href="#Device_Failure_and_Recovery">Device
+  Failure and Recovery</a></h2>
+<p class="Pp">ZFS supports a rich set of mechanisms for handling device failure
+    and data corruption. All metadata and data is checksummed, and ZFS
+    automatically repairs bad data from a good copy when corruption is
+  detected.</p>
+<p class="Pp">In order to take advantage of these features, a pool must make use
+    of some form of redundancy, using either mirrored or raidz groups. While ZFS
+    supports running in a non-redundant configuration, where each root vdev is
+    simply a disk or file, this is strongly discouraged. A single case of bit
+    corruption can render some or all of your data unavailable.</p>
+<p class="Pp">A pool's health status is described by one of three states:
+    online, degraded, or faulted. An online pool has all devices operating
+    normally. A degraded pool is one in which one or more devices have failed,
+    but the data is still available due to a redundant configuration. A faulted
+    pool has corrupted metadata, or one or more faulted devices, and
+    insufficient replicas to continue functioning.</p>
+<p class="Pp">The health of the top-level vdev, such as mirror or raidz device,
+    is potentially impacted by the state of its associated vdevs, or component
+    devices. A top-level vdev or component device is in one of the following
+    states:</p>
+<dl class="Bl-tag">
+  <dt id="DEGRADED"><a class="permalink" href="#DEGRADED"><b class="Sy">DEGRADED</b></a></dt>
+  <dd>One or more top-level vdevs is in the degraded state because one or more
+      component devices are offline. Sufficient replicas exist to continue
+      functioning.
+    <p class="Pp">One or more component devices is in the degraded or faulted
+        state, but sufficient replicas exist to continue functioning. The
+        underlying conditions are as follows:</p>
+    <ul class="Bl-bullet">
+      <li>The number of checksum errors exceeds acceptable levels and the device
+          is degraded as an indication that something may be wrong. ZFS
+          continues to use the device as necessary.</li>
+      <li>The number of I/O errors exceeds acceptable levels. The device could
+          not be marked as faulted because there are insufficient replicas to
+          continue functioning.</li>
+    </ul>
+  </dd>
+  <dt id="FAULTED"><a class="permalink" href="#FAULTED"><b class="Sy">FAULTED</b></a></dt>
+  <dd>One or more top-level vdevs is in the faulted state because one or more
+      component devices are offline. Insufficient replicas exist to continue
+      functioning.
+    <p class="Pp">One or more component devices is in the faulted state, and
+        insufficient replicas exist to continue functioning. The underlying
+        conditions are as follows:</p>
+    <ul class="Bl-bullet">
+      <li>The device could be opened, but the contents did not match expected
+          values.</li>
+      <li>The number of I/O errors exceeds acceptable levels and the device is
+          faulted to prevent further use of the device.</li>
+    </ul>
+  </dd>
+  <dt id="OFFLINE"><a class="permalink" href="#OFFLINE"><b class="Sy">OFFLINE</b></a></dt>
+  <dd>The device was explicitly taken offline by the
+      <code class="Nm">zpool</code> <code class="Cm">offline</code>
+    command.</dd>
+  <dt id="ONLINE"><a class="permalink" href="#ONLINE"><b class="Sy">ONLINE</b></a></dt>
+  <dd>The device is online and functioning.</dd>
+  <dt id="REMOVED"><a class="permalink" href="#REMOVED"><b class="Sy">REMOVED</b></a></dt>
+  <dd>The device was physically removed while the system was running. Device
+      removal detection is hardware-dependent and may not be supported on all
+      platforms.</dd>
+  <dt id="UNAVAIL"><a class="permalink" href="#UNAVAIL"><b class="Sy">UNAVAIL</b></a></dt>
+  <dd>The device could not be opened. If a pool is imported when a device was
+      unavailable, then the device will be identified by a unique identifier
+      instead of its path since the path was never correct in the first
+    place.</dd>
+</dl>
+<p class="Pp">If a device is removed and later re-attached to the system, ZFS
+    attempts to put the device online automatically. Device attach detection is
+    hardware-dependent and might not be supported on all platforms.</p>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="Hot_Spares"><a class="permalink" href="#Hot_Spares">Hot
+  Spares</a></h2>
+<p class="Pp">ZFS allows devices to be associated with pools as &quot;hot
+    spares&quot;. These devices are not actively used in the pool, but when an
+    active device fails, it is automatically replaced by a hot spare. To create
+    a pool with hot spares, specify a <b class="Sy">spare</b> vdev with any
+    number of devices. For example,</p>
+<div class="Bd Pp Li">
+<pre># zpool create pool mirror sda sdb spare sdc sdd</pre>
+</div>
+<p class="Pp">Spares can be shared across multiple pools, and can be added with
+    the <code class="Nm">zpool</code> <code class="Cm">add</code> command and
+    removed with the <code class="Nm">zpool</code>
+    <code class="Cm">remove</code> command. Once a spare replacement is
+    initiated, a new <b class="Sy">spare</b> vdev is created within the
+    configuration that will remain there until the original device is replaced.
+    At this point, the hot spare becomes available again if another device
+    fails.</p>
+<p class="Pp">If a pool has a shared spare that is currently being used, the
+    pool can not be exported since other pools may use this shared spare, which
+    may lead to potential data corruption.</p>
+<p class="Pp">An in-progress spare replacement can be canceled by detaching the
+    hot spare. If the original faulted device is detached, then the hot spare
+    assumes its place in the configuration, and is removed from the spare list
+    of all active pools.</p>
+<p class="Pp">Spares cannot replace log devices.</p>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="Intent_Log"><a class="permalink" href="#Intent_Log">Intent
+  Log</a></h2>
+<p class="Pp">The ZFS Intent Log (ZIL) satisfies POSIX requirements for
+    synchronous transactions. For instance, databases often require their
+    transactions to be on stable storage devices when returning from a system
+    call. NFS and other applications can also use <a class="Xr">fsync(2)</a> to
+    ensure data stability. By default, the intent log is allocated from blocks
+    within the main pool. However, it might be possible to get better
+    performance using separate intent log devices such as NVRAM or a dedicated
+    disk. For example:</p>
+<div class="Bd Pp Li">
+<pre># zpool create pool sda sdb log sdc</pre>
+</div>
+<p class="Pp">Multiple log devices can also be specified, and they can be
+    mirrored. See the <a class="Sx" href="#EXAMPLES">EXAMPLES</a> section for an
+    example of mirroring multiple log devices.</p>
+<p class="Pp">Log devices can be added, replaced, attached, detached, and
+    imported and exported as part of the larger pool. Mirrored log devices can
+    be removed by specifying the top-level mirror for the log.</p>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="Cache_Devices"><a class="permalink" href="#Cache_Devices">Cache
+  Devices</a></h2>
+<p class="Pp">Devices can be added to a storage pool as &quot;cache
+    devices&quot;. These devices provide an additional layer of caching between
+    main memory and disk. For read-heavy workloads, where the working set size
+    is much larger than what can be cached in main memory, using cache devices
+    allow much more of this working set to be served from low latency media.
+    Using cache devices provides the greatest performance improvement for random
+    read-workloads of mostly static content.</p>
+<p class="Pp">To create a pool with cache devices, specify a
+    <b class="Sy">cache</b> vdev with any number of devices. For example:</p>
+<div class="Bd Pp Li">
+<pre># zpool create pool sda sdb cache sdc sdd</pre>
+</div>
+<p class="Pp">Cache devices cannot be mirrored or part of a raidz configuration.
+    If a read error is encountered on a cache device, that read I/O is reissued
+    to the original storage pool device, which might be part of a mirrored or
+    raidz configuration.</p>
+<p class="Pp">The content of the cache devices is considered volatile, as is the
+    case with other system caches.</p>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="Properties"><a class="permalink" href="#Properties">Properties</a></h2>
+<p class="Pp">Each pool has several properties associated with it. Some
+    properties are read-only statistics while others are configurable and change
+    the behavior of the pool.</p>
+<p class="Pp">The following are read-only properties:</p>
+<dl class="Bl-tag">
+  <dt id="available"><a class="permalink" href="#available"><b class="Sy">available</b></a></dt>
+  <dd>Amount of storage available within the pool. This property can also be
+      referred to by its shortened column name,
+      <a class="permalink" href="#avail"><b class="Sy" id="avail">avail</b></a>.</dd>
+  <dt id="capacity"><a class="permalink" href="#capacity"><b class="Sy">capacity</b></a></dt>
+  <dd>Percentage of pool space used. This property can also be referred to by
+      its shortened column name,
+      <a class="permalink" href="#cap"><b class="Sy" id="cap">cap</b></a>.</dd>
+  <dt id="expandsize"><a class="permalink" href="#expandsize"><b class="Sy">expandsize</b></a></dt>
+  <dd>Amount of uninitialized space within the pool or device that can be used
+      to increase the total capacity of the pool. Uninitialized space consists
+      of any space on an EFI labeled vdev which has not been brought online
+      (e.g, using <code class="Nm">zpool</code> <code class="Cm">online</code>
+      <code class="Fl">-e</code>). This space occurs when a LUN is dynamically
+      expanded.</dd>
+  <dt id="fragmentation"><a class="permalink" href="#fragmentation"><b class="Sy">fragmentation</b></a></dt>
+  <dd>The amount of fragmentation in the pool.</dd>
+  <dt id="free"><a class="permalink" href="#free"><b class="Sy">free</b></a></dt>
+  <dd>The amount of free space available in the pool.</dd>
+  <dt id="freeing"><a class="permalink" href="#freeing"><b class="Sy">freeing</b></a></dt>
+  <dd>After a file system or snapshot is destroyed, the space it was using is
+      returned to the pool asynchronously. <b class="Sy">freeing</b> is the
+      amount of space remaining to be reclaimed. Over time
+      <b class="Sy">freeing</b> will decrease while <b class="Sy">free</b>
+      increases.</dd>
+  <dt id="health"><a class="permalink" href="#health"><b class="Sy">health</b></a></dt>
+  <dd>The current health of the pool. Health can be one of
+      <b class="Sy">ONLINE</b>, <b class="Sy">DEGRADED</b>,
+      <b class="Sy">FAULTED</b>,
+      <a class="permalink" href="#OFFLINE,"><b class="Sy" id="OFFLINE,">OFFLINE,
+      REMOVED</b></a>, <b class="Sy">UNAVAIL</b>.</dd>
+  <dt id="guid"><a class="permalink" href="#guid"><b class="Sy">guid</b></a></dt>
+  <dd>A unique identifier for the pool.</dd>
+  <dt id="size"><a class="permalink" href="#size"><b class="Sy">size</b></a></dt>
+  <dd>Total size of the storage pool.</dd>
+  <dt id="unsupported@"><a class="permalink" href="#unsupported@"><b class="Sy">unsupported@</b></a><a class="permalink" href="#feature_guid"><i class="Em" id="feature_guid">feature_guid</i></a></dt>
+  <dd>Information about unsupported features that are enabled on the pool. See
+      <a href="../5/zpool-features.5.html" class="Xr">zpool-features(5)</a> for details.</dd>
+  <dt id="used"><a class="permalink" href="#used"><b class="Sy">used</b></a></dt>
+  <dd>Amount of storage space used within the pool.</dd>
+</dl>
+<p class="Pp">The space usage properties report actual physical space available
+    to the storage pool. The physical space can be different from the total
+    amount of space that any contained datasets can actually use. The amount of
+    space used in a raidz configuration depends on the characteristics of the
+    data being written. In addition, ZFS reserves some space for internal
+    accounting that the <a href="../8/zfs.8.html" class="Xr">zfs(8)</a> command takes into account, but
+    the <code class="Nm">zpool</code> command does not. For non-full pools of a
+    reasonable size, these effects should be invisible. For small pools, or
+    pools that are close to being completely full, these discrepancies may
+    become more noticeable.</p>
+<p class="Pp">The following property can be set at creation time and import
+    time:</p>
+<dl class="Bl-tag">
+  <dt id="altroot"><a class="permalink" href="#altroot"><b class="Sy">altroot</b></a></dt>
+  <dd>Alternate root directory. If set, this directory is prepended to any mount
+      points within the pool. This can be used when examining an unknown pool
+      where the mount points cannot be trusted, or in an alternate boot
+      environment, where the typical paths are not valid.
+      <b class="Sy">altroot</b> is not a persistent property. It is valid only
+      while the system is up. Setting <b class="Sy">altroot</b> defaults to
+      using <b class="Sy">cachefile</b>=<b class="Sy">none</b>, though this may
+      be overridden using an explicit setting.</dd>
+</dl>
+<p class="Pp">The following property can be set only at import time:</p>
+<dl class="Bl-tag">
+  <dt id="readonly"><a class="permalink" href="#readonly"><b class="Sy">readonly</b></a>=<b class="Sy">on</b>|<b class="Sy">off</b></dt>
+  <dd>If set to <b class="Sy">on</b>, the pool will be imported in read-only
+      mode. This property can also be referred to by its shortened column name,
+      <a class="permalink" href="#rdonly"><b class="Sy" id="rdonly">rdonly</b></a>.</dd>
+</dl>
+<p class="Pp">The following properties can be set at creation time and import
+    time, and later changed with the <code class="Nm">zpool</code>
+    <code class="Cm">set</code> command:</p>
+<dl class="Bl-tag">
+  <dt id="ashift"><a class="permalink" href="#ashift"><b class="Sy">ashift</b></a>=<b class="Sy">ashift</b></dt>
+  <dd>Pool sector size exponent, to the power of <b class="Sy">2</b> (internally
+      referred to as <b class="Sy">ashift</b> ). Values from 9 to 16, inclusive,
+      are valid; also, the special value 0 (the default) means to auto-detect
+      using the kernel's block layer and a ZFS internal exception list. I/O
+      operations will be aligned to the specified size boundaries. Additionally,
+      the minimum (disk) write size will be set to the specified size, so this
+      represents a space vs. performance trade-off. For optimal performance, the
+      pool sector size should be greater than or equal to the sector size of the
+      underlying disks. The typical case for setting this property is when
+      performance is important and the underlying disks use 4KiB sectors but
+      report 512B sectors to the OS (for compatibility reasons); in that case,
+      set
+      <a class="permalink" href="#ashift=12"><b class="Sy" id="ashift=12">ashift=12</b></a>
+      (which is 1&lt;&lt;12 = 4096). When set, this property is used as the
+      default hint value in subsequent vdev operations (add, attach and
+      replace). Changing this value will not modify any existing vdev, not even
+      on disk replacement; however it can be used, for instance, to replace a
+      dying 512B sectors disk with a newer 4KiB sectors device: this will
+      probably result in bad performance but at the same time could prevent loss
+      of data.</dd>
+  <dt id="autoexpand"><a class="permalink" href="#autoexpand"><b class="Sy">autoexpand</b></a>=<b class="Sy">on</b>|<b class="Sy">off</b></dt>
+  <dd>Controls automatic pool expansion when the underlying LUN is grown. If set
+      to <b class="Sy">on</b>, the pool will be resized according to the size of
+      the expanded device. If the device is part of a mirror or raidz then all
+      devices within that mirror/raidz group must be expanded before the new
+      space is made available to the pool. The default behavior is
+      <b class="Sy">off</b>. This property can also be referred to by its
+      shortened column name,
+      <a class="permalink" href="#expand"><b class="Sy" id="expand">expand</b></a>.</dd>
+  <dt id="autoreplace"><a class="permalink" href="#autoreplace"><b class="Sy">autoreplace</b></a>=<b class="Sy">on</b>|<b class="Sy">off</b></dt>
+  <dd>Controls automatic device replacement. If set to <b class="Sy">off</b>,
+      device replacement must be initiated by the administrator by using the
+      <code class="Nm">zpool</code> <code class="Cm">replace</code> command. If
+      set to <b class="Sy">on</b>, any new device, found in the same physical
+      location as a device that previously belonged to the pool, is
+      automatically formatted and replaced. The default behavior is
+      <b class="Sy">off</b>. This property can also be referred to by its
+      shortened column name,
+      <a class="permalink" href="#replace"><b class="Sy" id="replace">replace</b></a>.
+      Autoreplace can also be used with virtual disks (like device mapper)
+      provided that you use the /dev/disk/by-vdev paths setup by vdev_id.conf.
+      See the <a href="../8/vdev_id.8.html" class="Xr">vdev_id(8)</a> man page for more details.
+      Autoreplace and autoonline require the ZFS Event Daemon be configured and
+      running. See the <a href="../8/zed.8.html" class="Xr">zed(8)</a> man page for more details.</dd>
+  <dt id="bootfs"><a class="permalink" href="#bootfs"><b class="Sy">bootfs</b></a>=<a class="permalink" href="#(unset)"><b class="Sy" id="(unset)">(unset)</b></a>|<var class="Ar">pool</var>/<var class="Ar">dataset</var></dt>
+  <dd>Identifies the default bootable dataset for the root pool. This property
+      is expected to be set mainly by the installation and upgrade programs. Not
+      all Linux distribution boot processes use the bootfs property.</dd>
+  <dt id="cachefile"><a class="permalink" href="#cachefile"><b class="Sy">cachefile</b></a>=<var class="Ar">path</var>|<b class="Sy">none</b></dt>
+  <dd>Controls the location of where the pool configuration is cached.
+      Discovering all pools on system startup requires a cached copy of the
+      configuration data that is stored on the root file system. All pools in
+      this cache are automatically imported when the system boots. Some
+      environments, such as install and clustering, need to cache this
+      information in a different location so that pools are not automatically
+      imported. Setting this property caches the pool configuration in a
+      different location that can later be imported with
+      <code class="Nm">zpool</code> <code class="Cm">import</code>
+      <code class="Fl">-c</code>. Setting it to the special value
+      <b class="Sy">none</b> creates a temporary pool that is never cached, and
+      the special value &quot;&quot; (empty string) uses the default location.
+    <p class="Pp">Multiple pools can share the same cache file. Because the
+        kernel destroys and recreates this file when pools are added and
+        removed, care should be taken when attempting to access this file. When
+        the last pool using a <b class="Sy">cachefile</b> is exported or
+        destroyed, the file will be empty.</p>
+  </dd>
+  <dt id="comment"><a class="permalink" href="#comment"><b class="Sy">comment</b></a>=<var class="Ar">text</var></dt>
+  <dd>A text string consisting of printable ASCII characters that will be stored
+      such that it is available even if the pool becomes faulted. An
+      administrator can provide additional information about a pool using this
+      property.</dd>
+  <dt id="dedupditto"><a class="permalink" href="#dedupditto"><b class="Sy">dedupditto</b></a>=<var class="Ar">number</var></dt>
+  <dd>Threshold for the number of block ditto copies. If the reference count for
+      a deduplicated block increases above this number, a new ditto copy of this
+      block is automatically stored. The default setting is <b class="Sy">0</b>
+      which causes no ditto copies to be created for deduplicated blocks. The
+      minimum legal nonzero setting is
+      <a class="permalink" href="#100"><b class="Sy" id="100">100</b></a>.</dd>
+  <dt id="delegation"><a class="permalink" href="#delegation"><b class="Sy">delegation</b></a>=<b class="Sy">on</b>|<b class="Sy">off</b></dt>
+  <dd>Controls whether a non-privileged user is granted access based on the
+      dataset permissions defined on the dataset. See <a href="../8/zfs.8.html" class="Xr">zfs(8)</a>
+      for more information on ZFS delegated administration.</dd>
+  <dt id="failmode"><a class="permalink" href="#failmode"><b class="Sy">failmode</b></a>=<b class="Sy">wait</b>|<b class="Sy">continue</b>|<b class="Sy">panic</b></dt>
+  <dd>Controls the system behavior in the event of catastrophic pool failure.
+      This condition is typically a result of a loss of connectivity to the
+      underlying storage device(s) or a failure of all devices within the pool.
+      The behavior of such an event is determined as follows:
+    <dl class="Bl-tag">
+      <dt id="wait"><a class="permalink" href="#wait"><b class="Sy">wait</b></a></dt>
+      <dd>Blocks all I/O access until the device connectivity is recovered and
+          the errors are cleared. This is the default behavior.</dd>
+      <dt id="continue"><a class="permalink" href="#continue"><b class="Sy">continue</b></a></dt>
+      <dd>Returns <code class="Er">EIO</code> to any new write I/O requests but
+          allows reads to any of the remaining healthy devices. Any write
+          requests that have yet to be committed to disk would be blocked.</dd>
+      <dt id="panic"><a class="permalink" href="#panic"><b class="Sy">panic</b></a></dt>
+      <dd>Prints out a message to the console and generates a system crash
+        dump.</dd>
+    </dl>
+  </dd>
+  <dt id="feature@"><a class="permalink" href="#feature@"><b class="Sy">feature@</b></a><var class="Ar">feature_name</var>=<b class="Sy">enabled</b></dt>
+  <dd>The value of this property is the current state of
+      <var class="Ar">feature_name</var>. The only valid value when setting this
+      property is <b class="Sy">enabled</b> which moves
+      <var class="Ar">feature_name</var> to the enabled state. See
+      <a href="../5/zpool-features.5.html" class="Xr">zpool-features(5)</a> for details on feature states.</dd>
+  <dt id="listsnapshots"><a class="permalink" href="#listsnapshots"><b class="Sy">listsnapshots</b></a>=<b class="Sy">on</b>|<b class="Sy">off</b></dt>
+  <dd>Controls whether information about snapshots associated with this pool is
+      output when <code class="Nm">zfs</code> <code class="Cm">list</code> is
+      run without the <code class="Fl">-t</code> option. The default value is
+      <b class="Sy">off</b>. This property can also be referred to by its
+      shortened name,
+      <a class="permalink" href="#listsnaps"><b class="Sy" id="listsnaps">listsnaps</b></a>.</dd>
+  <dt id="multihost"><a class="permalink" href="#multihost"><b class="Sy">multihost</b></a>=<b class="Sy">on</b>|<b class="Sy">off</b></dt>
+  <dd>Controls whether a pool activity check should be performed during
+      <code class="Nm">zpool</code> <code class="Cm">import</code>. When a pool
+      is determined to be active it cannot be imported, even with the
+      <code class="Fl">-f</code> option. This property is intended to be used in
+      failover configurations where multiple hosts have access to a pool on
+      shared storage. When this property is on, periodic writes to storage occur
+      to show the pool is in use. See
+      <a class="permalink" href="#zfs_multihost_interval"><b class="Sy" id="zfs_multihost_interval">zfs_multihost_interval</b></a>
+      in the <a href="../5/zfs-module-parameters.5.html" class="Xr">zfs-module-parameters(5)</a> man page. In order to
+      enable this property each host must set a unique hostid. See
+      <a href="../8/zgenhostid.8.html" class="Xr">zgenhostid(8)</a>
+      <a class="Xr">spl-module-parameters(5)</a> for additional details. The
+      default value is <b class="Sy">off</b>.</dd>
+  <dt id="version"><a class="permalink" href="#version"><b class="Sy">version</b></a>=<var class="Ar">version</var></dt>
+  <dd>The current on-disk version of the pool. This can be increased, but never
+      decreased. The preferred method of updating pools is with the
+      <code class="Nm">zpool</code> <code class="Cm">upgrade</code> command,
+      though this property can be used when a specific version is needed for
+      backwards compatibility. Once feature flags are enabled on a pool this
+      property will no longer have a value.</dd>
+</dl>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="Subcommands"><a class="permalink" href="#Subcommands">Subcommands</a></h2>
+<p class="Pp">All subcommands that modify state are logged persistently to the
+    pool in their original form.</p>
+<p class="Pp">The <code class="Nm">zpool</code> command provides subcommands to
+    create and destroy storage pools, add capacity to storage pools, and provide
+    information about the storage pools. The following subcommands are
+    supported:</p>
+<dl class="Bl-tag">
+  <dt><code class="Nm">zpool</code> <code class="Fl">-</code>?</dt>
+  <dd>Displays a help message.</dd>
+  <dt><code class="Nm">zpool</code> <code class="Cm">add</code>
+    [<code class="Fl">-fgLnP</code>] [<code class="Fl">-o</code>
+    <var class="Ar">property</var>=<var class="Ar">value</var>]
+    <var class="Ar">pool vdev</var>...</dt>
+  <dd>Adds the specified virtual devices to the given pool. The
+      <var class="Ar">vdev</var> specification is described in the
+      <a class="Sx" href="#Virtual_Devices">Virtual Devices</a> section. The
+      behavior of the <code class="Fl">-f</code> option, and the device checks
+      performed are described in the <code class="Nm">zpool</code>
+      <code class="Cm">create</code> subcommand.
+    <dl class="Bl-tag">
+      <dt id="f"><a class="permalink" href="#f"><code class="Fl">-f</code></a></dt>
+      <dd>Forces use of <var class="Ar">vdev</var>s, even if they appear in use
+          or specify a conflicting replication level. Not all devices can be
+          overridden in this manner.</dd>
+      <dt id="g"><a class="permalink" href="#g"><code class="Fl">-g</code></a></dt>
+      <dd>Display <var class="Ar">vdev</var>, GUIDs instead of the normal device
+          names. These GUIDs can be used in place of device names for the zpool
+          detach/offline/remove/replace commands.</dd>
+      <dt id="L"><a class="permalink" href="#L"><code class="Fl">-L</code></a></dt>
+      <dd>Display real paths for <var class="Ar">vdev</var>s resolving all
+          symbolic links. This can be used to look up the current block device
+          name regardless of the /dev/disk/ path used to open it.</dd>
+      <dt id="n"><a class="permalink" href="#n"><code class="Fl">-n</code></a></dt>
+      <dd>Displays the configuration that would be used without actually adding
+          the <var class="Ar">vdev</var>s. The actual pool creation can still
+          fail due to insufficient privileges or device sharing.</dd>
+      <dt id="P"><a class="permalink" href="#P"><code class="Fl">-P</code></a></dt>
+      <dd>Display real paths for <var class="Ar">vdev</var>s instead of only the
+          last component of the path. This can be used in conjunction with the
+          -L flag.</dd>
+      <dt id="o"><a class="permalink" href="#o"><code class="Fl">-o</code></a>
+        <var class="Ar">property</var>=<var class="Ar">value</var></dt>
+      <dd>Sets the given pool properties. See the
+          <a class="Sx" href="#Properties">Properties</a> section for a list of
+          valid properties that can be set. The only property supported at the
+          moment is ashift.</dd>
+    </dl>
+  </dd>
+  <dt><code class="Nm">zpool</code> <code class="Cm">attach</code>
+    [<code class="Fl">-f</code>] [<code class="Fl">-o</code>
+    <var class="Ar">property</var>=<var class="Ar">value</var>]
+    <var class="Ar">pool device new_device</var></dt>
+  <dd>Attaches <var class="Ar">new_device</var> to the existing
+      <var class="Ar">device</var>. The existing device cannot be part of a
+      raidz configuration. If <var class="Ar">device</var> is not currently part
+      of a mirrored configuration, <var class="Ar">device</var> automatically
+      transforms into a two-way mirror of <var class="Ar">device</var> and
+      <var class="Ar">new_device</var>. If <var class="Ar">device</var> is part
+      of a two-way mirror, attaching <var class="Ar">new_device</var> creates a
+      three-way mirror, and so on. In either case,
+      <var class="Ar">new_device</var> begins to resilver immediately.
+    <dl class="Bl-tag">
+      <dt id="f~2"><a class="permalink" href="#f~2"><code class="Fl">-f</code></a></dt>
+      <dd>Forces use of <var class="Ar">new_device</var>, even if its appears to
+          be in use. Not all devices can be overridden in this manner.</dd>
+      <dt id="o~2"><a class="permalink" href="#o~2"><code class="Fl">-o</code></a>
+        <var class="Ar">property</var>=<var class="Ar">value</var></dt>
+      <dd>Sets the given pool properties. See the
+          <a class="Sx" href="#Properties">Properties</a> section for a list of
+          valid properties that can be set. The only property supported at the
+          moment is ashift.</dd>
+    </dl>
+  </dd>
+  <dt><code class="Nm">zpool</code> <code class="Cm">clear</code>
+    <var class="Ar">pool</var> [<var class="Ar">device</var>]</dt>
+  <dd>Clears device errors in a pool. If no arguments are specified, all device
+      errors within the pool are cleared. If one or more devices is specified,
+      only those errors associated with the specified device or devices are
+      cleared.</dd>
+  <dt id="_"><code class="Nm">zpool</code> <code class="Cm">create</code>
+    [<code class="Fl">-dfn</code>] [<code class="Fl">-m</code>
+    <var class="Ar">mountpoint</var>] [<code class="Fl">-o</code>
+    <var class="Ar">property</var>=<var class="Ar">value</var>]...
+    [<code class="Fl">-o</code>
+    <var class="Ar">feature@feature</var>=<var class="Ar">value</var>]...
+    [<code class="Fl">-O</code>
+    <var class="Ar">file-system-property</var>=<var class="Ar">value</var>]...
+    [<code class="Fl">-R</code> <var class="Ar">root</var>]
+    [<code class="Fl">-t</code> <var class="Ar">tname</var>]
+    <var class="Ar">pool vdev</var>...</dt>
+  <dd>Creates a new storage pool containing the virtual devices specified on the
+      command line. The pool name must begin with a letter, and can only contain
+      alphanumeric characters as well as underscore
+      (&quot;<a class="permalink" href="#_"><b class="Sy">_</b></a>&quot;), dash
+      (&quot;<b class="Sy">.</b>&quot;), colon
+      (&quot;<a class="permalink" href="#:"><b class="Sy" id=":">:</b></a>&quot;),
+      space (&quot;<b class="Sy">-</b>&quot;), and period
+      (&quot;<b class="Sy">.</b>&quot;). The pool names
+      <b class="Sy">mirror</b>, <b class="Sy">raidz</b>, <b class="Sy">spare</b>
+      and <b class="Sy">log</b> are reserved, as are names beginning with the
+      pattern
+      <a class="permalink" href="#c_0-9_"><b class="Sy" id="c_0-9_">c[0-9]</b></a>.
+      The <var class="Ar">vdev</var> specification is described in the
+      <a class="Sx" href="#Virtual_Devices">Virtual Devices</a> section.
+    <p class="Pp">The command verifies that each device specified is accessible
+        and not currently in use by another subsystem. There are some uses, such
+        as being currently mounted, or specified as the dedicated dump device,
+        that prevents a device from ever being used by ZFS. Other uses, such as
+        having a preexisting UFS file system, can be overridden with the
+        <code class="Fl">-f</code> option.</p>
+    <p class="Pp">The command also checks that the replication strategy for the
+        pool is consistent. An attempt to combine redundant and non-redundant
+        storage in a single pool, or to mix disks and files, results in an error
+        unless <code class="Fl">-f</code> is specified. The use of differently
+        sized devices within a single raidz or mirror group is also flagged as
+        an error unless <code class="Fl">-f</code> is specified.</p>
+    <p class="Pp">Unless the <code class="Fl">-R</code> option is specified, the
+        default mount point is
+        <span class="Pa">/</span><var class="Ar">pool</var>. The mount point
+        must not exist or must be empty, or else the root dataset cannot be
+        mounted. This can be overridden with the <code class="Fl">-m</code>
+        option.</p>
+    <p class="Pp">By default all supported features are enabled on the new pool
+        unless the <code class="Fl">-d</code> option is specified.</p>
+    <dl class="Bl-tag">
+      <dt id="d"><a class="permalink" href="#d"><code class="Fl">-d</code></a></dt>
+      <dd>Do not enable any features on the new pool. Individual features can be
+          enabled by setting their corresponding properties to
+          <b class="Sy">enabled</b> with the <code class="Fl">-o</code> option.
+          See <a href="../5/zpool-features.5.html" class="Xr">zpool-features(5)</a> for details about feature
+          properties.</dd>
+      <dt id="f~3"><a class="permalink" href="#f~3"><code class="Fl">-f</code></a></dt>
+      <dd>Forces use of <var class="Ar">vdev</var>s, even if they appear in use
+          or specify a conflicting replication level. Not all devices can be
+          overridden in this manner.</dd>
+      <dt id="m"><a class="permalink" href="#m"><code class="Fl">-m</code></a>
+        <var class="Ar">mountpoint</var></dt>
+      <dd>Sets the mount point for the root dataset. The default mount point is
+          <span class="Pa">/pool</span> or <span class="Pa">altroot/pool</span>
+          if <var class="Ar">altroot</var> is specified. The mount point must be
+          an absolute path,
+          <a class="permalink" href="#legacy"><b class="Sy" id="legacy">legacy</b></a>,
+          or <b class="Sy">none</b>. For more information on dataset mount
+          points, see <a href="../8/zfs.8.html" class="Xr">zfs(8)</a>.</dd>
+      <dt id="n~2"><a class="permalink" href="#n~2"><code class="Fl">-n</code></a></dt>
+      <dd>Displays the configuration that would be used without actually
+          creating the pool. The actual pool creation can still fail due to
+          insufficient privileges or device sharing.</dd>
+      <dt id="o~3"><a class="permalink" href="#o~3"><code class="Fl">-o</code></a>
+        <var class="Ar">property</var>=<var class="Ar">value</var></dt>
+      <dd>Sets the given pool properties. See the
+          <a class="Sx" href="#Properties">Properties</a> section for a list of
+          valid properties that can be set.</dd>
+      <dt id="o~4"><a class="permalink" href="#o~4"><code class="Fl">-o</code></a>
+        <var class="Ar">feature@feature</var>=<var class="Ar">value</var></dt>
+      <dd>Sets the given pool feature. See the
+          <a href="../5/zpool-features.5.html" class="Xr">zpool-features(5)</a> section for a list of valid
+          features that can be set. Value can be either disabled or
+        enabled.</dd>
+      <dt id="O"><a class="permalink" href="#O"><code class="Fl">-O</code></a>
+        <var class="Ar">file-system-property</var>=<var class="Ar">value</var></dt>
+      <dd>Sets the given file system properties in the root file system of the
+          pool. See the <a class="Sx" href="#Properties">Properties</a> section
+          of <a href="../8/zfs.8.html" class="Xr">zfs(8)</a> for a list of valid properties that can be
+          set.</dd>
+      <dt id="R"><a class="permalink" href="#R"><code class="Fl">-R</code></a>
+        <var class="Ar">root</var></dt>
+      <dd>Equivalent to <code class="Fl">-o</code>
+          <b class="Sy">cachefile</b>=<b class="Sy">none</b>
+          <code class="Fl">-o</code>
+          <b class="Sy">altroot</b>=<var class="Ar">root</var></dd>
+      <dt id="t"><a class="permalink" href="#t"><code class="Fl">-t</code></a>
+        <var class="Ar">tname</var></dt>
+      <dd>Sets the in-core pool name to
+          <a class="permalink" href="#tname"><b class="Sy" id="tname">tname</b></a>
+          while the on-disk name will be the name specified as the pool name
+          <a class="permalink" href="#pool"><b class="Sy" id="pool">pool</b></a>.
+          This will set the default cachefile property to none. This is intended
+          to handle name space collisions when creating pools for other systems,
+          such as virtual machines or physical machines whose pools live on
+          network block devices.</dd>
+    </dl>
+  </dd>
+  <dt><code class="Nm">zpool</code> <code class="Cm">destroy</code>
+    [<code class="Fl">-f</code>] <var class="Ar">pool</var></dt>
+  <dd>Destroys the given pool, freeing up any devices for other use. This
+      command tries to unmount any active datasets before destroying the pool.
+    <dl class="Bl-tag">
+      <dt id="f~4"><a class="permalink" href="#f~4"><code class="Fl">-f</code></a></dt>
+      <dd>Forces any active datasets contained within the pool to be
+        unmounted.</dd>
+    </dl>
+  </dd>
+  <dt><code class="Nm">zpool</code> <code class="Cm">detach</code>
+    <var class="Ar">pool device</var></dt>
+  <dd>Detaches <var class="Ar">device</var> from a mirror. The operation is
+      refused if there are no other valid replicas of the data. If device may be
+      re-added to the pool later on then consider the <b class="Sy">zpool
+      offline</b> command instead.</dd>
+  <dt><code class="Nm">zpool</code> <code class="Cm">events</code>
+    [<code class="Fl">-cfHv</code>] [<var class="Ar">pool</var>...]</dt>
+  <dd>Lists all recent events generated by the ZFS kernel modules. These events
+      are consumed by the <a href="../8/zed.8.html" class="Xr">zed(8)</a> and used to automate
+      administrative tasks such as replacing a failed device with a hot spare.
+      For more information about the subclasses and event payloads that can be
+      generated see the <a href="../5/zfs-events.5.html" class="Xr">zfs-events(5)</a> man page.
+    <dl class="Bl-tag">
+      <dt id="c"><a class="permalink" href="#c"><code class="Fl">-c</code></a></dt>
+      <dd>Clear all previous events.</dd>
+      <dt id="f~5"><a class="permalink" href="#f~5"><code class="Fl">-f</code></a></dt>
+      <dd>Follow mode.</dd>
+      <dt id="H"><a class="permalink" href="#H"><code class="Fl">-H</code></a></dt>
+      <dd>Scripted mode. Do not display headers, and separate fields by a single
+          tab instead of arbitrary space.</dd>
+      <dt id="v"><a class="permalink" href="#v"><code class="Fl">-v</code></a></dt>
+      <dd>Print the entire payload for each event.</dd>
+    </dl>
+  </dd>
+  <dt><code class="Nm">zpool</code> <code class="Cm">export</code>
+    [<code class="Fl">-a</code>] [<code class="Fl">-f</code>]
+    <var class="Ar">pool</var>...</dt>
+  <dd>Exports the given pools from the system. All devices are marked as
+      exported, but are still considered in use by other subsystems. The devices
+      can be moved between systems (even those of different endianness) and
+      imported as long as a sufficient number of devices are present.
+    <p class="Pp">Before exporting the pool, all datasets within the pool are
+        unmounted. A pool can not be exported if it has a shared spare that is
+        currently being used.</p>
+    <p class="Pp">For pools to be portable, you must give the
+        <code class="Nm">zpool</code> command whole disks, not just partitions,
+        so that ZFS can label the disks with portable EFI labels. Otherwise,
+        disk drivers on platforms of different endianness will not recognize the
+        disks.</p>
+    <dl class="Bl-tag">
+      <dt id="a"><a class="permalink" href="#a"><code class="Fl">-a</code></a></dt>
+      <dd>Exports all pools imported on the system.</dd>
+      <dt id="f~6"><a class="permalink" href="#f~6"><code class="Fl">-f</code></a></dt>
+      <dd>Forcefully unmount all datasets, using the
+          <code class="Nm">unmount</code> <code class="Fl">-f</code> command.
+        <p class="Pp">This command will forcefully export the pool even if it
+            has a shared spare that is currently being used. This may lead to
+            potential data corruption.</p>
+      </dd>
+    </dl>
+  </dd>
+  <dt><code class="Nm">zpool</code> <code class="Cm">get</code>
+    [<code class="Fl">-Hp</code>] [<code class="Fl">-o</code>
+    <var class="Ar">field</var>[,<var class="Ar">field</var>]...]
+    <b class="Sy">all</b>|<var class="Ar">property</var>[,<var class="Ar">property</var>]...
+    <var class="Ar">pool</var>...</dt>
+  <dd>Retrieves the given list of properties (or all properties if
+      <b class="Sy">all</b> is used) for the specified storage pool(s). These
+      properties are displayed with the following fields:
+    <div class="Bd Pp Li">
+    <pre>        name          Name of storage pool
+        property      Property name
+        value         Property value
+        source        Property source, either 'default' or 'local'.</pre>
+    </div>
+    <p class="Pp">See the <a class="Sx" href="#Properties">Properties</a>
+        section for more information on the available pool properties.</p>
+    <dl class="Bl-tag">
+      <dt id="H~2"><a class="permalink" href="#H~2"><code class="Fl">-H</code></a></dt>
+      <dd>Scripted mode. Do not display headers, and separate fields by a single
+          tab instead of arbitrary space.</dd>
+      <dt id="o~5"><a class="permalink" href="#o~5"><code class="Fl">-o</code></a>
+        <var class="Ar">field</var></dt>
+      <dd>A comma-separated list of columns to display.
+          <a class="permalink" href="#name"><b class="Sy" id="name">name</b></a>,<a class="permalink" href="#property"><b class="Sy" id="property">property</b></a>,<a class="permalink" href="#value"><b class="Sy" id="value">value</b></a>,<a class="permalink" href="#source"><b class="Sy" id="source">source</b></a>
+          is the default value.</dd>
+      <dt id="p"><a class="permalink" href="#p"><code class="Fl">-p</code></a></dt>
+      <dd>Display numbers in parsable (exact) values.</dd>
+    </dl>
+  </dd>
+  <dt><code class="Nm">zpool</code> <code class="Cm">history</code>
+    [<code class="Fl">-il</code>] [<var class="Ar">pool</var>]...</dt>
+  <dd>Displays the command history of the specified pool(s) or all pools if no
+      pool is specified.
+    <dl class="Bl-tag">
+      <dt id="i"><a class="permalink" href="#i"><code class="Fl">-i</code></a></dt>
+      <dd>Displays internally logged ZFS events in addition to user initiated
+          events.</dd>
+      <dt id="l"><a class="permalink" href="#l"><code class="Fl">-l</code></a></dt>
+      <dd>Displays log records in long format, which in addition to standard
+          format includes, the user name, the hostname, and the zone in which
+          the operation was performed.</dd>
+    </dl>
+  </dd>
+  <dt><code class="Nm">zpool</code> <code class="Cm">import</code>
+    [<code class="Fl">-D</code>] [<code class="Fl">-c</code>
+    <var class="Ar">cachefile</var>|<code class="Fl">-d</code>
+    <var class="Ar">dir</var>]</dt>
+  <dd>Lists pools available to import. If the <code class="Fl">-d</code> option
+      is not specified, this command searches for devices in
+      <span class="Pa">/dev</span>. The <code class="Fl">-d</code> option can be
+      specified multiple times, and all directories are searched. If the device
+      appears to be part of an exported pool, this command displays a summary of
+      the pool with the name of the pool, a numeric identifier, as well as the
+      vdev layout and current health of the device for each device or file.
+      Destroyed pools, pools that were previously destroyed with the
+      <code class="Nm">zpool</code> <code class="Cm">destroy</code> command, are
+      not listed unless the <code class="Fl">-D</code> option is specified.
+    <p class="Pp">The numeric identifier is unique, and can be used instead of
+        the pool name when multiple exported pools of the same name are
+        available.</p>
+    <dl class="Bl-tag">
+      <dt id="c~2"><a class="permalink" href="#c~2"><code class="Fl">-c</code></a>
+        <var class="Ar">cachefile</var></dt>
+      <dd>Reads configuration from the given <var class="Ar">cachefile</var>
+          that was created with the <b class="Sy">cachefile</b> pool property.
+          This <var class="Ar">cachefile</var> is used instead of searching for
+          devices.</dd>
+      <dt id="d~2"><a class="permalink" href="#d~2"><code class="Fl">-d</code></a>
+        <var class="Ar">dir</var></dt>
+      <dd>Searches for devices or files in <var class="Ar">dir</var>. The
+          <code class="Fl">-d</code> option can be specified multiple
+        times.</dd>
+      <dt id="D"><a class="permalink" href="#D"><code class="Fl">-D</code></a></dt>
+      <dd>Lists destroyed pools only.</dd>
+    </dl>
+  </dd>
+  <dt><code class="Nm">zpool</code> <code class="Cm">import</code>
+    <code class="Fl">-a</code> [<code class="Fl">-DfmN</code>]
+    [<code class="Fl">-F</code> [<code class="Fl">-n</code>]
+    [<code class="Fl">-T</code>] [<code class="Fl">-X</code>]]
+    [<code class="Fl">-c</code>
+    <var class="Ar">cachefile</var>|<code class="Fl">-d</code>
+    <var class="Ar">dir</var>] [<code class="Fl">-o</code>
+    <var class="Ar">mntopts</var>] [<code class="Fl">-o</code>
+    <var class="Ar">property</var>=<var class="Ar">value</var>]...
+    [<code class="Fl">-R</code> <var class="Ar">root</var>]
+    [<code class="Fl">-s</code>]</dt>
+  <dd>Imports all pools found in the search directories. Identical to the
+      previous command, except that all pools with a sufficient number of
+      devices available are imported. Destroyed pools, pools that were
+      previously destroyed with the <code class="Nm">zpool</code>
+      <code class="Cm">destroy</code> command, will not be imported unless the
+      <code class="Fl">-D</code> option is specified.
+    <dl class="Bl-tag">
+      <dt id="a~2"><a class="permalink" href="#a~2"><code class="Fl">-a</code></a></dt>
+      <dd>Searches for and imports all pools found.</dd>
+      <dt id="c~3"><a class="permalink" href="#c~3"><code class="Fl">-c</code></a>
+        <var class="Ar">cachefile</var></dt>
+      <dd>Reads configuration from the given <var class="Ar">cachefile</var>
+          that was created with the <b class="Sy">cachefile</b> pool property.
+          This <var class="Ar">cachefile</var> is used instead of searching for
+          devices.</dd>
+      <dt id="d~3"><a class="permalink" href="#d~3"><code class="Fl">-d</code></a>
+        <var class="Ar">dir</var></dt>
+      <dd>Searches for devices or files in <var class="Ar">dir</var>. The
+          <code class="Fl">-d</code> option can be specified multiple times.
+          This option is incompatible with the <code class="Fl">-c</code>
+          option.</dd>
+      <dt id="D~2"><a class="permalink" href="#D~2"><code class="Fl">-D</code></a></dt>
+      <dd>Imports destroyed pools only. The <code class="Fl">-f</code> option is
+          also required.</dd>
+      <dt id="f~7"><a class="permalink" href="#f~7"><code class="Fl">-f</code></a></dt>
+      <dd>Forces import, even if the pool appears to be potentially active.</dd>
+      <dt id="F"><a class="permalink" href="#F"><code class="Fl">-F</code></a></dt>
+      <dd>Recovery mode for a non-importable pool. Attempt to return the pool to
+          an importable state by discarding the last few transactions. Not all
+          damaged pools can be recovered by using this option. If successful,
+          the data from the discarded transactions is irretrievably lost. This
+          option is ignored if the pool is importable or already imported.</dd>
+      <dt id="m~2"><a class="permalink" href="#m~2"><code class="Fl">-m</code></a></dt>
+      <dd>Allows a pool to import when there is a missing log device. Recent
+          transactions can be lost because the log device will be
+        discarded.</dd>
+      <dt id="n~3"><a class="permalink" href="#n~3"><code class="Fl">-n</code></a></dt>
+      <dd>Used with the <code class="Fl">-F</code> recovery option. Determines
+          whether a non-importable pool can be made importable again, but does
+          not actually perform the pool recovery. For more details about pool
+          recovery mode, see the <code class="Fl">-F</code> option, above.</dd>
+      <dt id="N"><a class="permalink" href="#N"><code class="Fl">-N</code></a></dt>
+      <dd>Import the pool without mounting any file systems.</dd>
+      <dt id="o~6"><a class="permalink" href="#o~6"><code class="Fl">-o</code></a>
+        <var class="Ar">mntopts</var></dt>
+      <dd>Comma-separated list of mount options to use when mounting datasets
+          within the pool. See <a href="../8/zfs.8.html" class="Xr">zfs(8)</a> for a description of
+          dataset properties and mount options.</dd>
+      <dt id="o~7"><a class="permalink" href="#o~7"><code class="Fl">-o</code></a>
+        <var class="Ar">property</var>=<var class="Ar">value</var></dt>
+      <dd>Sets the specified property on the imported pool. See the
+          <a class="Sx" href="#Properties">Properties</a> section for more
+          information on the available pool properties.</dd>
+      <dt id="R~2"><a class="permalink" href="#R~2"><code class="Fl">-R</code></a>
+        <var class="Ar">root</var></dt>
+      <dd>Sets the <b class="Sy">cachefile</b> property to
+          <b class="Sy">none</b> and the <b class="Sy">altroot</b> property to
+          <var class="Ar">root</var>.</dd>
+      <dt id="s"><a class="permalink" href="#s"><code class="Fl">-s</code></a></dt>
+      <dd>Scan using the default search path, the libblkid cache will not be
+          consulted. A custom search path may be specified by setting the
+          ZPOOL_IMPORT_PATH environment variable.</dd>
+      <dt id="X"><a class="permalink" href="#X"><code class="Fl">-X</code></a></dt>
+      <dd>Used with the <code class="Fl">-F</code> recovery option. Determines
+          whether extreme measures to find a valid txg should take place. This
+          allows the pool to be rolled back to a txg which is no longer
+          guaranteed to be consistent. Pools imported at an inconsistent txg may
+          contain uncorrectable checksum errors. For more details about pool
+          recovery mode, see the <code class="Fl">-F</code> option, above.
+          WARNING: This option can be extremely hazardous to the health of your
+          pool and should only be used as a last resort.</dd>
+      <dt id="T"><a class="permalink" href="#T"><code class="Fl">-T</code></a></dt>
+      <dd>Specify the txg to use for rollback. Implies
+          <code class="Fl">-FX</code>. For more details about pool recovery
+          mode, see the <code class="Fl">-X</code> option, above. WARNING: This
+          option can be extremely hazardous to the health of your pool and
+          should only be used as a last resort.</dd>
+    </dl>
+  </dd>
+  <dt><code class="Nm">zpool</code> <code class="Cm">import</code>
+    [<code class="Fl">-Dfm</code>] [<code class="Fl">-F</code>
+    [<code class="Fl">-n</code>] [<code class="Fl">-t</code>]
+    [<code class="Fl">-T</code>] [<code class="Fl">-X</code>]]
+    [<code class="Fl">-c</code>
+    <var class="Ar">cachefile</var>|<code class="Fl">-d</code>
+    <var class="Ar">dir</var>] [<code class="Fl">-o</code>
+    <var class="Ar">mntopts</var>] [<code class="Fl">-o</code>
+    <var class="Ar">property</var>=<var class="Ar">value</var>]...
+    [<code class="Fl">-R</code> <var class="Ar">root</var>]
+    [<code class="Fl">-s</code>]
+    <var class="Ar">pool</var>|<var class="Ar">id</var>
+    [<var class="Ar">newpool</var>]</dt>
+  <dd>Imports a specific pool. A pool can be identified by its name or the
+      numeric identifier. If <var class="Ar">newpool</var> is specified, the
+      pool is imported using the name <var class="Ar">newpool</var>. Otherwise,
+      it is imported with the same name as its exported name.
+    <p class="Pp">If a device is removed from a system without running
+        <code class="Nm">zpool</code> <code class="Cm">export</code> first, the
+        device appears as potentially active. It cannot be determined if this
+        was a failed export, or whether the device is really in use from another
+        host. To import a pool in this state, the <code class="Fl">-f</code>
+        option is required.</p>
+    <dl class="Bl-tag">
+      <dt id="c~4"><a class="permalink" href="#c~4"><code class="Fl">-c</code></a>
+        <var class="Ar">cachefile</var></dt>
+      <dd>Reads configuration from the given <var class="Ar">cachefile</var>
+          that was created with the <b class="Sy">cachefile</b> pool property.
+          This <var class="Ar">cachefile</var> is used instead of searching for
+          devices.</dd>
+      <dt id="d~4"><a class="permalink" href="#d~4"><code class="Fl">-d</code></a>
+        <var class="Ar">dir</var></dt>
+      <dd>Searches for devices or files in <var class="Ar">dir</var>. The
+          <code class="Fl">-d</code> option can be specified multiple times.
+          This option is incompatible with the <code class="Fl">-c</code>
+          option.</dd>
+      <dt id="D~3"><a class="permalink" href="#D~3"><code class="Fl">-D</code></a></dt>
+      <dd>Imports destroyed pool. The <code class="Fl">-f</code> option is also
+          required.</dd>
+      <dt id="f~8"><a class="permalink" href="#f~8"><code class="Fl">-f</code></a></dt>
+      <dd>Forces import, even if the pool appears to be potentially active.</dd>
+      <dt id="F~2"><a class="permalink" href="#F~2"><code class="Fl">-F</code></a></dt>
+      <dd>Recovery mode for a non-importable pool. Attempt to return the pool to
+          an importable state by discarding the last few transactions. Not all
+          damaged pools can be recovered by using this option. If successful,
+          the data from the discarded transactions is irretrievably lost. This
+          option is ignored if the pool is importable or already imported.</dd>
+      <dt id="m~3"><a class="permalink" href="#m~3"><code class="Fl">-m</code></a></dt>
+      <dd>Allows a pool to import when there is a missing log device. Recent
+          transactions can be lost because the log device will be
+        discarded.</dd>
+      <dt id="n~4"><a class="permalink" href="#n~4"><code class="Fl">-n</code></a></dt>
+      <dd>Used with the <code class="Fl">-F</code> recovery option. Determines
+          whether a non-importable pool can be made importable again, but does
+          not actually perform the pool recovery. For more details about pool
+          recovery mode, see the <code class="Fl">-F</code> option, above.</dd>
+      <dt id="o~8"><a class="permalink" href="#o~8"><code class="Fl">-o</code></a>
+        <var class="Ar">mntopts</var></dt>
+      <dd>Comma-separated list of mount options to use when mounting datasets
+          within the pool. See <a href="../8/zfs.8.html" class="Xr">zfs(8)</a> for a description of
+          dataset properties and mount options.</dd>
+      <dt id="o~9"><a class="permalink" href="#o~9"><code class="Fl">-o</code></a>
+        <var class="Ar">property</var>=<var class="Ar">value</var></dt>
+      <dd>Sets the specified property on the imported pool. See the
+          <a class="Sx" href="#Properties">Properties</a> section for more
+          information on the available pool properties.</dd>
+      <dt id="R~3"><a class="permalink" href="#R~3"><code class="Fl">-R</code></a>
+        <var class="Ar">root</var></dt>
+      <dd>Sets the <b class="Sy">cachefile</b> property to
+          <b class="Sy">none</b> and the <b class="Sy">altroot</b> property to
+          <var class="Ar">root</var>.</dd>
+      <dt id="s~2"><a class="permalink" href="#s~2"><code class="Fl">-s</code></a></dt>
+      <dd>Scan using the default search path, the libblkid cache will not be
+          consulted. A custom search path may be specified by setting the
+          ZPOOL_IMPORT_PATH environment variable.</dd>
+      <dt id="X~2"><a class="permalink" href="#X~2"><code class="Fl">-X</code></a></dt>
+      <dd>Used with the <code class="Fl">-F</code> recovery option. Determines
+          whether extreme measures to find a valid txg should take place. This
+          allows the pool to be rolled back to a txg which is no longer
+          guaranteed to be consistent. Pools imported at an inconsistent txg may
+          contain uncorrectable checksum errors. For more details about pool
+          recovery mode, see the <code class="Fl">-F</code> option, above.
+          WARNING: This option can be extremely hazardous to the health of your
+          pool and should only be used as a last resort.</dd>
+      <dt id="T~2"><a class="permalink" href="#T~2"><code class="Fl">-T</code></a></dt>
+      <dd>Specify the txg to use for rollback. Implies
+          <code class="Fl">-FX</code>. For more details about pool recovery
+          mode, see the <code class="Fl">-X</code> option, above. WARNING: This
+          option can be extremely hazardous to the health of your pool and
+          should only be used as a last resort.</dd>
+      <dt id="t~2"><a class="permalink" href="#t~2"><code class="Fl">-t</code></a></dt>
+      <dd>Used with <b class="Sy">newpool</b>. Specifies that
+          <b class="Sy">newpool</b> is temporary. Temporary pool names last
+          until export. Ensures that the original pool name will be used in all
+          label updates and therefore is retained upon export. Will also set -o
+          cachefile=none when not explicitly specified.</dd>
+    </dl>
+  </dd>
+  <dt id="K"><code class="Nm">zpool</code> <code class="Cm">iostat</code>
+    [[[<code class="Fl">-c</code> <var class="Ar">SCRIPT</var>]
+    [<code class="Fl">-lq</code>]]|<code class="Fl">-rw</code>]
+    [<code class="Fl">-T</code> <b class="Sy">u</b>|<b class="Sy">d</b>]
+    [<code class="Fl">-ghHLpPvy</code>]
+    [[<var class="Ar">pool</var>...]|[<var class="Ar">pool
+    vdev</var>...]|[<var class="Ar">vdev</var>...]]
+    [<var class="Ar">interval</var> [<var class="Ar">count</var>]]</dt>
+  <dd>Displays I/O statistics for the given pools/vdevs. You can pass in a list
+      of pools, a pool and list of vdevs in that pool, or a list of any vdevs
+      from any pool. If no items are specified, statistics for every pool in the
+      system are shown. When given an <var class="Ar">interval</var>, the
+      statistics are printed every <var class="Ar">interval</var> seconds until
+      ^C is pressed. If count is specified, the command exits after count
+      reports are printed. The first report printed is always the statistics
+      since boot regardless of whether <var class="Ar">interval</var> and
+      <var class="Ar">count</var> are passed. However, this behavior can be
+      suppressed with the <code class="Fl">-y</code> flag. Also note that the
+      units of <a class="permalink" href="#K"><b class="Sy">K</b></a>,
+      <a class="permalink" href="#M"><b class="Sy" id="M">M</b></a>,
+      <a class="permalink" href="#G"><b class="Sy" id="G">G ...</b></a> that are
+      printed in the report are in base 1024. To get the raw values, use the
+      <code class="Fl">-p</code> flag.
+    <dl class="Bl-tag">
+      <dt id="c~5"><a class="permalink" href="#c~5"><code class="Fl">-c</code></a>
+        [<var class="Ar">SCRIPT1</var>[,<var class="Ar">SCRIPT2</var>]...]</dt>
+      <dd>Run a script (or scripts) on each vdev and include the output as a new
+          column in the <code class="Nm">zpool</code>
+          <code class="Cm">iostat</code> output. Users can run any script found
+          in their <span class="Pa">~/.zpool.d</span> directory or from the
+          system <span class="Pa">/etc/zfs/zpool.d</span> directory. Script
+          names containing the slash (/) character are not allowed. The default
+          search path can be overridden by setting the ZPOOL_SCRIPTS_PATH
+          environment variable. A privileged user can run
+          <code class="Fl">-c</code> if they have the ZPOOL_SCRIPTS_AS_ROOT
+          environment variable set. If a script requires the use of a privileged
+          command, like <a class="Xr">smartctl(8)</a>, then it's recommended you
+          allow the user access to it in <span class="Pa">/etc/sudoers</span> or
+          add the user to the <span class="Pa">/etc/sudoers.d/zfs</span> file.
+        <p class="Pp">If <code class="Fl">-c</code> is passed without a script
+            name, it prints a list of all scripts. <code class="Fl">-c</code>
+            also sets verbose mode
+            (<code class="Fl">-v</code><span class="No">).</span></p>
+        <p class="Pp">Script output should be in the form of
+            &quot;name=value&quot;. The column name is set to &quot;name&quot;
+            and the value is set to &quot;value&quot;. Multiple lines can be
+            used to output multiple columns. The first line of output not in the
+            &quot;name=value&quot; format is displayed without a column title,
+            and no more output after that is displayed. This can be useful for
+            printing error messages. Blank or NULL values are printed as a '-'
+            to make output awk-able.</p>
+        <p class="Pp">The following environment variables are set before running
+            each script:</p>
+        <dl class="Bl-tag">
+          <dt id="VDEV_PATH"><a class="permalink" href="#VDEV_PATH"><b class="Sy">VDEV_PATH</b></a></dt>
+          <dd>Full path to the vdev</dd>
+        </dl>
+        <dl class="Bl-tag">
+          <dt id="VDEV_UPATH"><a class="permalink" href="#VDEV_UPATH"><b class="Sy">VDEV_UPATH</b></a></dt>
+          <dd>Underlying path to the vdev (/dev/sd*). For use with device
+              mapper, multipath, or partitioned vdevs.</dd>
+        </dl>
+        <dl class="Bl-tag">
+          <dt id="VDEV_ENC_SYSFS_PATH"><a class="permalink" href="#VDEV_ENC_SYSFS_PATH"><b class="Sy">VDEV_ENC_SYSFS_PATH</b></a></dt>
+          <dd>The sysfs path to the enclosure for the vdev (if any).</dd>
+        </dl>
+      </dd>
+      <dt id="T~3"><a class="permalink" href="#T~3"><code class="Fl">-T</code></a>
+        <b class="Sy">u</b>|<b class="Sy">d</b></dt>
+      <dd>Display a time stamp. Specify <b class="Sy">u</b> for a printed
+          representation of the internal representation of time. See
+          <a class="Xr">time(2)</a>. Specify <b class="Sy">d</b> for standard
+          date format. See <a class="Xr">date(1)</a>.</dd>
+      <dt id="g~2"><a class="permalink" href="#g~2"><code class="Fl">-g</code></a></dt>
+      <dd>Display vdev GUIDs instead of the normal device names. These GUIDs can
+          be used in place of device names for the zpool
+          detach/offline/remove/replace commands.</dd>
+      <dt id="H~3"><a class="permalink" href="#H~3"><code class="Fl">-H</code></a></dt>
+      <dd>Scripted mode. Do not display headers, and separate fields by a single
+          tab instead of arbitrary space.</dd>
+      <dt id="L~2"><a class="permalink" href="#L~2"><code class="Fl">-L</code></a></dt>
+      <dd>Display real paths for vdevs resolving all symbolic links. This can be
+          used to look up the current block device name regardless of the
+          <span class="Pa">/dev/disk/</span> path used to open it.</dd>
+      <dt id="p~2"><a class="permalink" href="#p~2"><code class="Fl">-p</code></a></dt>
+      <dd>Display numbers in parsable (exact) values. Time values are in
+          nanoseconds.</dd>
+      <dt id="P~2"><a class="permalink" href="#P~2"><code class="Fl">-P</code></a></dt>
+      <dd>Display full paths for vdevs instead of only the last component of the
+          path. This can be used in conjunction with the
+          <code class="Fl">-L</code> flag.</dd>
+      <dt id="r"><a class="permalink" href="#r"><code class="Fl">-r</code></a></dt>
+      <dd>Print request size histograms for the leaf ZIOs. This includes
+          histograms of individual ZIOs ( <var class="Ar">ind</var>) and
+          aggregate ZIOs ( <var class="Ar">agg ).</var> These stats can be
+          useful for seeing how well the ZFS IO aggregator is working. Do not
+          confuse these request size stats with the block layer requests; it's
+          possible ZIOs can be broken up before being sent to the block
+        device.</dd>
+      <dt id="v~2"><a class="permalink" href="#v~2"><code class="Fl">-v</code></a></dt>
+      <dd>Verbose statistics Reports usage statistics for individual vdevs
+          within the pool, in addition to the pool-wide statistics.</dd>
+      <dt id="y"><a class="permalink" href="#y"><code class="Fl">-y</code></a></dt>
+      <dd>Omit statistics since boot. Normally the first line of output reports
+          the statistics since boot. This option suppresses that first line of
+          output.</dd>
+      <dt id="w"><a class="permalink" href="#w"><code class="Fl">-w</code></a></dt>
+      <dd>Display latency histograms:
+        <p class="Pp"><var class="Ar">total_wait</var>: Total IO time (queuing +
+            disk IO time). <var class="Ar">disk_wait</var>: Disk IO time (time
+            reading/writing the disk). <var class="Ar">syncq_wait</var>: Amount
+            of time IO spent in synchronous priority queues. Does not include
+            disk time. <var class="Ar">asyncq_wait</var>: Amount of time IO
+            spent in asynchronous priority queues. Does not include disk time.
+            <var class="Ar">scrub</var>: Amount of time IO spent in scrub queue.
+            Does not include disk time.</p>
+      </dd>
+      <dt id="l~2"><a class="permalink" href="#l~2"><code class="Fl">-l</code></a></dt>
+      <dd>Include average latency statistics:
+        <p class="Pp"><var class="Ar">total_wait</var>: Average total IO time
+            (queuing + disk IO time). <var class="Ar">disk_wait</var>: Average
+            disk IO time (time reading/writing the disk).
+            <var class="Ar">syncq_wait</var>: Average amount of time IO spent in
+            synchronous priority queues. Does not include disk time.
+            <var class="Ar">asyncq_wait</var>: Average amount of time IO spent
+            in asynchronous priority queues. Does not include disk time.
+            <var class="Ar">scrub</var>: Average queuing time in scrub queue.
+            Does not include disk time.</p>
+      </dd>
+      <dt id="q"><a class="permalink" href="#q"><code class="Fl">-q</code></a></dt>
+      <dd>Include active queue statistics. Each priority queue has both pending
+          ( <var class="Ar">pend</var>) and active (
+          <var class="Ar">activ</var>) IOs. Pending IOs are waiting to be issued
+          to the disk, and active IOs have been issued to disk and are waiting
+          for completion. These stats are broken out by priority queue:
+        <p class="Pp"><var class="Ar">syncq_read/write</var>: Current number of
+            entries in synchronous priority queues.
+            <var class="Ar">asyncq_read/write</var>: Current number of entries
+            in asynchronous priority queues. <var class="Ar">scrubq_read</var>:
+            Current number of entries in scrub queue.</p>
+        <p class="Pp">All queue statistics are instantaneous measurements of the
+            number of entries in the queues. If you specify an interval, the
+            measurements will be sampled from the end of the interval.</p>
+      </dd>
+    </dl>
+  </dd>
+  <dt><code class="Nm">zpool</code> <code class="Cm">labelclear</code>
+    [<code class="Fl">-f</code>] <var class="Ar">device</var></dt>
+  <dd>Removes ZFS label information from the specified
+      <var class="Ar">device</var>. The <var class="Ar">device</var> must not be
+      part of an active pool configuration.
+    <dl class="Bl-tag">
+      <dt id="f~9"><a class="permalink" href="#f~9"><code class="Fl">-f</code></a></dt>
+      <dd>Treat exported or foreign devices as inactive.</dd>
+    </dl>
+  </dd>
+  <dt><code class="Nm">zpool</code> <code class="Cm">list</code>
+    [<code class="Fl">-HgLpPv</code>] [<code class="Fl">-o</code>
+    <var class="Ar">property</var>[,<var class="Ar">property</var>]...]
+    [<code class="Fl">-T</code> <b class="Sy">u</b>|<b class="Sy">d</b>]
+    [<var class="Ar">pool</var>]... [<var class="Ar">interval</var>
+    [<var class="Ar">count</var>]]</dt>
+  <dd>Lists the given pools along with a health status and space usage. If no
+      <var class="Ar">pool</var>s are specified, all pools in the system are
+      listed. When given an <var class="Ar">interval</var>, the information is
+      printed every <var class="Ar">interval</var> seconds until ^C is pressed.
+      If <var class="Ar">count</var> is specified, the command exits after
+      <var class="Ar">count</var> reports are printed.
+    <dl class="Bl-tag">
+      <dt id="g~3"><a class="permalink" href="#g~3"><code class="Fl">-g</code></a></dt>
+      <dd>Display vdev GUIDs instead of the normal device names. These GUIDs can
+          be used in place of device names for the zpool
+          detach/offline/remove/replace commands.</dd>
+      <dt id="H~4"><a class="permalink" href="#H~4"><code class="Fl">-H</code></a></dt>
+      <dd>Scripted mode. Do not display headers, and separate fields by a single
+          tab instead of arbitrary space.</dd>
+      <dt id="o~10"><a class="permalink" href="#o~10"><code class="Fl">-o</code></a>
+        <var class="Ar">property</var></dt>
+      <dd>Comma-separated list of properties to display. See the
+          <a class="Sx" href="#Properties">Properties</a> section for a list of
+          valid properties. The default list is
+          <a class="permalink" href="#name,"><b class="Sy" id="name,">name,
+          size, alloc, free, fragmentation, expandsize, capacity,</b></a>
+          <a class="permalink" href="#dedupratio,"><b class="Sy" id="dedupratio,">dedupratio,
+          health, altroot</b></a>.</dd>
+      <dt id="L~3"><a class="permalink" href="#L~3"><code class="Fl">-L</code></a></dt>
+      <dd>Display real paths for vdevs resolving all symbolic links. This can be
+          used to look up the current block device name regardless of the
+          /dev/disk/ path used to open it.</dd>
+      <dt id="p~3"><a class="permalink" href="#p~3"><code class="Fl">-p</code></a></dt>
+      <dd>Display numbers in parsable (exact) values.</dd>
+      <dt id="P~3"><a class="permalink" href="#P~3"><code class="Fl">-P</code></a></dt>
+      <dd>Display full paths for vdevs instead of only the last component of the
+          path. This can be used in conjunction with the
+          <code class="Fl">-L</code> <code class="Fl">-flag.</code></dd>
+      <dt id="T~4"><a class="permalink" href="#T~4"><code class="Fl">-T</code></a>
+        <b class="Sy">u</b>|<b class="Sy">d</b></dt>
+      <dd>Display a time stamp. Specify <code class="Fl">-u</code> for a printed
+          representation of the internal representation of time. See
+          <a class="Xr">time(2)</a>. Specify <code class="Fl">-d</code> for
+          standard date format. See <a class="Xr">date(1)</a>.</dd>
+      <dt id="v~3"><a class="permalink" href="#v~3"><code class="Fl">-v</code></a></dt>
+      <dd>Verbose statistics. Reports usage statistics for individual vdevs
+          within the pool, in addition to the pool-wise statistics.</dd>
+    </dl>
+  </dd>
+  <dt><code class="Nm">zpool</code> <code class="Cm">offline</code>
+    [<code class="Fl">-f</code>] [<code class="Fl">-t</code>]
+    <var class="Ar">pool</var> <var class="Ar">device</var>...</dt>
+  <dd>Takes the specified physical device offline. While the
+      <var class="Ar">device</var> is offline, no attempt is made to read or
+      write to the device. This command is not applicable to spares.
+    <dl class="Bl-tag">
+      <dt id="f~10"><a class="permalink" href="#f~10"><code class="Fl">-f</code></a></dt>
+      <dd>Force fault. Instead of offlining the disk, put it into a faulted
+          state. The fault will persist across imports unless the
+          <code class="Fl">-t</code> flag was specified.</dd>
+      <dt id="t~3"><a class="permalink" href="#t~3"><code class="Fl">-t</code></a></dt>
+      <dd>Temporary. Upon reboot, the specified physical device reverts to its
+          previous state.</dd>
+    </dl>
+  </dd>
+  <dt><code class="Nm">zpool</code> <code class="Cm">online</code>
+    [<code class="Fl">-e</code>] <var class="Ar">pool</var>
+    <var class="Ar">device</var>...</dt>
+  <dd>Brings the specified physical device online. This command is not
+      applicable to spares or cache devices.
+    <dl class="Bl-tag">
+      <dt id="e"><a class="permalink" href="#e"><code class="Fl">-e</code></a></dt>
+      <dd>Expand the device to use all available space. If the device is part of
+          a mirror or raidz then all devices must be expanded before the new
+          space will become available to the pool.</dd>
+    </dl>
+  </dd>
+  <dt><code class="Nm">zpool</code> <code class="Cm">reguid</code>
+    <var class="Ar">pool</var></dt>
+  <dd>Generates a new unique identifier for the pool. You must ensure that all
+      devices in this pool are online and healthy before performing this
+    action.</dd>
+  <dt><code class="Nm">zpool</code> <code class="Cm">reopen</code>
+    <var class="Ar">pool</var></dt>
+  <dd>Reopen all the vdevs associated with the pool.</dd>
+  <dt><code class="Nm">zpool</code> <code class="Cm">remove</code>
+    <var class="Ar">pool</var> <var class="Ar">device</var>...</dt>
+  <dd>Removes the specified device from the pool. This command currently only
+      supports removing hot spares, cache, and log devices. A mirrored log
+      device can be removed by specifying the top-level mirror for the log.
+      Non-log devices that are part of a mirrored configuration can be removed
+      using the <code class="Nm">zpool</code> <code class="Cm">detach</code>
+      command. Non-redundant and raidz devices cannot be removed from a
+    pool.</dd>
+  <dt><code class="Nm">zpool</code> <code class="Cm">replace</code>
+    [<code class="Fl">-f</code>] [<code class="Fl">-o</code>
+    <var class="Ar">property</var>=<var class="Ar">value</var>]
+    <var class="Ar">pool</var> <var class="Ar">device</var>
+    [<var class="Ar">new_device</var>]</dt>
+  <dd>Replaces <var class="Ar">old_device</var> with
+      <var class="Ar">new_device</var>. This is equivalent to attaching
+      <var class="Ar">new_device</var>, waiting for it to resilver, and then
+      detaching <var class="Ar">old_device</var>.
+    <p class="Pp">The size of <var class="Ar">new_device</var> must be greater
+        than or equal to the minimum size of all the devices in a mirror or
+        raidz configuration.</p>
+    <p class="Pp"><var class="Ar">new_device</var> is required if the pool is
+        not redundant. If <var class="Ar">new_device</var> is not specified, it
+        defaults to <var class="Ar">old_device</var>. This form of replacement
+        is useful after an existing disk has failed and has been physically
+        replaced. In this case, the new disk may have the same
+        <span class="Pa">/dev</span> path as the old device, even though it is
+        actually a different disk. ZFS recognizes this.</p>
+    <dl class="Bl-tag">
+      <dt id="f~11"><a class="permalink" href="#f~11"><code class="Fl">-f</code></a></dt>
+      <dd>Forces use of <var class="Ar">new_device</var>, even if its appears to
+          be in use. Not all devices can be overridden in this manner.</dd>
+      <dt id="o~11"><a class="permalink" href="#o~11"><code class="Fl">-o</code></a>
+        <var class="Ar">property</var>=<var class="Ar">value</var></dt>
+      <dd>Sets the given pool properties. See the
+          <a class="Sx" href="#Properties">Properties</a> section for a list of
+          valid properties that can be set. The only property supported at the
+          moment is <b class="Sy">ashift</b>.</dd>
+    </dl>
+  </dd>
+  <dt><code class="Nm">zpool</code> <code class="Cm">scrub</code>
+    [<code class="Fl">-s</code> | <code class="Fl">-p</code>]
+    <var class="Ar">pool</var>...</dt>
+  <dd>Begins a scrub or resumes a paused scrub. The scrub examines all data in
+      the specified pools to verify that it checksums correctly. For replicated
+      (mirror or raidz) devices, ZFS automatically repairs any damage discovered
+      during the scrub. The <code class="Nm">zpool</code>
+      <code class="Cm">status</code> command reports the progress of the scrub
+      and summarizes the results of the scrub upon completion.
+    <p class="Pp">Scrubbing and resilvering are very similar operations. The
+        difference is that resilvering only examines data that ZFS knows to be
+        out of date (for example, when attaching a new device to a mirror or
+        replacing an existing device), whereas scrubbing examines all data to
+        discover silent errors due to hardware faults or disk failure.</p>
+    <p class="Pp">Because scrubbing and resilvering are I/O-intensive
+        operations, ZFS only allows one at a time. If a scrub is paused, the
+        <code class="Nm">zpool</code> <code class="Cm">scrub</code> resumes it.
+        If a resilver is in progress, ZFS does not allow a scrub to be started
+        until the resilver completes.</p>
+    <dl class="Bl-tag">
+      <dt id="s~3"><a class="permalink" href="#s~3"><code class="Fl">-s</code></a></dt>
+      <dd>Stop scrubbing.</dd>
+    </dl>
+    <dl class="Bl-tag">
+      <dt id="p~4"><a class="permalink" href="#p~4"><code class="Fl">-p</code></a></dt>
+      <dd>Pause scrubbing. Scrub progress is periodically synced to disk so if
+          the system is restarted or pool is exported during a paused scrub, the
+          scrub will resume from the place where it was last checkpointed to
+          disk. To resume a paused scrub issue <code class="Nm">zpool</code>
+          <code class="Cm">scrub</code> again.</dd>
+    </dl>
+  </dd>
+  <dt><code class="Nm">zpool</code> <code class="Cm">set</code>
+    <var class="Ar">property</var>=<var class="Ar">value</var>
+    <var class="Ar">pool</var></dt>
+  <dd>Sets the given property on the specified pool. See the
+      <a class="Sx" href="#Properties">Properties</a> section for more
+      information on what properties can be set and acceptable values.</dd>
+  <dt><code class="Nm">zpool</code> <code class="Cm">split</code>
+    [<code class="Fl">-gLnP</code>] [<code class="Fl">-o</code>
+    <var class="Ar">property</var>=<var class="Ar">value</var>]...
+    [<code class="Fl">-R</code> <var class="Ar">root</var>] <var class="Ar">pool
+    newpool</var> [<var class="Ar">device ...</var>]</dt>
+  <dd>Splits devices off <var class="Ar">pool</var> creating
+      <var class="Ar">newpool</var>. All vdevs in <var class="Ar">pool</var>
+      must be mirrors and the pool must not be in the process of resilvering. At
+      the time of the split, <var class="Ar">newpool</var> will be a replica of
+      <var class="Ar">pool</var>. By default, the last device in each mirror is
+      split from <var class="Ar">pool</var> to create
+      <var class="Ar">newpool</var>.
+    <p class="Pp">The optional device specification causes the specified
+        device(s) to be included in the new <var class="Ar">pool</var> and,
+        should any devices remain unspecified, the last device in each mirror is
+        used as would be by default.</p>
+    <dl class="Bl-tag">
+      <dt id="g~4"><a class="permalink" href="#g~4"><code class="Fl">-g</code></a></dt>
+      <dd>Display vdev GUIDs instead of the normal device names. These GUIDs can
+          be used in place of device names for the zpool
+          detach/offline/remove/replace commands.</dd>
+      <dt id="L~4"><a class="permalink" href="#L~4"><code class="Fl">-L</code></a></dt>
+      <dd>Display real paths for vdevs resolving all symbolic links. This can be
+          used to look up the current block device name regardless of the
+          <span class="Pa">/dev/disk/</span> path used to open it.</dd>
+      <dt id="n~5"><a class="permalink" href="#n~5"><code class="Fl">-n</code></a></dt>
+      <dd>Do dry run, do not actually perform the split. Print out the expected
+          configuration of <var class="Ar">newpool</var>.</dd>
+      <dt id="P~4"><a class="permalink" href="#P~4"><code class="Fl">-P</code></a></dt>
+      <dd>Display full paths for vdevs instead of only the last component of the
+          path. This can be used in conjunction with the
+          <code class="Fl">-L</code> <code class="Fl">-flag.</code></dd>
+      <dt id="o~12"><a class="permalink" href="#o~12"><code class="Fl">-o</code></a>
+        <var class="Ar">property</var>=<var class="Ar">value</var></dt>
+      <dd>Sets the specified property for <var class="Ar">newpool</var>. See the
+          <a class="Sx" href="#Properties">Properties</a> section for more
+          information on the available pool properties.</dd>
+      <dt id="R~4"><a class="permalink" href="#R~4"><code class="Fl">-R</code></a>
+        <var class="Ar">root</var></dt>
+      <dd>Set <b class="Sy">altroot</b> for <var class="Ar">newpool</var> to
+          <var class="Ar">root</var> and automatically import it.</dd>
+    </dl>
+  </dd>
+  <dt><code class="Nm">zpool</code> <code class="Cm">status</code>
+    [<code class="Fl">-c</code>
+    [<var class="Ar">SCRIPT1</var>[,<var class="Ar">SCRIPT2</var>]...]]
+    [<code class="Fl">-gLPvxD</code>] [<code class="Fl">-T</code>
+    <b class="Sy">u</b>|<b class="Sy">d</b>] [<var class="Ar">pool</var>]...
+    [<var class="Ar">interval</var> [<var class="Ar">count</var>]]</dt>
+  <dd>Displays the detailed health status for the given pools. If no
+      <var class="Ar">pool</var> is specified, then the status of each pool in
+      the system is displayed. For more information on pool and device health,
+      see the <a class="Sx" href="#Device_Failure_and_Recovery">Device Failure
+      and Recovery</a> section.
+    <p class="Pp">If a scrub or resilver is in progress, this command reports
+        the percentage done and the estimated time to completion. Both of these
+        are only approximate, because the amount of data in the pool and the
+        other workloads on the system can change.</p>
+    <dl class="Bl-tag">
+      <dt id="c~6"><a class="permalink" href="#c~6"><code class="Fl">-c</code></a>
+        [<var class="Ar">SCRIPT1</var>[,<var class="Ar">SCRIPT2</var>]...]</dt>
+      <dd>Run a script (or scripts) on each vdev and include the output as a new
+          column in the <code class="Nm">zpool</code>
+          <code class="Cm">status</code> output. See the
+          <code class="Fl">-c</code> option of <code class="Nm">zpool</code>
+          <code class="Cm">iostat</code> for complete details.</dd>
+      <dt id="g~5"><a class="permalink" href="#g~5"><code class="Fl">-g</code></a></dt>
+      <dd>Display vdev GUIDs instead of the normal device names. These GUIDs can
+          be used in place of device names for the zpool
+          detach/offline/remove/replace commands.</dd>
+      <dt id="L~5"><a class="permalink" href="#L~5"><code class="Fl">-L</code></a></dt>
+      <dd>Display real paths for vdevs resolving all symbolic links. This can be
+          used to look up the current block device name regardless of the
+          <span class="Pa">/dev/disk/</span> path used to open it.</dd>
+      <dt id="P~5"><a class="permalink" href="#P~5"><code class="Fl">-P</code></a></dt>
+      <dd>Display full paths for vdevs instead of only the last component of the
+          path. This can be used in conjunction with the
+          <code class="Fl">-L</code> <code class="Fl">-flag.</code></dd>
+      <dt id="D~4"><a class="permalink" href="#D~4"><code class="Fl">-D</code></a></dt>
+      <dd>Display a histogram of deduplication statistics, showing the allocated
+          (physically present on disk) and referenced (logically referenced in
+          the pool) block counts and sizes by reference count.</dd>
+      <dt id="T~5"><a class="permalink" href="#T~5"><code class="Fl">-T</code></a>
+        <b class="Sy">u</b>|<b class="Sy">d</b></dt>
+      <dd>Display a time stamp. Specify <code class="Fl">-u</code> for a printed
+          representation of the internal representation of time. See
+          <a class="Xr">time(2)</a>. Specify <code class="Fl">-d</code> for
+          standard date format. See <a class="Xr">date(1)</a>.</dd>
+      <dt id="v~4"><a class="permalink" href="#v~4"><code class="Fl">-v</code></a></dt>
+      <dd>Displays verbose data error information, printing out a complete list
+          of all data errors since the last complete pool scrub.</dd>
+      <dt id="x"><a class="permalink" href="#x"><code class="Fl">-x</code></a></dt>
+      <dd>Only display status for pools that are exhibiting errors or are
+          otherwise unavailable. Warnings about pools not using the latest
+          on-disk format will not be included.</dd>
+    </dl>
+  </dd>
+  <dt><code class="Nm">zpool</code> <code class="Cm">sync</code>
+    [<var class="Ar">pool ...</var>]</dt>
+  <dd>This command forces all in-core dirty data to be written to the primary
+      pool storage and not the ZIL. It will also update administrative
+      information including quota reporting. Without arguments,
+      <b class="Sy">zpool sync</b> will sync all pools on the system. Otherwise,
+      it will sync only the specified pool(s).</dd>
+  <dt><code class="Nm">zpool</code> <code class="Cm">upgrade</code></dt>
+  <dd>Displays pools which do not have all supported features enabled and pools
+      formatted using a legacy ZFS version number. These pools can continue to
+      be used, but some features may not be available. Use
+      <code class="Nm">zpool</code> <code class="Cm">upgrade</code>
+      <code class="Fl">-a</code> to enable all features on all pools.</dd>
+  <dt><code class="Nm">zpool</code> <code class="Cm">upgrade</code>
+    <code class="Fl">-v</code></dt>
+  <dd>Displays legacy ZFS versions supported by the current software. See
+      <a href="../5/zpool-features.5.html" class="Xr">zpool-features(5)</a> for a description of feature flags
+      features supported by the current software.</dd>
+  <dt><code class="Nm">zpool</code> <code class="Cm">upgrade</code>
+    [<code class="Fl">-V</code> <var class="Ar">version</var>]
+    <code class="Fl">-a</code>|<var class="Ar">pool</var>...</dt>
+  <dd>Enables all supported features on the given pool. Once this is done, the
+      pool will no longer be accessible on systems that do not support feature
+      flags. See <a class="Xr">zfs-features(5)</a> for details on compatibility
+      with systems that support feature flags, but do not support all features
+      enabled on the pool.
+    <dl class="Bl-tag">
+      <dt id="a~3"><a class="permalink" href="#a~3"><code class="Fl">-a</code></a></dt>
+      <dd>Enables all supported features on all pools.</dd>
+      <dt id="V"><a class="permalink" href="#V"><code class="Fl">-V</code></a>
+        <var class="Ar">version</var></dt>
+      <dd>Upgrade to the specified legacy version. If the
+          <code class="Fl">-V</code> flag is specified, no features will be
+          enabled on the pool. This option can only be used to increase the
+          version number up to the last supported legacy version number.</dd>
+    </dl>
+  </dd>
+</dl>
+</section>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="EXIT_STATUS"><a class="permalink" href="#EXIT_STATUS">EXIT
+  STATUS</a></h1>
+<p class="Pp">The following exit values are returned:</p>
+<dl class="Bl-tag">
+  <dt id="0"><a class="permalink" href="#0"><b class="Sy">0</b></a></dt>
+  <dd>Successful completion.</dd>
+  <dt id="1"><a class="permalink" href="#1"><b class="Sy">1</b></a></dt>
+  <dd>An error occurred.</dd>
+  <dt id="2"><a class="permalink" href="#2"><b class="Sy">2</b></a></dt>
+  <dd>Invalid command line options were specified.</dd>
+</dl>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="EXAMPLES"><a class="permalink" href="#EXAMPLES">EXAMPLES</a></h1>
+<dl class="Bl-tag">
+  <dt id="Example"><a class="permalink" href="#Example"><b class="Sy">Example
+    1</b></a> <span class="No">Creating a RAID-Z Storage Pool</span></dt>
+  <dd>The following command creates a pool with a single raidz root vdev that
+      consists of six disks.
+    <div class="Bd Pp Li">
+    <pre># zpool create tank raidz sda sdb sdc sdd sde sdf</pre>
+    </div>
+  </dd>
+  <dt id="Example~2"><a class="permalink" href="#Example~2"><b class="Sy">Example
+    2</b></a> <span class="No">Creating a Mirrored Storage Pool</span></dt>
+  <dd>The following command creates a pool with two mirrors, where each mirror
+      contains two disks.
+    <div class="Bd Pp Li">
+    <pre># zpool create tank mirror sda sdb mirror sdc sdd</pre>
+    </div>
+  </dd>
+  <dt id="Example~3"><a class="permalink" href="#Example~3"><b class="Sy">Example
+    3</b></a> <span class="No">Creating a ZFS Storage Pool by Using
+    Partitions</span></dt>
+  <dd>The following command creates an unmirrored pool using two disk
+      partitions.
+    <div class="Bd Pp Li">
+    <pre># zpool create tank sda1 sdb2</pre>
+    </div>
+  </dd>
+  <dt id="Example~4"><a class="permalink" href="#Example~4"><b class="Sy">Example
+    4</b></a> <span class="No">Creating a ZFS Storage Pool by Using
+    Files</span></dt>
+  <dd>The following command creates an unmirrored pool using files. While not
+      recommended, a pool based on files can be useful for experimental
+      purposes.
+    <div class="Bd Pp Li">
+    <pre># zpool create tank /path/to/file/a /path/to/file/b</pre>
+    </div>
+  </dd>
+  <dt id="Example~5"><a class="permalink" href="#Example~5"><b class="Sy">Example
+    5</b></a> <span class="No">Adding a Mirror to a ZFS Storage Pool</span></dt>
+  <dd>The following command adds two mirrored disks to the pool
+      <i class="Em">tank</i>, assuming the pool is already made up of two-way
+      mirrors. The additional space is immediately available to any datasets
+      within the pool.
+    <div class="Bd Pp Li">
+    <pre># zpool add tank mirror sda sdb</pre>
+    </div>
+  </dd>
+  <dt id="Example~6"><a class="permalink" href="#Example~6"><b class="Sy">Example
+    6</b></a> <span class="No">Listing Available ZFS Storage Pools</span></dt>
+  <dd>The following command lists all available pools on the system. In this
+      case, the pool
+      <a class="permalink" href="#zion"><i class="Em" id="zion">zion</i></a> is
+      faulted due to a missing device. The results from this command are similar
+      to the following:
+    <div class="Bd Pp Li">
+    <pre># zpool list
+NAME    SIZE  ALLOC   FREE  EXPANDSZ   FRAG    CAP  DEDUP  HEALTH  ALTROOT
+rpool  19.9G  8.43G  11.4G         -    33%    42%  1.00x  ONLINE  -
+tank   61.5G  20.0G  41.5G         -    48%    32%  1.00x  ONLINE  -
+zion       -      -      -         -      -      -      -  FAULTED -</pre>
+    </div>
+  </dd>
+  <dt id="Example~7"><a class="permalink" href="#Example~7"><b class="Sy">Example
+    7</b></a> <span class="No">Destroying a ZFS Storage Pool</span></dt>
+  <dd>The following command destroys the pool <i class="Em">tank</i> and any
+      datasets contained within.
+    <div class="Bd Pp Li">
+    <pre># zpool destroy -f tank</pre>
+    </div>
+  </dd>
+  <dt id="Example~8"><a class="permalink" href="#Example~8"><b class="Sy">Example
+    8</b></a> <span class="No">Exporting a ZFS Storage Pool</span></dt>
+  <dd>The following command exports the devices in pool <i class="Em">tank</i>
+      so that they can be relocated or later imported.
+    <div class="Bd Pp Li">
+    <pre># zpool export tank</pre>
+    </div>
+  </dd>
+  <dt id="Example~9"><a class="permalink" href="#Example~9"><b class="Sy">Example
+    9</b></a> <span class="No">Importing a ZFS Storage Pool</span></dt>
+  <dd>The following command displays available pools, and then imports the pool
+      <i class="Em">tank</i> for use on the system. The results from this
+      command are similar to the following:
+    <div class="Bd Pp Li">
+    <pre># zpool import
+  pool: tank
+    id: 15451357997522795478
+ state: ONLINE
+action: The pool can be imported using its name or numeric identifier.
+config:
+
+        tank        ONLINE
+          mirror    ONLINE
+            sda     ONLINE
+            sdb     ONLINE
+
+# zpool import tank</pre>
+    </div>
+  </dd>
+  <dt id="Example~10"><a class="permalink" href="#Example~10"><b class="Sy">Example
+    10</b></a> <span class="No">Upgrading All ZFS Storage Pools to the Current
+    Version</span></dt>
+  <dd>The following command upgrades all ZFS Storage pools to the current
+      version of the software.
+    <div class="Bd Pp Li">
+    <pre># zpool upgrade -a
+This system is currently running ZFS version 2.</pre>
+    </div>
+  </dd>
+  <dt id="Example~11"><a class="permalink" href="#Example~11"><b class="Sy">Example
+    11</b></a> <span class="No">Managing Hot Spares</span></dt>
+  <dd>The following command creates a new pool with an available hot spare:
+    <div class="Bd Pp Li">
+    <pre># zpool create tank mirror sda sdb spare sdc</pre>
+    </div>
+    <p class="Pp">If one of the disks were to fail, the pool would be reduced to
+        the degraded state. The failed device can be replaced using the
+        following command:</p>
+    <div class="Bd Pp Li">
+    <pre># zpool replace tank sda sdd</pre>
+    </div>
+    <p class="Pp">Once the data has been resilvered, the spare is automatically
+        removed and is made available for use should another device fails. The
+        hot spare can be permanently removed from the pool using the following
+        command:</p>
+    <div class="Bd Pp Li">
+    <pre># zpool remove tank sdc</pre>
+    </div>
+  </dd>
+  <dt id="Example~12"><a class="permalink" href="#Example~12"><b class="Sy">Example
+    12</b></a> <span class="No">Creating a ZFS Pool with Mirrored Separate
+    Intent Logs</span></dt>
+  <dd>The following command creates a ZFS storage pool consisting of two,
+      two-way mirrors and mirrored log devices:
+    <div class="Bd Pp Li">
+    <pre># zpool create pool mirror sda sdb mirror sdc sdd log mirror \
+  sde sdf</pre>
+    </div>
+  </dd>
+  <dt id="Example~13"><a class="permalink" href="#Example~13"><b class="Sy">Example
+    13</b></a> <span class="No">Adding Cache Devices to a ZFS Pool</span></dt>
+  <dd>The following command adds two disks for use as cache devices to a ZFS
+      storage pool:
+    <div class="Bd Pp Li">
+    <pre># zpool add pool cache sdc sdd</pre>
+    </div>
+    <p class="Pp">Once added, the cache devices gradually fill with content from
+        main memory. Depending on the size of your cache devices, it could take
+        over an hour for them to fill. Capacity and reads can be monitored using
+        the <code class="Cm">iostat</code> option as follows:</p>
+    <div class="Bd Pp Li">
+    <pre># zpool iostat -v pool 5</pre>
+    </div>
+  </dd>
+  <dt id="Example~14"><a class="permalink" href="#Example~14"><b class="Sy">Example
+    14</b></a> <span class="No">Removing a Mirrored Log Device</span></dt>
+  <dd>The following command removes the mirrored log device
+      <b class="Sy">mirror-2</b>. Given this configuration:
+    <div class="Bd Pp Li">
+    <pre>  pool: tank
+ state: ONLINE
+ scrub: none requested
+config:
+
+         NAME        STATE     READ WRITE CKSUM
+         tank        ONLINE       0     0     0
+           mirror-0  ONLINE       0     0     0
+             sda     ONLINE       0     0     0
+             sdb     ONLINE       0     0     0
+           mirror-1  ONLINE       0     0     0
+             sdc     ONLINE       0     0     0
+             sdd     ONLINE       0     0     0
+         logs
+           mirror-2  ONLINE       0     0     0
+             sde     ONLINE       0     0     0
+             sdf     ONLINE       0     0     0</pre>
+    </div>
+    <p class="Pp">The command to remove the mirrored log
+        <b class="Sy">mirror-2</b> is:</p>
+    <div class="Bd Pp Li">
+    <pre># zpool remove tank mirror-2</pre>
+    </div>
+  </dd>
+  <dt id="Example~15"><a class="permalink" href="#Example~15"><b class="Sy">Example
+    15</b></a> <span class="No">Displaying expanded space on a
+    device</span></dt>
+  <dd>The following command displays the detailed information for the pool
+      <a class="permalink" href="#data"><i class="Em" id="data">data</i></a>.
+      This pool is comprised of a single raidz vdev where one of its devices
+      increased its capacity by 10GB. In this example, the pool will not be able
+      to utilize this extra capacity until all the devices under the raidz vdev
+      have been expanded.
+    <div class="Bd Pp Li">
+    <pre># zpool list -v data
+NAME         SIZE  ALLOC   FREE  EXPANDSZ   FRAG    CAP  DEDUP  HEALTH  ALTROOT
+data        23.9G  14.6G  9.30G         -    48%    61%  1.00x  ONLINE  -
+  raidz1    23.9G  14.6G  9.30G         -    48%
+    sda         -      -      -         -      -
+    sdb         -      -      -       10G      -
+    sdc         -      -      -         -      -</pre>
+    </div>
+  </dd>
+  <dt id="Example~16"><a class="permalink" href="#Example~16"><b class="Sy">Example
+    16</b></a> <span class="No">Adding output columns</span></dt>
+  <dd>Additional columns can be added to the <code class="Nm">zpool</code>
+      <code class="Cm">status</code> and <code class="Nm">zpool</code>
+      <code class="Cm">iostat</code> output with <code class="Fl">-c</code>
+      option.
+    <div class="Bd Pp Li">
+    <pre># zpool status -c vendor,model,size
+   NAME     STATE  READ WRITE CKSUM vendor  model        size
+   tank     ONLINE 0    0     0
+   mirror-0 ONLINE 0    0     0
+   U1       ONLINE 0    0     0     SEAGATE ST8000NM0075 7.3T
+   U10      ONLINE 0    0     0     SEAGATE ST8000NM0075 7.3T
+   U11      ONLINE 0    0     0     SEAGATE ST8000NM0075 7.3T
+   U12      ONLINE 0    0     0     SEAGATE ST8000NM0075 7.3T
+   U13      ONLINE 0    0     0     SEAGATE ST8000NM0075 7.3T
+   U14      ONLINE 0    0     0     SEAGATE ST8000NM0075 7.3T
+
+# zpool iostat -vc slaves
+   capacity operations bandwidth
+   pool       alloc free  read  write read  write slaves
+   ---------- ----- ----- ----- ----- ----- ----- ---------
+   tank       20.4G 7.23T 26    152   20.7M 21.6M
+   mirror     20.4G 7.23T 26    152   20.7M 21.6M
+   U1         -     -     0     31    1.46K 20.6M sdb sdff
+   U10        -     -     0     1     3.77K 13.3K sdas sdgw
+   U11        -     -     0     1     288K  13.3K sdat sdgx
+   U12        -     -     0     1     78.4K 13.3K sdau sdgy
+   U13        -     -     0     1     128K  13.3K sdav sdgz
+   U14        -     -     0     1     63.2K 13.3K sdfk sdg</pre>
+    </div>
+  </dd>
+</dl>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="ENVIRONMENT_VARIABLES"><a class="permalink" href="#ENVIRONMENT_VARIABLES">ENVIRONMENT
+  VARIABLES</a></h1>
+<dl class="Bl-tag">
+  <dt id="ZFS_ABORT"><a class="permalink" href="#ZFS_ABORT"><code class="Ev">ZFS_ABORT</code></a></dt>
+  <dd>Cause <code class="Nm">zpool</code> to dump core on exit for the purposes
+      of running</dd>
+</dl>
+<dl class="Bl-tag">
+  <dt id="ZPOOL_IMPORT_PATH"><a class="permalink" href="#ZPOOL_IMPORT_PATH"><code class="Ev">ZPOOL_IMPORT_PATH</code></a></dt>
+  <dd>The search path for devices or files to use with the pool. This is a
+      colon-separated list of directories in which <code class="Nm">zpool</code>
+      looks for device nodes and files. Similar to the
+      <code class="Fl">-d</code> option in <code class="Nm">zpool
+    import</code>.</dd>
+</dl>
+<dl class="Bl-tag">
+  <dt id="ZPOOL_VDEV_NAME_GUID"><a class="permalink" href="#ZPOOL_VDEV_NAME_GUID"><code class="Ev">ZPOOL_VDEV_NAME_GUID</code></a></dt>
+  <dd>Cause <code class="Nm">zpool subcommands to output vdev guids by default.
+      This behavior</code> is identical to the <code class="Nm">zpool status
+      -g</code> command line option.</dd>
+</dl>
+<dl class="Bl-tag">
+  <dt id="ZPOOL_VDEV_NAME_FOLLOW_LINKS"><a class="permalink" href="#ZPOOL_VDEV_NAME_FOLLOW_LINKS"><code class="Ev">ZPOOL_VDEV_NAME_FOLLOW_LINKS</code></a></dt>
+  <dd>Cause <code class="Nm">zpool</code> subcommands to follow links for vdev
+      names by default. This behavior is identical to the <code class="Nm">zpool
+      status -L</code> command line option.</dd>
+</dl>
+<dl class="Bl-tag">
+  <dt id="ZPOOL_VDEV_NAME_PATH"><a class="permalink" href="#ZPOOL_VDEV_NAME_PATH"><code class="Ev">ZPOOL_VDEV_NAME_PATH</code></a></dt>
+  <dd>Cause <code class="Nm">zpool</code> subcommands to output full vdev path
+      names by default. This behavior is identical to the <code class="Nm">zpool
+      status -p</code> command line option.</dd>
+</dl>
+<dl class="Bl-tag">
+  <dt id="ZFS_VDEV_DEVID_OPT_OUT"><a class="permalink" href="#ZFS_VDEV_DEVID_OPT_OUT"><code class="Ev">ZFS_VDEV_DEVID_OPT_OUT</code></a></dt>
+  <dd>Older ZFS on Linux implementations had issues when attempting to display
+      pool config VDEV names if a <b class="Sy">devid</b> NVP value is present
+      in the pool's config.
+    <p class="Pp">For example, a pool that originated on illumos platform would
+        have a devid value in the config and <code class="Nm">zpool
+        status</code> would fail when listing the config. This would also be
+        true for future Linux based pools.</p>
+    <p class="Pp">A pool can be stripped of any <b class="Sy">devid</b> values
+        on import or prevented from adding them on <code class="Nm">zpool
+        create</code> or <code class="Nm">zpool add</code> by setting
+        <b class="Sy">ZFS_VDEV_DEVID_OPT_OUT</b>.</p>
+  </dd>
+</dl>
+<dl class="Bl-tag">
+  <dt id="ZPOOL_SCRIPTS_AS_ROOT"><a class="permalink" href="#ZPOOL_SCRIPTS_AS_ROOT"><code class="Ev">ZPOOL_SCRIPTS_AS_ROOT</code></a></dt>
+  <dd>Allow a privileged user to run the <code class="Nm">zpool
+      status/iostat</code> with the <code class="Fl">-c</code> option. Normally,
+      only unprivileged users are allowed to run
+    <code class="Fl">-c</code>.</dd>
+</dl>
+<dl class="Bl-tag">
+  <dt id="ZPOOL_SCRIPTS_PATH"><a class="permalink" href="#ZPOOL_SCRIPTS_PATH"><code class="Ev">ZPOOL_SCRIPTS_PATH</code></a></dt>
+  <dd>The search path for scripts when running <code class="Nm">zpool
+      status/iostat</code> with the <code class="Fl">-c</code> option. This is a
+      colon-separated list of directories and overrides the default
+      <span class="Pa">~/.zpool.d</span> and
+      <span class="Pa">/etc/zfs/zpool.d</span> search paths.</dd>
+</dl>
+<dl class="Bl-tag">
+  <dt id="ZPOOL_SCRIPTS_ENABLED"><a class="permalink" href="#ZPOOL_SCRIPTS_ENABLED"><code class="Ev">ZPOOL_SCRIPTS_ENABLED</code></a></dt>
+  <dd>Allow a user to run <code class="Nm">zpool status/iostat</code> with the
+      <code class="Fl">-c</code> option. If
+      <b class="Sy">ZPOOL_SCRIPTS_ENABLED</b> is not set, it is assumed that the
+      user is allowed to run <code class="Nm">zpool status/iostat
+    -c</code>.</dd>
+</dl>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="INTERFACE_STABILITY"><a class="permalink" href="#INTERFACE_STABILITY">INTERFACE
+  STABILITY</a></h1>
+<p class="Pp"><a class="permalink" href="#Evolving"><b class="Sy" id="Evolving">Evolving</b></a></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SEE_ALSO"><a class="permalink" href="#SEE_ALSO">SEE
+  ALSO</a></h1>
+<p class="Pp"><a href="../8/zed.8.html" class="Xr">zed(8)</a>, <a href="../8/zfs.8.html" class="Xr">zfs(8)</a>,
+    <a href="../5/zfs-events.5.html" class="Xr">zfs-events(5)</a>, <a href="../5/zfs-module-parameters.5.html" class="Xr">zfs-module-parameters(5)</a>,
+    <a href="../5/zpool-features.5.html" class="Xr">zpool-features(5)</a></p>
+</section>
+</div>
+<table class="foot">
+  <tr>
+    <td class="foot-date">April 27, 2018</td>
+    <td class="foot-os">Linux</td>
+  </tr>
+</table>
+</div></section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="zinject.8.html" class="btn btn-neutral float-left" title="zinject.8" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="zstreamdump.8.html" class="btn btn-neutral float-right" title="zstreamdump.8" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, OpenZFS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,419 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>zpios.1 &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
+      <script src="../../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="ztest.1" href="ztest.1.html" />
+    <link rel="prev" title="zhack.1" href="zhack.1.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Basic%20Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Man Pages</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../master/index.html">master</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.3/index.html">v2.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.2/index.html">v2.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.1/index.html">v2.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.0/index.html">v2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.8/index.html">v0.8</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">v0.7</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">User Commands (1)</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="cstyle.1.html">cstyle.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="raidz_test.1.html">raidz_test.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zhack.1.html">zhack.1</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">zpios.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ztest.1.html">ztest.1</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../5/index.html">File Formats and Conventions (5)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../8/index.html">System Administration Commands (8)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.6/index.html">v0.6</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Man Pages</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">v0.7</a></li>
+          <li class="breadcrumb-item"><a href="index.html">User Commands (1)</a></li>
+      <li class="breadcrumb-item active">zpios.1</li>
+      <li class="wy-breadcrumbs-aside">
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/openzfs/zfs/blob/zfs-0.7.13/man/man1/zpios.1" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="zpios-1">
+<h1>zpios.1<a class="headerlink" href="#zpios-1" title="Permalink to this heading"></a></h1>
+<div class="man_container"><table class="head">
+  <tr>
+    <td class="head-ltitle">zpios(1)</td>
+    <td class="head-vol">User Commands</td>
+    <td class="head-rtitle">zpios(1)</td>
+  </tr>
+</table>
+<div class="manual-text">
+<p class="Pp"></p>
+<section class="Sh">
+<h1 class="Sh" id="NAME"><a class="permalink" href="#NAME">NAME</a></h1>
+<p class="Pp">zpios - Directly test the DMU.</p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SYNOPSIS"><a class="permalink" href="#SYNOPSIS">SYNOPSIS</a></h1>
+<p class="Pp"><b>zpios [options] &lt;-p </b><i>pool</i><b>&gt;</b></p>
+<p class="Pp"></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h1>
+<p class="Pp">This utility runs in-kernel DMU performance and stress tests that
+    do not depend on the ZFS Posix Layer (&quot;ZPL&quot;).</p>
+<p class="Pp"></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="OPTIONS"><a class="permalink" href="#OPTIONS">OPTIONS</a></h1>
+<p class="Pp HP"><b>-t</b><i> regex</i><b>, --threadcount</b><i> regex</i></p>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>Start this many threads for each test series, specified as a comma
+      delimited regular expression. (eg: &quot;-t 1,2,3&quot;)</dd>
+  <dt></dt>
+  <dd>This option is mutually exclusive with the <b>threadcount_*</b>
+    options.</dd>
+</dl>
+<p class="Pp HP"><b>-l</b><i> regex_low</i><b>, --threadcount_low</b><i>
+    regex_low</i></p>
+<p class="Pp HP"><b>-h</b><i> regex_high</i><b>, --threadcount_high</b><i>
+    regex_high</i></p>
+<p class="Pp HP"><b>-e</b><i> regex_incr</i><b>, --threadcount_incr</b><i>
+    regex_incr</i></p>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>Start <i>regex_low</i> threads for the first test, add <i>regex_incr</i>
+      threads for each subsequent test, and start <i>regex_high</i> threads for
+      the last test.</dd>
+  <dt></dt>
+  <dd>These three options must be specified together and are mutually exclusive
+      with the <b>threadcount</b> option.</dd>
+</dl>
+<p class="Pp HP"><b>-n</b><i> regex</i><b>, --regioncount</b><i> regex</i></p>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>Create this many regions for each test series, specified as a comma
+      delimited regular expression. (eg: &quot;-n 512,4096,65536&quot;)</dd>
+  <dt></dt>
+  <dd>This option is mutually exclusive with the <b>regioncount_*</b>
+    options.</dd>
+</dl>
+<p class="Pp HP"><b>-i</b><i> regex_low</i><b>, --regioncount_low</b><i>
+    regex_low</i></p>
+<p class="Pp HP"><b>-j</b><i> regex_high</i><b>, --regioncount_high</b><i>
+    regex_high</i></p>
+<p class="Pp HP"><b>-k</b><i> regex_incr</i><b>, --regioncount_incr</b><i>
+    regex_incr</i></p>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>Create <i>regex_low</i> regions for the first test, add <i>regex_incr</i>
+      regions for each subsequent test, and create <i>regex_high</i> regions for
+      the last test.</dd>
+  <dt></dt>
+  <dd>These three options must be specified together and are mutually exclusive
+      with the <b>regioncount</b> option.</dd>
+</dl>
+<p class="Pp HP"><b>-o</b><i> size</i><b>, --offset</b><i> size</i></p>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>Create regions at <i>size</i> offset for each test series, specified as a
+      comma delimited regular expression with an optional unit suffix. (eg:
+      &quot;-o 4M&quot; means four megabytes.)</dd>
+  <dt></dt>
+  <dd>This option is mutually exclusive with the <b>offset_*</b> options.</dd>
+</dl>
+<p class="Pp HP"><b>-m</b><i> size_low</i><b>, --offset_low</b><i>
+  size_low</i></p>
+<p class="Pp HP"><b>-q</b><i> size_high</i><b>, --offset_high</b><i>
+    size_high</i></p>
+<p class="Pp HP"><b>-r</b><i> size_incr</i><b>, --offset_incr</b><i>
+    size_incr</i></p>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>Create a region at <i>size_low</i> offset for the first test, add
+      <i>size_incr</i> to the offset for each subsequent test, and create a
+      region at <i>size_high</i> offset for the last test.</dd>
+  <dt></dt>
+  <dd>These three options must be specified together and are mutually exclusive
+      with the <b>offset</b> option.</dd>
+</dl>
+<p class="Pp HP"><b>-c</b><i> size</i><b>, --chunksize</b><i> size</i></p>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>Use <i>size</i> chunks for each test, specified as a comma delimited
+      regular expression with an optional unit suffix. (eg: &quot;-c 1M&quot;
+      means one megabyte.) The chunk size must be at least the region size.</dd>
+  <dt></dt>
+  <dd>This option is mutually exclusive with the <b>chunksize_*</b><b>
+      options.</b></dd>
+</dl>
+<p class="Pp HP"><b>-a</b><i> size_low</i><b>, --chunksize_low</b><i>
+    size_low</i></p>
+<p class="Pp HP"><b>-b</b><i> size_high</i><b>, --chunksize_high</b><i>
+    size_high</i></p>
+<p class="Pp HP"><b>-g</b><i> size_incr</i><b>, --chunksize_incr</b><i>
+    size_incr</i></p>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>Use a <i>size_low</i> chunk size for the first test, add <i>size_incr</i>
+      to the chunk size for each subsequent test, and use a <i>size_high</i>
+      chunk size for the last test.</dd>
+  <dt></dt>
+  <dd>These three options must be specified together and are mutually exclusive
+      with the <b>chunksize</b> option.</dd>
+</dl>
+<p class="Pp HP"><b>-s</b><i> size</i><b>, --regionsize</b><i> size</i></p>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>Use <i>size</i> regions for each test, specified as a comma delimited
+      regular expression with an optional unit suffix. (eg: &quot;-s 1M&quot;
+      means one megabyte.)</dd>
+  <dt></dt>
+  <dd>This option is mutually exclusive with the <b>regionsize_*</b><b>
+      options.</b></dd>
+</dl>
+<p class="Pp HP"><b>-A</b><i> size_low</i><b>, --regionsize_low</b><i>
+    size_low</i></p>
+<p class="Pp HP"><b>-B</b><i> size_high</i><b>, --regionsize_high</b><i>
+    size_high</i></p>
+<p class="Pp HP"><b>-C</b><i> size_incr</i><b>, --regionsize_incr</b><i>
+    size_incr</i></p>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>Use a <i>size_low</i> region size for the first test, add <i>size_incr</i>
+      to the region size for each subsequent test, and use a <i>size_high</i>
+      region size for the last test.</dd>
+  <dt></dt>
+  <dd>These three options must be specified together and are mutually exclusive
+      with the <b>regionsize</b> option.</dd>
+</dl>
+<p class="Pp HP"><b>-S</b><i> size | sizes</i><b>, --blocksize</b><i> size |
+    sizes</i></p>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>Use <i>size</i> ZFS blocks for each test, specified as a comma delimited
+      regular expression with an optional unit suffix. (eg: &quot;-S 1M&quot;
+      means one megabyte.) The supported range is powers of two from 128K
+      through 16M. A range of blocks can be tested as follows: &quot;-S
+      128K,256K,512K,1M&quot;.</dd>
+</dl>
+<p class="Pp HP"><b>-L</b><i> dmu_flags</i><b>, --load</b><i> dmu_flags</i></p>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>Specify <i>dmuio</i> for regular DMU_IO, <i>ssf</i> for single shared file
+      access, or <i>fpp</i> for per thread access. Use commas to delimit
+      multiple flags. (eg: &quot;-L dmuio,ssf&quot;)</dd>
+</dl>
+<p class="Pp HP"><b>-p</b><i> name</i><b>, --pool</b><i> name</i></p>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>The pool name, which is mandatory.</dd>
+</dl>
+<p class="Pp HP"><b>-M</b><i> test</i><b>, --name</b><i> test</i></p>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>An arbitrary string that appears in the program output.</dd>
+</dl>
+<p class="Pp HP"><b>-x, --cleanup</b></p>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>Enable the DMU_REMOVE flag.</dd>
+</dl>
+<p class="Pp HP"><b>-P</b><i> command</i><b>, --prerun</b><i> command</i></p>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>Invoke <i>command</i> from the kernel before running the test. Shell
+      expansion is not performed and the environment is set to HOME=/;
+      TERM=linux; PATH=/sbin:/usr/sbin:/bin:/usr/bin.</dd>
+</dl>
+<p class="Pp HP"><b>-R</b><i> command</i><b>, --postrun</b><i> command</i></p>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>Invoke <i>command</i> from the kernel after running the test. Shell
+      expansion is not performed and the environment is set to HOME=/;
+      TERM=linux; PATH=/sbin:/usr/sbin:/bin:/usr/bin.</dd>
+</dl>
+<p class="Pp HP"><b>-G</b><i> directory</i><b>, --log</b><i> directory</i></p>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>Put logging output in this directory.</dd>
+</dl>
+<p class="Pp HP"><b>-I</b><i> size</i><b>, --regionnoise</b><i> size</i></p>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>Randomly vary the <b>regionsize</b> parameter for each test modulo
+      <i>size</i> bytes.</dd>
+</dl>
+<p class="Pp HP"><b>-N</b><i> size</i><b>, --chunknoise</b><i> size</i></p>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>Randomly vary the <b>chunksize</b> parameter for each test modulo
+      <i>size</i> bytes.</dd>
+</dl>
+<p class="Pp HP"><b>-T</b><i> time</i><b>, --threaddelay</b><i> time</i></p>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>Randomly vary the execution time for each test modulo <i>time</i> kernel
+      jiffies.</dd>
+</dl>
+<p class="Pp HP"><b>-V</b><i></i><b>, --verify</b><i></i></p>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>Enable the DMU_VERIFY flag for trivial data verification.</dd>
+</dl>
+<p class="Pp HP"><b>-z</b><i></i><b>, --zerocopy</b><i></i></p>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>Enable the DMU_READ_ZC and DMU_WRITE_ZC flags, which are currently
+      unimplemented for Linux.</dd>
+</dl>
+<p class="Pp HP"><b>-O</b><i></i><b>, --nowait</b><i></i></p>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>Enable the DMU_WRITE_NOWAIT flag.</dd>
+</dl>
+<p class="Pp HP"><b>-f</b><i></i><b>, --noprefetch</b><i></i></p>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>Enable the DMU_READ_NOPF flag.</dd>
+</dl>
+<p class="Pp HP"><b>-H</b><i></i><b>, --human-readable</b><i></i></p>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>Print PASS and FAIL results explicitly and put unit suffixes on large
+      numbers.</dd>
+</dl>
+<p class="Pp HP"><b>-v</b><i></i><b>, --verbose</b><i></i></p>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>Increase output verbosity.</dd>
+</dl>
+<p class="Pp HP"><b>-?</b><i> </i><b>, --help</b><i> </i></p>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>Print the usage message.</dd>
+</dl>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="AUTHORS"><a class="permalink" href="#AUTHORS">AUTHORS</a></h1>
+<p class="Pp">The original zpios implementation was created by Cluster File
+    Systems Inc and adapted to ZFS on Linux by Brian Behlendorf
+    &lt;behlendorf1@llnl.gov&gt;.</p>
+<p class="Pp">This man page was written by Darik Horn
+    &lt;dajhorn@vanadac.com&gt;.</p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SEE_ALSO"><a class="permalink" href="#SEE_ALSO">SEE
+  ALSO</a></h1>
+<p class="Pp"><b>zpool</b>(8), <b>zfs</b>(8)</p>
+</section>
+</div>
+<table class="foot">
+  <tr>
+    <td class="foot-date">2013 FEB 28</td>
+    <td class="foot-os">ZFS on Linux</td>
+  </tr>
+</table>
+</div></section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="zhack.1.html" class="btn btn-neutral float-left" title="zhack.1" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ztest.1.html" class="btn btn-neutral float-right" title="ztest.1" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, OpenZFS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
