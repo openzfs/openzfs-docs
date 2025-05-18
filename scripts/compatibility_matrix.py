@@ -358,9 +358,8 @@ for (feature, domain), names in sorted(features.items()):
         for ver in vers:
             # custom case for OpenZFS FreeBSD https://github.com/openzfs/zfs/pull/12735
             if (feature == 'edonr' and name == openzfs_key and '.' in ver
-                    and (int(ver.split('.')[0]) <= 2
-                         or (int(ver.split('.')[0]) <= 1
-                             and int(ver.split('.')[1]) <= 1))):
+                    and not (int(ver.split('.')[0]) >= 2
+                             and int(ver.split('.')[1]) >= 2)):
                 html.write('<td class="yes">yes<sup><a href="#note_1">1</a></sup></td>')
             elif (name, ver) in names:
                 html.write('<td class="yes">yes</td>')
