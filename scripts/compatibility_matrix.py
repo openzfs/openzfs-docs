@@ -141,18 +141,27 @@ def joyent():
     return sources
 
 
+# NOTE: CVS mirror is unreliable from github actions, and netbsd didn't have
+#  new features since 2016. Let's use mirror from github and show only MAIN.
+# def netbsd():
+#     url = ('http://cvsweb.netbsd.org/bsdweb.cgi/src/external/'
+#            'cddl/osnet/dist/cmd/zpool/zpool-features.7?rev=1.1;'
+#            'content-type=text%2Fplain;only_with_tag={}')
+#     sources = {'main': url.format('MAIN')}
+#     with urlopen('https://netbsd.org/releases/') as web:
+#         tags = findall(r'href="formal-.+?/NetBSD-(.+?)\.html',
+#                        web.read().decode('utf-8', 'ignore'))
+#     tags = [(v, 'netbsd-' + v.replace('.', '-') + '-RELEASE') for v in tags]
+#     for ver, tag in tags:
+#         if int(ver.split('.')[0]) >= 9:
+#             sources[ver] = url.format(tag)
+#     return sources
+
+
 def netbsd():
-    url = ('http://cvsweb.netbsd.org/bsdweb.cgi/src/external/'
-           'cddl/osnet/dist/cmd/zpool/zpool-features.7?rev=1.1;'
-           'content-type=text%2Fplain;only_with_tag={}')
-    sources = {'main': url.format('MAIN')}
-    with urlopen('https://netbsd.org/releases/') as web:
-        tags = findall(r'href="formal-.+?/NetBSD-(.+?)\.html',
-                       web.read().decode('utf-8', 'ignore'))
-    tags = [(v, 'netbsd-' + v.replace('.', '-') + '-RELEASE') for v in tags]
-    for ver, tag in tags:
-        if int(ver.split('.')[0]) >= 9:
-            sources[ver] = url.format(tag)
+    sources = {'main': 'https://raw.githubusercontent.com/NetBSD/src/refs/'
+               'heads/trunk/external/cddl/osnet/dist/cmd/zpool/'
+               'zpool-features.7'}
     return sources
 
 
