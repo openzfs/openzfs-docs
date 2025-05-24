@@ -1,0 +1,332 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>vdevprops.7 &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
+      <script src="../../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="zfsconcepts.7" href="zfsconcepts.7.html" />
+    <link rel="prev" title="dracut.zfs.7" href="dracut.zfs.7.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Basic%20Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Man Pages</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../master/index.html">master</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.3/index.html">v2.3</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">v2.2</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../1/index.html">User Commands (1)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../4/index.html">Devices and Special Files (4)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../5/index.html">File Formats and Conventions (5)</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">Miscellaneous (7)</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="dracut.zfs.7.html">dracut.zfs.7</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">vdevprops.7</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfsconcepts.7.html">zfsconcepts.7</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfsprops.7.html">zfsprops.7</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-features.7.html">zpool-features.7</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpoolconcepts.7.html">zpoolconcepts.7</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpoolprops.7.html">zpoolprops.7</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../8/index.html">System Administration Commands (8)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.1/index.html">v2.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.0/index.html">v2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.8/index.html">v0.8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.7/index.html">v0.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.6/index.html">v0.6</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Man Pages</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">v2.2</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Miscellaneous (7)</a></li>
+      <li class="breadcrumb-item active">vdevprops.7</li>
+      <li class="wy-breadcrumbs-aside">
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/openzfs/zfs/blob/zfs-2.2.7/man/man7/vdevprops.7" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="vdevprops-7">
+<h1>vdevprops.7<a class="headerlink" href="#vdevprops-7" title="Permalink to this heading"></a></h1>
+<div class="man_container"><table class="head">
+  <tr>
+    <td class="head-ltitle">VDEVPROPS(7)</td>
+    <td class="head-vol">Miscellaneous Information Manual</td>
+    <td class="head-rtitle">VDEVPROPS(7)</td>
+  </tr>
+</table>
+<div class="manual-text">
+<section class="Sh">
+<h1 class="Sh" id="NAME"><a class="permalink" href="#NAME">NAME</a></h1>
+<p class="Pp"><code class="Nm">vdevprops</code> &#x2014; <span class="Nd">native
+    and user-defined properties of ZFS vdevs</span></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h1>
+<p class="Pp">Properties are divided into two types, native properties and
+    user-defined (or &quot;user&quot;) properties. Native properties either
+    export internal statistics or control ZFS behavior. In addition, native
+    properties are either editable or read-only. User properties have no effect
+    on ZFS behavior, but you can use them to annotate vdevs in a way that is
+    meaningful in your environment. For more information about user properties,
+    see the <a class="Sx" href="#User_Properties">User Properties</a> section,
+    below.</p>
+<section class="Ss">
+<h2 class="Ss" id="Native_Properties"><a class="permalink" href="#Native_Properties">Native
+  Properties</a></h2>
+<p class="Pp">Every vdev has a set of properties that export statistics about
+    the vdev as well as control various behaviors. Properties are not inherited
+    from top-level vdevs, with the exception of checksum_n, checksum_t, io_n,
+    io_t, slow_io_n, and slow_io_t.</p>
+<p class="Pp" id="k">The values of numeric properties can be specified using
+    human-readable suffixes (for example,
+    <a class="permalink" href="#k"><b class="Sy">k</b></a>,
+    <a class="permalink" href="#KB"><b class="Sy" id="KB">KB</b></a>,
+    <a class="permalink" href="#M"><b class="Sy" id="M">M</b></a>,
+    <a class="permalink" href="#Gb"><b class="Sy" id="Gb">Gb</b></a>, and so
+    forth, up to <a class="permalink" href="#Z"><b class="Sy" id="Z">Z</b></a>
+    for zettabyte). The following are all valid (and equal) specifications:
+    <code class="Li">1536M</code>, <code class="Li">1.5g</code>,
+    <code class="Li">1.50GB</code>.</p>
+<p class="Pp">The values of non-numeric properties are case sensitive and must
+    be lowercase.</p>
+<p class="Pp">The following native properties consist of read-only statistics
+    about the vdev. These properties can not be changed.</p>
+<dl class="Bl-tag">
+  <dt id="capacity"><a class="permalink" href="#capacity"><b class="Sy">capacity</b></a></dt>
+  <dd>Percentage of vdev space used</dd>
+  <dt id="state"><a class="permalink" href="#state"><b class="Sy">state</b></a></dt>
+  <dd>state of this vdev such as online, faulted, or offline</dd>
+  <dt id="guid"><a class="permalink" href="#guid"><b class="Sy">guid</b></a></dt>
+  <dd>globally unique id of this vdev</dd>
+  <dt id="asize"><a class="permalink" href="#asize"><b class="Sy">asize</b></a></dt>
+  <dd>The allocable size of this vdev</dd>
+  <dt id="psize"><a class="permalink" href="#psize"><b class="Sy">psize</b></a></dt>
+  <dd>The physical size of this vdev</dd>
+  <dt id="ashift"><a class="permalink" href="#ashift"><b class="Sy">ashift</b></a></dt>
+  <dd>The physical sector size of this vdev expressed as the power of two</dd>
+  <dt id="size"><a class="permalink" href="#size"><b class="Sy">size</b></a></dt>
+  <dd>The total size of this vdev</dd>
+  <dt id="free"><a class="permalink" href="#free"><b class="Sy">free</b></a></dt>
+  <dd>The amount of remaining free space on this vdev</dd>
+  <dt id="allocated"><a class="permalink" href="#allocated"><b class="Sy">allocated</b></a></dt>
+  <dd>The amount of allocated space on this vdev</dd>
+  <dt id="expandsize"><a class="permalink" href="#expandsize"><b class="Sy">expandsize</b></a></dt>
+  <dd>How much this vdev can expand by</dd>
+  <dt id="fragmentation"><a class="permalink" href="#fragmentation"><b class="Sy">fragmentation</b></a></dt>
+  <dd>Percent of fragmentation in this vdev</dd>
+  <dt id="parity"><a class="permalink" href="#parity"><b class="Sy">parity</b></a></dt>
+  <dd>The level of parity for this vdev</dd>
+  <dt id="devid"><a class="permalink" href="#devid"><b class="Sy">devid</b></a></dt>
+  <dd>The device id for this vdev</dd>
+  <dt id="physpath"><a class="permalink" href="#physpath"><b class="Sy">physpath</b></a></dt>
+  <dd>The physical path to the device</dd>
+  <dt id="encpath"><a class="permalink" href="#encpath"><b class="Sy">encpath</b></a></dt>
+  <dd>The enclosure path to the device</dd>
+  <dt id="fru"><a class="permalink" href="#fru"><b class="Sy">fru</b></a></dt>
+  <dd>Field Replacable Unit, usually a model number</dd>
+  <dt id="parent"><a class="permalink" href="#parent"><b class="Sy">parent</b></a></dt>
+  <dd>Parent of this vdev</dd>
+  <dt id="children"><a class="permalink" href="#children"><b class="Sy">children</b></a></dt>
+  <dd>Comma separated list of children of this vdev</dd>
+  <dt id="numchildren"><a class="permalink" href="#numchildren"><b class="Sy">numchildren</b></a></dt>
+  <dd>The number of children belonging to this vdev</dd>
+  <dt id="read_errors"><a class="permalink" href="#read_errors"><b class="Sy">read_errors</b></a>,
+    <a class="permalink" href="#write_errors"><b class="Sy" id="write_errors">write_errors</b></a>,
+    <a class="permalink" href="#checksum_errors"><b class="Sy" id="checksum_errors">checksum_errors</b></a>,
+    <a class="permalink" href="#initialize_errors"><b class="Sy" id="initialize_errors">initialize_errors</b></a></dt>
+  <dd>The number of errors of each type encountered by this vdev</dd>
+  <dt id="null_ops"><a class="permalink" href="#null_ops"><b class="Sy">null_ops</b></a>,
+    <a class="permalink" href="#read_ops"><b class="Sy" id="read_ops">read_ops</b></a>,
+    <a class="permalink" href="#write_ops"><b class="Sy" id="write_ops">write_ops</b></a>,
+    <a class="permalink" href="#free_ops"><b class="Sy" id="free_ops">free_ops</b></a>,
+    <a class="permalink" href="#claim_ops"><b class="Sy" id="claim_ops">claim_ops</b></a>,
+    <a class="permalink" href="#trim_ops"><b class="Sy" id="trim_ops">trim_ops</b></a></dt>
+  <dd>The number of I/O operations of each type performed by this vdev</dd>
+  <dt id="null_bytes"><a class="permalink" href="#null_bytes"><b class="Sy">null_bytes</b></a>,
+    <a class="permalink" href="#read_bytes"><b class="Sy" id="read_bytes">read_bytes</b></a>,
+    <a class="permalink" href="#write_bytes"><b class="Sy" id="write_bytes">write_bytes</b></a>,
+    <a class="permalink" href="#free_bytes"><b class="Sy" id="free_bytes">free_bytes</b></a>,
+    <a class="permalink" href="#claim_bytes"><b class="Sy" id="claim_bytes">claim_bytes</b></a>,
+    <a class="permalink" href="#trim_bytes"><b class="Sy" id="trim_bytes">trim_bytes</b></a></dt>
+  <dd>The cumulative size of all operations of each type performed by this
+    vdev</dd>
+  <dt id="removing"><a class="permalink" href="#removing"><b class="Sy">removing</b></a></dt>
+  <dd>If this device is currently being removed from the pool</dd>
+</dl>
+<p class="Pp">The following native properties can be used to change the behavior
+    of a vdev.</p>
+<dl class="Bl-tag">
+  <dt id="checksum_n"><a class="permalink" href="#checksum_n"><b class="Sy">checksum_n</b></a>,
+    <a class="permalink" href="#checksum_t"><b class="Sy" id="checksum_t">checksum_t</b></a>,
+    <a class="permalink" href="#io_n"><b class="Sy" id="io_n">io_n</b></a>,
+    <a class="permalink" href="#io_t"><b class="Sy" id="io_t">io_t</b></a>,
+    <a class="permalink" href="#slow_io_n"><b class="Sy" id="slow_io_n">slow_io_n</b></a>,
+    <a class="permalink" href="#slow_io_t"><b class="Sy" id="slow_io_t">slow_io_t</b></a></dt>
+  <dd>Tune the fault management daemon by specifying checksum/io thresholds of
+      &lt;N&gt; errors in &lt;T&gt; seconds, respectively. These properties can
+      be set on leaf and top-level vdevs. When the property is set on the leaf
+      and top-level vdev, the value of the leaf vdev will be used. If the
+      property is only set on the top-level vdev, this value will be used. The
+      value of these properties do not persist across vdev replacement. For this
+      reason, it is advisable to set the property on the top-level vdev - not on
+      the leaf vdev itself. The default values for <b class="Sy">OpenZFS on
+      Linux</b> are 10 errors in 600 seconds. For <b class="Sy">OpenZFS on
+      FreeBSD</b> defaults see <a class="Xr">zfsd(8)</a>.</dd>
+  <dt id="comment"><a class="permalink" href="#comment"><b class="Sy">comment</b></a></dt>
+  <dd>A text comment up to 8192 characters long</dd>
+  <dt id="bootsize"><a class="permalink" href="#bootsize"><b class="Sy">bootsize</b></a></dt>
+  <dd>The amount of space to reserve for the EFI system partition</dd>
+  <dt id="failfast"><a class="permalink" href="#failfast"><b class="Sy">failfast</b></a></dt>
+  <dd>If this device should propage BIO errors back to ZFS, used to disable
+      failfast.</dd>
+  <dt id="path"><a class="permalink" href="#path"><b class="Sy">path</b></a></dt>
+  <dd>The path to the device for this vdev</dd>
+  <dt id="allocating"><a class="permalink" href="#allocating"><b class="Sy">allocating</b></a></dt>
+  <dd>If this device should perform new allocations, used to disable a device
+      when it is scheduled for later removal. See
+      <a href="../8/zpool-remove.8.html" class="Xr">zpool-remove(8)</a>.</dd>
+</dl>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="User_Properties"><a class="permalink" href="#User_Properties">User
+  Properties</a></h2>
+<p class="Pp">In addition to the standard native properties, ZFS supports
+    arbitrary user properties. User properties have no effect on ZFS behavior,
+    but applications or administrators can use them to annotate vdevs.</p>
+<p class="Pp" id=".">User property names must contain a colon
+    (&quot;<b class="Sy">:</b>&quot;) character to distinguish them from native
+    properties. They may contain lowercase letters, numbers, and the following
+    punctuation characters: colon (&quot;<b class="Sy">:</b>&quot;), dash
+    (&quot;<b class="Sy">-</b>&quot;), period
+    (&quot;<a class="permalink" href="#."><b class="Sy">.</b></a>&quot;), and
+    underscore
+    (&quot;<a class="permalink" href="#_"><b class="Sy" id="_">_</b></a>&quot;).
+    The expected convention is that the property name is divided into two
+    portions such as
+    <var class="Ar">module</var>:<var class="Ar">property</var>, but this
+    namespace is not enforced by ZFS. User property names can be at most 256
+    characters, and cannot begin with a dash
+  (&quot;<b class="Sy">-</b>&quot;).</p>
+<p class="Pp">When making programmatic use of user properties, it is strongly
+    suggested to use a reversed DNS domain name for the
+    <var class="Ar">module</var> component of property names to reduce the
+    chance that two independently-developed packages use the same property name
+    for different purposes.</p>
+<p class="Pp">The values of user properties are arbitrary strings and are never
+    validated. Use the <code class="Nm">zpool</code> <code class="Cm">set</code>
+    command with a blank value to clear a user property. Property values are
+    limited to 8192 bytes.</p>
+</section>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SEE_ALSO"><a class="permalink" href="#SEE_ALSO">SEE
+  ALSO</a></h1>
+<p class="Pp"><a href="../7/zpoolprops.7.html" class="Xr">zpoolprops(7)</a>,
+  <a href="../8/zpool-set.8.html" class="Xr">zpool-set(8)</a></p>
+</section>
+</div>
+<table class="foot">
+  <tr>
+    <td class="foot-date">October 30, 2022</td>
+    <td class="foot-os">Debian</td>
+  </tr>
+</table>
+</div></section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="dracut.zfs.7.html" class="btn btn-neutral float-left" title="dracut.zfs.7" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="zfsconcepts.7.html" class="btn btn-neutral float-right" title="zfsconcepts.7" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, OpenZFS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
