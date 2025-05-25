@@ -88,10 +88,10 @@ performance degradation as partial sector writes. In some cases, the
 design of NAND-flash makes the performance degradation even worse, but
 that is beyond the scope of this description.
 
-Reporting the correct sector sizes is the responsibility the block
-device layer. This unfortunately has made proper handling of devices
-that misreport drives different across different platforms. The
-respective methods are as follows:
+Reporting the correct sector sizes is the responsibility of the block
+device layer. Since many devices misreport their sector sizes and ZFS relies
+on the block device layer for this information, each platform has developed
+different workarounds. The platform-specific methods are as follows:
 
 -  `sd.conf <http://wiki.illumos.org/display/illumos/ZFS+and+Advanced+Format+disks#ZFSandAdvancedFormatdisks-OverridingthePhysicalBlockSize>`__
    on illumos
