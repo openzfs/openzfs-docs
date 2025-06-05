@@ -213,7 +213,12 @@ Step 2: Disk Formatting
      sgdisk --zap-all $DISK
 
    If you get a message about the kernel still using the old partition table,
-   reboot and start over (except that you can skip this step).
+   you can request the kernel reload the partition information using::
+
+     partprobe $DISK
+
+   If the new partitions still don't show up, you can reboot and start over
+   (except that you can skip this step).
 
 #. Create bootloader partition(s)::
 
