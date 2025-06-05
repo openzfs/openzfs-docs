@@ -697,12 +697,26 @@ Step 5: System Configuration
 
    **Note:** If you installed `base` pattern, you need to deinstall busybox-grep to install `kernel-default` package.
 
-#. Install ZFS in the chroot environment for the new system::
+#. Install ZFS in the chroot environment for the new system
+
+   .. code-block:: text
 
      zypper install lsb-release
      zypper addrepo https://download.opensuse.org/repositories/filesystems/`lsb_release -rs`/filesystems.repo
      zypper refresh   # Refresh all repositories
      zypper install zfs zfs-kmp-default
+
+   Note that if your system uses UEFI with Secure Boot, since openSUSE Leap
+   15.2 the kernel requires all kernel modules to be signed. The ZFS kernel
+   module built in the ``filesystems`` project *is* signed, but not with the
+   official openSUSE key that was automatically registered with your system
+   when you first booted into openSUSE. In order to make sure that your system
+   trusts the ``filesystems`` signing key, make sure to install the
+   ``zfs-ueficert`` package as well::
+
+     zypper install zfs-ueficert
+
+   On the next boot, you will be prompted by the MOK to enroll the new key.
 
 #. For LUKS installs only, setup ``/etc/crypttab``::
 
