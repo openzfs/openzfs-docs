@@ -1,6 +1,14 @@
 RHEL-based distro
 =======================
 
+Important Notice Regarding Stability on RHEL-based Distros
+-----------------------------------------------------------
+
+As of May 2025, we are currently experiencing stability and build issues on this platform. 
+The kernel modules may not build on non-testing branches, and known regressions exist in 
+the 2.2.x branch on EL9.6 kernels. **We strongly advise against deploying OpenZFS in production
+environments on these platforms until these issues are resolved.**
+
 Contents
 --------
 .. toctree::
