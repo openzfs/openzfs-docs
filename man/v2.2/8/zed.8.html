@@ -1,0 +1,473 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>zed.8 &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
+      <script src="../../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="zfs-allow.8" href="zfs-allow.8.html" />
+    <link rel="prev" title="zdb.8" href="zdb.8.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Basic%20Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Man Pages</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../master/index.html">master</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.3/index.html">v2.3</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">v2.2</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../1/index.html">User Commands (1)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../4/index.html">Devices and Special Files (4)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../5/index.html">File Formats and Conventions (5)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../7/index.html">Miscellaneous (7)</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">System Administration Commands (8)</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="fsck.zfs.8.html">fsck.zfs.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mount.zfs.8.html">mount.zfs.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vdev_id.8.html">vdev_id.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zdb.8.html">zdb.8</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">zed.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-allow.8.html">zfs-allow.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-bookmark.8.html">zfs-bookmark.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-change-key.8.html">zfs-change-key.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-clone.8.html">zfs-clone.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-create.8.html">zfs-create.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-destroy.8.html">zfs-destroy.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-diff.8.html">zfs-diff.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-get.8.html">zfs-get.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-groupspace.8.html">zfs-groupspace.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-hold.8.html">zfs-hold.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-inherit.8.html">zfs-inherit.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-jail.8.html">zfs-jail.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-list.8.html">zfs-list.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-load-key.8.html">zfs-load-key.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-mount-generator.8.html">zfs-mount-generator.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-mount.8.html">zfs-mount.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-program.8.html">zfs-program.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-project.8.html">zfs-project.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-projectspace.8.html">zfs-projectspace.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-promote.8.html">zfs-promote.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-receive.8.html">zfs-receive.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-recv.8.html">zfs-recv.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-redact.8.html">zfs-redact.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-release.8.html">zfs-release.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-rename.8.html">zfs-rename.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-rollback.8.html">zfs-rollback.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-send.8.html">zfs-send.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-set.8.html">zfs-set.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-share.8.html">zfs-share.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-snapshot.8.html">zfs-snapshot.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-unallow.8.html">zfs-unallow.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-unjail.8.html">zfs-unjail.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-unload-key.8.html">zfs-unload-key.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-unmount.8.html">zfs-unmount.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-unzone.8.html">zfs-unzone.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-upgrade.8.html">zfs-upgrade.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-userspace.8.html">zfs-userspace.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-wait.8.html">zfs-wait.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-zone.8.html">zfs-zone.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs.8.html">zfs.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs_ids_to_path.8.html">zfs_ids_to_path.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs_prepare_disk.8.html">zfs_prepare_disk.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zgenhostid.8.html">zgenhostid.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zinject.8.html">zinject.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-add.8.html">zpool-add.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-attach.8.html">zpool-attach.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-checkpoint.8.html">zpool-checkpoint.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-clear.8.html">zpool-clear.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-create.8.html">zpool-create.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-destroy.8.html">zpool-destroy.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-detach.8.html">zpool-detach.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-events.8.html">zpool-events.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-export.8.html">zpool-export.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-get.8.html">zpool-get.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-history.8.html">zpool-history.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-import.8.html">zpool-import.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-initialize.8.html">zpool-initialize.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-iostat.8.html">zpool-iostat.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-labelclear.8.html">zpool-labelclear.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-list.8.html">zpool-list.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-offline.8.html">zpool-offline.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-online.8.html">zpool-online.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-reguid.8.html">zpool-reguid.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-remove.8.html">zpool-remove.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-reopen.8.html">zpool-reopen.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-replace.8.html">zpool-replace.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-resilver.8.html">zpool-resilver.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-scrub.8.html">zpool-scrub.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-set.8.html">zpool-set.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-split.8.html">zpool-split.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-status.8.html">zpool-status.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-sync.8.html">zpool-sync.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-trim.8.html">zpool-trim.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-upgrade.8.html">zpool-upgrade.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-wait.8.html">zpool-wait.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool.8.html">zpool.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool_influxdb.8.html">zpool_influxdb.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zstream.8.html">zstream.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zstreamdump.8.html">zstreamdump.8</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.1/index.html">v2.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.0/index.html">v2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.8/index.html">v0.8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.7/index.html">v0.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.6/index.html">v0.6</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Man Pages</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">v2.2</a></li>
+          <li class="breadcrumb-item"><a href="index.html">System Administration Commands (8)</a></li>
+      <li class="breadcrumb-item active">zed.8</li>
+      <li class="wy-breadcrumbs-aside">
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/openzfs/zfs/blob/zfs-2.2.7/man/man8/zed.8" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="zed-8">
+<h1>zed.8<a class="headerlink" href="#zed-8" title="Permalink to this heading"></a></h1>
+<div class="man_container"><table class="head">
+  <tr>
+    <td class="head-ltitle">ZED(8)</td>
+    <td class="head-vol">System Manager's Manual</td>
+    <td class="head-rtitle">ZED(8)</td>
+  </tr>
+</table>
+<div class="manual-text">
+<section class="Sh">
+<h1 class="Sh" id="NAME"><a class="permalink" href="#NAME">NAME</a></h1>
+<p class="Pp"><code class="Nm">ZED</code> &#x2014; <span class="Nd">ZFS Event
+    Daemon</span></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SYNOPSIS"><a class="permalink" href="#SYNOPSIS">SYNOPSIS</a></h1>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">ZED</code></td>
+    <td>[<code class="Fl">-fFhILMvVZ</code>] [<code class="Fl">-d</code>
+      <var class="Ar">zedletdir</var>] [<code class="Fl">-p</code>
+      <var class="Ar">pidfile</var>] [<code class="Fl">-P</code>
+      <var class="Ar">path</var>] [<code class="Fl">-s</code>
+      <var class="Ar">statefile</var>] [<code class="Fl">-j</code>
+      <var class="Ar">jobs</var>] [<code class="Fl">-b</code>
+      <var class="Ar">buflen</var>]</td>
+  </tr>
+</table>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h1>
+<p class="Pp">The <code class="Nm">ZED</code> (ZFS Event Daemon) monitors events
+    generated by the ZFS kernel module. When a zevent (ZFS Event) is posted, the
+    <code class="Nm">ZED</code> will run any ZEDLETs (ZFS Event Daemon Linkage
+    for Executable Tasks) that have been enabled for the corresponding zevent
+    class.</p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="OPTIONS"><a class="permalink" href="#OPTIONS">OPTIONS</a></h1>
+<dl class="Bl-tag">
+  <dt id="h"><a class="permalink" href="#h"><code class="Fl">-h</code></a></dt>
+  <dd>Display a summary of the command-line options.</dd>
+  <dt id="L"><a class="permalink" href="#L"><code class="Fl">-L</code></a></dt>
+  <dd>Display license information.</dd>
+  <dt id="V"><a class="permalink" href="#V"><code class="Fl">-V</code></a></dt>
+  <dd>Display version information.</dd>
+  <dt id="v"><a class="permalink" href="#v"><code class="Fl">-v</code></a></dt>
+  <dd>Be verbose.</dd>
+  <dt id="f"><a class="permalink" href="#f"><code class="Fl">-f</code></a></dt>
+  <dd>Force the daemon to run if at all possible, disabling security checks and
+      throwing caution to the wind. Not recommended for use in production.</dd>
+  <dt id="F"><a class="permalink" href="#F"><code class="Fl">-F</code></a></dt>
+  <dd>Don't daemonise: remain attached to the controlling terminal, log to the
+      standard I/O streams.</dd>
+  <dt id="M"><a class="permalink" href="#M"><code class="Fl">-M</code></a></dt>
+  <dd>Lock all current and future pages in the virtual memory address space.
+      This may help the daemon remain responsive when the system is under heavy
+      memory pressure.</dd>
+  <dt id="I"><a class="permalink" href="#I"><code class="Fl">-I</code></a></dt>
+  <dd>Request that the daemon idle rather than exit when the kernel modules are
+      not loaded. Processing of events will start, or resume, when the kernel
+      modules are (re)loaded. Under Linux the kernel modules cannot be unloaded
+      while the daemon is running.</dd>
+  <dt id="Z"><a class="permalink" href="#Z"><code class="Fl">-Z</code></a></dt>
+  <dd>Zero the daemon's state, thereby allowing zevents still within the kernel
+      to be reprocessed.</dd>
+  <dt id="d"><a class="permalink" href="#d"><code class="Fl">-d</code></a>
+    <var class="Ar">zedletdir</var></dt>
+  <dd>Read the enabled ZEDLETs from the specified directory.</dd>
+  <dt id="p"><a class="permalink" href="#p"><code class="Fl">-p</code></a>
+    <var class="Ar">pidfile</var></dt>
+  <dd>Write the daemon's process ID to the specified file.</dd>
+  <dt id="P"><a class="permalink" href="#P"><code class="Fl">-P</code></a>
+    <var class="Ar">path</var></dt>
+  <dd>Custom <code class="Ev">$PATH</code> for zedlets to use. Normally zedlets
+      run in a locked-down environment, with hardcoded paths to the ZFS commands
+      (<code class="Ev">$ZFS</code>, <code class="Ev">$ZPOOL</code>,
+      <code class="Ev">$ZED</code>, <code class="Ev">&#x2026;</code>), and a
+      hard-coded <code class="Ev">$PATH</code>. This is done for security
+      reasons. However, the ZFS test suite uses a custom PATH for its ZFS
+      commands, and passes it to <code class="Nm">ZED</code> with
+      <code class="Fl">-P</code>. In short, <code class="Fl">-P</code> is only
+      to be used by the ZFS test suite; never use it in production!</dd>
+  <dt id="s"><a class="permalink" href="#s"><code class="Fl">-s</code></a>
+    <var class="Ar">statefile</var></dt>
+  <dd>Write the daemon's state to the specified file.</dd>
+  <dt id="j"><a class="permalink" href="#j"><code class="Fl">-j</code></a>
+    <var class="Ar">jobs</var></dt>
+  <dd>Allow at most <var class="Ar">jobs</var> ZEDLETs to run concurrently,
+      delaying execution of new ones until they finish. Defaults to
+      <a class="permalink" href="#16"><b class="Sy" id="16">16</b></a>.</dd>
+  <dt id="b"><a class="permalink" href="#b"><code class="Fl">-b</code></a>
+    <var class="Ar">buflen</var></dt>
+  <dd>Cap kernel event buffer growth to <var class="Ar">buflen</var> entries.
+      This buffer is grown when the daemon misses an event, but results in
+      unreclaimable memory use in the kernel. A value of
+      <a class="permalink" href="#0"><b class="Sy" id="0">0</b></a> removes the
+      cap. Defaults to
+      <a class="permalink" href="#1048576"><b class="Sy" id="1048576">1048576</b></a>.</dd>
+</dl>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="ZEVENTS"><a class="permalink" href="#ZEVENTS">ZEVENTS</a></h1>
+<p class="Pp">A zevent is comprised of a list of nvpairs (name/value pairs).
+    Each zevent contains an EID (Event IDentifier) that uniquely identifies it
+    throughout the lifetime of the loaded ZFS kernel module; this EID is a
+    monotonically increasing integer that resets to 1 each time the kernel
+    module is loaded. Each zevent also contains a class string that identifies
+    the type of event. For brevity, a subclass string is defined that omits the
+    leading components of the class string. Additional nvpairs exist to provide
+    event details.</p>
+<p class="Pp">The kernel maintains a list of recent zevents that can be viewed
+    (along with their associated lists of nvpairs) using the
+    <code class="Nm">zpool</code> <code class="Cm">events</code>
+    <code class="Fl">-v</code> command.</p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="CONFIGURATION"><a class="permalink" href="#CONFIGURATION">CONFIGURATION</a></h1>
+<p class="Pp">ZEDLETs to be invoked in response to zevents are located in the
+    <i class="Em">enabled-zedlets</i> directory
+    (<var class="Ar">zedletdir</var>). These can be symlinked or copied from the
+    <a class="permalink" href="#installed-zedlets"><i class="Em" id="installed-zedlets">installed-zedlets</i></a>
+    directory; symlinks allow for automatic updates from the installed ZEDLETs,
+    whereas copies preserve local modifications. As a security measure, since
+    ownership change is a privileged operation, ZEDLETs must be owned by root.
+    They must have execute permissions for the user, but they must not have
+    write permissions for group or other. Dotfiles are ignored.</p>
+<p class="Pp" id="all">ZEDLETs are named after the zevent class for which they
+    should be invoked. In particular, a ZEDLET will be invoked for a given
+    zevent if either its class or subclass string is a prefix of its filename
+    (and is followed by a non-alphabetic character). As a special case, the
+    prefix <a class="permalink" href="#all"><b class="Sy">all</b></a> matches
+    all zevents. Multiple ZEDLETs may be invoked for a given zevent.</p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="ZEDLETS"><a class="permalink" href="#ZEDLETS">ZEDLETS</a></h1>
+<p class="Pp">ZEDLETs are executables invoked by the ZED in response to a given
+    zevent. They should be written under the presumption they can be invoked
+    concurrently, and they should use appropriate locking to access any shared
+    resources. Common variables used by ZEDLETs can be stored in the default rc
+    file which is sourced by scripts; these variables should be prefixed with
+    <a class="permalink" href="#ZED_"><b class="Sy" id="ZED_">ZED_</b></a>.</p>
+<p class="Pp">The zevent nvpairs are passed to ZEDLETs as environment variables.
+    Each nvpair name is converted to an environment variable in the following
+    manner:</p>
+<ol class="Bl-enum Bl-compact">
+  <li id="ZEVENT_">it is prefixed with
+      <a class="permalink" href="#ZEVENT_"><b class="Sy">ZEVENT_</b></a>,</li>
+  <li>it is converted to uppercase, and</li>
+  <li>each non-alphanumeric character is converted to an underscore.</li>
+</ol>
+<p class="Pp">Some additional environment variables have been defined to present
+    certain nvpair values in a more convenient form. An incomplete list of
+    zevent environment variables is as follows:</p>
+<dl class="Bl-tag Bl-compact">
+  <dt id="ZEVENT_EID"><a class="permalink" href="#ZEVENT_EID"><b class="Sy">ZEVENT_EID</b></a></dt>
+  <dd>The Event IDentifier.</dd>
+  <dt id="ZEVENT_CLASS"><a class="permalink" href="#ZEVENT_CLASS"><b class="Sy">ZEVENT_CLASS</b></a></dt>
+  <dd>The zevent class string.</dd>
+  <dt id="ZEVENT_SUBCLASS"><a class="permalink" href="#ZEVENT_SUBCLASS"><b class="Sy">ZEVENT_SUBCLASS</b></a></dt>
+  <dd>The zevent subclass string.</dd>
+  <dt id="ZEVENT_TIME"><a class="permalink" href="#ZEVENT_TIME"><b class="Sy">ZEVENT_TIME</b></a></dt>
+  <dd>The time at which the zevent was posted as &#x201C;<i class="Em">seconds
+      nanoseconds</i>&#x201D; since the Epoch.</dd>
+  <dt id="ZEVENT_TIME_SECS"><a class="permalink" href="#ZEVENT_TIME_SECS"><b class="Sy">ZEVENT_TIME_SECS</b></a></dt>
+  <dd>The <i class="Em">seconds</i> component of
+    <b class="Sy">ZEVENT_TIME</b>.</dd>
+  <dt id="ZEVENT_TIME_NSECS"><a class="permalink" href="#ZEVENT_TIME_NSECS"><b class="Sy">ZEVENT_TIME_NSECS</b></a></dt>
+  <dd>The
+      <a class="permalink" href="#nanoseconds"><i class="Em" id="nanoseconds">nanoseconds</i></a>
+      component of <b class="Sy">ZEVENT_TIME</b>.</dd>
+  <dt id="ZEVENT_TIME_STRING"><a class="permalink" href="#ZEVENT_TIME_STRING"><b class="Sy">ZEVENT_TIME_STRING</b></a></dt>
+  <dd>An almost-RFC3339-compliant string for <b class="Sy">ZEVENT_TIME</b>.</dd>
+</dl>
+<p class="Pp">Additionally, the following ZED &amp; ZFS variables are
+  defined:</p>
+<dl class="Bl-tag Bl-compact">
+  <dt id="ZED_PID"><a class="permalink" href="#ZED_PID"><b class="Sy">ZED_PID</b></a></dt>
+  <dd>The daemon's process ID.</dd>
+  <dt id="ZED_ZEDLET_DIR"><a class="permalink" href="#ZED_ZEDLET_DIR"><b class="Sy">ZED_ZEDLET_DIR</b></a></dt>
+  <dd>The daemon's current <i class="Em">enabled-zedlets</i> directory.</dd>
+  <dt id="ZFS_ALIAS"><a class="permalink" href="#ZFS_ALIAS"><b class="Sy">ZFS_ALIAS</b></a></dt>
+  <dd>The alias
+      (&#x201C;<a class="permalink" href="#name"><i class="Em" id="name">name</i></a>-<a class="permalink" href="#version"><i class="Em" id="version">version</i></a>-<a class="permalink" href="#release"><i class="Em" id="release">release</i></a>&#x201D;)
+      string of the ZFS distribution the daemon is part of.</dd>
+  <dt id="ZFS_VERSION"><a class="permalink" href="#ZFS_VERSION"><b class="Sy">ZFS_VERSION</b></a></dt>
+  <dd>The ZFS version the daemon is part of.</dd>
+  <dt id="ZFS_RELEASE"><a class="permalink" href="#ZFS_RELEASE"><b class="Sy">ZFS_RELEASE</b></a></dt>
+  <dd>The ZFS release the daemon is part of.</dd>
+</dl>
+<p class="Pp" id="ZDB">ZEDLETs may need to call other ZFS commands. The
+    installation paths of the following executables are defined as environment
+    variables: <a class="permalink" href="#ZDB"><b class="Sy">ZDB</b></a>,
+    <a class="permalink" href="#ZED"><b class="Sy" id="ZED">ZED</b></a>,
+    <a class="permalink" href="#ZFS"><b class="Sy" id="ZFS">ZFS</b></a>,
+    <a class="permalink" href="#ZINJECT"><b class="Sy" id="ZINJECT">ZINJECT</b></a>,
+    and
+    <a class="permalink" href="#ZPOOL"><b class="Sy" id="ZPOOL">ZPOOL</b></a>.
+    These variables may be overridden in the rc file.</p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="FILES"><a class="permalink" href="#FILES">FILES</a></h1>
+<dl class="Bl-tag">
+  <dt><span class="Pa">@sysconfdir@/zfs/zed.d</span></dt>
+  <dd>The default directory for enabled ZEDLETs.</dd>
+  <dt><span class="Pa">@sysconfdir@/zfs/zed.d/zed.rc</span></dt>
+  <dd>The default rc file for common variables used by ZEDLETs.</dd>
+  <dt><span class="Pa">@zfsexecdir@/zed.d</span></dt>
+  <dd>The default directory for installed ZEDLETs.</dd>
+  <dt><span class="Pa">@runstatedir@/zed.pid</span></dt>
+  <dd>The default file containing the daemon's process ID.</dd>
+  <dt><span class="Pa">@runstatedir@/zed.state</span></dt>
+  <dd>The default file containing the daemon's state.</dd>
+</dl>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SIGNALS"><a class="permalink" href="#SIGNALS">SIGNALS</a></h1>
+<dl class="Bl-tag">
+  <dt id="SIGHUP"><a class="permalink" href="#SIGHUP"><b class="Sy">SIGHUP</b></a></dt>
+  <dd>Reconfigure the daemon and rescan the directory for enabled ZEDLETs.</dd>
+  <dt id="SIGTERM"><a class="permalink" href="#SIGTERM"><b class="Sy">SIGTERM</b></a>,
+    <a class="permalink" href="#SIGINT"><b class="Sy" id="SIGINT">SIGINT</b></a></dt>
+  <dd>Terminate the daemon.</dd>
+</dl>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SEE_ALSO"><a class="permalink" href="#SEE_ALSO">SEE
+  ALSO</a></h1>
+<p class="Pp"><a href="../8/zfs.8.html" class="Xr">zfs(8)</a>, <a href="../8/zpool.8.html" class="Xr">zpool(8)</a>,
+    <a href="../8/zpool-events.8.html" class="Xr">zpool-events(8)</a></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="NOTES"><a class="permalink" href="#NOTES">NOTES</a></h1>
+<p class="Pp">The <code class="Nm">ZED</code> requires root privileges.</p>
+<p class="Pp">Do not taunt the <code class="Nm">ZED</code>.</p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="BUGS"><a class="permalink" href="#BUGS">BUGS</a></h1>
+<p class="Pp">ZEDLETs are unable to return state/status information to the
+    kernel.</p>
+<p class="Pp">Internationalization support via gettext has not been added.</p>
+</section>
+</div>
+<table class="foot">
+  <tr>
+    <td class="foot-date">May 26, 2021</td>
+    <td class="foot-os">Debian</td>
+  </tr>
+</table>
+</div></section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="zdb.8.html" class="btn btn-neutral float-left" title="zdb.8" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="zfs-allow.8.html" class="btn btn-neutral float-right" title="zfs-allow.8" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, OpenZFS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

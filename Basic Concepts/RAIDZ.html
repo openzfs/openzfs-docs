@@ -1,0 +1,198 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RAIDZ &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=b3ba4146"></script>
+      <script src="../_static/doctools.js?v=888ff710"></script>
+      <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Troubleshooting" href="Troubleshooting.html" />
+    <link rel="prev" title="Feature Flags" href="Feature%20Flags.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../index.html">
+            
+              <img src="../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Basic Concepts</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Checksums.html">Checksums and Their Use in ZFS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Feature%20Flags.html">Feature Flags</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">RAIDZ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#space-efficiency">Space efficiency</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#performance-considerations">Performance considerations</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#write">Write</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dRAID%20Howto.html">dRAID</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../man/index.html">Man Pages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Basic Concepts</a></li>
+      <li class="breadcrumb-item active">RAIDZ</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/Basic Concepts/RAIDZ.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="raidz">
+<h1>RAIDZ<a class="headerlink" href="#raidz" title="Permalink to this heading"></a></h1>
+<p>tl;dr: RAIDZ is effective for large block sizes and sequential workloads.</p>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h2>
+<p>RAIDZ is a variation on RAID-5 that allows for better distribution of parity
+and eliminates the RAID-5 “write hole” (in which data and parity become
+inconsistent after a power loss).
+Data and parity is striped across all disks within a raidz group.</p>
+<p>A raidz group can have single, double, or triple parity, meaning that the raidz
+group can sustain one, two, or three failures, respectively, without losing any
+data. The <code class="docutils literal notranslate"><span class="pre">raidz1</span></code> vdev type specifies a single-parity raidz group; the <code class="docutils literal notranslate"><span class="pre">raidz2</span></code>
+vdev type specifies a double-parity raidz group; and the <code class="docutils literal notranslate"><span class="pre">raidz3</span></code> vdev type
+specifies a triple-parity raidz group. The <code class="docutils literal notranslate"><span class="pre">raidz</span></code> vdev type is an alias for
+raidz1.</p>
+<p>A raidz group of N disks of size X with P parity disks can hold
+approximately (N-P)*X bytes and can withstand P devices failing without
+losing data. The minimum number of devices in a raidz group is one more
+than the number of parity disks. The recommended number is between 3 and 9
+to help increase performance.</p>
+</section>
+<section id="space-efficiency">
+<h2>Space efficiency<a class="headerlink" href="#space-efficiency" title="Permalink to this heading"></a></h2>
+<p>Actual used space for a block in RAIDZ is based on several points:</p>
+<ul class="simple">
+<li><p>minimal write size is disk sector size (can be set via <cite>ashift</cite> vdev parameter)</p></li>
+<li><p>stripe width in RAIDZ is dynamic, and starts with at least one data block part, or up to
+<code class="docutils literal notranslate"><span class="pre">disks</span> <span class="pre">count</span></code> minus <code class="docutils literal notranslate"><span class="pre">parity</span> <span class="pre">number</span></code> parts of data block</p></li>
+<li><p>one block of data with size of <code class="docutils literal notranslate"><span class="pre">recordsize</span></code> is
+splitted equally via <code class="docutils literal notranslate"><span class="pre">sector</span> <span class="pre">size</span></code> parts
+and written on each stripe on RAIDZ vdev</p></li>
+<li><p>each stripe of data will have a part of block</p></li>
+<li><p>in addition to data one, two or three blocks of parity should be written,
+one per disk; so, for raidz2 of 5 disks there will be 3 blocks of data and
+2 blocks of parity</p></li>
+</ul>
+<p>Due to these inputs, if <code class="docutils literal notranslate"><span class="pre">recordsize</span></code> is less or equal to sector size,
+then RAIDZ’s parity size will be effictively equal to mirror with same redundancy.
+For example, for raidz1 of 3 disks with <code class="docutils literal notranslate"><span class="pre">ashift=12</span></code> and <code class="docutils literal notranslate"><span class="pre">recordsize=4K</span></code>
+we will allocate on disk:</p>
+<ul class="simple">
+<li><p>one 4K block of data</p></li>
+<li><p>one 4K parity block</p></li>
+</ul>
+<p>and usable space ratio will be 50%, same as with double mirror.</p>
+<p>Another example for <code class="docutils literal notranslate"><span class="pre">ashift=12</span></code> and <code class="docutils literal notranslate"><span class="pre">recordsize=128K</span></code> for raidz1 of 3 disks:</p>
+<ul class="simple">
+<li><p>total stripe width is 3</p></li>
+<li><p>one stripe can have up to 2 data parts of 4K size because of 1 parity blocks</p></li>
+<li><p>we will have 128K/8k = 16 stripes with 8K of data and 4K of parity each</p></li>
+<li><p>16 stripes each with 12k, means we write 192k to store 128k</p></li>
+</ul>
+<p>so usable space ratio in this case will be 66%.</p>
+<p>The more disks RAIDZ has, the wider the stripe, the greater the space
+efficiency.</p>
+<p>You can find actual parity cost per RAIDZ size here:</p>
+<iframe src="https://docs.google.com/spreadsheets/d/1tf4qx1aMJp8Lo_R6gpT689wTjHv6CGVElrPqTA0w_ZY/pub?embed=true" height="1000px" width="100%"></iframe><p>(<a class="reference external" href="https://docs.google.com/spreadsheets/d/1tf4qx1aMJp8Lo_R6gpT689wTjHv6CGVElrPqTA0w_ZY/edit">source</a>)</p>
+</section>
+<section id="performance-considerations">
+<h2>Performance considerations<a class="headerlink" href="#performance-considerations" title="Permalink to this heading"></a></h2>
+<section id="write">
+<h3>Write<a class="headerlink" href="#write" title="Permalink to this heading"></a></h3>
+<p>A stripe spans across all drives in the array. A one block write will write the stripe part onto each disk.
+A RAIDZ vdev has a write IOPS of the slowest disk in the array in the worst case because the write operation of all stripe parts must be completed on each disk.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Feature%20Flags.html" class="btn btn-neutral float-left" title="Feature Flags" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Troubleshooting.html" class="btn btn-neutral float-right" title="Troubleshooting" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, OpenZFS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
