@@ -308,10 +308,8 @@ Metaslab Allocator
 ~~~~~~~~~~~~~~~~~~
 
 ZFS top level vdevs are divided into metaslabs from which blocks can be
-independently allocated so allow for concurrent IOs to perform
-allocations without blocking one another. At present, `there is a
-regression <https://github.com/zfsonlinux/zfs/pull/3643>`__ on the
-Linux and Mac OS X ports that causes serialization to occur.
+independently allocated to allow for concurrent IOs to perform
+allocations without blocking one another.
 
 By default, the selection of a metaslab is biased toward lower LBAs to
 improve performance of spinning disks, but this does not make sense on
