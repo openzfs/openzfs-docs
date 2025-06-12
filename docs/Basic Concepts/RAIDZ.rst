@@ -76,9 +76,9 @@ You can find actual parity cost per RAIDZ size here:
 
 .. raw:: html
 
-    <iframe src="https://docs.google.com/spreadsheets/d/1tf4qx1aMJp8Lo_R6gpT689wTjHv6CGVElrPqTA0w_ZY/pub?embed=true" height="1000px" width="100%"></iframe>
+    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vRDgvK_cjwpLZBQcneGIS2cmEExUgqUQPblUmGGVXgG1zt-2YR3INFiWMMuYnbo5bK94t1aYGbtoLCS/pubhtml?widget=true&amp;headers=false" height="1000px" width="100%"></iframe>
 
-(`source <https://docs.google.com/spreadsheets/d/1tf4qx1aMJp8Lo_R6gpT689wTjHv6CGVElrPqTA0w_ZY/edit>`__)
+(`source <https://docs.google.com/spreadsheets/d/1_CO8x03VICdiIMulDjQi9NDBd53qFpUreMQVrF1uS28/edit?usp=sharing>`__)
 
 
 Performance considerations
