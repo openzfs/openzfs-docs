@@ -1,0 +1,412 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Custom Packages &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=b3ba4146"></script>
+      <script src="../_static/doctools.js?v=888ff710"></script>
+      <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Building ZFS" href="Building%20ZFS.html" />
+    <link rel="prev" title="Developer Resources" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../index.html">
+            
+              <img src="../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Developer Resources</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Custom Packages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#rhel-centos-and-fedora">RHEL, CentOS and Fedora</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#dkms">DKMS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#kmod">kmod</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#kabi-tracking-kmod">kABI-tracking kmod</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fedora-41-secure-boot-with-kmod">Fedora 41 secure boot with kmod</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#debian-and-ubuntu">Debian and Ubuntu</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#kmod-1">kmod</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dkms-1">DKMS</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#get-the-source-code">Get the Source Code</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#released-tarball">Released Tarball</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#git-master-branch">Git Master Branch</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Building%20ZFS.html">Building ZFS</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://build.openzfs.org/tgrid?length=100&amp;branch=master&amp;category=Platforms&amp;rev_order=desc">Buildbot Status</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://build.openzfs.org/known-issues.html">Buildbot Known Issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Buildbot%20Options.html">Buildbot Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="OpenZFS%20Patches.html">OpenZFS Patches</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://openzfs.org/wiki/Developer_resources">OpenZFS Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Git%20and%20GitHub%20for%20beginners.html">Git and GitHub for beginners (ZoL edition)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Basic%20Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../man/index.html">Man Pages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Developer Resources</a></li>
+      <li class="breadcrumb-item active">Custom Packages</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/Developer Resources/Custom Packages.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="custom-packages">
+<h1>Custom Packages<a class="headerlink" href="#custom-packages" title="Permalink to this heading"></a></h1>
+<p>The following instructions assume you are building from an official
+<a class="reference external" href="https://github.com/zfsonlinux/zfs/releases/latest">release tarball</a>
+(version 0.8.0 or newer) or directly from the <a class="reference external" href="https://github.com/zfsonlinux/zfs">git
+repository</a>. Most users should not
+need to do this and should preferentially use the distribution packages.
+As a general rule the distribution packages will be more tightly
+integrated, widely tested, and better supported. However, if your
+distribution of choice doesn’t provide packages, or you’re a developer
+and want to roll your own, here’s how to do it.</p>
+<p>The first thing to be aware of is that the build system is capable of
+generating several different types of packages. Which type of package
+you choose depends on what’s supported on your platform and exactly what
+your needs are.</p>
+<ul class="simple">
+<li><p><strong>DKMS</strong> packages contain only the source code and scripts for
+rebuilding the kernel modules. When the DKMS package is installed
+kernel modules will be built for all available kernels. Additionally,
+when the kernel is upgraded new kernel modules will be automatically
+built for that kernel. This is particularly convenient for desktop
+systems which receive frequent kernel updates. The downside is that
+because the DKMS packages build the kernel modules from source a full
+development environment is required which may not be appropriate for
+large deployments.</p></li>
+<li><p><strong>kmods</strong> packages are binary kernel modules which are compiled
+against a specific version of the kernel. This means that if you
+update the kernel you must compile and install a new kmod package. If
+you don’t frequently update your kernel, or if you’re managing a
+large number of systems, then kmod packages are a good choice.</p></li>
+<li><p><strong>kABI-tracking kmod</strong> Packages are similar to standard binary kmods
+and may be used with Enterprise Linux distributions like Red Hat and
+CentOS. These distributions provide a stable kABI (Kernel Application
+Binary Interface) which allows the same binary modules to be used
+with new versions of the distribution provided kernel.</p></li>
+</ul>
+<p>By default the build system will generate user packages and both DKMS
+and kmod style kernel packages if possible. The user packages can be
+used with either set of kernel packages and do not need to be rebuilt
+when the kernel is updated. You can also streamline the build process by
+building only the DKMS or kmod packages as shown below.</p>
+<p>Be aware that when building directly from a git repository you must
+first run the <em>autogen.sh</em> script to create the <em>configure</em> script. This
+will require installing the GNU autotools packages for your
+distribution. To perform any of the builds, you must install all the
+necessary development tools and headers for your distribution.</p>
+<p>It is important to note that if the development kernel headers for the
+currently running kernel aren’t installed, the modules won’t compile
+properly.</p>
+<ul class="simple">
+<li><p><a class="reference external" href="#red-hat-centos-and-fedora">Red Hat, CentOS and Fedora</a></p></li>
+<li><p><a class="reference external" href="#debian-and-ubuntu">Debian and Ubuntu</a></p></li>
+</ul>
+<section id="rhel-centos-and-fedora">
+<h2>RHEL, CentOS and Fedora<a class="headerlink" href="#rhel-centos-and-fedora" title="Permalink to this heading"></a></h2>
+<p>Make sure that the required packages are installed to build the latest
+ZFS 2.1 release:</p>
+<ul class="simple">
+<li><p><strong>RHEL/CentOS 7</strong>:</p></li>
+</ul>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>yum<span class="w"> </span>install<span class="w"> </span>epel-release<span class="w"> </span>gcc<span class="w"> </span>make<span class="w"> </span>autoconf<span class="w"> </span>automake<span class="w"> </span>libtool<span class="w"> </span>rpm-build<span class="w"> </span>libtirpc-devel<span class="w"> </span>libblkid-devel<span class="w"> </span>libuuid-devel<span class="w"> </span>libudev-devel<span class="w"> </span>openssl-devel<span class="w"> </span>zlib-devel<span class="w"> </span>libaio-devel<span class="w"> </span>libattr-devel<span class="w"> </span>elfutils-libelf-devel<span class="w"> </span>kernel-devel-<span class="k">$(</span>uname<span class="w"> </span>-r<span class="k">)</span><span class="w"> </span>python<span class="w"> </span>python2-devel<span class="w"> </span>python-setuptools<span class="w"> </span>python-cffi<span class="w"> </span>libffi-devel<span class="w"> </span>ncompress
+sudo<span class="w"> </span>yum<span class="w"> </span>install<span class="w"> </span>--enablerepo<span class="o">=</span>epel<span class="w"> </span>dkms<span class="w"> </span>python-packaging
+</pre></div>
+</div>
+<p><strong>NOTE:</strong> RHEL/CentOS 7 is end of life. Use yum instead of dnf for install instructions below.</p>
+<ul class="simple">
+<li><p><strong>RHEL/CentOS 8</strong>:</p></li>
+</ul>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> </span>--skip-broken<span class="w"> </span>epel-release<span class="w"> </span>gcc<span class="w"> </span>make<span class="w"> </span>autoconf<span class="w"> </span>automake<span class="w"> </span>libtool<span class="w"> </span>rpm-build<span class="w"> </span>kernel-rpm-macros<span class="w"> </span>libtirpc-devel<span class="w"> </span>libblkid-devel<span class="w"> </span>libuuid-devel<span class="w"> </span>libudev-devel<span class="w"> </span>openssl-devel<span class="w"> </span>zlib-devel<span class="w"> </span>libaio-devel<span class="w"> </span>libattr-devel<span class="w"> </span>elfutils-libelf-devel<span class="w"> </span>kernel-devel-<span class="k">$(</span>uname<span class="w"> </span>-r<span class="k">)</span><span class="w"> </span>kernel-abi-stablelists-<span class="k">$(</span>uname<span class="w"> </span>-r<span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span><span class="s1">&#39;s/\.[^.]\+$//&#39;</span><span class="k">)</span><span class="w"> </span>python3<span class="w"> </span>python3-devel<span class="w"> </span>python3-setuptools<span class="w"> </span>python3-cffi<span class="w"> </span>libffi-devel<span class="w"> </span>ncompress
+sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> </span>--skip-broken<span class="w"> </span>--enablerepo<span class="o">=</span>epel<span class="w"> </span>--enablerepo<span class="o">=</span>powertools<span class="w"> </span>python3-packaging<span class="w"> </span>dkms
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>RHEL/CentOS 9</strong>:</p></li>
+</ul>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>dnf<span class="w"> </span>config-manager<span class="w"> </span>--set-enabled<span class="w"> </span>crb
+sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> </span>--skip-broken<span class="w"> </span>epel-release<span class="w"> </span>gcc<span class="w"> </span>make<span class="w"> </span>autoconf<span class="w"> </span>automake<span class="w"> </span>libtool<span class="w"> </span>rpm-build<span class="w"> </span>kernel-rpm-macros<span class="w"> </span>libtirpc-devel<span class="w"> </span>libblkid-devel<span class="w"> </span>libuuid-devel<span class="w"> </span>libudev-devel<span class="w"> </span>openssl-devel<span class="w"> </span>zlib-devel<span class="w"> </span>libaio-devel<span class="w"> </span>libattr-devel<span class="w"> </span>elfutils-libelf-devel<span class="w"> </span>kernel-devel-<span class="k">$(</span>uname<span class="w"> </span>-r<span class="k">)</span><span class="w"> </span>kernel-abi-stablelists-<span class="k">$(</span>uname<span class="w"> </span>-r<span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span><span class="s1">&#39;s/\.[^.]\+$//&#39;</span><span class="k">)</span><span class="w"> </span>python3<span class="w"> </span>python3-devel<span class="w"> </span>python3-setuptools<span class="w"> </span>python3-cffi<span class="w"> </span>libffi-devel
+sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> </span>--skip-broken<span class="w"> </span>--enablerepo<span class="o">=</span>epel<span class="w"> </span>python3-packaging<span class="w"> </span>dkms
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>Fedora 41</strong>:</p></li>
+</ul>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> </span>gcc<span class="w"> </span>make<span class="w"> </span>autoconf<span class="w"> </span>automake<span class="w"> </span>libtool<span class="w"> </span>rpm-build<span class="w"> </span>kernel-rpm-macros<span class="w"> </span>libtirpc-devel<span class="w"> </span>libblkid-devel<span class="w"> </span>libuuid-devel<span class="w"> </span>systemd-devel<span class="w"> </span>openssl-devel<span class="w"> </span>zlib-ng-compat-devel<span class="w"> </span>libaio-devel<span class="w"> </span>libattr-devel<span class="w"> </span>libffi-devel<span class="w"> </span>libunwind-devel<span class="w"> </span>kernel-devel-<span class="k">$(</span>uname<span class="w"> </span>-r<span class="k">)</span><span class="w"> </span>python3<span class="w"> </span>python3-devel<span class="w"> </span>openssl<span class="w"> </span>ncompress
+sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> </span>python3-packaging<span class="w"> </span>dkms
+</pre></div>
+</div>
+<p><a class="reference external" href="#get-the-source-code">Get the source code</a>.</p>
+<section id="dkms">
+<h3>DKMS<a class="headerlink" href="#dkms" title="Permalink to this heading"></a></h3>
+<p>Building rpm-based DKMS and user packages can be done as follows:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>zfs
+$<span class="w"> </span>./configure
+$<span class="w"> </span>make<span class="w"> </span>-j1<span class="w"> </span>rpm-utils<span class="w"> </span>rpm-dkms
+$<span class="w"> </span>sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> </span>*.<span class="k">$(</span>uname<span class="w"> </span>-m<span class="k">)</span>.rpm<span class="w"> </span>*.noarch.rpm
+</pre></div>
+</div>
+</section>
+<section id="kmod">
+<h3>kmod<a class="headerlink" href="#kmod" title="Permalink to this heading"></a></h3>
+<p>The key thing to know when building a kmod package is that a specific
+Linux kernel must be specified. At configure time the build system will
+make an educated guess as to which kernel you want to build against.
+However, if configure is unable to locate your kernel development
+headers, or you want to build against a different kernel, you must
+specify the exact path with the <em>–with-linux</em> and <em>–with-linux-obj</em>
+options.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>zfs
+$<span class="w"> </span>./configure
+$<span class="w"> </span>make<span class="w"> </span>-j1<span class="w"> </span>rpm-utils<span class="w"> </span>rpm-kmod
+$<span class="w"> </span>sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> </span>*.<span class="k">$(</span>uname<span class="w"> </span>-m<span class="k">)</span>.rpm<span class="w"> </span>*.noarch.rpm
+</pre></div>
+</div>
+<p><strong>NOTE:</strong> Fedora 41 Workstation includes the rpm package zfs-fuse
+which will prevent the installation of your own packages. Remove
+that single package before dnf install:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>sudo<span class="w"> </span>rpm<span class="w"> </span>-e<span class="w"> </span>--nodeps<span class="w"> </span>zfs-fuse
+</pre></div>
+</div>
+</section>
+<section id="kabi-tracking-kmod">
+<h3>kABI-tracking kmod<a class="headerlink" href="#kabi-tracking-kmod" title="Permalink to this heading"></a></h3>
+<p>The process for building kABI-tracking kmods is almost identical to for
+building normal kmods. However, it will only produce binaries which can
+be used by multiple kernels if the distribution supports a stable kABI.
+In order to request kABI-tracking package the <em>–with-spec=redhat</em>
+option must be passed to configure.</p>
+<p><strong>NOTE:</strong> This type of package is not available for Fedora.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>zfs
+$<span class="w"> </span>./configure<span class="w"> </span>--with-spec<span class="o">=</span>redhat
+$<span class="w"> </span>make<span class="w"> </span>-j1<span class="w"> </span>rpm-utils<span class="w"> </span>rpm-kmod
+$<span class="w"> </span>sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> </span>*.<span class="k">$(</span>uname<span class="w"> </span>-m<span class="k">)</span>.rpm<span class="w"> </span>*.noarch.rpm
+</pre></div>
+</div>
+</section>
+<section id="fedora-41-secure-boot-with-kmod">
+<h3>Fedora 41 secure boot with kmod<a class="headerlink" href="#fedora-41-secure-boot-with-kmod" title="Permalink to this heading"></a></h3>
+<p>The zfs kernel module will fail to load on modern computers that use
+UEFI and secure boot:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo modprobe zfs
+modprobe: ERROR: could not insert &#39;zfs&#39;: Key was rejected by service
+</pre></div>
+</div>
+<p>Either disable secure boot or create a custom machine owner key (MOK)
+<strong>once</strong> and manually sign your current and future modules using that key:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>sudo<span class="w"> </span>mkdir<span class="w"> </span>/etc/pki/mok
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>/etc/pki/mok
+$<span class="w"> </span>sudo<span class="w"> </span>openssl<span class="w"> </span>req<span class="w"> </span>-new<span class="w"> </span>-x509<span class="w"> </span>-newkey<span class="w"> </span>rsa:2048<span class="w"> </span>-keyout<span class="w"> </span>LOCALMOK.priv<span class="w"> </span>-outform<span class="w"> </span>DER<span class="w"> </span>-out<span class="w"> </span>LOCALMOK.der<span class="w"> </span>-nodes<span class="w"> </span>-days<span class="w"> </span><span class="m">36500</span><span class="w"> </span>-subj<span class="w"> </span><span class="s2">&quot;/CN=LOCALMOK/&quot;</span>
+$<span class="w"> </span>sudo<span class="w"> </span>mokutil<span class="w"> </span>--import<span class="w"> </span>LOCALMOK.der
+</pre></div>
+</div>
+<p>Mokutil asks for a password that you have to create and remember,
+then reboot your machine and UEFI will ask to import your key:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Select</span> <span class="s2">&quot;Enroll MOK&quot;</span><span class="p">,</span> <span class="s2">&quot;Continue&quot;</span><span class="p">,</span> <span class="s2">&quot;Yes&quot;</span><span class="p">,</span> <span class="n">enter</span> <span class="n">mokutil</span><span class="s1">&#39;s password, &quot;Reboot&quot;</span>
+</pre></div>
+</div>
+<p>This MOK can then be used to manually sign your zfs kernel modules:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rpm -ql kmod-zfs-$(uname -r) | grep .ko
+/lib/modules/6.11.8-300.fc41.x86_64/extra/zfs/spl.ko
+/lib/modules/6.11.8-300.fc41.x86_64/extra/zfs/zfs.ko
+</pre></div>
+</div>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>sudo<span class="w"> </span>/usr/src/kernels/<span class="k">$(</span>uname<span class="w"> </span>-r<span class="k">)</span>/scripts/sign-file<span class="w"> </span>sha256<span class="w"> </span>/etc/pki/mok/LOCALMOK.priv<span class="w"> </span>/etc/pki/mok/LOCALMOK.der<span class="w"> </span>/lib/modules/<span class="k">$(</span>uname<span class="w"> </span>-r<span class="k">)</span>/extra/zfs/spl.ko
+$<span class="w"> </span>sudo<span class="w"> </span>/usr/src/kernels/<span class="k">$(</span>uname<span class="w"> </span>-r<span class="k">)</span>/scripts/sign-file<span class="w"> </span>sha256<span class="w"> </span>/etc/pki/mok/LOCALMOK.priv<span class="w"> </span>/etc/pki/mok/LOCALMOK.der<span class="w"> </span>/lib/modules/<span class="k">$(</span>uname<span class="w"> </span>-r<span class="k">)</span>/extra/zfs/zfs.ko
+</pre></div>
+</div>
+<p>Load the module and verify it is active:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo modprobe zfs
+
+$ lsmod | grep zfs
+zfs                  6930432  0
+spl                   155648  1 zfs
+</pre></div>
+</div>
+</section>
+</section>
+<section id="debian-and-ubuntu">
+<h2>Debian and Ubuntu<a class="headerlink" href="#debian-and-ubuntu" title="Permalink to this heading"></a></h2>
+<p>Make sure that the required packages are installed:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>build-essential<span class="w"> </span>autoconf<span class="w"> </span>automake<span class="w"> </span>libtool<span class="w"> </span>gawk<span class="w"> </span>alien<span class="w"> </span>fakeroot<span class="w"> </span>dkms<span class="w"> </span>libblkid-dev<span class="w"> </span>uuid-dev<span class="w"> </span>libudev-dev<span class="w"> </span>libssl-dev<span class="w"> </span>zlib1g-dev<span class="w"> </span>libaio-dev<span class="w"> </span>libattr1-dev<span class="w"> </span>libelf-dev<span class="w"> </span>linux-headers-generic<span class="w"> </span>python3<span class="w"> </span>python3-dev<span class="w"> </span>python3-setuptools<span class="w"> </span>python3-cffi<span class="w"> </span>libffi-dev<span class="w"> </span>python3-packaging<span class="w"> </span>debhelper-compat<span class="w"> </span>dh-python<span class="w"> </span>po-debconf<span class="w"> </span>python3-all-dev<span class="w"> </span>python3-sphinx<span class="w"> </span>libpam0g-dev
+</pre></div>
+</div>
+<p><a class="reference external" href="#get-the-source-code">Get the source code</a>.</p>
+<section id="kmod-1">
+<span id="id1"></span><h3>kmod<a class="headerlink" href="#kmod-1" title="Permalink to this heading"></a></h3>
+<p>The key thing to know when building a kmod package is that a specific
+Linux kernel must be specified. At configure time the build system will
+make an educated guess as to which kernel you want to build against.
+However, if configure is unable to locate your kernel development
+headers, or you want to build against a different kernel, you must
+specify the exact path with the <em>–with-linux</em> and <em>–with-linux-obj</em>
+options.</p>
+<p>To build RPM converted Debian packages:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>zfs
+$<span class="w"> </span>./configure<span class="w"> </span>--enable-systemd
+$<span class="w"> </span>make<span class="w"> </span>-j1<span class="w"> </span>deb-utils<span class="w"> </span>deb-kmod
+$<span class="w"> </span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>--fix-missing<span class="w"> </span>./*.deb
+</pre></div>
+</div>
+<p>Starting from openzfs-2.2 release, native Debian packages can be built
+as follows:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>zfs
+$<span class="w"> </span>./configure
+$<span class="w"> </span>make<span class="w"> </span>native-deb-utils<span class="w"> </span>native-deb-kmod
+$<span class="w"> </span>rm<span class="w"> </span>../openzfs-zfs-dkms_*.deb
+$<span class="w"> </span>rm<span class="w"> </span>../openzfs-zfs-dracut_*.deb<span class="w">  </span><span class="c1"># deb-based systems usually use initramfs</span>
+$<span class="w"> </span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>--fix-missing<span class="w"> </span>../*.deb
+</pre></div>
+</div>
+<p>Native Debian packages build with pre-configured paths for Debian and
+Ubuntu. It’s best not to override the paths during configure.
+<code class="docutils literal notranslate"><span class="pre">KVERS</span></code>, <code class="docutils literal notranslate"><span class="pre">KSRC</span></code> and <code class="docutils literal notranslate"><span class="pre">KOBJ</span></code> environment variables can be exported
+to specify the kernel installed in non-default location.</p>
+</section>
+<section id="dkms-1">
+<span id="id2"></span><h3>DKMS<a class="headerlink" href="#dkms-1" title="Permalink to this heading"></a></h3>
+<p>Building RPM converted deb-based DKMS and user packages can be done as
+follows:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>zfs
+$<span class="w"> </span>./configure<span class="w"> </span>--enable-systemd
+$<span class="w"> </span>make<span class="w"> </span>-j1<span class="w"> </span>deb-utils<span class="w"> </span>deb-dkms
+$<span class="w"> </span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>--fix-missing<span class="w"> </span>./*.deb
+</pre></div>
+</div>
+<p>Starting from openzfs-2.2 release, native deb-based DKMS and user
+packages can be built as follows:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>dh-dkms
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>zfs
+$<span class="w"> </span>./configure
+$<span class="w"> </span>make<span class="w"> </span>native-deb-utils
+$<span class="w"> </span>rm<span class="w"> </span>../openzfs-zfs-dracut_*.deb<span class="w">  </span><span class="c1"># deb-based systems usually use initramfs</span>
+$<span class="w"> </span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>--fix-missing<span class="w"> </span>../*.deb
+</pre></div>
+</div>
+</section>
+</section>
+<section id="get-the-source-code">
+<h2>Get the Source Code<a class="headerlink" href="#get-the-source-code" title="Permalink to this heading"></a></h2>
+<section id="released-tarball">
+<h3>Released Tarball<a class="headerlink" href="#released-tarball" title="Permalink to this heading"></a></h3>
+<p>The released tarball contains the latest fully tested and released
+version of ZFS. This is the preferred source code location for use in
+production systems. If you want to use the official released tarballs,
+then use the following commands to fetch and prepare the source.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>wget<span class="w"> </span>http://archive.zfsonlinux.org/downloads/zfsonlinux/zfs/zfs-x.y.z.tar.gz
+$<span class="w"> </span>tar<span class="w"> </span>-xzf<span class="w"> </span>zfs-x.y.z.tar.gz
+</pre></div>
+</div>
+</section>
+<section id="git-master-branch">
+<h3>Git Master Branch<a class="headerlink" href="#git-master-branch" title="Permalink to this heading"></a></h3>
+<p>The Git <em>master</em> branch contains the latest version of the software, and
+will probably contain fixes that, for some reason, weren’t included in
+the released tarball. This is the preferred source code location for
+developers who intend to modify ZFS. If you would like to use the git
+version, you can clone it from Github and prepare the source like this.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/zfsonlinux/zfs.git
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>zfs
+$<span class="w"> </span>./autogen.sh
+</pre></div>
+</div>
+<p>Once the source has been prepared you’ll need to decide what kind of
+packages you’re building and jump the to appropriate section above. Note
+that not all package types are supported for all platforms.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Developer Resources" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Building%20ZFS.html" class="btn btn-neutral float-right" title="Building ZFS" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, OpenZFS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
