@@ -1,0 +1,1328 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>zfs-module-parameters.5 &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
+      <script src="../../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="zpool-features.5" href="zpool-features.5.html" />
+    <link rel="prev" title="zfs-events.5" href="zfs-events.5.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Basic%20Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Man Pages</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../master/index.html">master</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.3/index.html">v2.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.2/index.html">v2.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.1/index.html">v2.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.0/index.html">v2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.8/index.html">v0.8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.7/index.html">v0.7</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">v0.6</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../1/index.html">User Commands (1)</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">File Formats and Conventions (5)</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="vdev_id.conf.5.html">vdev_id.conf.5</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-events.5.html">zfs-events.5</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">zfs-module-parameters.5</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-features.5.html">zpool-features.5</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../8/index.html">System Administration Commands (8)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Man Pages</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">v0.6</a></li>
+          <li class="breadcrumb-item"><a href="index.html">File Formats and Conventions (5)</a></li>
+      <li class="breadcrumb-item active">zfs-module-parameters.5</li>
+      <li class="wy-breadcrumbs-aside">
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/openzfs/zfs/blob/zfs-0.6.5.11/man/man5/zfs-module-parameters.5" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="zfs-module-parameters-5">
+<h1>zfs-module-parameters.5<a class="headerlink" href="#zfs-module-parameters-5" title="Permalink to this heading"></a></h1>
+<div class="man_container"><table class="head">
+  <tr>
+    <td class="head-ltitle">ZFS-MODULE-PARAMETERS(5)</td>
+    <td class="head-vol">File Formats Manual</td>
+    <td class="head-rtitle">ZFS-MODULE-PARAMETERS(5)</td>
+  </tr>
+</table>
+<div class="manual-text">
+<section class="Sh">
+<h1 class="Sh" id="NAME"><a class="permalink" href="#NAME">NAME</a></h1>
+<p class="Pp">zfs-module-parameters - ZFS module parameters</p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h1>
+<p class="Pp">Description of the different parameters to the ZFS module.</p>
+<p class="Pp"></p>
+<section class="Ss">
+<h2 class="Ss" id="Module_parameters"><a class="permalink" href="#Module_parameters">Module
+  parameters</a></h2>
+<p class="Pp"></p>
+<p class="Pp"><b>ignore_hole_birth</b> (int)</p>
+<div class="Bd-indent">When set, the hole_birth optimization will not be used,
+  and all holes will always be sent on zfs send. Useful if you suspect your
+  datasets are affected by a bug in hole_birth.
+<p class="Pp">Use <b>1</b> (default) for on and <b>0</b> for off.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>l2arc_feed_again</b> (int)</p>
+<div class="Bd-indent">Turbo L2ARC warmup
+<p class="Pp">Use <b>1</b> for yes (default) and <b>0</b> to disable.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>l2arc_feed_min_ms</b> (ulong)</p>
+<div class="Bd-indent">Min feed interval in milliseconds
+<p class="Pp">Default value: <b>200</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>l2arc_feed_secs</b> (ulong)</p>
+<div class="Bd-indent">Seconds between L2ARC writing
+<p class="Pp">Default value: <b>1</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>l2arc_headroom</b> (ulong)</p>
+<div class="Bd-indent">Number of max device writes to precache
+<p class="Pp">Default value: <b>2</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>l2arc_headroom_boost</b> (ulong)</p>
+<div class="Bd-indent">Compressed l2arc_headroom multiplier
+<p class="Pp">Default value: <b>200</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>l2arc_nocompress</b> (int)</p>
+<div class="Bd-indent">Skip compressing L2ARC buffers
+<p class="Pp">Use <b>1</b> for yes and <b>0</b> for no (default).</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>l2arc_noprefetch</b> (int)</p>
+<div class="Bd-indent">Skip caching prefetched buffers
+<p class="Pp">Use <b>1</b> for yes (default) and <b>0</b> to disable.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>l2arc_norw</b> (int)</p>
+<div class="Bd-indent">No reads during writes
+<p class="Pp">Use <b>1</b> for yes and <b>0</b> for no (default).</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>l2arc_write_boost</b> (ulong)</p>
+<div class="Bd-indent">Extra write bytes during device warmup
+<p class="Pp">Default value: <b>8,388,608</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>l2arc_write_max</b> (ulong)</p>
+<div class="Bd-indent">Max write bytes per interval
+<p class="Pp">Default value: <b>8,388,608</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>metaslab_aliquot</b> (ulong)</p>
+<div class="Bd-indent">Metaslab granularity, in bytes. This is roughly similar
+  to what would be referred to as the &quot;stripe size&quot; in traditional
+  RAID arrays. In normal operation, ZFS will try to write this amount of data to
+  a top-level vdev before moving on to the next one.
+<p class="Pp">Default value: <b>524,288</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>metaslab_bias_enabled</b> (int)</p>
+<div class="Bd-indent">Enable metaslab group biasing based on its vdev's over-
+  or under-utilization relative to the pool.
+<p class="Pp">Use <b>1</b> for yes (default) and <b>0</b> for no.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>metaslab_debug_load</b> (int)</p>
+<div class="Bd-indent">Load all metaslabs during pool import.
+<p class="Pp">Use <b>1</b> for yes and <b>0</b> for no (default).</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>metaslab_debug_unload</b> (int)</p>
+<div class="Bd-indent">Prevent metaslabs from being unloaded.
+<p class="Pp">Use <b>1</b> for yes and <b>0</b> for no (default).</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>metaslab_fragmentation_factor_enabled</b> (int)</p>
+<div class="Bd-indent">Enable use of the fragmentation metric in computing
+  metaslab weights.
+<p class="Pp">Use <b>1</b> for yes (default) and <b>0</b> for no.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>metaslabs_per_vdev</b> (int)</p>
+<div class="Bd-indent">When a vdev is added, it will be divided into
+  approximately (but no more than) this number of metaslabs.
+<p class="Pp">Default value: <b>200</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>metaslab_preload_enabled</b> (int)</p>
+<div class="Bd-indent">Enable metaslab group preloading.
+<p class="Pp">Use <b>1</b> for yes (default) and <b>0</b> for no.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>metaslab_lba_weighting_enabled</b> (int)</p>
+<div class="Bd-indent">Give more weight to metaslabs with lower LBAs, assuming
+  they have greater bandwidth as is typically the case on a modern constant
+  angular velocity disk drive.
+<p class="Pp">Use <b>1</b> for yes (default) and <b>0</b> for no.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>spa_config_path</b> (charp)</p>
+<div class="Bd-indent">SPA config file
+<p class="Pp">Default value: <b>/etc/zfs/zpool.cache</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>spa_asize_inflation</b> (int)</p>
+<div class="Bd-indent">Multiplication factor used to estimate actual disk
+  consumption from the size of data being written. The default value is a worst
+  case estimate, but lower values may be valid for a given pool depending on its
+  configuration. Pool administrators who understand the factors involved may
+  wish to specify a more realistic inflation factor, particularly if they
+  operate close to quota or capacity limits.
+<p class="Pp">Default value: 24</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>spa_load_verify_data</b> (int)</p>
+<div class="Bd-indent">Whether to traverse data blocks during an &quot;extreme
+  rewind&quot; (<b>-X</b>) import. Use 0 to disable and 1 to enable.
+<p class="Pp">An extreme rewind import normally performs a full traversal of all
+    blocks in the pool for verification. If this parameter is set to 0, the
+    traversal skips non-metadata blocks. It can be toggled once the import has
+    started to stop or start the traversal of non-metadata blocks.</p>
+<p class="Pp">Default value: 1</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>spa_load_verify_metadata</b> (int)</p>
+<div class="Bd-indent">Whether to traverse blocks during an &quot;extreme
+  rewind&quot; (<b>-X</b>) pool import. Use 0 to disable and 1 to enable.
+<p class="Pp">An extreme rewind import normally performs a full traversal of all
+    blocks in the pool for verification. If this parameter is set to 1, the
+    traversal is not performed. It can be toggled once the import has started to
+    stop or start the traversal.</p>
+<p class="Pp">Default value: 1</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>spa_load_verify_maxinflight</b> (int)</p>
+<div class="Bd-indent">Maximum concurrent I/Os during the traversal performed
+  during an &quot;extreme rewind&quot; (<b>-X</b>) pool import.
+<p class="Pp">Default value: 10000</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>spa_slop_shift</b> (int)</p>
+<div class="Bd-indent">Normally, we don't allow the last 3.2%
+  (1/(2^spa_slop_shift)) of space in the pool to be consumed. This ensures that
+  we don't run the pool completely out of space, due to unaccounted changes
+  (e.g. to the MOS). It also limits the worst-case time to allocate space. If we
+  have less than this amount of free space, most ZPL operations (e.g. write,
+  create) will return ENOSPC.
+<p class="Pp">Default value: 5</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfetch_array_rd_sz</b> (ulong)</p>
+<div class="Bd-indent">If prefetching is enabled, disable prefetching for reads
+  larger than this size.
+<p class="Pp">Default value: <b>1,048,576</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfetch_block_cap</b> (uint)</p>
+<div class="Bd-indent">Max number of blocks to prefetch at a time
+<p class="Pp">Default value: <b>256</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfetch_max_streams</b> (uint)</p>
+<div class="Bd-indent">Max number of streams per zfetch (prefetch streams per
+  file).
+<p class="Pp">Default value: <b>8</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfetch_min_sec_reap</b> (uint)</p>
+<div class="Bd-indent">Min time before an active prefetch stream can be
+  reclaimed
+<p class="Pp">Default value: <b>2</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_arc_average_blocksize</b> (int)</p>
+<div class="Bd-indent">The ARC's buffer hash table is sized based on the
+  assumption of an average block size of <b>zfs_arc_average_blocksize</b>
+  (default 8K). This works out to roughly 1MB of hash table per 1GB of physical
+  memory with 8-byte pointers. For configurations with a known larger average
+  block size this value can be increased to reduce the memory footprint.
+<p class="Pp"></p>
+<p class="Pp">Default value: <b>8192</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_arc_evict_batch_limit</b> (int)</p>
+<div class="Bd-indent">Number ARC headers to evict per sub-list before
+  proceeding to another sub-list. This batch-style operation prevents entire
+  sub-lists from being evicted at once but comes at a cost of additional
+  unlocking and locking.
+<p class="Pp">Default value: <b>10</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_arc_grow_retry</b> (int)</p>
+<div class="Bd-indent">Seconds before growing arc size
+<p class="Pp">Default value: <b>5</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_arc_lotsfree_percent</b> (int)</p>
+<div class="Bd-indent">Throttle I/O when free system memory drops below this
+  percentage of total system memory. Setting this value to 0 will disable the
+  throttle.
+<p class="Pp">Default value: <b>10</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_arc_max</b> (ulong)</p>
+<div class="Bd-indent">Max arc size
+<p class="Pp">Default value: <b>0</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_arc_meta_limit</b> (ulong)</p>
+<div class="Bd-indent">The maximum allowed size in bytes that meta data buffers
+  are allowed to consume in the ARC. When this limit is reached meta data
+  buffers will be reclaimed even if the overall arc_c_max has not been reached.
+  This value defaults to 0 which indicates that 3/4 of the ARC may be used for
+  meta data.
+<p class="Pp">Default value: <b>0</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_arc_meta_min</b> (ulong)</p>
+<div class="Bd-indent">The minimum allowed size in bytes that meta data buffers
+  may consume in the ARC. This value defaults to 0 which disables a floor on the
+  amount of the ARC devoted meta data.
+<p class="Pp">Default value: <b>0</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_arc_meta_prune</b> (int)</p>
+<div class="Bd-indent">The number of dentries and inodes to be scanned looking
+  for entries which can be dropped. This may be required when the ARC reaches
+  the <b>zfs_arc_meta_limit</b> because dentries and inodes can pin buffers in
+  the ARC. Increasing this value will cause to dentry and inode caches to be
+  pruned more aggressively. Setting this value to 0 will disable pruning the
+  inode and dentry caches.
+<p class="Pp">Default value: <b>10,000</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_arc_meta_adjust_restarts</b> (ulong)</p>
+<div class="Bd-indent">The number of restart passes to make while scanning the
+  ARC attempting the free buffers in order to stay below the
+  <b>zfs_arc_meta_limit</b>. This value should not need to be tuned but is
+  available to facilitate performance analysis.
+<p class="Pp">Default value: <b>4096</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_arc_min</b> (ulong)</p>
+<div class="Bd-indent">Min arc size
+<p class="Pp">Default value: <b>100</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_arc_min_prefetch_lifespan</b> (int)</p>
+<div class="Bd-indent">Min life of prefetch block
+<p class="Pp">Default value: <b>100</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_arc_num_sublists_per_state</b> (int)</p>
+<div class="Bd-indent">To allow more fine-grained locking, each ARC state
+  contains a series of lists for both data and meta data objects. Locking is
+  performed at the level of these &quot;sub-lists&quot;. This parameters
+  controls the number of sub-lists per ARC state.
+<p class="Pp">Default value: 1 or the number of on-online CPUs, whichever is
+    greater</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_arc_overflow_shift</b> (int)</p>
+<div class="Bd-indent">The ARC size is considered to be overflowing if it
+  exceeds the current ARC target size (arc_c) by a threshold determined by this
+  parameter. The threshold is calculated as a fraction of arc_c using the
+  formula &quot;arc_c &gt;&gt; <b>zfs_arc_overflow_shift</b>&quot;.
+<p class="Pp">The default value of 8 causes the ARC to be considered to be
+    overflowing if it exceeds the target size by 1/256th (0.3%) of the target
+    size.</p>
+<p class="Pp">When the ARC is overflowing, new buffer allocations are stalled
+    until the reclaim thread catches up and the overflow condition no longer
+    exists.</p>
+<p class="Pp">Default value: <b>8</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_arc_p_min_shift</b> (int)</p>
+<div class="Bd-indent">arc_c shift to calc min/max arc_p
+<p class="Pp">Default value: <b>4</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_arc_p_aggressive_disable</b> (int)</p>
+<div class="Bd-indent">Disable aggressive arc_p growth
+<p class="Pp">Use <b>1</b> for yes (default) and <b>0</b> to disable.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_arc_p_dampener_disable</b> (int)</p>
+<div class="Bd-indent">Disable arc_p adapt dampener
+<p class="Pp">Use <b>1</b> for yes (default) and <b>0</b> to disable.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_arc_shrink_shift</b> (int)</p>
+<div class="Bd-indent">log2(fraction of arc to reclaim)
+<p class="Pp">Default value: <b>5</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_arc_sys_free</b> (ulong)</p>
+<div class="Bd-indent">The target number of bytes the ARC should leave as free
+  memory on the system. Defaults to the larger of 1/64 of physical memory or
+  512K. Setting this option to a non-zero value will override the default.
+<p class="Pp">Default value: <b>0</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_autoimport_disable</b> (int)</p>
+<div class="Bd-indent">Disable pool import at module load by ignoring the cache
+  file (typically <b>/etc/zfs/zpool.cache</b>).
+<p class="Pp">Use <b>1</b> for yes (default) and <b>0</b> for no.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_dbgmsg_enable</b> (int)</p>
+<div class="Bd-indent">Internally ZFS keeps a small log to facilitate debugging.
+  By default the log is disabled, to enable it set this option to 1. The
+  contents of the log can be accessed by reading the /proc/spl/kstat/zfs/dbgmsg
+  file. Writing 0 to this proc file clears the log.
+<p class="Pp">Default value: <b>0</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_dbgmsg_maxsize</b> (int)</p>
+<div class="Bd-indent">The maximum size in bytes of the internal ZFS debug log.
+<p class="Pp">Default value: <b>4M</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_dbuf_state_index</b> (int)</p>
+<div class="Bd-indent">Calculate arc header index
+<p class="Pp">Default value: <b>0</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_deadman_enabled</b> (int)</p>
+<div class="Bd-indent">Enable deadman timer
+<p class="Pp">Use <b>1</b> for yes (default) and <b>0</b> to disable.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_deadman_synctime_ms</b> (ulong)</p>
+<div class="Bd-indent">Expiration time in milliseconds. This value has two
+  meanings. First it is used to determine when the spa_deadman() logic should
+  fire. By default the spa_deadman() will fire if spa_sync() has not completed
+  in 1000 seconds. Secondly, the value determines if an I/O is considered
+  &quot;hung&quot;. Any I/O that has not completed in zfs_deadman_synctime_ms is
+  considered &quot;hung&quot; resulting in a zevent being logged.
+<p class="Pp">Default value: <b>1,000,000</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_dedup_prefetch</b> (int)</p>
+<div class="Bd-indent">Enable prefetching dedup-ed blks
+<p class="Pp">Use <b>1</b> for yes and <b>0</b> to disable (default).</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_delay_min_dirty_percent</b> (int)</p>
+<div class="Bd-indent">Start to delay each transaction once there is this amount
+  of dirty data, expressed as a percentage of <b>zfs_dirty_data_max</b>. This
+  value should be &gt;= zfs_vdev_async_write_active_max_dirty_percent. See the
+  section &quot;ZFS TRANSACTION DELAY&quot;.
+<p class="Pp">Default value: <b>60</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_delay_scale</b> (int)</p>
+<div class="Bd-indent">This controls how quickly the transaction delay
+  approaches infinity. Larger values cause longer delays for a given amount of
+  dirty data.
+<p class="Pp">For the smoothest delay, this value should be about 1 billion
+    divided by the maximum number of operations per second. This will smoothly
+    handle between 10x and 1/10th this number.</p>
+<p class="Pp">See the section &quot;ZFS TRANSACTION DELAY&quot;.</p>
+<p class="Pp">Note: <b>zfs_delay_scale</b> * <b>zfs_dirty_data_max</b> must be
+    &lt; 2^64.</p>
+<p class="Pp">Default value: <b>500,000</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_dirty_data_max</b> (int)</p>
+<div class="Bd-indent">Determines the dirty space limit in bytes. Once this
+  limit is exceeded, new writes are halted until space frees up. This parameter
+  takes precedence over <b>zfs_dirty_data_max_percent</b>. See the section
+  &quot;ZFS TRANSACTION DELAY&quot;.
+<p class="Pp">Default value: 10 percent of all memory, capped at
+    <b>zfs_dirty_data_max_max</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_dirty_data_max_max</b> (int)</p>
+<div class="Bd-indent">Maximum allowable value of <b>zfs_dirty_data_max</b>,
+  expressed in bytes. This limit is only enforced at module load time, and will
+  be ignored if <b>zfs_dirty_data_max</b> is later changed. This parameter takes
+  precedence over <b>zfs_dirty_data_max_max_percent</b>. See the section
+  &quot;ZFS TRANSACTION DELAY&quot;.
+<p class="Pp">Default value: 25% of physical RAM.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_dirty_data_max_max_percent</b> (int)</p>
+<div class="Bd-indent">Maximum allowable value of <b>zfs_dirty_data_max</b>,
+  expressed as a percentage of physical RAM. This limit is only enforced at
+  module load time, and will be ignored if <b>zfs_dirty_data_max</b> is later
+  changed. The parameter <b>zfs_dirty_data_max_max</b> takes precedence over
+  this one. See the section &quot;ZFS TRANSACTION DELAY&quot;.
+<p class="Pp">Default value: 25</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_dirty_data_max_percent</b> (int)</p>
+<div class="Bd-indent">Determines the dirty space limit, expressed as a
+  percentage of all memory. Once this limit is exceeded, new writes are halted
+  until space frees up. The parameter <b>zfs_dirty_data_max</b> takes precedence
+  over this one. See the section &quot;ZFS TRANSACTION DELAY&quot;.
+<p class="Pp">Default value: 10%, subject to <b>zfs_dirty_data_max_max</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_dirty_data_sync</b> (int)</p>
+<div class="Bd-indent">Start syncing out a transaction group if there is at
+  least this much dirty data.
+<p class="Pp">Default value: <b>67,108,864</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_free_max_blocks</b> (ulong)</p>
+<div class="Bd-indent">Maximum number of blocks freed in a single txg.
+<p class="Pp">Default value: <b>100,000</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_vdev_async_read_max_active</b> (int)</p>
+<div class="Bd-indent">Maxium asynchronous read I/Os active to each device. See
+  the section &quot;ZFS I/O SCHEDULER&quot;.
+<p class="Pp">Default value: <b>3</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_vdev_async_read_min_active</b> (int)</p>
+<div class="Bd-indent">Minimum asynchronous read I/Os active to each device. See
+  the section &quot;ZFS I/O SCHEDULER&quot;.
+<p class="Pp">Default value: <b>1</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_vdev_async_write_active_max_dirty_percent</b> (int)</p>
+<div class="Bd-indent">When the pool has more than
+  <b>zfs_vdev_async_write_active_max_dirty_percent</b> dirty data, use
+  <b>zfs_vdev_async_write_max_active</b> to limit active async writes. If the
+  dirty data is between min and max, the active I/O limit is linearly
+  interpolated. See the section &quot;ZFS I/O SCHEDULER&quot;.
+<p class="Pp">Default value: <b>60</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_vdev_async_write_active_min_dirty_percent</b> (int)</p>
+<div class="Bd-indent">When the pool has less than
+  <b>zfs_vdev_async_write_active_min_dirty_percent</b> dirty data, use
+  <b>zfs_vdev_async_write_min_active</b> to limit active async writes. If the
+  dirty data is between min and max, the active I/O limit is linearly
+  interpolated. See the section &quot;ZFS I/O SCHEDULER&quot;.
+<p class="Pp">Default value: <b>30</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_vdev_async_write_max_active</b> (int)</p>
+<div class="Bd-indent">Maxium asynchronous write I/Os active to each device. See
+  the section &quot;ZFS I/O SCHEDULER&quot;.
+<p class="Pp">Default value: <b>10</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_vdev_async_write_min_active</b> (int)</p>
+<div class="Bd-indent">Minimum asynchronous write I/Os active to each device.
+  See the section &quot;ZFS I/O SCHEDULER&quot;.
+<p class="Pp">Lower values are associated with better latency on rotational
+    media but poorer resilver performance. The default value of 2 was chosen as
+    a compromise. A value of 3 has been shown to improve resilver performance
+    further at a cost of further increasing latency.</p>
+<p class="Pp">Default value: <b>2</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_vdev_max_active</b> (int)</p>
+<div class="Bd-indent">The maximum number of I/Os active to each device.
+  Ideally, this will be &gt;= the sum of each queue's max_active. It must be at
+  least the sum of each queue's min_active. See the section &quot;ZFS I/O
+  SCHEDULER&quot;.
+<p class="Pp">Default value: <b>1,000</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_vdev_scrub_max_active</b> (int)</p>
+<div class="Bd-indent">Maxium scrub I/Os active to each device. See the section
+  &quot;ZFS I/O SCHEDULER&quot;.
+<p class="Pp">Default value: <b>2</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_vdev_scrub_min_active</b> (int)</p>
+<div class="Bd-indent">Minimum scrub I/Os active to each device. See the section
+  &quot;ZFS I/O SCHEDULER&quot;.
+<p class="Pp">Default value: <b>1</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_vdev_sync_read_max_active</b> (int)</p>
+<div class="Bd-indent">Maxium synchronous read I/Os active to each device. See
+  the section &quot;ZFS I/O SCHEDULER&quot;.
+<p class="Pp">Default value: <b>10</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_vdev_sync_read_min_active</b> (int)</p>
+<div class="Bd-indent">Minimum synchronous read I/Os active to each device. See
+  the section &quot;ZFS I/O SCHEDULER&quot;.
+<p class="Pp">Default value: <b>10</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_vdev_sync_write_max_active</b> (int)</p>
+<div class="Bd-indent">Maxium synchronous write I/Os active to each device. See
+  the section &quot;ZFS I/O SCHEDULER&quot;.
+<p class="Pp">Default value: <b>10</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_vdev_sync_write_min_active</b> (int)</p>
+<div class="Bd-indent">Minimum synchronous write I/Os active to each device. See
+  the section &quot;ZFS I/O SCHEDULER&quot;.
+<p class="Pp">Default value: <b>10</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_disable_dup_eviction</b> (int)</p>
+<div class="Bd-indent">Disable duplicate buffer eviction
+<p class="Pp">Use <b>1</b> for yes and <b>0</b> for no (default).</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_expire_snapshot</b> (int)</p>
+<div class="Bd-indent">Seconds to expire .zfs/snapshot
+<p class="Pp">Default value: <b>300</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_admin_snapshot</b> (int)</p>
+<div class="Bd-indent">Allow the creation, removal, or renaming of entries in
+  the .zfs/snapshot directory to cause the creation, destruction, or renaming of
+  snapshots. When enabled this functionality works both locally and over NFS
+  exports which have the 'no_root_squash' option set. This functionality is
+  disabled by default.
+<p class="Pp">Use <b>1</b> for yes and <b>0</b> for no (default).</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_flags</b> (int)</p>
+<div class="Bd-indent">Set additional debugging flags. The following flags may
+  be bitwise-or'd together.
+<p class="Pp"></p>
+<table class="tbl" style="border-style: solid;">
+  <tr>
+    <td style="text-align: right;"><b>Value</b></td>
+    <td><b>Symbolic Name</b></td>
+  </tr>
+  <tr style="border-bottom-style: solid;">
+    <td><b></b></td>
+    <td><b>Description</b></td>
+  </tr>
+  <tr>
+    <td style="text-align: right;">1</td>
+    <td>ZFS_DEBUG_DPRINTF</td>
+  </tr>
+  <tr style="border-bottom-style: solid;">
+    <td style="text-align: right;"></td>
+    <td>Enable dprintf entries in the debug log.</td>
+  </tr>
+  <tr>
+    <td style="text-align: right;">2</td>
+    <td>ZFS_DEBUG_DBUF_VERIFY *</td>
+  </tr>
+  <tr style="border-bottom-style: solid;">
+    <td style="text-align: right;"></td>
+    <td>Enable extra dbuf verifications.</td>
+  </tr>
+  <tr>
+    <td style="text-align: right;">4</td>
+    <td>ZFS_DEBUG_DNODE_VERIFY *</td>
+  </tr>
+  <tr style="border-bottom-style: solid;">
+    <td style="text-align: right;"></td>
+    <td>Enable extra dnode verifications.</td>
+  </tr>
+  <tr>
+    <td style="text-align: right;">8</td>
+    <td>ZFS_DEBUG_SNAPNAMES</td>
+  </tr>
+  <tr style="border-bottom-style: solid;">
+    <td style="text-align: right;"></td>
+    <td>Enable snapshot name verification.</td>
+  </tr>
+  <tr>
+    <td style="text-align: right;">16</td>
+    <td>ZFS_DEBUG_MODIFY</td>
+  </tr>
+  <tr style="border-bottom-style: solid;">
+    <td style="text-align: right;"></td>
+    <td>Check for illegally modified ARC buffers.</td>
+  </tr>
+  <tr>
+    <td style="text-align: right;">32</td>
+    <td>ZFS_DEBUG_SPA</td>
+  </tr>
+  <tr style="border-bottom-style: solid;">
+    <td style="text-align: right;"></td>
+    <td>Enable spa_dbgmsg entries in the debug log.</td>
+  </tr>
+  <tr>
+    <td style="text-align: right;">64</td>
+    <td>ZFS_DEBUG_ZIO_FREE</td>
+  </tr>
+  <tr style="border-bottom-style: solid;">
+    <td style="text-align: right;"></td>
+    <td>Enable verification of block frees.</td>
+  </tr>
+  <tr>
+    <td style="text-align: right;">128</td>
+    <td>ZFS_DEBUG_HISTOGRAM_VERIFY</td>
+  </tr>
+  <tr>
+    <td style="text-align: right;"></td>
+    <td>Enable extra spacemap histogram verifications.</td>
+  </tr>
+</table>
+<p class="Pp">* Requires debug build.</p>
+<p class="Pp">Default value: <b>0</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_free_leak_on_eio</b> (int)</p>
+<div class="Bd-indent">If destroy encounters an EIO while reading metadata (e.g.
+  indirect blocks), space referenced by the missing metadata can not be freed.
+  Normally this causes the background destroy to become &quot;stalled&quot;, as
+  it is unable to make forward progress. While in this stalled state, all
+  remaining space to free from the error-encountering filesystem is
+  &quot;temporarily leaked&quot;. Set this flag to cause it to ignore the EIO,
+  permanently leak the space from indirect blocks that can not be read, and
+  continue to free everything else that it can.
+<p class="Pp">The default, &quot;stalling&quot; behavior is useful if the
+    storage partially fails (i.e. some but not all i/os fail), and then later
+    recovers. In this case, we will be able to continue pool operations while it
+    is partially failed, and when it recovers, we can continue to free the
+    space, with no leaks. However, note that this case is actually fairly
+  rare.</p>
+<p class="Pp">Typically pools either (a) fail completely (but perhaps
+    temporarily, e.g. a top-level vdev going offline), or (b) have localized,
+    permanent errors (e.g. disk returns the wrong data due to bit flip or
+    firmware bug). In case (a), this setting does not matter because the pool
+    will be suspended and the sync thread will not be able to make forward
+    progress regardless. In case (b), because the error is permanent, the best
+    we can do is leak the minimum amount of space, which is what setting this
+    flag will do. Therefore, it is reasonable for this flag to normally be set,
+    but we chose the more conservative approach of not setting it, so that there
+    is no possibility of leaking space in the &quot;partial temporary&quot;
+    failure case.</p>
+<p class="Pp">Default value: <b>0</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_free_min_time_ms</b> (int)</p>
+<div class="Bd-indent">Min millisecs to free per txg
+<p class="Pp">Default value: <b>1,000</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_immediate_write_sz</b> (long)</p>
+<div class="Bd-indent">Largest data block to write to zil
+<p class="Pp">Default value: <b>32,768</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_max_recordsize</b> (int)</p>
+<div class="Bd-indent">We currently support block sizes from 512 bytes to 16MB.
+  The benefits of larger blocks, and thus larger IO, need to be weighed against
+  the cost of COWing a giant block to modify one byte. Additionally, very large
+  blocks can have an impact on i/o latency, and also potentially on the memory
+  allocator. Therefore, we do not allow the recordsize to be set larger than
+  zfs_max_recordsize (default 1MB). Larger blocks can be created by changing
+  this tunable, and pools with larger blocks can always be imported and used,
+  regardless of this setting.
+<p class="Pp">Default value: <b>1,048,576</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_mdcomp_disable</b> (int)</p>
+<div class="Bd-indent">Disable meta data compression
+<p class="Pp">Use <b>1</b> for yes and <b>0</b> for no (default).</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_metaslab_fragmentation_threshold</b> (int)</p>
+<div class="Bd-indent">Allow metaslabs to keep their active state as long as
+  their fragmentation percentage is less than or equal to this value. An active
+  metaslab that exceeds this threshold will no longer keep its active status
+  allowing better metaslabs to be selected.
+<p class="Pp">Default value: <b>70</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_mg_fragmentation_threshold</b> (int)</p>
+<div class="Bd-indent">Metaslab groups are considered eligible for allocations
+  if their fragmenation metric (measured as a percentage) is less than or equal
+  to this value. If a metaslab group exceeds this threshold then it will be
+  skipped unless all metaslab groups within the metaslab class have also crossed
+  this threshold.
+<p class="Pp">Default value: <b>85</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_mg_noalloc_threshold</b> (int)</p>
+<div class="Bd-indent">Defines a threshold at which metaslab groups should be
+  eligible for allocations. The value is expressed as a percentage of free space
+  beyond which a metaslab group is always eligible for allocations. If a
+  metaslab group's free space is less than or equal to the the threshold, the
+  allocator will avoid allocating to that group unless all groups in the pool
+  have reached the threshold. Once all groups have reached the threshold, all
+  groups are allowed to accept allocations. The default value of 0 disables the
+  feature and causes all metaslab groups to be eligible for allocations.
+<p class="Pp">This parameter allows to deal with pools having heavily imbalanced
+    vdevs such as would be the case when a new vdev has been added. Setting the
+    threshold to a non-zero percentage will stop allocations from being made to
+    vdevs that aren't filled to the specified percentage and allow lesser filled
+    vdevs to acquire more allocations than they otherwise would under the old
+    <b>zfs_mg_alloc_failures</b> facility.</p>
+<p class="Pp">Default value: <b>0</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_no_scrub_io</b> (int)</p>
+<div class="Bd-indent">Set for no scrub I/O
+<p class="Pp">Use <b>1</b> for yes and <b>0</b> for no (default).</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_no_scrub_prefetch</b> (int)</p>
+<div class="Bd-indent">Set for no scrub prefetching
+<p class="Pp">Use <b>1</b> for yes and <b>0</b> for no (default).</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_nocacheflush</b> (int)</p>
+<div class="Bd-indent">Disable cache flushes
+<p class="Pp">Use <b>1</b> for yes and <b>0</b> for no (default).</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_nopwrite_enabled</b> (int)</p>
+<div class="Bd-indent">Enable NOP writes
+<p class="Pp">Use <b>1</b> for yes (default) and <b>0</b> to disable.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_pd_bytes_max</b> (int)</p>
+<div class="Bd-indent">The number of bytes which should be prefetched.
+<p class="Pp">Default value: <b>52,428,800</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_prefetch_disable</b> (int)</p>
+<div class="Bd-indent">Disable all ZFS prefetching
+<p class="Pp">Use <b>1</b> for yes and <b>0</b> for no (default).</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_read_chunk_size</b> (long)</p>
+<div class="Bd-indent">Bytes to read per chunk
+<p class="Pp">Default value: <b>1,048,576</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_read_history</b> (int)</p>
+<div class="Bd-indent">Historic statistics for the last N reads
+<p class="Pp">Default value: <b>0</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_read_history_hits</b> (int)</p>
+<div class="Bd-indent">Include cache hits in read history
+<p class="Pp">Use <b>1</b> for yes and <b>0</b> for no (default).</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_recover</b> (int)</p>
+<div class="Bd-indent">Set to attempt to recover from fatal errors. This should
+  only be used as a last resort, as it typically results in leaked space, or
+  worse.
+<p class="Pp">Use <b>1</b> for yes and <b>0</b> for no (default).</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_resilver_delay</b> (int)</p>
+<div class="Bd-indent">Number of ticks to delay prior to issuing a resilver I/O
+  operation when a non-resilver or non-scrub I/O operation has occurred within
+  the past <b>zfs_scan_idle</b> ticks.
+<p class="Pp">Default value: <b>2</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_resilver_min_time_ms</b> (int)</p>
+<div class="Bd-indent">Min millisecs to resilver per txg
+<p class="Pp">Default value: <b>3,000</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_scan_idle</b> (int)</p>
+<div class="Bd-indent">Idle window in clock ticks. During a scrub or a resilver,
+  if a non-scrub or non-resilver I/O operation has occurred during this window,
+  the next scrub or resilver operation is delayed by, respectively
+  <b>zfs_scrub_delay</b> or <b>zfs_resilver_delay</b> ticks.
+<p class="Pp">Default value: <b>50</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_scan_min_time_ms</b> (int)</p>
+<div class="Bd-indent">Min millisecs to scrub per txg
+<p class="Pp">Default value: <b>1,000</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_scrub_delay</b> (int)</p>
+<div class="Bd-indent">Number of ticks to delay prior to issuing a scrub I/O
+  operation when a non-scrub or non-resilver I/O operation has occurred within
+  the past <b>zfs_scan_idle</b> ticks.
+<p class="Pp">Default value: <b>4</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_send_corrupt_data</b> (int)</p>
+<div class="Bd-indent">Allow to send corrupt data (ignore read/checksum errors
+  when sending data)
+<p class="Pp">Use <b>1</b> for yes and <b>0</b> for no (default).</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_sync_pass_deferred_free</b> (int)</p>
+<div class="Bd-indent">Defer frees starting in this pass
+<p class="Pp">Default value: <b>2</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_sync_pass_dont_compress</b> (int)</p>
+<div class="Bd-indent">Don't compress starting in this pass
+<p class="Pp">Default value: <b>5</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_sync_pass_rewrite</b> (int)</p>
+<div class="Bd-indent">Rewrite new bps starting in this pass
+<p class="Pp">Default value: <b>2</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_top_maxinflight</b> (int)</p>
+<div class="Bd-indent">Max I/Os per top-level vdev during scrub or resilver
+  operations.
+<p class="Pp">Default value: <b>32</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_txg_history</b> (int)</p>
+<div class="Bd-indent">Historic statistics for the last N txgs
+<p class="Pp">Default value: <b>0</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_txg_timeout</b> (int)</p>
+<div class="Bd-indent">Max seconds worth of delta per txg
+<p class="Pp">Default value: <b>5</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_vdev_aggregation_limit</b> (int)</p>
+<div class="Bd-indent">Max vdev I/O aggregation size
+<p class="Pp">Default value: <b>131,072</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_vdev_cache_bshift</b> (int)</p>
+<div class="Bd-indent">Shift size to inflate reads too
+<p class="Pp">Default value: <b>16</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_vdev_cache_max</b> (int)</p>
+<div class="Bd-indent">Inflate reads small than max</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_vdev_cache_size</b> (int)</p>
+<div class="Bd-indent">Total size of the per-disk cache
+<p class="Pp">Default value: <b>0</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_vdev_mirror_switch_us</b> (int)</p>
+<div class="Bd-indent">Switch mirrors every N usecs
+<p class="Pp">Default value: <b>10,000</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_vdev_read_gap_limit</b> (int)</p>
+<div class="Bd-indent">Aggregate read I/O over gap
+<p class="Pp">Default value: <b>32,768</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_vdev_scheduler</b> (charp)</p>
+<div class="Bd-indent">I/O scheduler
+<p class="Pp">Default value: <b>noop</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_vdev_write_gap_limit</b> (int)</p>
+<div class="Bd-indent">Aggregate write I/O over gap
+<p class="Pp">Default value: <b>4,096</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_zevent_cols</b> (int)</p>
+<div class="Bd-indent">Max event column width
+<p class="Pp">Default value: <b>80</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_zevent_console</b> (int)</p>
+<div class="Bd-indent">Log events to the console
+<p class="Pp">Use <b>1</b> for yes and <b>0</b> for no (default).</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs_zevent_len_max</b> (int)</p>
+<div class="Bd-indent">Max event queue length
+<p class="Pp">Default value: <b>0</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zil_replay_disable</b> (int)</p>
+<div class="Bd-indent">Disable intent logging replay
+<p class="Pp">Use <b>1</b> for yes and <b>0</b> for no (default).</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zil_slog_limit</b> (ulong)</p>
+<div class="Bd-indent">Max commit bytes to separate log device
+<p class="Pp">Default value: <b>1,048,576</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zio_delay_max</b> (int)</p>
+<div class="Bd-indent">Max zio millisec delay before posting event
+<p class="Pp">Default value: <b>30,000</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zio_requeue_io_start_cut_in_line</b> (int)</p>
+<div class="Bd-indent">Prioritize requeued I/O
+<p class="Pp">Default value: <b>0</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zio_taskq_batch_pct</b> (uint)</p>
+<div class="Bd-indent">Percentage of online CPUs (or CPU cores, etc) which will
+  run a worker thread for IO. These workers are responsible for IO work such as
+  compression and checksum calculations. Fractional number of CPUs will be
+  rounded down.
+<p class="Pp">The default value of 75 was chosen to avoid using all CPUs which
+    can result in latency issues and inconsistent application performance,
+    especially when high compression is enabled.</p>
+<p class="Pp">Default value: <b>75</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zvol_inhibit_dev</b> (uint)</p>
+<div class="Bd-indent">Do not create zvol device nodes
+<p class="Pp">Use <b>1</b> for yes and <b>0</b> for no (default).</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zvol_major</b> (uint)</p>
+<div class="Bd-indent">Major number for zvol device
+<p class="Pp">Default value: <b>230</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zvol_max_discard_blocks</b> (ulong)</p>
+<div class="Bd-indent">Max number of blocks to discard at once
+<p class="Pp">Default value: <b>16,384</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zvol_prefetch_bytes</b> (uint)</p>
+<div class="Bd-indent">When adding a zvol to the system prefetch
+  <b>zvol_prefetch_bytes</b> from the start and end of the volume. Prefetching
+  these regions of the volume is desirable because they are likely to be
+  accessed immediately by <b>blkid(8)</b> or by the kernel scanning for a
+  partition table.
+<p class="Pp">Default value: <b>131,072</b>.</p>
+</div>
+<p class="Pp"></p>
+</section>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="ZFS_I/O_SCHEDULER"><a class="permalink" href="#ZFS_I/O_SCHEDULER">ZFS
+  I/O SCHEDULER</a></h1>
+<p class="Pp">ZFS issues I/O operations to leaf vdevs to satisfy and complete
+    I/Os. The I/O scheduler determines when and in what order those operations
+    are issued. The I/O scheduler divides operations into five I/O classes
+    prioritized in the following order: sync read, sync write, async read, async
+    write, and scrub/resilver. Each queue defines the minimum and maximum number
+    of concurrent operations that may be issued to the device. In addition, the
+    device has an aggregate maximum, <b>zfs_vdev_max_active</b>. Note that the
+    sum of the per-queue minimums must not exceed the aggregate maximum. If the
+    sum of the per-queue maximums exceeds the aggregate maximum, then the number
+    of active I/Os may reach <b>zfs_vdev_max_active</b>, in which case no
+    further I/Os will be issued regardless of whether all per-queue minimums
+    have been met.</p>
+<p class="Pp">For many physical devices, throughput increases with the number of
+    concurrent operations, but latency typically suffers. Further, physical
+    devices typically have a limit at which more concurrent operations have no
+    effect on throughput or can actually cause it to decrease.</p>
+<p class="Pp">The scheduler selects the next operation to issue by first looking
+    for an I/O class whose minimum has not been satisfied. Once all are
+    satisfied and the aggregate maximum has not been hit, the scheduler looks
+    for classes whose maximum has not been satisfied. Iteration through the I/O
+    classes is done in the order specified above. No further operations are
+    issued if the aggregate maximum number of concurrent operations has been hit
+    or if there are no operations queued for an I/O class that has not hit its
+    maximum. Every time an I/O is queued or an operation completes, the I/O
+    scheduler looks for new operations to issue.</p>
+<p class="Pp">In general, smaller max_active's will lead to lower latency of
+    synchronous operations. Larger max_active's may lead to higher overall
+    throughput, depending on underlying storage.</p>
+<p class="Pp">The ratio of the queues' max_actives determines the balance of
+    performance between reads, writes, and scrubs. E.g., increasing
+    <b>zfs_vdev_scrub_max_active</b> will cause the scrub or resilver to
+    complete more quickly, but reads and writes to have higher latency and lower
+    throughput.</p>
+<p class="Pp">All I/O classes have a fixed maximum number of outstanding
+    operations except for the async write class. Asynchronous writes represent
+    the data that is committed to stable storage during the syncing stage for
+    transaction groups. Transaction groups enter the syncing state periodically
+    so the number of queued async writes will quickly burst up and then bleed
+    down to zero. Rather than servicing them as quickly as possible, the I/O
+    scheduler changes the maximum number of active async write I/Os according to
+    the amount of dirty data in the pool. Since both throughput and latency
+    typically increase with the number of concurrent operations issued to
+    physical devices, reducing the burstiness in the number of concurrent
+    operations also stabilizes the response time of operations from other -- and
+    in particular synchronous -- queues. In broad strokes, the I/O scheduler
+    will issue more concurrent operations from the async write queue as there's
+    more dirty data in the pool.</p>
+<p class="Pp">Async Writes</p>
+<p class="Pp">The number of concurrent operations issued for the async write I/O
+    class follows a piece-wise linear function defined by a few adjustable
+    points.</p>
+<pre>
+<br/>
+       |              o---------| &lt;-- zfs_vdev_async_write_max_active
+<br/>
+  ^    |             /^         |
+<br/>
+  |    |            / |         |
+active |           /  |         |
+<br/>
+ I/O   |          /   |         |
+count  |         /    |         |
+<br/>
+       |        /     |         |
+<br/>
+       |-------o      |         | &lt;-- zfs_vdev_async_write_min_active
+<br/>
+      0|_______^______|_________|
+<br/>
+       0%      |      |       100% of zfs_dirty_data_max
+<br/>
+               |      |
+<br/>
+               |      `-- zfs_vdev_async_write_active_max_dirty_percent
+<br/>
+               `--------- zfs_vdev_async_write_active_min_dirty_percent
+</pre>
+Until the amount of dirty data exceeds a minimum percentage of the dirty data
+  allowed in the pool, the I/O scheduler will limit the number of concurrent
+  operations to the minimum. As that threshold is crossed, the number of
+  concurrent operations issued increases linearly to the maximum at the
+  specified maximum percentage of the dirty data allowed in the pool.
+<p class="Pp">Ideally, the amount of dirty data on a busy pool will stay in the
+    sloped part of the function between
+    <b>zfs_vdev_async_write_active_min_dirty_percent</b> and
+    <b>zfs_vdev_async_write_active_max_dirty_percent</b>. If it exceeds the
+    maximum percentage, this indicates that the rate of incoming data is greater
+    than the rate that the backend storage can handle. In this case, we must
+    further throttle incoming writes, as described in the next section.</p>
+<p class="Pp"></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="ZFS_TRANSACTION_DELAY"><a class="permalink" href="#ZFS_TRANSACTION_DELAY">ZFS
+  TRANSACTION DELAY</a></h1>
+<p class="Pp">We delay transactions when we've determined that the backend
+    storage isn't able to accommodate the rate of incoming writes.</p>
+<p class="Pp">If there is already a transaction waiting, we delay relative to
+    when that transaction will finish waiting. This way the calculated delay
+    time is independent of the number of threads concurrently executing
+    transactions.</p>
+<p class="Pp">If we are the only waiter, wait relative to when the transaction
+    started, rather than the current time. This credits the transaction for
+    &quot;time already served&quot;, e.g. reading indirect blocks.</p>
+<p class="Pp">The minimum time for a transaction to take is calculated as:</p>
+<pre>
+<br/>
+    min_time = zfs_delay_scale * (dirty - min) / (max - dirty)
+<br/>
+    min_time is then capped at 100 milliseconds.</pre>
+<p class="Pp">The delay has two degrees of freedom that can be adjusted via
+    tunables. The percentage of dirty data at which we start to delay is defined
+    by <b>zfs_delay_min_dirty_percent</b>. This should typically be at or above
+    <b>zfs_vdev_async_write_active_max_dirty_percent</b> so that we only start
+    to delay after writing at full speed has failed to keep up with the incoming
+    write rate. The scale of the curve is defined by <b>zfs_delay_scale</b>.
+    Roughly speaking, this variable determines the amount of delay at the
+    midpoint of the curve.</p>
+<p class="Pp"></p>
+<pre>delay
+<br/>
+ 10ms +-------------------------------------------------------------*+
+<br/>
+      |                                                             *|
+<br/>
+  9ms +                                                             *+
+<br/>
+      |                                                             *|
+<br/>
+  8ms +                                                             *+
+<br/>
+      |                                                            * |
+<br/>
+  7ms +                                                            * +
+<br/>
+      |                                                            * |
+<br/>
+  6ms +                                                            * +
+<br/>
+      |                                                            * |
+<br/>
+  5ms +                                                           *  +
+<br/>
+      |                                                           *  |
+<br/>
+  4ms +                                                           *  +
+<br/>
+      |                                                           *  |
+<br/>
+  3ms +                                                          *   +
+<br/>
+      |                                                          *   |
+<br/>
+  2ms +                                              (midpoint) *    +
+<br/>
+      |                                                  |    **     |
+<br/>
+  1ms +                                                  v ***       +
+<br/>
+      |             zfs_delay_scale ----------&gt;     ********         |
+<br/>
+    0 +-------------------------------------*********----------------+
+<br/>
+      0%                    &lt;- zfs_dirty_data_max -&gt;               100%</pre>
+<p class="Pp">Note that since the delay is added to the outstanding time
+    remaining on the most recent transaction, the delay is effectively the
+    inverse of IOPS. Here the midpoint of 500us translates to 2000 IOPS. The
+    shape of the curve was chosen such that small changes in the amount of
+    accumulated dirty data in the first 3/4 of the curve yield relatively small
+    differences in the amount of delay.</p>
+<p class="Pp">The effects can be easier to understand when the amount of delay
+    is represented on a log scale:</p>
+<p class="Pp"></p>
+<pre>delay
+100ms +-------------------------------------------------------------++
+<br/>
+      +                                                              +
+<br/>
+      |                                                              |
+<br/>
+      +                                                             *+
+<br/>
+ 10ms +                                                             *+
+<br/>
+      +                                                           ** +
+<br/>
+      |                                              (midpoint)  **  |
+<br/>
+      +                                                  |     **    +
+<br/>
+  1ms +                                                  v ****      +
+<br/>
+      +             zfs_delay_scale ----------&gt;        *****         +
+<br/>
+      |                                             ****             |
+<br/>
+      +                                          ****                +
+100us +                                        **                    +
+<br/>
+      +                                       *                      +
+<br/>
+      |                                      *                       |
+<br/>
+      +                                     *                        +
+<br/>
+ 10us +                                     *                        +
+<br/>
+      +                                                              +
+<br/>
+      |                                                              |
+<br/>
+      +                                                              +
+<br/>
+      +--------------------------------------------------------------+
+<br/>
+      0%                    &lt;- zfs_dirty_data_max -&gt;               100%</pre>
+<p class="Pp">Note here that only as the amount of dirty data approaches its
+    limit does the delay start to increase rapidly. The goal of a properly tuned
+    system should be to keep the amount of dirty data out of that range by first
+    ensuring that the appropriate limits are set for the I/O scheduler to reach
+    optimal throughput on the backend storage, and then by changing the value of
+    <b>zfs_delay_scale</b> to increase the steepness of the curve.</p>
+</section>
+</div>
+<table class="foot">
+  <tr>
+    <td class="foot-date">November 16, 2013</td>
+    <td class="foot-os"></td>
+  </tr>
+</table>
+</div></section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="zfs-events.5.html" class="btn btn-neutral float-left" title="zfs-events.5" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="zpool-features.5.html" class="btn btn-neutral float-right" title="zpool-features.5" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, OpenZFS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

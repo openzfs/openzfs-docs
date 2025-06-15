@@ -1,0 +1,696 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>zdb.8 &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
+      <script src="../../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="zed.8" href="zed.8.html" />
+    <link rel="prev" title="vdev_id.8" href="vdev_id.8.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Basic%20Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Man Pages</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../master/index.html">master</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.3/index.html">v2.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.2/index.html">v2.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.1/index.html">v2.1</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">v2.0</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../1/index.html">User Commands (1)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../5/index.html">File Formats and Conventions (5)</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">System Administration Commands (8)</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="fsck.zfs.8.html">fsck.zfs.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mount.zfs.8.html">mount.zfs.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vdev_id.8.html">vdev_id.8</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">zdb.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zed.8.html">zed.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-allow.8.html">zfs-allow.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-bookmark.8.html">zfs-bookmark.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-change-key.8.html">zfs-change-key.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-clone.8.html">zfs-clone.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-create.8.html">zfs-create.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-destroy.8.html">zfs-destroy.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-diff.8.html">zfs-diff.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-get.8.html">zfs-get.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-groupspace.8.html">zfs-groupspace.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-hold.8.html">zfs-hold.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-inherit.8.html">zfs-inherit.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-jail.8.html">zfs-jail.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-list.8.html">zfs-list.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-load-key.8.html">zfs-load-key.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-mount-generator.8.html">zfs-mount-generator.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-mount.8.html">zfs-mount.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-program.8.html">zfs-program.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-project.8.html">zfs-project.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-projectspace.8.html">zfs-projectspace.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-promote.8.html">zfs-promote.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-receive.8.html">zfs-receive.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-recv.8.html">zfs-recv.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-redact.8.html">zfs-redact.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-release.8.html">zfs-release.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-rename.8.html">zfs-rename.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-rollback.8.html">zfs-rollback.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-send.8.html">zfs-send.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-set.8.html">zfs-set.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-share.8.html">zfs-share.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-snapshot.8.html">zfs-snapshot.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-unallow.8.html">zfs-unallow.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-unjail.8.html">zfs-unjail.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-unload-key.8.html">zfs-unload-key.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-unmount.8.html">zfs-unmount.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-upgrade.8.html">zfs-upgrade.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-userspace.8.html">zfs-userspace.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-wait.8.html">zfs-wait.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs.8.html">zfs.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs_ids_to_path.8.html">zfs_ids_to_path.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfsconcepts.8.html">zfsconcepts.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfsprops.8.html">zfsprops.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zgenhostid.8.html">zgenhostid.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zinject.8.html">zinject.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-add.8.html">zpool-add.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-attach.8.html">zpool-attach.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-checkpoint.8.html">zpool-checkpoint.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-clear.8.html">zpool-clear.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-create.8.html">zpool-create.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-destroy.8.html">zpool-destroy.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-detach.8.html">zpool-detach.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-events.8.html">zpool-events.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-export.8.html">zpool-export.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-get.8.html">zpool-get.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-history.8.html">zpool-history.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-import.8.html">zpool-import.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-initialize.8.html">zpool-initialize.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-iostat.8.html">zpool-iostat.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-labelclear.8.html">zpool-labelclear.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-list.8.html">zpool-list.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-offline.8.html">zpool-offline.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-online.8.html">zpool-online.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-reguid.8.html">zpool-reguid.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-remove.8.html">zpool-remove.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-reopen.8.html">zpool-reopen.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-replace.8.html">zpool-replace.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-resilver.8.html">zpool-resilver.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-scrub.8.html">zpool-scrub.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-set.8.html">zpool-set.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-split.8.html">zpool-split.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-status.8.html">zpool-status.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-sync.8.html">zpool-sync.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-trim.8.html">zpool-trim.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-upgrade.8.html">zpool-upgrade.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-wait.8.html">zpool-wait.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool.8.html">zpool.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpoolconcepts.8.html">zpoolconcepts.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpoolprops.8.html">zpoolprops.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zstream.8.html">zstream.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zstreamdump.8.html">zstreamdump.8</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.8/index.html">v0.8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.7/index.html">v0.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.6/index.html">v0.6</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Man Pages</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">v2.0</a></li>
+          <li class="breadcrumb-item"><a href="index.html">System Administration Commands (8)</a></li>
+      <li class="breadcrumb-item active">zdb.8</li>
+      <li class="wy-breadcrumbs-aside">
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/openzfs/zfs/blob/zfs-2.0.7/man/man8/zdb.8" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="zdb-8">
+<h1>zdb.8<a class="headerlink" href="#zdb-8" title="Permalink to this heading"></a></h1>
+<div class="man_container"><table class="head">
+  <tr>
+    <td class="head-ltitle">ZDB(8)</td>
+    <td class="head-vol">System Manager's Manual (smm)</td>
+    <td class="head-rtitle">ZDB(8)</td>
+  </tr>
+</table>
+<div class="manual-text">
+<section class="Sh">
+<h1 class="Sh" id="NAME"><a class="permalink" href="#NAME">NAME</a></h1>
+<p class="Pp"><code class="Nm">zdb</code> &#x2014; <span class="Nd">display
+    zpool debugging and consistency information</span></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SYNOPSIS"><a class="permalink" href="#SYNOPSIS">SYNOPSIS</a></h1>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zdb</code></td>
+    <td>[<code class="Fl">-AbcdDFGhikLMPsvXYy</code>]
+      [<code class="Fl">-e</code> [<code class="Fl">-V</code>]
+      [<code class="Fl">-p</code> <var class="Ar">path ...</var>]]
+      [<code class="Fl">-I</code> <var class="Ar">inflight I/Os</var>]
+      [<code class="Fl">-o</code>
+      <var class="Ar">var</var>=<var class="Ar">value</var>]...
+      [<code class="Fl">-t</code> <var class="Ar">txg</var>]
+      [<code class="Fl">-U</code> <var class="Ar">cache</var>]
+      [<code class="Fl">-x</code> <var class="Ar">dumpdir</var>]
+      [<var class="Ar">poolname[/dataset</var> | <var class="Ar">objset
+      ID]</var>] [<var class="Ar">object</var> | <var class="Ar">range
+      ...</var>]</td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zdb</code></td>
+    <td>[<code class="Fl">-AdiPv</code>] [<code class="Fl">-e</code>
+      [<code class="Fl">-V</code>] [<code class="Fl">-p</code>
+      <var class="Ar">path ...</var>]] [<code class="Fl">-U</code>
+      <var class="Ar">cache</var>] <var class="Ar">poolname[/dataset</var> |
+      <var class="Ar">objset ID]</var> [<var class="Ar">object</var> |
+      <var class="Ar">range ...</var>]</td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zdb</code></td>
+    <td><code class="Fl">-C</code> [<code class="Fl">-A</code>]
+      [<code class="Fl">-U</code> <var class="Ar">cache</var>]</td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zdb</code></td>
+    <td><code class="Fl">-E</code> [<code class="Fl">-A</code>]
+      <var class="Ar">word0</var>:<var class="Ar">word1</var>:...:<var class="Ar">word15</var></td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zdb</code></td>
+    <td><code class="Fl">-l</code> [<code class="Fl">-Aqu</code>]
+      <var class="Ar">device</var></td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zdb</code></td>
+    <td><code class="Fl">-m</code> [<code class="Fl">-AFLPXY</code>]
+      [<code class="Fl">-e</code> [<code class="Fl">-V</code>]
+      [<code class="Fl">-p</code> <var class="Ar">path ...</var>]]
+      [<code class="Fl">-t</code> <var class="Ar">txg</var>]
+      [<code class="Fl">-U</code> <var class="Ar">cache</var>]
+      <var class="Ar">poolname</var> [<var class="Ar">vdev</var>
+      [<var class="Ar">metaslab ...</var>]]</td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zdb</code></td>
+    <td><code class="Fl">-O</code> <var class="Ar">dataset path</var></td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zdb</code></td>
+    <td><code class="Fl">-R</code> [<code class="Fl">-A</code>]
+      [<code class="Fl">-e</code> [<code class="Fl">-V</code>]
+      [<code class="Fl">-p</code> <var class="Ar">path ...</var>]]
+      [<code class="Fl">-U</code> <var class="Ar">cache</var>]
+      <var class="Ar">poolname
+      vdev</var>:<var class="Ar">offset</var>:<var class="Ar">[&lt;lsize&gt;/]&lt;psize&gt;</var>[:<var class="Ar">flags</var>]</td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zdb</code></td>
+    <td><code class="Fl">-S</code> [<code class="Fl">-AP</code>]
+      [<code class="Fl">-e</code> [<code class="Fl">-V</code>]
+      [<code class="Fl">-p</code> <var class="Ar">path ...</var>]]
+      [<code class="Fl">-U</code> <var class="Ar">cache</var>]
+      <var class="Ar">poolname</var></td>
+  </tr>
+</table>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h1>
+<p class="Pp">The <code class="Nm">zdb</code> utility displays information about
+    a ZFS pool useful for debugging and performs some amount of consistency
+    checking. It is a not a general purpose tool and options (and facilities)
+    may change. This is not a <a class="Xr">fsck(8)</a> utility.</p>
+<p class="Pp">The output of this command in general reflects the on-disk
+    structure of a ZFS pool, and is inherently unstable. The precise output of
+    most invocations is not documented, a knowledge of ZFS internals is
+  assumed.</p>
+<p class="Pp" id="/">If the <var class="Ar">dataset</var> argument does not
+    contain any
+    &quot;<a class="permalink" href="#/"><b class="Sy">/</b></a>&quot; or
+    &quot;<a class="permalink" href="#@"><b class="Sy" id="@">@</b></a>&quot;
+    characters, it is interpreted as a pool name. The root dataset can be
+    specified as <var class="Ar">pool</var>/ (pool name followed by a
+  slash).</p>
+<p class="Pp">When operating on an imported and active pool it is possible,
+    though unlikely, that zdb may interpret inconsistent pool data and behave
+    erratically.</p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="OPTIONS"><a class="permalink" href="#OPTIONS">OPTIONS</a></h1>
+<p class="Pp">Display options:</p>
+<dl class="Bl-tag">
+  <dt id="b"><a class="permalink" href="#b"><code class="Fl">-b</code></a></dt>
+  <dd>Display statistics regarding the number, size (logical, physical and
+      allocated) and deduplication of blocks.</dd>
+  <dt id="c"><a class="permalink" href="#c"><code class="Fl">-c</code></a></dt>
+  <dd>Verify the checksum of all metadata blocks while printing block statistics
+      (see <code class="Fl">-b</code>).
+    <p class="Pp">If specified multiple times, verify the checksums of all
+        blocks.</p>
+  </dd>
+  <dt id="C"><a class="permalink" href="#C"><code class="Fl">-C</code></a></dt>
+  <dd>Display information about the configuration. If specified with no other
+      options, instead display information about the cache file
+      (<span class="Pa">/etc/zfs/zpool.cache</span>). To specify the cache file
+      to display, see <code class="Fl">-U</code>.
+    <p class="Pp">If specified multiple times, and a pool name is also specified
+        display both the cached configuration and the on-disk configuration. If
+        specified multiple times with <code class="Fl">-e</code> also display
+        the configuration that would be used were the pool to be imported.</p>
+  </dd>
+  <dt id="d"><a class="permalink" href="#d"><code class="Fl">-d</code></a></dt>
+  <dd>Display information about datasets. Specified once, displays basic dataset
+      information: ID, create transaction, size, and object count.
+    <p class="Pp">If specified multiple times provides greater and greater
+        verbosity.</p>
+    <p class="Pp">If object IDs or object ID ranges are specified, display
+        information about those specific objects or ranges only.</p>
+    <p class="Pp">An object ID range is specified in terms of a colon-separated
+        tuple of the form
+        &#x27E8;start&#x27E9;:&#x27E8;end&#x27E9;[:&#x27E8;flags&#x27E9;]. The
+        fields <var class="Ar">start</var> and <var class="Ar">end</var> are
+        integer object identifiers that denote the upper and lower bounds of the
+        range. An <var class="Ar">end</var> value of -1 specifies a range with
+        no upper bound. The <var class="Ar">flags</var> field optionally
+        specifies a set of flags, described below, that control which object
+        types are dumped. By default, all object types are dumped. A minus sign
+        (-) negates the effect of the flag that follows it and has no effect
+        unless preceded by the <var class="Ar">A</var> flag. For example, the
+        range 0:-1:A-d will dump all object types except for directories.</p>
+    <p class="Pp"></p>
+    <dl class="Bl-tag Bl-compact">
+      <dt id="A"><a class="permalink" href="#A"><b class="Sy">A</b></a></dt>
+      <dd>Dump all objects (this is the default)</dd>
+      <dt id="d~2"><a class="permalink" href="#d~2"><b class="Sy">d</b></a></dt>
+      <dd>Dump ZFS directory objects</dd>
+      <dt id="f"><a class="permalink" href="#f"><b class="Sy">f</b></a></dt>
+      <dd>Dump ZFS plain file objects</dd>
+      <dt id="m"><a class="permalink" href="#m"><b class="Sy">m</b></a></dt>
+      <dd>Dump SPA space map objects</dd>
+      <dt id="z"><a class="permalink" href="#z"><b class="Sy">z</b></a></dt>
+      <dd>Dump ZAP objects</dd>
+      <dt><b class="Sy">-</b></dt>
+      <dd>Negate the effect of next flag</dd>
+    </dl>
+  </dd>
+  <dt id="D"><a class="permalink" href="#D"><code class="Fl">-D</code></a></dt>
+  <dd>Display deduplication statistics, including the deduplication ratio
+      (<b class="Sy">dedup</b>), compression ratio (<b class="Sy">compress</b>),
+      inflation due to the zfs copies property (<b class="Sy">copies</b>), and
+      an overall effective ratio (<b class="Sy">dedup</b>
+      <span class="No">*</span> <b class="Sy">compress</b>
+      <span class="No">/</span> <b class="Sy">copies</b>).</dd>
+  <dt id="DD"><a class="permalink" href="#DD"><code class="Fl">-DD</code></a></dt>
+  <dd>Display a histogram of deduplication statistics, showing the allocated
+      (physically present on disk) and referenced (logically referenced in the
+      pool) block counts and sizes by reference count.</dd>
+  <dt id="DDD"><a class="permalink" href="#DDD"><code class="Fl">-DDD</code></a></dt>
+  <dd>Display the statistics independently for each deduplication table.</dd>
+  <dt id="DDDD"><a class="permalink" href="#DDDD"><code class="Fl">-DDDD</code></a></dt>
+  <dd>Dump the contents of the deduplication tables describing duplicate
+    blocks.</dd>
+  <dt id="DDDDD"><a class="permalink" href="#DDDDD"><code class="Fl">-DDDDD</code></a></dt>
+  <dd>Also dump the contents of the deduplication tables describing unique
+      blocks.</dd>
+  <dt id="E"><a class="permalink" href="#E"><code class="Fl">-E</code></a>
+    <var class="Ar">word0</var>:<var class="Ar">word1</var>:...:<var class="Ar">word15</var></dt>
+  <dd>Decode and display block from an embedded block pointer specified by the
+      <var class="Ar">word</var> arguments.</dd>
+  <dt id="h"><a class="permalink" href="#h"><code class="Fl">-h</code></a></dt>
+  <dd>Display pool history similar to <code class="Nm">zpool</code>
+      <code class="Cm">history</code>, but include internal changes,
+      transaction, and dataset information.</dd>
+  <dt id="i"><a class="permalink" href="#i"><code class="Fl">-i</code></a></dt>
+  <dd>Display information about intent log (ZIL) entries relating to each
+      dataset. If specified multiple times, display counts of each intent log
+      transaction type.</dd>
+  <dt id="k"><a class="permalink" href="#k"><code class="Fl">-k</code></a></dt>
+  <dd>Examine the checkpointed state of the pool. Note, the on disk format of
+      the pool is not reverted to the checkpointed state.</dd>
+  <dt id="l"><a class="permalink" href="#l"><code class="Fl">-l</code></a>
+    <var class="Ar">device</var></dt>
+  <dd>Read the vdev labels and L2ARC header from the specified device.
+      <code class="Nm">zdb</code> <code class="Fl">-l</code> will return 0 if
+      valid label was found, 1 if error occurred, and 2 if no valid labels were
+      found. The presence of L2ARC header is indicated by a specific sequence
+      (L2ARC_DEV_HDR_MAGIC). If there is an accounting error in the size or the
+      number of L2ARC log blocks <code class="Nm">zdb</code>
+      <code class="Fl">-l</code> will return 1. Each unique configuration is
+      displayed only once.</dd>
+  <dt id="ll"><a class="permalink" href="#ll"><code class="Fl">-ll</code></a>
+    <var class="Ar">device</var></dt>
+  <dd>In addition display label space usage stats. If a valid L2ARC header was
+      found also display the properties of log blocks used for restoring L2ARC
+      contents (persistent L2ARC).</dd>
+  <dt id="lll"><a class="permalink" href="#lll"><code class="Fl">-lll</code></a>
+    <var class="Ar">device</var></dt>
+  <dd>Display every configuration, unique or not. If a valid L2ARC header was
+      found also display the properties of log entries in log blocks used for
+      restoring L2ARC contents (persistent L2ARC).
+    <p class="Pp">If the <code class="Fl">-q</code> option is also specified,
+        don't print the labels or the L2ARC header.</p>
+    <p class="Pp">If the <code class="Fl">-u</code> option is also specified,
+        also display the uberblocks on this device. Specify multiple times to
+        increase verbosity.</p>
+  </dd>
+  <dt id="L"><a class="permalink" href="#L"><code class="Fl">-L</code></a></dt>
+  <dd>Disable leak detection and the loading of space maps. By default,
+      <code class="Nm">zdb</code> verifies that all non-free blocks are
+      referenced, which can be very expensive.</dd>
+  <dt id="m~2"><a class="permalink" href="#m~2"><code class="Fl">-m</code></a></dt>
+  <dd>Display the offset, spacemap, free space of each metaslab, all the log
+      spacemaps and their obsolete entry statistics.</dd>
+  <dt id="mm"><a class="permalink" href="#mm"><code class="Fl">-mm</code></a></dt>
+  <dd>Also display information about the on-disk free space histogram associated
+      with each metaslab.</dd>
+  <dt id="mmm"><a class="permalink" href="#mmm"><code class="Fl">-mmm</code></a></dt>
+  <dd>Display the maximum contiguous free space, the in-core free space
+      histogram, and the percentage of free space in each space map.</dd>
+  <dt id="mmmm"><a class="permalink" href="#mmmm"><code class="Fl">-mmmm</code></a></dt>
+  <dd>Display every spacemap record.</dd>
+  <dt id="M"><a class="permalink" href="#M"><code class="Fl">-M</code></a></dt>
+  <dd>Display the offset, spacemap, and free space of each metaslab.</dd>
+  <dt id="MM"><a class="permalink" href="#MM"><code class="Fl">-MM</code></a></dt>
+  <dd>Also display information about the maximum contiguous free space and the
+      percentage of free space in each space map.</dd>
+  <dt id="MMM"><a class="permalink" href="#MMM"><code class="Fl">-MMM</code></a></dt>
+  <dd>Display every spacemap record.</dd>
+  <dt id="O"><a class="permalink" href="#O"><code class="Fl">-O</code></a>
+    <var class="Ar">dataset path</var></dt>
+  <dd>Look up the specified <var class="Ar">path</var> inside of the
+      <var class="Ar">dataset</var> and display its metadata and indirect
+      blocks. Specified <var class="Ar">path</var> must be relative to the root
+      of <var class="Ar">dataset</var>. This option can be combined with
+      <code class="Fl">-v</code> for increasing verbosity.</dd>
+  <dt id="R"><a class="permalink" href="#R"><code class="Fl">-R</code></a>
+    <var class="Ar">poolname
+    vdev</var>:<var class="Ar">offset</var>:<var class="Ar">[&lt;lsize&gt;/]&lt;psize&gt;</var>[:<var class="Ar">flags</var>]</dt>
+  <dd>Read and display a block from the specified device. By default the block
+      is displayed as a hex dump, but see the description of the
+      <b class="Sy">r</b> flag, below.
+    <p class="Pp">The block is specified in terms of a colon-separated tuple
+        <var class="Ar">vdev</var> (an integer vdev identifier)
+        <var class="Ar">offset</var> (the offset within the vdev)
+        <var class="Ar">size</var> (the physical size, or logical size /
+        physical size) of the block to read and, optionally,
+        <var class="Ar">flags</var> (a set of flags, described below).</p>
+    <p class="Pp"></p>
+    <dl class="Bl-tag Bl-compact">
+      <dt id="b~2"><a class="permalink" href="#b~2"><b class="Sy">b</b></a>
+        <var class="Ar">offset</var></dt>
+      <dd>Print block pointer at hex offset</dd>
+      <dt id="c~2"><a class="permalink" href="#c~2"><b class="Sy">c</b></a></dt>
+      <dd>Calculate and display checksums</dd>
+      <dt id="d~3"><a class="permalink" href="#d~3"><b class="Sy">d</b></a></dt>
+      <dd>Decompress the block. Set environment variable
+          <code class="Nm">ZDB_NO_ZLE</code> to skip zle when guessing.</dd>
+      <dt id="e"><a class="permalink" href="#e"><b class="Sy">e</b></a></dt>
+      <dd>Byte swap the block</dd>
+      <dt id="g"><a class="permalink" href="#g"><b class="Sy">g</b></a></dt>
+      <dd>Dump gang block header</dd>
+      <dt id="i~2"><a class="permalink" href="#i~2"><b class="Sy">i</b></a></dt>
+      <dd>Dump indirect block</dd>
+      <dt id="r"><a class="permalink" href="#r"><b class="Sy">r</b></a></dt>
+      <dd>Dump raw uninterpreted block data</dd>
+      <dt id="v"><a class="permalink" href="#v"><b class="Sy">v</b></a></dt>
+      <dd>Verbose output for guessing compression algorithm</dd>
+    </dl>
+  </dd>
+  <dt id="s"><a class="permalink" href="#s"><code class="Fl">-s</code></a></dt>
+  <dd>Report statistics on <code class="Nm">zdb</code> I/O. Display operation
+      counts, bandwidth, and error counts of I/O to the pool from
+      <code class="Nm">zdb</code>.</dd>
+  <dt id="S"><a class="permalink" href="#S"><code class="Fl">-S</code></a></dt>
+  <dd>Simulate the effects of deduplication, constructing a DDT and then display
+      that DDT as with <code class="Fl">-DD</code>.</dd>
+  <dt id="u"><a class="permalink" href="#u"><code class="Fl">-u</code></a></dt>
+  <dd>Display the current uberblock.</dd>
+</dl>
+<p class="Pp">Other options:</p>
+<dl class="Bl-tag">
+  <dt id="A~2"><a class="permalink" href="#A~2"><code class="Fl">-A</code></a></dt>
+  <dd>Do not abort should any assertion fail.</dd>
+  <dt id="AA"><a class="permalink" href="#AA"><code class="Fl">-AA</code></a></dt>
+  <dd>Enable panic recovery, certain errors which would otherwise be fatal are
+      demoted to warnings.</dd>
+  <dt id="AAA"><a class="permalink" href="#AAA"><code class="Fl">-AAA</code></a></dt>
+  <dd>Do not abort if asserts fail and also enable panic recovery.</dd>
+  <dt id="e~2"><a class="permalink" href="#e~2"><code class="Fl">-e</code></a>
+    [<code class="Fl">-p</code> <var class="Ar">path ...</var>]</dt>
+  <dd>Operate on an exported pool, not present in
+      <span class="Pa">/etc/zfs/zpool.cache</span>. The
+      <code class="Fl">-p</code> flag specifies the path under which devices are
+      to be searched.</dd>
+  <dt id="x"><a class="permalink" href="#x"><code class="Fl">-x</code></a>
+    <var class="Ar">dumpdir</var></dt>
+  <dd>All blocks accessed will be copied to files in the specified directory.
+      The blocks will be placed in sparse files whose name is the same as that
+      of the file or device read. <code class="Nm">zdb</code> can be then run on
+      the generated files. Note that the <code class="Fl">-bbc</code> flags are
+      sufficient to access (and thus copy) all metadata on the pool.</dd>
+  <dt id="F"><a class="permalink" href="#F"><code class="Fl">-F</code></a></dt>
+  <dd>Attempt to make an unreadable pool readable by trying progressively older
+      transactions.</dd>
+  <dt id="G"><a class="permalink" href="#G"><code class="Fl">-G</code></a></dt>
+  <dd>Dump the contents of the zfs_dbgmsg buffer before exiting
+      <code class="Nm">zdb</code>. zfs_dbgmsg is a buffer used by ZFS to dump
+      advanced debug information.</dd>
+  <dt id="I"><a class="permalink" href="#I"><code class="Fl">-I</code></a>
+    <var class="Ar">inflight I/Os</var></dt>
+  <dd>Limit the number of outstanding checksum I/Os to the specified value. The
+      default value is 200. This option affects the performance of the
+      <code class="Fl">-c</code> option.</dd>
+  <dt id="o"><a class="permalink" href="#o"><code class="Fl">-o</code></a>
+    <var class="Ar">var</var>=<var class="Ar">value ...</var></dt>
+  <dd>Set the given global libzpool variable to the provided value. The value
+      must be an unsigned 32-bit integer. Currently only little-endian systems
+      are supported to avoid accidentally setting the high 32 bits of 64-bit
+      variables.</dd>
+  <dt id="P"><a class="permalink" href="#P"><code class="Fl">-P</code></a></dt>
+  <dd>Print numbers in an unscaled form more amenable to parsing, eg. 1000000
+      rather than 1M.</dd>
+  <dt id="t"><a class="permalink" href="#t"><code class="Fl">-t</code></a>
+    <var class="Ar">transaction</var></dt>
+  <dd>Specify the highest transaction to use when searching for uberblocks. See
+      also the <code class="Fl">-u</code> and <code class="Fl">-l</code> options
+      for a means to see the available uberblocks and their associated
+      transaction numbers.</dd>
+  <dt id="U"><a class="permalink" href="#U"><code class="Fl">-U</code></a>
+    <var class="Ar">cachefile</var></dt>
+  <dd>Use a cache file other than
+    <span class="Pa">/etc/zfs/zpool.cache</span>.</dd>
+  <dt id="v~2"><a class="permalink" href="#v~2"><code class="Fl">-v</code></a></dt>
+  <dd>Enable verbosity. Specify multiple times for increased verbosity.</dd>
+  <dt id="V"><a class="permalink" href="#V"><code class="Fl">-V</code></a></dt>
+  <dd>Attempt verbatim import. This mimics the behavior of the kernel when
+      loading a pool from a cachefile. Only usable with
+      <code class="Fl">-e</code>.</dd>
+  <dt id="X"><a class="permalink" href="#X"><code class="Fl">-X</code></a></dt>
+  <dd>Attempt &quot;extreme&quot; transaction rewind, that is attempt the same
+      recovery as <code class="Fl">-F</code> but read transactions otherwise
+      deemed too old.</dd>
+  <dt id="Y"><a class="permalink" href="#Y"><code class="Fl">-Y</code></a></dt>
+  <dd>Attempt all possible combinations when reconstructing indirect split
+      blocks. This flag disables the individual I/O deadman timer in order to
+      allow as much time as required for the attempted reconstruction.</dd>
+  <dt id="y"><a class="permalink" href="#y"><code class="Fl">-y</code></a></dt>
+  <dd>Perform validation for livelists that are being deleted. Scans through the
+      livelist and metaslabs, checking for duplicate entries and compares the
+      two, checking for potential double frees. If it encounters issues,
+      warnings will be printed, but the command will not necessarily fail.</dd>
+</dl>
+<p class="Pp">Specifying a display option more than once enables verbosity for
+    only that option, with more occurrences enabling more verbosity.</p>
+<p class="Pp">If no options are specified, all information about the named pool
+    will be displayed at default verbosity.</p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="EXAMPLES"><a class="permalink" href="#EXAMPLES">EXAMPLES</a></h1>
+<dl class="Bl-tag">
+  <dt id="Example"><a class="permalink" href="#Example"><b class="Sy">Example
+    1</b></a> Display the configuration of imported pool
+    <span class="Pa">rpool</span></dt>
+  <dd>
+    <div class="Bd Li">
+    <pre># zdb -C rpool
+
+MOS Configuration:
+        version: 28
+        name: 'rpool'
+ ...</pre>
+    </div>
+  </dd>
+  <dt id="Example~2"><a class="permalink" href="#Example~2"><b class="Sy">Example
+    2</b></a> Display basic dataset information about
+    <span class="Pa">rpool</span></dt>
+  <dd>
+    <div class="Bd Pp Li">
+    <pre># zdb -d rpool
+Dataset mos [META], ID 0, cr_txg 4, 26.9M, 1051 objects
+Dataset rpool/swap [ZVOL], ID 59, cr_txg 356, 486M, 2 objects
+ ...</pre>
+    </div>
+  </dd>
+  <dt id="Example~3"><a class="permalink" href="#Example~3"><b class="Sy">Example
+    3</b></a> Display basic information about object 0 in
+    <span class="Pa">rpool/export/home</span></dt>
+  <dd>
+    <div class="Bd Pp Li">
+    <pre># zdb -d rpool/export/home 0
+Dataset rpool/export/home [ZPL], ID 137, cr_txg 1546, 32K, 8 objects
+
+    Object  lvl   iblk   dblk  dsize  lsize   %full  type
+         0    7    16K    16K  15.0K    16K   25.00  DMU dnode</pre>
+    </div>
+  </dd>
+  <dt id="Example~4"><a class="permalink" href="#Example~4"><b class="Sy">Example
+    4</b></a> Display the predicted effect of enabling deduplication on
+    <span class="Pa">rpool</span></dt>
+  <dd>
+    <div class="Bd Pp Li">
+    <pre># zdb -S rpool
+Simulated DDT histogram:
+
+bucket              allocated                       referenced
+______   ______________________________   ______________________________
+refcnt   blocks   LSIZE   PSIZE   DSIZE   blocks   LSIZE   PSIZE   DSIZE
+------   ------   -----   -----   -----   ------   -----   -----   -----
+     1     694K   27.1G   15.0G   15.0G     694K   27.1G   15.0G   15.0G
+     2    35.0K   1.33G    699M    699M    74.7K   2.79G   1.45G   1.45G
+ ...
+dedup = 1.11, compress = 1.80, copies = 1.00, dedup * compress / copies = 2.00</pre>
+    </div>
+  </dd>
+</dl>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SEE_ALSO"><a class="permalink" href="#SEE_ALSO">SEE
+  ALSO</a></h1>
+<p class="Pp"><a href="../8/zfs.8.html" class="Xr">zfs(8)</a>, <a href="../8/zpool.8.html" class="Xr">zpool(8)</a></p>
+</section>
+</div>
+<table class="foot">
+  <tr>
+    <td class="foot-date">April 14, 2019</td>
+    <td class="foot-os">Debian</td>
+  </tr>
+</table>
+</div></section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="vdev_id.8.html" class="btn btn-neutral float-left" title="vdev_id.8" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="zed.8.html" class="btn btn-neutral float-right" title="zed.8" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, OpenZFS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
