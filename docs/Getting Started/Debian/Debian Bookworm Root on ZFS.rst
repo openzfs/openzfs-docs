@@ -565,6 +565,16 @@ Step 4: System Configuration
 
    Customize this file if the system is not a DHCP client.
 
+#. Optional: Install driver firmware and WiFi support
+
+   If you're installing on a laptop or a device where wireless is the
+   primary network option, the above may not be sufficient as you
+   could lack the appopriate firmware for the device and tools to
+   configure the radio. Install some additional packages to cover
+   that need::
+
+     apt install --yes firmware-linux wireless-tools
+
 #. Configure the package sources::
 
      vi /mnt/etc/apt/sources.list
