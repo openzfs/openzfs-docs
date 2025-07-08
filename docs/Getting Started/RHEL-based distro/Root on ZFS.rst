@@ -408,7 +408,7 @@ System Configuration
       echo 'force_drivers+=" mpt3sas "'  >> /etc/dracut.conf.d/zfs.conf
     fi
     if grep virtio_blk /proc/modules; then
-      echo 'filesystems+=" virtio_blk "' >> /etc/dracut.conf.d/fs.conf
+      echo 'filesystems+=" virtio_blk "' >> /etc/dracut.conf.d/zfs.conf
     fi
 
 #. Build initrd::
