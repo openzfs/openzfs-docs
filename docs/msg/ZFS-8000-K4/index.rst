@@ -62,7 +62,7 @@ which pool is in error:
      pool: test
     state: FAULTED
    status: One or more of the intent logs could not be read.
-           Waiting for adminstrator intervention to fix the faulted pool.
+           Waiting for administrator intervention to fix the faulted pool.
    action: Either restore the affected device(s) and run 'zpool online',
            or ignore the intent log records by running 'zpool clear'.
     scrub: none requested

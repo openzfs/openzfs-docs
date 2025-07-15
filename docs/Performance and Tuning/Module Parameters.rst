@@ -1262,7 +1262,7 @@ l2arc_meta_percent
 
 Percent of ARC size allowed for L2ARC-only headers.
 Since L2ARC buffers are not evicted on memory pressure, too large amount of
-headers on system with irrationaly large L2ARC can render it slow or unusable.
+headers on system with irrationally large L2ARC can render it slow or unusable.
 This parameter limits L2ARC writes and rebuild to achieve it.
 
 +-------------------+-------------------------------------------------+
@@ -1443,7 +1443,7 @@ storage devices.
 | Tags              | `ARC <#arc>`__, `L2ARC <#l2arc>`__              |
 +-------------------+-------------------------------------------------+
 | When to change    | Consider setting for cache devices which        |
-|                   | effeciently handle TRIM commands.               |
+|                   | efficiently handle TRIM commands.               |
 +-------------------+-------------------------------------------------+
 | Data Type         | ulong                                           |
 +-------------------+-------------------------------------------------+
@@ -4716,7 +4716,7 @@ zfs_nopwrite_enabled
 ~~~~~~~~~~~~~~~~~~~~
 
 The NOP-write feature is enabled by default when a
-crytographically-secure checksum algorithm is in use by the dataset.
+cryptographically-secure checksum algorithm is in use by the dataset.
 ``zfs_nopwrite_enabled`` allows the NOP-write feature to be completely
 disabled.
 
@@ -6860,7 +6860,7 @@ zfs_compressed_arc_enabled
 
 When compression is enabled for a dataset, later reads of the data can
 store the blocks in ARC in their on-disk, compressed state. This can
-increse the effective size of the ARC, as counted in blocks, and thus
+increase the effective size of the ARC, as counted in blocks, and thus
 improve the ARC hit ratio.
 
 +----------------------------+----------------------------------------+

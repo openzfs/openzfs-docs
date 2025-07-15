@@ -569,7 +569,7 @@ Step 4: System Configuration
 
    If you're installing on a laptop or a device where wireless is the
    primary network option, the above may not be sufficient as you
-   could lack the appopriate firmware for the device and tools to
+   could lack the appropriate firmware for the device and tools to
    configure the radio. Install some additional packages to cover
    that need::
 

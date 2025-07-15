@@ -4,7 +4,7 @@
 
   # For the CI/CD test run of this guide,
   # Enable verbose logging of bash shell and fail immediately when
-  # a commmand fails.
+  # a command fails.
   set -vxeuf
 
 .. In this document, there are three types of code-block markups:
@@ -154,7 +154,7 @@ System Installation
        # devices as installation target.  However, the alias support for
        # loop device was just introduced in March 2023. See
        # https://github.com/systemd/systemd/pull/26693
-       # For now, we will create the aliases maunally as a workaround
+       # For now, we will create the aliases manually as a workaround
        looppart="1 2 3 4 5"
        for i in ${DISK}; do
          for j in ${looppart}; do
