@@ -655,7 +655,7 @@ Step 5: System Configuration
    * en_US.utf8
    * POSIX
 
-   Find yout locale from `locale -a` commands output then set it with following command.
+   Find your locale from `locale -a` commands output then set it with following command.
 
    .. code-block:: text
 
@@ -818,7 +818,7 @@ Step 6: Kernel Installation
      mkinitrd
 
    **Note:** After some installations, LUKS partition cannot seen by dracut,
-   this will print “Failure occured during following action:
+   this will print “Failure occurred during following action:
    configuring encrypted DM device X VOLUME_CRYPTSETUP_FAILED“. For fix this
    issue you need to check cryptsetup installation. `See for more information <https://forums.opensuse.org/showthread.php/528938-installation-with-LUKS-cryptsetup-installer-gives-error-code-3034?p=2850404#post2850404>`__
    **Note:** Although we add the zfs config to the system module into `/etc/modules.d`, if it is not seen by dracut, we have to add it to dracut by force.

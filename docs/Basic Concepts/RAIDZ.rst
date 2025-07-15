@@ -36,7 +36,7 @@ Actual used space for a block in RAIDZ is based on several points:
   ``disks count`` minus ``parity number`` parts of data block
 
 - one block of data with size of ``recordsize`` is
-  splitted equally via ``sector size`` parts
+  split equally via ``sector size`` parts
   and written on each stripe on RAIDZ vdev
 - each stripe of data will have a part of block
 
