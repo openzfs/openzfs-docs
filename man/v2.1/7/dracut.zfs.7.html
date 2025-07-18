@@ -1,0 +1,401 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>dracut.zfs.7 &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
+      <script src="../../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="zfsconcepts.7" href="zfsconcepts.7.html" />
+    <link rel="prev" title="Miscellaneous (7)" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Basic%20Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Man Pages</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../master/index.html">master</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.3/index.html">v2.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.2/index.html">v2.2</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">v2.1</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../1/index.html">User Commands (1)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../4/index.html">Devices and Special Files (4)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../5/index.html">File Formats and Conventions (5)</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">Miscellaneous (7)</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">dracut.zfs.7</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfsconcepts.7.html">zfsconcepts.7</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfsprops.7.html">zfsprops.7</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-features.7.html">zpool-features.7</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpoolconcepts.7.html">zpoolconcepts.7</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpoolprops.7.html">zpoolprops.7</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../8/index.html">System Administration Commands (8)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.0/index.html">v2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.8/index.html">v0.8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.7/index.html">v0.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.6/index.html">v0.6</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Man Pages</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">v2.1</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Miscellaneous (7)</a></li>
+      <li class="breadcrumb-item active">dracut.zfs.7</li>
+      <li class="wy-breadcrumbs-aside">
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/openzfs/zfs/blob/zfs-2.1.16/man/man7/dracut.zfs.7" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="dracut-zfs-7">
+<h1>dracut.zfs.7<a class="headerlink" href="#dracut-zfs-7" title="Permalink to this heading"></a></h1>
+<div class="man_container"><table class="head">
+  <tr>
+    <td class="head-ltitle">DRACUT.ZFS(7)</td>
+    <td class="head-vol">Miscellaneous Information Manual</td>
+    <td class="head-rtitle">DRACUT.ZFS(7)</td>
+  </tr>
+</table>
+<div class="manual-text">
+<section class="Sh">
+<h1 class="Sh" id="NAME"><a class="permalink" href="#NAME">NAME</a></h1>
+<p class="Pp"><code class="Nm">dracut.zfs</code> &#x2014;
+    <span class="Nd">overview of ZFS dracut hooks</span></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SYNOPSIS"><a class="permalink" href="#SYNOPSIS">SYNOPSIS</a></h1>
+<div class="Bd Li">
+<pre>                      parse-zfs.sh &#x2192; dracut-cmdline.service
+                          |                     &#x2193;
+                          |                     &#x2026;
+                          |                     &#x2193;
+                          \&#x2014;&#x2014;&#x2014;&#x2014;&#x2014;&#x2014;&#x2014;&#x2014;&#x2192; dracut-initqueue.service
+                                                |                      zfs-import-opts.sh
+   zfs-load-module.service                      &#x2193;                          |       |
+     |                  |                sysinit.target                    &#x2193;       |
+     &#x2193;                  |                       |        zfs-import-scan.service   &#x2193;
+zfs-import-scan.service &#x2193;                       &#x2193;           | zfs-import-cache.service
+     |   zfs-import-cache.service         basic.target      |     |
+     \__________________|                       |           &#x2193;     &#x2193;
+                        &#x2193;                       |     zfs-load-key.sh
+     zfs-env-bootfs.service                     |         |
+                        &#x2193;                       &#x2193;         &#x2193;
+                 zfs-import.target &#x2192; dracut-pre-mount.service
+                        |          &#x2191;            |
+                        | dracut-zfs-generator  |
+                        | _____________________/|
+                        |/                      &#x2193;
+                        |                   sysroot.mount &#x2190;&#x2014;&#x2014;&#x2014; dracut-zfs-generator
+                        |                       |
+                        |                       &#x2193;
+                        |             initrd-root-fs.target &#x2190;&#x2014; zfs-nonroot-necessities.service
+                        |                       |                                 |
+                        |                       &#x2193;                                 |
+                        &#x2193;             dracut-mount.service                        |
+       zfs-snapshot-bootfs.service              |                                 |
+                        |                       &#x2193;                                 |
+                        &#x2193;                       &#x2026;                                 |
+       zfs-rollback-bootfs.service              |                                 |
+                        |                       &#x2193;                                 |
+                        |          /sysroot/{usr,etc,lib,&amp;c.} &#x2190;&#x2014;&#x2014;&#x2014;&#x2014;&#x2014;&#x2014;&#x2014;&#x2014;&#x2014;&#x2014;&#x2014;&#x2014;&#x2014;&#x2014;&#x2014;&#x2014;&#x2014;&#x2014;&#x2014;/
+                        |                       |
+                        |                       &#x2193;
+                        |                initrd-fs.target
+                        \______________________ |
+                                               \|
+                                                &#x2193;
+        export-zfs.sh                      initrd.target
+              |                                 |
+              &#x2193;                                 &#x2193;
+   dracut-shutdown.service                      &#x2026;
+                                                |
+                                                &#x2193;
+                 zfs-needshutdown.sh &#x2192; initrd-cleanup.service</pre>
+</div>
+<p class="Pp">Compare <a class="Xr">dracut.bootup(7)</a> for the full
+  flowchart.</p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h1>
+<p class="Pp">Under dracut, booting with
+    <span class="No">ZFS-on-</span><span class="Pa">/</span> is facilitated by a
+    number of hooks in the <code class="Nm">90zfs</code> module.</p>
+<p class="Pp">Booting into a ZFS dataset requires
+    <b class="Sy">mountpoint</b>=<span class="Pa">/</span> to be set on the
+    dataset containing the root filesystem (henceforth &quot;the boot
+    dataset&quot;) and at the very least either the <b class="Sy">bootfs</b>
+    property to be set to that dataset, or the <b class="Sy">root=</b> kernel
+    cmdline (or dracut drop-in) argument to specify it.</p>
+<p class="Pp" id="canmount">All children of the boot dataset with
+    <a class="permalink" href="#canmount"><b class="Sy">canmount</b></a>=<a class="permalink" href="#on"><b class="Sy" id="on">on</b></a>
+    with <b class="Sy">mountpoint</b>s matching <span class="Pa">/etc</span>,
+    <span class="Pa">/bin</span>, <span class="Pa">/lib</span>,
+    <span class="Pa">/lib??</span>, <span class="Pa">/libx32</span>,
+    <span class="No">and</span> <span class="Pa">/usr</span> globs are deemed
+    essential and will be mounted as well.</p>
+<p class="Pp"><a href="../8/zfs-mount-generator.8.html" class="Xr">zfs-mount-generator(8)</a> is recommended for proper
+    functioning of the system afterward (correct mount properties, remounting,
+    &amp;c.).</p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="CMDLINE"><a class="permalink" href="#CMDLINE">CMDLINE</a></h1>
+<section class="Ss">
+<h2 class="Ss" id="Standard"><a class="permalink" href="#Standard">Standard</a></h2>
+<dl class="Bl-tag Bl-compact">
+  <dt id="root=zfs:"><a class="permalink" href="#root=zfs:"><b class="Sy">root=zfs:</b></a><var class="Ar">dataset</var>,
+    <a class="permalink" href="#root=ZFS="><b class="Sy" id="root=ZFS=">root=ZFS=</b></a><var class="Ar">dataset</var></dt>
+  <dd>Use <var class="Ar">dataset</var> as the boot dataset. All pluses
+      (&#x2018;+&#x2019;) are replaced with spaces
+    (&#x2018;&#x00A0;&#x2019;).</dd>
+  <dt id="root=zfs:AUTO"><a class="permalink" href="#root=zfs:AUTO"><b class="Sy">root=zfs:AUTO</b></a>,
+    <b class="Sy">root=zfs:</b>,
+    <a class="permalink" href="#root=zfs"><b class="Sy" id="root=zfs">root=zfs</b></a>,
+    [<b class="Sy">root=</b>]</dt>
+  <dd>After import, search for the first pool with the <b class="Sy">bootfs</b>
+      property set, use its value as-if specified as the
+      <var class="Ar">dataset</var> above.</dd>
+  <dt><b class="Sy">rootfstype=zfs root=</b><var class="Ar">dataset</var></dt>
+  <dd>Equivalent to
+    <b class="Sy">root=zfs:</b><var class="Ar">dataset</var>.</dd>
+  <dt id="rootfstype=zfs"><a class="permalink" href="#rootfstype=zfs"><b class="Sy">rootfstype=zfs</b></a>
+    [<b class="Sy">root=</b>]</dt>
+  <dd>Equivalent to <b class="Sy">root=zfs:AUTO</b>.</dd>
+  <dt id="rootflags="><a class="permalink" href="#rootflags="><b class="Sy">rootflags=</b></a><var class="Ar">flags</var></dt>
+  <dd>Mount the boot dataset with <code class="Fl">-o</code>
+      <var class="Ar">flags</var>; cf.
+      <a class="Sx" href="#Temporary_Mount_Point_Properties">Temporary Mount
+      Point Properties</a> in <a href="../7/zfsprops.7.html" class="Xr">zfsprops(7)</a>. These properties
+      will not last, since all filesystems will be re-mounted from the real
+      root.</dd>
+  <dt id="debug"><a class="permalink" href="#debug"><b class="Sy">debug</b></a></dt>
+  <dd>If specified, <code class="Nm">dracut-zfs-generator</code> logs to the
+      journal.</dd>
+</dl>
+<p class="Pp">Be careful about setting neither <b class="Sy">rootfstype=zfs</b>
+    nor <b class="Sy">root=zfs:</b><var class="Ar">dataset</var> &#x2014; other
+    automatic boot selection methods, like
+    <code class="Nm">systemd-gpt-auto-generator</code> and
+    <code class="Nm">systemd-fstab-generator</code> might take precedent.</p>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="ZFS-specific"><a class="permalink" href="#ZFS-specific">ZFS-specific</a></h2>
+<dl class="Bl-tag Bl-compact">
+  <dt id="bootfs.snapshot"><a class="permalink" href="#bootfs.snapshot"><b class="Sy">bootfs.snapshot</b></a>[<b class="Sy">=</b><var class="Ar">snapshot-name</var>]</dt>
+  <dd>Execute <code class="Nm">zfs</code> <code class="Cm">snapshot</code>
+      <var class="Ar">boot-dataset</var><b class="Sy">@</b><var class="Ar">snapshot-name</var>
+      before pivoting to the real root. <var class="Ar">snapshot-name</var>
+      defaults to the current kernel release.</dd>
+  <dt id="bootfs.rollback"><a class="permalink" href="#bootfs.rollback"><b class="Sy">bootfs.rollback</b></a>[<b class="Sy">=</b><var class="Ar">snapshot-name</var>]</dt>
+  <dd>Execute <code class="Nm">zfs</code> <code class="Cm">snapshot</code>
+      <code class="Fl">-Rf</code>
+      <var class="Ar">boot-dataset</var><b class="Sy">@</b><var class="Ar">snapshot-name</var>
+      before pivoting to the real root. <var class="Ar">snapshot-name</var>
+      defaults to the current kernel release.</dd>
+  <dt id="spl_hostid="><a class="permalink" href="#spl_hostid="><b class="Sy">spl_hostid=</b></a><var class="Ar">host-id</var></dt>
+  <dd>Use <a href="../8/zgenhostid.8.html" class="Xr">zgenhostid(8)</a> to set the host ID to
+      <var class="Ar">host-id</var>; otherwise,
+      <span class="Pa">/etc/hostid</span> inherited from the real root is
+    used.</dd>
+  <dt id="zfs_force"><a class="permalink" href="#zfs_force"><b class="Sy">zfs_force</b></a>,
+    <b class="Sy">zfs.force</b>, <b class="Sy">zfsforce</b></dt>
+  <dd>Appends <code class="Fl">-f</code> to all <code class="Nm">zpool</code>
+      <code class="Cm">import</code> invocations; primarily useful in
+      conjunction with <b class="Sy">spl_hostid=</b>, or if no host ID was
+      inherited.</dd>
+</dl>
+</section>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="FILES"><a class="permalink" href="#FILES">FILES</a></h1>
+<dl class="Bl-tag">
+  <dt id="cmdline"><span class="Pa">parse-zfs.sh</span>
+    (<a class="permalink" href="#cmdline"><b class="Sy">cmdline</b></a>)</dt>
+  <dd>Processes <b class="Sy">spl_hostid=</b>. If <b class="Sy">root=</b>
+      matches a known pattern, above, provides <span class="Pa">/dev/root</span>
+      and delays the initqueue until <a href="../4/zfs.4.html" class="Xr">zfs(4)</a> is loaded,</dd>
+  <dt><span class="Pa">zfs-import-opts.sh</span>
+    (<code class="Nm">systemd</code> <span class="No">environment
+    generator</span>)</dt>
+  <dd>Turns <b class="Sy">zfs_force</b>, <b class="Sy">zfs.force</b>,
+      <span class="No">or</span> <b class="Sy">zfsforce</b> into
+      <code class="Ev">ZPOOL_IMPORT_OPTS</code>=<code class="Fl">-f</code> for
+      <span class="Pa">zfs-import-scan.service</span> or
+      <span class="Pa">zfs-import-cache.service</span>.</dd>
+  <dt id="pre-mount"><span class="Pa">zfs-load-key.sh</span>
+    (<a class="permalink" href="#pre-mount"><b class="Sy">pre-mount</b></a>)</dt>
+  <dd>Loads encryption keys for the boot dataset and its essential descendants.
+    <div class="Bd-indent">
+    <dl class="Bl-tag Bl-compact">
+      <dt id="keylocation"><a class="permalink" href="#keylocation"><b class="Sy">keylocation</b></a>=<a class="permalink" href="#prompt"><b class="Sy" id="prompt">prompt</b></a></dt>
+      <dd>Is prompted for via <code class="Nm">systemd-ask-password</code>
+          thrice.</dd>
+      <dt id="keylocation~2"><a class="permalink" href="#keylocation~2"><b class="Sy">keylocation</b></a>=<a class="permalink" href="#https://"><b class="Sy" id="https://">https://</b></a><var class="Ar">URL</var>,
+        <b class="Sy">keylocation</b>=<a class="permalink" href="#http://"><b class="Sy" id="http://">http://</b></a><var class="Ar">URL</var></dt>
+      <dd><span class="Pa">network-online.target</span> is started before
+          loading.</dd>
+      <dt id="keylocation~3"><a class="permalink" href="#keylocation~3"><b class="Sy">keylocation</b></a>=<a class="permalink" href="#file://"><b class="Sy" id="file://">file://</b></a><var class="Ar">path</var></dt>
+      <dd>If <var class="Ar">path</var> doesn't exist,
+          <code class="Nm">udevadm</code> <span class="No">is</span>
+          <code class="Cm">settle</code>d. If it still doesn't, it's waited for
+          for up to
+          <a class="permalink" href="#10"><b class="Sy" id="10">10</b></a>s.</dd>
+    </dl>
+    </div>
+  </dd>
+  <dt><span class="Pa">zfs-env-bootfs.service</span>
+    (<code class="Nm">systemd</code> <span class="No">service</span>)</dt>
+  <dd>After pool import, sets <code class="Ev">BOOTFS</code>= in the systemd
+      environment to the first non-null <b class="Sy">bootfs</b> value in
+      iteration order.</dd>
+  <dt><span class="Pa">dracut-zfs-generator</span>
+    (<code class="Nm">systemd</code> <span class="No">generator</span>)</dt>
+  <dd>Generates <span class="Pa">sysroot.mount</span> (using
+      <b class="Sy">rootflags=</b>, <span class="No">if any</span>). If an
+      explicit boot dataset was specified, also generates essential mountpoints
+      (<span class="Pa">sysroot-etc.mount</span>,
+      <span class="Pa">sysroot-bin.mount</span>,
+      <span class="No">&amp;c.</span>), otherwise generates
+      <span class="Pa">zfs-nonroot-necessities.service</span> which mounts them
+      explicitly after <span class="Pa">/sysroot</span> using
+      <code class="Ev">BOOTFS</code>=.</dd>
+  <dt><span class="Pa">zfs-snapshot-bootfs.service</span>,
+    <span class="Pa">zfs-rollback-bootfs.service</span>
+    (<code class="Nm">systemd</code> <span class="No">services</span>)</dt>
+  <dd>Consume <b class="Sy">bootfs.snapshot</b> and
+      <b class="Sy">bootfs.rollback</b> as described in
+      <a class="Sx" href="#CMDLINE">CMDLINE</a>. Use
+      <code class="Ev">BOOTFS</code>= if no explicit boot dataset was
+    specified.</dd>
+  <dt id="cleanup"><span class="Pa">zfs-needshutdown.sh</span>
+    (<a class="permalink" href="#cleanup"><b class="Sy">cleanup</b></a>)</dt>
+  <dd>If any pools were imported, signals that shutdown hooks are required.</dd>
+  <dt id="shutdown"><span class="Pa">export-zfs.sh</span>
+    (<a class="permalink" href="#shutdown"><b class="Sy">shutdown</b></a>)</dt>
+  <dd>Forcibly exports all pools.</dd>
+  <dt><span class="Pa">/etc/hostid</span>,
+    <span class="Pa">/etc/zfs/zpool.cache</span>,
+    <span class="Pa">/etc/zfs/vdev_id.conf</span> (regular files)</dt>
+  <dd>Included verbatim, hostonly.</dd>
+  <dt id="mount"><span class="Pa">mount-zfs.sh</span>
+    (<a class="permalink" href="#mount"><b class="Sy">mount</b></a>)</dt>
+  <dd>Does nothing on <code class="Nm">systemd</code> systems (if
+      <span class="Pa">dracut-zfs-generator</span>
+      <span class="No">succeeded</span>). Otherwise, loads encryption key for
+      the boot dataset from the console or via plymouth. It may not work at
+    all!</dd>
+</dl>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SEE_ALSO"><a class="permalink" href="#SEE_ALSO">SEE
+  ALSO</a></h1>
+<p class="Pp"><a href="../7/zfsprops.7.html" class="Xr">zfsprops(7)</a>,
+    <a href="../7/zpoolprops.7.html" class="Xr">zpoolprops(7)</a>,
+    <a class="Xr">dracut-shutdown.service(8)</a>,
+    <a class="Xr">systemd-fstab-generator(8)</a>,
+    <a class="Xr">systemd-gpt-auto-generator(8)</a>,
+    <a href="../8/zfs-mount-generator.8.html" class="Xr">zfs-mount-generator(8)</a>,
+  <a href="../8/zgenhostid.8.html" class="Xr">zgenhostid(8)</a></p>
+</section>
+</div>
+<table class="foot">
+  <tr>
+    <td class="foot-date">March 28, 2023</td>
+    <td class="foot-os">Debian</td>
+  </tr>
+</table>
+</div></section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Miscellaneous (7)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="zfsconcepts.7.html" class="btn btn-neutral float-right" title="zfsconcepts.7" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, OpenZFS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
