@@ -1,0 +1,576 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>arcstat.1 &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
+      <script src="../../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="cstyle.1" href="cstyle.1.html" />
+    <link rel="prev" title="User Commands (1)" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Basic%20Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Man Pages</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">master</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">User Commands (1)</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">arcstat.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cstyle.1.html">cstyle.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="raidz_test.1.html">raidz_test.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="test-runner.1.html">test-runner.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zhack.1.html">zhack.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ztest.1.html">ztest.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zvol_wait.1.html">zvol_wait.1</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../4/index.html">Devices and Special Files (4)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../5/index.html">File Formats and Conventions (5)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../7/index.html">Miscellaneous (7)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../8/index.html">System Administration Commands (8)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.3/index.html">v2.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.2/index.html">v2.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.1/index.html">v2.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.0/index.html">v2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.8/index.html">v0.8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.7/index.html">v0.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.6/index.html">v0.6</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Man Pages</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">master</a></li>
+          <li class="breadcrumb-item"><a href="index.html">User Commands (1)</a></li>
+      <li class="breadcrumb-item active">arcstat.1</li>
+      <li class="wy-breadcrumbs-aside">
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/openzfs/zfs/blob/master/man/man1/arcstat.1" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="arcstat-1">
+<h1>arcstat.1<a class="headerlink" href="#arcstat-1" title="Permalink to this heading"></a></h1>
+<div class="man_container"><table class="head">
+  <tr>
+    <td class="head-ltitle">ARCSTAT(1)</td>
+    <td class="head-vol">General Commands Manual</td>
+    <td class="head-rtitle">ARCSTAT(1)</td>
+  </tr>
+</table>
+<div class="manual-text">
+<section class="Sh">
+<h1 class="Sh" id="NAME"><a class="permalink" href="#NAME">NAME</a></h1>
+<p class="Pp"><code class="Nm">arcstat</code> &#x2014; <span class="Nd">report
+    ZFS ARC and L2ARC statistics</span></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SYNOPSIS"><a class="permalink" href="#SYNOPSIS">SYNOPSIS</a></h1>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">arcstat</code></td>
+    <td>[<code class="Fl">-havxp</code>] [<code class="Fl">-f</code>
+      <var class="Ar">field</var>[,<var class="Ar">field</var>&#x2026;]]
+      [<code class="Fl">-o</code> <var class="Ar">file</var>]
+      [<code class="Fl">-s</code> <var class="Ar">string</var>]
+      [<var class="Ar">interval</var>] [<var class="Ar">count</var>]</td>
+  </tr>
+</table>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h1>
+<p class="Pp"><code class="Nm">arcstat</code> prints various ZFS ARC and L2ARC
+    statistics in vmstat-like fashion:</p>
+<div class="Bd-indent">
+<dl class="Bl-tag Bl-compact">
+  <dt id="c"><a class="permalink" href="#c"><b class="Sy">c</b></a></dt>
+  <dd>ARC target size</dd>
+  <dt id="dh_"><a class="permalink" href="#dh_"><b class="Sy">dh%</b></a></dt>
+  <dd>Demand hit percentage</dd>
+  <dt id="di_"><a class="permalink" href="#di_"><b class="Sy">di%</b></a></dt>
+  <dd>Demand I/O hit percentage</dd>
+  <dt id="dm_"><a class="permalink" href="#dm_"><b class="Sy">dm%</b></a></dt>
+  <dd>Demand miss percentage</dd>
+  <dt id="ddh_"><a class="permalink" href="#ddh_"><b class="Sy">ddh%</b></a></dt>
+  <dd>Demand data hit percentage</dd>
+  <dt id="ddi_"><a class="permalink" href="#ddi_"><b class="Sy">ddi%</b></a></dt>
+  <dd>Demand data I/O hit percentage</dd>
+  <dt id="ddm_"><a class="permalink" href="#ddm_"><b class="Sy">ddm%</b></a></dt>
+  <dd>Demand data miss percentage</dd>
+  <dt id="dmh_"><a class="permalink" href="#dmh_"><b class="Sy">dmh%</b></a></dt>
+  <dd>Demand metadata hit percentage</dd>
+  <dt id="dmi_"><a class="permalink" href="#dmi_"><b class="Sy">dmi%</b></a></dt>
+  <dd>Demand metadata I/O hit percentage</dd>
+  <dt id="dmm_"><a class="permalink" href="#dmm_"><b class="Sy">dmm%</b></a></dt>
+  <dd>Demand metadata miss percentage</dd>
+  <dt id="mfu"><a class="permalink" href="#mfu"><b class="Sy">mfu</b></a></dt>
+  <dd>MFU list hits per second</dd>
+  <dt id="mh_"><a class="permalink" href="#mh_"><b class="Sy">mh%</b></a></dt>
+  <dd>Metadata hit percentage</dd>
+  <dt id="mi_"><a class="permalink" href="#mi_"><b class="Sy">mi%</b></a></dt>
+  <dd>Metadata I/O hit percentage</dd>
+  <dt id="mm_"><a class="permalink" href="#mm_"><b class="Sy">mm%</b></a></dt>
+  <dd>Metadata miss percentage</dd>
+  <dt id="mru"><a class="permalink" href="#mru"><b class="Sy">mru</b></a></dt>
+  <dd>MRU list hits per second</dd>
+  <dt id="ph_"><a class="permalink" href="#ph_"><b class="Sy">ph%</b></a></dt>
+  <dd>Prefetch hits percentage</dd>
+  <dt id="pi_"><a class="permalink" href="#pi_"><b class="Sy">pi%</b></a></dt>
+  <dd>Prefetch I/O hits percentage</dd>
+  <dt id="pm_"><a class="permalink" href="#pm_"><b class="Sy">pm%</b></a></dt>
+  <dd>Prefetch miss percentage</dd>
+  <dt id="pdh_"><a class="permalink" href="#pdh_"><b class="Sy">pdh%</b></a></dt>
+  <dd>Prefetch data hits percentage</dd>
+  <dt id="pdi_"><a class="permalink" href="#pdi_"><b class="Sy">pdi%</b></a></dt>
+  <dd>Prefetch data I/O hits percentage</dd>
+  <dt id="pdm_"><a class="permalink" href="#pdm_"><b class="Sy">pdm%</b></a></dt>
+  <dd>Prefetch data miss percentage</dd>
+  <dt id="pmh_"><a class="permalink" href="#pmh_"><b class="Sy">pmh%</b></a></dt>
+  <dd>Prefetch metadata hits percentage</dd>
+  <dt id="pmi_"><a class="permalink" href="#pmi_"><b class="Sy">pmi%</b></a></dt>
+  <dd>Prefetch metadata I/O hits percentage</dd>
+  <dt id="pmm_"><a class="permalink" href="#pmm_"><b class="Sy">pmm%</b></a></dt>
+  <dd>Prefetch metadata miss percentage</dd>
+  <dt id="dhit"><a class="permalink" href="#dhit"><b class="Sy">dhit</b></a></dt>
+  <dd>Demand hits per second</dd>
+  <dt id="dioh"><a class="permalink" href="#dioh"><b class="Sy">dioh</b></a></dt>
+  <dd>Demand I/O hits per second</dd>
+  <dt id="dmis"><a class="permalink" href="#dmis"><b class="Sy">dmis</b></a></dt>
+  <dd>Demand misses per second</dd>
+  <dt id="ddhit"><a class="permalink" href="#ddhit"><b class="Sy">ddhit</b></a></dt>
+  <dd>Demand data hits per second</dd>
+  <dt id="ddioh"><a class="permalink" href="#ddioh"><b class="Sy">ddioh</b></a></dt>
+  <dd>Demand data I/O hits per second</dd>
+  <dt id="ddmis"><a class="permalink" href="#ddmis"><b class="Sy">ddmis</b></a></dt>
+  <dd>Demand data misses per second</dd>
+  <dt id="dmhit"><a class="permalink" href="#dmhit"><b class="Sy">dmhit</b></a></dt>
+  <dd>Demand metadata hits per second</dd>
+  <dt id="dmioh"><a class="permalink" href="#dmioh"><b class="Sy">dmioh</b></a></dt>
+  <dd>Demand metadata I/O hits per second</dd>
+  <dt id="dmmis"><a class="permalink" href="#dmmis"><b class="Sy">dmmis</b></a></dt>
+  <dd>Demand metadata misses per second</dd>
+  <dt id="hit_"><a class="permalink" href="#hit_"><b class="Sy">hit%</b></a></dt>
+  <dd>ARC hit percentage</dd>
+  <dt id="hits"><a class="permalink" href="#hits"><b class="Sy">hits</b></a></dt>
+  <dd>ARC hits per second</dd>
+  <dt id="ioh_"><a class="permalink" href="#ioh_"><b class="Sy">ioh%</b></a></dt>
+  <dd>ARC I/O hits percentage</dd>
+  <dt id="iohs"><a class="permalink" href="#iohs"><b class="Sy">iohs</b></a></dt>
+  <dd>ARC I/O hits per second</dd>
+  <dt id="mfug"><a class="permalink" href="#mfug"><b class="Sy">mfug</b></a></dt>
+  <dd>MFU ghost list hits per second</dd>
+  <dt id="mhit"><a class="permalink" href="#mhit"><b class="Sy">mhit</b></a></dt>
+  <dd>Metadata hits per second</dd>
+  <dt id="mioh"><a class="permalink" href="#mioh"><b class="Sy">mioh</b></a></dt>
+  <dd>Metadata I/O hits per second</dd>
+  <dt id="miss"><a class="permalink" href="#miss"><b class="Sy">miss</b></a></dt>
+  <dd>ARC misses per second</dd>
+  <dt id="mmis"><a class="permalink" href="#mmis"><b class="Sy">mmis</b></a></dt>
+  <dd>Metadata misses per second</dd>
+  <dt id="mrug"><a class="permalink" href="#mrug"><b class="Sy">mrug</b></a></dt>
+  <dd>MRU ghost list hits per second</dd>
+  <dt id="phit"><a class="permalink" href="#phit"><b class="Sy">phit</b></a></dt>
+  <dd>Prefetch hits per second</dd>
+  <dt id="pioh"><a class="permalink" href="#pioh"><b class="Sy">pioh</b></a></dt>
+  <dd>Prefetch I/O hits per second</dd>
+  <dt id="pmis"><a class="permalink" href="#pmis"><b class="Sy">pmis</b></a></dt>
+  <dd>Prefetch misses per second</dd>
+  <dt id="pdhit"><a class="permalink" href="#pdhit"><b class="Sy">pdhit</b></a></dt>
+  <dd>Prefetch data hits per second</dd>
+  <dt id="pdioh"><a class="permalink" href="#pdioh"><b class="Sy">pdioh</b></a></dt>
+  <dd>Prefetch data I/O hits per second</dd>
+  <dt id="pdmis"><a class="permalink" href="#pdmis"><b class="Sy">pdmis</b></a></dt>
+  <dd>Prefetch data misses per second</dd>
+  <dt id="pmhit"><a class="permalink" href="#pmhit"><b class="Sy">pmhit</b></a></dt>
+  <dd>Prefetch metadata hits per second</dd>
+  <dt id="pmioh"><a class="permalink" href="#pmioh"><b class="Sy">pmioh</b></a></dt>
+  <dd>Prefetch metadata I/O hits per second</dd>
+  <dt id="pmmis"><a class="permalink" href="#pmmis"><b class="Sy">pmmis</b></a></dt>
+  <dd>Prefetch metadata misses per second</dd>
+  <dt id="read"><a class="permalink" href="#read"><b class="Sy">read</b></a></dt>
+  <dd>Total ARC accesses per second</dd>
+  <dt id="time"><a class="permalink" href="#time"><b class="Sy">time</b></a></dt>
+  <dd>Current time</dd>
+  <dt id="size"><a class="permalink" href="#size"><b class="Sy">size</b></a></dt>
+  <dd>ARC size</dd>
+  <dt id="arcsz"><a class="permalink" href="#arcsz"><b class="Sy">arcsz</b></a></dt>
+  <dd>Alias for <b class="Sy">size</b></dd>
+  <dt id="unc"><a class="permalink" href="#unc"><b class="Sy">unc</b></a></dt>
+  <dd>Uncached list hits per second</dd>
+  <dt id="dread"><a class="permalink" href="#dread"><b class="Sy">dread</b></a></dt>
+  <dd>Demand accesses per second</dd>
+  <dt id="ddread"><a class="permalink" href="#ddread"><b class="Sy">ddread</b></a></dt>
+  <dd>Demand data accesses per second</dd>
+  <dt id="dmread"><a class="permalink" href="#dmread"><b class="Sy">dmread</b></a></dt>
+  <dd>Demand metadata accesses per second</dd>
+  <dt id="eskip"><a class="permalink" href="#eskip"><b class="Sy">eskip</b></a></dt>
+  <dd>evict_skip per second</dd>
+  <dt id="miss_"><a class="permalink" href="#miss_"><b class="Sy">miss%</b></a></dt>
+  <dd>ARC miss percentage</dd>
+  <dt id="mread"><a class="permalink" href="#mread"><b class="Sy">mread</b></a></dt>
+  <dd>Metadata accesses per second</dd>
+  <dt id="pread"><a class="permalink" href="#pread"><b class="Sy">pread</b></a></dt>
+  <dd>Prefetch accesses per second</dd>
+  <dt id="pdread"><a class="permalink" href="#pdread"><b class="Sy">pdread</b></a></dt>
+  <dd>Prefetch data accesses per second</dd>
+  <dt id="pmread"><a class="permalink" href="#pmread"><b class="Sy">pmread</b></a></dt>
+  <dd>Prefetch metadata accesses per second</dd>
+  <dt id="l2hit_"><a class="permalink" href="#l2hit_"><b class="Sy">l2hit%</b></a></dt>
+  <dd>L2ARC access hit percentage</dd>
+  <dt id="l2hits"><a class="permalink" href="#l2hits"><b class="Sy">l2hits</b></a></dt>
+  <dd>L2ARC hits per second</dd>
+  <dt id="l2miss"><a class="permalink" href="#l2miss"><b class="Sy">l2miss</b></a></dt>
+  <dd>L2ARC misses per second</dd>
+  <dt id="l2read"><a class="permalink" href="#l2read"><b class="Sy">l2read</b></a></dt>
+  <dd>Total L2ARC accesses per second</dd>
+  <dt id="l2pref"><a class="permalink" href="#l2pref"><b class="Sy">l2pref</b></a></dt>
+  <dd>L2ARC prefetch allocated size per second</dd>
+  <dt id="l2pref_"><a class="permalink" href="#l2pref_"><b class="Sy">l2pref%</b></a></dt>
+  <dd>L2ARC prefetch allocated size percentage</dd>
+  <dt id="l2mfu"><a class="permalink" href="#l2mfu"><b class="Sy">l2mfu</b></a></dt>
+  <dd>L2ARC MFU allocated size per second</dd>
+  <dt id="l2mfu_"><a class="permalink" href="#l2mfu_"><b class="Sy">l2mfu%</b></a></dt>
+  <dd>L2ARC MFU allocated size percentage</dd>
+  <dt id="l2mru"><a class="permalink" href="#l2mru"><b class="Sy">l2mru</b></a></dt>
+  <dd>L2ARC MRU allocated size per second</dd>
+  <dt id="l2mru_"><a class="permalink" href="#l2mru_"><b class="Sy">l2mru%</b></a></dt>
+  <dd>L2ARC MRU allocated size percentage</dd>
+  <dt id="l2data"><a class="permalink" href="#l2data"><b class="Sy">l2data</b></a></dt>
+  <dd>L2ARC data (buf content) allocated size per second</dd>
+  <dt id="l2data_"><a class="permalink" href="#l2data_"><b class="Sy">l2data%</b></a></dt>
+  <dd>L2ARC data (buf content) allocated size percentage</dd>
+  <dt id="l2meta"><a class="permalink" href="#l2meta"><b class="Sy">l2meta</b></a></dt>
+  <dd>L2ARC metadata (buf content) allocated size per second</dd>
+  <dt id="l2meta_"><a class="permalink" href="#l2meta_"><b class="Sy">l2meta%</b></a></dt>
+  <dd>L2ARC metadata (buf content) allocated size percentage</dd>
+  <dt id="l2size"><a class="permalink" href="#l2size"><b class="Sy">l2size</b></a></dt>
+  <dd>Size of the L2ARC</dd>
+  <dt id="mtxmis"><a class="permalink" href="#mtxmis"><b class="Sy">mtxmis</b></a></dt>
+  <dd>mutex_miss per second</dd>
+  <dt id="l2bytes"><a class="permalink" href="#l2bytes"><b class="Sy">l2bytes</b></a></dt>
+  <dd>Bytes read per second from the L2ARC</dd>
+  <dt id="l2wbytes"><a class="permalink" href="#l2wbytes"><b class="Sy">l2wbytes</b></a></dt>
+  <dd>Bytes written per second to the L2ARC</dd>
+  <dt id="l2miss_"><a class="permalink" href="#l2miss_"><b class="Sy">l2miss%</b></a></dt>
+  <dd>L2ARC access miss percentage</dd>
+  <dt id="l2asize"><a class="permalink" href="#l2asize"><b class="Sy">l2asize</b></a></dt>
+  <dd>Actual (compressed) size of the L2ARC</dd>
+  <dt id="cmpsz"><a class="permalink" href="#cmpsz"><b class="Sy">cmpsz</b></a></dt>
+  <dd>Compressed size</dd>
+  <dt id="cmpsz_"><a class="permalink" href="#cmpsz_"><b class="Sy">cmpsz%</b></a></dt>
+  <dd>Compressed size percentage</dd>
+  <dt id="ovhsz"><a class="permalink" href="#ovhsz"><b class="Sy">ovhsz</b></a></dt>
+  <dd>Overhead size</dd>
+  <dt id="ovhsz_"><a class="permalink" href="#ovhsz_"><b class="Sy">ovhsz%</b></a></dt>
+  <dd>Overhead size percentage</dd>
+  <dt id="bonsz"><a class="permalink" href="#bonsz"><b class="Sy">bonsz</b></a></dt>
+  <dd>Bonus size</dd>
+  <dt id="bonsz_"><a class="permalink" href="#bonsz_"><b class="Sy">bonsz%</b></a></dt>
+  <dd>Bonus size percentage</dd>
+  <dt id="dnosz"><a class="permalink" href="#dnosz"><b class="Sy">dnosz</b></a></dt>
+  <dd>Dnode size</dd>
+  <dt id="dnosz_"><a class="permalink" href="#dnosz_"><b class="Sy">dnosz%</b></a></dt>
+  <dd>Dnode size percentage</dd>
+  <dt id="dbusz"><a class="permalink" href="#dbusz"><b class="Sy">dbusz</b></a></dt>
+  <dd>Dbuf size</dd>
+  <dt id="dbusz_"><a class="permalink" href="#dbusz_"><b class="Sy">dbusz%</b></a></dt>
+  <dd>Dbuf size percentage</dd>
+  <dt id="hdrsz"><a class="permalink" href="#hdrsz"><b class="Sy">hdrsz</b></a></dt>
+  <dd>Header size</dd>
+  <dt id="hdrsz_"><a class="permalink" href="#hdrsz_"><b class="Sy">hdrsz%</b></a></dt>
+  <dd>Header size percentage</dd>
+  <dt id="l2hsz"><a class="permalink" href="#l2hsz"><b class="Sy">l2hsz</b></a></dt>
+  <dd>L2 header size</dd>
+  <dt id="l2hsz_"><a class="permalink" href="#l2hsz_"><b class="Sy">l2hsz%</b></a></dt>
+  <dd>L2 header size percentage</dd>
+  <dt id="abdsz"><a class="permalink" href="#abdsz"><b class="Sy">abdsz</b></a></dt>
+  <dd>ABD chunk waste size</dd>
+  <dt id="abdsz_"><a class="permalink" href="#abdsz_"><b class="Sy">abdsz%</b></a></dt>
+  <dd>ABD chunk waste size percentage</dd>
+  <dt id="datatg"><a class="permalink" href="#datatg"><b class="Sy">datatg</b></a></dt>
+  <dd>ARC data target</dd>
+  <dt id="datatg_"><a class="permalink" href="#datatg_"><b class="Sy">datatg%</b></a></dt>
+  <dd>ARC data target percentage</dd>
+  <dt id="datasz"><a class="permalink" href="#datasz"><b class="Sy">datasz</b></a></dt>
+  <dd>ARC data size</dd>
+  <dt id="datasz_"><a class="permalink" href="#datasz_"><b class="Sy">datasz%</b></a></dt>
+  <dd>ARC data size percentage</dd>
+  <dt id="metatg"><a class="permalink" href="#metatg"><b class="Sy">metatg</b></a></dt>
+  <dd>ARC metadata target</dd>
+  <dt id="metatg_"><a class="permalink" href="#metatg_"><b class="Sy">metatg%</b></a></dt>
+  <dd>ARC metadata target percentage</dd>
+  <dt id="metasz"><a class="permalink" href="#metasz"><b class="Sy">metasz</b></a></dt>
+  <dd>ARC metadata size</dd>
+  <dt id="metasz_"><a class="permalink" href="#metasz_"><b class="Sy">metasz%</b></a></dt>
+  <dd>ARC metadata size percentage</dd>
+  <dt id="anosz"><a class="permalink" href="#anosz"><b class="Sy">anosz</b></a></dt>
+  <dd>Anonymous size</dd>
+  <dt id="anosz_"><a class="permalink" href="#anosz_"><b class="Sy">anosz%</b></a></dt>
+  <dd>Anonymous size percentage</dd>
+  <dt id="anoda"><a class="permalink" href="#anoda"><b class="Sy">anoda</b></a></dt>
+  <dd>Anonymous data size</dd>
+  <dt id="anoda_"><a class="permalink" href="#anoda_"><b class="Sy">anoda%</b></a></dt>
+  <dd>Anonymous data size percentage</dd>
+  <dt id="anome"><a class="permalink" href="#anome"><b class="Sy">anome</b></a></dt>
+  <dd>Anonymous metadata size</dd>
+  <dt id="anome_"><a class="permalink" href="#anome_"><b class="Sy">anome%</b></a></dt>
+  <dd>Anonymous metadata size percentage</dd>
+  <dt id="anoed"><a class="permalink" href="#anoed"><b class="Sy">anoed</b></a></dt>
+  <dd>Anonymous evictable data size</dd>
+  <dt id="anoed_"><a class="permalink" href="#anoed_"><b class="Sy">anoed%</b></a></dt>
+  <dd>Anonymous evictable data size percentage</dd>
+  <dt id="anoem"><a class="permalink" href="#anoem"><b class="Sy">anoem</b></a></dt>
+  <dd>Anonymous evictable metadata size</dd>
+  <dt id="anoem_"><a class="permalink" href="#anoem_"><b class="Sy">anoem%</b></a></dt>
+  <dd>Anonymous evictable metadata size percentage</dd>
+  <dt id="mfutg"><a class="permalink" href="#mfutg"><b class="Sy">mfutg</b></a></dt>
+  <dd>MFU target</dd>
+  <dt id="mfutg_"><a class="permalink" href="#mfutg_"><b class="Sy">mfutg%</b></a></dt>
+  <dd>MFU target percentage</dd>
+  <dt id="mfudt"><a class="permalink" href="#mfudt"><b class="Sy">mfudt</b></a></dt>
+  <dd>MFU data target</dd>
+  <dt id="mfudt_"><a class="permalink" href="#mfudt_"><b class="Sy">mfudt%</b></a></dt>
+  <dd>MFU data target percentage</dd>
+  <dt id="mfumt"><a class="permalink" href="#mfumt"><b class="Sy">mfumt</b></a></dt>
+  <dd>MFU metadata target</dd>
+  <dt id="mfumt_"><a class="permalink" href="#mfumt_"><b class="Sy">mfumt%</b></a></dt>
+  <dd>MFU metadata target percentage</dd>
+  <dt id="mfusz"><a class="permalink" href="#mfusz"><b class="Sy">mfusz</b></a></dt>
+  <dd>MFU size</dd>
+  <dt id="mfusz_"><a class="permalink" href="#mfusz_"><b class="Sy">mfusz%</b></a></dt>
+  <dd>MFU size percentage</dd>
+  <dt id="mfuda"><a class="permalink" href="#mfuda"><b class="Sy">mfuda</b></a></dt>
+  <dd>MFU data size</dd>
+  <dt id="mfuda_"><a class="permalink" href="#mfuda_"><b class="Sy">mfuda%</b></a></dt>
+  <dd>MFU data size percentage</dd>
+  <dt id="mfume"><a class="permalink" href="#mfume"><b class="Sy">mfume</b></a></dt>
+  <dd>MFU metadata size</dd>
+  <dt id="mfume_"><a class="permalink" href="#mfume_"><b class="Sy">mfume%</b></a></dt>
+  <dd>MFU metadata size percentage</dd>
+  <dt id="mfued"><a class="permalink" href="#mfued"><b class="Sy">mfued</b></a></dt>
+  <dd>MFU evictable data size</dd>
+  <dt id="mfued_"><a class="permalink" href="#mfued_"><b class="Sy">mfued%</b></a></dt>
+  <dd>MFU evictable data size percentage</dd>
+  <dt id="mfuem"><a class="permalink" href="#mfuem"><b class="Sy">mfuem</b></a></dt>
+  <dd>MFU evictable metadata size</dd>
+  <dt id="mfuem_"><a class="permalink" href="#mfuem_"><b class="Sy">mfuem%</b></a></dt>
+  <dd>MFU evictable metadata size percentage</dd>
+  <dt id="mfugsz"><a class="permalink" href="#mfugsz"><b class="Sy">mfugsz</b></a></dt>
+  <dd>MFU ghost size</dd>
+  <dt id="mfugd"><a class="permalink" href="#mfugd"><b class="Sy">mfugd</b></a></dt>
+  <dd>MFU ghost data size</dd>
+  <dt id="mfugm"><a class="permalink" href="#mfugm"><b class="Sy">mfugm</b></a></dt>
+  <dd>MFU ghost metadata size</dd>
+  <dt id="mrutg"><a class="permalink" href="#mrutg"><b class="Sy">mrutg</b></a></dt>
+  <dd>MRU target</dd>
+  <dt id="mrutg_"><a class="permalink" href="#mrutg_"><b class="Sy">mrutg%</b></a></dt>
+  <dd>MRU target percentage</dd>
+  <dt id="mrudt"><a class="permalink" href="#mrudt"><b class="Sy">mrudt</b></a></dt>
+  <dd>MRU data target</dd>
+  <dt id="mrudt_"><a class="permalink" href="#mrudt_"><b class="Sy">mrudt%</b></a></dt>
+  <dd>MRU data target percentage</dd>
+  <dt id="mrumt"><a class="permalink" href="#mrumt"><b class="Sy">mrumt</b></a></dt>
+  <dd>MRU metadata target</dd>
+  <dt id="mrumt_"><a class="permalink" href="#mrumt_"><b class="Sy">mrumt%</b></a></dt>
+  <dd>MRU metadata target percentage</dd>
+  <dt id="mrusz"><a class="permalink" href="#mrusz"><b class="Sy">mrusz</b></a></dt>
+  <dd>MRU size</dd>
+  <dt id="mrusz_"><a class="permalink" href="#mrusz_"><b class="Sy">mrusz%</b></a></dt>
+  <dd>MRU size percentage</dd>
+  <dt id="mruda"><a class="permalink" href="#mruda"><b class="Sy">mruda</b></a></dt>
+  <dd>MRU data size</dd>
+  <dt id="mruda_"><a class="permalink" href="#mruda_"><b class="Sy">mruda%</b></a></dt>
+  <dd>MRU data size percentage</dd>
+  <dt id="mrume"><a class="permalink" href="#mrume"><b class="Sy">mrume</b></a></dt>
+  <dd>MRU metadata size</dd>
+  <dt id="mrume_"><a class="permalink" href="#mrume_"><b class="Sy">mrume%</b></a></dt>
+  <dd>MRU metadata size percentage</dd>
+  <dt id="mrued"><a class="permalink" href="#mrued"><b class="Sy">mrued</b></a></dt>
+  <dd>MRU evictable data size</dd>
+  <dt id="mrued_"><a class="permalink" href="#mrued_"><b class="Sy">mrued%</b></a></dt>
+  <dd>MRU evictable data size percentage</dd>
+  <dt id="mruem"><a class="permalink" href="#mruem"><b class="Sy">mruem</b></a></dt>
+  <dd>MRU evictable metadata size</dd>
+  <dt id="mruem_"><a class="permalink" href="#mruem_"><b class="Sy">mruem%</b></a></dt>
+  <dd>MRU evictable metadata size percentage</dd>
+  <dt id="mrugsz"><a class="permalink" href="#mrugsz"><b class="Sy">mrugsz</b></a></dt>
+  <dd>MRU ghost size</dd>
+  <dt id="mrugd"><a class="permalink" href="#mrugd"><b class="Sy">mrugd</b></a></dt>
+  <dd>MRU ghost data size</dd>
+  <dt id="mrugm"><a class="permalink" href="#mrugm"><b class="Sy">mrugm</b></a></dt>
+  <dd>MRU ghost metadata size</dd>
+  <dt id="uncsz"><a class="permalink" href="#uncsz"><b class="Sy">uncsz</b></a></dt>
+  <dd>Uncached size</dd>
+  <dt id="uncsz_"><a class="permalink" href="#uncsz_"><b class="Sy">uncsz%</b></a></dt>
+  <dd>Uncached size percentage</dd>
+  <dt id="uncda"><a class="permalink" href="#uncda"><b class="Sy">uncda</b></a></dt>
+  <dd>Uncached data size</dd>
+  <dt id="uncda_"><a class="permalink" href="#uncda_"><b class="Sy">uncda%</b></a></dt>
+  <dd>Uncached data size percentage</dd>
+  <dt id="uncme"><a class="permalink" href="#uncme"><b class="Sy">uncme</b></a></dt>
+  <dd>Uncached metadata size</dd>
+  <dt id="uncme_"><a class="permalink" href="#uncme_"><b class="Sy">uncme%</b></a></dt>
+  <dd>Uncached metadata size percentage</dd>
+  <dt id="unced"><a class="permalink" href="#unced"><b class="Sy">unced</b></a></dt>
+  <dd>Uncached evictable data size</dd>
+  <dt id="unced_"><a class="permalink" href="#unced_"><b class="Sy">unced%</b></a></dt>
+  <dd>Uncached evictable data size percentage</dd>
+  <dt id="uncem"><a class="permalink" href="#uncem"><b class="Sy">uncem</b></a></dt>
+  <dd>Uncached evictable metadata size</dd>
+  <dt id="uncem_"><a class="permalink" href="#uncem_"><b class="Sy">uncem%</b></a></dt>
+  <dd>Uncached evictable metadata size percentage</dd>
+  <dt id="grow"><a class="permalink" href="#grow"><b class="Sy">grow</b></a></dt>
+  <dd>ARC grow disabled</dd>
+  <dt id="need"><a class="permalink" href="#need"><b class="Sy">need</b></a></dt>
+  <dd>ARC reclaim needed</dd>
+  <dt id="free"><a class="permalink" href="#free"><b class="Sy">free</b></a></dt>
+  <dd>The ARC's idea of how much free memory there is, which includes evictable
+      memory in the page cache. Since the ARC tries to keep
+      <b class="Sy">avail</b> above zero, <b class="Sy">avail</b> is usually
+      more instructive to observe than <b class="Sy">free</b>.</dd>
+  <dt id="avail"><a class="permalink" href="#avail"><b class="Sy">avail</b></a></dt>
+  <dd>The ARC's idea of how much free memory is available to it, which is a bit
+      less than <b class="Sy">free</b>. May temporarily be negative, in which
+      case the ARC will reduce the target size <b class="Sy">c</b>.</dd>
+</dl>
+</div>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="OPTIONS"><a class="permalink" href="#OPTIONS">OPTIONS</a></h1>
+<dl class="Bl-tag">
+  <dt id="a"><a class="permalink" href="#a"><code class="Fl">-a</code></a></dt>
+  <dd>Print all possible stats.</dd>
+  <dt id="f"><a class="permalink" href="#f"><code class="Fl">-f</code></a></dt>
+  <dd>Display only specific fields. See
+      <a class="Sx" href="#DESCRIPTION">DESCRIPTION</a> for supported
+      statistics.</dd>
+  <dt id="h"><a class="permalink" href="#h"><code class="Fl">-h</code></a></dt>
+  <dd>Display help message.</dd>
+  <dt id="o"><a class="permalink" href="#o"><code class="Fl">-o</code></a></dt>
+  <dd>Report statistics to a file instead of the standard output.</dd>
+  <dt id="p"><a class="permalink" href="#p"><code class="Fl">-p</code></a></dt>
+  <dd>Disable auto-scaling of numerical fields (for raw, machine-parsable
+      values).</dd>
+  <dt id="s"><a class="permalink" href="#s"><code class="Fl">-s</code></a></dt>
+  <dd>Display data with a specified separator (default: 2 spaces).</dd>
+  <dt id="x"><a class="permalink" href="#x"><code class="Fl">-x</code></a></dt>
+  <dd>Print extended stats (same as <code class="Fl">-f</code>
+      <b class="Sy">time</b>,<b class="Sy">mfu</b>,<b class="Sy">mru</b>,<b class="Sy">mfug</b>,<b class="Sy">mrug</b>,<b class="Sy">eskip</b>,<b class="Sy">mtxmis</b>,<b class="Sy">dread</b>,<b class="Sy">pread</b>,<b class="Sy">read</b>).</dd>
+  <dt id="v"><a class="permalink" href="#v"><code class="Fl">-v</code></a></dt>
+  <dd>Show field headers and definitions</dd>
+</dl>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="OPERANDS"><a class="permalink" href="#OPERANDS">OPERANDS</a></h1>
+<p class="Pp">The following operands are supported:</p>
+<div class="Bd-indent">
+<dl class="Bl-tag Bl-compact">
+  <dt><var class="Ar">interval</var></dt>
+  <dd>Specify the sampling interval in seconds.</dd>
+  <dt><var class="Ar">count</var></dt>
+  <dd>Display only <var class="Ar">count</var> reports.</dd>
+</dl>
+</div>
+</section>
+</div>
+<table class="foot">
+  <tr>
+    <td class="foot-date">December 23, 2022</td>
+    <td class="foot-os">Debian</td>
+  </tr>
+</table>
+</div></section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="User Commands (1)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cstyle.1.html" class="btn btn-neutral float-right" title="cstyle.1" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, OpenZFS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

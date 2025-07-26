@@ -1,0 +1,601 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>zpoolconcepts.7 &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
+      <script src="../../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="zpoolprops.7" href="zpoolprops.7.html" />
+    <link rel="prev" title="zpool-features.7" href="zpool-features.7.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Basic%20Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Man Pages</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../master/index.html">master</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.3/index.html">v2.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.2/index.html">v2.2</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">v2.1</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../1/index.html">User Commands (1)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../4/index.html">Devices and Special Files (4)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../5/index.html">File Formats and Conventions (5)</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">Miscellaneous (7)</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="dracut.zfs.7.html">dracut.zfs.7</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfsconcepts.7.html">zfsconcepts.7</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfsprops.7.html">zfsprops.7</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-features.7.html">zpool-features.7</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">zpoolconcepts.7</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpoolprops.7.html">zpoolprops.7</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../8/index.html">System Administration Commands (8)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.0/index.html">v2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.8/index.html">v0.8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.7/index.html">v0.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.6/index.html">v0.6</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Man Pages</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">v2.1</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Miscellaneous (7)</a></li>
+      <li class="breadcrumb-item active">zpoolconcepts.7</li>
+      <li class="wy-breadcrumbs-aside">
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/openzfs/zfs/blob/zfs-2.1.16/man/man7/zpoolconcepts.7" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="zpoolconcepts-7">
+<h1>zpoolconcepts.7<a class="headerlink" href="#zpoolconcepts-7" title="Permalink to this heading"></a></h1>
+<div class="man_container"><table class="head">
+  <tr>
+    <td class="head-ltitle">ZPOOLCONCEPTS(7)</td>
+    <td class="head-vol">Miscellaneous Information Manual</td>
+    <td class="head-rtitle">ZPOOLCONCEPTS(7)</td>
+  </tr>
+</table>
+<div class="manual-text">
+<section class="Sh">
+<h1 class="Sh" id="NAME"><a class="permalink" href="#NAME">NAME</a></h1>
+<p class="Pp"><code class="Nm">zpoolconcepts</code> &#x2014;
+    <span class="Nd">overview of ZFS storage pools</span></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h1>
+<section class="Ss">
+<h2 class="Ss" id="Virtual_Devices_(vdevs)"><a class="permalink" href="#Virtual_Devices_(vdevs)">Virtual
+  Devices (vdevs)</a></h2>
+<p class="Pp">A &quot;virtual device&quot; describes a single device or a
+    collection of devices organized according to certain performance and fault
+    characteristics. The following virtual devices are supported:</p>
+<dl class="Bl-tag">
+  <dt id="disk"><a class="permalink" href="#disk"><b class="Sy">disk</b></a></dt>
+  <dd>A block device, typically located under <span class="Pa">/dev</span>. ZFS
+      can use individual slices or partitions, though the recommended mode of
+      operation is to use whole disks. A disk can be specified by a full path,
+      or it can be a shorthand name (the relative portion of the path under
+      <span class="Pa">/dev</span>). A whole disk can be specified by omitting
+      the slice or partition designation. For example,
+      <span class="Pa">sda</span> is equivalent to
+      <span class="Pa">/dev/sda</span>. When given a whole disk, ZFS
+      automatically labels the disk, if necessary.</dd>
+  <dt id="file"><a class="permalink" href="#file"><b class="Sy">file</b></a></dt>
+  <dd>A regular file. The use of files as a backing store is strongly
+      discouraged. It is designed primarily for experimental purposes, as the
+      fault tolerance of a file is only as good as the file system on which it
+      resides. A file must be specified by a full path.</dd>
+  <dt id="mirror"><a class="permalink" href="#mirror"><b class="Sy">mirror</b></a></dt>
+  <dd>A mirror of two or more devices. Data is replicated in an identical
+      fashion across all components of a mirror. A mirror with
+      <i class="Em">N</i> <span class="No">disks of size</span>
+      <i class="Em">X</i> <span class="No">can hold</span> <i class="Em">X</i>
+      <span class="No">bytes and can withstand</span>
+      <a class="permalink" href="#N-1"><i class="Em" id="N-1">N-1</i></a>
+      devices failing without losing data.</dd>
+  <dt id="raidz"><a class="permalink" href="#raidz"><b class="Sy">raidz</b></a>,
+    <b class="Sy">raidz1</b>, <b class="Sy">raidz2</b>,
+    <b class="Sy">raidz3</b></dt>
+  <dd>A variation on RAID-5 that allows for better distribution of parity and
+      eliminates the RAID-5 &quot;write hole&quot; (in which data and parity
+      become inconsistent after a power loss). Data and parity is striped across
+      all disks within a raidz group.
+    <p class="Pp">A raidz group can have single, double, or triple parity,
+        meaning that the raidz group can sustain one, two, or three failures,
+        respectively, without losing any data. The <b class="Sy">raidz1</b> vdev
+        type specifies a single-parity raidz group; the <b class="Sy">raidz2</b>
+        vdev type specifies a double-parity raidz group; and the
+        <b class="Sy">raidz3</b> vdev type specifies a triple-parity raidz
+        group. The <b class="Sy">raidz</b> vdev type is an alias for
+        <b class="Sy">raidz1</b>.</p>
+    <p class="Pp" id="(N-P)*X">A raidz group with <i class="Em">N</i>
+        <span class="No">disks of size</span> <i class="Em">X</i>
+        <span class="No">with</span> <i class="Em">P</i> <span class="No">parity
+        disks can hold approximately</span>
+        <a class="permalink" href="#(N-P)*X"><i class="Em">(N-P)*X</i></a>
+        <span class="No">bytes and can withstand</span> <i class="Em">P</i>
+        <span class="No">devices failing without losing data.</span> The minimum
+        number of devices in a raidz group is one more than the number of parity
+        disks. The recommended number is between 3 and 9 to help increase
+        performance.</p>
+  </dd>
+  <dt id="draid"><a class="permalink" href="#draid"><b class="Sy">draid</b></a>,
+    <b class="Sy">draid1</b>, <b class="Sy">draid2</b>,
+    <b class="Sy">draid3</b></dt>
+  <dd>A variant of raidz that provides integrated distributed hot spares which
+      allows for faster resilvering while retaining the benefits of raidz. A
+      dRAID vdev is constructed from multiple internal raidz groups, each with
+      <i class="Em">D</i> <span class="No">data devices and</span>
+      <i class="Em">P</i> <span class="No">parity devices.</span> These groups
+      are distributed over all of the children in order to fully utilize the
+      available disk performance.
+    <p class="Pp" id="D=8">Unlike raidz, dRAID uses a fixed stripe width
+        (padding as necessary with zeros) to allow fully sequential resilvering.
+        This fixed stripe width significantly effects both usable capacity and
+        IOPS. For example, with the default
+        <a class="permalink" href="#D=8"><i class="Em">D=8</i></a>
+        <span class="No">and</span>
+        <a class="permalink" href="#4kB"><i class="Em" id="4kB">4kB</i></a>
+        <span class="No">disk sectors the minimum allocation size is</span>
+        <a class="permalink" href="#32kB"><i class="Em" id="32kB">32kB</i></a>.
+        If using compression, this relatively large allocation size can reduce
+        the effective compression ratio. When using ZFS volumes and dRAID, the
+        default of the
+        <a class="permalink" href="#volblocksize"><b class="Sy" id="volblocksize">volblocksize</b></a>
+        property is increased to account for the allocation size. If a dRAID
+        pool will hold a significant amount of small blocks, it is recommended
+        to also add a mirrored <b class="Sy">special</b> vdev to store those
+        blocks.</p>
+    <p class="Pp" id="floor((N-S)/(D+P))*single_drive_IOPS">In regards to I/O,
+        performance is similar to raidz since for any read all
+        <i class="Em">D</i> <span class="No">data disks must be accessed.</span>
+        Delivered random IOPS can be reasonably approximated as
+        <a class="permalink" href="#floor((N-S)/(D+P))*single_drive_IOPS"><b class="Sy">floor((N-S)/(D+P))*single_drive_IOPS</b></a>.</p>
+    <p class="Pp">Like raidzm a dRAID can have single-, double-, or
+        triple-parity. The <b class="Sy">draid1</b>, <b class="Sy">draid2</b>,
+        and <b class="Sy">draid3</b> types can be used to specify the parity
+        level. The <b class="Sy">draid</b> vdev type is an alias for
+        <b class="Sy">draid1</b>.</p>
+    <p class="Pp" id="S">A dRAID with <i class="Em">N</i> <span class="No">disks
+        of size</span> <i class="Em">X</i>, <i class="Em">D</i>
+        <span class="No">data disks per redundancy group,</span>
+        <i class="Em">P</i> <span class="No">parity level, and</span>
+        <a class="permalink" href="#S"><i class="Em">S</i></a>
+        <span class="No">distributed hot spares can hold approximately</span>
+        <a class="permalink" href="#(N-S)*(D/(D+P))*X"><i class="Em" id="(N-S)*(D/(D+P))*X">(N-S)*(D/(D+P))*X</i></a>
+        <span class="No">bytes and can withstand</span> <i class="Em">P</i>
+        devices failing without losing data.</p>
+  </dd>
+  <dt id="draid~2"><a class="permalink" href="#draid~2"><b class="Sy">draid</b></a>[<var class="Ar">parity</var>][<b class="Sy">:</b><var class="Ar">data</var><a class="permalink" href="#d"><b class="Sy" id="d">d</b></a>][<b class="Sy">:</b><var class="Ar">children</var><a class="permalink" href="#c"><b class="Sy" id="c">c</b></a>][<b class="Sy">:</b><var class="Ar">spares</var><a class="permalink" href="#s"><b class="Sy" id="s">s</b></a>]</dt>
+  <dd>A non-default dRAID configuration can be specified by appending one or
+      more of the following optional arguments to the <b class="Sy">draid</b>
+      keyword:
+    <dl class="Bl-tag Bl-compact">
+      <dt><var class="Ar">parity</var></dt>
+      <dd>The parity level (1-3).</dd>
+      <dt id="N-P-S"><var class="Ar">data</var></dt>
+      <dd>The number of data devices per redundancy group. In general, a smaller
+          value of <i class="Em">D</i> <span class="No">will increase IOPS,
+          improve the compression ratio,</span> and speed up resilvering at the
+          expense of total usable capacity. Defaults to <i class="Em">8</i>,
+          <span class="No">unless</span>
+          <a class="permalink" href="#N-P-S"><i class="Em">N-P-S</i></a>
+          <span class="No">is less than</span> <i class="Em">8</i>.</dd>
+      <dt><var class="Ar">children</var></dt>
+      <dd>The expected number of children. Useful as a cross-check when listing
+          a large number of devices. An error is returned when the provided
+          number of children differs.</dd>
+      <dt><var class="Ar">spares</var></dt>
+      <dd>The number of distributed hot spares. Defaults to zero.</dd>
+    </dl>
+  </dd>
+  <dt id="spare"><a class="permalink" href="#spare"><b class="Sy">spare</b></a></dt>
+  <dd>A pseudo-vdev which keeps track of available hot spares for a pool. For
+      more information, see the <a class="Sx" href="#Hot_Spares">Hot Spares</a>
+      section.</dd>
+  <dt id="log"><a class="permalink" href="#log"><b class="Sy">log</b></a></dt>
+  <dd>A separate intent log device. If more than one log device is specified,
+      then writes are load-balanced between devices. Log devices can be
+      mirrored. However, raidz vdev types are not supported for the intent log.
+      For more information, see the <a class="Sx" href="#Intent_Log">Intent
+      Log</a> section.</dd>
+  <dt id="dedup"><a class="permalink" href="#dedup"><b class="Sy">dedup</b></a></dt>
+  <dd>A device dedicated solely for deduplication tables. The redundancy of this
+      device should match the redundancy of the other normal devices in the
+      pool. If more than one dedup device is specified, then allocations are
+      load-balanced between those devices.</dd>
+  <dt id="special"><a class="permalink" href="#special"><b class="Sy">special</b></a></dt>
+  <dd>A device dedicated solely for allocating various kinds of internal
+      metadata, and optionally small file blocks. The redundancy of this device
+      should match the redundancy of the other normal devices in the pool. If
+      more than one special device is specified, then allocations are
+      load-balanced between those devices.
+    <p class="Pp">For more information on special allocations, see the
+        <a class="Sx" href="#Special_Allocation_Class">Special Allocation
+        Class</a> section.</p>
+  </dd>
+  <dt id="cache"><a class="permalink" href="#cache"><b class="Sy">cache</b></a></dt>
+  <dd>A device used to cache storage pool data. A cache device cannot be
+      configured as a mirror or raidz group. For more information, see the
+      <a class="Sx" href="#Cache_Devices">Cache Devices</a> section.</dd>
+</dl>
+<p class="Pp">Virtual devices cannot be nested, so a mirror or raidz virtual
+    device can only contain files or disks. Mirrors of mirrors (or other
+    combinations) are not allowed.</p>
+<p class="Pp">A pool can have any number of virtual devices at the top of the
+    configuration (known as &quot;root vdevs&quot;). Data is dynamically
+    distributed across all top-level devices to balance data among devices. As
+    new virtual devices are added, ZFS automatically places data on the newly
+    available devices.</p>
+<p class="Pp">Virtual devices are specified one at a time on the command line,
+    separated by whitespace. Keywords like <b class="Sy">mirror</b>
+    <span class="No">and</span> <b class="Sy">raidz</b> are used to distinguish
+    where a group ends and another begins. For example, the following creates a
+    pool with two root vdevs, each a mirror of two disks:</p>
+<div class="Bd Bd-indent"><code class="Li"># <code class="Nm">zpool</code>
+  <code class="Cm">create</code> <var class="Ar">mypool</var>
+  <b class="Sy">mirror</b> <var class="Ar">sda sdb</var>
+  <b class="Sy">mirror</b> <var class="Ar">sdc sdd</var></code></div>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="Device_Failure_and_Recovery"><a class="permalink" href="#Device_Failure_and_Recovery">Device
+  Failure and Recovery</a></h2>
+<p class="Pp">ZFS supports a rich set of mechanisms for handling device failure
+    and data corruption. All metadata and data is checksummed, and ZFS
+    automatically repairs bad data from a good copy when corruption is
+  detected.</p>
+<p class="Pp">In order to take advantage of these features, a pool must make use
+    of some form of redundancy, using either mirrored or raidz groups. While ZFS
+    supports running in a non-redundant configuration, where each root vdev is
+    simply a disk or file, this is strongly discouraged. A single case of bit
+    corruption can render some or all of your data unavailable.</p>
+<p class="Pp" id="online">A pool's health status is described by one of three
+    states: <a class="permalink" href="#online"><b class="Sy">online</b></a>,
+    <a class="permalink" href="#degraded"><b class="Sy" id="degraded">degraded</b></a>,
+    <span class="No">or</span>
+    <a class="permalink" href="#faulted"><b class="Sy" id="faulted">faulted</b></a>.
+    An online pool has all devices operating normally. A degraded pool is one in
+    which one or more devices have failed, but the data is still available due
+    to a redundant configuration. A faulted pool has corrupted metadata, or one
+    or more faulted devices, and insufficient replicas to continue
+  functioning.</p>
+<p class="Pp">The health of the top-level vdev, such as a mirror or raidz
+    device, is potentially impacted by the state of its associated vdevs, or
+    component devices. A top-level vdev or component device is in one of the
+    following states:</p>
+<dl class="Bl-tag">
+  <dt id="DEGRADED"><a class="permalink" href="#DEGRADED"><b class="Sy">DEGRADED</b></a></dt>
+  <dd>One or more top-level vdevs is in the degraded state because one or more
+      component devices are offline. Sufficient replicas exist to continue
+      functioning.
+    <p class="Pp">One or more component devices is in the degraded or faulted
+        state, but sufficient replicas exist to continue functioning. The
+        underlying conditions are as follows:</p>
+    <ul class="Bl-bullet Bl-compact">
+      <li>The number of checksum errors exceeds acceptable levels and the device
+          is degraded as an indication that something may be wrong. ZFS
+          continues to use the device as necessary.</li>
+      <li>The number of I/O errors exceeds acceptable levels. The device could
+          not be marked as faulted because there are insufficient replicas to
+          continue functioning.</li>
+    </ul>
+  </dd>
+  <dt id="FAULTED"><a class="permalink" href="#FAULTED"><b class="Sy">FAULTED</b></a></dt>
+  <dd>One or more top-level vdevs is in the faulted state because one or more
+      component devices are offline. Insufficient replicas exist to continue
+      functioning.
+    <p class="Pp">One or more component devices is in the faulted state, and
+        insufficient replicas exist to continue functioning. The underlying
+        conditions are as follows:</p>
+    <ul class="Bl-bullet Bl-compact">
+      <li>The device could be opened, but the contents did not match expected
+          values.</li>
+      <li>The number of I/O errors exceeds acceptable levels and the device is
+          faulted to prevent further use of the device.</li>
+    </ul>
+  </dd>
+  <dt id="OFFLINE"><a class="permalink" href="#OFFLINE"><b class="Sy">OFFLINE</b></a></dt>
+  <dd>The device was explicitly taken offline by the
+      <code class="Nm">zpool</code> <code class="Cm">offline</code>
+    command.</dd>
+  <dt id="ONLINE"><a class="permalink" href="#ONLINE"><b class="Sy">ONLINE</b></a></dt>
+  <dd>The device is online and functioning.</dd>
+  <dt id="REMOVED"><a class="permalink" href="#REMOVED"><b class="Sy">REMOVED</b></a></dt>
+  <dd>The device was physically removed while the system was running. Device
+      removal detection is hardware-dependent and may not be supported on all
+      platforms.</dd>
+  <dt id="UNAVAIL"><a class="permalink" href="#UNAVAIL"><b class="Sy">UNAVAIL</b></a></dt>
+  <dd>The device could not be opened. If a pool is imported when a device was
+      unavailable, then the device will be identified by a unique identifier
+      instead of its path since the path was never correct in the first
+    place.</dd>
+</dl>
+<p class="Pp">Checksum errors represent events where a disk returned data that
+    was expected to be correct, but was not. In other words, these are instances
+    of silent data corruption. The checksum errors are reported in
+    <code class="Nm">zpool</code> <code class="Cm">status</code> and
+    <code class="Nm">zpool</code> <code class="Cm">events</code>. When a block
+    is stored redundantly, a damaged block may be reconstructed (e.g. from raidz
+    parity or a mirrored copy). In this case, ZFS reports the checksum error
+    against the disks that contained damaged data. If a block is unable to be
+    reconstructed (e.g. due to 3 disks being damaged in a raidz2 group), it is
+    not possible to determine which disks were silently corrupted. In this case,
+    checksum errors are reported for all disks on which the block is stored.</p>
+<p class="Pp">If a device is removed and later re-attached to the system, ZFS
+    attempts online the device automatically. Device attachment detection is
+    hardware-dependent and might not be supported on all platforms.</p>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="Hot_Spares"><a class="permalink" href="#Hot_Spares">Hot
+  Spares</a></h2>
+<p class="Pp">ZFS allows devices to be associated with pools as &quot;hot
+    spares&quot;. These devices are not actively used in the pool, but when an
+    active device fails, it is automatically replaced by a hot spare. To create
+    a pool with hot spares, specify a <b class="Sy">spare</b> vdev with any
+    number of devices. For example,</p>
+<div class="Bd Bd-indent"><code class="Li"># <code class="Nm">zpool</code>
+  <code class="Cm">create</code> <var class="Ar">pool</var>
+  <b class="Sy">mirror</b> <var class="Ar">sda sdb</var> <b class="Sy">spare</b>
+  <var class="Ar">sdc sdd</var></code></div>
+<p class="Pp">Spares can be shared across multiple pools, and can be added with
+    the <code class="Nm">zpool</code> <code class="Cm">add</code> command and
+    removed with the <code class="Nm">zpool</code>
+    <code class="Cm">remove</code> command. Once a spare replacement is
+    initiated, a new <b class="Sy">spare</b> vdev is created within the
+    configuration that will remain there until the original device is replaced.
+    At this point, the hot spare becomes available again if another device
+    fails.</p>
+<p class="Pp">If a pool has a shared spare that is currently being used, the
+    pool can not be exported since other pools may use this shared spare, which
+    may lead to potential data corruption.</p>
+<p class="Pp">Shared spares add some risk. If the pools are imported on
+    different hosts, and both pools suffer a device failure at the same time,
+    both could attempt to use the spare at the same time. This may not be
+    detected, resulting in data corruption.</p>
+<p class="Pp">An in-progress spare replacement can be cancelled by detaching the
+    hot spare. If the original faulted device is detached, then the hot spare
+    assumes its place in the configuration, and is removed from the spare list
+    of all active pools.</p>
+<p class="Pp">The <b class="Sy">draid</b> vdev type provides distributed hot
+    spares. These hot spares are named after the dRAID vdev they're a part of
+    (<b class="Sy">draid1</b>-<var class="Ar">2</var>-<var class="Ar">3</var>
+    <span class="No">specifies spare</span> <var class="Ar">3</var>
+    <span class="No">of vdev</span> <var class="Ar">2</var>,
+    <span class="No">which is a single parity dRAID</span>) and may only be used
+    by that dRAID vdev. Otherwise, they behave the same as normal hot
+  spares.</p>
+<p class="Pp">Spares cannot replace log devices.</p>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="Intent_Log"><a class="permalink" href="#Intent_Log">Intent
+  Log</a></h2>
+<p class="Pp">The ZFS Intent Log (ZIL) satisfies POSIX requirements for
+    synchronous transactions. For instance, databases often require their
+    transactions to be on stable storage devices when returning from a system
+    call. NFS and other applications can also use <a class="Xr">fsync(2)</a> to
+    ensure data stability. By default, the intent log is allocated from blocks
+    within the main pool. However, it might be possible to get better
+    performance using separate intent log devices such as NVRAM or a dedicated
+    disk. For example:</p>
+<div class="Bd Bd-indent"><code class="Li"># <code class="Nm">zpool</code>
+  <code class="Cm">create</code> <var class="Ar">pool sda sdb</var>
+  <b class="Sy">log</b> <var class="Ar">sdc</var></code></div>
+<p class="Pp">Multiple log devices can also be specified, and they can be
+    mirrored. See the <a class="Sx" href="#EXAMPLES">EXAMPLES</a> section for an
+    example of mirroring multiple log devices.</p>
+<p class="Pp">Log devices can be added, replaced, attached, detached and
+    removed. In addition, log devices are imported and exported as part of the
+    pool that contains them. Mirrored devices can be removed by specifying the
+    top-level mirror vdev.</p>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="Cache_Devices"><a class="permalink" href="#Cache_Devices">Cache
+  Devices</a></h2>
+<p class="Pp">Devices can be added to a storage pool as &quot;cache
+    devices&quot;. These devices provide an additional layer of caching between
+    main memory and disk. For read-heavy workloads, where the working set size
+    is much larger than what can be cached in main memory, using cache devices
+    allows much more of this working set to be served from low latency media.
+    Using cache devices provides the greatest performance improvement for random
+    read-workloads of mostly static content.</p>
+<p class="Pp">To create a pool with cache devices, specify a
+    <b class="Sy">cache</b> vdev with any number of devices. For example:</p>
+<div class="Bd Bd-indent"><code class="Li"># <code class="Nm">zpool</code>
+  <code class="Cm">create</code> <var class="Ar">pool sda sdb</var>
+  <b class="Sy">cache</b> <var class="Ar">sdc sdd</var></code></div>
+<p class="Pp">Cache devices cannot be mirrored or part of a raidz configuration.
+    If a read error is encountered on a cache device, that read I/O is reissued
+    to the original storage pool device, which might be part of a mirrored or
+    raidz configuration.</p>
+<p class="Pp" id="l2arc_rebuild_enabled">The content of the cache devices is
+    persistent across reboots and restored asynchronously when importing the
+    pool in L2ARC (persistent L2ARC). This can be disabled by setting
+    <a class="permalink" href="#l2arc_rebuild_enabled"><b class="Sy">l2arc_rebuild_enabled</b></a>=<b class="Sy">0</b>.
+    For cache devices smaller than
+    <a class="permalink" href="#1GB"><i class="Em" id="1GB">1GB</i></a>, we do
+    not write the metadata structures required for rebuilding the L2ARC in order
+    not to waste space. This can be changed with
+    <a class="permalink" href="#l2arc_rebuild_blocks_min_l2size"><b class="Sy" id="l2arc_rebuild_blocks_min_l2size">l2arc_rebuild_blocks_min_l2size</b></a>.
+    The cache device header
+    (<a class="permalink" href="#512B"><i class="Em" id="512B">512B</i></a>) is
+    updated even if no metadata structures are written. Setting
+    <a class="permalink" href="#l2arc_headroom"><b class="Sy" id="l2arc_headroom">l2arc_headroom</b></a>=<b class="Sy">0</b>
+    will result in scanning the full-length ARC lists for cacheable content to
+    be written in L2ARC (persistent ARC). If a cache device is added with
+    <code class="Nm">zpool</code> <code class="Cm">add</code> its label and
+    header will be overwritten and its contents are not going to be restored in
+    L2ARC, even if the device was previously part of the pool. If a cache device
+    is onlined with <code class="Nm">zpool</code> <code class="Cm">online</code>
+    its contents will be restored in L2ARC. This is useful in case of memory
+    pressure where the contents of the cache device are not fully restored in
+    L2ARC. The user can off- and online the cache device when there is less
+    memory pressure in order to fully restore its contents to L2ARC.</p>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="Pool_checkpoint"><a class="permalink" href="#Pool_checkpoint">Pool
+  checkpoint</a></h2>
+<p class="Pp">Before starting critical procedures that include destructive
+    actions (like <code class="Nm">zfs</code> <code class="Cm">destroy</code>),
+    an administrator can checkpoint the pool's state and in the case of a
+    mistake or failure, rewind the entire pool back to the checkpoint.
+    Otherwise, the checkpoint can be discarded when the procedure has completed
+    successfully.</p>
+<p class="Pp">A pool checkpoint can be thought of as a pool-wide snapshot and
+    should be used with care as it contains every part of the pool's state, from
+    properties to vdev configuration. Thus, certain operations are not allowed
+    while a pool has a checkpoint. Specifically, vdev removal/attach/detach,
+    mirror splitting, and changing the pool's GUID. Adding a new vdev is
+    supported, but in the case of a rewind it will have to be added again.
+    Finally, users of this feature should keep in mind that scrubs in a pool
+    that has a checkpoint do not repair checkpointed data.</p>
+<p class="Pp">To create a checkpoint for a pool:</p>
+<div class="Bd Bd-indent"><code class="Li"># <code class="Nm">zpool</code>
+  <code class="Cm">checkpoint</code> <var class="Ar">pool</var></code></div>
+<p class="Pp">To later rewind to its checkpointed state, you need to first
+    export it and then rewind it during import:</p>
+<div class="Bd Bd-indent"><code class="Li"># <code class="Nm">zpool</code>
+  <code class="Cm">export</code> <var class="Ar">pool</var></code></div>
+<div class="Bd Bd-indent"><code class="Li"># <code class="Nm">zpool</code>
+  <code class="Cm">import</code> <code class="Fl">--rewind-to-checkpoint</code>
+  <var class="Ar">pool</var></code></div>
+<p class="Pp">To discard the checkpoint from a pool:</p>
+<div class="Bd Bd-indent"><code class="Li"># <code class="Nm">zpool</code>
+  <code class="Cm">checkpoint</code> <code class="Fl">-d</code>
+  <var class="Ar">pool</var></code></div>
+<p class="Pp" id="reservation">Dataset reservations (controlled by the
+    <a class="permalink" href="#reservation"><b class="Sy">reservation</b></a>
+    <span class="No">and</span>
+    <a class="permalink" href="#refreservation"><b class="Sy" id="refreservation">refreservation</b></a>
+    properties) may be unenforceable while a checkpoint exists, because the
+    checkpoint is allowed to consume the dataset's reservation. Finally, data
+    that is part of the checkpoint but has been freed in the current state of
+    the pool won't be scanned during a scrub.</p>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="Special_Allocation_Class"><a class="permalink" href="#Special_Allocation_Class">Special
+  Allocation Class</a></h2>
+<p class="Pp">Allocations in the special class are dedicated to specific block
+    types. By default this includes all metadata, the indirect blocks of user
+    data, and any deduplication tables. The class can also be provisioned to
+    accept small file blocks.</p>
+<p class="Pp">A pool must always have at least one normal
+    (non-<b class="Sy">dedup</b>/-<b class="Sy">special</b>) vdev before other
+    devices can be assigned to the special class. If the
+    <b class="Sy">special</b> class becomes full, then allocations intended for
+    it will spill back into the normal class.</p>
+<p class="Pp" id="zfs_ddt_data_is_special">Deduplication tables can be excluded
+    from the special class by unsetting the
+    <a class="permalink" href="#zfs_ddt_data_is_special"><b class="Sy">zfs_ddt_data_is_special</b></a>
+    ZFS module parameter.</p>
+<p class="Pp" id="special_small_blocks">Inclusion of small file blocks in the
+    special class is opt-in. Each dataset can control the size of small file
+    blocks allowed in the special class by setting the
+    <a class="permalink" href="#special_small_blocks"><b class="Sy">special_small_blocks</b></a>
+    property to nonzero. See <a href="../7/zfsprops.7.html" class="Xr">zfsprops(7)</a> for more info on this
+    property.</p>
+</section>
+</section>
+</div>
+<table class="foot">
+  <tr>
+    <td class="foot-date">June 2, 2021</td>
+    <td class="foot-os">Debian</td>
+  </tr>
+</table>
+</div></section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="zpool-features.7.html" class="btn btn-neutral float-left" title="zpool-features.7" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="zpoolprops.7.html" class="btn btn-neutral float-right" title="zpoolprops.7" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, OpenZFS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
