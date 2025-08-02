@@ -1,0 +1,234 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>vdev_id.8 &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
+      <script src="../../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="zdb.8" href="zdb.8.html" />
+    <link rel="prev" title="mount.zfs.8" href="mount.zfs.8.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Basic%20Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Man Pages</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../master/index.html">master</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.3/index.html">v2.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.2/index.html">v2.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.1/index.html">v2.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.0/index.html">v2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.8/index.html">v0.8</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">v0.7</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../1/index.html">User Commands (1)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../5/index.html">File Formats and Conventions (5)</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">System Administration Commands (8)</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="fsck.zfs.8.html">fsck.zfs.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mount.zfs.8.html">mount.zfs.8</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">vdev_id.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zdb.8.html">zdb.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zed.8.html">zed.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs.8.html">zfs.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zgenhostid.8.html">zgenhostid.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zinject.8.html">zinject.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool.8.html">zpool.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zstreamdump.8.html">zstreamdump.8</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.6/index.html">v0.6</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Man Pages</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">v0.7</a></li>
+          <li class="breadcrumb-item"><a href="index.html">System Administration Commands (8)</a></li>
+      <li class="breadcrumb-item active">vdev_id.8</li>
+      <li class="wy-breadcrumbs-aside">
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/openzfs/zfs/blob/zfs-0.7.13/man/man8/vdev_id.8" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="vdev-id-8">
+<h1>vdev_id.8<a class="headerlink" href="#vdev-id-8" title="Permalink to this heading"></a></h1>
+<div class="man_container"><table class="head">
+  <tr>
+    <td class="head-ltitle">vdev_id(8)</td>
+    <td class="head-vol">System Manager's Manual</td>
+    <td class="head-rtitle">vdev_id(8)</td>
+  </tr>
+</table>
+<div class="manual-text">
+<section class="Sh">
+<h1 class="Sh" id="NAME"><a class="permalink" href="#NAME">NAME</a></h1>
+<p class="Pp">vdev_id - generate user-friendly names for JBOD disks</p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SYNOPSIS"><a class="permalink" href="#SYNOPSIS">SYNOPSIS</a></h1>
+<pre><b>vdev_id</b> &lt;-d dev&gt; [-c config_file] [-g sas_direct|sas_switch]
+<br/>
+                 [-m] [-p phys_per_port]
+<b>vdev_id</b> -h</pre>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h1>
+<p class="Pp">The <b>vdev_id</b> command is a udev helper which parses the file
+    <b>/etc/zfs/vdev_id.conf</b>(5) to map a physical path in a storage topology
+    to a channel name. The channel name is combined with a disk enclosure slot
+    number to create an alias that reflects the physical location of the drive.
+    This is particularly helpful when it comes to tasks like replacing failed
+    drives. Slot numbers may also be re-mapped in case the default numbering is
+    unsatisfactory. The drive aliases will be created as symbolic links in
+    /dev/disk/by-vdev.</p>
+<p class="Pp">The currently supported topologies are sas_direct and sas_switch.
+    A multipath mode is supported in which dm-mpath devices are handled by
+    examining the first-listed running component disk as reported by the
+    <b>multipath</b>(8) command. In multipath mode the configuration file should
+    contain a channel definition with the same name for each path to a given
+    enclosure.</p>
+<p class="Pp"><b>vdev_id</b> also supports creating aliases based on existing
+    udev links in the /dev hierarchy using the <i>alias</i> configuration file
+    keyword. See the <b>vdev_id.conf</b>(5) man page for details.</p>
+<p class="Pp"></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="OPTIONS"><a class="permalink" href="#OPTIONS">OPTIONS</a></h1>
+<dl class="Bl-tag">
+  <dt id="c"><a class="permalink" href="#c"><b>-c</b>
+    &lt;config_file&gt;</a></dt>
+  <dd>Specifies the path to an alternate configuration file. The default is
+      /etc/zfs/vdev_id.conf.</dd>
+  <dt id="d"><a class="permalink" href="#d"><b>-d</b> &lt;device&gt;</a></dt>
+  <dd>This is the only mandatory argument. Specifies the name of a device in
+      /dev, i.e. &quot;sda&quot;.</dd>
+  <dt id="g"><a class="permalink" href="#g"><b>-g</b>
+    &lt;sas_direct|sas_switch&gt;</a></dt>
+  <dd>Identifies a physical topology that governs how physical paths are mapped
+      to channels.
+    <p class="Pp"><i>sas_direct</i> - in this mode a channel is uniquely
+        identified by a PCI slot and a HBA port number</p>
+    <p class="Pp"><i>sas_switch</i> - in this mode a channel is uniquely
+        identified by a SAS switch port number</p>
+  </dd>
+  <dt id="m"><a class="permalink" href="#m"><b>-m</b></a></dt>
+  <dd>Specifies that <b>vdev_id</b>(8) will handle only dm-multipath devices. If
+      set to &quot;yes&quot; then <b>vdev_id</b>(8) will examine the first
+      running component disk of a dm-multipath device as listed by the
+      <b>multipath</b>(8) command to determine the physical path.</dd>
+  <dt id="p"><a class="permalink" href="#p"><b>-p</b>
+    &lt;phys_per_port&gt;</a></dt>
+  <dd>Specifies the number of PHY devices associated with a SAS HBA port or SAS
+      switch port. <b>vdev_id</b>(8) internally uses this value to determine
+      which HBA or switch port a device is connected to. The default is 4.</dd>
+  <dt id="h"><a class="permalink" href="#h"><b>-h</b></a></dt>
+  <dd>Print a usage summary.</dd>
+</dl>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SEE_ALSO"><a class="permalink" href="#SEE_ALSO">SEE
+  ALSO</a></h1>
+<p class="Pp"><b>vdev_id.conf</b>(5)</p>
+</section>
+</div>
+<table class="foot">
+  <tr>
+    <td class="foot-date"></td>
+    <td class="foot-os"></td>
+  </tr>
+</table>
+</div></section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="mount.zfs.8.html" class="btn btn-neutral float-left" title="mount.zfs.8" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="zdb.8.html" class="btn btn-neutral float-right" title="zdb.8" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, OpenZFS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

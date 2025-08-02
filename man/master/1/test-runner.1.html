@@ -1,0 +1,436 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>test-runner.1 &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
+      <script src="../../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="zhack.1" href="zhack.1.html" />
+    <link rel="prev" title="raidz_test.1" href="raidz_test.1.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Basic%20Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Man Pages</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">master</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">User Commands (1)</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="arcstat.1.html">arcstat.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cstyle.1.html">cstyle.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="raidz_test.1.html">raidz_test.1</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">test-runner.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zhack.1.html">zhack.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ztest.1.html">ztest.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zvol_wait.1.html">zvol_wait.1</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../4/index.html">Devices and Special Files (4)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../5/index.html">File Formats and Conventions (5)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../7/index.html">Miscellaneous (7)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../8/index.html">System Administration Commands (8)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.3/index.html">v2.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.2/index.html">v2.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.1/index.html">v2.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.0/index.html">v2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.8/index.html">v0.8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.7/index.html">v0.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.6/index.html">v0.6</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Man Pages</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">master</a></li>
+          <li class="breadcrumb-item"><a href="index.html">User Commands (1)</a></li>
+      <li class="breadcrumb-item active">test-runner.1</li>
+      <li class="wy-breadcrumbs-aside">
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/openzfs/zfs/blob/master/man/man1/test-runner.1" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="test-runner-1">
+<h1>test-runner.1<a class="headerlink" href="#test-runner-1" title="Permalink to this heading"></a></h1>
+<div class="man_container"><table class="head">
+  <tr>
+    <td class="head-ltitle">RUN(1)</td>
+    <td class="head-vol">General Commands Manual</td>
+    <td class="head-rtitle">RUN(1)</td>
+  </tr>
+</table>
+<div class="manual-text">
+<section class="Sh">
+<h1 class="Sh" id="NAME"><a class="permalink" href="#NAME">NAME</a></h1>
+<p class="Pp"><code class="Nm">run</code> &#x2014; <span class="Nd">find,
+    execute, and log the results of tests</span></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SYNOPSIS"><a class="permalink" href="#SYNOPSIS">SYNOPSIS</a></h1>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">run</code></td>
+    <td>[<code class="Fl">-dgq</code>] [<code class="Fl">-o</code>
+      <var class="Ar">outputdir</var>] [<code class="Fl">-pP</code>
+      <var class="Ar">script</var>] [<code class="Fl">-t</code>
+      <code class="Fl">-seconds</code>] [<code class="Fl">-uxX</code>
+      <var class="Ar">username</var>]
+      <var class="Ar">pathname</var><span class="No">&#x2026;</span></td>
+  </tr>
+</table>
+<p class="Pp"></p>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">run</code></td>
+    <td><code class="Fl">-w</code> <var class="Ar">runfile</var>
+      [<code class="Fl">-gq</code>] [<code class="Fl">-o</code>
+      <var class="Ar">outputdir</var>] [<code class="Fl">-pP</code>
+      <var class="Ar">script</var>] [<code class="Fl">-t</code>
+      <code class="Fl">-seconds</code>] [<code class="Fl">-uxX</code>
+      <var class="Ar">username</var>]
+      <var class="Ar">pathname</var><span class="No">&#x2026;</span></td>
+  </tr>
+</table>
+<p class="Pp"></p>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">run</code></td>
+    <td><code class="Fl">-c</code> <var class="Ar">runfile</var>
+      [<code class="Fl">-dq</code>]</td>
+  </tr>
+</table>
+<p class="Pp"></p>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">run</code></td>
+    <td>[<code class="Fl">-h</code>]</td>
+  </tr>
+</table>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h1>
+<p class="Pp"><code class="Nm">run</code> command has three basic modes of
+    operation. With neither <code class="Fl">-c</code> nor
+    <code class="Fl">-w</code>, <code class="Nm">run</code> processes the
+    arguments provided on the command line, adding them to the list for this
+    run. If a specified <var class="Ar">pathname</var> is an executable file, it
+    is added as a test. If a specified <var class="Ar">pathname</var> is a
+    directory, the behavior depends upon the presence of
+    <code class="Fl">-g</code>. If <code class="Fl">-g</code> is specified, the
+    directory is treated as a test group. See the section on
+    <a class="permalink" href="#Test"><b class="Sy" id="Test">Test
+    Groups</b></a> below. Without <code class="Fl">-g</code>,
+    <code class="Nm">run</code> simply descends into the directory looking for
+    executable files. The tests are then executed, and the results are
+  logged.</p>
+<p class="Pp">With <code class="Fl">-w</code>, <code class="Nm">run</code> finds
+    tests in the manner described above. Rather than executing the tests and
+    logging the results, the test configuration is stored in a
+    <var class="Ar">runfile</var>, which can be used in future invocations, or
+    edited to modify which tests are executed and which options are applied.
+    Options included on the command line with <code class="Fl">-w</code> become
+    defaults in the <var class="Ar">runfile</var>.</p>
+<p class="Pp">With <code class="Fl">-c</code>, <code class="Nm">run</code>
+    parses a <var class="Ar">runfile</var>, which can specify a series of tests
+    and test groups to be executed. The tests are then executed, and the results
+    are logged.</p>
+<section class="Ss">
+<h2 class="Ss" id="Test_Groups"><a class="permalink" href="#Test_Groups">Test
+  Groups</a></h2>
+<p class="Pp">A test group is comprised of a set of executable files, all of
+    which exist in one directory. The options specified on the command line or
+    in a <var class="Ar">runfile</var> apply to individual tests in the group.
+    The exception is options pertaining to pre and post scripts, which act on
+    all tests as a group. Rather than running before and after each test, these
+    scripts are run only once each at the start and end of the test group.</p>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="Test_Execution"><a class="permalink" href="#Test_Execution">Test
+  Execution</a></h2>
+<p class="Pp">The specified tests run serially, and are typically assigned
+    results according to exit values. Tests that exit zero and non-zero are
+    marked
+    <a class="permalink" href="#PASS"><b class="Sy" id="PASS">PASS</b></a> and
+    <a class="permalink" href="#FAIL"><b class="Sy" id="FAIL">FAIL</b></a>,
+    respectively. When a pre script fails for a test group, only the post script
+    is executed, and the remaining tests are marked
+    <a class="permalink" href="#SKIPPED"><b class="Sy" id="SKIPPED">SKIPPED</b></a>.
+    Any test that exceeds its <var class="Ar">timeout</var> is terminated, and
+    marked
+    <a class="permalink" href="#KILLED"><b class="Sy" id="KILLED">KILLED</b></a>.</p>
+<p class="Pp">By default, tests are executed with the credentials of the
+    <code class="Nm">run</code> script. Executing tests with other credentials
+    is done via <a class="Xr">sudo(1m)</a>, which must be configured to allow
+    execution without prompting for a password. Environment variables from the
+    calling shell are available to individual tests. During test execution, the
+    working directory is changed to <var class="Ar">outputdir</var>.</p>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="Output_Logging"><a class="permalink" href="#Output_Logging">Output
+  Logging</a></h2>
+<p class="Pp">By default, <code class="Nm">run</code> will print one line on
+    standard output at the conclusion of each test indicating the test name,
+    result and elapsed time. Additionally, for each invocation of
+    <code class="Nm">run</code>, a directory is created using the ISO 8601 date
+    format. Within this directory is a file named
+    <a class="permalink" href="#log"><b class="Sy" id="log">log</b></a>
+    containing all the test output with timestamps, and a directory for each
+    test. Within the test directories, there is one file each for standard
+    output, standard error and merged output. The default location for the
+    <var class="Ar">outputdir</var> is
+    <span class="Pa">/var/tmp/test_results</span>.</p>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="Runfiles"><a class="permalink" href="#Runfiles">Runfiles</a></h2>
+<p class="Pp">The <var class="Ar">runfile</var> is an INI-style configuration
+    file that describes a test run. The file has one section named
+    <a class="permalink" href="#DEFAULT"><b class="Sy" id="DEFAULT">DEFAULT</b></a>,
+    which contains configuration option names and their values in
+    <a class="permalink" href="#name"><b class="Sy" id="name">name</b></a>
+    <span class="No">=</span> <var class="Ar">value</var> format. The values in
+    this section apply to all the subsequent sections, unless they are also
+    specified there, in which case the default is overridden. The remaining
+    section names are the absolute pathnames of files and directories,
+    describing tests and test groups respectively. The legal option names
+  are:</p>
+<dl class="Bl-tag">
+  <dt id="outputdir"><a class="permalink" href="#outputdir"><b class="Sy">outputdir</b></a>
+    <span class="No">=</span> <var class="Ar">pathname</var></dt>
+  <dd>The name of the directory that holds test logs.</dd>
+  <dt id="pre"><a class="permalink" href="#pre"><b class="Sy">pre</b></a>
+    <span class="No">=</span> <var class="Ar">script</var></dt>
+  <dd>Run <var class="Ar">script</var> prior to the test or test group.</dd>
+  <dt id="pre_user"><a class="permalink" href="#pre_user"><b class="Sy">pre_user</b></a>
+    <span class="No">=</span> <var class="Ar">username</var></dt>
+  <dd>Execute the pre script as <var class="Ar">username</var>.</dd>
+  <dt id="post"><a class="permalink" href="#post"><b class="Sy">post</b></a>
+    <span class="No">=</span> <var class="Ar">script</var></dt>
+  <dd>Run <var class="Ar">script</var> after the test or test group.</dd>
+  <dt id="post_user"><a class="permalink" href="#post_user"><b class="Sy">post_user</b></a>
+    <span class="No">=</span> <var class="Ar">username</var></dt>
+  <dd>Execute the post script as <var class="Ar">username</var>.</dd>
+  <dt id="quiet"><a class="permalink" href="#quiet"><b class="Sy">quiet</b></a>
+    <span class="No">=</span>
+    <b class="Sy">True</b>|<a class="permalink" href="#False"><b class="Sy" id="False">False</b></a></dt>
+  <dd>If <b class="Sy">True</b>, only the results summary is printed to standard
+      out.</dd>
+  <dt id="tests"><a class="permalink" href="#tests"><b class="Sy">tests</b></a>
+    <span class="No">=</span> [<var class="Ar">'filename'</var>,
+    <span class="No">&#x2026;</span>]</dt>
+  <dd>Specify a list of <var class="Ar">filenames</var> for this test group.
+      Only the basename of the absolute path is required. This option is only
+      valid for test groups, and each <var class="Ar">filename</var> must be
+      single quoted.</dd>
+  <dt id="timeout"><a class="permalink" href="#timeout"><b class="Sy">timeout</b></a>
+    <span class="No">=</span> <var class="Ar">n</var></dt>
+  <dd>A timeout value of <var class="Ar">n</var> seconds.</dd>
+  <dt id="user"><a class="permalink" href="#user"><b class="Sy">user</b></a>
+    <span class="No">=</span> <var class="Ar">username</var></dt>
+  <dd>Execute the test or test group as <var class="Ar">username</var>.</dd>
+</dl>
+</section>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="OPTIONS"><a class="permalink" href="#OPTIONS">OPTIONS</a></h1>
+<dl class="Bl-tag">
+  <dt id="c"><a class="permalink" href="#c"><code class="Fl">-c</code></a>
+    <var class="Ar">runfile</var></dt>
+  <dd>Specify a <var class="Ar">runfile</var> to be consumed by the run
+    command.</dd>
+  <dt id="d"><a class="permalink" href="#d"><code class="Fl">-d</code></a></dt>
+  <dd>Dry run mode. Execute no tests, but print a description of each test that
+      would have been run.</dd>
+  <dt id="m"><a class="permalink" href="#m"><code class="Fl">-m</code></a></dt>
+  <dd>Enable kmemleak reporting (Linux only)</dd>
+  <dt id="g"><a class="permalink" href="#g"><code class="Fl">-g</code></a></dt>
+  <dd>Create test groups from any directories found while searching for
+    tests.</dd>
+  <dt id="o"><a class="permalink" href="#o"><code class="Fl">-o</code></a>
+    <var class="Ar">outputdir</var></dt>
+  <dd>Specify the directory in which to write test results.</dd>
+  <dt id="p"><a class="permalink" href="#p"><code class="Fl">-p</code></a>
+    <var class="Ar">script</var></dt>
+  <dd>Run <var class="Ar">script</var> prior to any test or test group.</dd>
+  <dt id="P"><a class="permalink" href="#P"><code class="Fl">-P</code></a>
+    <var class="Ar">script</var></dt>
+  <dd>Run <var class="Ar">script</var> after any test or test group.</dd>
+  <dt id="q"><a class="permalink" href="#q"><code class="Fl">-q</code></a></dt>
+  <dd>Print only the results summary to the standard output.</dd>
+  <dt id="s"><a class="permalink" href="#s"><code class="Fl">-s</code></a>
+    <var class="Ar">script</var></dt>
+  <dd>Run <var class="Ar">script</var> as a failsafe after any test is
+    killed.</dd>
+  <dt id="S"><a class="permalink" href="#S"><code class="Fl">-S</code></a>
+    <var class="Ar">username</var></dt>
+  <dd>Execute the failsafe script as <var class="Ar">username</var>.</dd>
+  <dt id="t"><a class="permalink" href="#t"><code class="Fl">-t</code></a>
+    <var class="Ar">n</var></dt>
+  <dd>Specify a timeout value of <var class="Ar">n</var> seconds per test.</dd>
+  <dt id="u"><a class="permalink" href="#u"><code class="Fl">-u</code></a>
+    <var class="Ar">username</var></dt>
+  <dd>Execute tests or test groups as <var class="Ar">username</var>.</dd>
+  <dt id="w"><a class="permalink" href="#w"><code class="Fl">-w</code></a>
+    <var class="Ar">runfile</var></dt>
+  <dd>Specify the name of the <var class="Ar">runfile</var> to create.</dd>
+  <dt id="x"><a class="permalink" href="#x"><code class="Fl">-x</code></a>
+    <var class="Ar">username</var></dt>
+  <dd>Execute the pre script as <var class="Ar">username</var>.</dd>
+  <dt id="X"><a class="permalink" href="#X"><code class="Fl">-X</code></a>
+    <var class="Ar">username</var></dt>
+  <dd>Execute the post script as <var class="Ar">username</var>.</dd>
+</dl>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="EXAMPLES"><a class="permalink" href="#EXAMPLES">EXAMPLES</a></h1>
+<dl class="Bl-tag">
+  <dt id="Example"><a class="permalink" href="#Example"><b class="Sy">Example
+    1</b></a>: <span class="No">Running ad-hoc tests</span>.</dt>
+  <dd>This example demonstrates the simplest invocation of
+      <code class="Nm">run</code>.
+    <div class="Bd Pp Li">
+    <pre><span class="No">%</span> <code class="Nm">run</code> <var class="Ar">my-tests</var>
+Test: /home/jkennedy/my-tests/test-01                    [00:02] [PASS]
+Test: /home/jkennedy/my-tests/test-02                    [00:04] [PASS]
+Test: /home/jkennedy/my-tests/test-03                    [00:01] [PASS]
+
+Results Summary
+PASS       3
+
+Running Time:   00:00:07
+Percent passed: 100.0%
+Log directory:  /var/tmp/test_results/20120923T180654</pre>
+    </div>
+  </dd>
+  <dt id="Example~2"><a class="permalink" href="#Example~2"><b class="Sy">Example
+    2</b></a>: <span class="No">Creating a</span> <var class="Ar">runfile</var>
+    <span class="No">for future use</span>.</dt>
+  <dd>This example demonstrates creating a <var class="Ar">runfile</var> with
+      non-default options.
+    <div class="Bd Pp Li">
+    <pre><span class="No">%</span> <code class="Nm">run</code> <code class="Fl">-p</code> <var class="Ar">setup</var> <code class="Fl">-x</code> <var class="Ar">root</var> <code class="Fl">-g</code> <code class="Fl">-w</code> <var class="Ar">new-tests.run</var> <var class="Ar">new-tests</var>
+<span class="No">%</span> <code class="Nm">cat</code> <span class="Pa">new-tests.run</span>
+[DEFAULT]
+pre = setup
+post_user =
+quiet = False
+user =
+timeout = 60
+post =
+pre_user = root
+outputdir = /var/tmp/test_results
+
+[/home/jkennedy/new-tests]
+tests = ['test-01', 'test-02', 'test-03']</pre>
+    </div>
+  </dd>
+</dl>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SEE_ALSO"><a class="permalink" href="#SEE_ALSO">SEE
+  ALSO</a></h1>
+<p class="Pp"><a class="Xr">sudo(1m)</a></p>
+</section>
+</div>
+<table class="foot">
+  <tr>
+    <td class="foot-date">May 26, 2021</td>
+    <td class="foot-os">Debian</td>
+  </tr>
+</table>
+</div></section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="raidz_test.1.html" class="btn btn-neutral float-left" title="raidz_test.1" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="zhack.1.html" class="btn btn-neutral float-right" title="zhack.1" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, OpenZFS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

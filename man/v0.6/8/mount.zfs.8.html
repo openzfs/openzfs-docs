@@ -1,0 +1,263 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mount.zfs.8 &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
+      <script src="../../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="vdev_id.8" href="vdev_id.8.html" />
+    <link rel="prev" title="fsck.zfs.8" href="fsck.zfs.8.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Basic%20Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Man Pages</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../master/index.html">master</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.3/index.html">v2.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.2/index.html">v2.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.1/index.html">v2.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.0/index.html">v2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.8/index.html">v0.8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.7/index.html">v0.7</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">v0.6</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../1/index.html">User Commands (1)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../5/index.html">File Formats and Conventions (5)</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">System Administration Commands (8)</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="fsck.zfs.8.html">fsck.zfs.8</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">mount.zfs.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vdev_id.8.html">vdev_id.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zdb.8.html">zdb.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zed.8.html">zed.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs.8.html">zfs.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zinject.8.html">zinject.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool.8.html">zpool.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zstreamdump.8.html">zstreamdump.8</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Man Pages</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">v0.6</a></li>
+          <li class="breadcrumb-item"><a href="index.html">System Administration Commands (8)</a></li>
+      <li class="breadcrumb-item active">mount.zfs.8</li>
+      <li class="wy-breadcrumbs-aside">
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/openzfs/zfs/blob/zfs-0.6.5.11/man/man8/mount.zfs.8" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="mount-zfs-8">
+<h1>mount.zfs.8<a class="headerlink" href="#mount-zfs-8" title="Permalink to this heading"></a></h1>
+<div class="man_container"><table class="head">
+  <tr>
+    <td class="head-ltitle">mount.zfs(8)</td>
+    <td class="head-vol">System Administration Commands</td>
+    <td class="head-rtitle">mount.zfs(8)</td>
+  </tr>
+</table>
+<div class="manual-text">
+<p class="Pp"></p>
+<section class="Sh">
+<h1 class="Sh" id="NAME"><a class="permalink" href="#NAME">NAME</a></h1>
+<p class="Pp">mount.zfs - mount a ZFS filesystem</p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SYNOPSIS"><a class="permalink" href="#SYNOPSIS">SYNOPSIS</a></h1>
+<p class="Pp"><b>mount.zfs [-sfnvh] [-o </b><i>options</i><b>]</b><i> dataset
+    mountpoint</i></p>
+<p class="Pp"></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h1>
+<p class="Pp"><b>mount.zfs</b> is part of the zfsutils package for Linux. It is
+    a helper program that is usually invoked by the <b>mount</b>(8) or
+    <b>zfs</b>(8) commands to mount a ZFS dataset.</p>
+<p class="Pp">All <i>options</i> are handled according to the FILESYSTEM
+    INDEPENDENT MOUNT OPTIONS section in the <b>mount</b>(8) manual, except for
+    those described below.</p>
+<p class="Pp">The <i>dataset</i> parameter is a ZFS filesystem name, as output
+    by the <b>zfs list -H -o name</b> command. This parameter never has a
+    leading slash character and is not a device name.</p>
+<p class="Pp">The <i>mountpoint</i> parameter is the path name of a
+  directory.</p>
+<p class="Pp"></p>
+<p class="Pp"></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="OPTIONS"><a class="permalink" href="#OPTIONS">OPTIONS</a></h1>
+<dl class="Bl-tag">
+  <dt id="s"><a class="permalink" href="#s"><b>-s</b></a></dt>
+  <dd>Ignore bad or sloppy mount options.</dd>
+  <dt id="f"><a class="permalink" href="#f"><b>-f</b></a></dt>
+  <dd>Do a fake mount; do not perform the mount operation.</dd>
+  <dt id="n"><a class="permalink" href="#n"><b>-n</b></a></dt>
+  <dd>Do not update the /etc/mtab file.</dd>
+  <dt id="v"><a class="permalink" href="#v"><b>-v</b></a></dt>
+  <dd>Increase verbosity.</dd>
+  <dt id="h"><a class="permalink" href="#h"><b>-h</b></a></dt>
+  <dd>Print the usage message.</dd>
+  <dt id="o"><a class="permalink" href="#o"><b>-o context</b></a></dt>
+  <dd>This flag sets the SELinux context for all files in the filesytem under
+      that mountpoint.</dd>
+  <dt id="o~2"><a class="permalink" href="#o~2"><b>-o fscontext</b></a></dt>
+  <dd>This flag sets the SELinux context for the filesytem being mounted.</dd>
+  <dt id="o~3"><a class="permalink" href="#o~3"><b>-o defcontext</b></a></dt>
+  <dd>This flag sets the SELinux context for unlabeled files.</dd>
+  <dt id="o~4"><a class="permalink" href="#o~4"><b>-o rootcontext</b></a></dt>
+  <dd>This flag sets the SELinux context for the root inode of the
+    filesystem.</dd>
+  <dt id="o~5"><a class="permalink" href="#o~5"><b>-o legacy</b></a></dt>
+  <dd>This private flag indicates that the <i>dataset</i> has an entry in the
+      /etc/fstab file.</dd>
+  <dt id="o~6"><a class="permalink" href="#o~6"><b>-o noxattr</b></a></dt>
+  <dd>This private flag disables extended attributes.</dd>
+  <dt id="o~7"><a class="permalink" href="#o~7"><b>-o xattr</b></a></dt>
+  <dd>This private flag enables directory-based extended attributes and, if
+      appropriate, adds a ZFS context to the selinux system policy.</dd>
+  <dt id="o~8"><a class="permalink" href="#o~8"><b>-o saxattr</b></a></dt>
+  <dd>This private flag enables system attributed-based extended attributes and,
+      if appropriate, adds a ZFS context to the selinux system policy.</dd>
+  <dt id="o~9"><a class="permalink" href="#o~9"><b>-o dirxattr</b></a></dt>
+  <dd>Equivalent to <b>xattr</b>.</dd>
+  <dt id="o~10"><a class="permalink" href="#o~10"><b>-o zfsutil</b></a></dt>
+  <dd>This private flag indicates that <b>mount</b>(8) is being called by the
+      <b>zfs</b>(8) command.
+    <p class="Pp"></p>
+  </dd>
+</dl>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="NOTES"><a class="permalink" href="#NOTES">NOTES</a></h1>
+<p class="Pp">ZFS conventionally requires that the <i>mountpoint</i> be an empty
+    directory, but the Linux implementation inconsistently enforces the
+    requirement.</p>
+<p class="Pp">The <b>mount.zfs</b> helper does not mount the contents of
+  zvols.</p>
+<p class="Pp"></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="FILES"><a class="permalink" href="#FILES">FILES</a></h1>
+<dl class="Bl-tag">
+  <dt><i>/etc/fstab</i></dt>
+  <dd>The static filesystem table.</dd>
+  <dt><i>/etc/mtab</i></dt>
+  <dd>The mounted filesystem table.</dd>
+</dl>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="AUTHORS"><a class="permalink" href="#AUTHORS">AUTHORS</a></h1>
+<p class="Pp">The primary author of <b>mount.zfs</b> is Brian Behlendorf
+    &lt;behlendorf1@llnl.gov&gt;.</p>
+<p class="Pp">This man page was written by Darik Horn
+    &lt;dajhorn@vanadac.com&gt;.</p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SEE_ALSO"><a class="permalink" href="#SEE_ALSO">SEE
+  ALSO</a></h1>
+<p class="Pp"><b>fstab</b>(5), <b>mount</b>(8), <b>zfs</b>(8)</p>
+</section>
+</div>
+<table class="foot">
+  <tr>
+    <td class="foot-date">2013 FEB 28</td>
+    <td class="foot-os">ZFS on Linux</td>
+  </tr>
+</table>
+</div></section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="fsck.zfs.8.html" class="btn btn-neutral float-left" title="fsck.zfs.8" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="vdev_id.8.html" class="btn btn-neutral float-right" title="vdev_id.8" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, OpenZFS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
