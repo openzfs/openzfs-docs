@@ -233,7 +233,6 @@ debug
 -  `zfs_zevent_len_max <#zfs-zevent-len-max>`__
 -  `zil_replay_disable <#zil-replay-disable>`__
 -  `zio_deadman_log_all <#zio-deadman-log-all>`__
--  `zio_decompress_fail_fraction <#zio-decompress-fail-fraction>`__
 -  `zio_delay_max <#zio-delay-max>`__
 
 dedup
@@ -1011,7 +1010,6 @@ Index
 -  `zil_replay_disable <#zil-replay-disable>`__
 -  `zil_slog_bulk <#zil-slog-bulk>`__
 -  `zio_deadman_log_all <#zio-deadman-log-all>`__
--  `zio_decompress_fail_fraction <#zio-decompress-fail-fraction>`__
 -  `zio_delay_max <#zio-delay-max>`__
 -  `zio_dva_throttle_enabled <#zio-dva-throttle-enabled>`__
 -  `zio_requeue_io_start_cut_in_line <#zio-requeue-io-start-cut-in-line>`__
@@ -8551,38 +8549,6 @@ See also `zfs_dbgmsg_enable <#zfs-dbgmsg-enable>`__
 +---------------------+-----------------------------------------------+
 | Versions Affected   | planned for v2                                |
 +---------------------+-----------------------------------------------+
-
-zio_decompress_fail_fraction
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-If non-zero, ``zio_decompress_fail_fraction`` represents the denominator
-of the probability that ZFS should induce a decompression failure. For
-instance, for a 5% decompression failure rate, this value should be set
-to 20.
-
-+------------------------------+--------------------------------------+
-| zio_decompress_fail_fraction | Notes                                |
-+==============================+======================================+
-| Tags                         | `debug <#debug>`__                   |
-+------------------------------+--------------------------------------+
-| When to change               | when debugging ZFS internal          |
-|                              | compressed buffer code               |
-+------------------------------+--------------------------------------+
-| Data Type                    | ulong                                |
-+------------------------------+--------------------------------------+
-| Units                        | probability of induced decompression |
-|                              | failure is                           |
-|                              | 1/``zio_decompress_fail_fraction``   |
-+------------------------------+--------------------------------------+
-| Range                        | 0 = do not induce failures, or 1 to  |
-|                              | MAX_ULONG                            |
-+------------------------------+--------------------------------------+
-| Default                      | 0                                    |
-+------------------------------+--------------------------------------+
-| Change                       | Dynamic                              |
-+------------------------------+--------------------------------------+
-| Versions Affected            | planned for v2                       |
-+------------------------------+--------------------------------------+
 
 zio_slow_io_ms
 ~~~~~~~~~~~~~~
