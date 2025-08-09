@@ -1,0 +1,252 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>zhack.1 &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
+      <script src="../../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="zpios.1" href="zpios.1.html" />
+    <link rel="prev" title="raidz_test.1" href="raidz_test.1.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Basic%20Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Man Pages</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../master/index.html">master</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.3/index.html">v2.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.2/index.html">v2.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.1/index.html">v2.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.0/index.html">v2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.8/index.html">v0.8</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">v0.7</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">User Commands (1)</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="cstyle.1.html">cstyle.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="raidz_test.1.html">raidz_test.1</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">zhack.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpios.1.html">zpios.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ztest.1.html">ztest.1</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../5/index.html">File Formats and Conventions (5)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../8/index.html">System Administration Commands (8)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.6/index.html">v0.6</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Man Pages</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">v0.7</a></li>
+          <li class="breadcrumb-item"><a href="index.html">User Commands (1)</a></li>
+      <li class="breadcrumb-item active">zhack.1</li>
+      <li class="wy-breadcrumbs-aside">
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/openzfs/zfs/blob/zfs-0.7.13/man/man1/zhack.1" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="zhack-1">
+<h1>zhack.1<a class="headerlink" href="#zhack-1" title="Permalink to this heading"></a></h1>
+<div class="man_container"><table class="head">
+  <tr>
+    <td class="head-ltitle">zhack(1)</td>
+    <td class="head-vol">User Commands</td>
+    <td class="head-rtitle">zhack(1)</td>
+  </tr>
+</table>
+<div class="manual-text">
+<p class="Pp"></p>
+<section class="Sh">
+<h1 class="Sh" id="NAME"><a class="permalink" href="#NAME">NAME</a></h1>
+<p class="Pp">zhack - libzpool debugging tool</p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h1>
+<p class="Pp">This utility pokes configuration changes directly into a ZFS pool,
+    which is dangerous and can cause data corruption.</p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SYNOPSIS"><a class="permalink" href="#SYNOPSIS">SYNOPSIS</a></h1>
+<p class="Pp"><b>zhack [-c </b><i>cachefile</i><b>] [-d </b><i>dir</i><b>]
+    &lt;</b><i>subcommand</i><b>&gt; [</b><i>arguments</i><b>]</b></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="OPTIONS"><a class="permalink" href="#OPTIONS">OPTIONS</a></h1>
+<p class="Pp HP"><b>-c</b><i> cachefile</i></p>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>Read the <i>pool</i> configuration from the <i>cachefile</i>, which is
+      /etc/zfs/zpool.cache by default.</dd>
+</dl>
+<p class="Pp HP"><b>-d</b><i> dir</i></p>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>Search for <i>pool</i> members in the <i>dir</i> path. Can be specified
+      more than once.</dd>
+</dl>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SUBCOMMANDS"><a class="permalink" href="#SUBCOMMANDS">SUBCOMMANDS</a></h1>
+<p class="Pp"><b>feature stat </b><i>pool</i></p>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>List feature flags.</dd>
+</dl>
+<p class="Pp"><b>feature enable [-d </b><i>description</i><b>] [-r] </b><i>pool
+    guid</i></p>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>Add a new feature to <i>pool</i> that is uniquely identified by
+      <i>guid</i>, which is specified in the same form as a zfs(8) user
+      property.</dd>
+  <dt></dt>
+  <dd>The <i>description</i> is a short human readable explanation of the new
+      feature.</dd>
+  <dt></dt>
+  <dd>The <b>-r</b> switch indicates that <i>pool</i> can be safely opened in
+      read-only mode by a system that does not have the <i>guid</i>
+    feature.</dd>
+</dl>
+<p class="Pp"><b>feature ref [-d|-m] </b><i>pool guid</i></p>
+<dl class="Bl-tag">
+  <dt></dt>
+  <dd>Increment the reference count of the <i>guid</i> feature in
+    <i>pool</i>.</dd>
+  <dt></dt>
+  <dd>The <b>-d</b> switch decrements the reference count of the <i>guid</i>
+      feature in <i>pool</i>.</dd>
+  <dt></dt>
+  <dd>The <b>-m</b> switch indicates that the <i>guid</i> feature is now
+      required to read the pool MOS.</dd>
+</dl>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="EXAMPLES"><a class="permalink" href="#EXAMPLES">EXAMPLES</a></h1>
+<pre># zhack feature stat tank
+for_read_obj:
+	org.illumos:lz4_compress = 0
+for_write_obj:
+	com.delphix:async_destroy = 0
+	com.delphix:empty_bpobj = 0
+descriptions_obj:
+	com.delphix:async_destroy = Destroy filesystems asynchronously.
+	com.delphix:empty_bpobj = Snapshots use less space.
+	org.illumos:lz4_compress = LZ4 compression algorithm support.</pre>
+<pre># zhack feature enable -d 'Predict future disk failures.' \
+<br/>
+    tank com.example:clairvoyance</pre>
+<pre># zhack feature ref tank com.example:clairvoyance</pre>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="AUTHORS"><a class="permalink" href="#AUTHORS">AUTHORS</a></h1>
+<p class="Pp">This man page was written by Darik Horn
+    &lt;dajhorn@vanadac.com&gt;.</p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SEE_ALSO"><a class="permalink" href="#SEE_ALSO">SEE
+  ALSO</a></h1>
+<p class="Pp"><b>splat</b>(1), <b>zfs</b>(8), <b>zpios</b>(1),
+    <b>zpool-features</b>(5), <b>ztest</b>(1)</p>
+</section>
+</div>
+<table class="foot">
+  <tr>
+    <td class="foot-date">2013 MAR 16</td>
+    <td class="foot-os">ZFS on Linux</td>
+  </tr>
+</table>
+</div></section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="raidz_test.1.html" class="btn btn-neutral float-left" title="raidz_test.1" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="zpios.1.html" class="btn btn-neutral float-right" title="zpios.1" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, OpenZFS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,384 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NixOS Root on ZFS &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
+      <script src="../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="openSUSE" href="../openSUSE/index.html" />
+    <link rel="prev" title="NixOS" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Getting Started</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Alpine%20Linux/index.html">Alpine Linux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Arch%20Linux/index.html">Arch Linux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Debian/index.html">Debian</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Fedora/index.html">Fedora</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../FreeBSD.html">FreeBSD</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://wiki.gentoo.org/wiki/ZFS">Gentoo</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">NixOS</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="index.html#contents">Contents</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">NixOS Root on ZFS</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="index.html#support">Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="index.html#installation">Installation</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html#root-on-zfs">Root on ZFS</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">NixOS Root on ZFS</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="index.html#contribute">Contribute</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../openSUSE/index.html">openSUSE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../RHEL-based%20distro/index.html">RHEL-based distro</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Slackware/index.html">Slackware</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Ubuntu/index.html">Ubuntu</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Basic%20Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../man/index.html">Man Pages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Getting Started</a></li>
+          <li class="breadcrumb-item"><a href="index.html">NixOS</a></li>
+      <li class="breadcrumb-item active">NixOS Root on ZFS</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/Getting Started/NixOS/Root on ZFS.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="nixos-root-on-zfs">
+<h1>NixOS Root on ZFS<a class="headerlink" href="#nixos-root-on-zfs" title="Permalink to this heading"></a></h1>
+<p><strong>Customization</strong></p>
+<p>Unless stated otherwise, it is not recommended to customize system
+configuration before reboot.</p>
+<p><strong>UEFI support only</strong></p>
+<p>Only UEFI is supported by this guide.  Make sure your computer is
+booted in UEFI mode.</p>
+<section id="preparation">
+<h2>Preparation<a class="headerlink" href="#preparation" title="Permalink to this heading"></a></h2>
+<ol class="arabic">
+<li><p>Download <a class="reference external" href="https://nixos.org/download.html#nixos-iso">NixOS Live Image</a> and boot from it.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sha256sum<span class="w"> </span>-c<span class="w"> </span>./nixos-*.sha256
+
+dd<span class="w"> </span><span class="k">if</span><span class="o">=</span>input-file<span class="w"> </span><span class="nv">of</span><span class="o">=</span>output-file<span class="w"> </span><span class="nv">bs</span><span class="o">=</span>1M
+</pre></div>
+</div>
+</li>
+<li><p>Connect to the Internet.</p></li>
+<li><p>Set root password or <code class="docutils literal notranslate"><span class="pre">/root/.ssh/authorized_keys</span></code>.</p></li>
+<li><p>Start SSH server</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>systemctl<span class="w"> </span>restart<span class="w"> </span>sshd
+</pre></div>
+</div>
+</li>
+<li><p>Connect from another computer</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>ssh<span class="w"> </span>root@192.168.1.91
+</pre></div>
+</div>
+</li>
+<li><p>Target disk</p>
+<p>List available disks with</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>find<span class="w"> </span>/dev/disk/by-id/
+</pre></div>
+</div>
+<p>If virtio is used as disk bus, power off the VM and set serial numbers for disk.
+For QEMU, use <code class="docutils literal notranslate"><span class="pre">-drive</span> <span class="pre">format=raw,file=disk2.img,serial=AaBb</span></code>.
+For libvirt, edit domain XML.  See <a class="reference external" href="https://bugzilla.redhat.com/show_bug.cgi?id=1245013">this page</a> for examples.</p>
+<p>Declare disk array</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nv">DISK</span><span class="o">=</span><span class="s1">&#39;/dev/disk/by-id/ata-FOO /dev/disk/by-id/nvme-BAR&#39;</span>
+</pre></div>
+</div>
+<p>For single disk installation, use</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nv">DISK</span><span class="o">=</span><span class="s1">&#39;/dev/disk/by-id/disk1&#39;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Set a mount point</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nv">MNT</span><span class="o">=</span><span class="k">$(</span>mktemp<span class="w"> </span>-d<span class="k">)</span>
+</pre></div>
+</div>
+</li>
+<li><p>Set partition size:</p>
+<p>Set swap size in GB, set to 1 if you don’t want swap to
+take up too much space</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nv">SWAPSIZE</span><span class="o">=</span><span class="m">4</span>
+</pre></div>
+</div>
+<p>Set how much space should be left at the end of the disk, minimum 1GB</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nv">RESERVE</span><span class="o">=</span><span class="m">1</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="system-installation">
+<h2>System Installation<a class="headerlink" href="#system-installation" title="Permalink to this heading"></a></h2>
+<ol class="arabic">
+<li><p>Partition the disks.</p>
+<p>Note: you must clear all existing partition tables and data structures from target disks.</p>
+<p>For flash-based storage, this can be done by the blkdiscard command below:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>partition_disk<span class="w"> </span><span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="w"> </span><span class="nb">local</span><span class="w"> </span><span class="nv">disk</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">1</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="w"> </span>blkdiscard<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">disk</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+
+<span class="w"> </span>parted<span class="w"> </span>--script<span class="w"> </span>--align<span class="o">=</span>optimal<span class="w">  </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">disk</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span>--<span class="w"> </span><span class="se">\</span>
+<span class="w"> </span>mklabel<span class="w"> </span>gpt<span class="w"> </span><span class="se">\</span>
+<span class="w"> </span>mkpart<span class="w"> </span>EFI<span class="w"> </span>1MiB<span class="w"> </span>4GiB<span class="w"> </span><span class="se">\</span>
+<span class="w"> </span>mkpart<span class="w"> </span>rpool<span class="w"> </span>4GiB<span class="w"> </span>-<span class="k">$((</span><span class="nv">SWAPSIZE</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nv">RESERVE</span><span class="k">))</span>GiB<span class="w"> </span><span class="se">\</span>
+<span class="w"> </span>mkpart<span class="w"> </span>swap<span class="w">  </span>-<span class="k">$((</span><span class="nv">SWAPSIZE</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nv">RESERVE</span><span class="k">))</span>GiB<span class="w"> </span>-<span class="s2">&quot;</span><span class="si">${</span><span class="nv">RESERVE</span><span class="si">}</span><span class="s2">&quot;</span>GiB<span class="w"> </span><span class="se">\</span>
+<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="m">1</span><span class="w"> </span>esp<span class="w"> </span>on<span class="w"> </span><span class="se">\</span>
+
+<span class="w"> </span>partprobe<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">disk</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="o">}</span>
+
+<span class="k">for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="si">${</span><span class="nv">DISK</span><span class="si">}</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">   </span>partition_disk<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">i</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="k">done</span>
+</pre></div>
+</div>
+</li>
+<li><p>Setup temporary encrypted swap for this installation only.  This is
+useful if the available memory is small:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="k">for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="si">${</span><span class="nv">DISK</span><span class="si">}</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">   </span>cryptsetup<span class="w"> </span>open<span class="w"> </span>--type<span class="w"> </span>plain<span class="w"> </span>--key-file<span class="w"> </span>/dev/random<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">i</span><span class="si">}</span><span class="s2">&quot;</span>-part3<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">i</span><span class="p">##*/</span><span class="si">}</span><span class="s2">&quot;</span>-part3
+<span class="w">   </span>mkswap<span class="w"> </span>/dev/mapper/<span class="s2">&quot;</span><span class="si">${</span><span class="nv">i</span><span class="p">##*/</span><span class="si">}</span><span class="s2">&quot;</span>-part3
+<span class="w">   </span>swapon<span class="w"> </span>/dev/mapper/<span class="s2">&quot;</span><span class="si">${</span><span class="nv">i</span><span class="p">##*/</span><span class="si">}</span><span class="s2">&quot;</span>-part3
+<span class="k">done</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>LUKS only</strong>: Setup encrypted LUKS container for root pool:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="k">for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="si">${</span><span class="nv">DISK</span><span class="si">}</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">   </span><span class="c1"># see PASSPHRASE PROCESSING section in cryptsetup(8)</span>
+<span class="w">   </span><span class="nb">printf</span><span class="w"> </span><span class="s2">&quot;YOUR_PASSWD&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cryptsetup<span class="w"> </span>luksFormat<span class="w"> </span>--type<span class="w"> </span>luks2<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">i</span><span class="si">}</span><span class="s2">&quot;</span>-part2<span class="w"> </span>-
+<span class="w">   </span><span class="nb">printf</span><span class="w"> </span><span class="s2">&quot;YOUR_PASSWD&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cryptsetup<span class="w"> </span>luksOpen<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">i</span><span class="si">}</span><span class="s2">&quot;</span>-part2<span class="w"> </span>luks-rpool-<span class="s2">&quot;</span><span class="si">${</span><span class="nv">i</span><span class="p">##*/</span><span class="si">}</span><span class="s2">&quot;</span>-part2<span class="w"> </span>-
+<span class="k">done</span>
+</pre></div>
+</div>
+</li>
+<li><p>Create root pool</p>
+<ul>
+<li><p>Unencrypted</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># shellcheck disable=SC2046</span>
+zpool<span class="w"> </span>create<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-o<span class="w"> </span><span class="nv">ashift</span><span class="o">=</span><span class="m">12</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-o<span class="w"> </span><span class="nv">autotrim</span><span class="o">=</span>on<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-R<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">MNT</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-O<span class="w"> </span><span class="nv">acltype</span><span class="o">=</span>posixacl<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-O<span class="w"> </span><span class="nv">canmount</span><span class="o">=</span>off<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-O<span class="w"> </span><span class="nv">dnodesize</span><span class="o">=</span>auto<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-O<span class="w"> </span><span class="nv">normalization</span><span class="o">=</span>formD<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-O<span class="w"> </span><span class="nv">relatime</span><span class="o">=</span>on<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-O<span class="w"> </span><span class="nv">xattr</span><span class="o">=</span>sa<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-O<span class="w"> </span><span class="nv">mountpoint</span><span class="o">=</span>none<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>rpool<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>mirror<span class="w"> </span><span class="se">\</span>
+<span class="w">   </span><span class="k">$(for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="si">${</span><span class="nv">DISK</span><span class="si">}</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">      </span><span class="nb">printf</span><span class="w"> </span><span class="s1">&#39;%s &#39;</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">i</span><span class="si">}</span><span class="s2">-part2&quot;</span><span class="p">;</span>
+<span class="w">     </span><span class="k">done)</span>
+</pre></div>
+</div>
+</li>
+<li><p>LUKS encrypted</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># shellcheck disable=SC2046</span>
+zpool<span class="w"> </span>create<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-o<span class="w"> </span><span class="nv">ashift</span><span class="o">=</span><span class="m">12</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-o<span class="w"> </span><span class="nv">autotrim</span><span class="o">=</span>on<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-R<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">MNT</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-O<span class="w"> </span><span class="nv">acltype</span><span class="o">=</span>posixacl<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-O<span class="w"> </span><span class="nv">canmount</span><span class="o">=</span>off<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-O<span class="w"> </span><span class="nv">dnodesize</span><span class="o">=</span>auto<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-O<span class="w"> </span><span class="nv">normalization</span><span class="o">=</span>formD<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-O<span class="w"> </span><span class="nv">relatime</span><span class="o">=</span>on<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-O<span class="w"> </span><span class="nv">xattr</span><span class="o">=</span>sa<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-O<span class="w"> </span><span class="nv">mountpoint</span><span class="o">=</span>none<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>rpool<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>mirror<span class="w"> </span><span class="se">\</span>
+<span class="w">   </span><span class="k">$(for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="si">${</span><span class="nv">DISK</span><span class="si">}</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">      </span><span class="nb">printf</span><span class="w"> </span><span class="s1">&#39;/dev/mapper/luks-rpool-%s &#39;</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">i</span><span class="p">##*/</span><span class="si">}</span><span class="s2">-part2&quot;</span><span class="p">;</span>
+<span class="w">     </span><span class="k">done)</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p>If not using a multi-disk setup, remove <code class="docutils literal notranslate"><span class="pre">mirror</span></code>.</p>
+</li>
+<li><p>Create root system container:</p>
+<blockquote>
+<div><div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>zfs<span class="w"> </span>create<span class="w"> </span>-o<span class="w"> </span><span class="nv">canmount</span><span class="o">=</span>noauto<span class="w"> </span>-o<span class="w"> </span><span class="nv">mountpoint</span><span class="o">=</span>legacy<span class="w"> </span>rpool/root
+</pre></div>
+</div>
+</div></blockquote>
+<p>Create system datasets,
+manage mountpoints with <code class="docutils literal notranslate"><span class="pre">mountpoint=legacy</span></code></p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>zfs<span class="w"> </span>create<span class="w"> </span>-o<span class="w"> </span><span class="nv">mountpoint</span><span class="o">=</span>legacy<span class="w"> </span>rpool/home
+mount<span class="w"> </span>-o<span class="w"> </span>X-mount.mkdir<span class="w"> </span>-t<span class="w"> </span>zfs<span class="w"> </span>rpool/root<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">MNT</span><span class="si">}</span><span class="s2">&quot;</span>
+mount<span class="w"> </span>-o<span class="w"> </span>X-mount.mkdir<span class="w"> </span>-t<span class="w"> </span>zfs<span class="w"> </span>rpool/home<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">MNT</span><span class="si">}</span><span class="s2">&quot;</span>/home
+</pre></div>
+</div>
+</li>
+<li><p>Format and mount ESP.  Only one of them is used as /boot, you need to set up mirroring afterwards</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="k">for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="si">${</span><span class="nv">DISK</span><span class="si">}</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w"> </span>mkfs.vfat<span class="w"> </span>-n<span class="w"> </span>EFI<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">i</span><span class="si">}</span><span class="s2">&quot;</span>-part1
+<span class="k">done</span>
+
+<span class="k">for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="si">${</span><span class="nv">DISK</span><span class="si">}</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w"> </span>mount<span class="w"> </span>-t<span class="w"> </span>vfat<span class="w"> </span>-o<span class="w"> </span><span class="nv">fmask</span><span class="o">=</span><span class="m">0077</span>,dmask<span class="o">=</span><span class="m">0077</span>,iocharset<span class="o">=</span>iso8859-1,X-mount.mkdir<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">i</span><span class="si">}</span><span class="s2">&quot;</span>-part1<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">MNT</span><span class="si">}</span><span class="s2">&quot;</span>/boot
+<span class="w"> </span><span class="k">break</span>
+<span class="k">done</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="system-configuration">
+<h2>System Configuration<a class="headerlink" href="#system-configuration" title="Permalink to this heading"></a></h2>
+<ol class="arabic">
+<li><p>Generate system configuration:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>nixos-generate-config<span class="w"> </span>--root<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">MNT</span><span class="si">}</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Edit system configuration:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>nano<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">MNT</span><span class="si">}</span><span class="s2">&quot;</span>/etc/nixos/hardware-configuration.nix
+</pre></div>
+</div>
+</li>
+<li><p>Set networking.hostId:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>networking.hostId<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;abcd1234&quot;</span><span class="p">;</span>
+</pre></div>
+</div>
+</li>
+<li><p>If using LUKS, add the output from following command to system
+configuration</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>tee<span class="w"> </span><span class="s">&lt;&lt;EOF</span>
+<span class="s">  boot.initrd.luks.devices = {</span>
+<span class="s">EOF</span>
+
+<span class="k">for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="si">${</span><span class="nv">DISK</span><span class="si">}</span><span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="se">\&quot;</span>luks-rpool-<span class="s2">&quot;</span><span class="si">${</span><span class="nv">i</span><span class="p">##*/</span><span class="si">}</span><span class="s2">-part2&quot;</span><span class="se">\&quot;</span>.device<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="se">\&quot;</span><span class="si">${</span><span class="nv">i</span><span class="si">}</span>-part2<span class="se">\&quot;\;</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">done</span>
+
+tee<span class="w"> </span><span class="s">&lt;&lt;EOF</span>
+<span class="s">};</span>
+<span class="s">EOF</span>
+</pre></div>
+</div>
+</li>
+<li><p>Install system and apply configuration</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>nixos-install<span class="w">  </span>--root<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">MNT</span><span class="si">}</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<p>Wait for the root password reset prompt to appear.</p>
+</li>
+<li><p>Unmount filesystems</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/
+umount<span class="w"> </span>-Rl<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">MNT</span><span class="si">}</span><span class="s2">&quot;</span>
+zpool<span class="w"> </span><span class="nb">export</span><span class="w"> </span>-a
+</pre></div>
+</div>
+</li>
+<li><p>Reboot</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>reboot
+</pre></div>
+</div>
+</li>
+<li><p>Set up networking, desktop and swap.</p></li>
+<li><p>Mount other EFI system partitions then set up a service for syncing
+their contents.</p></li>
+</ol>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="NixOS" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../openSUSE/index.html" class="btn btn-neutral float-right" title="openSUSE" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, OpenZFS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

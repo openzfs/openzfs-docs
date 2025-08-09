@@ -1,0 +1,436 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>zfs-mount-generator.8 &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
+      <script src="../../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="zfs-mount.8" href="zfs-mount.8.html" />
+    <link rel="prev" title="zfs-load-key.8" href="zfs-load-key.8.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Basic%20Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Man Pages</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../master/index.html">master</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.3/index.html">v2.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.2/index.html">v2.2</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">v2.1</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../1/index.html">User Commands (1)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../4/index.html">Devices and Special Files (4)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../5/index.html">File Formats and Conventions (5)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../7/index.html">Miscellaneous (7)</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">System Administration Commands (8)</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="fsck.zfs.8.html">fsck.zfs.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mount.zfs.8.html">mount.zfs.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vdev_id.8.html">vdev_id.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zdb.8.html">zdb.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zed.8.html">zed.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-allow.8.html">zfs-allow.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-bookmark.8.html">zfs-bookmark.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-change-key.8.html">zfs-change-key.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-clone.8.html">zfs-clone.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-create.8.html">zfs-create.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-destroy.8.html">zfs-destroy.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-diff.8.html">zfs-diff.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-get.8.html">zfs-get.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-groupspace.8.html">zfs-groupspace.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-hold.8.html">zfs-hold.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-inherit.8.html">zfs-inherit.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-jail.8.html">zfs-jail.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-list.8.html">zfs-list.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-load-key.8.html">zfs-load-key.8</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">zfs-mount-generator.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-mount.8.html">zfs-mount.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-program.8.html">zfs-program.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-project.8.html">zfs-project.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-projectspace.8.html">zfs-projectspace.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-promote.8.html">zfs-promote.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-receive.8.html">zfs-receive.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-recv.8.html">zfs-recv.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-redact.8.html">zfs-redact.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-release.8.html">zfs-release.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-rename.8.html">zfs-rename.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-rollback.8.html">zfs-rollback.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-send.8.html">zfs-send.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-set.8.html">zfs-set.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-share.8.html">zfs-share.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-snapshot.8.html">zfs-snapshot.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-unallow.8.html">zfs-unallow.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-unjail.8.html">zfs-unjail.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-unload-key.8.html">zfs-unload-key.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-unmount.8.html">zfs-unmount.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-upgrade.8.html">zfs-upgrade.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-userspace.8.html">zfs-userspace.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-wait.8.html">zfs-wait.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs.8.html">zfs.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs_ids_to_path.8.html">zfs_ids_to_path.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs_prepare_disk.8.html">zfs_prepare_disk.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zgenhostid.8.html">zgenhostid.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zinject.8.html">zinject.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-add.8.html">zpool-add.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-attach.8.html">zpool-attach.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-checkpoint.8.html">zpool-checkpoint.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-clear.8.html">zpool-clear.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-create.8.html">zpool-create.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-destroy.8.html">zpool-destroy.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-detach.8.html">zpool-detach.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-events.8.html">zpool-events.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-export.8.html">zpool-export.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-get.8.html">zpool-get.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-history.8.html">zpool-history.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-import.8.html">zpool-import.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-initialize.8.html">zpool-initialize.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-iostat.8.html">zpool-iostat.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-labelclear.8.html">zpool-labelclear.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-list.8.html">zpool-list.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-offline.8.html">zpool-offline.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-online.8.html">zpool-online.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-reguid.8.html">zpool-reguid.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-remove.8.html">zpool-remove.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-reopen.8.html">zpool-reopen.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-replace.8.html">zpool-replace.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-resilver.8.html">zpool-resilver.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-scrub.8.html">zpool-scrub.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-set.8.html">zpool-set.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-split.8.html">zpool-split.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-status.8.html">zpool-status.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-sync.8.html">zpool-sync.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-trim.8.html">zpool-trim.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-upgrade.8.html">zpool-upgrade.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-wait.8.html">zpool-wait.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool.8.html">zpool.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool_influxdb.8.html">zpool_influxdb.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zstream.8.html">zstream.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zstreamdump.8.html">zstreamdump.8</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.0/index.html">v2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.8/index.html">v0.8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.7/index.html">v0.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.6/index.html">v0.6</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Man Pages</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">v2.1</a></li>
+          <li class="breadcrumb-item"><a href="index.html">System Administration Commands (8)</a></li>
+      <li class="breadcrumb-item active">zfs-mount-generator.8</li>
+      <li class="wy-breadcrumbs-aside">
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/openzfs/zfs/blob/zfs-2.1.16/man/man8/zfs-mount-generator.8" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="zfs-mount-generator-8">
+<h1>zfs-mount-generator.8<a class="headerlink" href="#zfs-mount-generator-8" title="Permalink to this heading"></a></h1>
+<div class="man_container"><table class="head">
+  <tr>
+    <td class="head-ltitle">ZFS-MOUNT-GENERATOR(8)</td>
+    <td class="head-vol">System Manager's Manual</td>
+    <td class="head-rtitle">ZFS-MOUNT-GENERATOR(8)</td>
+  </tr>
+</table>
+<div class="manual-text">
+<section class="Sh">
+<h1 class="Sh" id="NAME"><a class="permalink" href="#NAME">NAME</a></h1>
+<p class="Pp"><code class="Nm">zfs-mount-generator</code> &#x2014;
+    <span class="Nd">generate systemd mount units for ZFS filesystems</span></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SYNOPSIS"><a class="permalink" href="#SYNOPSIS">SYNOPSIS</a></h1>
+<p class="Pp"><span class="Pa">@systemdgeneratordir@/zfs-mount-generator</span></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h1>
+<p class="Pp"><code class="Nm">zfs-mount-generator</code> is a
+    <a class="Xr">systemd.generator(7)</a> that generates native
+    <a class="Xr">systemd.mount(5)</a> units for configured ZFS datasets.</p>
+<section class="Ss">
+<h2 class="Ss" id="Properties"><a class="permalink" href="#Properties">Properties</a></h2>
+<dl class="Bl-tag Bl-compact">
+  <dt id="mountpoint"><a class="permalink" href="#mountpoint"><b class="Sy">mountpoint</b></a>=</dt>
+  <dd><a class="permalink" href="#Skipped"><span class="No" id="Skipped">Skipped
+      if</span></a>
+      <a class="permalink" href="#legacy"><b class="Sy" id="legacy">legacy</b></a>
+      <span class="No">or</span> <b class="Sy">none</b>.</dd>
+  <dt id="canmount"><a class="permalink" href="#canmount"><b class="Sy">canmount</b></a>=</dt>
+  <dd><a class="permalink" href="#Skipped~2"><span class="No" id="Skipped~2">Skipped
+      if</span></a> <b class="Sy">off</b>. <span class="No">Skipped if
+      only</span> <b class="Sy">noauto</b> datasets exist for a given mountpoint
+      and there's more than one. <span class="No">Datasets with</span>
+      <a class="permalink" href="#yes"><b class="Sy" id="yes">yes</b></a>
+      <span class="No">take precedence over ones with</span>
+      <b class="Sy">noauto</b> <span class="No">for the same mountpoint.</span>
+      <span class="No">Sets logical</span> <i class="Em">noauto</i>
+      <span class="No">flag if</span> <b class="Sy">noauto</b>. Encryption roots
+      always generate
+      <b class="Sy">zfs-load-key@</b><var class="Ar">root</var><b class="Sy">.service</b>,
+      even if <b class="Sy">off</b>.</dd>
+  <dt id="atime"><a class="permalink" href="#atime"><b class="Sy">atime</b></a>=,
+    <b class="Sy">relatime</b>=,
+    <a class="permalink" href="#devices"><b class="Sy" id="devices">devices</b></a>=,
+    <a class="permalink" href="#exec"><b class="Sy" id="exec">exec</b></a>=,
+    <a class="permalink" href="#readonly"><b class="Sy" id="readonly">readonly</b></a>=,
+    <a class="permalink" href="#setuid"><b class="Sy" id="setuid">setuid</b></a>=,
+    <a class="permalink" href="#nbmand"><b class="Sy" id="nbmand">nbmand</b></a>=</dt>
+  <dd>Used to generate mount options equivalent to <code class="Nm">zfs</code>
+      <code class="Cm">mount</code>.</dd>
+  <dt id="encroot"><a class="permalink" href="#encroot"><b class="Sy">encroot</b></a>=,
+    <b class="Sy">keylocation</b>=</dt>
+  <dd>If the dataset is an encryption root, its mount unit will bind to
+      <b class="Sy">zfs-load-key@</b><var class="Ar">root</var><b class="Sy">.service</b>,
+      with additional dependencies as follows:
+    <div class="Bd-indent">
+    <dl class="Bl-tag Bl-compact">
+      <dt id="keylocation"><a class="permalink" href="#keylocation"><b class="Sy">keylocation</b></a>=<a class="permalink" href="#prompt"><b class="Sy" id="prompt">prompt</b></a></dt>
+      <dd>None, uses <a class="Xr">systemd-ask-password(1)</a></dd>
+      <dt id="keylocation~2"><a class="permalink" href="#keylocation~2"><b class="Sy">keylocation</b></a>=<a class="permalink" href="#https://"><b class="Sy" id="https://">https://</b></a><var class="Ar">URL</var>
+        (et al.)</dt>
+      <dd><a class="permalink" href="#Wants"><b class="Sy" id="Wants">Wants</b></a>=,
+          <b class="Sy">After</b>=:
+          <span class="Pa">network-online.target</span></dd>
+      <dt id="keylocation~3"><a class="permalink" href="#keylocation~3"><b class="Sy">keylocation</b></a>=<a class="permalink" href="#file://"><b class="Sy" id="file://">file://</b></a>&lt;<var class="Ar">path</var>&gt;</dt>
+      <dd><a class="permalink" href="#RequiresMountsFor"><b class="Sy" id="RequiresMountsFor">RequiresMountsFor</b></a>=<var class="Ar">path</var></dd>
+    </dl>
+    </div>
+    The service also uses the same <b class="Sy">Wants</b>=,
+      <b class="Sy">After</b>=, <b class="Sy">Requires</b>=,
+      <span class="No">and</span> <b class="Sy">RequiresMountsFor</b>=, as the
+      mount unit.</dd>
+  <dt id="org.openzfs.systemd:requires"><a class="permalink" href="#org.openzfs.systemd:requires"><b class="Sy">org.openzfs.systemd:requires</b></a>=<span class="Pa">path</span>[
+    <span class="Pa">path</span>]&#x2026;</dt>
+  <dd><a class="permalink" href="#Sets"><span class="No" id="Sets">Sets</span></a>
+      <b class="Sy">Requires</b>= for the mount- and key-loading unit.</dd>
+  <dt id="org.openzfs.systemd:requires-mounts-for"><a class="permalink" href="#org.openzfs.systemd:requires-mounts-for"><b class="Sy">org.openzfs.systemd:requires-mounts-for</b></a>=<span class="Pa">path</span>[
+    <span class="Pa">path</span>]&#x2026;</dt>
+  <dd><a class="permalink" href="#Sets~2"><span class="No" id="Sets~2">Sets</span></a>
+      <b class="Sy">RequiresMountsFor</b>= for the mount- and key-loading
+    unit.</dd>
+  <dt id="org.openzfs.systemd:before"><a class="permalink" href="#org.openzfs.systemd:before"><b class="Sy">org.openzfs.systemd:before</b></a>=<span class="Pa">unit</span>[
+    <span class="Pa">unit</span>]&#x2026;</dt>
+  <dd><a class="permalink" href="#Sets~3"><span class="No" id="Sets~3">Sets</span></a>
+      <b class="Sy">Before</b>= for the mount unit.</dd>
+  <dt id="org.openzfs.systemd:after"><a class="permalink" href="#org.openzfs.systemd:after"><b class="Sy">org.openzfs.systemd:after</b></a>=<span class="Pa">unit</span>[
+    <span class="Pa">unit</span>]&#x2026;</dt>
+  <dd><a class="permalink" href="#Sets~4"><span class="No" id="Sets~4">Sets</span></a>
+      <b class="Sy">After</b>= for the mount unit.</dd>
+  <dt id="org.openzfs.systemd:wanted-by"><a class="permalink" href="#org.openzfs.systemd:wanted-by"><b class="Sy">org.openzfs.systemd:wanted-by</b></a>=<span class="Pa">unit</span>[
+    <span class="Pa">unit</span>]&#x2026;</dt>
+  <dd><span class="No">Sets logical</span> <i class="Em">noauto</i>
+      <span class="No">flag (see below).</span> <span class="No">If not</span>
+      <b class="Sy">none</b>, <span class="No">sets</span>
+      <b class="Sy">WantedBy</b>= for the mount unit.</dd>
+  <dt id="org.openzfs.systemd:required-by"><a class="permalink" href="#org.openzfs.systemd:required-by"><b class="Sy">org.openzfs.systemd:required-by</b></a>=<span class="Pa">unit</span>[
+    <span class="Pa">unit</span>]&#x2026;</dt>
+  <dd><span class="No">Sets logical</span> <i class="Em">noauto</i>
+      <span class="No">flag (see below).</span> <span class="No">If not</span>
+      <b class="Sy">none</b>, <span class="No">sets</span>
+      <b class="Sy">RequiredBy</b>= for the mount unit.</dd>
+  <dt id="org.openzfs.systemd:nofail"><a class="permalink" href="#org.openzfs.systemd:nofail"><b class="Sy">org.openzfs.systemd:nofail</b></a>=(unset)|<b class="Sy">on</b>|<b class="Sy">off</b></dt>
+  <dd>Waxes or wanes strength of default reverse dependencies of the mount unit,
+      see below.</dd>
+  <dt id="org.openzfs.systemd:ignore"><a class="permalink" href="#org.openzfs.systemd:ignore"><b class="Sy">org.openzfs.systemd:ignore</b></a>=<b class="Sy">on</b>|<b class="Sy">off</b></dt>
+  <dd><a class="permalink" href="#Skip"><span class="No" id="Skip">Skip
+      if</span></a> <b class="Sy">on</b>. <span class="No">Defaults to</span>
+      <b class="Sy">off</b>.</dd>
+</dl>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="Unit_Ordering_And_Dependencies"><a class="permalink" href="#Unit_Ordering_And_Dependencies">Unit
+  Ordering And Dependencies</a></h2>
+<p class="Pp">Additionally, unless the pool the dataset resides on is imported
+    at generation time, both units gain
+    <b class="Sy">Wants</b>=<span class="Pa">zfs-import.target</span> and
+    <b class="Sy">After</b>=<span class="Pa">zfs-import.target</span>.</p>
+<p class="Pp">Additionally, unless the logical <i class="Em">noauto</i> flag is
+    set, the mount unit gains a reverse-dependency for
+    <span class="Pa">local-fs.target</span> of strength</p>
+<div class="Bd-indent">
+<dl class="Bl-tag Bl-compact">
+  <dt id="WantedBy">(unset)</dt>
+  <dd><a class="permalink" href="#WantedBy"><b class="Sy">WantedBy</b></a>=
+      <span class="No">+</span> <b class="Sy">Before</b>=</dd>
+  <dt id="on"><a class="permalink" href="#on"><b class="Sy">on</b></a></dt>
+  <dd><a class="permalink" href="#WantedBy~2"><b class="Sy" id="WantedBy~2">WantedBy</b></a>=</dd>
+  <dt id="off"><a class="permalink" href="#off"><b class="Sy">off</b></a></dt>
+  <dd><a class="permalink" href="#RequiredBy"><b class="Sy" id="RequiredBy">RequiredBy</b></a>=
+      <span class="No">+</span> <b class="Sy">Before</b>=</dd>
+</dl>
+</div>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="Cache_File"><a class="permalink" href="#Cache_File">Cache
+  File</a></h2>
+<p class="Pp">Because ZFS pools may not be available very early in the boot
+    process, information on ZFS mountpoints must be stored separately. The
+    output of</p>
+<div class="Bd Bd-indent"><code class="Li"><code class="Nm">zfs</code>
+  <code class="Cm">list</code> <code class="Fl">-Ho</code>
+  <var class="Ar">name</var>,&#x27E8;every property above in
+  order&#x27E9;</code></div>
+for datasets that should be mounted by systemd should be kept at
+  <span class="Pa">@sysconfdir@/zfs/zfs-list.cache/</span><var class="Ar">poolname</var>,
+  and, if writeable, will be kept synchronized for the entire pool by the
+  <span class="Pa">history_event-zfs-list-cacher.sh</span> ZEDLET, if enabled
+  (see <a href="../8/zed.8.html" class="Xr">zed(8)</a>).
+</section>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="ENVIRONMENT"><a class="permalink" href="#ENVIRONMENT">ENVIRONMENT</a></h1>
+<p class="Pp">If the
+    <a class="permalink" href="#ZFS_DEBUG"><b class="Sy" id="ZFS_DEBUG">ZFS_DEBUG</b></a>
+    environment variable is nonzero (or unset and
+    <span class="Pa">/proc/cmdline</span> <span class="No">contains</span>
+    &quot;<a class="permalink" href="#debug"><b class="Sy" id="debug">debug</b></a>&quot;),
+    print summary accounting information at the end.</p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="EXAMPLES"><a class="permalink" href="#EXAMPLES">EXAMPLES</a></h1>
+<p class="Pp">To begin, enable tracking for the pool:</p>
+<div class="Bd Bd-indent"><code class="Li"># <code class="Nm">touch</code>
+  <span class="Pa">@sysconfdir@/zfs/zfs-list.cache/</span><var class="Ar">poolname</var></code></div>
+Then enable the tracking ZEDLET:
+<div class="Bd Bd-indent"><code class="Li"># <code class="Nm">ln</code>
+  <code class="Fl">-s</code>
+  <span class="Pa">@zfsexecdir@/zed.d/history_event-zfs-list-cacher.sh
+  @sysconfdir@/zfs/zed.d</span></code></div>
+<div class="Bd Bd-indent"><code class="Li"># <code class="Nm">systemctl</code>
+  <code class="Cm">enable</code>
+  <span class="Pa">zfs-zed.service</span></code></div>
+<div class="Bd Bd-indent"><code class="Li"># <code class="Nm">systemctl</code>
+  <code class="Cm">restart</code>
+  <span class="Pa">zfs-zed.service</span></code></div>
+<p class="Pp">If no history event is in the queue, inject one to ensure the
+    ZEDLET runs to refresh the cache file by setting a monitored property
+    somewhere on the pool:</p>
+<div class="Bd Bd-indent"><code class="Li"># <code class="Nm">zfs</code>
+  <code class="Cm">set</code> <b class="Sy">relatime</b>=<b class="Sy">off</b>
+  <var class="Ar">poolname/dset</var></code></div>
+<div class="Bd Bd-indent"><code class="Li"># <code class="Nm">zfs</code>
+  <code class="Cm">inherit</code> <b class="Sy">relatime</b>
+  <var class="Ar">poolname/dset</var></code></div>
+<p class="Pp">To test the generator output:</p>
+<div class="Bd Bd-indent"><code class="Li">$ <code class="Nm">mkdir</code>
+  <span class="Pa">/tmp/zfs-mount-generator</span></code></div>
+<div class="Bd Bd-indent"><code class="Li">$
+  <code class="Nm">@systemdgeneratordir@/zfs-mount-generator</code>
+  <span class="Pa">/tmp/zfs-mount-generator</span></code></div>
+If the generated units are satisfactory, instruct
+  <code class="Nm">systemd</code> to re-run all generators:
+<div class="Bd Bd-indent"><code class="Li"># <code class="Nm">systemctl
+  daemon-reload</code></code></div>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SEE_ALSO"><a class="permalink" href="#SEE_ALSO">SEE
+  ALSO</a></h1>
+<p class="Pp"><a class="Xr">systemd.mount(5)</a>,
+    <a href="../5/zfs.5.html" class="Xr">zfs(5)</a>,
+    <a class="Xr">systemd.generator(7)</a>,
+    <a href="../8/zed.8.html" class="Xr">zed(8)</a>,
+    <a href="../8/zpool-events.8.html" class="Xr">zpool-events(8)</a></p>
+</section>
+</div>
+<table class="foot">
+  <tr>
+    <td class="foot-date">May 31, 2021</td>
+    <td class="foot-os">Debian</td>
+  </tr>
+</table>
+</div></section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="zfs-load-key.8.html" class="btn btn-neutral float-left" title="zfs-load-key.8" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="zfs-mount.8.html" class="btn btn-neutral float-right" title="zfs-mount.8" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, OpenZFS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
