@@ -1,0 +1,363 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>arcstat.1 &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
+      <script src="../../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="cstyle.1" href="cstyle.1.html" />
+    <link rel="prev" title="User Commands (1)" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Basic%20Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Man Pages</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../master/index.html">master</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.3/index.html">v2.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.2/index.html">v2.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.1/index.html">v2.1</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">v2.0</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">User Commands (1)</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">arcstat.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cstyle.1.html">cstyle.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="raidz_test.1.html">raidz_test.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zhack.1.html">zhack.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ztest.1.html">ztest.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zvol_wait.1.html">zvol_wait.1</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../5/index.html">File Formats and Conventions (5)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../8/index.html">System Administration Commands (8)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.8/index.html">v0.8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.7/index.html">v0.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.6/index.html">v0.6</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Man Pages</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">v2.0</a></li>
+          <li class="breadcrumb-item"><a href="index.html">User Commands (1)</a></li>
+      <li class="breadcrumb-item active">arcstat.1</li>
+      <li class="wy-breadcrumbs-aside">
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/openzfs/zfs/blob/zfs-2.0.7/man/man1/arcstat.1" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="arcstat-1">
+<h1>arcstat.1<a class="headerlink" href="#arcstat-1" title="Permalink to this heading"></a></h1>
+<div class="man_container"><table class="head">
+  <tr>
+    <td class="head-ltitle">ARCSTAT(1)</td>
+    <td class="head-vol">General Commands Manual</td>
+    <td class="head-rtitle">ARCSTAT(1)</td>
+  </tr>
+</table>
+<div class="manual-text">
+<section class="Sh">
+<h1 class="Sh" id="NAME"><a class="permalink" href="#NAME">NAME</a></h1>
+<p class="Pp">arcstat - report ZFS ARC and L2ARC statistics</p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SYNOPSIS"><a class="permalink" href="#SYNOPSIS">SYNOPSIS</a></h1>
+<pre><b>arcstat</b> [<b>-havxp</b>] [<b>-f field[,field]...</b>] [<b>-o file</b>] [<b>-s string</b>] [<b>interval</b> [<b>count</b>]]</pre>
+<p class="Pp"></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h1>
+<p class="Pp">The <b>arcstat</b> utility print various ZFS ARC and L2ARC
+    statistics in vmstat-like fashion.</p>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp">The <b>arcstat</b> command reports the following information:</p>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp"><b>c </b></p>
+<div class="Bd-indent">ARC target size</div>
+<p class="Pp"></p>
+<p class="Pp"><b>dh% </b></p>
+<div class="Bd-indent">Demand data hit percentage</div>
+<p class="Pp"></p>
+<p class="Pp"><b>dm% </b></p>
+<div class="Bd-indent">Demand data miss percentage</div>
+<p class="Pp"></p>
+<p class="Pp"><b>mfu </b></p>
+<div class="Bd-indent">MFU list hits per second</div>
+<p class="Pp"></p>
+<p class="Pp"><b>mh% </b></p>
+<div class="Bd-indent">Metadata hit percentage</div>
+<p class="Pp"></p>
+<p class="Pp"><b>mm% </b></p>
+<div class="Bd-indent">Metadata miss percentage</div>
+<p class="Pp"></p>
+<p class="Pp"><b>mru </b></p>
+<div class="Bd-indent">MRU list hits per second</div>
+<p class="Pp"></p>
+<p class="Pp"><b>ph% </b></p>
+<div class="Bd-indent">Prefetch hits percentage</div>
+<p class="Pp"></p>
+<p class="Pp"><b>pm% </b></p>
+<div class="Bd-indent">Prefetch miss percentage</div>
+<p class="Pp"></p>
+<p class="Pp"><b>dhit </b></p>
+<div class="Bd-indent">Demand data hits per second</div>
+<p class="Pp"></p>
+<p class="Pp"><b>dmis </b></p>
+<div class="Bd-indent">Demand data misses per second</div>
+<p class="Pp"></p>
+<p class="Pp"><b>hit% </b></p>
+<div class="Bd-indent">ARC hit percentage</div>
+<p class="Pp"></p>
+<p class="Pp"><b>hits </b></p>
+<div class="Bd-indent">ARC reads per second</div>
+<p class="Pp"></p>
+<p class="Pp"><b>mfug </b></p>
+<div class="Bd-indent">MFU ghost list hits per second</div>
+<p class="Pp"></p>
+<p class="Pp"><b>mhit </b></p>
+<div class="Bd-indent">Metadata hits per second</div>
+<p class="Pp"></p>
+<p class="Pp"><b>miss </b></p>
+<div class="Bd-indent">ARC misses per second</div>
+<p class="Pp"></p>
+<p class="Pp"><b>mmis </b></p>
+<div class="Bd-indent">Metadata misses per second</div>
+<p class="Pp"></p>
+<p class="Pp"><b>mrug </b></p>
+<div class="Bd-indent">MRU ghost list hits per second</div>
+<p class="Pp"></p>
+<p class="Pp"><b>phit </b></p>
+<div class="Bd-indent">Prefetch hits per second</div>
+<p class="Pp"></p>
+<p class="Pp"><b>pmis </b></p>
+<div class="Bd-indent">Prefetch misses per second</div>
+<p class="Pp"></p>
+<p class="Pp"><b>read </b></p>
+<div class="Bd-indent">Total ARC accesses per second</div>
+<p class="Pp"></p>
+<p class="Pp"><b>time </b></p>
+<div class="Bd-indent">Time</div>
+<p class="Pp"></p>
+<p class="Pp"><b>size </b></p>
+<div class="Bd-indent">ARC size</div>
+<p class="Pp"></p>
+<p class="Pp"><b>arcsz </b></p>
+<div class="Bd-indent">Alias for <b>size</b></div>
+<p class="Pp"></p>
+<p class="Pp"><b>dread </b></p>
+<div class="Bd-indent">Demand data accesses per second</div>
+<p class="Pp"></p>
+<p class="Pp"><b>eskip </b></p>
+<div class="Bd-indent">evict_skip per second</div>
+<p class="Pp"></p>
+<p class="Pp"><b>miss% </b></p>
+<div class="Bd-indent">ARC miss percentage</div>
+<p class="Pp"></p>
+<p class="Pp"><b>mread </b></p>
+<div class="Bd-indent">Metadata accesses per second</div>
+<p class="Pp"></p>
+<p class="Pp"><b>pread </b></p>
+<div class="Bd-indent">Prefetch accesses per second</div>
+<p class="Pp"></p>
+<p class="Pp"><b>l2hit% </b></p>
+<div class="Bd-indent">L2ARC access hit percentage</div>
+<p class="Pp"></p>
+<p class="Pp"><b>l2hits </b></p>
+<div class="Bd-indent">L2ARC hits per second</div>
+<p class="Pp"></p>
+<p class="Pp"><b>l2miss </b></p>
+<div class="Bd-indent">L2ARC misses per second</div>
+<p class="Pp"></p>
+<p class="Pp"><b>l2read </b></p>
+<div class="Bd-indent">Total L2ARC accesses per second</div>
+<p class="Pp"></p>
+<p class="Pp"><b>l2size </b></p>
+<div class="Bd-indent">Size of the L2ARC</div>
+<p class="Pp"></p>
+<p class="Pp"><b>mtxmis </b></p>
+<div class="Bd-indent">mutex_miss per second</div>
+<p class="Pp"></p>
+<p class="Pp"><b>l2bytes </b></p>
+<div class="Bd-indent">Bytes read per second from the L2ARC</div>
+<p class="Pp"></p>
+<p class="Pp"><b>l2miss% </b></p>
+<div class="Bd-indent">L2ARC access miss percentage</div>
+<p class="Pp"></p>
+<p class="Pp"><b>l2asize </b></p>
+<div class="Bd-indent">Actual (compressed) size of the L2ARC</div>
+<p class="Pp"></p>
+<p class="Pp"><b>grow </b></p>
+<div class="Bd-indent">ARC grow disabled</div>
+<p class="Pp"></p>
+<p class="Pp"><b>need </b></p>
+<div class="Bd-indent">ARC reclaim needed</div>
+<p class="Pp"></p>
+<p class="Pp"><b>free </b></p>
+<div class="Bd-indent">The ARC's idea of how much free memory there is, which
+  includes evictable memory in the page cache. Since the ARC tries to keep
+  <b>avail</b> above zero, <b>avail</b> is usually more instructive to observe
+  than <b>free</b>.</div>
+<p class="Pp"></p>
+<p class="Pp"><b>avail </b></p>
+<div class="Bd-indent">The ARC's idea of how much free memory is available to
+  it, which is a bit less than <b>free</b>. May temporarily be negative, in
+  which case the ARC will reduce the target size <b>c</b>.</div>
+<p class="Pp"></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="OPTIONS"><a class="permalink" href="#OPTIONS">OPTIONS</a></h1>
+<p class="Pp">The following options are supported:</p>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-a</b></p>
+<div class="Bd-indent">Print all possible stats.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-f</b></p>
+<div class="Bd-indent">Display only specific fields. See <b>DESCRIPTION</b> for
+  supported statistics.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-h</b></p>
+<div class="Bd-indent">Display help message.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-o</b></p>
+<div class="Bd-indent">Report statistics to a file instead of the standard
+  output.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-p</b></p>
+<div class="Bd-indent">Disable auto-scaling of numerical fields (for raw,
+  machine-parsable values).</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-s</b></p>
+<div class="Bd-indent">Display data with a specified separator (default: 2
+  spaces).</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-x</b></p>
+<div class="Bd-indent">Print extended stats (same as -f
+  time,mfu,mru,mfug,mrug,eskip,mtxmis,dread,pread,read).</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-v</b></p>
+<div class="Bd-indent">Show field headers and definitions</div>
+<p class="Pp"></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="OPERANDS"><a class="permalink" href="#OPERANDS">OPERANDS</a></h1>
+<p class="Pp">The following operands are supported:</p>
+<p class="Pp"><b></b><i>count</i></p>
+<div class="Bd-indent">Display only <i>count</i> reports.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><i>interval</i></p>
+<div class="Bd-indent">Specify the sampling interval in seconds.</div>
+<p class="Pp"></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="AUTHORS"><a class="permalink" href="#AUTHORS">AUTHORS</a></h1>
+<p class="Pp">arcstat was originally written in Perl by Neelakanth Nadgir and
+    supported only ZFS ARC statistics. Mike Harsch updated it to support L2ARC
+    statistics. John Hixson ported it to Python for FreeNAS over some beer,
+    after which many individuals from the OpenZFS community continued to
+    maintain and improve it.</p>
+</section>
+</div>
+<table class="foot">
+  <tr>
+    <td class="foot-date">October 20, 2020</td>
+    <td class="foot-os">OpenZFS</td>
+  </tr>
+</table>
+</div></section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="User Commands (1)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cstyle.1.html" class="btn btn-neutral float-right" title="cstyle.1" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, OpenZFS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

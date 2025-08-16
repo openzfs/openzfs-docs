@@ -1,0 +1,430 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>zpool-iostat.8 &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
+      <script src="../../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="zpool-labelclear.8" href="zpool-labelclear.8.html" />
+    <link rel="prev" title="zpool-initialize.8" href="zpool-initialize.8.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Basic%20Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Man Pages</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../master/index.html">master</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.3/index.html">v2.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.2/index.html">v2.2</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">v2.1</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../1/index.html">User Commands (1)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../4/index.html">Devices and Special Files (4)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../5/index.html">File Formats and Conventions (5)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../7/index.html">Miscellaneous (7)</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">System Administration Commands (8)</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="fsck.zfs.8.html">fsck.zfs.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mount.zfs.8.html">mount.zfs.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vdev_id.8.html">vdev_id.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zdb.8.html">zdb.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zed.8.html">zed.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-allow.8.html">zfs-allow.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-bookmark.8.html">zfs-bookmark.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-change-key.8.html">zfs-change-key.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-clone.8.html">zfs-clone.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-create.8.html">zfs-create.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-destroy.8.html">zfs-destroy.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-diff.8.html">zfs-diff.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-get.8.html">zfs-get.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-groupspace.8.html">zfs-groupspace.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-hold.8.html">zfs-hold.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-inherit.8.html">zfs-inherit.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-jail.8.html">zfs-jail.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-list.8.html">zfs-list.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-load-key.8.html">zfs-load-key.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-mount-generator.8.html">zfs-mount-generator.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-mount.8.html">zfs-mount.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-program.8.html">zfs-program.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-project.8.html">zfs-project.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-projectspace.8.html">zfs-projectspace.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-promote.8.html">zfs-promote.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-receive.8.html">zfs-receive.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-recv.8.html">zfs-recv.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-redact.8.html">zfs-redact.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-release.8.html">zfs-release.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-rename.8.html">zfs-rename.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-rollback.8.html">zfs-rollback.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-send.8.html">zfs-send.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-set.8.html">zfs-set.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-share.8.html">zfs-share.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-snapshot.8.html">zfs-snapshot.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-unallow.8.html">zfs-unallow.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-unjail.8.html">zfs-unjail.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-unload-key.8.html">zfs-unload-key.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-unmount.8.html">zfs-unmount.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-upgrade.8.html">zfs-upgrade.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-userspace.8.html">zfs-userspace.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs-wait.8.html">zfs-wait.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs.8.html">zfs.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs_ids_to_path.8.html">zfs_ids_to_path.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zfs_prepare_disk.8.html">zfs_prepare_disk.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zgenhostid.8.html">zgenhostid.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zinject.8.html">zinject.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-add.8.html">zpool-add.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-attach.8.html">zpool-attach.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-checkpoint.8.html">zpool-checkpoint.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-clear.8.html">zpool-clear.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-create.8.html">zpool-create.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-destroy.8.html">zpool-destroy.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-detach.8.html">zpool-detach.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-events.8.html">zpool-events.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-export.8.html">zpool-export.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-get.8.html">zpool-get.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-history.8.html">zpool-history.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-import.8.html">zpool-import.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-initialize.8.html">zpool-initialize.8</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">zpool-iostat.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-labelclear.8.html">zpool-labelclear.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-list.8.html">zpool-list.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-offline.8.html">zpool-offline.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-online.8.html">zpool-online.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-reguid.8.html">zpool-reguid.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-remove.8.html">zpool-remove.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-reopen.8.html">zpool-reopen.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-replace.8.html">zpool-replace.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-resilver.8.html">zpool-resilver.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-scrub.8.html">zpool-scrub.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-set.8.html">zpool-set.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-split.8.html">zpool-split.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-status.8.html">zpool-status.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-sync.8.html">zpool-sync.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-trim.8.html">zpool-trim.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-upgrade.8.html">zpool-upgrade.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool-wait.8.html">zpool-wait.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool.8.html">zpool.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool_influxdb.8.html">zpool_influxdb.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zstream.8.html">zstream.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zstreamdump.8.html">zstreamdump.8</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.0/index.html">v2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.8/index.html">v0.8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.7/index.html">v0.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.6/index.html">v0.6</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Man Pages</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">v2.1</a></li>
+          <li class="breadcrumb-item"><a href="index.html">System Administration Commands (8)</a></li>
+      <li class="breadcrumb-item active">zpool-iostat.8</li>
+      <li class="wy-breadcrumbs-aside">
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/openzfs/zfs/blob/zfs-2.1.16/man/man8/zpool-iostat.8" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="zpool-iostat-8">
+<h1>zpool-iostat.8<a class="headerlink" href="#zpool-iostat-8" title="Permalink to this heading"></a></h1>
+<div class="man_container"><table class="head">
+  <tr>
+    <td class="head-ltitle">ZPOOL-IOSTAT(8)</td>
+    <td class="head-vol">System Manager's Manual</td>
+    <td class="head-rtitle">ZPOOL-IOSTAT(8)</td>
+  </tr>
+</table>
+<div class="manual-text">
+<section class="Sh">
+<h1 class="Sh" id="NAME"><a class="permalink" href="#NAME">NAME</a></h1>
+<p class="Pp"><code class="Nm">zpool-iostat</code> &#x2014;
+    <span class="Nd">display logical I/O statistics for ZFS storage
+  pools</span></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SYNOPSIS"><a class="permalink" href="#SYNOPSIS">SYNOPSIS</a></h1>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zpool</code></td>
+    <td><code class="Cm">iostat</code> [[[<code class="Fl">-c</code>
+      <var class="Ar">SCRIPT</var>]
+      [<code class="Fl">-lq</code>]]|<code class="Fl">-rw</code>]
+      [<code class="Fl">-T</code> <b class="Sy">u</b>|<b class="Sy">d</b>]
+      [<code class="Fl">-ghHLnpPvy</code>]
+      [<var class="Ar">pool</var>&#x2026;|[<var class="Ar">pool
+      vdev</var>&#x2026;]|<var class="Ar">vdev</var>&#x2026;]
+      [<var class="Ar">interval</var> [<var class="Ar">count</var>]]</td>
+  </tr>
+</table>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h1>
+<p class="Pp">Displays logical I/O statistics for the given pools/vdevs.
+    Physical I/O statistics may be observed via <a class="Xr">iostat(1)</a>. If
+    writes are located nearby, they may be merged into a single larger
+    operation. Additional I/O may be generated depending on the level of vdev
+    redundancy. To filter output, you may pass in a list of pools, a pool and
+    list of vdevs in that pool, or a list of any vdevs from any pool. If no
+    items are specified, statistics for every pool in the system are shown. When
+    given an <var class="Ar">interval</var>, the statistics are printed every
+    <var class="Ar">interval</var> seconds until killed. If
+    <code class="Fl">-n</code> flag is specified the headers are displayed only
+    once, otherwise they are displayed periodically. If
+    <var class="Ar">count</var> is specified, the command exits after
+    <var class="Ar">count</var> reports are printed. The first report printed is
+    always the statistics since boot regardless of whether
+    <var class="Ar">interval</var> and <var class="Ar">count</var> are passed.
+    However, this behavior can be suppressed with the <code class="Fl">-y</code>
+    flag. Also note that the units of
+    <a class="permalink" href="#K"><b class="Sy" id="K">K</b></a>,
+    <a class="permalink" href="#M"><b class="Sy" id="M">M</b></a>,
+    <a class="permalink" href="#G"><b class="Sy" id="G">G</b></a>&#x2026; that
+    are printed in the report are in base 1024. To get the raw values, use the
+    <code class="Fl">-p</code> flag.</p>
+<dl class="Bl-tag">
+  <dt id="c"><a class="permalink" href="#c"><code class="Fl">-c</code></a>
+    [<var class="Ar">SCRIPT1</var>[,<var class="Ar">SCRIPT2</var>]&#x2026;]</dt>
+  <dd>Run a script (or scripts) on each vdev and include the output as a new
+      column in the <code class="Nm">zpool</code> <code class="Cm">iostat</code>
+      output. Users can run any script found in their
+      <span class="Pa">~/.zpool.d</span> directory or from the system
+      <span class="Pa">/etc/zfs/zpool.d</span> directory. Script names
+      containing the slash
+      (<a class="permalink" href="#/"><b class="Sy" id="/">/</b></a>) character
+      are not allowed. The default search path can be overridden by setting the
+      <a class="permalink" href="#ZPOOL_SCRIPTS_PATH"><b class="Sy" id="ZPOOL_SCRIPTS_PATH">ZPOOL_SCRIPTS_PATH</b></a>
+      environment variable. A privileged user can only run
+      <code class="Fl">-c</code> if they have the
+      <a class="permalink" href="#ZPOOL_SCRIPTS_AS_ROOT"><b class="Sy" id="ZPOOL_SCRIPTS_AS_ROOT">ZPOOL_SCRIPTS_AS_ROOT</b></a>
+      environment variable set. If a script requires the use of a privileged
+      command, like <a class="Xr">smartctl(8)</a>, then it's recommended you
+      allow the user access to it in <span class="Pa">/etc/sudoers</span> or add
+      the user to the <span class="Pa">/etc/sudoers.d/zfs</span> file.
+    <p class="Pp">If <code class="Fl">-c</code> is passed without a script name,
+        it prints a list of all scripts. <code class="Fl">-c</code> also sets
+        verbose mode
+        <span class="No">(</span><code class="Fl">-v</code><span class="No">).</span></p>
+    <p class="Pp">Script output should be in the form of &quot;name=value&quot;.
+        The column name is set to &quot;name&quot; and the value is set to
+        &quot;value&quot;. Multiple lines can be used to output multiple
+        columns. The first line of output not in the &quot;name=value&quot;
+        format is displayed without a column title, and no more output after
+        that is displayed. This can be useful for printing error messages. Blank
+        or NULL values are printed as a '-' to make output AWKable.</p>
+    <p class="Pp">The following environment variables are set before running
+        each script:</p>
+    <dl class="Bl-tag Bl-compact">
+      <dt id="VDEV_PATH"><a class="permalink" href="#VDEV_PATH"><b class="Sy">VDEV_PATH</b></a></dt>
+      <dd>Full path to the vdev</dd>
+      <dt id="VDEV_UPATH"><a class="permalink" href="#VDEV_UPATH"><b class="Sy">VDEV_UPATH</b></a></dt>
+      <dd>Underlying path to the vdev (<span class="Pa">/dev/sd*</span>). For
+          use with device mapper, multipath, or partitioned vdevs.</dd>
+      <dt id="VDEV_ENC_SYSFS_PATH"><a class="permalink" href="#VDEV_ENC_SYSFS_PATH"><b class="Sy">VDEV_ENC_SYSFS_PATH</b></a></dt>
+      <dd>The sysfs path to the enclosure for the vdev (if any).</dd>
+    </dl>
+  </dd>
+  <dt id="T"><a class="permalink" href="#T"><code class="Fl">-T</code></a>
+    <b class="Sy">u</b>|<b class="Sy">d</b></dt>
+  <dd>Display a time stamp. Specify <b class="Sy">u</b> for a printed
+      representation of the internal representation of time. See
+      <a class="Xr">time(2)</a>. Specify <b class="Sy">d</b> for standard date
+      format. See <a class="Xr">date(1)</a>.</dd>
+  <dt id="g"><a class="permalink" href="#g"><code class="Fl">-g</code></a></dt>
+  <dd>Display vdev GUIDs instead of the normal device names. These GUIDs can be
+      used in place of device names for the zpool detach/offline/remove/replace
+      commands.</dd>
+  <dt id="H"><a class="permalink" href="#H"><code class="Fl">-H</code></a></dt>
+  <dd>Scripted mode. Do not display headers, and separate fields by a single tab
+      instead of arbitrary space.</dd>
+  <dt id="L"><a class="permalink" href="#L"><code class="Fl">-L</code></a></dt>
+  <dd>Display real paths for vdevs resolving all symbolic links. This can be
+      used to look up the current block device name regardless of the
+      <span class="Pa">/dev/disk/</span> path used to open it.</dd>
+  <dt id="n"><a class="permalink" href="#n"><code class="Fl">-n</code></a></dt>
+  <dd>Print headers only once when passed</dd>
+  <dt id="p"><a class="permalink" href="#p"><code class="Fl">-p</code></a></dt>
+  <dd>Display numbers in parsable (exact) values. Time values are in
+      nanoseconds.</dd>
+  <dt id="P"><a class="permalink" href="#P"><code class="Fl">-P</code></a></dt>
+  <dd>Display full paths for vdevs instead of only the last component of the
+      path. This can be used in conjunction with the <code class="Fl">-L</code>
+      flag.</dd>
+  <dt id="r"><a class="permalink" href="#r"><code class="Fl">-r</code></a></dt>
+  <dd>Print request size histograms for the leaf vdev's I/O. This includes
+      histograms of individual I/O (ind) and aggregate I/O (agg). These stats
+      can be useful for observing how well I/O aggregation is working. Note that
+      TRIM I/O may exceed 16M, but will be counted as 16M.</dd>
+  <dt id="v"><a class="permalink" href="#v"><code class="Fl">-v</code></a></dt>
+  <dd>Verbose statistics Reports usage statistics for individual vdevs within
+      the pool, in addition to the pool-wide statistics.</dd>
+  <dt id="y"><a class="permalink" href="#y"><code class="Fl">-y</code></a></dt>
+  <dd>Normally the first line of output reports the statistics since boot:
+      suppress it.</dd>
+  <dt id="w"><a class="permalink" href="#w"><code class="Fl">-w</code></a></dt>
+  <dd>Display latency histograms:
+    <dl class="Bl-tag Bl-compact">
+      <dt id="total_wait"><a class="permalink" href="#total_wait"><b class="Sy">total_wait</b></a></dt>
+      <dd>Total I/O time (queuing + disk I/O time).</dd>
+      <dt id="disk_wait"><a class="permalink" href="#disk_wait"><b class="Sy">disk_wait</b></a></dt>
+      <dd>Disk I/O time (time reading/writing the disk).</dd>
+      <dt id="syncq_wait"><a class="permalink" href="#syncq_wait"><b class="Sy">syncq_wait</b></a></dt>
+      <dd>Amount of time I/O spent in synchronous priority queues. Does not
+          include disk time.</dd>
+      <dt id="asyncq_wait"><a class="permalink" href="#asyncq_wait"><b class="Sy">asyncq_wait</b></a></dt>
+      <dd>Amount of time I/O spent in asynchronous priority queues. Does not
+          include disk time.</dd>
+      <dt id="scrub"><a class="permalink" href="#scrub"><b class="Sy">scrub</b></a></dt>
+      <dd>Amount of time I/O spent in scrub queue. Does not include disk
+        time.</dd>
+    </dl>
+  </dd>
+  <dt id="l"><a class="permalink" href="#l"><code class="Fl">-l</code></a></dt>
+  <dd>Include average latency statistics:
+    <dl class="Bl-tag Bl-compact">
+      <dt id="total_wait~2"><a class="permalink" href="#total_wait~2"><b class="Sy">total_wait</b></a></dt>
+      <dd>Average total I/O time (queuing + disk I/O time).</dd>
+      <dt id="disk_wait~2"><a class="permalink" href="#disk_wait~2"><b class="Sy">disk_wait</b></a></dt>
+      <dd>Average disk I/O time (time reading/writing the disk).</dd>
+      <dt id="syncq_wait~2"><a class="permalink" href="#syncq_wait~2"><b class="Sy">syncq_wait</b></a></dt>
+      <dd>Average amount of time I/O spent in synchronous priority queues. Does
+          not include disk time.</dd>
+      <dt id="asyncq_wait~2"><a class="permalink" href="#asyncq_wait~2"><b class="Sy">asyncq_wait</b></a></dt>
+      <dd>Average amount of time I/O spent in asynchronous priority queues. Does
+          not include disk time.</dd>
+      <dt id="scrub~2"><a class="permalink" href="#scrub~2"><b class="Sy">scrub</b></a></dt>
+      <dd>Average queuing time in scrub queue. Does not include disk time.</dd>
+      <dt id="trim"><a class="permalink" href="#trim"><b class="Sy">trim</b></a></dt>
+      <dd>Average queuing time in trim queue. Does not include disk time.</dd>
+    </dl>
+  </dd>
+  <dt id="q"><a class="permalink" href="#q"><code class="Fl">-q</code></a></dt>
+  <dd>Include active queue statistics. Each priority queue has both pending
+      (<a class="permalink" href="#pend"><b class="Sy" id="pend">pend</b></a>)
+      and active
+      (<a class="permalink" href="#activ"><b class="Sy" id="activ">activ</b></a>)
+      I/O requests. Pending requests are waiting to be issued to the disk, and
+      active requests have been issued to disk and are waiting for completion.
+      These stats are broken out by priority queue:
+    <dl class="Bl-tag Bl-compact">
+      <dt id="syncq_read/write"><a class="permalink" href="#syncq_read/write"><b class="Sy">syncq_read/write</b></a></dt>
+      <dd>Current number of entries in synchronous priority queues.</dd>
+      <dt id="asyncq_read/write"><a class="permalink" href="#asyncq_read/write"><b class="Sy">asyncq_read/write</b></a></dt>
+      <dd>Current number of entries in asynchronous priority queues.</dd>
+      <dt id="scrubq_read"><a class="permalink" href="#scrubq_read"><b class="Sy">scrubq_read</b></a></dt>
+      <dd>Current number of entries in scrub queue.</dd>
+      <dt id="trimq_write"><a class="permalink" href="#trimq_write"><b class="Sy">trimq_write</b></a></dt>
+      <dd>Current number of entries in trim queue.</dd>
+    </dl>
+    <p class="Pp">All queue statistics are instantaneous measurements of the
+        number of entries in the queues. If you specify an interval, the
+        measurements will be sampled from the end of the interval.</p>
+  </dd>
+</dl>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SEE_ALSO"><a class="permalink" href="#SEE_ALSO">SEE
+  ALSO</a></h1>
+<p class="Pp"><a class="Xr">iostat(1)</a>, <a class="Xr">smartctl(8)</a>,
+    <a href="../8/zpool-list.8.html" class="Xr">zpool-list(8)</a>, <a href="../8/zpool-status.8.html" class="Xr">zpool-status(8)</a></p>
+</section>
+</div>
+<table class="foot">
+  <tr>
+    <td class="foot-date">May 27, 2021</td>
+    <td class="foot-os">Debian</td>
+  </tr>
+</table>
+</div></section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="zpool-initialize.8.html" class="btn btn-neutral float-left" title="zpool-initialize.8" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="zpool-labelclear.8.html" class="btn btn-neutral float-right" title="zpool-labelclear.8" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, OpenZFS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

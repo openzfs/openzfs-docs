@@ -1,0 +1,3314 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>zfs.8 &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
+      <script src="../../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="zinject.8" href="zinject.8.html" />
+    <link rel="prev" title="zed.8" href="zed.8.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Basic%20Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Man Pages</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../master/index.html">master</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.3/index.html">v2.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.2/index.html">v2.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.1/index.html">v2.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.0/index.html">v2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.8/index.html">v0.8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.7/index.html">v0.7</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">v0.6</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../1/index.html">User Commands (1)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../5/index.html">File Formats and Conventions (5)</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">System Administration Commands (8)</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="fsck.zfs.8.html">fsck.zfs.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mount.zfs.8.html">mount.zfs.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vdev_id.8.html">vdev_id.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zdb.8.html">zdb.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zed.8.html">zed.8</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">zfs.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zinject.8.html">zinject.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zpool.8.html">zpool.8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zstreamdump.8.html">zstreamdump.8</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Man Pages</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">v0.6</a></li>
+          <li class="breadcrumb-item"><a href="index.html">System Administration Commands (8)</a></li>
+      <li class="breadcrumb-item active">zfs.8</li>
+      <li class="wy-breadcrumbs-aside">
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/openzfs/zfs/blob/zfs-0.6.5.11/man/man8/zfs.8" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="zfs-8">
+<h1>zfs.8<a class="headerlink" href="#zfs-8" title="Permalink to this heading"></a></h1>
+<div class="man_container"><table class="head">
+  <tr>
+    <td class="head-ltitle">zfs(8)</td>
+    <td class="head-vol">System Administration Commands</td>
+    <td class="head-rtitle">zfs(8)</td>
+  </tr>
+</table>
+<div class="manual-text">
+<section class="Sh">
+<h1 class="Sh" id="NAME"><a class="permalink" href="#NAME">NAME</a></h1>
+<p class="Pp">zfs - configures ZFS file systems</p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SYNOPSIS"><a class="permalink" href="#SYNOPSIS">SYNOPSIS</a></h1>
+<pre><b>zfs</b> [<b>-?</b>]</pre>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<pre><b>zfs</b> <b>create</b> [<b>-p</b>] [<b>-o</b> <i>property</i>=<i>value</i>] ... <i>filesystem</i></pre>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<pre><b>zfs</b> <b>create</b> [<b>-ps</b>] [<b>-b</b> <i>blocksize</i>] [<b>-o</b> <i>property</i>=<i>value</i>] ... <b>-V</b> <i>size</i> <i>volume</i></pre>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<pre><b>zfs</b> <b>destroy</b> [<b>-fnpRrv</b>] <i>filesystem</i>|<i>volume</i></pre>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<pre><b>zfs</b> <b>destroy</b> [<b>-dnpRrv</b>] <i>filesystem</i>|<i>volume</i>@<i>snap</i>[%<i>snap</i>][,...]</pre>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<pre><b>zfs</b> <b>destroy</b> <i>filesystem</i>|<i>volume</i>#<i>bookmark</i></pre>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<pre><b>zfs</b> <b>snapshot | snap</b> [<b>-r</b>] [<b>-o</b> <i>property</i>=<i>value</i>] ... 
+<br/>
+      <i>filesystem@snapname</i>|<i>volume@snapname</i> ...</pre>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<pre><b>zfs</b> <b>rollback</b> [<b>-rRf</b>] <i>snapshot</i></pre>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<pre><b>zfs</b> <b>clone</b> [<b>-p</b>] [<b>-o</b> <i>property</i>=<i>value</i>] ... <i>snapshot</i> <i>filesystem</i>|<i>volume</i></pre>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<pre><b>zfs</b> <b>promote</b> <i>clone-filesystem</i></pre>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<pre><b>zfs</b> <b>rename</b> [<b>-f</b>] <i>filesystem</i>|<i>volume</i>|<i>snapshot</i>
+<br/>
+     <i>filesystem</i>|<i>volume</i>|<i>snapshot</i></pre>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<pre><b>zfs</b> <b>rename</b> [<b>-fp</b>] <i>filesystem</i>|<i>volume</i> <i>filesystem</i>|<i>volume</i></pre>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<pre><b>zfs</b> <b>rename</b> <b>-r</b> <i>snapshot</i> <i>snapshot</i></pre>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<pre><b>zfs</b> <b>list</b> [<b>-r</b>|<b>-d</b> <i>depth</i>][<b>-Hp</b>][<b>-o</b> <i>property</i>[,<i>property</i>]...] [<b>-t</b> <i>type</i>[,<i>type</i>]..]
+<br/>
+     [<b>-s</b> <i>property</i>] ... [<b>-S</b> <i>property</i>] ... [<i>filesystem</i>|<i>volume</i>|<i>snapshot</i>] ...</pre>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<pre><b>zfs</b> <b>set</b> <i>property</i>=<i>value</i> <i>filesystem</i>|<i>volume</i>|<i>snapshot</i> ...</pre>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<pre><b>zfs</b> <b>get</b> [<b>-r</b>|<b>-d</b> <i>depth</i>][<b>-Hp</b>][<b>-o</b> <i>field</i>[,...]] [<b>-t</b> <i>type</i>[,...]] 
+<br/>
+    [<b>-s</b> <i>source</i>[,...]] &quot;<i>all</i>&quot; | <i>property</i>[,...] <i>filesystem</i>|<i>volume</i>|<i>snapshot</i> ...</pre>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<pre><b>zfs</b> <b>inherit</b> [<b>-rS</b>] <i>property</i> <i>filesystem</i>|<i>volume|snapshot</i> ...</pre>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<pre><b>zfs</b> <b>upgrade</b> [<b>-v</b>]</pre>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<pre><b>zfs</b> <b>upgrade</b> [<b>-r</b>] [<b>-V</b> <i>version</i>] <b>-a</b> | <i>filesystem</i></pre>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<pre><b>zfs</b> <b>userspace</b> [<b>-Hinp</b>] [<b>-o</b> <i>field</i>[,...]] [<b>-s</b> <i>field</i>] ...
+<br/>
+    [<b>-S</b> <i>field</i>] ... [<b>-t</b> <i>type</i>[,...]] <i>filesystem</i>|<i>snapshot</i></pre>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<pre><b>zfs</b> <b>groupspace</b> [<b>-Hinp</b>] [<b>-o</b> <i>field</i>[,...]] [<b>-s</b> <i>field</i>] ...
+<br/>
+    [<b>-S</b> <i>field</i>] ... [<b>-t</b> <i>type</i>[,...]] <i>filesystem</i>|<i>snapshot</i></pre>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<pre><b>zfs</b> <b>mount</b> </pre>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<pre><b>zfs</b> <b>mount</b> [<b>-vO</b>] [<b>-o </b><i>options</i>] <b>-a</b> | <i>filesystem</i></pre>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<pre><b>zfs</b> <b>unmount | umount</b> [<b>-f</b>] <b>-a</b> | <i>filesystem</i>|<i>mountpoint</i></pre>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<pre><b>zfs</b> <b>share</b> <b>-a</b> | <i>filesystem</i></pre>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<pre><b>zfs</b> <b>unshare</b> <b>-a</b> <i>filesystem</i>|<i>mountpoint</i></pre>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<pre><b>zfs</b> <b>bookmark</b> <i>snapshot</i> <i>bookmark</i></pre>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<pre><b>zfs</b> <b>send</b> [<b>-DnPpRveL</b>] [<b>-</b>[<b>iI</b>] <i>snapshot</i>] <i>snapshot</i></pre>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<pre><b>zfs</b> <b>send</b> [<b>-eL</b>] [<b>-i </b><i>snapshot</i>|<i>bookmark</i>] <i>filesystem</i>|<i>volume</i>|<i>snapshot</i></pre>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<pre><b>zfs</b> <b>receive | recv</b> [<b>-vnFu</b>] <i>filesystem</i>|<i>volume</i>|<i>snapshot</i></pre>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<pre><b>zfs</b> <b>receive | recv</b> [<b>-vnFu</b>] [<b>-d</b>|<b>-e</b>] <i>filesystem</i></pre>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<pre><b>zfs</b> <b>allow</b> <i>filesystem</i>|<i>volume</i></pre>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<pre><b>zfs</b> <b>allow</b> [<b>-ldug</b>] &quot;<i>everyone</i>&quot;|<i>user</i>|<i>group</i>[,...] <i>perm</i>|<i>@setname</i>[,...] 
+<br/>
+     <i>filesystem</i>|<i>volume</i></pre>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<pre><b>zfs</b> <b>allow</b> [<b>-ld</b>] <b>-e</b> <i>perm</i>|@<i>setname</i>[,...] <i>filesystem</i>|<i>volume</i></pre>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<pre><b>zfs</b> <b>allow</b> <b>-c</b> <i>perm</i>|@<i>setname</i>[,...] <i>filesystem</i>|<i>volume</i></pre>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<pre><b>zfs</b> <b>allow</b> <b>-s</b> @<i>setname</i> <i>perm</i>|@<i>setname</i>[,...] <i>filesystem</i>|<i>volume</i></pre>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<pre><b>zfs</b> <b>unallow</b> [<b>-rldug</b>] &quot;<i>everyone</i>&quot;|<i>user</i>|<i>group</i>[,...] [<i>perm</i>|@<i>setname</i>[,... ]] 
+<br/>
+     <i>filesystem</i>|<i>volume</i></pre>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<pre><b>zfs</b> <b>unallow</b> [<b>-rld</b>] <b>-e</b> [<i>perm</i>|@<i>setname</i>[,... ]] <i>filesystem</i>|<i>volume</i></pre>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<pre><b>zfs</b> <b>unallow</b> [<b>-r</b>] <b>-c</b> [<i>perm</i>|@<i>setname</i>[ ... ]] <i>filesystem</i>|<i>volume</i></pre>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<pre><b>zfs</b> <b>unallow</b> [<b>-r</b>] <b>-s</b> @<i>setname</i> [<i>perm</i>|@<i>setname</i>[,... ]] <i>filesystem</i>|<i>volume</i></pre>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<pre><b>zfs</b> <b>hold</b> [<b>-r</b>] <i>tag</i> <i>snapshot</i>...</pre>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<pre><b>zfs</b> <b>holds</b> [<b>-r</b>] <i>snapshot</i>...</pre>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<pre><b>zfs</b> <b>release</b> [<b>-r</b>] <i>tag</i> <i>snapshot</i>...</pre>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<pre><b>zfs</b> <b>diff</b> [<b>-FHt</b>] <i>snapshot</i> <i>snapshot|filesystem</i>
+</pre>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h1>
+<p class="Pp">The <b>zfs</b> command configures <b>ZFS</b> datasets within a
+    <b>ZFS</b> storage pool, as described in <b>zpool</b>(8). A dataset is
+    identified by a unique path within the <b>ZFS</b> namespace. For
+  example:</p>
+<p class="Pp">
+  <br/>
+</p>
+<pre>pool/{filesystem,volume,snapshot}</pre>
+<br/>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp">where the maximum length of a dataset name is <b>MAXNAMELEN</b>
+    (256 bytes).</p>
+<p class="Pp"></p>
+<p class="Pp">A dataset can be one of the following:</p>
+<p class="Pp"><b></b><i>file system</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">A <b>ZFS</b> dataset of type <b>filesystem</b> can be
+  mounted within the standard system namespace and behaves like other file
+  systems. While <b>ZFS</b> file systems are designed to be <b>POSIX</b>
+  compliant, known issues exist that prevent compliance in some cases.
+  Applications that depend on standards conformance might fail due to
+  nonstandard behavior when checking file system free space.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><i>volume</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">A logical volume exported as a raw or block device. This
+  type of dataset should only be used under special circumstances. File systems
+  are typically used in most environments.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><i>snapshot</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">A read-only version of a file system or volume at a given
+  point in time. It is specified as <i>filesystem@name</i> or
+  <i>volume@name</i>.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><i>bookmark</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Much like a <i>snapshot</i>, but without the hold on
+  on-disk data. It can be used as the source of a send (but not for a receive).
+  It is specified as <i>filesystem#name</i> or <i>volume#name</i>.</div>
+<p class="Pp"></p>
+<section class="Ss">
+<h2 class="Ss" id="ZFS_File_System_Hierarchy"><a class="permalink" href="#ZFS_File_System_Hierarchy">ZFS
+  File System Hierarchy</a></h2>
+<p class="Pp">A <b>ZFS</b> storage pool is a logical collection of devices that
+    provide space for datasets. A storage pool is also the root of the
+    <b>ZFS</b> file system hierarchy.</p>
+<p class="Pp"></p>
+<p class="Pp">The root of the pool can be accessed as a file system, such as
+    mounting and unmounting, taking snapshots, and setting properties. The
+    physical storage characteristics, however, are managed by the
+    <b>zpool</b>(8) command.</p>
+<p class="Pp"></p>
+<p class="Pp">See <b>zpool</b>(8) for more information on creating and
+    administering pools.</p>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="Snapshots"><a class="permalink" href="#Snapshots">Snapshots</a></h2>
+<p class="Pp">A snapshot is a read-only copy of a file system or volume.
+    Snapshots can be created extremely quickly, and initially consume no
+    additional space within the pool. As data within the active dataset changes,
+    the snapshot consumes more data than would otherwise be shared with the
+    active dataset.</p>
+<p class="Pp"></p>
+<p class="Pp">Snapshots can have arbitrary names. Snapshots of volumes can be
+    cloned or rolled back. Visibility is determined by the <b>snapdev</b>
+    property of the parent volume.</p>
+<p class="Pp"></p>
+<p class="Pp">File system snapshots can be accessed under the
+    <b>.zfs/snapshot</b> directory in the root of the file system. Snapshots are
+    automatically mounted on demand and may be unmounted at regular intervals.
+    The visibility of the <b>.zfs</b> directory can be controlled by the
+    <b>snapdir</b> property.</p>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="Bookmarks"><a class="permalink" href="#Bookmarks">Bookmarks</a></h2>
+<p class="Pp">A bookmark is like a snapshot, a read-only copy of a file system
+    or volume. Bookmarks can be created extremely quickly, compared to
+    snapshots, and they consume no additional space within the pool. Bookmarks
+    can also have arbitrary names, much like snapshots.</p>
+<p class="Pp"></p>
+<p class="Pp">Unlike snapshots, bookmarks can not be accessed through the
+    filesystem in any way. From a storage standpoint a bookmark just provides a
+    way to reference when a snapshot was created as a distinct object. Bookmarks
+    are initially tied to a snapshot, not the filesystem/volume, and they will
+    survive if the snapshot itself is destroyed. Since they are very light
+    weight there's little incentive to destroy them.</p>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="Clones"><a class="permalink" href="#Clones">Clones</a></h2>
+<p class="Pp">A clone is a writable volume or file system whose initial contents
+    are the same as another dataset. As with snapshots, creating a clone is
+    nearly instantaneous, and initially consumes no additional space.</p>
+<p class="Pp"></p>
+<p class="Pp">Clones can only be created from a snapshot. When a snapshot is
+    cloned, it creates an implicit dependency between the parent and child. Even
+    though the clone is created somewhere else in the dataset hierarchy, the
+    original snapshot cannot be destroyed as long as a clone exists. The
+    <b>origin</b> property exposes this dependency, and the <b>destroy</b>
+    command lists any such dependencies, if they exist.</p>
+<p class="Pp"></p>
+<p class="Pp">The clone parent-child dependency relationship can be reversed by
+    using the <b>promote</b> subcommand. This causes the &quot;origin&quot; file
+    system to become a clone of the specified file system, which makes it
+    possible to destroy the file system that the clone was created from.</p>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="Mount_Points"><a class="permalink" href="#Mount_Points">Mount
+  Points</a></h2>
+<p class="Pp">Creating a <b>ZFS</b> file system is a simple operation, so the
+    number of file systems per system is likely to be numerous. To cope with
+    this, <b>ZFS</b> automatically manages mounting and unmounting file systems
+    without the need to edit the <b>/etc/fstab</b> file. All automatically
+    managed file systems are mounted by <b>ZFS</b> at boot time.</p>
+<p class="Pp"></p>
+<p class="Pp">By default, file systems are mounted under <b>/</b><i>path</i>,
+    where <i>path</i> is the name of the file system in the <b>ZFS</b>
+    namespace. Directories are created and destroyed as needed.</p>
+<p class="Pp"></p>
+<p class="Pp">A file system can also have a mount point set in the
+    <b>mountpoint</b> property. This directory is created as needed, and
+    <b>ZFS</b> automatically mounts the file system when the <b>zfs mount -a</b>
+    command is invoked (without editing <b>/etc/fstab</b>). The
+    <b>mountpoint</b> property can be inherited, so if <b>pool/home</b> has a
+    mount point of <b>/export/stuff</b>, then <b>pool/home/user</b>
+    automatically inherits a mount point of <b>/export/stuff/user</b>.</p>
+<p class="Pp"></p>
+<p class="Pp">A file system <b>mountpoint</b> property of <b>none</b> prevents
+    the file system from being mounted.</p>
+<p class="Pp"></p>
+<p class="Pp">If needed, <b>ZFS</b> file systems can also be managed with
+    traditional tools (<b>mount</b>, <b>umount</b>, <b>/etc/fstab</b>). If a
+    file system's mount point is set to <b>legacy</b>, <b>ZFS</b> makes no
+    attempt to manage the file system, and the administrator is responsible for
+    mounting and unmounting the file system.</p>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="Deduplication"><a class="permalink" href="#Deduplication">Deduplication</a></h2>
+<p class="Pp">Deduplication is the process for removing redundant data at the
+    block-level, reducing the total amount of data stored. If a file system has
+    the <b>dedup</b> property enabled, duplicate data blocks are removed
+    synchronously. The result is that only unique data is stored and common
+    components are shared among files.</p>
+<p class="Pp"><b>WARNING: DO NOT ENABLE DEDUPLICATION UNLESS YOU NEED IT AND
+    KNOW EXACTLY WHAT YOU ARE DOING!</b></p>
+<p class="Pp">Deduplicating data is a very resource-intensive operation. It is
+    generally recommended that you have <i>at least</i> 1.25 GB of RAM per 1 TB
+    of storage when you enable deduplication. But calculating the exact
+    requirenments is a somewhat complicated affair. Please see the <b>Oracle
+    Dedup Guide</b> for more information..</p>
+<p class="Pp">Enabling deduplication on an improperly-designed system will
+    result in extreme performance issues (extremely slow filesystem and snapshot
+    deletions etc.) and can potentially lead to data loss (i.e. unimportable
+    pool due to memory exhaustion) if your system is not built for this purpose.
+    Deduplication affects the processing power (CPU), disks (and the controller)
+    as well as primary (real) memory.</p>
+<p class="Pp">Before creating a pool with deduplication enabled, ensure that you
+    have planned your hardware requirements appropriately and implemented
+    appropriate recovery practices, such as regular backups.</p>
+<p class="Pp">Unless necessary, deduplication should NOT be enabled on a system.
+    Instead, consider using <i>compression=lz4</i>, as a less resource-intensive
+    alternative.</p>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="Native_Properties"><a class="permalink" href="#Native_Properties">Native
+  Properties</a></h2>
+<p class="Pp">Properties are divided into two types, native properties and
+    user-defined (or &quot;user&quot;) properties. Native properties either
+    export internal statistics or control <b>ZFS</b> behavior. In addition,
+    native properties are either editable or read-only. User properties have no
+    effect on <b>ZFS</b> behavior, but you can use them to annotate datasets in
+    a way that is meaningful in your environment. For more information about
+    user properties, see the &quot;User Properties&quot; section, below.</p>
+<p class="Pp"></p>
+<p class="Pp">Every dataset has a set of properties that export statistics about
+    the dataset as well as control various behaviors. Properties are inherited
+    from the parent unless overridden by the child. Some properties apply only
+    to certain types of datasets (file systems, volumes, or snapshots).</p>
+<p class="Pp"></p>
+<p class="Pp">The values of numeric properties can be specified using
+    human-readable suffixes (for example, <b>k</b>, <b>KB</b>, <b>M</b>,
+    <b>Gb</b>, and so forth, up to <b>Z</b> for zettabyte). The following are
+    all valid (and equal) specifications:</p>
+<p class="Pp">
+  <br/>
+</p>
+<pre>1536M, 1.5g, 1.50GB</pre>
+<br/>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp">The values of non-numeric properties are case sensitive and must
+    be lowercase, except for <b>mountpoint</b>, <b>sharenfs</b>, and
+    <b>sharesmb</b>.</p>
+<p class="Pp"></p>
+<p class="Pp">The following native properties consist of read-only statistics
+    about the dataset. These properties can be neither set, nor inherited.
+    Native properties apply to all dataset types unless otherwise noted.</p>
+<p class="Pp"><b></b><b>available</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">The amount of space available to the dataset and all its
+  children, assuming that there is no other activity in the pool. Because space
+  is shared within a pool, availability can be limited by any number of factors,
+  including physical pool size, quotas, reservations, or other datasets within
+  the pool.
+<p class="Pp">This property can also be referred to by its shortened column
+    name, <b>avail</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>compressratio</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">For non-snapshots, the compression ratio achieved for the
+  <b>used</b> space of this dataset, expressed as a multiplier. The <b>used</b>
+  property includes descendant datasets, and, for clones, does not include the
+  space shared with the origin snapshot. For snapshots, the <b>compressratio</b>
+  is the same as the <b>refcompressratio</b> property. Compression can be turned
+  on by running: <b>zfs set compression=on </b><i>dataset</i>. The default value
+  is <b>off</b>.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>creation</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">The time this dataset was created.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>clones</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">For snapshots, this property is a comma-separated list of
+  filesystems or volumes which are clones of this snapshot. The clones'
+  <b>origin</b> property is this snapshot. If the <b>clones</b> property is not
+  empty, then this snapshot can not be destroyed (even with the <b>-r</b> or
+  <b>-f</b> options).</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>defer_destroy</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">This property is <b>on</b> if the snapshot has been
+  marked for deferred destruction by using the <b>zfs destroy</b> <b>-d</b>
+  command. Otherwise, the property is <b>off</b>.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>filesystem_count</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">The total number of filesystems and volumes that exist
+  under this location in the dataset tree. This value is only available when a
+  <b>filesystem_limit</b> has been set somewhere in the tree under which the
+  dataset resides.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>logicalreferenced</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">The amount of space that is &quot;logically&quot;
+  accessible by this dataset. See the <b>referenced</b> property. The logical
+  space ignores the effect of the <b>compression</b> and <b>copies</b>
+  properties, giving a quantity closer to the amount of data that applications
+  see. However, it does include space consumed by metadata.
+<p class="Pp">This property can also be referred to by its shortened column
+    name, <b>lrefer</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>logicalused</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">The amount of space that is &quot;logically&quot;
+  consumed by this dataset and all its descendents. See the <b>used</b>
+  property. The logical space ignores the effect of the <b>compression</b> and
+  <b>copies</b> properties, giving a quantity closer to the amount of data that
+  applications see. However, it does include space consumed by metadata.
+<p class="Pp">This property can also be referred to by its shortened column
+    name, <b>lused</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>mounted</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">For file systems, indicates whether the file system is
+  currently mounted. This property can be either <b>yes</b> or <b>no</b>.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>origin</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">For cloned file systems or volumes, the snapshot from
+  which the clone was created. See also the <b>clones</b> property.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>referenced</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">The amount of data that is accessible by this dataset,
+  which may or may not be shared with other datasets in the pool. When a
+  snapshot or clone is created, it initially references the same amount of space
+  as the file system or snapshot it was created from, since its contents are
+  identical.
+<p class="Pp">This property can also be referred to by its shortened column
+    name, <b>refer</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>refcompressratio</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">The compression ratio achieved for the <b>referenced</b>
+  space of this dataset, expressed as a multiplier. See also the
+  <b>compressratio</b> property.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>snapshot_count</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">The total number of snapshots that exist under this
+  location in the dataset tree. This value is only available when a
+  <b>snapshot_limit</b> has been set somewhere in the tree under which the
+  dataset resides.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>type</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">The type of dataset: <b>filesystem</b>, <b>volume</b>, or
+  <b>snapshot</b>.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>used</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">The amount of space consumed by this dataset and all its
+  descendents. This is the value that is checked against this dataset's quota
+  and reservation. The space used does not include this dataset's reservation,
+  but does take into account the reservations of any descendent datasets. The
+  amount of space that a dataset consumes from its parent, as well as the amount
+  of space that are freed if this dataset is recursively destroyed, is the
+  greater of its space used and its reservation.
+<p class="Pp">When snapshots (see the &quot;Snapshots&quot; section) are
+    created, their space is initially shared between the snapshot and the file
+    system, and possibly with previous snapshots. As the file system changes,
+    space that was previously shared becomes unique to the snapshot, and counted
+    in the snapshot's space used. Additionally, deleting snapshots can increase
+    the amount of space unique to (and used by) other snapshots.</p>
+<p class="Pp">The amount of space used, available, or referenced does not take
+    into account pending changes. Pending changes are generally accounted for
+    within a few seconds. Committing a change to a disk using <b>fsync</b>(2) or
+    <b>O_SYNC</b> does not necessarily guarantee that the space usage
+    information is updated immediately.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>usedby*</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">The <b>usedby*</b> properties decompose the <b>used</b>
+  properties into the various reasons that space is used. Specifically,
+  <b>used</b> = <b>usedbychildren</b> + <b>usedbydataset</b> +
+  <b>usedbyrefreservation</b> +, <b>usedbysnapshots</b>. These properties are
+  only available for datasets created on <b>zpool</b> &quot;version 13&quot;
+  pools.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>usedbychildren</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">The amount of space used by children of this dataset,
+  which would be freed if all the dataset's children were destroyed.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>usedbydataset</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">The amount of space used by this dataset itself, which
+  would be freed if the dataset were destroyed (after first removing any
+  <b>refreservation</b> and destroying any necessary snapshots or
+  descendents).</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>usedbyrefreservation</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">The amount of space used by a <b>refreservation</b> set
+  on this dataset, which would be freed if the <b>refreservation</b> was
+  removed.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>usedbysnapshots</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">The amount of space consumed by snapshots of this
+  dataset. In particular, it is the amount of space that would be freed if all
+  of this dataset's snapshots were destroyed. Note that this is not simply the
+  sum of the snapshots' <b>used</b> properties because space can be shared by
+  multiple snapshots.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>userused@</b><i>user</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">The amount of space consumed by the specified user in
+  this dataset. Space is charged to the owner of each file, as displayed by
+  <b>ls</b> <b>-l</b>. The amount of space charged is displayed by <b>du</b> and
+  <b>ls</b> <b>-s</b>. See the <b>zfs userspace</b> subcommand for more
+  information.
+<p class="Pp">Unprivileged users can access only their own space usage. The root
+    user, or a user who has been granted the <b>userused</b> privilege with
+    <b>zfs allow</b>, can access everyone's usage.</p>
+<p class="Pp">The <b>userused@</b>... properties are not displayed by <b>zfs get
+    all</b>. The user's name must be appended after the <b>@</b> symbol, using
+    one of the following forms:</p>
+<div class="Bd-indent">
+<dl class="Bl-tag">
+  <dt id="o"><a class="permalink" href="#o">o</a></dt>
+  <dd><i>POSIX name</i> (for example, <b>joe</b>)</dd>
+</dl>
+</div>
+<div class="Bd-indent">
+<dl class="Bl-tag">
+  <dt id="o~2"><a class="permalink" href="#o~2">o</a></dt>
+  <dd><i>POSIX numeric ID</i> (for example, <b>789</b>)</dd>
+</dl>
+</div>
+<div class="Bd-indent">
+<dl class="Bl-tag">
+  <dt id="o~3"><a class="permalink" href="#o~3">o</a></dt>
+  <dd><i>SID name</i> (for example, <b>joe.smith@mydomain</b>)</dd>
+</dl>
+</div>
+<div class="Bd-indent">
+<dl class="Bl-tag">
+  <dt id="o~4"><a class="permalink" href="#o~4">o</a></dt>
+  <dd><i>SID numeric ID</i> (for example, <b>S-1-123-456-789</b>)</dd>
+</dl>
+</div>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>userrefs</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">This property is set to the number of user holds on this
+  snapshot. User holds are set by using the <b>zfs hold</b> command.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>groupused@</b><i>group</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">The amount of space consumed by the specified group in
+  this dataset. Space is charged to the group of each file, as displayed by
+  <b>ls</b> <b>-l</b>. See the <b>userused@</b><i>user</i> property for more
+  information.
+<p class="Pp">Unprivileged users can only access their own groups' space usage.
+    The root user, or a user who has been granted the <b>groupused</b> privilege
+    with <b>zfs allow</b>, can access all groups' usage.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>volblocksize</b>=<i>blocksize</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">For volumes, specifies the block size of the volume. The
+  <b>blocksize</b> cannot be changed once the volume has been written, so it
+  should be set at volume creation time. The default <b>blocksize</b> for
+  volumes is 8 Kbytes. Any power of 2 from 512 bytes to 128 Kbytes is valid.
+<p class="Pp">This property can also be referred to by its shortened column
+    name, <b>volblock</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>written</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">The amount of <b>referenced</b> space written to this
+  dataset since the previous snapshot.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>written@</b><i>snapshot</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">The amount of <b>referenced</b> space written to this
+  dataset since the specified snapshot. This is the space that is referenced by
+  this dataset but was not referenced by the specified snapshot.
+<p class="Pp">The <i>snapshot</i> may be specified as a short snapshot name
+    (just the part after the <b>@</b>), in which case it will be interpreted as
+    a snapshot in the same filesystem as this dataset. The <i>snapshot</i> be a
+    full snapshot name (<i>filesystem</i>@<i>snapshot</i>), which for clones may
+    be a snapshot in the origin's filesystem (or the origin of the origin's
+    filesystem, etc).</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp">The following native properties can be used to change the behavior
+    of a <b>ZFS</b> dataset.</p>
+<p class="Pp"><b></b><b>aclinherit</b>=<b>discard</b> | <b>noallow</b> |
+    <b>restricted</b> | <b>passthrough</b> | <b>passthrough-x</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Controls how <b>ACL</b> entries are inherited when files
+  and directories are created. A file system with an <b>aclinherit</b> property
+  of <b>discard</b> does not inherit any <b>ACL</b> entries. A file system with
+  an <b>aclinherit</b> property value of <b>noallow</b> only inherits
+  inheritable <b>ACL</b> entries that specify &quot;deny&quot; permissions. The
+  property value <b>restricted</b> (the default) removes the <b>write_acl</b>
+  and <b>write_owner</b> permissions when the <b>ACL</b> entry is inherited. A
+  file system with an <b>aclinherit</b> property value of <b>passthrough</b>
+  inherits all inheritable <b>ACL</b> entries without any modifications made to
+  the <b>ACL</b> entries when they are inherited. A file system with an
+  <b>aclinherit</b> property value of <b>passthrough-x</b> has the same meaning
+  as <b>passthrough</b>, except that the <b>owner@</b>, <b>group@</b>, and
+  <b>everyone@</b> <b>ACE</b>s inherit the execute permission only if the file
+  creation mode also requests the execute bit.
+<p class="Pp">When the property value is set to <b>passthrough</b>, files are
+    created with a mode determined by the inheritable <b>ACE</b>s. If no
+    inheritable <b>ACE</b>s exist that affect the mode, then the mode is set in
+    accordance to the requested mode from the application.</p>
+<p class="Pp">The <b>aclinherit</b> property does not apply to Posix ACLs.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>acltype</b>=<b>noacl</b> | <b>posixacl</b> </p>
+<p class="Pp"></p>
+<div class="Bd-indent">Controls whether ACLs are enabled and if so what type of
+  ACL to use. When a file system has the <b>acltype</b> property set to
+  <b>noacl</b> (the default) then ACLs are disabled. Setting the <b>acltype</b>
+  property to <b>posixacl</b> indicates Posix ACLs should be used. Posix ACLs
+  are specific to Linux and are not functional on other platforms. Posix ACLs
+  are stored as an xattr and therefore will not overwrite any existing ZFS/NFSv4
+  ACLs which may be set. Currently only <b>posixacls</b> are supported on Linux.
+<p class="Pp">To obtain the best performance when setting <b>posixacl</b> users
+    are strongly encouraged to set the <b>xattr=sa</b> property. This will
+    result in the Posix ACL being stored more efficiently on disk. But as a
+    consequence of this all new xattrs will only be accessible from ZFS
+    implementations which support the <b>xattr=sa</b> property. See the
+    <b>xattr</b> property for more details.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>atime</b>=<b>on</b> | <b>off</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Controls whether the access time for files is updated
+  when they are read. Turning this property off avoids producing write traffic
+  when reading files and can result in significant performance gains, though it
+  might confuse mailers and other similar utilities. The default value is
+  <b>on</b>. See also <b>relatime</b> below.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>canmount</b>=<b>on</b> | <b>off</b> | <b>noauto</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">If this property is set to <b>off</b>, the file system
+  cannot be mounted, and is ignored by <b>zfs mount -a</b>. Setting this
+  property to <b>off</b> is similar to setting the <b>mountpoint</b> property to
+  <b>none</b>, except that the dataset still has a normal <b>mountpoint</b>
+  property, which can be inherited. Setting this property to <b>off</b> allows
+  datasets to be used solely as a mechanism to inherit properties. One example
+  of setting <b>canmount=</b><b>off</b> is to have two datasets with the same
+  <b>mountpoint</b>, so that the children of both datasets appear in the same
+  directory, but might have different inherited characteristics.
+<p class="Pp">When the <b>noauto</b> option is set, a dataset can only be
+    mounted and unmounted explicitly. The dataset is not mounted automatically
+    when the dataset is created or imported, nor is it mounted by the <b>zfs
+    mount -a</b> command or unmounted by the <b>zfs unmount -a</b> command.</p>
+<p class="Pp">This property is not inherited.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>checksum</b>=<b>on</b> | <b>off</b> | <b>fletcher2,</b>|
+    <b>fletcher4</b> | <b>sha256</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Controls the checksum used to verify data integrity. The
+  default value is <b>on</b>, which automatically selects an appropriate
+  algorithm (currently, <b>fletcher4</b>, but this may change in future
+  releases). The value <b>off</b> disables integrity checking on user data.
+  Disabling checksums is <b>NOT</b> a recommended practice.
+<p class="Pp">Changing this property affects only newly-written data.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>compression</b>=<b>on</b> | <b>off</b> | <b>lzjb</b> |
+    <b>lz4</b> | <b>gzip</b> | <b>gzip-</b><i>N</i> | <b>zle</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Controls the compression algorithm used for this dataset.
+<p class="Pp">Setting compression to <b>on</b> indicates that the current
+    default compression algorithm should be used. The default balances
+    compression and decompression speed, with compression ratio and is expected
+    to work well on a wide variety of workloads. Unlike all other settings for
+    this property, <b>on</b> does not select a fixed compression type. As new
+    compression algorithms are added to ZFS and enabled on a pool, the default
+    compression algorithm may change. The current default compression algorthm
+    is either <b>lzjb</b> or, if the <b>lz4_compress</b> feature is enabled,
+    <b>lz4</b>.</p>
+<p class="Pp">The <b>lzjb</b> compression algorithm is optimized for performance
+    while providing decent data compression.</p>
+<p class="Pp">The <b>lz4</b> compression algorithm is a high-performance
+    replacement for the <b>lzjb</b> algorithm. It features significantly faster
+    compression and decompression, as well as a moderately higher compression
+    ratio than <b>lzjb</b>, but can only be used on pools with the
+    <b>lz4_compress</b> feature set to <i>enabled</i>. See
+    <b>zpool-features</b>(5) for details on ZFS feature flags and the
+    <b>lz4_compress</b> feature.</p>
+<p class="Pp">The <b>gzip</b> compression algorithm uses the same compression as
+    the <b>gzip</b>(1) command. You can specify the <b>gzip</b> level by using
+    the value <b>gzip-</b><i>N</i> where <i>N</i> is an integer from 1 (fastest)
+    to 9 (best compression ratio). Currently, <b>gzip</b> is equivalent to
+    <b>gzip-6</b> (which is also the default for <b>gzip</b>(1)). The <b>zle</b>
+    compression algorithm compresses runs of zeros.</p>
+<p class="Pp">This property can also be referred to by its shortened column name
+    <b>compress</b>. Changing this property affects only newly-written data.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>copies</b>=<b>1</b> | <b>2</b> | <b>3</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Controls the number of copies of data stored for this
+  dataset. These copies are in addition to any redundancy provided by the pool,
+  for example, mirroring or RAID-Z. The copies are stored on different disks, if
+  possible. The space used by multiple copies is charged to the associated file
+  and dataset, changing the <b>used</b> property and counting against quotas and
+  reservations.
+<p class="Pp">Changing this property only affects newly-written data. Therefore,
+    set this property at file system creation time by using the <b>-o</b>
+    <b>copies=</b><i>N</i> option.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>dedup</b>=<b>on</b> | <b>off</b> | <b>verify</b> |
+    <b>sha256</b>[,<b>verify</b>]</p>
+<p class="Pp"></p>
+<div class="Bd-indent">Controls whether deduplication is in effect for a
+  dataset. The default value is <b>off</b>. The default checksum used for
+  deduplication is <b>sha256</b> (subject to change). When <b>dedup</b> is
+  enabled, the <b>dedup</b> checksum algorithm overrides the <b>checksum</b>
+  property. Setting the value to <b>verify</b> is equivalent to specifying
+  <b>sha256,verify</b>.
+<p class="Pp">If the property is set to <b>verify</b>, then, whenever two blocks
+    have the same signature, ZFS will do a byte-for-byte comparison with the
+    existing block to ensure that the contents are identical.</p>
+<p class="Pp">Unless necessary, deduplication should NOT be enabled on a system.
+    See <b>Deduplication</b> above.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>devices</b>=<b>on</b> | <b>off</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Controls whether device nodes can be opened on this file
+  system. The default value is <b>on</b>.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>exec</b>=<b>on</b> | <b>off</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Controls whether processes can be executed from within
+  this file system. The default value is <b>on</b>.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>mlslabel</b>=<i>label</i> | <b>none</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">The <b>mlslabel</b> property is a sensitivity label that
+  determines if a dataset can be mounted in a zone on a system with Trusted
+  Extensions enabled. If the labeled dataset matches the labeled zone, the
+  dataset can be mounted and accessed from the labeled zone.
+<p class="Pp">When the <b>mlslabel</b> property is not set, the default value is
+    <b>none</b>. Setting the <b>mlslabel</b> property to <b>none</b> is
+    equivalent to removing the property.</p>
+<p class="Pp">The <b>mlslabel</b> property can be modified only when Trusted
+    Extensions is enabled and only with appropriate privilege. Rights to modify
+    it cannot be delegated. When changing a label to a higher label or setting
+    the initial dataset label, the <b>{PRIV_FILE_UPGRADE_SL}</b> privilege is
+    required. When changing a label to a lower label or the default
+    (<b>none</b>), the <b>{PRIV_FILE_DOWNGRADE_SL}</b> privilege is required.
+    Changing the dataset to labels other than the default can be done only when
+    the dataset is not mounted. When a dataset with the default label is mounted
+    into a labeled-zone, the mount operation automatically sets the
+    <b>mlslabel</b> property to the label of that zone.</p>
+<p class="Pp">When Trusted Extensions is <b>not</b> enabled, only datasets with
+    the default label (<b>none</b>) can be mounted.</p>
+<p class="Pp">Zones are a Solaris feature and are not relevant on Linux.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>filesystem_limit</b>=<i>count</i> | <b>none</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Limits the number of filesystems and volumes that can
+  exist under this point in the dataset tree. The limit is not enforced if the
+  user is allowed to change the limit. Setting a filesystem_limit on a
+  descendent of a filesystem that already has a filesystem_limit does not
+  override the ancestor's filesystem_limit, but rather imposes an additional
+  limit. This feature must be enabled to be used (see
+  <b>zpool-features</b>(5)).</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>mountpoint</b>=<i>path</i> | <b>none</b> |
+  <b>legacy</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Controls the mount point used for this file system. See
+  the &quot;Mount Points&quot; section for more information on how this property
+  is used.
+<p class="Pp">When the <b>mountpoint</b> property is changed for a file system,
+    the file system and any children that inherit the mount point are unmounted.
+    If the new value is <b>legacy</b>, then they remain unmounted. Otherwise,
+    they are automatically remounted in the new location if the property was
+    previously <b>legacy</b> or <b>none</b>, or if they were mounted before the
+    property was changed. In addition, any shared file systems are unshared and
+    shared in the new location.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>nbmand</b>=<b>on</b> | <b>off</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Controls whether the file system should be mounted with
+  <b>nbmand</b> (Non Blocking mandatory locks). This is used for <b>CIFS</b>
+  clients. Changes to this property only take effect when the file system is
+  umounted and remounted. See <b>mount</b>(8) for more information on
+  <b>nbmand</b> mounts.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>primarycache</b>=<b>all</b> | <b>none</b> |
+    <b>metadata</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Controls what is cached in the primary cache (ARC). If
+  this property is set to <b>all</b>, then both user data and metadata is
+  cached. If this property is set to <b>none</b>, then neither user data nor
+  metadata is cached. If this property is set to <b>metadata</b>, then only
+  metadata is cached. The default value is <b>all</b>.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>quota</b>=<i>size</i> | <b>none</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Limits the amount of space a dataset and its descendents
+  can consume. This property enforces a hard limit on the amount of space used.
+  This includes all space consumed by descendents, including file systems and
+  snapshots. Setting a quota on a descendent of a dataset that already has a
+  quota does not override the ancestor's quota, but rather imposes an additional
+  limit.
+<p class="Pp">Quotas cannot be set on volumes, as the <b>volsize</b> property
+    acts as an implicit quota.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>snapshot_limit</b>=<i>count</i> | <b>none</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Limits the number of snapshots that can be created on a
+  dataset and its descendents. Setting a snapshot_limit on a descendent of a
+  dataset that already has a snapshot_limit does not override the ancestor's
+  snapshot_limit, but rather imposes an additional limit. The limit is not
+  enforced if the user is allowed to change the limit. For example, this means
+  that recursive snapshots taken from the global zone are counted against each
+  delegated dataset within a zone. This feature must be enabled to be used (see
+  <b>zpool-features</b>(5)).</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>userquota@</b><i>user</i>=<i>size</i> | <b>none</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Limits the amount of space consumed by the specified
+  user. Similar to the <b>refquota</b> property, the <b>userquota</b> space
+  calculation does not include space that is used by descendent datasets, such
+  as snapshots and clones. User space consumption is identified by the
+  <b>userspace@</b><i>user</i> property.
+<p class="Pp">Enforcement of user quotas may be delayed by several seconds. This
+    delay means that a user might exceed their quota before the system notices
+    that they are over quota and begins to refuse additional writes with the
+    <b>EDQUOT</b> error message . See the <b>zfs userspace</b> subcommand for
+    more information.</p>
+<p class="Pp">Unprivileged users can only access their own groups' space usage.
+    The root user, or a user who has been granted the <b>userquota</b> privilege
+    with <b>zfs allow</b>, can get and set everyone's quota.</p>
+<p class="Pp">This property is not available on volumes, on file systems before
+    version 4, or on pools before version 15. The <b>userquota@</b>...
+    properties are not displayed by <b>zfs get all</b>. The user's name must be
+    appended after the <b>@</b> symbol, using one of the following forms:</p>
+<div class="Bd-indent">
+<dl class="Bl-tag">
+  <dt id="o~5"><a class="permalink" href="#o~5">o</a></dt>
+  <dd><i>POSIX name</i> (for example, <b>joe</b>)</dd>
+</dl>
+</div>
+<div class="Bd-indent">
+<dl class="Bl-tag">
+  <dt id="o~6"><a class="permalink" href="#o~6">o</a></dt>
+  <dd><i>POSIX numeric ID</i> (for example, <b>789</b>)</dd>
+</dl>
+</div>
+<div class="Bd-indent">
+<dl class="Bl-tag">
+  <dt id="o~7"><a class="permalink" href="#o~7">o</a></dt>
+  <dd><i>SID name</i> (for example, <b>joe.smith@mydomain</b>)</dd>
+</dl>
+</div>
+<div class="Bd-indent">
+<dl class="Bl-tag">
+  <dt id="o~8"><a class="permalink" href="#o~8">o</a></dt>
+  <dd><i>SID numeric ID</i> (for example, <b>S-1-123-456-789</b>)</dd>
+</dl>
+</div>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>groupquota@</b><i>group</i>=<i>size</i> |
+  <b>none</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Limits the amount of space consumed by the specified
+  group. Group space consumption is identified by the
+  <b>userquota@</b><i>user</i> property.
+<p class="Pp">Unprivileged users can access only their own groups' space usage.
+    The root user, or a user who has been granted the <b>groupquota</b>
+    privilege with <b>zfs allow</b>, can get and set all groups' quotas.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>readonly</b>=<b>on</b> | <b>off</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Controls whether this dataset can be modified. The
+  default value is <b>off</b>.
+<p class="Pp">This property can also be referred to by its shortened column
+    name, <b>rdonly</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>recordsize</b>=<i>size</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Specifies a suggested block size for files in the file
+  system. This property is designed solely for use with database workloads that
+  access files in fixed-size records. <b>ZFS</b> automatically tunes block sizes
+  according to internal algorithms optimized for typical access patterns.
+<p class="Pp">For databases that create very large files but access them in
+    small random chunks, these algorithms may be suboptimal. Specifying a
+    <b>recordsize</b> greater than or equal to the record size of the database
+    can result in significant performance gains. Use of this property for
+    general purpose file systems is strongly discouraged, and may adversely
+    affect performance.</p>
+<p class="Pp">The size specified must be a power of two greater than or equal to
+    512 and less than or equal to 128 Kbytes.</p>
+<p class="Pp">Changing the file system's <b>recordsize</b> affects only files
+    created afterward; existing files are unaffected.</p>
+<p class="Pp">This property can also be referred to by its shortened column
+    name, <b>recsize</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>redundant_metadata</b>=<b>all</b> | <b>most</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Controls what types of metadata are stored redundantly.
+  ZFS stores an extra copy of metadata, so that if a single block is corrupted,
+  the amount of user data lost is limited. This extra copy is in addition to any
+  redundancy provided at the pool level (e.g. by mirroring or RAID-Z), and is in
+  addition to an extra copy specified by the <b>copies</b> property (up to a
+  total of 3 copies). For example if the pool is mirrored, <b>copies</b>=2, and
+  <b>redundant_metadata</b>=most, then ZFS stores 6 copies of most metadata, and
+  4 copies of data and some metadata.
+<p class="Pp">When set to <b>all</b>, ZFS stores an extra copy of all metadata.
+    If a single on-disk block is corrupt, at worst a single block of user data
+    (which is <b>recordsize</b> bytes long) can be lost.</p>
+<p class="Pp">When set to <b>most</b>, ZFS stores an extra copy of most types of
+    metadata. This can improve performance of random writes, because less
+    metadata must be written. In practice, at worst about 100 blocks (of
+    <b>recordsize</b> bytes each) of user data can be lost if a single on-disk
+    block is corrupt. The exact behavior of which metadata blocks are stored
+    redundantly may change in future releases.</p>
+<p class="Pp">The default value is <b>all</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>refquota</b>=<i>size</i> | <b>none</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Limits the amount of space a dataset can consume. This
+  property enforces a hard limit on the amount of space used. This hard limit
+  does not include space used by descendents, including file systems and
+  snapshots.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>refreservation</b>=<i>size</i> | <b>none</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">The minimum amount of space guaranteed to a dataset, not
+  including its descendents. When the amount of space used is below this value,
+  the dataset is treated as if it were taking up the amount of space specified
+  by <b>refreservation</b>. The <b>refreservation</b> reservation is accounted
+  for in the parent datasets' space used, and counts against the parent
+  datasets' quotas and reservations.
+<p class="Pp">If <b>refreservation</b> is set, a snapshot is only allowed if
+    there is enough free pool space outside of this reservation to accommodate
+    the current number of &quot;referenced&quot; bytes in the dataset.</p>
+<p class="Pp">This property can also be referred to by its shortened column
+    name, <b>refreserv</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>relatime</b>=<b>on</b> | <b>off</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Controls the manner in which the access time is updated
+  when <b>atime=on</b> is set. Turning this property <b>on</b> causes the access
+  time to be updated relative to the modify or change time. Access time is only
+  updated if the previous access time was earlier than the current modify or
+  change time or if the existing access time hasn't been updated within the past
+  24 hours. The default value is <b>off</b>.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>reservation</b>=<i>size</i> | <b>none</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">The minimum amount of space guaranteed to a dataset and
+  its descendents. When the amount of space used is below this value, the
+  dataset is treated as if it were taking up the amount of space specified by
+  its reservation. Reservations are accounted for in the parent datasets' space
+  used, and count against the parent datasets' quotas and reservations.
+<p class="Pp">This property can also be referred to by its shortened column
+    name, <b>reserv</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>secondarycache</b>=<b>all</b> | <b>none</b> |
+    <b>metadata</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Controls what is cached in the secondary cache (L2ARC).
+  If this property is set to <b>all</b>, then both user data and metadata is
+  cached. If this property is set to <b>none</b>, then neither user data nor
+  metadata is cached. If this property is set to <b>metadata</b>, then only
+  metadata is cached. The default value is <b>all</b>.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>setuid</b>=<b>on</b> | <b>off</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Controls whether the set-<b>UID</b> bit is respected for
+  the file system. The default value is <b>on</b>.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>shareiscsi</b>=<b>on</b> | <b>off</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Like the <b>sharenfs</b> property, <b>shareiscsi</b>
+  indicates whether a <b>ZFS</b> volume is exported as an <b>iSCSI</b> target.
+  The acceptable values for this property are <b>on</b>, <b>off</b>, and
+  <b>type=disk</b>. The default value is <b>off</b>. In the future, other target
+  types might be supported. For example, <b>tape</b>.
+<p class="Pp">You might want to set <b>shareiscsi=on</b> for a file system so
+    that all <b>ZFS</b> volumes within the file system are shared by default.
+    However, setting this property on a file system has no direct effect.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>sharesmb</b>=<b>on</b> | <b>off</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Controls whether the file system is shared by using
+  <b>Samba USERSHARES</b>, and what options are to be used. Otherwise, the file
+  system is automatically shared and unshared with the <b>zfs share</b> and
+  <b>zfs unshare</b> commands. If the property is set to <b>on</b>, the
+  <b>net</b>(8) command is invoked to create a <b>USERSHARE</b>.
+<p class="Pp">Because <b>SMB</b> shares requires a resource name, a unique
+    resource name is constructed from the dataset name. The constructed name is
+    a copy of the dataset name except that the characters in the dataset name,
+    which would be illegal in the resource name, are replaced with underscore
+    (<b>_</b>) characters. The ZFS On Linux driver does not (yet) support
+    additional options which might be available in the Solaris version.</p>
+<p class="Pp">If the <b>sharesmb</b> property is set to <b>off</b>, the file
+    systems are unshared.</p>
+<p class="Pp">In Linux, the share is created with the ACL (Access Control List)
+    &quot;Everyone:F&quot; (&quot;F&quot; stands for &quot;full
+    permissions&quot;, ie. read and write permissions) and no guest access
+    (which means samba must be able to authenticate a real user, system
+    passwd/shadow, ldap or smbpasswd based) by default. This means that any
+    additional access control (dissalow specific user specific access etc) must
+    be done on the underlaying filesystem.</p>
+<p class="Pp">
+  <br/>
+  Example to mount a SMB filesystem shared through ZFS (share/tmp): Note that a
+    user and his/her password <b>must</b> be given!</p>
+<p class="Pp">
+  <br/>
+  smbmount //127.0.0.1/share_tmp /mnt/tmp -o
+    user=workgroup/turbo,password=obrut,uid=1000
+  <br/>
+  <br/>
+</p>
+<p class="Pp"><b>Minimal /etc/samba/smb.conf configuration</b></p>
+<p class="Pp">
+  <br/>
+  * Samba will need to listen to 'localhost' (127.0.0.1) for the zfs utilities
+    to communitate with samba. This is the default behavior for most Linux
+    distributions.</p>
+<p class="Pp">* Samba must be able to authenticate a user. This can be done in a
+    number of ways, depending on if using the system password file, LDAP or the
+    Samba specific smbpasswd file. How to do this is outside the scope of this
+    manual. Please refer to the smb.conf(5) manpage for more information.</p>
+<p class="Pp">* See the <b>USERSHARE</b> section of the <b>smb.conf</b>(5) man
+    page for all configuration options in case you need to modify any options to
+    the share afterwards. Do note that any changes done with the 'net' command
+    will be undone if the share is every unshared (such as at a reboot etc). In
+    the future, ZoL will be able to set specific options directly using
+    sharesmb=&lt;option&gt;.</p>
+<p class="Pp">
+  <br/>
+</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>sharenfs</b>=<b>on</b> | <b>off</b> | <i>opts</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Controls whether the file system is shared via
+  <b>NFS</b>, and what options are used. A file system with a <b>sharenfs</b>
+  property of <b>off</b> is managed with the <b>exportfs</b>(8) command and
+  entries in <b>/etc/exports</b> file. Otherwise, the file system is
+  automatically shared and unshared with the <b>zfs share</b> and <b>zfs
+  unshare</b> commands. If the property is set to <b>on</b>, the dataset is
+  shared using the <b>exportfs</b>(8) command in the following manner (see
+  <b>exportfs</b>(8) for the meaning of the different options):
+<p class="Pp">
+  <br/>
+</p>
+<pre>/usr/sbin/exportfs -i -o sec=sys,rw,no_subtree_check,no_root_squash,mountpoint *:&lt;mountpoint of dataset&gt;</pre>
+<br/>
+<p class="Pp">Otherwise, the <b>exportfs</b>(8) command is invoked with options
+    equivalent to the contents of this property.</p>
+<p class="Pp">When the <b>sharenfs</b> property is changed for a dataset, the
+    dataset and any children inheriting the property are re-shared with the new
+    options, only if the property was previously <b>off</b>, or if they were
+    shared before the property was changed. If the new property is <b>off</b>,
+    the file systems are unshared.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>logbias</b> = <b>latency</b> | <b>throughput</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Provide a hint to ZFS about handling of synchronous
+  requests in this dataset. If <b>logbias</b> is set to <b>latency</b> (the
+  default), ZFS will use pool log devices (if configured) to handle the requests
+  at low latency. If <b>logbias</b> is set to <b>throughput</b>, ZFS will not
+  use configured pool log devices. ZFS will instead optimize synchronous
+  operations for global pool throughput and efficient use of resources.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>snapdev</b>=<b>hidden</b> | <b>visible</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Controls whether the snapshots devices of zvol's are
+  hidden or visible. The default value is <b>hidden</b>.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>snapdir</b>=<b>hidden</b> | <b>visible</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Controls whether the <b>.zfs</b> directory is hidden or
+  visible in the root of the file system as discussed in the
+  &quot;Snapshots&quot; section. The default value is <b>hidden</b>.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>sync</b>=<b>standard</b> | <b>always</b> |
+    <b>disabled</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Controls the behavior of synchronous requests (e.g.
+  fsync, O_DSYNC). <b>standard</b> is the POSIX specified behavior of ensuring
+  all synchronous requests are written to stable storage and all devices are
+  flushed to ensure data is not cached by device controllers (this is the
+  default). <b>always</b> causes every file system transaction to be written and
+  flushed before its system call returns. This has a large performance penalty.
+  <b>disabled</b> disables synchronous requests. File system transactions are
+  only committed to stable storage periodically. This option will give the
+  highest performance. However, it is very dangerous as ZFS would be ignoring
+  the synchronous transaction demands of applications such as databases or NFS.
+  Administrators should only use this option when the risks are
+  understood.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>version</b>=<b>1</b> | <b>2</b> | <b>current</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">The on-disk version of this file system, which is
+  independent of the pool version. This property can only be set to later
+  supported versions. See the <b>zfs upgrade</b> command.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>volsize</b>=<i>size</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">For volumes, specifies the logical size of the volume. By
+  default, creating a volume establishes a reservation of equal size. For
+  storage pools with a version number of 9 or higher, a <b>refreservation</b> is
+  set instead. Any changes to <b>volsize</b> are reflected in an equivalent
+  change to the reservation (or <b>refreservation</b>). The <b>volsize</b> can
+  only be set to a multiple of <b>volblocksize</b>, and cannot be zero.
+<p class="Pp">The reservation is kept equal to the volume's logical size to
+    prevent unexpected behavior for consumers. Without the reservation, the
+    volume could run out of space, resulting in undefined behavior or data
+    corruption, depending on how the volume is used. These effects can also
+    occur when the volume size is changed while it is in use (particularly when
+    shrinking the size). Extreme care should be used when adjusting the volume
+    size.</p>
+<p class="Pp">Though not recommended, a &quot;sparse volume&quot; (also known as
+    &quot;thin provisioning&quot;) can be created by specifying the <b>-s</b>
+    option to the <b>zfs create -V</b> command, or by changing the reservation
+    after the volume has been created. A &quot;sparse volume&quot; is a volume
+    where the reservation is less then the volume size. Consequently, writes to
+    a sparse volume can fail with <b>ENOSPC</b> when the pool is low on space.
+    For a sparse volume, changes to <b>volsize</b> are not reflected in the
+    reservation.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>vscan</b>=<b>on</b> | <b>off</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Controls whether regular files should be scanned for
+  viruses when a file is opened and closed. In addition to enabling this
+  property, the virus scan service must also be enabled for virus scanning to
+  occur. The default value is <b>off</b>.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>xattr</b>=<b>on</b> | <b>off</b> | <b>sa</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Controls whether extended attributes are enabled for this
+  file system. Two styles of extended attributes are supported either directory
+  based or system attribute based.
+<p class="Pp">The default value of <b>on</b> enables directory based extended
+    attributes. This style of xattr imposes no practical limit on either the
+    size or number of xattrs which may be set on a file. Although under Linux
+    the <b>getxattr</b>(2) and <b>setxattr</b>(2) system calls limit the maximum
+    xattr size to 64K. This is the most compatible style of xattr and it is
+    supported by the majority of ZFS implementations.</p>
+<p class="Pp">System attribute based xattrs may be enabled by setting the value
+    to <b>sa</b>. The key advantage of this type of xattr is improved
+    performance. Storing xattrs as system attributes significantly decreases the
+    amount of disk IO required. Up to 64K of xattr data may be stored per file
+    in the space reserved for system attributes. If there is not enough space
+    available for an xattr then it will be automatically written as a directory
+    based xattr. System attribute based xattrs are not accessible on platforms
+    which do not support the <b>xattr=sa</b> feature.</p>
+<p class="Pp">The use of system attribute based xattrs is strongly encouraged
+    for users of SELinux or Posix ACLs. Both of these features heavily rely of
+    xattrs and benefit significantly from the reduced xattr access time.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>zoned</b>=<b>on</b> | <b>off</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Controls whether the dataset is managed from a non-global
+  zone. Zones are a Solaris feature and are not relevant on Linux. The default
+  value is <b>off</b>.</div>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp">The following three properties cannot be changed after the file
+    system is created, and therefore, should be set when the file system is
+    created. If the properties are not set with the <b>zfs create</b> or
+    <b>zpool create</b> commands, these properties are inherited from the parent
+    dataset. If the parent dataset lacks these properties due to having been
+    created prior to these features being supported, the new file system will
+    have the default values for these properties.</p>
+<p class="Pp"><b></b><b>casesensitivity</b>=<b>sensitive</b> |
+    <b>insensitive</b> | <b>mixed</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Indicates whether the file name matching algorithm used
+  by the file system should be case-sensitive, case-insensitive, or allow a
+  combination of both styles of matching. The default value for the
+  <b>casesensitivity</b> property is <b>sensitive</b>. Traditionally, UNIX and
+  POSIX file systems have case-sensitive file names.
+<p class="Pp">The <b>mixed</b> value for the <b>casesensitivity</b> property
+    indicates that the file system can support requests for both case-sensitive
+    and case-insensitive matching behavior. Currently, case-insensitive matching
+    behavior on a file system that supports mixed behavior is limited to the
+    Solaris CIFS server product. For more information about the <b>mixed</b>
+    value behavior, see the <i>Solaris ZFS Administration Guide</i>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>normalization</b> = <b>none</b> | <b>formC</b> |
+    <b>formD</b> | <b>formKC</b> | <b>formKD</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Indicates whether the file system should perform a
+  <b>unicode</b> normalization of file names whenever two file names are
+  compared, and which normalization algorithm should be used. File names are
+  always stored unmodified, names are normalized as part of any comparison
+  process. If this property is set to a legal value other than <b>none</b>, and
+  the <b>utf8only</b> property was left unspecified, the <b>utf8only</b>
+  property is automatically set to <b>on</b>. The default value of the
+  <b>normalization</b> property is <b>none</b>. This property cannot be changed
+  after the file system is created.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>utf8only</b>=<b>on</b> | <b>off</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Indicates whether the file system should reject file
+  names that include characters that are not present in the <b>UTF-8</b>
+  character code set. If this property is explicitly set to <b>off</b>, the
+  normalization property must either not be explicitly set or be set to
+  <b>none</b>. The default value for the <b>utf8only</b> property is <b>off</b>.
+  This property cannot be changed after the file system is created.</div>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp">The <b>casesensitivity</b>, <b>normalization</b>, and
+    <b>utf8only</b> properties are also new permissions that can be assigned to
+    non-privileged users by using the <b>ZFS</b> delegated administration
+    feature.</p>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>context</b>=<b>SELinux_User:SElinux_Role:Selinux_Type:Sensitivity_Level</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">This flag sets the SELinux context for all files in the
+  filesytem under the mountpoint for that filesystem. See <b>selinux</b>(8) for
+  more information.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>fscontext</b>=<b>SELinux_User:SElinux_Role:Selinux_Type:Sensitivity_Level</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">This flag sets the SELinux context for the filesytem
+  being mounted. See <b>selinux</b>(8) for more information.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>defntext</b>=<b>SELinux_User:SElinux_Role:Selinux_Type:Sensitivity_Level</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">This flag sets the SELinux context for unlabeled files.
+  See <b>selinux</b>(8) for more information.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>rootcontext</b>=<b>SELinux_User:SElinux_Role:Selinux_Type:Sensitivity_Level</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">This flag sets the SELinux context for the root inode of
+  the filesystem. See <b>selinux</b>(8) for more information.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>overlay</b>=<b>on</b> | <b>off</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Allow mounting on a busy directory or a directory which
+  already contains files/directories. This is the default mount behavior for
+  Linux filesystems. However, for consistency with ZFS on other platforms
+  overlay mounts are disabled by default. Set <b>overlay=on</b> to enable
+  overlay mounts.</div>
+<p class="Pp"></p>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="Temporary_Mount_Point_Properties"><a class="permalink" href="#Temporary_Mount_Point_Properties">Temporary
+  Mount Point Properties</a></h2>
+<p class="Pp">When a file system is mounted, either through <b>mount</b>(8) for
+    legacy mounts or the <b>zfs mount</b> command for normal file systems, its
+    mount options are set according to its properties. The correlation between
+    properties and mount options is as follows:</p>
+<p class="Pp">
+  <br/>
+</p>
+<pre>
+<br/>
+    PROPERTY                MOUNT OPTION
+<br/>
+     devices                 devices/nodevices
+<br/>
+     exec                    exec/noexec
+<br/>
+     readonly                ro/rw
+<br/>
+     setuid                  setuid/nosetuid
+<br/>
+     xattr                   xattr/noxattr
+<br/>
+     atime                   atime/noatime
+<br/>
+     relatime                relatime/norelatime
+<br/>
+     nbmand                  nbmand/nonbmand</pre>
+<br/>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp">In addition, these options can be set on a per-mount basis using
+    the <b>-o</b> option, without affecting the property that is stored on disk.
+    The values specified on the command line override the values stored in the
+    dataset. The <b>-nosuid</b> option is an alias for
+    <b>nodevices,nosetuid</b>. These properties are reported as
+    &quot;temporary&quot; by the <b>zfs get</b> command. If the properties are
+    changed while the dataset is mounted, the new setting overrides any
+    temporary settings.</p>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="User_Properties"><a class="permalink" href="#User_Properties">User
+  Properties</a></h2>
+<p class="Pp">In addition to the standard native properties, <b>ZFS</b> supports
+    arbitrary user properties. User properties have no effect on <b>ZFS</b>
+    behavior, but applications or administrators can use them to annotate
+    datasets (file systems, volumes, and snapshots).</p>
+<p class="Pp"></p>
+<p class="Pp">User property names must contain a colon (<b>:</b>) character to
+    distinguish them from native properties. They may contain lowercase letters,
+    numbers, and the following punctuation characters: colon (<b>:</b>), dash
+    (<b>-</b>), period (<b>.</b>), and underscore (<b>_</b>). The expected
+    convention is that the property name is divided into two portions such as
+    <i>module</i><b>:</b><i>property</i>, but this namespace is not enforced by
+    <b>ZFS</b>. User property names can be at most 256 characters, and cannot
+    begin with a dash (<b>-</b>).</p>
+<p class="Pp"></p>
+<p class="Pp">When making programmatic use of user properties, it is strongly
+    suggested to use a reversed <b>DNS</b> domain name for the <i>module</i>
+    component of property names to reduce the chance that two
+    independently-developed packages use the same property name for different
+    purposes. For example, property names beginning with <b>com.sun</b>. are
+    reserved for use by Oracle Corporation (which acquired Sun
+  Microsystems).</p>
+<p class="Pp"></p>
+<p class="Pp">The values of user properties are arbitrary strings, are always
+    inherited, and are never validated. All of the commands that operate on
+    properties (<b>zfs list</b>, <b>zfs get</b>, <b>zfs set</b>, and so forth)
+    can be used to manipulate both native properties and user properties. Use
+    the <b>zfs inherit</b> command to clear a user property . If the property is
+    not defined in any parent dataset, it is removed entirely. Property values
+    are limited to 1024 characters.</p>
+</section>
+<section class="Ss">
+<h2 class="Ss" id="ZFS_Volumes_as_Swap"><a class="permalink" href="#ZFS_Volumes_as_Swap">ZFS
+  Volumes as Swap</a></h2>
+<p class="Pp"><b>ZFS</b> volumes may be used as Linux swap devices. After
+    creating the volume with the <b>zfs create</b> command set up and enable the
+    swap area using the <b>mkswap</b>(8) and <b>swapon</b>(8) commands. Do not
+    swap to a file on a <b>ZFS</b> file system. A <b>ZFS</b> swap file
+    configuration is not supported.</p>
+</section>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SUBCOMMANDS"><a class="permalink" href="#SUBCOMMANDS">SUBCOMMANDS</a></h1>
+<p class="Pp">All subcommands that modify state are logged persistently to the
+    pool in their original form.</p>
+<p class="Pp"><b></b><b>zfs ?</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Displays a help message.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>zfs create</b> [<b>-p</b>] [<b>-o</b>
+    <i>property</i>=<i>value</i>] ... <i>filesystem</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Creates a new <b>ZFS</b> file system. The file system is
+  automatically mounted according to the <b>mountpoint</b> property inherited
+  from the parent.
+<p class="Pp"><b></b><b>-p</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Creates all the non-existing parent datasets. Datasets
+  created in this manner are automatically mounted according to the
+  <b>mountpoint</b> property inherited from their parent. Any property specified
+  on the command line using the <b>-o</b> option is ignored. If the target
+  filesystem already exists, the operation completes successfully.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-o</b> <i>property</i>=<i>value</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Sets the specified property as if the command <b>zfs
+  set</b> <i>property</i>=<i>value</i> was invoked at the same time the dataset
+  was created. Any editable <b>ZFS</b> property can also be set at creation
+  time. Multiple <b>-o</b> options can be specified. An error results if the
+  same property is specified in multiple <b>-o</b> options.</div>
+<p class="Pp"></p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>zfs create</b> [<b>-ps</b>] [<b>-b</b> <i>blocksize</i>]
+    [<b>-o</b> <i>property</i>=<i>value</i>] ... <b>-V</b> <i>size</i>
+    <i>volume</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Creates a volume of the given size. The volume is
+  exported as a block device in <b>/dev/zvol/</b><i>path</i>, where <i>path</i>
+  is the name of the volume in the <b>ZFS</b> namespace. The size represents the
+  logical size as exported by the device. By default, a reservation of equal
+  size is created.
+<p class="Pp"><i>size</i> is automatically rounded up to the nearest 128 Kbytes
+    to ensure that the volume has an integral number of blocks regardless of
+    <i>blocksize</i>.</p>
+<p class="Pp"><b></b><b>-p</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Creates all the non-existing parent datasets. Datasets
+  created in this manner are automatically mounted according to the
+  <b>mountpoint</b> property inherited from their parent. Any property specified
+  on the command line using the <b>-o</b> option is ignored. If the target
+  filesystem already exists, the operation completes successfully.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-s</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Creates a sparse volume with no reservation. See
+  <b>volsize</b> in the Native Properties section for more information about
+  sparse volumes.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-o</b> <i>property</i>=<i>value</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Sets the specified property as if the <b>zfs set</b>
+  <i>property</i>=<i>value</i> command was invoked at the same time the dataset
+  was created. Any editable <b>ZFS</b> property can also be set at creation
+  time. Multiple <b>-o</b> options can be specified. An error results if the
+  same property is specified in multiple <b>-o</b> options.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-b</b> <i>blocksize</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Equivalent to <b>-o</b>
+  <b>volblocksize</b>=<i>blocksize</i>. If this option is specified in
+  conjunction with <b>-o</b> <b>volblocksize</b>, the resulting behavior is
+  undefined.</div>
+<p class="Pp"></p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs destroy</b> [<b>-fnpRrv</b>]
+    <i>filesystem</i>|<i>volume</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Destroys the given dataset. By default, the command
+  unshares any file systems that are currently shared, unmounts any file systems
+  that are currently mounted, and refuses to destroy a dataset that has active
+  dependents (children or clones).
+<p class="Pp"><b></b><b>-r</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Recursively destroy all children.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-R</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Recursively destroy all dependents, including cloned file
+  systems outside the target hierarchy.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-f</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Force an unmount of any file systems using the <b>unmount
+  -f</b> command. This option has no effect on non-file systems or unmounted
+  file systems.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-n</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Do a dry-run (&quot;No-op&quot;) deletion. No data will
+  be deleted. This is useful in conjunction with the <b>-v</b> or <b>-p</b>
+  flags to determine what data would be deleted.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-p</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Print machine-parsable verbose information about the
+  deleted data.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-v</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Print verbose information about the deleted data.</div>
+<p class="Pp"></p>
+<p class="Pp">Extreme care should be taken when applying either the <b>-r</b> or
+    the <b>-R</b> options, as they can destroy large portions of a pool and
+    cause unexpected behavior for mounted file systems in use.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs destroy</b> [<b>-dnpRrv</b>]
+    <i>filesystem</i>|<i>volume</i>@<i>snap</i>[%<i>snap</i>][,...]</p>
+<p class="Pp"></p>
+<div class="Bd-indent">The given snapshots are destroyed immediately if and only
+  if the <b>zfs destroy</b> command without the <b>-d</b> option would have
+  destroyed it. Such immediate destruction would occur, for example, if the
+  snapshot had no clones and the user-initiated reference count were zero.
+<p class="Pp">If a snapshot does not qualify for immediate destruction, it is
+    marked for deferred destruction. In this state, it exists as a usable,
+    visible snapshot until both of the preconditions listed above are met, at
+    which point it is destroyed.</p>
+<p class="Pp">An inclusive range of snapshots may be specified by separating the
+    first and last snapshots with a percent sign. The first and/or last
+    snapshots may be left blank, in which case the filesystem's oldest or newest
+    snapshot will be implied.</p>
+<p class="Pp">Multiple snapshots (or ranges of snapshots) of the same filesystem
+    or volume may be specified in a comma-separated list of snapshots. Only the
+    snapshot's short name (the part after the <b>@</b>) should be specified when
+    using a range or comma-separated list to identify multiple snapshots.</p>
+<p class="Pp"><b></b><b>-d</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Defer snapshot deletion.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-r</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Destroy (or mark for deferred destruction) all snapshots
+  with this name in descendent file systems.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-R</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Recursively destroy all clones of these snapshots,
+  including the clones, snapshots, and children. If this flag is specified, the
+  <b>-d</b> flag will have no effect.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-n</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Do a dry-run (&quot;No-op&quot;) deletion. No data will
+  be deleted. This is useful in conjunction with the <b>-v</b> or <b>-p</b>
+  flags to determine what data would be deleted.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-p</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Print machine-parsable verbose information about the
+  deleted data.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-v</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Print verbose information about the deleted data.</div>
+<p class="Pp"></p>
+<p class="Pp">Extreme care should be taken when applying either the <b>-r</b> or
+    the <b>-R</b> options, as they can destroy large portions of a pool and
+    cause unexpected behavior for mounted file systems in use.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs destroy</b>
+  <i>filesystem</i>|<i>volume</i>#<i>bookmark</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">The given bookmark is destroyed.
+<p class="Pp"></p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>zfs snapshot</b> [<b>-r</b>] [<b>-o</b>
+    <i>property</i>=<i>value</i>] ...
+    <i>filesystem@snapname</i>|<i>volume@snapname</i> ...</p>
+<p class="Pp"></p>
+<div class="Bd-indent">Creates snapshots with the given names. All previous
+  modifications by successful system calls to the file system are part of the
+  snapshots. Snapshots are taken atomically, so that all snapshots correspond to
+  the same moment in time. See the &quot;Snapshots&quot; section for details.
+<p class="Pp"><b></b><b>-r</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Recursively create snapshots of all descendent
+  datasets.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-o</b> <i>property</i>=<i>value</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Sets the specified property; see <b>zfs create</b> for
+  details.</div>
+<p class="Pp"></p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>zfs rollback</b> [<b>-rRf</b>] <i>snapshot</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Roll back the given dataset to a previous snapshot. When
+  a dataset is rolled back, all data that has changed since the snapshot is
+  discarded, and the dataset reverts to the state at the time of the snapshot.
+  By default, the command refuses to roll back to a snapshot other than the most
+  recent one. In order to do so, all intermediate snapshots and bookmarks must
+  be destroyed by specifying the <b>-r</b> option.
+<p class="Pp">The <b>-rR</b> options do not recursively destroy the child
+    snapshots of a recursive snapshot. Only direct snapshots of the specified
+    filesystem are destroyed by either of these options. To completely roll back
+    a recursive snapshot, you must rollback the individual child snapshots.</p>
+<p class="Pp"><b></b><b>-r</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Destroy any snapshots and bookmarks more recent than the
+  one specified.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-R</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Recursively destroy any more recent snapshots and
+  bookmarks, as well as any clones of those snapshots.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-f</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Used with the <b>-R</b> option to force an unmount of any
+  clone file systems that are to be destroyed.</div>
+<p class="Pp"></p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>zfs clone</b> [<b>-p</b>] [<b>-o</b>
+    <i>property</i>=<i>value</i>] ... <i>snapshot</i>
+    <i>filesystem</i>|<i>volume</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Creates a clone of the given snapshot. See the
+  &quot;Clones&quot; section for details. The target dataset can be located
+  anywhere in the <b>ZFS</b> hierarchy, and is created as the same type as the
+  original.
+<p class="Pp"><b></b><b>-p</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Creates all the non-existing parent datasets. Datasets
+  created in this manner are automatically mounted according to the
+  <b>mountpoint</b> property inherited from their parent. If the target
+  filesystem or volume already exists, the operation completes
+  successfully.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-o</b> <i>property</i>=<i>value</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Sets the specified property; see <b>zfs create</b> for
+  details.</div>
+<p class="Pp"></p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>zfs promote</b> <i>clone-filesystem</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Promotes a clone file system to no longer be dependent on
+  its &quot;origin&quot; snapshot. This makes it possible to destroy the file
+  system that the clone was created from. The clone parent-child dependency
+  relationship is reversed, so that the origin file system becomes a clone of
+  the specified file system.
+<p class="Pp">The snapshot that was cloned, and any snapshots previous to this
+    snapshot, are now owned by the promoted clone. The space they use moves from
+    the origin file system to the promoted clone, so enough space must be
+    available to accommodate these snapshots. No new space is consumed by this
+    operation, but the space accounting is adjusted. The promoted clone must not
+    have any conflicting snapshot names of its own. The <b>rename</b> subcommand
+    can be used to rename any conflicting snapshots.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>zfs rename</b> [<b>-f</b>]
+    <i>filesystem</i>|<i>volume</i>|<i>snapshot</i>
+  <br/>
+  <b></b><i>filesystem</i>|<i>volume</i>|<i>snapshot</i>
+  <br/>
+  <b></b><b>zfs rename</b> [<b>-fp</b>] <i>filesystem</i>|<i>volume</i>
+    <i>filesystem</i>|<i>volume</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Renames the given dataset. The new target can be located
+  anywhere in the <b>ZFS</b> hierarchy, with the exception of snapshots.
+  Snapshots can only be renamed within the parent file system or volume. When
+  renaming a snapshot, the parent file system of the snapshot does not need to
+  be specified as part of the second argument. Renamed file systems can inherit
+  new mount points, in which case they are unmounted and remounted at the new
+  mount point.
+<p class="Pp"><b></b><b>-p</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Creates all the nonexistent parent datasets. Datasets
+  created in this manner are automatically mounted according to the
+  <b>mountpoint</b> property inherited from their parent.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-f</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Force unmount any filesystems that need to be unmounted
+  in the process.</div>
+<p class="Pp"></p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>zfs rename</b> <b>-r</b> <i>snapshot</i>
+  <i>snapshot</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Recursively rename the snapshots of all descendent
+  datasets. Snapshots are the only dataset that can be renamed
+  recursively.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>zfs</b> <b>list</b> [<b>-r</b>|<b>-d</b> <i>depth</i>]
+    [<b>-Hp</b>] [<b>-o</b> <i>property</i>[,<i>...</i>]] [ <b>-t</b>
+    <i>type</i>[,<i>...</i>]] [ <b>-s</b> <i>property</i> ] ... [ <b>-S</b>
+    <i>property</i> ] ... [<i>filesystem</i>|<i>volume</i>|<i>snapshot</i>]
+  ...</p>
+<p class="Pp"></p>
+<div class="Bd-indent">Lists the property information for the given datasets in
+  tabular form. If specified, you can list property information by the absolute
+  pathname or the relative pathname. By default, all file systems and volumes
+  are displayed. Snapshots are displayed if the <b>listsnaps</b> property is
+  <b>on</b> (the default is <b>off</b>). When listing hundreds or thousands of
+  snapshots performance can be improved by restricting the output to only the
+  name. In that case, it is recommended to use <b>-o name -s name</b>. The
+  following fields are displayed by default,
+  <b>name,used,available,referenced,mountpoint</b>.
+<p class="Pp"><b></b><b>-H</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Used for scripting mode. Do not print headers and
+  separate fields by a single tab instead of arbitrary white space.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-p</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Display numbers in parsable (exact) values.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-r</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Recursively display any children of the dataset on the
+  command line.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-d</b> <i>depth</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Recursively display any children of the dataset, limiting
+  the recursion to <i>depth</i>. A depth of <b>1</b> will display only the
+  dataset and its direct children.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-o</b> <i>property</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">A comma-separated list of properties to display. The
+  property must be:
+<div class="Bd-indent">
+<dl class="Bl-tag">
+  <dt id="o~9"><a class="permalink" href="#o~9">o</a></dt>
+  <dd>One of the properties described in the &quot;Native Properties&quot;
+      section</dd>
+</dl>
+</div>
+<div class="Bd-indent">
+<dl class="Bl-tag">
+  <dt id="o~10"><a class="permalink" href="#o~10">o</a></dt>
+  <dd>A user property</dd>
+</dl>
+</div>
+<div class="Bd-indent">
+<dl class="Bl-tag">
+  <dt id="o~11"><a class="permalink" href="#o~11">o</a></dt>
+  <dd>The value <b>name</b> to display the dataset name</dd>
+</dl>
+</div>
+<div class="Bd-indent">
+<dl class="Bl-tag">
+  <dt id="o~12"><a class="permalink" href="#o~12">o</a></dt>
+  <dd>The value <b>space</b> to display space usage properties on file systems
+      and volumes. This is a shortcut for specifying <b>-o
+      name,avail,used,usedsnap,usedds,usedrefreserv,usedchild</b> <b>-t
+      filesystem,volume</b> syntax.</dd>
+</dl>
+</div>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-s</b> <i>property</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">A property for sorting the output by column in ascending
+  order based on the value of the property. The property must be one of the
+  properties described in the &quot;Properties&quot; section, or the special
+  value <b>name</b> to sort by the dataset name. Multiple properties can be
+  specified at one time using multiple <b>-s</b> property options. Multiple
+  <b>-s</b> options are evaluated from left to right in decreasing order of
+  importance.
+<p class="Pp">The following is a list of sorting criteria:</p>
+<div class="Bd-indent">
+<dl class="Bl-tag">
+  <dt id="o~13"><a class="permalink" href="#o~13">o</a></dt>
+  <dd>Numeric types sort in numeric order.</dd>
+</dl>
+</div>
+<div class="Bd-indent">
+<dl class="Bl-tag">
+  <dt id="o~14"><a class="permalink" href="#o~14">o</a></dt>
+  <dd>String types sort in alphabetical order.</dd>
+</dl>
+</div>
+<div class="Bd-indent">
+<dl class="Bl-tag">
+  <dt id="o~15"><a class="permalink" href="#o~15">o</a></dt>
+  <dd>Types inappropriate for a row sort that row to the literal bottom,
+      regardless of the specified ordering.</dd>
+</dl>
+</div>
+<div class="Bd-indent">
+<dl class="Bl-tag">
+  <dt id="o~16"><a class="permalink" href="#o~16">o</a></dt>
+  <dd>If no sorting options are specified the existing behavior of <b>zfs
+      list</b> is preserved.</dd>
+</dl>
+</div>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-S</b> <i>property</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Same as the <b>-s</b> option, but sorts by property in
+  descending order.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-t</b> <i>type</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">A comma-separated list of types to display, where
+  <i>type</i> is one of <b>filesystem</b>, <b>snapshot</b>, <b>snap</b>,
+  <b>volume</b>, <b>bookmark</b>, or <b>all</b>. For example, specifying <b>-t
+  snapshot</b> displays only snapshots.</div>
+<p class="Pp"></p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>zfs set</b> <i>property</i>=<i>value</i>
+    <i>filesystem</i>|<i>volume</i>|<i>snapshot</i> ...</p>
+<p class="Pp"></p>
+<div class="Bd-indent">Sets the property to the given value for each dataset.
+  Only some properties can be edited. See the &quot;Properties&quot; section for
+  more information on what properties can be set and acceptable values. Numeric
+  values can be specified as exact values, or in a human-readable form with a
+  suffix of <b>B</b>, <b>K</b>, <b>M</b>, <b>G</b>, <b>T</b>, <b>P</b>,
+  <b>E</b>, <b>Z</b> (for bytes, kilobytes, megabytes, gigabytes, terabytes,
+  petabytes, exabytes, or zettabytes, respectively). User properties can be set
+  on snapshots. For more information, see the &quot;User Properties&quot;
+  section.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>zfs get</b> [<b>-r</b>|<b>-d</b> <i>depth</i>]
+    [<b>-Hp</b>] [<b>-o</b> <i>field</i>[,...] [<b>-t</b> <i>type</i>[,...]]
+    [<b>-s</b> <i>source</i>[,...] &quot;<i>all</i>&quot; |
+    <i>property</i>[,...] <i>filesystem</i>|<i>volume</i>|<i>snapshot</i>
+  ...</p>
+<p class="Pp"></p>
+<div class="Bd-indent">Displays properties for the given datasets. If no
+  datasets are specified, then the command displays properties for all datasets
+  on the system. For each property, the following columns are displayed:
+<p class="Pp">
+  <br/>
+</p>
+<pre>
+<br/>
+    name      Dataset name
+<br/>
+     property  Property name
+<br/>
+     value     Property value
+<br/>
+     source    Property source. Can either be local, default,
+<br/>
+               temporary, inherited, received, or none (-).</pre>
+<br/>
+<p class="Pp"></p>
+<p class="Pp">All columns are displayed by default, though this can be
+    controlled by using the <b>-o</b> option. This command takes a
+    comma-separated list of properties as described in the &quot;Native
+    Properties&quot; and &quot;User Properties&quot; sections.</p>
+<p class="Pp">The special value <b>all</b> can be used to display all properties
+    that apply to the given dataset's type (filesystem, volume snapshot, or
+    bookmark).</p>
+<p class="Pp"><b></b><b>-r</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Recursively display properties for any children.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-d</b> <i>depth</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Recursively display any children of the dataset, limiting
+  the recursion to <i>depth</i>. A depth of <b>1</b> will display only the
+  dataset and its direct children.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-H</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Display output in a form more easily parsed by scripts.
+  Any headers are omitted, and fields are explicitly separated by a single tab
+  instead of an arbitrary amount of space.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-o</b> <i>field</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">A comma-separated list of columns to display.
+  <b>name,property,value,source</b> is the default value.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-s</b> <i>source</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">A comma-separated list of sources to display. Those
+  properties coming from a source other than those in this list are ignored.
+  Each source must be one of the following:
+  <b>local,default,inherited,received,temporary,none</b>. The default value is
+  all sources.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-p</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Display numbers in parsable (exact) values.</div>
+<p class="Pp"></p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>zfs inherit</b> [<b>-rS</b>] <i>property</i>
+    <i>filesystem</i>|<i>volume</i>|<i>snapshot</i> ...</p>
+<p class="Pp"></p>
+<div class="Bd-indent">Clears the specified property, causing it to be inherited
+  from an ancestor, restored to default if no ancestor has the property set, or
+  with the <b>-S</b> option reverted to the received value if one exists. See
+  the &quot;Properties&quot; section for a listing of default values, and
+  details on which properties can be inherited.
+<p class="Pp"><b></b><b>-r</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Recursively inherit the given property for all
+  children.</div>
+<p class="Pp"><b></b><b>-S</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Revert the property to the received value if one exists;
+  otherwise operate as if the <b>-S</b> option was not specified.</div>
+<p class="Pp"></p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>zfs upgrade</b> [<b>-v</b>]</p>
+<p class="Pp"></p>
+<div class="Bd-indent">Displays a list of file systems that are not the most
+  recent version.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>zfs upgrade</b> [<b>-r</b>] [<b>-V</b> <i>version</i>]
+    [<b>-a</b> | <i>filesystem</i>]</p>
+<p class="Pp"></p>
+<div class="Bd-indent">Upgrades file systems to a new on-disk version. Once this
+  is done, the file systems will no longer be accessible on systems running
+  older versions of the software. <b>zfs send</b> streams generated from new
+  snapshots of these file systems cannot be accessed on systems running older
+  versions of the software.
+<p class="Pp">In general, the file system version is independent of the pool
+    version. See <b>zpool</b>(8) for information on the <b>zpool upgrade</b>
+    command.</p>
+<p class="Pp">In some cases, the file system version and the pool version are
+    interrelated and the pool version must be upgraded before the file system
+    version can be upgraded.</p>
+<p class="Pp"><b></b><b>-a</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Upgrade all file systems on all imported pools.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><i>filesystem</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Upgrade the specified file system.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-r</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Upgrade the specified file system and all descendent file
+  systems</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-V</b> <i>version</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Upgrade to the specified <i>version</i>. If the <b>-V</b>
+  flag is not specified, this command upgrades to the most recent version. This
+  option can only be used to increase the version number, and only up to the
+  most recent version supported by this software.</div>
+<p class="Pp"></p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs</b> <b>userspace</b> [<b>-Hinp</b>] [<b>-o</b>
+    <i>field</i>[,...]] [<b>-s</b> <i>field</i>] ... [<b>-S</b> <i>field</i>]
+    ... [<b>-t</b> <i>type</i>[,...]] <i>filesystem</i>|<i>snapshot</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Displays space consumed by, and quotas on, each user in
+  the specified filesystem or snapshot. This corresponds to the
+  <b>userused@</b><i>user</i> and <b>userquota@</b><i>user</i> properties.
+<p class="Pp"><b></b><b>-n</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Print numeric ID instead of user/group name.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-H</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Do not print headers, use tab-delimited output.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-p</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Use exact (parsable) numeric output.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-o</b> <i>field</i>[,...]</p>
+<p class="Pp"></p>
+<div class="Bd-indent">Display only the specified fields from the following set:
+  <b>type, name, used, quota</b>. The default is to display all fields.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-s</b> <i>field</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Sort output by this field. The <i>s</i> and <i>S</i>
+  flags may be specified multiple times to sort first by one field, then by
+  another. The default is <b>-s type</b> <b>-s name</b>.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-S</b> <i>field</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Sort by this field in reverse order. See <b>-s</b>.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-t</b> <i>type</i>[,...]</p>
+<p class="Pp"></p>
+<div class="Bd-indent">Print only the specified types from the following set:
+  <b>all, posixuser, smbuser, posixgroup, smbgroup</b>. The default is <b>-t
+  posixuser,smbuser</b>. The default can be changed to include group
+  types.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-i</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Translate SID to POSIX ID. The POSIX ID may be ephemeral
+  if no mapping exists. Normal POSIX interfaces (for example, <b>stat</b>(2),
+  <b>ls</b> <b>-l</b>) perform this translation, so the <b>-i</b> option allows
+  the output from <b>zfs</b> <b>userspace</b> to be compared directly with those
+  utilities. However, <b>-i</b> may lead to confusion if some files were created
+  by an SMB user before a SMB-to-POSIX name mapping was established. In such a
+  case, some files will be owned by the SMB entity and some by the POSIX entity.
+  However, the <b>-i</b> option will report that the POSIX entity has the total
+  usage and quota for both.</div>
+<p class="Pp"></p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs</b> <b>groupspace</b> [<b>-Hinp</b>] [<b>-o</b>
+    <i>field</i>[,...]] [<b>-s</b> <i>field</i>] ... [<b>-S</b> <i>field</i>]
+    ... [<b>-t</b> <i>type</i>[,...]] <i>filesystem</i>|<i>snapshot</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Displays space consumed by, and quotas on, each group in
+  the specified filesystem or snapshot. This subcommand is identical to <b>zfs
+  userspace</b>, except that the default types to display are <b>-t
+  posixgroup,smbgroup</b>.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>zfs mount</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Displays all <b>ZFS</b> file systems currently
+  mounted.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>zfs mount</b> [<b>-vO</b>] [<b>-o</b> <i>options</i>]
+    <b>-a</b> | <i>filesystem</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Mounts <b>ZFS</b> file systems. Invoked automatically as
+  part of the boot process.
+<p class="Pp"><b></b><b>-o</b> <i>options</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">An optional, comma-separated list of mount options to use
+  temporarily for the duration of the mount. See the &quot;Temporary Mount Point
+  Properties&quot; section for details.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-O</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Perform an overlay mount. See <b>mount</b>(8) for more
+  information.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-v</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Report mount progress.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-a</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Mount all available <b>ZFS</b> file systems. Invoked
+  automatically as part of the boot process.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><i>filesystem</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Mount the specified filesystem.</div>
+<p class="Pp"></p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>zfs unmount</b> [<b>-f</b>] <b>-a</b> |
+    <i>filesystem</i>|<i>mountpoint</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Unmounts currently mounted <b>ZFS</b> file systems.
+  Invoked automatically as part of the shutdown process.
+<p class="Pp"><b></b><b>-f</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Forcefully unmount the file system, even if it is
+  currently in use.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-a</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Unmount all available <b>ZFS</b> file systems. Invoked
+  automatically as part of the boot process.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><i>filesystem</i>|<i>mountpoint</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Unmount the specified filesystem. The command can also be
+  given a path to a <b>ZFS</b> file system mount point on the system.</div>
+<p class="Pp"></p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>zfs share</b> <b>-a</b> | <i>filesystem</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Shares available <b>ZFS</b> file systems.
+<p class="Pp"><b></b><b>-a</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Share all available <b>ZFS</b> file systems. Invoked
+  automatically as part of the boot process.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><i>filesystem</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Share the specified filesystem according to the
+  <b>sharenfs</b> and <b>sharesmb</b> properties. File systems are shared when
+  the <b>sharenfs</b> or <b>sharesmb</b> property is set.</div>
+<p class="Pp"></p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>zfs unshare</b> <b>-a</b> |
+    <i>filesystem</i>|<i>mountpoint</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Unshares currently shared <b>ZFS</b> file systems. This
+  is invoked automatically as part of the shutdown process.
+<p class="Pp"><b></b><b>-a</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Unshare all available <b>ZFS</b> file systems. Invoked
+  automatically as part of the boot process.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><i>filesystem</i>|<i>mountpoint</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Unshare the specified filesystem. The command can also be
+  given a path to a <b>ZFS</b> file system shared on the system.</div>
+<p class="Pp"></p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>zfs bookmark</b> <i>snapshot</i> <i>bookmark</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Creates a bookmark of the given snapshot. Bookmarks mark
+  the point in time when the snapshot was created, and can be used as the
+  incremental source for a <b>zfs send</b> command.
+<p class="Pp">This feature must be enabled to be used. See
+    <b>zpool-features</b>(5) for details on ZFS feature flags and the
+    <b>bookmarks</b> feature.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs send</b> [<b>-DnPpRveL</b>] [<b>-</b>[<b>iI</b>]
+    <i>snapshot</i>] <i>snapshot</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Creates a stream representation of the second
+  <i>snapshot</i>, which is written to standard output. The output can be
+  redirected to a file or to a different system (for example, using
+  <b>ssh</b>(1). By default, a full stream is generated.
+<p class="Pp"><b></b><b>-i</b> <i>snapshot</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Generate an incremental stream from the first
+  <i>snapshot</i> (the incremental source) to the second <i>snapshot</i> (the
+  incremental target). The incremental source can be specified as the last
+  component of the snapshot name (the <b>@</b> character and following) and it
+  is assumed to be from the same file system as the incremental target.
+<p class="Pp">If the destination is a clone, the source may be the origin
+    snapshot, which must be fully specified (for example, <b>pool/fs@origin</b>,
+    not just <b>@origin</b>).</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-I</b> <i>snapshot</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Generate a stream package that sends all intermediary
+  snapshots from the first snapshot to the second snapshot. For example, <b>-I
+  @a fs@d</b> is similar to <b>-i @a fs@b; -i @b fs@c; -i @c fs@d</b>. The
+  incremental source may be specified as with the <b>-i</b> option.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-R</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Generate a replication stream package, which will
+  replicate the specified filesystem, and all descendent file systems, up to the
+  named snapshot. When received, all properties, snapshots, descendent file
+  systems, and clones are preserved.
+<p class="Pp">If the <b>-i</b> or <b>-I</b> flags are used in conjunction with
+    the <b>-R</b> flag, an incremental replication stream is generated. The
+    current values of properties, and current snapshot and file system names are
+    set when the stream is received. If the <b>-F</b> flag is specified when
+    this stream is received, snapshots and file systems that do not exist on the
+    sending side are destroyed.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-D</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Generate a deduplicated stream. Blocks which would have
+  been sent multiple times in the send stream will only be sent once. The
+  receiving system must also support this feature to receive a deduplicated
+  stream. This flag can be used regardless of the dataset's dedup property, but
+  performance will be much better if the filesystem uses a dedup-capable
+  checksum (eg. sha256).</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-L</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Generate a stream which may contain blocks larger than
+  128KB. This flag has no effect if the <b>large_blocks</b> pool feature is
+  disabled, or if the recordsize property of this filesystem has never been set
+  above 128KB. The receiving system must have the <b>large_blocks</b> pool
+  feature enabled as well. See <b>zpool-features</b>(5) for details on ZFS
+  feature flags and the <b>large_blocks</b> feature.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-e</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Generate a more compact stream by using WRITE_EMBEDDED
+  records for blocks which are stored more compactly on disk by the
+  <b>embedded_data</b> pool feature. This flag has no effect if the
+  <b>embedded_data</b> feature is disabled. The receiving system must have the
+  <b>embedded_data</b> feature enabled. If the <b>lz4_compress</b> feature is
+  active on the sending system, then the receiving system must have that feature
+  enabled as well. See <b>zpool-features</b>(5) for details on ZFS feature flags
+  and the <b>embedded_data</b> feature.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-p</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Include the dataset's properties in the stream. This flag
+  is implicit when -R is specified. The receiving system must also support this
+  feature.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-n</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Do a dry-run (&quot;No-op&quot;) send. Do not generate
+  any actual send data. This is useful in conjunction with the <b>-v</b> or
+  <b>-P</b> flags to determine what data will be sent. In this case, the verbose
+  output will be written to standard output (contrast with a non-dry-run, where
+  the stream is written to standard output and the verbose output goes to
+  standard error).</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-P</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Print machine-parsable verbose information about the
+  stream package generated.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-v</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Print verbose information about the stream package
+  generated. This information includes a per-second report of how much data has
+  been sent.</div>
+<p class="Pp">The format of the stream is committed. You will be able to receive
+    your streams on future versions of <b>ZFS</b>.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b>zfs send</b> [<b>-eL</b>] [<b>-i</b>
+    <i>snapshot</i>|<i>bookmark</i>]
+    <i>filesystem</i>|<i>volume</i>|<i>snapshot</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Generate a send stream, which may be of a filesystem, and
+  may be incremental from a bookmark. If the destination is a filesystem or
+  volume, the pool must be read-only, or the filesystem must not be mounted.
+  When the stream generated from a filesystem or volume is received, the default
+  snapshot name will be &quot;--head--&quot;.
+<p class="Pp"></p>
+<p class="Pp"><b>-i</b> <i>snapshot</i>|<i>bookmark</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Generate an incremental send stream. The incremental
+  source must be an earlier snapshot in the destination's history. It will
+  commonly be an earlier snapshot in the destination's filesystem, in which case
+  it can be specified as the last component of the name (the <b>#</b> or
+  <b>@</b> character and following).
+<p class="Pp">If the incremental target is a clone, the incremental source can
+    be the origin snapshot, or an earlier snapshot in the origin's filesystem,
+    or the origin's origin, etc.</p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-L</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Generate a stream which may contain blocks larger than
+  128KB. This flag has no effect if the <b>large_blocks</b> pool feature is
+  disabled, or if the recordsize property of this filesystem has never been set
+  above 128KB. The receiving system must have the <b>large_blocks</b> pool
+  feature enabled as well. See <b>zpool-features</b>(5) for details on ZFS
+  feature flags and the <b>large_blocks</b> feature.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-e</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Generate a more compact stream by using WRITE_EMBEDDED
+  records for blocks which are stored more compactly on disk by the
+  <b>embedded_data</b> pool feature. This flag has no effect if the
+  <b>embedded_data</b> feature is disabled. The receiving system must have the
+  <b>embedded_data</b> feature enabled. If the <b>lz4_compress</b> feature is
+  active on the sending system, then the receiving system must have that feature
+  enabled as well. See <b>zpool-features</b>(5) for details on ZFS feature flags
+  and the <b>embedded_data</b> feature.</div>
+<p class="Pp"></p>
+</div>
+<p class="Pp"><b></b><b>zfs receive</b> [<b>-vnFu</b>]
+    <i>filesystem</i>|<i>volume</i>|<i>snapshot</i>
+  <br/>
+  <b></b><b>zfs receive</b> [<b>-vnFu</b>] [<b>-d</b>|<b>-e</b>]
+    <i>filesystem</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Creates a snapshot whose contents are as specified in the
+  stream provided on standard input. If a full stream is received, then a new
+  file system is created as well. Streams are created using the <b>zfs send</b>
+  subcommand, which by default creates a full stream. <b>zfs recv</b> can be
+  used as an alias for <b>zfs receive</b>.
+<p class="Pp">If an incremental stream is received, then the destination file
+    system must already exist, and its most recent snapshot must match the
+    incremental stream's source. For <b>zvols</b>, the destination device link
+    is destroyed and recreated, which means the <b>zvol</b> cannot be accessed
+    during the <b>receive</b> operation.</p>
+<p class="Pp">When a snapshot replication package stream that is generated by
+    using the <b>zfs send</b> <b>-R</b> command is received, any snapshots that
+    do not exist on the sending location are destroyed by using the <b>zfs
+    destroy</b> <b>-d</b> command.</p>
+<p class="Pp">The name of the snapshot (and file system, if a full stream is
+    received) that this subcommand creates depends on the argument type and the
+    use of the <b>-d</b> or <b>-e</b> options.</p>
+<p class="Pp">If the argument is a snapshot name, the specified <i>snapshot</i>
+    is created. If the argument is a file system or volume name, a snapshot with
+    the same name as the sent snapshot is created within the specified
+    <i>filesystem</i> or <i>volume</i>. If neither of the <b>-d</b> or <b>-e</b>
+    options are specified, the provided target snapshot name is used exactly as
+    provided.</p>
+<p class="Pp">The <b>-d</b> and <b>-e</b> options cause the file system name of
+    the target snapshot to be determined by appending a portion of the sent
+    snapshot's name to the specified target <i>filesystem</i>. If the <b>-d</b>
+    option is specified, all but the first element of the sent snapshot's file
+    system path (usually the pool name) is used and any required intermediate
+    file systems within the specified one are created. If the <b>-e</b> option
+    is specified, then only the last element of the sent snapshot's file system
+    name (i.e. the name of the source file system itself) is used as the target
+    file system name.</p>
+<p class="Pp"><b></b><b>-d</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Discard the first element of the sent snapshot's file
+  system name, using the remaining elements to determine the name of the target
+  file system for the new snapshot as described in the paragraph above.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-e</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Discard all but the last element of the sent snapshot's
+  file system name, using that element to determine the name of the target file
+  system for the new snapshot as described in the paragraph above.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-u</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">File system that is associated with the received stream
+  is not mounted.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-v</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Print verbose information about the stream and the time
+  required to perform the receive operation.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-n</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Do not actually receive the stream. This can be useful in
+  conjunction with the <b>-v</b> option to verify the name the receive operation
+  would use.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>-F</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Force a rollback of the file system to the most recent
+  snapshot before performing the receive operation. If receiving an incremental
+  replication stream (for example, one generated by <b>zfs send -R -[iI]</b>),
+  destroy snapshots and file systems that do not exist on the sending
+  side.</div>
+<p class="Pp"></p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>zfs allow</b> <i>filesystem</i> | <i>volume</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Displays permissions that have been delegated on the
+  specified filesystem or volume. See the other forms of <b>zfs allow</b> for
+  more information.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>zfs allow</b> [<b>-ldug</b>]
+    &quot;<i>everyone</i>&quot;|<i>user</i>|<i>group</i>[,...]
+    <i>perm</i>|@<i>setname</i>[,...] <i>filesystem</i>| <i>volume</i>
+  <br/>
+  <b></b><b>zfs allow</b> [<b>-ld</b>] <b>-e</b>
+    <i>perm</i>|@<i>setname</i>[,...] <i>filesystem</i> | <i>volume</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Delegates <b>ZFS</b> administration permission for the
+  file systems to non-privileged users.
+<p class="Pp"><b>[</b><b>-ug</b>]
+    &quot;<i>everyone</i>&quot;|<i>user</i>|<i>group</i>[,...]</p>
+<p class="Pp"></p>
+<div class="Bd-indent">Specifies to whom the permissions are delegated. Multiple
+  entities can be specified as a comma-separated list. If neither of the
+  <b>-ug</b> options are specified, then the argument is interpreted
+  preferentially as the keyword &quot;everyone&quot;, then as a user name, and
+  lastly as a group name. To specify a user or group named &quot;everyone&quot;,
+  use the <b>-u</b> or <b>-g</b> options. To specify a group with the same name
+  as a user, use the <b>-g</b> options.</div>
+<p class="Pp"></p>
+<p class="Pp"><b>[</b><b>-e</b>] <i>perm</i>|@<i>setname</i>[,...]</p>
+<p class="Pp"></p>
+<div class="Bd-indent">Specifies that the permissions be delegated to
+  &quot;everyone.&quot; Multiple permissions may be specified as a
+  comma-separated list. Permission names are the same as <b>ZFS</b> subcommand
+  and property names. See the property list below. Property set names, which
+  begin with an at sign (<b>@</b>) , may be specified. See the <b>-s</b> form
+  below for details.</div>
+<p class="Pp"></p>
+<p class="Pp"><b>[</b><b>-ld</b>] <i>filesystem</i>|<i>volume</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Specifies where the permissions are delegated. If neither
+  of the <b>-ld</b> options are specified, or both are, then the permissions are
+  allowed for the file system or volume, and all of its descendents. If only the
+  <b>-l</b> option is used, then is allowed &quot;locally&quot; only for the
+  specified file system. If only the <b>-d</b> option is used, then is allowed
+  only for the descendent file systems.</div>
+<p class="Pp"></p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp">Permissions are generally the ability to use a <b>ZFS</b>
+    subcommand or change a <b>ZFS</b> property. The following permissions are
+    available:</p>
+<p class="Pp">
+  <br/>
+</p>
+<pre>NAME             TYPE           NOTES
+allow            subcommand     Must also have the permission that is being
+<br/>
+                                allowed
+clone            subcommand     Must also have the 'create' ability and 'mount'
+<br/>
+                                ability in the origin file system
+create           subcommand     Must also have the 'mount' ability
+destroy          subcommand     Must also have the 'mount' ability
+diff             subcommand     Allows lookup of paths within a dataset
+<br/>
+                                given an object number, and the ability to
+<br/>
+                                create snapshots necessary to 'zfs diff'.
+mount            subcommand     Allows mount/umount of ZFS datasets
+promote          subcommand     Must also have the 'mount'
+<br/>
+                                and 'promote' ability in the origin file system
+receive          subcommand     Must also have the 'mount' and 'create' ability
+rename           subcommand     Must also have the 'mount' and 'create'
+<br/>
+                                ability in the new parent
+rollback         subcommand     Must also have the 'mount' ability
+send             subcommand     
+share            subcommand     Allows sharing file systems over NFS or SMB
+<br/>
+                                protocols
+snapshot         subcommand     Must also have the 'mount' ability
+groupquota       other          Allows accessing any groupquota@... property
+groupused        other          Allows reading any groupused@... property
+userprop         other          Allows changing any user property
+userquota        other          Allows accessing any userquota@... property
+userused         other          Allows reading any userused@... property
+acltype          property
+aclinherit       property       
+atime            property       
+canmount         property       
+casesensitivity  property       
+checksum         property       
+compression      property       
+copies           property       
+dedup            property
+devices          property       
+exec             property       
+filesystem_limit property
+logbias          property
+mlslabel         property
+mountpoint       property       
+nbmand           property       
+normalization    property       
+primarycache     property       
+quota            property       
+readonly         property       
+recordsize       property       
+refquota         property       
+refreservation   property       
+reservation      property       
+secondarycache   property       
+setuid           property       
+shareiscsi       property       
+sharenfs         property       
+sharesmb         property       
+snapdir          property       
+snapshot_limit   property
+utf8only         property       
+version          property       
+volblocksize     property       
+volsize          property       
+vscan            property       
+xattr            property       
+zoned            property       </pre>
+<br/>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>zfs allow</b> <b>-c</b>
+    <i>perm</i>|@<i>setname</i>[,...] <i>filesystem</i>|<i>volume</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Sets &quot;create time&quot; permissions. These
+  permissions are granted (locally) to the creator of any newly-created
+  descendent file system.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>zfs allow</b> <b>-s</b> @<i>setname</i>
+    <i>perm</i>|@<i>setname</i>[,...] <i>filesystem</i>|<i>volume</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Defines or adds permissions to a permission set. The set
+  can be used by other <b>zfs allow</b> commands for the specified file system
+  and its descendents. Sets are evaluated dynamically, so changes to a set are
+  immediately reflected. Permission sets follow the same naming restrictions as
+  ZFS file systems, but the name must begin with an &quot;at sign&quot;
+  (<b>@</b>), and can be no more than 64 characters long.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>zfs unallow</b> [<b>-rldug</b>]
+    &quot;<i>everyone</i>&quot;|<i>user</i>|<i>group</i>[,...]
+    [<i>perm</i>|@<i>setname</i>[, ...]] <i>filesystem</i>|<i>volume</i>
+  <br/>
+  <b></b><b>zfs unallow</b> [<b>-rld</b>] <b>-e</b> [<i>perm</i>|@<i>setname</i>
+    [,...]] <i>filesystem</i>|<i>volume</i>
+  <br/>
+  <b></b><b>zfs unallow</b> [<b>-r</b>] <b>-c</b>
+    [<i>perm</i>|@<i>setname</i>[,...]]
+  <br/>
+  <b></b><i>filesystem</i>|<i>volume</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Removes permissions that were granted with the <b>zfs
+  allow</b> command. No permissions are explicitly denied, so other permissions
+  granted are still in effect. For example, if the permission is granted by an
+  ancestor. If no permissions are specified, then all permissions for the
+  specified <i>user</i>, <i>group</i>, or <i>everyone</i> are removed.
+  Specifying &quot;everyone&quot; (or using the <b>-e</b> option) only removes
+  the permissions that were granted to &quot;everyone&quot;, not all permissions
+  for every user and group. See the <b>zfs allow</b> command for a description
+  of the <b>-ldugec</b> options.
+<p class="Pp"><b></b><b>-r</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Recursively remove the permissions from this file system
+  and all descendents.</div>
+<p class="Pp"></p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>zfs unallow</b> [<b>-r</b>] <b>-s</b> @<i>setname</i>
+    [<i>perm</i>|@<i>setname</i>[,...]]
+  <br/>
+  <b></b><i>filesystem</i>|<i>volume</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Removes permissions from a permission set. If no
+  permissions are specified, then all permissions are removed, thus removing the
+  set entirely.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>zfs hold</b> [<b>-r</b>] <i>tag</i>
+  <i>snapshot</i>...</p>
+<p class="Pp"></p>
+<div class="Bd-indent">Adds a single reference, named with the <i>tag</i>
+  argument, to the specified snapshot or snapshots. Each snapshot has its own
+  tag namespace, and tags must be unique within that space.
+<p class="Pp">If a hold exists on a snapshot, attempts to destroy that snapshot
+    by using the <b>zfs destroy</b> command return <b>EBUSY</b>.</p>
+<p class="Pp"><b></b><b>-r</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Specifies that a hold with the given tag is applied
+  recursively to the snapshots of all descendent file systems.</div>
+<p class="Pp"></p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>zfs holds</b> [<b>-r</b>] <i>snapshot</i>...</p>
+<p class="Pp"></p>
+<div class="Bd-indent">Lists all existing user references for the given snapshot
+  or snapshots.
+<p class="Pp"><b></b><b>-r</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Lists the holds that are set on the named descendent
+  snapshots, in addition to listing the holds on the named snapshot.</div>
+<p class="Pp"></p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>zfs release</b> [<b>-r</b>] <i>tag</i>
+    <i>snapshot</i>...</p>
+<p class="Pp"></p>
+<div class="Bd-indent">Removes a single reference, named with the <i>tag</i>
+  argument, from the specified snapshot or snapshots. The tag must already exist
+  for each snapshot.
+<p class="Pp">If a hold exists on a snapshot, attempts to destroy that snapshot
+    by using the <b>zfs destroy</b> command return <b>EBUSY</b>.</p>
+<p class="Pp"><b></b><b>-r</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Recursively releases a hold with the given tag on the
+  snapshots of all descendent file systems.</div>
+<p class="Pp"></p>
+</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>zfs diff</b> [<b>-FHt</b>] <i>snapshot</i>
+    <i>snapshot|filesystem</i></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Display the difference between a snapshot of a given
+  filesystem and another snapshot of that filesystem from a later time or the
+  current contents of the filesystem. The first column is a character indicating
+  the type of change, the other columns indicate pathname, new pathname (in case
+  of rename), change in link count, and optionally file type and/or change time.
+<p class="Pp">The types of change are:
+  <br/>
+</p>
+<pre>-       The path has been removed
++       The path has been created
+M       The path has been modified
+R       The path has been renamed</pre>
+<br/>
+<p class="Pp"><b>-F</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Display an indication of the type of file, in a manner
+  similar to the <b>-F</b> option of <b>ls</b>(1).
+<br/>
+<pre>B       Block device
+C       Character device
+/       Directory
+&gt;       Door
+|       Named pipe
+@       Symbolic link
+P       Event port
+=       Socket
+F       Regular file</pre>
+<br/>
+</div>
+<p class="Pp"><b>-H</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Give more parsable tab-separated output, without header
+  lines and without arrows.</div>
+<p class="Pp"><b>-t</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Display the path's inode change time as the first column
+  of output.</div>
+<p class="Pp"></p>
+</div>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="EXAMPLES"><a class="permalink" href="#EXAMPLES">EXAMPLES</a></h1>
+<p class="Pp"><b>Example 1 </b>Creating a ZFS File System Hierarchy</p>
+<p class="Pp"></p>
+<p class="Pp">The following commands create a file system named <b>pool/home</b>
+    and a file system named <b>pool/home/bob</b>. The mount point
+    <b>/export/home</b> is set for the parent file system, and is automatically
+    inherited by the child file system.</p>
+<p class="Pp"></p>
+<p class="Pp">
+  <br/>
+</p>
+<pre># <b>zfs create pool/home</b>
+# <b>zfs set mountpoint=/export/home pool/home</b>
+# <b>zfs create pool/home/bob</b></pre>
+<br/>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp"><b>Example 2 </b>Creating a ZFS Snapshot</p>
+<p class="Pp"></p>
+<p class="Pp">The following command creates a snapshot named <b>yesterday</b>.
+    This snapshot is mounted on demand in the <b>.zfs/snapshot</b> directory at
+    the root of the <b>pool/home/bob</b> file system.</p>
+<p class="Pp"></p>
+<p class="Pp">
+  <br/>
+</p>
+<pre># <b>zfs snapshot pool/home/bob@yesterday</b></pre>
+<br/>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp"><b>Example 3 </b>Creating and Destroying Multiple Snapshots</p>
+<p class="Pp"></p>
+<p class="Pp">The following command creates snapshots named <b>yesterday</b> of
+    <b>pool/home</b> and all of its descendent file systems. Each snapshot is
+    mounted on demand in the <b>.zfs/snapshot</b> directory at the root of its
+    file system. The second command destroys the newly created snapshots.</p>
+<p class="Pp"></p>
+<p class="Pp">
+  <br/>
+</p>
+<pre># <b>zfs snapshot -r pool/home@yesterday</b>
+# <b>zfs destroy -r pool/home@yesterday</b></pre>
+<br/>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp"><b>Example 4 </b>Disabling and Enabling File System
+  Compression</p>
+<p class="Pp"></p>
+<p class="Pp">The following command disables the <b>compression</b> property for
+    all file systems under <b>pool/home</b>. The next command explicitly enables
+    <b>compression</b> for <b>pool/home/anne</b>.</p>
+<p class="Pp"></p>
+<p class="Pp">
+  <br/>
+</p>
+<pre># <b>zfs set compression=off pool/home</b>
+# <b>zfs set compression=on pool/home/anne</b></pre>
+<br/>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp"><b>Example 5 </b>Listing ZFS Datasets</p>
+<p class="Pp"></p>
+<p class="Pp">The following command lists all active file systems and volumes in
+    the system. Snapshots are displayed if the <b>listsnaps</b> property is
+    <b>on</b>. The default is <b>off</b>. See <b>zpool</b>(8) for more
+    information on pool properties.</p>
+<p class="Pp"></p>
+<p class="Pp">
+  <br/>
+</p>
+<pre># <b>zfs list</b>
+<br/>
+   NAME                      USED  AVAIL  REFER  MOUNTPOINT
+<br/>
+   pool                      450K   457G    18K  /pool
+<br/>
+   pool/home                 315K   457G    21K  /export/home
+<br/>
+   pool/home/anne             18K   457G    18K  /export/home/anne
+<br/>
+   pool/home/bob             276K   457G   276K  /export/home/bob</pre>
+<br/>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp"><b>Example 6 </b>Setting a Quota on a ZFS File System</p>
+<p class="Pp"></p>
+<p class="Pp">The following command sets a quota of 50 Gbytes for
+    <b>pool/home/bob</b>.</p>
+<p class="Pp"></p>
+<p class="Pp">
+  <br/>
+</p>
+<pre># <b>zfs set quota=50G pool/home/bob</b></pre>
+<br/>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp"><b>Example 7 </b>Listing ZFS Properties</p>
+<p class="Pp"></p>
+<p class="Pp">The following command lists all properties for
+    <b>pool/home/bob</b>.</p>
+<p class="Pp"></p>
+<p class="Pp">
+  <br/>
+</p>
+<pre># <b>zfs get all pool/home/bob</b>
+NAME           PROPERTY              VALUE                  SOURCE
+pool/home/bob  type                  filesystem             -
+pool/home/bob  creation              Tue Jul 21 15:53 2009  -
+pool/home/bob  used                  21K                    -
+pool/home/bob  available             20.0G                  -
+pool/home/bob  referenced            21K                    -
+pool/home/bob  compressratio         1.00x                  -
+pool/home/bob  mounted               yes                    -
+pool/home/bob  quota                 20G                    local
+pool/home/bob  reservation           none                   default
+pool/home/bob  recordsize            128K                   default
+pool/home/bob  mountpoint            /pool/home/bob         default
+pool/home/bob  sharenfs              off                    default
+pool/home/bob  checksum              on                     default
+pool/home/bob  compression           on                     local
+pool/home/bob  atime                 on                     default
+pool/home/bob  devices               on                     default
+pool/home/bob  exec                  on                     default
+pool/home/bob  setuid                on                     default
+pool/home/bob  readonly              off                    default
+pool/home/bob  zoned                 off                    default
+pool/home/bob  snapdir               hidden                 default
+pool/home/bob  acltype               off                    default
+pool/home/bob  aclinherit            restricted             default
+pool/home/bob  canmount              on                     default
+pool/home/bob  shareiscsi            off                    default
+pool/home/bob  xattr                 on                     default
+pool/home/bob  copies                1                      default
+pool/home/bob  version               4                      -
+pool/home/bob  utf8only              off                    -
+pool/home/bob  normalization         none                   -
+pool/home/bob  casesensitivity       sensitive              -
+pool/home/bob  vscan                 off                    default
+pool/home/bob  nbmand                off                    default
+pool/home/bob  sharesmb              off                    default
+pool/home/bob  refquota              none                   default
+pool/home/bob  refreservation        none                   default
+pool/home/bob  primarycache          all                    default
+pool/home/bob  secondarycache        all                    default
+pool/home/bob  usedbysnapshots       0                      -
+pool/home/bob  usedbydataset         21K                    -
+pool/home/bob  usedbychildren        0                      -
+pool/home/bob  usedbyrefreservation  0                      -
+pool/home/bob  logbias               latency                default
+pool/home/bob  dedup                 off                    default
+pool/home/bob  mlslabel              none                   default
+pool/home/bob  relatime              off                    default</pre>
+<br/>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp">The following command gets a single property value.</p>
+<p class="Pp"></p>
+<p class="Pp">
+  <br/>
+</p>
+<pre># <b>zfs get -H -o value compression pool/home/bob</b>
+on</pre>
+<br/>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp">The following command lists all properties with local settings for
+    <b>pool/home/bob</b>.</p>
+<p class="Pp"></p>
+<p class="Pp">
+  <br/>
+</p>
+<pre># <b>zfs get -r -s local -o name,property,value all pool/home/bob</b>
+NAME           PROPERTY              VALUE
+pool/home/bob  quota                 20G
+pool/home/bob  compression           on</pre>
+<br/>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp"><b>Example 8 </b>Rolling Back a ZFS File System</p>
+<p class="Pp"></p>
+<p class="Pp">The following command reverts the contents of
+    <b>pool/home/anne</b> to the snapshot named <b>yesterday</b>, deleting all
+    intermediate snapshots.</p>
+<p class="Pp"></p>
+<p class="Pp">
+  <br/>
+</p>
+<pre># <b>zfs rollback -r pool/home/anne@yesterday</b></pre>
+<br/>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp"><b>Example 9 </b>Creating a ZFS Clone</p>
+<p class="Pp"></p>
+<p class="Pp">The following command creates a writable file system whose initial
+    contents are the same as <b>pool/home/bob@yesterday</b>.</p>
+<p class="Pp"></p>
+<p class="Pp">
+  <br/>
+</p>
+<pre># <b>zfs clone pool/home/bob@yesterday pool/clone</b></pre>
+<br/>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp"><b>Example 10 </b>Promoting a ZFS Clone</p>
+<p class="Pp"></p>
+<p class="Pp">The following commands illustrate how to test out changes to a
+    file system, and then replace the original file system with the changed one,
+    using clones, clone promotion, and renaming:</p>
+<p class="Pp"></p>
+<p class="Pp">
+  <br/>
+</p>
+<pre># <b>zfs create pool/project/production</b>
+<br/>
+  populate /pool/project/production with data
+# <b>zfs snapshot pool/project/production@today</b>
+# <b>zfs clone pool/project/production@today pool/project/beta</b>
+make changes to /pool/project/beta and test them
+# <b>zfs promote pool/project/beta</b>
+# <b>zfs rename pool/project/production pool/project/legacy</b>
+# <b>zfs rename pool/project/beta pool/project/production</b>
+once the legacy version is no longer needed, it can be destroyed
+# <b>zfs destroy pool/project/legacy</b></pre>
+<br/>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp"><b>Example 11 </b>Inheriting ZFS Properties</p>
+<p class="Pp"></p>
+<p class="Pp">The following command causes <b>pool/home/bob</b> and
+    <b>pool/home/anne</b> to inherit the <b>checksum</b> property from their
+    parent.</p>
+<p class="Pp"></p>
+<p class="Pp">
+  <br/>
+</p>
+<pre># <b>zfs inherit checksum pool/home/bob pool/home/anne</b></pre>
+<br/>
+<p class="Pp"></p>
+<p class="Pp">The following command causes <b>pool/home/bob</b> to revert to the
+    received value for the <b>quota</b> property if it exists.</p>
+<p class="Pp"></p>
+<p class="Pp">
+  <br/>
+</p>
+<pre># <b>zfs inherit -S quota pool/home/bob</b></pre>
+<br/>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp"><b>Example 12 </b>Remotely Replicating ZFS Data</p>
+<p class="Pp"></p>
+<p class="Pp">The following commands send a full stream and then an incremental
+    stream to a remote machine, restoring them into
+    <b>poolB/received/fs@a</b>and <b>poolB/received/fs@b</b>, respectively.
+    <b>poolB</b> must contain the file system <b>poolB/received</b>, and must
+    not initially contain <b>poolB/received/fs</b>.</p>
+<p class="Pp"></p>
+<p class="Pp">
+  <br/>
+</p>
+<pre># <b>zfs send pool/fs@a | \</b>
+<br/>
+   <b>ssh host zfs receive poolB/received/fs@a</b>
+# <b>zfs send -i a pool/fs@b | ssh host \</b>
+<br/>
+   <b>zfs receive poolB/received/fs</b></pre>
+<br/>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp"><b>Example 13 </b>Using the <b>zfs receive</b> <b>-d</b>
+  Option</p>
+<p class="Pp"></p>
+<p class="Pp">The following command sends a full stream of
+    <b>poolA/fsA/fsB@snap</b> to a remote machine, receiving it into
+    <b>poolB/received/fsA/fsB@snap</b>. The <b>fsA/fsB@snap</b> portion of the
+    received snapshot's name is determined from the name of the sent snapshot.
+    <b>poolB</b> must contain the file system <b>poolB/received</b>. If
+    <b>poolB/received/fsA</b> does not exist, it is created as an empty file
+    system.</p>
+<p class="Pp"></p>
+<p class="Pp">
+  <br/>
+</p>
+<pre># <b>zfs send poolA/fsA/fsB@snap | \</b>
+<br/>
+<b>   ssh host zfs receive -d poolB/received</b></pre>
+<br/>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp"><b>Example 14 </b>Setting User Properties</p>
+<p class="Pp"></p>
+<p class="Pp">The following example sets the user-defined
+    <b>com.example:department</b> property for a dataset.</p>
+<p class="Pp"></p>
+<p class="Pp">
+  <br/>
+</p>
+<pre># <b>zfs set com.example:department=12345 tank/accounting</b></pre>
+<br/>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp"><b>Example 15 </b>Creating a ZFS Volume as an iSCSI Target
+  Device</p>
+<p class="Pp"></p>
+<p class="Pp">The following example shows how to create a <b>ZFS</b> volume as
+    an <b>iSCSI</b> target.</p>
+<p class="Pp"></p>
+<p class="Pp">
+  <br/>
+</p>
+<pre># <b>zfs create -V 2g pool/volumes/vol1</b>
+# <b>zfs set shareiscsi=on pool/volumes/vol1</b>
+# <b>iscsitadm list target</b>
+Target: pool/volumes/vol1
+<br/>
+ iSCSI Name: 
+<br/>
+ iqn.1986-03.com.sun:02:7b4b02a6-3277-eb1b-e686-a24762c52a8c
+<br/>
+ Connections: 0</pre>
+<br/>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp">After the <b>iSCSI</b> target is created, set up the <b>iSCSI</b>
+    initiator. For more information about the Solaris <b>iSCSI</b> initiator,
+    see <b>iscsitadm</b>(1M).</p>
+<p class="Pp"><b>Example 16 </b>Performing a Rolling Snapshot</p>
+<p class="Pp"></p>
+<p class="Pp">The following example shows how to maintain a history of snapshots
+    with a consistent naming scheme. To keep a week's worth of snapshots, the
+    user destroys the oldest snapshot, renames the remaining snapshots, and then
+    creates a new snapshot, as follows:</p>
+<p class="Pp"></p>
+<p class="Pp">
+  <br/>
+</p>
+<pre># <b>zfs destroy -r pool/users@7daysago</b>
+# <b>zfs rename -r pool/users@6daysago @7daysago</b>
+# <b>zfs rename -r pool/users@5daysago @6daysago</b>
+# <b>zfs rename -r pool/users@4daysago @5daysago</b>
+# <b>zfs rename -r pool/users@3daysago @4daysago</b>
+# <b>zfs rename -r pool/users@2daysago @3daysago</b>
+# <b>zfs rename -r pool/users@yesterday @2daysago</b>
+# <b>zfs rename -r pool/users@today @yesterday</b>
+# <b>zfs snapshot -r pool/users@today</b></pre>
+<br/>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp"><b>Example 17 </b>Setting <b>sharenfs</b> Property Options on a
+    ZFS File System</p>
+<p class="Pp"></p>
+<p class="Pp">The following commands show how to set <b>sharenfs</b> property
+    options to enable <b>rw</b> access for a set of <b>IP</b> addresses and to
+    enable root access for system <b>neo</b> on the <b>tank/home</b> file
+    system.</p>
+<p class="Pp"></p>
+<p class="Pp">
+  <br/>
+</p>
+<pre># <b>zfs set sharenfs='rw=@123.123.0.0/16,root=neo' tank/home</b></pre>
+<br/>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp">If you are using <b>DNS</b> for host name resolution, specify the
+    fully qualified hostname.</p>
+<p class="Pp"></p>
+<p class="Pp"><b>Example 18 </b>Delegating ZFS Administration Permissions on a
+    ZFS Dataset</p>
+<p class="Pp"></p>
+<p class="Pp">The following example shows how to set permissions so that user
+    <b>cindys</b> can create, destroy, mount, and take snapshots on
+    <b>tank/cindys</b>. The permissions on <b>tank/cindys</b> are also
+    displayed.</p>
+<p class="Pp"></p>
+<p class="Pp">
+  <br/>
+</p>
+<pre># <b>zfs allow cindys create,destroy,mount,snapshot tank/cindys</b>
+# <b>zfs allow tank/cindys</b>
+-------------------------------------------------------------
+Local+Descendent permissions on (tank/cindys)
+<br/>
+          user cindys create,destroy,mount,snapshot
+-------------------------------------------------------------</pre>
+<br/>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp">Because the <b>tank/cindys</b> mount point permission is set to
+    755 by default, user <b>cindys</b> will be unable to mount file systems
+    under <b>tank/cindys</b>. Set an <b>ACL</b> similar to the following syntax
+    to provide mount point access:</p>
+<p class="Pp">
+  <br/>
+</p>
+<pre># <b>chmod A+user:cindys:add_subdirectory:allow /tank/cindys</b></pre>
+<br/>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp"><b>Example 19 </b>Delegating Create Time Permissions on a ZFS
+    Dataset</p>
+<p class="Pp"></p>
+<p class="Pp">The following example shows how to grant anyone in the group
+    <b>staff</b> to create file systems in <b>tank/users</b>. This syntax also
+    allows staff members to destroy their own file systems, but not destroy
+    anyone else's file system. The permissions on <b>tank/users</b> are also
+    displayed.</p>
+<p class="Pp"></p>
+<p class="Pp">
+  <br/>
+</p>
+<pre># <b>zfs allow staff create,mount tank/users</b>
+# <b>zfs allow -c destroy tank/users</b>
+# <b>zfs allow tank/users</b>
+-------------------------------------------------------------
+Create time permissions on (tank/users)
+<br/>
+          create,destroy
+Local+Descendent permissions on (tank/users)
+<br/>
+          group staff create,mount
+------------------------------------------------------------- </pre>
+<br/>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp"><b>Example 20 </b>Defining and Granting a Permission Set on a ZFS
+    Dataset</p>
+<p class="Pp"></p>
+<p class="Pp">The following example shows how to define and grant a permission
+    set on the <b>tank/users</b> file system. The permissions on
+    <b>tank/users</b> are also displayed.</p>
+<p class="Pp"></p>
+<p class="Pp">
+  <br/>
+</p>
+<pre># <b>zfs allow -s @pset create,destroy,snapshot,mount tank/users</b>
+# <b>zfs allow staff @pset tank/users</b>
+# <b>zfs allow tank/users</b>
+-------------------------------------------------------------
+Permission sets on (tank/users)
+<br/>
+        @pset create,destroy,mount,snapshot
+Create time permissions on (tank/users)
+<br/>
+        create,destroy
+Local+Descendent permissions on (tank/users)
+<br/>
+        group staff @pset,create,mount
+-------------------------------------------------------------</pre>
+<br/>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp"><b>Example 21 </b>Delegating Property Permissions on a ZFS
+  Dataset</p>
+<p class="Pp"></p>
+<p class="Pp">The following example shows to grant the ability to set quotas and
+    reservations on the <b>users/home</b> file system. The permissions on
+    <b>users/home</b> are also displayed.</p>
+<p class="Pp"></p>
+<p class="Pp">
+  <br/>
+</p>
+<pre># <b>zfs allow cindys quota,reservation users/home</b>
+# <b>zfs allow users/home</b>
+-------------------------------------------------------------
+Local+Descendent permissions on (users/home)
+<br/>
+        user cindys quota,reservation
+-------------------------------------------------------------
+cindys% <b>zfs set quota=10G users/home/marks</b>
+cindys% <b>zfs get quota users/home/marks</b>
+NAME              PROPERTY  VALUE             SOURCE
+users/home/marks  quota     10G               local </pre>
+<br/>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp"><b>Example 22 </b>Removing ZFS Delegated Permissions on a ZFS
+    Dataset</p>
+<p class="Pp"></p>
+<p class="Pp">The following example shows how to remove the snapshot permission
+    from the <b>staff</b> group on the <b>tank/users</b> file system. The
+    permissions on <b>tank/users</b> are also displayed.</p>
+<p class="Pp"></p>
+<p class="Pp">
+  <br/>
+</p>
+<pre># <b>zfs unallow staff snapshot tank/users</b>
+# <b>zfs allow tank/users</b>
+-------------------------------------------------------------
+Permission sets on (tank/users)
+<br/>
+        @pset create,destroy,mount,snapshot
+Create time permissions on (tank/users)
+<br/>
+        create,destroy
+Local+Descendent permissions on (tank/users)
+<br/>
+        group staff @pset,create,mount
+------------------------------------------------------------- </pre>
+<br/>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp"><b>Example 23</b> Showing the differences between a snapshot and a
+    ZFS Dataset</p>
+<p class="Pp"></p>
+<p class="Pp">The following example shows how to see what has changed between a
+    prior snapshot of a ZFS Dataset and its current state. The <b>-F</b> option
+    is used to indicate type information for the files affected.</p>
+<p class="Pp"></p>
+<p class="Pp">
+  <br/>
+</p>
+<pre># zfs diff -F tank/test@before tank/test
+M       /       /tank/test/
+M       F       /tank/test/linked      (+1)
+R       F       /tank/test/oldname -&gt; /tank/test/newname
+-       F       /tank/test/deleted
++       F       /tank/test/created
+M       F       /tank/test/modified</pre>
+<br/>
+<p class="Pp"></p>
+<p class="Pp"></p>
+<p class="Pp"><b>Example 24</b> Creating a bookmark</p>
+<p class="Pp"></p>
+<p class="Pp">The following example create a bookmark to a snapshot. This
+    bookmark can then be used instead of snapshot in send streams.</p>
+<p class="Pp"></p>
+<p class="Pp">
+  <br/>
+</p>
+<pre># zfs bookmark rpool@snapshot rpool#bookmark</pre>
+<br/>
+<p class="Pp"></p>
+<p class="Pp"></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="ENVIRONMENT_VARIABLES"><a class="permalink" href="#ENVIRONMENT_VARIABLES">ENVIRONMENT
+  VARIABLES</a></h1>
+<dl class="Bl-tag">
+  <dt id="ZFS_ABORT"><a class="permalink" href="#ZFS_ABORT"><b>ZFS_ABORT</b></a></dt>
+  <dd>Cause <b>zfs</b> to dump core on exit for the purposes of running
+      <b>::findleaks</b>.
+    <p class="Pp"></p>
+  </dd>
+</dl>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="EXIT_STATUS"><a class="permalink" href="#EXIT_STATUS">EXIT
+  STATUS</a></h1>
+<p class="Pp">The following exit values are returned:</p>
+<p class="Pp"><b></b><b>0</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Successful completion.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>1</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">An error occurred.</div>
+<p class="Pp"></p>
+<p class="Pp"><b></b><b>2</b></p>
+<p class="Pp"></p>
+<div class="Bd-indent">Invalid command line options were specified.</div>
+<p class="Pp"></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SEE_ALSO"><a class="permalink" href="#SEE_ALSO">SEE
+  ALSO</a></h1>
+<p class="Pp"><b>chmod</b>(2), <b>fsync</b>(2), <b>gzip</b>(1), <b>mount</b>(8),
+    <b>ssh</b>(1), <b>stat</b>(2), <b>write</b>(2), <b>zpool</b>(8)</p>
+</section>
+</div>
+<table class="foot">
+  <tr>
+    <td class="foot-date">November 19, 2013</td>
+    <td class="foot-os">ZFS pool 28, filesystem 5</td>
+  </tr>
+</table>
+</div></section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="zed.8.html" class="btn btn-neutral float-left" title="zed.8" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="zinject.8.html" class="btn btn-neutral float-right" title="zinject.8" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, OpenZFS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
