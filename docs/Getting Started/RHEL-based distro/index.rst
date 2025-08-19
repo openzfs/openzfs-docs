@@ -35,13 +35,13 @@ the fingerprint listed here.
   `direct link <https://raw.githubusercontent.com/zfsonlinux/zfsonlinux.github.com/master/zfs-release/RPM-GPG-KEY-openzfs-key2>`__
 | **Fingerprint:** 7DC7 299D CF7C 7FD9 CD87 701B A599 FD5E 9DB8 4141
 
-For EL7 run::
+For EL 7 run::
 
  yum install https://zfsonlinux.org/epel/zfs-release-2-3$(rpm --eval "%{dist}").noarch.rpm
 
-and for EL8 and 9::
+and for EL 8-10::
 
- dnf install https://zfsonlinux.org/epel/zfs-release-2-3$(rpm --eval "%{dist}").noarch.rpm
+ dnf install https://zfsonlinux.org/epel/zfs-release-2-8$(rpm --eval "%{dist}").noarch.rpm
 
 After installing the *zfs-release* package and verifying the public key
 users can opt to install either the DKMS or kABI-tracking kmod style packages.
