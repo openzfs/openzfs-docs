@@ -411,6 +411,10 @@ System Configuration
       echo 'filesystems+=" virtio_blk "' >> /etc/dracut.conf.d/zfs.conf
     fi
 
+#. Generate host id::
+
+    zgenhostid -f -o /etc/hostid
+
 #. Build initrd::
 
     find -D exec /lib/modules -maxdepth 1 \
@@ -424,10 +428,6 @@ System Configuration
 #. For SELinux, relabel filesystem on reboot::
 
     fixfiles -F onboot
-
-#. Generate host id::
-
-    zgenhostid -f -o /etc/hostid
 
 #. Install locale package, example for English locale::
 
