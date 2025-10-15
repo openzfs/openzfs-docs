@@ -2372,6 +2372,10 @@ Maximum size of ARC in bytes.
 If set to 0 then the maximum size of ARC
 is determined by the amount of system memory installed:
 
+* **Linux** and **FreeBSD**: the larger of ``all_system_memory - 1GB`` and ``5/8 × all_system_memory``
+
+*prior to v2.3.0*
+
 * **Linux**: 1/2 of system memory
 * **FreeBSD**: the larger of ``all_system_memory - 1GB`` and ``5/8 × all_system_memory``
 
