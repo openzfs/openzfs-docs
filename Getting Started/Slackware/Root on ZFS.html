@@ -1,0 +1,290 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Slackware Root on ZFS &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
+      <script src="../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Ubuntu" href="../Ubuntu/index.html" />
+    <link rel="prev" title="Slackware" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Getting Started</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Alpine%20Linux/index.html">Alpine Linux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Arch%20Linux/index.html">Arch Linux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Debian/index.html">Debian</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Fedora/index.html">Fedora</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../FreeBSD.html">FreeBSD</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://wiki.gentoo.org/wiki/ZFS">Gentoo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../NixOS/index.html">NixOS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../openSUSE/index.html">openSUSE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../RHEL-based%20distro/index.html">RHEL-based distro</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Slackware</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="index.html#installation">Installation</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html#root-on-zfs">Root on ZFS</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Slackware Root on ZFS</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Ubuntu/index.html">Ubuntu</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Basic%20Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../man/index.html">Man Pages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Getting Started</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Slackware</a></li>
+      <li class="breadcrumb-item active">Slackware Root on ZFS</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/Getting Started/Slackware/Root on ZFS.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="slackware-root-on-zfs">
+<h1>Slackware Root on ZFS<a class="headerlink" href="#slackware-root-on-zfs" title="Permalink to this heading"></a></h1>
+<p>This page shows some possible ways to configure Slackware to use zfs for the root filesystem.</p>
+<p>There are countless different ways to achieve such setup, particularly with the flexibility that zfs allows. We’ll show only a simple recipe and give pointers for further customization.</p>
+<section id="kernel-considerations">
+<h2>Kernel considerations<a class="headerlink" href="#kernel-considerations" title="Permalink to this heading"></a></h2>
+<p>For this mini-HOWTO we’ll be using the generic kernel and customize the stock initrd.</p>
+<p>If you use the huge kernel, you may want to switch to the generic kernel first, and install both the kernel-generic and mkinitrd packages. This makes things easier since we’ll need an initrd.</p>
+<p>If you absolutely do not want to use an initrd, see “Other options” further down.</p>
+</section>
+<section id="the-problem-space">
+<h2>The problem space<a class="headerlink" href="#the-problem-space" title="Permalink to this heading"></a></h2>
+<p>In order to have the root filesystem on zfs, two problems need to be addressed:</p>
+<ol class="arabic simple">
+<li><p>The boot loader needs to be able to load the kernel and its initrd.</p></li>
+<li><p>The kernel (or, rather, the initrd) needs to be able to mount the zfs root filesystem and run /sbin/init.</p></li>
+</ol>
+<p>The second problem is relatively easy to deal with, and only requires slight modifications to the default Slackware initrd scripts.</p>
+<p>For the first problem, however, a variety of scenarios are possible; on a PC, for example, you might be booting:</p>
+<ol class="arabic simple">
+<li><p>In UEFI mode, via an additional bootloader like elilo: here, the kernel and its initrd are on (read: have been copied to) the ESP, and the additional bootloader doesn’t need to understand zfs.</p></li>
+<li><p>In UEFI mode, by booting the kernel straight from the firmware. All Slackware kernels are built with EFI_STUB=Y, so if you copy your kernel and initrd to the ESP and configure a boot entry with efibootmgr, you are all set (note that the kernel image must have a .efi extension).</p></li>
+<li><p>In legacy BIOS mode, using lilo or grub or similar: lilo doesn’t understand zfs and even the latest grub understands it with some limitations (for example, no zstd compression). If you’re stuck with legacy BIOS mode, the best option is to put /boot on a separate partition that your loader understands (for example, ext4).</p></li>
+</ol>
+<p>If you are not using a PC, things will likely be quite different, so refer to relevant hardware documentation for your platform; on a Raspberry PI, for example, the firmware loads kernel and initrd from a FAT32 partition, so the situation is similar to a PC booting in UEFI mode.</p>
+<p>The simplest setup, discussed in this recipe, is the one using UEFI. As said above, if you boot in legacy BIOS mode, you will have to ensure that the boot loader of your choice can load the kernel image.</p>
+</section>
+<section id="partition-layout">
+<h2>Partition layout<a class="headerlink" href="#partition-layout" title="Permalink to this heading"></a></h2>
+<p>Repartitioning an existing system disk in order to make room for a zfs root partition is left as an exercise to the reader (there’s nothing specific to zfs).</p>
+<p>As a pointer: if you’re starting from a whole-disk ext4 filesystem, you could use resize2fs to shrink it to half of disk size and then relocate it to the second half of the disk with sfdisk. After that, you could create a ZFS partition before it, and copy stuff across using cp or rsync. This approach has the benefit of providing some kind of recovery mechanism in case stuff goes wrong. When you are happy about the final setup, you can then delete the ext4 partition and enlarge the ZFS one.</p>
+<p>In any case you will want to have a rescue cdrom at hand, and one that supports zfs out of the box. A Ubuntu live CD will do.</p>
+<p>For this recipe, we’ll be assuming that we’re booting in UEFI mode and there’s a single disk configured like this:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>/dev/sda1<span class="w"> </span><span class="c1"># EFI system partition</span>
+/dev/sda2<span class="w"> </span><span class="c1"># zfs pool (contains the &quot;root&quot; filesystem)</span>
+</pre></div>
+</div>
+<p>Since we are creating a zpool inside a disk partition (as opposed to using up a whole disk), make sure that the partition type is set correctly (for GPT, 54 or 67 are good choices).</p>
+<p>When creating the zfs filesystem, you will want to set “mountpoint=legacy” so that the filesystem can be mounted with “mount” in a traditional way; Slackware startup and shutdown scripts expect that.</p>
+<p>Back to our recipe, this is a working example:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>zpool<span class="w"> </span>create<span class="w"> </span>-o<span class="w"> </span><span class="nv">ashift</span><span class="o">=</span><span class="m">12</span><span class="w"> </span>-O<span class="w"> </span><span class="nv">mountpoint</span><span class="o">=</span>none<span class="w"> </span>tank<span class="w"> </span>/dev/sda2
+zfs<span class="w"> </span>create<span class="w"> </span>-o<span class="w"> </span><span class="nv">mountpoint</span><span class="o">=</span>legacy<span class="w"> </span>-o<span class="w"> </span><span class="nv">compression</span><span class="o">=</span>zstd<span class="w"> </span>tank/root
+<span class="c1"># add more as needed:</span>
+<span class="c1"># zfs create -o mountpoint=legacy [..] tank/home</span>
+<span class="c1"># zfs create -o mountpoint=legacy [..] tank/usr</span>
+<span class="c1"># zfs create -o mountpoint=legacy [..] tank/opt</span>
+</pre></div>
+</div>
+<p>Tweak options to taste; while “mountpoint=legacy” is required for the root filesystem, it is not required for any additional filesystems. In the example above we applied it to all of them, but that’s a matter of personal preference, as is setting “mountpoint=none” on the pool itself so it’s not mounted anywhere by default (do note that zpool’s “mountpoint=none” wants an uppercase “-O”).</p>
+<p>You can check your setup with:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>zpool<span class="w"> </span>list
+zfs<span class="w"> </span>list
+</pre></div>
+</div>
+<p>Then, adjust /etc/fstab to something like this:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>tank/root<span class="w">    </span>/<span class="w">       </span>zfs<span class="w">   </span>defaults<span class="w">   </span><span class="m">0</span><span class="w">   </span><span class="m">0</span>
+<span class="c1"># add more as needed:</span>
+<span class="c1"># tank/home    /home   zfs   defaults   0   0</span>
+<span class="c1"># tank/usr     /usr    zfs   defaults   0   0</span>
+<span class="c1"># tank/opt     /opt    zfs   defaults   0   0</span>
+</pre></div>
+</div>
+<p>This allow us to mount and umount them as usual, once we have imported the pool with “zpool import tank”. Which leads us to…</p>
+</section>
+<section id="patch-and-rebuild-the-initrd">
+<h2>Patch and rebuild the initrd<a class="headerlink" href="#patch-and-rebuild-the-initrd" title="Permalink to this heading"></a></h2>
+<p>Since we’re using the generic kernel, we already have a usable /boot/initrd-tree/ (if you don’t, prepare one by running mkinitrd once).</p>
+<p>Copy the zfs userspace tools to it (/sbin/zfs isn’t strictly necessary, but may be handy for rescuing a system that refuses to boot):</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>install<span class="w"> </span>-m755<span class="w"> </span>/sbin/zpool<span class="w"> </span>/sbin/zfs<span class="w"> </span>/boot/initrd-tree/sbin/
+</pre></div>
+</div>
+<p>Modify /boot/initrd-tree/init; locate the first “case” statement that sets ROOTDEV; it reads:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nv">root</span><span class="o">=</span>/dev/*<span class="o">)</span>
+<span class="w">  </span><span class="nv">ROOTDEV</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span><span class="w"> </span><span class="nv">$ARG</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-f2<span class="w"> </span>-d<span class="o">=</span><span class="k">)</span>
+<span class="p">;;</span>
+<span class="nv">root</span><span class="o">=</span><span class="nv">LABEL</span><span class="o">=</span>*<span class="o">)</span>
+<span class="w">  </span><span class="nv">ROOTDEV</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span><span class="w"> </span><span class="nv">$ARG</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-f2-<span class="w"> </span>-d<span class="o">=</span><span class="k">)</span>
+<span class="p">;;</span>
+<span class="nv">root</span><span class="o">=</span><span class="nv">UUID</span><span class="o">=</span>*<span class="o">)</span>
+<span class="w">  </span><span class="nv">ROOTDEV</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span><span class="w"> </span><span class="nv">$ARG</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-f2-<span class="w"> </span>-d<span class="o">=</span><span class="k">)</span>
+<span class="p">;;</span>
+</pre></div>
+</div>
+<p>Replace the three cases with:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nv">root</span><span class="o">=</span>*<span class="o">)</span>
+<span class="w">  </span><span class="nv">ROOTDEV</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span><span class="w"> </span><span class="nv">$ARG</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-f2<span class="w"> </span>-d<span class="o">=</span><span class="k">)</span>
+<span class="p">;;</span>
+</pre></div>
+</div>
+<p>This allows us to specify something like “root=tank/root” (if you look carefully at the script, you will notice that you can collapse the /dev/<em>, LABEL=</em>, UUID=* and the newly-added case into a single one).</p>
+<p>Further down in the script, locate the section that handles RESUMEDEV (”# Resume state from swap”), and insert the following just before it:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># Support for zfs root filesystem:</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>x<span class="s2">&quot;</span><span class="nv">$ROOTFS</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>xzfs<span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">  </span><span class="nv">POOL</span><span class="o">=</span><span class="si">${</span><span class="nv">ROOTDEV</span><span class="p">%%/*</span><span class="si">}</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Importing zfs pool: </span><span class="nv">$POOL</span><span class="s2">&quot;</span>
+<span class="w">  </span>zpool<span class="w"> </span>import<span class="w"> </span>-o<span class="w"> </span><span class="nv">cachefile</span><span class="o">=</span>none<span class="w"> </span>-N<span class="w"> </span><span class="nv">$POOL</span>
+<span class="k">fi</span>
+</pre></div>
+</div>
+<p>Finally, rebuild the initrd with something like:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mkinitrd<span class="w"> </span>-m<span class="w"> </span>zfs
+</pre></div>
+</div>
+<p>It may make sense to use the “-o” option and create an initrd.gz in a different file, just in case. Look at /boot/README.initrd for more details.</p>
+<p>Rebuilding the initrd should also copy in the necessary libraries (libzfs.so, etc.) under /lib/; verify it by running:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>chroot<span class="w"> </span>/boot/initrd-tree<span class="w"> </span>/sbin/zpool<span class="w"> </span>--help
+</pre></div>
+</div>
+<p>When you’re happy, remember to copy the new initrd.gz to the ESP partition.</p>
+<p>There are other ways to ensure that the zfs binaries and filesystem module are always built into the initrd - see man initrd.</p>
+</section>
+<section id="configure-the-boot-loader">
+<h2>Configure the boot loader<a class="headerlink" href="#configure-the-boot-loader" title="Permalink to this heading"></a></h2>
+<p>Any of these three options will do:</p>
+<ol class="arabic simple">
+<li><p>Append “rootfstype=zfs root=tank/root” to the boot loader configuration (e.g. elilo.conf or equivalent).</p></li>
+<li><p>Modify /boot/initrd-tree/rootdev and /boot/initrd-tree/rootfs in the previous step, then rebuild the initrd.</p></li>
+<li><p>When rebuilding the initrd, add “-f zfs -r tank/root”.</p></li>
+</ol>
+<p>If you’re using elilo, it should look something like this:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nv">image</span><span class="o">=</span>vmlinuz
+<span class="w">  </span><span class="nv">label</span><span class="o">=</span>linux
+<span class="w">  </span><span class="nv">initrd</span><span class="o">=</span>initrd.gz
+<span class="w">  </span><span class="nv">append</span><span class="o">=</span><span class="s2">&quot;root=tank/root rootfstype=zfs&quot;</span>
+</pre></div>
+</div>
+<p>Should go without saying, but doublecheck that the file referenced by initrd is the one you just generated (e.g. if you’re using the ESP, make sure you copy the newly-built initrd to it).</p>
+</section>
+<section id="before-rebooting">
+<h2>Before rebooting<a class="headerlink" href="#before-rebooting" title="Permalink to this heading"></a></h2>
+<p>Make sure you have an emergency kernel around in case something goes wrong.
+If you upgrade kernel or packages, make use of snapshosts.</p>
+</section>
+<section id="other-options">
+<h2>Other options<a class="headerlink" href="#other-options" title="Permalink to this heading"></a></h2>
+<p>You can build zfs support right into the kernel. If you do so and do not want to use an initrd, you can embed a small initramfs in the kernel image that performs the “zpool import” step).</p>
+</section>
+<section id="snapshots-and-boot-environments">
+<h2>Snapshots and boot environments<a class="headerlink" href="#snapshots-and-boot-environments" title="Permalink to this heading"></a></h2>
+<p>The modifications above also allow you to create a clone of the root filesystem and boot into it; something like this should work:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>zfs<span class="w"> </span>snapshot<span class="w"> </span>tank/root@mysnapshot
+zfs<span class="w"> </span>clone<span class="w"> </span>tank/root@mysnapshot<span class="w"> </span>tank/root-clone
+zfs<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="nv">mountpoint</span><span class="o">=</span>legacy<span class="w"> </span>tank/root-clone
+zfs<span class="w"> </span>promote<span class="w"> </span>tank/root-clone
+</pre></div>
+</div>
+<p>Adjust boot parameters to mount “tank/root-clone” instead of “tank/root” (making a copy of the known-good kernel and initrd on the ESP is not a bad idea).</p>
+</section>
+<section id="support">
+<h2>Support<a class="headerlink" href="#support" title="Permalink to this heading"></a></h2>
+<p>If you need help, reach out to the community using the <a class="reference internal" href="../../Project%20and%20Community/Mailing%20Lists.html#mailing-lists"><span class="std std-ref">Mailing Lists</span></a> or IRC at <a class="reference external" href="ircs://irc.libera.chat/#zfsonlinux">#zfsonlinux</a> on <a class="reference external" href="https://libera.chat/">Libera Chat</a>. If you have a bug report or feature request related to this HOWTO, please <a class="reference external" href="https://github.com/openzfs/openzfs-docs/issues/new?body=&#64;a-biardi,%20re.%20Slackware%20Root%20on%20ZFS%20HOWTO">file a new issue and mention &#64;a-biardi</a>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Slackware" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../Ubuntu/index.html" class="btn btn-neutral float-right" title="Ubuntu" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, OpenZFS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
