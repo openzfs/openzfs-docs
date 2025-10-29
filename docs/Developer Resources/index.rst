@@ -8,6 +8,5 @@ Developer Resources
 
    Custom Packages
    Building ZFS
-   OpenZFS Patches
    OpenZFS Documentation <https://openzfs.org/wiki/Developer_resources>
    Git and GitHub for beginners
