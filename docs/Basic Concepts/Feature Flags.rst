@@ -23,6 +23,9 @@ Where all *features* that are used by a pool are supported by multiple
 implementations of OpenZFS, the on-disk format is portable across those
 implementations.
 
+Due to incompatible formats, illumos ZFS cannot read OpenZFS datasets
+with native encryption.
+
 Features that are exclusive when enabled should be periodically ported
 to all distributions.
 
@@ -37,6 +40,8 @@ exist for pool versions 1-28 …".
 `zpool-features(7) man page <../man/7/zpool-features.7.html>`_ - OpenZFS
 
 `zpool-features <http://illumos.org/man/5/zpool-features>`__ (5) – illumos
+
+`ZFS native encryption status <https://illumos.topicbox.com/groups/discuss/Ta2162fbb2358fa0e>` – illumos discussion
 
 Feature flags implementation per OS
 -----------------------------------
