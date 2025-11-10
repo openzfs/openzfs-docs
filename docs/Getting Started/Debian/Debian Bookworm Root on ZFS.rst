@@ -9,6 +9,14 @@ Debian Bookworm Root on ZFS
 Overview
 --------
 
+Newer release available
+~~~~~~~~~~~~~~~~~~~~~~~
+
+- See :doc:`Debian Trixie Root on ZFS <./Debian Trixie Root on ZFS>` for
+  new installs. This guide continues to exist for reference for existing
+  installs that followed it.
+
+
 Caution
 ~~~~~~~
 
