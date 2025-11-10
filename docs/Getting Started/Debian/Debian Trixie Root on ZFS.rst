@@ -22,7 +22,7 @@ System Requirements
 - `64-bit Debian GNU/Linux Trixie Live CD w/ GUI (e.g. gnome iso)
   <https://cdimage.debian.org/debian-cd/current-live/amd64/iso-hybrid/>`__
 - `A 64-bit kernel is strongly encouraged.
-  <https://github.com/zfsonlinux/zfs/wiki/FAQ#32-bit-vs-64-bit-systems>`__
+  <../../Project%20and%20Community/FAQ.html#bit-vs-64-bit-systems>`__
 - Installing on a drive which presents 4 KiB logical sectors (a “4Kn” drive)
   only works with UEFI booting. This is not unique to ZFS. `GRUB does not and
   will not work on 4Kn with legacy (BIOS) booting.
@@ -334,7 +334,7 @@ Step 2: Disk Formatting
      <https://askubuntu.com/questions/970886/journalctl-says-failed-to-search-journal-acl-operation-not-supported>`__
    - Setting ``xattr=sa`` `vastly improves the performance of extended
      attributes
-     <https://github.com/zfsonlinux/zfs/commit/82a37189aac955c81a59a5ecc3400475adb56355>`__.
+     <https://github.com/openzfs/zfs/commit/82a37189aac955c81a59a5ecc3400475adb56355>`__.
      Inside ZFS, extended attributes are used to implement POSIX ACLs.
      Extended attributes can also be used by user-space applications.
      `They are used by some desktop GUI applications.
@@ -976,7 +976,7 @@ Step 7: Optional: Configure Swap
 **Caution**: On systems with extremely high memory pressure, using a
 zvol for swap can result in lockup, regardless of how much swap is still
 available. There is `a bug report upstream
-<https://github.com/zfsonlinux/zfs/issues/7734>`__.
+<https://github.com/openzfs/zfs/issues/7734>`__.
 
 #. Create a volume dataset (zvol) for use as a swap device::
 
@@ -1165,8 +1165,8 @@ cards that have been flashed to the reference LSI firmware.
 
 The basic problem is that disks on these controllers are not visible to the
 Linux kernel until after the regular system is started, and ZoL does not
-hotplug pool members. See `https://github.com/zfsonlinux/zfs/issues/330
-<https://github.com/zfsonlinux/zfs/issues/330>`__.
+hotplug pool members. See `https://github.com/openzfs/zfs/issues/330
+<https://github.com/openzfs/zfs/issues/330>`__.
 
 Most LSI cards are perfectly compatible with ZoL. If your card has this
 glitch, try setting ``ZFS_INITRD_PRE_MOUNTROOT_SLEEP=X`` in
