@@ -23,8 +23,8 @@ Add the backports repository::
 
 .. code-block:: sourceslist
 
-   deb http://deb.debian.org/debian trixie-backports main contrib
-   deb-src http://deb.debian.org/debian trixie-backports main contrib
+   deb http://deb.debian.org/debian trixie-backports main contrib non-free-firmware
+   deb-src http://deb.debian.org/debian trixie-backports main contrib non-free-firmware
 
 ::
 
