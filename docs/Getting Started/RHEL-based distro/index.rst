@@ -41,7 +41,7 @@ For EL 7 run::
 
 and for EL 8-10::
 
- dnf install https://zfsonlinux.org/epel/zfs-release-2-8$(rpm --eval "%{dist}").noarch.rpm
+ dnf install https://zfsonlinux.org/epel/zfs-release-3-0$(rpm --eval "%{dist}").noarch.rpm
 
 After installing the *zfs-release* package and verifying the public key
 users can opt to install either the DKMS or kABI-tracking kmod style packages.
