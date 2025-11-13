@@ -1,21 +1,13 @@
 .. highlight:: sh
 
-Debian Bookworm Root on ZFS
-===========================
+Debian Trixie Root on ZFS
+=========================
 
 .. contents:: Table of Contents
   :local:
 
 Overview
 --------
-
-Newer release available
-~~~~~~~~~~~~~~~~~~~~~~~
-
-- See :doc:`Debian Trixie Root on ZFS <./Debian Trixie Root on ZFS>` for
-  new installs. This guide continues to exist for reference for existing
-  installs that followed it.
-
 
 Caution
 ~~~~~~~
@@ -27,10 +19,10 @@ Caution
 System Requirements
 ~~~~~~~~~~~~~~~~~~~
 
-- `64-bit Debian GNU/Linux Bookworm Live CD w/ GUI (e.g. gnome iso)
-  <https://cdimage.debian.org/mirror/cdimage/release/current-live/amd64/iso-hybrid/>`__
+- `64-bit Debian GNU/Linux Trixie Live CD w/ GUI (e.g. gnome iso)
+  <https://cdimage.debian.org/debian-cd/current-live/amd64/iso-hybrid/>`__
 - `A 64-bit kernel is strongly encouraged.
-  <https://github.com/zfsonlinux/zfs/wiki/FAQ#32-bit-vs-64-bit-systems>`__
+  <../../Project%20and%20Community/FAQ.html#bit-vs-64-bit-systems>`__
 - Installing on a drive which presents 4 KiB logical sectors (a “4Kn” drive)
   only works with UEFI booting. This is not unique to ZFS. `GRUB does not and
   will not work on 4Kn with legacy (BIOS) booting.
@@ -49,7 +41,7 @@ If you need help, reach out to the community using the :ref:`mailing_lists` or I
 `#zfsonlinux <ircs://irc.libera.chat/#zfsonlinux>`__ on `Libera Chat
 <https://libera.chat/>`__. If you have a bug report or feature request
 related to this HOWTO, please `file a new issue and mention @rlaager
-<https://github.com/openzfs/openzfs-docs/issues/new?body=@rlaager,%20I%20have%20the%20following%20issue%20with%20the%20Debian%20Bookworm%20Root%20on%20ZFS%20HOWTO:>`__.
+<https://github.com/openzfs/openzfs-docs/issues/new?body=@rlaager,%20I%20have%20the%20following%20issue%20with%20the%20Debian%20Trixie%20Root%20on%20ZFS%20HOWTO:>`__.
 
 Contributing
 ~~~~~~~~~~~~
@@ -114,7 +106,7 @@ Step 1: Prepare The Install Environment
 
    .. code-block:: sourceslist
 
-     deb http://deb.debian.org/debian bookworm main contrib non-free-firmware
+     deb http://deb.debian.org/debian trixie main contrib non-free-firmware
 
    ::
 
@@ -342,7 +334,7 @@ Step 2: Disk Formatting
      <https://askubuntu.com/questions/970886/journalctl-says-failed-to-search-journal-acl-operation-not-supported>`__
    - Setting ``xattr=sa`` `vastly improves the performance of extended
      attributes
-     <https://github.com/zfsonlinux/zfs/commit/82a37189aac955c81a59a5ecc3400475adb56355>`__.
+     <https://github.com/openzfs/zfs/commit/82a37189aac955c81a59a5ecc3400475adb56355>`__.
      Inside ZFS, extended attributes are used to implement POSIX ACLs.
      Extended attributes can also be used by user-space applications.
      `They are used by some desktop GUI applications.
@@ -525,7 +517,7 @@ Step 3: System Installation
 
 #. Install the minimal system::
 
-     debootstrap bookworm /mnt
+     debootstrap trixie /mnt
 
    The ``debootstrap`` command leaves the new system in an unconfigured state.
    An alternative to using ``debootstrap`` is to copy the entirety of a
@@ -589,14 +581,14 @@ Step 4: System Configuration
 
    .. code-block:: sourceslist
 
-     deb http://deb.debian.org/debian bookworm main contrib non-free-firmware
-     deb-src http://deb.debian.org/debian bookworm main contrib non-free-firmware
+     deb http://deb.debian.org/debian trixie main contrib non-free-firmware
+     deb-src http://deb.debian.org/debian trixie main contrib non-free-firmware
 
-     deb http://deb.debian.org/debian-security bookworm-security main contrib non-free-firmware
-     deb-src http://deb.debian.org/debian-security bookworm-security main contrib non-free-firmware
+     deb http://deb.debian.org/debian-security trixie-security main contrib non-free-firmware
+     deb-src http://deb.debian.org/debian-security trixie-security main contrib non-free-firmware
 
-     deb http://deb.debian.org/debian bookworm-updates main contrib non-free-firmware
-     deb-src http://deb.debian.org/debian bookworm-updates main contrib non-free-firmware
+     deb http://deb.debian.org/debian trixie-updates main contrib non-free-firmware
+     deb-src http://deb.debian.org/debian trixie-updates main contrib non-free-firmware
 
 #. Bind the virtual filesystems from the LiveCD environment to the new
    system and ``chroot`` into it::
@@ -646,7 +638,7 @@ Step 4: System Configuration
    ``/etc/crypttab`` entries for ``luks2``, etc. adjusting for each disk.
 
 #. Install an NTP service to synchronize time.
-   This step is specific to Bookworm which does not install the package during
+   This step is specific to Trixie which does not install the package during
    bootstrap.
    Although this step is not necessary for ZFS, it is useful for internet
    browsing where local clock drift can cause login failures::
@@ -984,7 +976,7 @@ Step 7: Optional: Configure Swap
 **Caution**: On systems with extremely high memory pressure, using a
 zvol for swap can result in lockup, regardless of how much swap is still
 available. There is `a bug report upstream
-<https://github.com/zfsonlinux/zfs/issues/7734>`__.
+<https://github.com/openzfs/zfs/issues/7734>`__.
 
 #. Create a volume dataset (zvol) for use as a swap device::
 
@@ -1173,8 +1165,8 @@ cards that have been flashed to the reference LSI firmware.
 
 The basic problem is that disks on these controllers are not visible to the
 Linux kernel until after the regular system is started, and ZoL does not
-hotplug pool members. See `https://github.com/zfsonlinux/zfs/issues/330
-<https://github.com/zfsonlinux/zfs/issues/330>`__.
+hotplug pool members. See `https://github.com/openzfs/zfs/issues/330
+<https://github.com/openzfs/zfs/issues/330>`__.
 
 Most LSI cards are perfectly compatible with ZoL. If your card has this
 glitch, try setting ``ZFS_INITRD_PRE_MOUNTROOT_SLEEP=X`` in
