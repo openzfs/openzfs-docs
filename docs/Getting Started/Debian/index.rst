@@ -19,12 +19,15 @@ often provides newer releases of ZFS. You can use it as follows.
 
 Add the backports repository::
 
-  vi /etc/apt/sources.list.d/bookworm-backports.list
+  vi /etc/apt/sources.list.d/trixie-backports.sources
 
 .. code-block:: sourceslist
 
-   deb http://deb.debian.org/debian bookworm-backports main contrib
-   deb-src http://deb.debian.org/debian bookworm-backports main contrib
+   Types: deb
+   URIs: https://deb.debian.org/debian
+   Suites: trixie-backports
+   Components: main contrib non-free non-free-firmware
+   Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
 
 ::
 
@@ -33,8 +36,8 @@ Add the backports repository::
 .. code-block:: control
 
   Package: src:zfs-linux
-  Pin: release n=bookworm-backports
-  Pin-Priority: 990
+  Pin: release n=trixie-backports
+  Pin-Priority: 500
 
 Install the packages::
 
