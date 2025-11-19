@@ -36,7 +36,11 @@ your needs are.
    and may be used with Enterprise Linux distributions like Red Hat and
    CentOS. These distributions provide a stable kABI (Kernel Application
    Binary Interface) which allows the same binary modules to be used
-   with new versions of the distribution provided kernel.
+   with new versions of the distribution provided kernel. Note that these 
+   packges do not quite follow Redhat's rules, so there is a slight possibility
+   that a new kernel could fail with one of these packages. The probability
+   is low, but we recommend that for production servers, you disable
+   automatic kernel updates when using one of these builds.
 
 By default the build system will generate user packages and both DKMS
 and kmod style kernel packages if possible. The user packages can be
@@ -144,6 +148,11 @@ building normal kmods. However, it will only produce binaries which can
 be used by multiple kernels if the distribution supports a stable kABI.
 In order to request kABI-tracking package the *--with-spec=redhat*
 option must be passed to configure.
+
+Be aware that these packages do not completely follow Redhat's rules, so
+there is a slight chance that they will not work with a new kernel.
+We recommend disabling automatic kernel updates when using these builds
+on a production server.
 
 **NOTE:** This type of package is not available for Fedora.
 
