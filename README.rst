@@ -25,6 +25,11 @@ The dependencies are available via pip::
    # Add ~/.local/bin to your $PATH, e.g. by adding this to ~/.bashrc:
    PATH=$HOME/.local/bin:$PATH
 
+Or, you can use tox::
+
+   tox -e develop
+   . .tox/develop/bin/activate
+
 Build
 ~~~~~
 
