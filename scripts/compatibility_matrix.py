@@ -169,6 +169,7 @@ def nexenta():
 
 
 openzfs_key = 'OpenZFS (Linux, FreeBSD 13+)'
+illumos_key = 'Illumos'
 sources = {
         openzfs_key: openzfs(),
         'FreeBSD pre OpenZFS': freebsd_pre_openzfs(),
@@ -177,7 +178,7 @@ sources = {
         'Joyent': joyent(),
         'NetBSD': netbsd(),
         'Nexenta': nexenta(),
-        'Illumos': {
+        illumos_key: {
             'master': 'https://raw.githubusercontent.com/illumos/illumos-gate/'
                       'master/usr/src/man/man7/zpool-features.7',
             },
@@ -343,11 +344,12 @@ for (feature, domain), names in sorted(features.items()):
         html.write('<td class="warn">no</td>')
     for name, vers in header:
         for ver in vers:
-            # custom case for OpenZFS FreeBSD https://github.com/openzfs/zfs/pull/12735
             if (feature == 'edonr' and name == openzfs_key and '.' in ver
                     and not (int(ver.split('.')[0]) >= 2
                              and int(ver.split('.')[1]) >= 2)):
-                html.write('<td class="yes">yes<sup><a href="#note_1">1</a></sup></td>')
+                html.write('<td class="warn">yes<sup><a href="#note_1">1</a></sup></td>')
+            elif (feature == 'encryption' and name == illumos_key):
+                html.write('<td class="warn">yes<sup><a href="#note_2">2</a></sup></td>')
             elif (name, ver) in names:
                 html.write('<td class="yes">yes</td>')
             else:
@@ -358,6 +360,7 @@ html.write('<div>\n')
 html.write('<h3>Notes:</h3>\n')
 html.write('<ol>\n')
 html.write('<li id="note_1"><a href="https://github.com/openzfs/zfs/pull/12735">Edonr support was not enabled in FreeBSD with OpenZFS up to 2.1 release included</a></li>\n')
+html.write('<li id="note_2"><a href="https://illumos.topicbox.com/groups/discuss/Ta2162fbb2358fa0e">While Illumos have nearly same encryption logic, it\'s format is not 100% compatible with OpenZFS encryption format, so you may have problems with cross-platform encryption.</a></li>\n')
 html.write('</ol>\n')
 html.write('</div>\n')
 now = datetime.now().isoformat() + 'Z'
