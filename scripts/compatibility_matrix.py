@@ -95,23 +95,10 @@ def freebsd_pre_openzfs():
     #   There could be some lag between OpenZFS upstream and the FreeBSD,
     #   or even Linux implementations.
     sources = {}
-    with urlopen('https://www.freebsd.org/releases/') as web:
-        versions = findall(r'/releases/([0-9.]+?)R',
-                           web.read().decode('utf-8', 'ignore'))
-    with urlopen('https://svnweb.freebsd.org/base/release/') as web:
-        data = web.read().decode('utf-8', 'ignore')
-    actualversions = []
-    for ver in set(versions):
-        found = list(sorted(findall(
-            r'/base/release/(' + ver.replace('.', '\\.') + r'[0-9.]*)',
-            data
-            )))
-        if found:
-            actualversions.append(found[-1])
-    for ver in actualversions:
-        sources[ver] = ('https://svnweb.freebsd.org/base/release/{}/cddl/'
-                        'contrib/opensolaris/cmd/zpool/zpool-features.7'
-                        '?view=co'.format(ver))
+
+    sources['12'] = ('https://raw.githubusercontent.com/freebsd/freebsd-src/'
+                     'refs/heads/stable/12/cddl/contrib/opensolaris/'
+                     'cmd/zpool/zpool-features.7')
     return sources
 
 
