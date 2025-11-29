@@ -129,6 +129,10 @@ html_context = {
     'github_version': 'master/docs/'
      }
 
+html_js_files = [
+    'js/redirect.js',
+]
+
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
 #
