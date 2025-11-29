@@ -24,7 +24,8 @@ import sphinx_rtd_theme  # noqa
 # -- Project information -----------------------------------------------------
 
 project = u'OpenZFS'
-copyright = u'2023, OpenZFS'
+copyright = u'%Y, OpenZFS'
+html_last_updated_fmt = ''
 author = u'OpenZFS'
 
 # The short X.Y version
@@ -51,6 +52,7 @@ extensions = [
     "sphinx_rtd_theme",
     "notfound.extension",
     "sphinxext.rediraffe",
+    "sphinx_last_updated_by_git",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
