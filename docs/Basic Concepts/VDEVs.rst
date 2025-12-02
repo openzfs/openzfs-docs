@@ -1,25 +1,28 @@
+VDEVs
+=====
+
 What is a VDEV?
-===============
+~~~~~~~~~~~~~~~
 
 A vdev (virtual device) is a fundamental building block of ZFS storage pools. It represents a logical grouping of physical storage devices, such as hard drives, SSDs, or partitions.
 
 What is a leaf vdev?
-====================
+~~~~~~~~~~~~~~~~~~~~
 
 A leaf vdev is the most basic type of vdev, which directly corresponds to a physical storage device. It is the endpoint of the storage hierarchy in ZFS.
 
 What is a top-level vdev?
-=========================
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Top-level vdevs are the direct children of the root vdev. They can be single devices or logical groups that aggregate multiple leaf vdevs (like mirrors or RAIDZ groups). ZFS dynamically stripes data across all top-level vdevs in a pool.
 
 What is a root vdev?
-====================
+~~~~~~~~~~~~~~~~~~~~
 
 The root vdev is the top of the pool hierarchy. It aggregates all top-level vdevs into a single logical storage unit (the pool).
 
 What are the different types of vdevs?
-======================================
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 OpenZFS supports several types of vdevs. Top-level vdevs carry data and provide redundancy:
 
@@ -42,7 +45,7 @@ Auxiliary vdevs provide specific functionality:
 * **Dedup**: A vdev dedicated strictly to storing the Deduplication Table (DDT).
 
 How do vdevs relate to storage pools?
-=====================================
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Vdevs are the building blocks of ZFS storage pools. A storage pool (zpool) is created by combining one or more top-level vdevs. The overall performance, capacity, and redundancy of the storage pool depend on the configuration and types of vdevs used.
 
@@ -66,7 +69,7 @@ for a pool with two RAIDZ1 top-level vdevs and 10 leaf vdevs:
        /dev/dsk/disk9 (leaf vdev)
 
 How does ZFS handle vdev failures?
-==================================
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ZFS is designed to handle vdev failures gracefully. If a vdev fails, ZFS can continue to operate using the remaining vdevs in the pool,
 provided that the redundancy level of the pool allows for it (e.g., in a mirror, RAIDZ, or dRAID configuration).
@@ -75,7 +78,7 @@ Administrators can `zpool-replace(8) <https://openzfs.github.io/openzfs-docs/man
 the data onto the new vdev to return the pool to a healthy state.
 
 How do I manage vdevs in ZFS?
-=============================
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Vdevs are managed using the `zpool(8) <https://openzfs.github.io/openzfs-docs/man/master/8/zpool.8.html>`_ command-line utility. Common operations include:
 
