@@ -1,9 +1,19 @@
-ZFS Transaction Delay
-=====================
+OpenZFS Transaction Delay
+=========================
 
-ZFS write operations are delayed when the backend storage isn't able to
+OpenZFS write operations are delayed when the backend storage isn't able to
 accommodate the rate of incoming writes. This delay process is known as
-the ZFS write throttle.
+the OpenZFS write throttle. As different hardware and workloads have different
+performance characteristics, tuning the write throttle is hardware and workload
+specific.
+
+Writes are grouped into transactions. Transactions are grouped into transaction groups.
+When a transaction group is synced to disk, all transactions in that group are
+considered complete. When a delay is applied to a transaction it delays the transaction's
+assignment into a transaction group.
+
+To check if write throttle is activated on a pool, monitor the dmu_tx_delay
+and/or dmu_tx_dirty_delay kstat counters.
 
 If there is already a write transaction waiting, the delay is relative
 to when that transaction will finish waiting. Thus the calculated delay
@@ -103,3 +113,7 @@ system should be to keep the amount of dirty data out of that range by
 first ensuring that the appropriate limits are set for the I/O scheduler
 to reach optimal throughput on the backend storage, and then by changing
 the value of zfs_delay_scale to increase the steepness of the curve.
+
+
+
+Code reference: `dmu_tx.c <https://github.com/openzfs/zfs/blob/master/module/zfs/dmu_tx.c#L866>`_
