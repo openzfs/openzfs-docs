@@ -234,7 +234,9 @@ issues_commit_uri = "https://github.com/openzfs/zfs/commit/{commit}"
 notfound_urls_prefix = '/openzfs-docs/'
 
 # Redirects
-rediraffe_redirects = {}
+rediraffe_redirects = {
+    "Performance and Tuning/Async Write.rst": "Performance and Tuning/ZIO Scheduler.rst",
+}
 
 # Old man pages location -> to new master branch location
 redirect_folders = {

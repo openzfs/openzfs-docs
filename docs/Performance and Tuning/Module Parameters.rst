@@ -488,6 +488,8 @@ resilver
 -  `zfs_top_maxinflight <#zfs-top-maxinflight>`__
 -  `zfs_vdev_scrub_max_active <#zfs-vdev-scrub-max-active>`__
 -  `zfs_vdev_scrub_min_active <#zfs-vdev-scrub-min-active>`__
+-  `zfs_vdev_nia_credit <#zfs-vdev-nia-credit>`__
+-  `zfs_vdev_nia_delay <#zfs-vdev-nia-delay>`__
 
 scrub
 ~~~~~
@@ -511,6 +513,8 @@ scrub
 -  `zfs_top_maxinflight <#zfs-top-maxinflight>`__
 -  `zfs_vdev_scrub_max_active <#zfs-vdev-scrub-max-active>`__
 -  `zfs_vdev_scrub_min_active <#zfs-vdev-scrub-min-active>`__
+-  `zfs_vdev_nia_credit <#zfs-vdev-nia-credit>`__
+-  `zfs_vdev_nia_delay <#zfs-vdev-nia-delay>`__
 
 send
 ~~~~
@@ -632,6 +636,8 @@ vdev
 -  `zfs_vdev_write_gap_limit <#zfs-vdev-write-gap-limit>`__
 -  `zio_dva_throttle_enabled <#zio-dva-throttle-enabled>`__
 -  `zio_slow_io_ms <#zio-slow-io-ms>`__
+-  `zfs_vdev_nia_credit <#zfs-vdev-nia-credit>`__
+-  `zfs_vdev_nia_delay <#zfs-vdev-nia-delay>`__
 
 vdev_cache
 ~~~~~~~~~~
@@ -644,6 +650,8 @@ vdev_initialize
 ~~~~~~~~~~~~~~~
 
 -  `zfs_initialize_value <#zfs-initialize-value>`__
+-  `zfs_vdev_nia_credit <#zfs-vdev-nia-credit>`__
+-  `zfs_vdev_nia_delay <#zfs-vdev-nia-delay>`__
 
 vdev_removal
 ~~~~~~~~~~~~
@@ -656,6 +664,8 @@ vdev_removal
 -  `zfs_removal_ignore_errors <#zfs-removal-ignore-errors>`__
 -  `zfs_removal_suspend_progress <#zfs-removal-suspend-progress>`__
 -  `vdev_removal_max_span <#vdev-removal-max-span>`__
+-  `zfs_vdev_nia_credit <#zfs-vdev-nia-credit>`__
+-  `zfs_vdev_nia_delay <#zfs-vdev-nia-delay>`__
 
 volume
 ~~~~~~
@@ -736,6 +746,8 @@ ZIO_scheduler
 -  `zfs_vdev_trim_max_active <#zfs-vdev-trim-max-active>`__
 -  `zfs_vdev_trim_min_active <#zfs-vdev-trim-min-active>`__
 -  `zfs_vdev_write_gap_limit <#zfs-vdev-write-gap-limit>`__
+-  `zfs_vdev_nia_credit <#zfs-vdev-nia-credit>`__
+-  `zfs_vdev_nia_delay <#zfs-vdev-nia-delay>`__
 -  `zio_dva_throttle_enabled <#zio-dva-throttle-enabled>`__
 -  `zio_requeue_io_start_cut_in_line <#zio-requeue-io-start-cut-in-line>`__
 -  `zio_taskq_batch_pct <#zio-taskq-batch-pct>`__
@@ -979,6 +991,8 @@ Index
 -  `zfs_vdev_mirror_rotating_seek_inc <#zfs-vdev-mirror-rotating-seek-inc>`__
 -  `zfs_vdev_mirror_rotating_seek_offset <#zfs-vdev-mirror-rotating-seek-offset>`__
 -  `zfs_vdev_ms_count_limit <#zfs-vdev-ms-count-limit>`__
+-  `zfs_vdev_nia_credit <#zfs-vdev-nia-credit>`__
+-  `zfs_vdev_nia_delay <#zfs-vdev-nia-delay>`__
 -  `zfs_vdev_queue_depth_pct <#zfs-vdev-queue-depth-pct>`__
 -  `zfs_vdev_raidz_impl <#zfs-vdev-raidz-impl>`__
 -  `zfs_vdev_read_gap_limit <#zfs-vdev-read-gap-limit>`__
@@ -4008,6 +4022,53 @@ See also `zio_dva_throttle_enabled <#zio-dva-throttle-enabled>`__
 +--------------------------+------------------------------------------+
 | Versions Affected        | v0.7.0 and later                         |
 +--------------------------+------------------------------------------+
+
+zfs_vdev_nia_delay
+~~~~~~~~~~~~~~~~~~
+
+For non-interactive I/O (scrub, resilver, removal, initialize and rebuild),
+the number of concurrently-active I/O operations is limited to zfs_*_min_active,
+unless the vdev is "idle". When there are no interactive I/O operations active
+(synchronous or otherwise), and zfs_vdev_nia_delay operations have completed
+since the last interactive operation, then the vdev is considered to be "idle",
+and the number of concurrently-active non-interactive operations is increased to
+zfs_*_max_active. See `ZIO SCHEDULER <https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/ZIO%20Scheduler.html>`__.
+
+====================== ====================
+zfs_vdev_nia_delay     Notes
+====================== ====================
+Tags                   `vdev <#vdev>`__, `scrub <#scrub>`__, `resilver <#resilver>`__
+When to change         See `ZIO SCHEDULER <https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/ZIO%20Scheduler.html>`__
+Data Type              uint
+Range                  1 to UINT_MAX
+Default                5
+Change                 Dynamic
+Versions Affected      v2.0.0 and later
+====================== ====================
+
+zfs_vdev_nia_credit
+~~~~~~~~~~~~~~~~~~~
+
+Some HDDs tend to prioritize sequential I/O so strongly, that concurrent
+random I/O latency reaches several seconds. On some HDDs this happens even
+if sequential I/O operations are submitted one at a time, and so setting
+zfs_*_max_active= 1 does not help. To prevent non-interactive I/O, like scrub,
+from monopolizing the device, no more than zfs_vdev_nia_credit operations
+can be sent while there are outstanding incomplete interactive operations.
+This enforced wait ensures the HDD services the interactive I/O within a
+reasonable amount of time. See `ZIO SCHEDULER <https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/ZIO%20Scheduler.html>`__.
+
+====================== ====================
+zfs_vdev_nia_credit    Notes
+====================== ====================
+Tags                   `vdev <#vdev>`__, `scrub <#scrub>`__, `resilver <#resilver>`__
+When to change         See `ZIO SCHEDULER <https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/ZIO%20Scheduler.html>`__
+Data Type              uint
+Range                  1 to UINT_MAX
+Default                5
+Change                 Dynamic
+Versions Affected      v2.0.0 and later
+====================== ====================
 
 zfs_disable_dup_eviction
 ~~~~~~~~~~~~~~~~~~~~~~~~

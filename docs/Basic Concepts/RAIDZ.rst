@@ -1,8 +1,6 @@
 RAIDZ
 =====
 
-tl;dr: RAIDZ is effective for large block sizes and sequential workloads.
-
 Introduction
 ~~~~~~~~~~~~
 
