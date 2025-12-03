@@ -453,8 +453,6 @@ Step 3: System Installation
 
      zfs create -o com.sun:auto-snapshot=false rpool/var/cache
      zfs create -o com.sun:auto-snapshot=false rpool/var/lib/nfs
-     zfs create -o com.sun:auto-snapshot=false rpool/var/tmp
-     chmod 1777 /mnt/var/tmp
 
    If you use /srv on this system::
 
@@ -491,22 +489,8 @@ Step 3: System Installation
 
      zfs create rpool/var/www
 
-   A tmpfs is recommended later, but if you want a separate dataset for
-   ``/tmp``::
-
-     zfs create -o com.sun:auto-snapshot=false  rpool/tmp
-     chmod 1777 /mnt/tmp
-
-   The primary goal of this dataset layout is to separate the OS from user
-   data. This allows the root filesystem to be rolled back without rolling
-   back user data.
-
-   If you do nothing extra, ``/tmp`` will be stored as part of the root
-   filesystem. Alternatively, you can create a separate dataset for ``/tmp``,
-   as shown above. This keeps the ``/tmp`` data out of snapshots of your root
-   filesystem. It also allows you to set a quota on ``rpool/tmp``, if you want
-   to limit the maximum space used. Otherwise, you can use a tmpfs (RAM
-   filesystem) later.
+   **Note:** As tmpfs is used by default by Debian Trixie, all ``/tmp`` related operations
+   in previous versions are now obsolete.
 
    **Note:** If you separate a directory required for booting (e.g. ``/etc``)
    into its own dataset, you must add it to
@@ -726,17 +710,6 @@ Step 4: System Configuration
    indicating that the ``bpool`` cannot be found.  If this happens, add
    ``-d DISK-part3`` (replace ``DISK`` with the correct device path) to the
    ``zpool import`` command.
-
-#. Optional (but recommended): Mount a tmpfs to ``/tmp``
-
-   If you chose to create a ``/tmp`` dataset above, skip this step, as they
-   are mutually exclusive choices. Otherwise, you can put ``/tmp`` on a
-   tmpfs (RAM filesystem) by enabling the ``tmp.mount`` unit.
-
-   ::
-
-     cp /usr/share/systemd/tmp.mount /etc/systemd/system/
-     systemctl enable tmp.mount
 
 #. Optional: Install SSH::
 
