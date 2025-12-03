@@ -136,6 +136,10 @@ Step 1: Prepare The Install Environment
 
      sudo -i
 
+#. Install missing prerequisites in zfsutils-linux package (`bug 1091428 <https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1091428>`_)::
+
+     apt install --yes linux-headers-generic
+
 #. Install ZFS in the Live CD environment::
 
      apt install --yes debootstrap gdisk zfsutils-linux
