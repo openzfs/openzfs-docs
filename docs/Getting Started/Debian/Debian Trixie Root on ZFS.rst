@@ -1001,6 +1001,7 @@ Step 8: Full Software Installation
 
 #. Install a regular set of software::
 
+     apt install tasksel
      tasksel --new-install
 
    **Note:** This will check "Debian desktop environment" and "print server"
