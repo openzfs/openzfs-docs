@@ -195,6 +195,43 @@ is how you keep updated:
 This will make sure you are on the master branch of the repository, grab
 the changes from upstream, then push them back to your repository.
 
+Backporting a commit to a release branch
+----------------------------------------
+
+Users may want to backport commits from the ``master`` branch to one
+of the release branches.  To do that, first checkout the "staging"
+branch for the release version you want to pull the commit into.
+For example, if you want to backport commit XYZ from ``master`` into the
+future ``zfs-2.3.6`` release, first checkout the ``zfs-2.3.6-staging``
+branch, and then pull the commit in with ``git cherry-pick XYZ`` (and
+resolve any merge conflicts). You can then open a PR with your backport
+branch against the ``zfs-2.3.6-staging`` branch (make sure to select
+this branch in the PR target dropdown box).
+
+Please keep the commit message the same when you backport.  This means
+keeping the author the same, and all of the attestation lines the
+same (Signed-off-by, Reviewed-by, etc).  It is assumed those attestation
+lines refer to the original commit from ``master``, and not necessarily
+the backport commit (even though it may have needed changes to backport).
+
+You may optionally add a ``Backported-by:`` line with your name if
+desired.
+
+Sometimes you may need to add a small, version-specific commit that only
+goes in the release branch.  For those cases, add a tag to the commit
+line with the release version, in the format of "[x.y.z-only]".  For
+example:
+
+
+::
+
+   [2.3.6-only] Disable feature X by default
+
+   Unlike the master branch, turn feature X off by default
+   for the zfs-2.3.6 release.
+
+   Signed-off-by: Tony Hutter <hutter2@llnl.gov>
+
 Final words
 -----------
 
