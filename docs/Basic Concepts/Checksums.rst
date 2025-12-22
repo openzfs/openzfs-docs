@@ -45,7 +45,7 @@ The checksum algorithm for a dataset can be changed by setting the
 |           |              |                        | deduped                 |
 |           |              |                        | datasets                |
 +-----------+--------------+------------------------+-------------------------+
-| off       | no           | yes                    | Do not do use           |
+| off       | no           | yes                    | Do not use              |
 |           |              |                        | ``off``                 |
 +-----------+--------------+------------------------+-------------------------+
 | fletcher2 | no           | yes                    | Deprecated              |
