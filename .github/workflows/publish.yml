@@ -25,6 +25,8 @@ jobs:
       run: make man
     - name: Gen_feature_matrix
       run: make feature_matrix
+    - name: Gen_llms_full_txt
+      run: python3 scripts/generate_llms_full_txt.py
     - name: Gen_sphinx
       run: make html
     - name: Deploy
