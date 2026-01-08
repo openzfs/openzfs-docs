@@ -1,5 +1,13 @@
+:llms-txt-ignore: true
+
 Module Parameters
 =================
+
+.. note::
+   This page is not actively maintained, so not all parameters are reflected and actualized,
+   see `issue <https://github.com/openzfs/openzfs-docs/issues/491>`__.
+
+   For a complete list of parameters see `man pages <../man/master/4/index.html>`__.
 
 Most of the ZFS kernel module parameters are accessible in the SysFS
 ``/sys/module/zfs/parameters`` directory. Current values can be observed
@@ -1083,7 +1091,7 @@ caching into L2ARC.
 |                       | `L2ARC <#l2arc>`__,                             |
 |                       | `special_vdev <#special-vdev>`__,               |
 +-----------------------+-------------------------------------------------+
-| When to change        | If cache and special devices exist and caching  | 
+| When to change        | If cache and special devices exist and caching  |
 |                       | data on special devices in L2ARC is not desired |
 +-----------------------+-------------------------------------------------+
 | Data Type             | boolean                                         |
@@ -2381,7 +2389,7 @@ Versions Affected        v0.6.5 and later
 zfs_arc_max
 ~~~~~~~~~~~
 
-Maximum size of ARC in bytes. 
+Maximum size of ARC in bytes.
 
 If set to 0 then the maximum size of ARC
 is determined by the amount of system memory installed:
