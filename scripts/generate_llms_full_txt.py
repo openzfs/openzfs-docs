@@ -1,13 +1,42 @@
 #!/usr/bin/env python3
+# vim: tabstop=4 shiftwidth=4 softtabstop=4
+#
+# Copyright 2026 The OpenZFS Contributors
+#
+# All Rights Reserved.
+#
+#    Licensed under the Apache License, Version 2.0 (the "License"); you may
+#    not use this file except in compliance with the License. You may obtain
+#    a copy of the License at
+#
+#         http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing, software
+#    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+#    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+#    License for the specific language governing permissions and limitations
+#    under the License.
+
 import os
 import re
 import sys
 import argparse
+import urllib.parse
 
 SOURCE_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'docs')
 GITHUB_BASE_URL = "https://github.com/openzfs/openzfs-docs/tree/master/docs"
+INDENT_NOT_FOUND = None  # Indicates that no indentation was found in the lookahead
 
 def convert_rst_to_md(rst_content):
+    """
+    Convert ReStructuredText content to Markdown.
+
+    Args:
+        rst_content (str): The RST content to convert.
+
+    Returns:
+        str: The converted Markdown content.
+    """
     lines = rst_content.splitlines()
     md_lines = []
 
@@ -53,7 +82,8 @@ def convert_rst_to_md(rst_content):
             next_stripped = next_line.strip()
             # RST headers are usually ===, ---, ~~~, ^^^, etc.
             # Must be at least as long as title or usually >= 3 chars
-            if next_stripped and set(next_stripped).issubset({'=', '-', '~', '^', '"', '#', '*'}):
+            # Check that all characters are the same using len(set(...)) == 1
+            if next_stripped and len(set(next_stripped)) == 1 and set(next_stripped).issubset({'=', '-', '~', '^', '"', '#', '*'}):
                 if len(next_stripped) >= 3:
                     char = next_stripped[0]
                     # Approximate mapping
@@ -76,14 +106,14 @@ def convert_rst_to_md(rst_content):
 
             # Determine indentation of the NEXT non-empty line
             j = i + 1
-            next_indent = -1
+            next_indent = INDENT_NOT_FOUND
             while j < len(lines):
                 if lines[j].strip():
                     next_indent = len(lines[j]) - len(lines[j].lstrip())
                     break
                 j += 1
 
-            if next_indent > current_indent:
+            if next_indent is not None and next_indent > current_indent:
                 in_code_block = True
                 block_indent = next_indent
                 md_lines.append(f"```{lang}")
@@ -109,14 +139,14 @@ def convert_rst_to_md(rst_content):
 
             # Check lookahead for indentation
             j = i + 1
-            next_indent = -1
+            next_indent = INDENT_NOT_FOUND
             while j < len(lines):
                 if lines[j].strip():
                     next_indent = len(lines[j]) - len(lines[j].lstrip())
                     break
                 j += 1
 
-            if next_indent > current_indent:
+            if next_indent is not None and next_indent > current_indent:
                 in_code_block = True
                 block_indent = next_indent
                 md_lines.append("```")
@@ -124,7 +154,7 @@ def convert_rst_to_md(rst_content):
                 continue
             else:
                 # Not a code block, just text ending in :: (rare but possible)
-                md_lines.append(line)
+                # We already appended the modified line above, so just continue
                 i += 1
                 continue
 
@@ -153,20 +183,21 @@ def convert_rst_to_md(rst_content):
             continue
 
         # 5. Inline Formatting
-        curr = line
+        processed_line = line
 
         # Links: `Text <url>`_
-        curr = re.sub(r'`([^`<]+) <([^>]+)>`_{1,2}', r'[\1](\2)', curr)
+        # Changed regex to be non-greedy for the text part to handle more characters
+        processed_line = re.sub(r'`(.*?) <([^>]+)>`_{1,2}', r'[\1](\2)', processed_line)
 
         # Roles: :doc:`Foo <path>` -> [Foo](path)
         # :ref:`Foo` -> Foo
-        curr = re.sub(r':\w+:`([^`<]+) <([^>]+)>`', r'[\1](\2)', curr)
-        curr = re.sub(r':\w+:`([^`]+)`', r'\1', curr)
+        processed_line = re.sub(r':\w+:`([^`<]+) <([^>]+)>`', r'[\1](\2)', processed_line)
+        processed_line = re.sub(r':\w+:`([^`]+)`', r'\1', processed_line)
 
         # Literals: ``text`` -> `text`
-        curr = re.sub(r'``([^`]+)``', r'`\1`', curr)
+        processed_line = re.sub(r'``([^`]+)``', r'`\1`', processed_line)
 
-        md_lines.append(curr)
+        md_lines.append(processed_line)
         i += 1
 
     if in_code_block:
@@ -174,10 +205,21 @@ def convert_rst_to_md(rst_content):
 
     return "\n".join(md_lines)
 
-def process_files(output_file):
+def generate_llms_full_txt(output_file):
+    """
+    Generate the llms-full.txt file by aggregating all RST documentation files.
+
+    Args:
+        output_file (str): The path to the output file.
+
+    Raises:
+        SystemExit: If the generation process fails.
+    """
     print(f"Generating {output_file} from {SOURCE_DIR}...")
 
     try:
+        if os.path.dirname(output_file):
+            os.makedirs(os.path.dirname(output_file), exist_ok=True)
         with open(output_file + ".tmp", 'w', encoding='utf-8') as outfile:
             # Write header
             outfile.write(f"# OpenZFS Documentation\n\n")
@@ -189,8 +231,11 @@ def process_files(output_file):
                     if file.endswith(".rst") and file != "404.rst":
                         file_path = os.path.join(root, file)
                         rel_path = os.path.relpath(file_path, SOURCE_DIR)
-                        url = f"{GITHUB_BASE_URL}/{rel_path}"
-                        url_encoded = url.replace(" ", "%20")
+
+                        # Properly encode URL components
+                        # GITHUB_BASE_URL is safe, we only encode the relative path
+                        url_encoded_path = urllib.parse.quote(rel_path)
+                        url = f"{GITHUB_BASE_URL}/{url_encoded_path}"
 
                         try:
                             with open(file_path, 'r', encoding='utf-8') as f:
@@ -199,7 +244,7 @@ def process_files(output_file):
                             md_content = convert_rst_to_md(content)
 
                             outfile.write(f"## File: {rel_path}\n")
-                            outfile.write(f"Source: {url_encoded}\n\n")
+                            outfile.write(f"Source: {url}\n\n")
                             outfile.write(md_content)
                             outfile.write("\n\n---\n\n")
 
@@ -217,7 +262,7 @@ def process_files(output_file):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate llms-full.txt from documentation.")
-    parser.add_argument("--output", help="Path to the output file", default=os.path.join(SOURCE_DIR, 'llms-full.txt'))
+    parser.add_argument("--output", help="Path to the output file", default=os.path.join(SOURCE_DIR, '_build', 'html', 'llms-full.txt'))
     args = parser.parse_args()
 
-    process_files(args.output)
+    generate_llms_full_txt(args.output)
