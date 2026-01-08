@@ -53,6 +53,7 @@ extensions = [
     "notfound.extension",
     "sphinxext.rediraffe",
     "sphinx_last_updated_by_git",
+    "sphinx_sitemap",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -100,6 +101,8 @@ zfs_root_test = False
 # a list of builtin themes.
 #
 html_theme = 'sphinx_rtd_theme'
+
+html_baseurl = 'https://openzfs.github.io/openzfs-docs/'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the

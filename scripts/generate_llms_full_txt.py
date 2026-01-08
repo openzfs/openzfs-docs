@@ -181,7 +181,8 @@ def process_files(output_file):
         with open(output_file + ".tmp", 'w', encoding='utf-8') as outfile:
             # Write header
             outfile.write(f"# OpenZFS Documentation\n\n")
-            outfile.write(f"Generated from source at {GITHUB_BASE_URL}\n\n")
+            outfile.write(f"Generated from source at {GITHUB_BASE_URL}\n")
+            outfile.write(f"Sitemap: https://openzfs.github.io/openzfs-docs/sitemap.xml\n\n")
 
             for root, _, files in os.walk(SOURCE_DIR):
                 for file in sorted(files):
