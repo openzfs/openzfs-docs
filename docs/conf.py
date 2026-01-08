@@ -263,3 +263,7 @@ for old, new in redirect_folders.items():
         if newpath.suffix in [".rst"]:
             oldpath = str(newpath).replace(new, old, 1)
             rediraffe_redirects[oldpath] = str(newpath)
+
+llms_txt_code_files = [
+    "+:./_build/html/_sources/man/master/**/*.txt",  # Include man pages in llms-full.txt
+]
