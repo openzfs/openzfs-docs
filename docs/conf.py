@@ -54,6 +54,7 @@ extensions = [
     "sphinxext.rediraffe",
     "sphinx_last_updated_by_git",
     "sphinx_sitemap",
+    "sphinx_llms_txt",
 ]
 
 # Add any paths that contain templates here, relative to this directory.

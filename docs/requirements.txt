@@ -6,3 +6,4 @@ sphinxext-rediraffe
 sphinx_last_updated_by_git
 gitpython
 sphinx-sitemap
+sphinx_llms_txt
