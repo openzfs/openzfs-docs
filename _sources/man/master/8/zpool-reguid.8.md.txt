@@ -1,0 +1,34 @@
+ZPOOL-REGUID(8) - System Manager's Manual
+
+# NAME
+
+**zpool-reguid** - generate new unique identifier for ZFS storage pool
+
+# SYNOPSIS
+
+**zpool**
+**reguid**
+\[**-g**&nbsp;*guid*]
+*pool*
+
+# DESCRIPTION
+
+Generates a new unique identifier for the pool.
+You must ensure that all devices in this pool are online and healthy before
+performing this action.
+
+**-g** *guid*
+
+> Set the pool GUID to the provided value.
+> The GUID can be any 64-bit value accepted by
+> strtoull(3)
+> in base 10.
+> **zpool-reguid**
+> will return an error if the provided GUID is already in use.
+
+# SEE ALSO
+
+zpool-export(8),
+zpool-import(8)
+
+Debian - August 26, 2024

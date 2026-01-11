@@ -1,0 +1,48 @@
+ZFS-BOOKMARK(8) - System Manager's Manual
+
+# NAME
+
+**zfs-bookmark** - create bookmark of ZFS snapshot
+
+# SYNOPSIS
+
+**zfs**
+**bookmark**
+*snapshot*|*bookmark*
+*newbookmark*
+
+# DESCRIPTION
+
+Creates a new bookmark of the given snapshot or bookmark.
+Bookmarks mark the point in time when the snapshot was created, and can be used
+as the incremental source for a
+**zfs** **send**.
+
+When creating a bookmark from an existing redaction bookmark, the resulting
+bookmark is
+*not*
+a redaction bookmark.
+
+This feature must be enabled to be used.
+See
+zpool-features(7)
+for details on ZFS feature flags and the
+**bookmarks**
+feature.
+
+# EXAMPLES
+
+## Example 1: Creating a bookmark
+
+The following example creates a bookmark to a snapshot.
+This bookmark can then be used instead of a snapshot in send streams.
+
+	# **zfs** **bookmark** *rpool*@*snapshot rpool*#*bookmark*
+
+# SEE ALSO
+
+zfs-destroy(8),
+zfs-send(8),
+zfs-snapshot(8)
+
+Debian - July 11, 2022

@@ -1,0 +1,82 @@
+ZFS-ZONE(8) - System Manager's Manual
+
+# NAME
+
+**zfs-zone**,
+**zfs-unzone** - attach and detach ZFS filesystems to user namespaces
+
+# SYNOPSIS
+
+**zfs&nbsp;**zone**&zwnj;**
+*nsfile*
+*filesystem*  
+**zfs&nbsp;**unzone**&zwnj;**
+*nsfile*
+*filesystem*
+
+# DESCRIPTION
+
+**zfs**
+**zone**
+*nsfile*
+*filesystem*
+
+> Attach the specified
+> *filesystem*
+> to the user namespace identified by
+> *nsfile*.
+> From now on this file system tree can be managed from within a user namespace
+> if the
+> **zoned**
+> property has been set.
+
+> You cannot attach a zoned dataset's children to another user namespace.
+> You can also not attach the root file system
+> of the user namespace or any dataset
+> which needs to be mounted before the zfs service
+> is run inside the user namespace,
+> as it would be attached unmounted until it is
+> mounted from the service inside the user namespace.
+
+> To allow management of the dataset from within a user namespace, the
+> **zoned**
+> property has to be set and the user namespaces needs access to the
+> */dev/zfs*
+> device.
+> The
+> **quota**
+> property cannot be changed from within a user namespace.
+
+> After a dataset is attached to a user namespace and the
+> **zoned**
+> property is set,
+> a zoned file system cannot be mounted outside the user namespace,
+> since the user namespace administrator might have set the mount point
+> to an unacceptable value.
+
+**zfs**
+**unzone**
+*nsfile*
+*filesystem*
+
+> Detach the specified
+> *filesystem*
+> from the user namespace identified by
+> *nsfile*.
+
+# EXAMPLES
+
+## Example 1: Delegating a Dataset to a User Namespace
+
+The following example delegates the
+*tank/users*
+dataset to a user namespace identified by user namespace file
+*/proc/1234/ns/user*.
+
+	# **zfs** **zone** */proc/1234/ns/user* *tank/users*
+
+# SEE ALSO
+
+zfsprops(7)
+
+Debian - July 11, 2022
