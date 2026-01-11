@@ -1,0 +1,31 @@
+name: Publish Github Pages
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: https://github.com/actions/checkout@v2
+    - name: Prepare
+      run: |
+        sudo apt-get update -y
+        sudo apt-get install -y git python3-pip mandoc
+        pip install -r docs/requirements.txt
+    - name: Gen_man_pages
+      run: make man
+    - name: Gen_feature_matrix
+      run: make feature_matrix
+    - name: Gen_sphinx
+      uses: ammaraskar/sphinx-action@master
+      with:
+        docs-folder: "docs/"
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./docs/_build/html
+        force_orphan: true

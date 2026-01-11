@@ -1,0 +1,79 @@
+name: "Test installation guides"
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'docs/Getting Started/NixOS/Root on ZFS.rst'
+      - 'docs/Getting Started/RHEL-based distro/Root on ZFS.rst'
+      - 'docs/Getting Started/Alpine Linux/Root on ZFS.rst'
+      - 'docs/Getting Started/Arch Linux/Root on ZFS.rst'
+      - 'docs/Getting Started/Fedora/Root on ZFS.rst'
+      - 'docs/Getting Started/zfs_root_maintenance.rst'
+
+  pull_request:
+    paths:
+      - 'docs/Getting Started/NixOS/Root on ZFS.rst'
+      - 'docs/Getting Started/RHEL-based distro/Root on ZFS.rst'
+      - 'docs/Getting Started/Alpine Linux/Root on ZFS.rst'
+      - 'docs/Getting Started/Arch Linux/Root on ZFS.rst'
+      - 'docs/Getting Started/Fedora/Root on ZFS.rst'
+      - 'docs/Getting Started/zfs_root_maintenance.rst'
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: https://github.com/actions/checkout@v3
+      - name: Install shellcheck
+        run: |
+          sudo apt install --yes shellcheck
+      - name: Run shellcheck on test entry point
+        run: |
+          sh -n ./scripts/zfs_root_guide_test.sh
+          shellcheck --check-sourced  --enable=all --shell=dash --severity=style --format=tty \
+           ./scripts/zfs_root_guide_test.sh
+      - name: Install pylit
+        run: |
+          set -vexuf
+          sudo apt-get update -y
+          sudo apt-get install -y python3-pip
+          sudo pip install pylit
+      - name: Install ZFS and partitioning tools
+        run: |
+          set -vexuf
+          sudo add-apt-repository --yes universe
+          sudo apt install --yes zfsutils-linux
+          sudo apt install --yes qemu-utils
+          sudo modprobe zfs
+          sudo apt install --yes git jq parted
+          sudo apt install --yes whois curl
+          sudo apt install --yes arch-install-scripts
+      - name: Test Alpine Linux guide
+        run: |
+          sudo ./scripts/zfs_root_guide_test.sh alpine
+      - name: Test Root on ZFS maintenance guide
+        run: |
+          sudo ./scripts/zfs_root_guide_test.sh maintenance
+      - name: Test Arch Linux guide
+        run: |
+          sudo ./scripts/zfs_root_guide_test.sh archlinux
+      - name: Test Fedora guide
+        run: |
+         sudo ./scripts/zfs_root_guide_test.sh fedora
+      - name: Test RHEL guide
+        run: |
+         sudo ./scripts/zfs_root_guide_test.sh rhel
+      - uses: cachix/install-nix-action@v20
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+      - name: Test NixOS guide
+        run: |
+          sudo PATH="${PATH}" NIX_PATH="${NIX_PATH}" ./scripts/zfs_root_guide_test.sh nixos
+      - uses: https://github.com/actions/upload-artifact@v3
+        with:
+          name: installation-scripts
+          path: |
+            *.sh
