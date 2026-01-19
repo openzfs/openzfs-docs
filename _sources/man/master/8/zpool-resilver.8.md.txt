@@ -1,0 +1,33 @@
+ZPOOL-RESILVER(8) - System Manager's Manual
+
+# NAME
+
+**zpool-resilver** - resilver devices in ZFS storage pools
+
+# SYNOPSIS
+
+**zpool**
+**resilver**
+*pool*&#8230;
+
+# DESCRIPTION
+
+Starts a resilver of the specified pools.
+If an existing resilver is already running it will be restarted from the
+beginning.
+Any drives that were scheduled for a deferred
+resilver will be added to the new one.
+This requires the
+**resilver\_defer**
+pool feature.
+
+# SEE ALSO
+
+zpool-iostat(8),
+zpool-online(8),
+zpool-reopen(8),
+zpool-replace(8),
+zpool-scrub(8),
+zpool-status(8)
+
+Debian - July 11, 2022
