@@ -414,7 +414,7 @@ The primary goal of this dataset layout is to separate the OS from user
 data. This allows the root filesystem to be rolled back without rolling
 back user data such as logs (in ``/var/log``). This will be especially
 important if/when a ``beadm`` or similar utility is integrated. The
-``com.sun.auto-snapshot`` setting is used by some ZFS snapshot utilities
+``com.sun:auto-snapshot`` setting is used by some ZFS snapshot utilities
 to exclude transient data.
 
 If you do nothing extra, ``/tmp`` will be stored as part of the root
