@@ -142,7 +142,7 @@ do not apply to microSD cards:
    - Download the `Raspberry Pi Imager Utility
      <https://www.raspberrypi.com/news/raspberry-pi-imager-imaging-utility/>`_.
    - Flash the ``USB Boot`` image to a microSD card. The ``USB Boot`` image is
-     listed under ``Bootload`` in the ``Misc utility images`` folder.
+     listed under ``Bootloader`` in the ``Misc utility images`` folder.
    - Boot the Raspberry Pi from the microSD card. USB Boot should be enabled
      automatically.
 
