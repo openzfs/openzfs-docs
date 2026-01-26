@@ -652,9 +652,23 @@ PostgreSQL
 
 Make separate datasets for PostgreSQL's data and WAL. Set 
 ``compression=lz4`` and ``recordsize=32K`` (64K also work well, as 
-does the 128K default) on both. Configure ``full_page_writes = off`` 
-for PostgreSQL, as ZFS will never commit a partial write. For a database 
-with large updates, experiment with ``logbias=throughput`` on 
+does the 128K default) on both.
+Previous advice before ``compression=lz4`` was to to set
+``recordsize=8K`` to match PostgreSQL's 8K page size to avoid
+write amplification, but compression often causes even bigger
+performance improvements [#compression_larger_block_size]_,
+and compression is only effective when given larger ``recordesize``.
+
+Configure ``full_page_writes = off``
+for PostgreSQL, as ZFS will never commit a partial write.
+But do not do this if you set ``recordsize`` < 8K for some reason,
+or if there is any chance that somebody may
+copy this database config to a non-ZFS system,
+as PostgreSQL can end up with corrupt data on power loss
+if the filesystem does not provide at least
+Postgres-page-sized atomic writes [#postgres_full_page_writes]_.
+
+For a database with large updates, experiment with ``logbias=throughput`` on
 PostgreSQL's data to avoid writing twice, but be aware that with this 
 setting smaller updates can cause severe fragmentation.
 
@@ -778,6 +792,8 @@ AIO should be used to maximize IOPS when using files for guest storage.
 
 .. rubric:: Footnotes
 
+.. [#compression_larger_block_size] <https://github.com/openzfs/openzfs-docs/pull/369>
+.. [#postgres_full_page_writes] https://wiki.postgresql.org/wiki/Full_page_writes
 .. [#ssd_iops] <http://www.anandtech.com/show/6489/playing-with-op>
 .. [#mysql_basic] <https://www.patpro.net/blog/index.php/2014/03/09/2617-mysql-on-zfs-on-freebsd/>
 .. [#sqlite_ps] <https://www.sqlite.org/pragma.html#pragma_page_size>
