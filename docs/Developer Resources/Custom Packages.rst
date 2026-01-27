@@ -122,7 +122,7 @@ Linux kernel must be specified. At configure time the build system will
 make an educated guess as to which kernel you want to build against.
 However, if configure is unable to locate your kernel development
 headers, or you want to build against a different kernel, you must
-specify the exact path with the *--with-linux* and *--with-linux-obj*
+specify the exact path with the ``--with-linux`` and ``--with-linux-obj``
 options.
 
 .. code:: sh
@@ -146,7 +146,7 @@ kABI-tracking kmod
 The process for building kABI-tracking kmods is almost identical to for
 building normal kmods. However, it will only produce binaries which can
 be used by multiple kernels if the distribution supports a stable kABI.
-In order to request kABI-tracking package the *--with-spec=redhat*
+In order to request kABI-tracking package the ``--with-spec=redhat``
 option must be passed to configure.
 
 Be aware that these packages do not completely follow Redhat's rules, so
@@ -235,7 +235,7 @@ Linux kernel must be specified. At configure time the build system will
 make an educated guess as to which kernel you want to build against.
 However, if configure is unable to locate your kernel development
 headers, or you want to build against a different kernel, you must
-specify the exact path with the *--with-linux* and *--with-linux-obj*
+specify the exact path with the ``--with-linux`` and ``--with-linux-obj``
 options.
 
 To build RPM converted Debian packages:
