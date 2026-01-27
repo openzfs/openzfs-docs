@@ -211,7 +211,7 @@ additional utilities must be installed.
 There are a few helper scripts provided in the top-level scripts
 directory designed to aid developers working with in-tree builds.
 
--  **zfs-helper.sh:** Certain functionality (i.e. /dev/zvol/) depends on
+-  **zfs-helpers.sh:** Certain functionality (i.e. /dev/zvol/) depends on
    the ZFS provided udev helper scripts being installed on the system.
    This script can be used to create symlinks on the system from the
    installation location to the in-tree helper. These links must be in
