@@ -74,7 +74,7 @@ ZFS 2.1 release:
    sudo yum install epel-release gcc make autoconf automake libtool rpm-build libtirpc-devel libblkid-devel libuuid-devel libudev-devel openssl-devel zlib-devel libaio-devel libattr-devel elfutils-libelf-devel kernel-devel-$(uname -r) python python2-devel python-setuptools python-cffi libffi-devel ncompress
    sudo yum install --enablerepo=epel dkms python-packaging
  
-**NOTE:** RHEL/CentOS 7 is end of life. Use yum instead of dnf for install instructions below.
+**NOTE:** RHEL/CentOS 7 is end of life. Use dnf instead of yum for install instructions below.
 
 -  **RHEL/CentOS 8**:
 
