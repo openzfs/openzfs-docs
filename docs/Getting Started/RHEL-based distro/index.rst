@@ -59,7 +59,7 @@ package, then the *kernel-devel* and *zfs* packages. Note that it is
 important to make sure that the matching *kernel-devel* package is installed
 for the running kernel since DKMS requires it to build OpenZFS.
 
-For EL6 and 7, separately run::
+For EL7, separately run::
 
  yum install -y epel-release
  yum install -y kernel-devel
@@ -86,7 +86,7 @@ install the kABI-tracking kmods the default repository must be switched
 from *zfs* to *zfs-kmod*. Keep in mind that the kABI-tracking kmods are
 only verified to work with the distribution-provided, non-Stream kernel.
 
-For EL6 and 7 run::
+For EL7 run::
 
  yum-config-manager --disable zfs
  yum-config-manager --enable zfs-kmod
@@ -140,30 +140,65 @@ will be aliased to the current minor version (e.g. `8.7`), but you can specify
 
 In the above example, the former packages were built for EL8.7, and the latter for EL8.6.
 
-Testing Repositories
---------------------
+Latest Repositories
+-------------------
 
-In addition to the primary *zfs* repository a *zfs-testing* repository
-is available. This repository, which is disabled by default, contains
-the latest version of OpenZFS which is under active development. These
-packages are made available in order to get feedback from users regarding
+*zfs-latest* repository, which is disabled by default, contains the latest released
+version of OpenZFS which is under active development.
+These packages are made available in order to get feedback from users regarding
 the functionality and stability of upcoming releases. These packages
-**should not** be used on production systems. Packages from the testing
+**should not** be used on production systems. Packages from the latest
 repository can be installed as follows.
 
-For EL6 and 7 run::
+For EL8 and newer run::
 
- yum-config-manager --enable zfs-testing
- yum install kernel-devel zfs
-
-And for EL8 and newer::
-
- dnf config-manager --enable zfs-testing
+ dnf config-manager --enable zfs-latest
  dnf install kernel-devel zfs
 
 .. note::
-   Use *zfs-testing* for DKMS packages and *zfs-testing-kmod*
+   Use *zfs-latest* for DKMS packages and *zfs-latest-kmod*
    for kABI-tracking kmod packages.
+
+Legacy Repositories
+-------------------
+
+*zfs-legacy* repository, which is disabled by default, contains the previous
+ZFS major version that is still being actively updated.
+Typically, this repository provides same packages as primary *zfs* repository
+for RHEL- and CentOS-based distribution.
+Packages from the legacy repository can be installed as follows.
+
+For EL8 and newer run::
+
+ dnf config-manager --enable zfs-legacy
+ dnf install kernel-devel zfs
+
+.. note::
+   Use *zfs-legacy* for DKMS packages and *zfs-legacy-kmod*
+   for kABI-tracking kmod packages.
+
+Version Specific Repositories
+-----------------------------
+
+Version specific repositories are provided for users who wants to run a specific
+branch (e.g. `2.3.x`) of ZFS.
+Packages from the version specific repository can be installed as follows.
+
+For EL8 and newer, to enable version specific repository for ZFS branch x.y, run::
+
+ dnf config-manager --enable zfs-x.y
+ dnf install kernel-devel zfs
+
+.. note::
+   Use *zfs-x.y* for DKMS packages and *zfs-x.y-kmod*
+   for kABI-tracking kmod packages.
+
+Testing Repositories (DEPRECATED)
+---------------------------------
+
+*zfs-testing* and *zfs-testing-kmod* repositories are DEPRECATED
+in favor of 'zfs-latest'.
+
 
 Root on ZFS
 -----------
