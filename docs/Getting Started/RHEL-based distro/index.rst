@@ -22,7 +22,7 @@ encouraged to verify the authenticity of the OpenZFS public key using
 the fingerprint listed here.
 
 | **Key location:** /etc/pki/rpm-gpg/RPM-GPG-KEY-openzfs (previously -zfsonlinux)
-| **Current release packages:** `EL7`_, `EL8`_, `EL9`_
+| **Current release packages:** `EL7`_, `EL8`_, `EL9`_, `EL10`_
 | **Archived release packages:** `see repo page <https://github.com/zfsonlinux/zfsonlinux.github.com/tree/master/epel>`__
 
 | **Signing key1 (EL8 and older, Fedora 36 and older)**
@@ -176,6 +176,7 @@ Root on ZFS
 .. _kABI-tracking kmod: https://elrepoproject.blogspot.com/2016/02/kabi-tracking-kmod-packages.html
 .. _DKMS: https://en.wikipedia.org/wiki/Dynamic_Kernel_Module_Support
 .. _EL7: https://zfsonlinux.org/epel/zfs-release-2-3.el7.noarch.rpm
-.. _EL8: https://zfsonlinux.org/epel/zfs-release-2-3.el8.noarch.rpm
-.. _EL9: https://zfsonlinux.org/epel/zfs-release-2-3.el9.noarch.rpm
+.. _EL8: https://zfsonlinux.org/epel/zfs-release-3-0.el8.noarch.rpm
+.. _EL9: https://zfsonlinux.org/epel/zfs-release-3-0.el9.noarch.rpm
+.. _EL10: https://zfsonlinux.org/epel/zfs-release-3-0.el10.noarch.rpm
 .. _EPEL repository: https://fedoraproject.org/wiki/EPEL
