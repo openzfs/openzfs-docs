@@ -1,0 +1,26 @@
+ZVOL\_WAIT(1) - General Commands Manual
+
+# NAME
+
+**zvol\_wait** - wait for ZFS volume links to appear in /dev
+
+# SYNOPSIS
+
+**zvol\_wait**
+
+# DESCRIPTION
+
+When a ZFS pool is imported, the volumes within it will appear as block devices.
+As they're registered,
+udev(7)
+asynchronously creates symlinks under
+*/dev/zvol*
+using the volumes' names.
+**zvol\_wait**
+will wait for all those symlinks to be created before exiting.
+
+# SEE ALSO
+
+udev(7)
+
+Debian - May 27, 2021
