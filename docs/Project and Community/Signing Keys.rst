@@ -3,7 +3,7 @@ Signing Keys
 
 All tagged ZFS on Linux
 `releases <https://github.com/zfsonlinux/zfs/releases>`__ are signed by
-the official maintainer for that branch. These signatures are
+one of the official maintainers. These signatures are
 automatically verified by GitHub and can be checked locally by
 downloading the maintainers public key.
 
