@@ -5,7 +5,7 @@ All tagged ZFS on Linux
 `releases <https://github.com/zfsonlinux/zfs/releases>`__ are signed by
 one of the official maintainers. These signatures are
 automatically verified by GitHub and can be checked locally by
-downloading the maintainers public key.
+downloading the maintainer's public key.
 
 Maintainers
 -----------
