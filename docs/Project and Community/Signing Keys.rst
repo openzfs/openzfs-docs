@@ -10,7 +10,7 @@ downloading the maintainer's public key.
 Maintainers
 -----------
 
-| **Maintainer:** `Ned Bass <https://github.com/nedbass>`__
+| **Maintainer (inactive):** `Ned Bass <https://github.com/nedbass>`__
 | **Download:**
   `pgp.mit.edu <http://pgp.mit.edu/pks/lookup?op=vindex&search=0xB97467AAC77B9667&fingerprint=on>`__
 | **Key ID:** C77B9667
