@@ -10,14 +10,13 @@ downloading the maintainers public key.
 Maintainers
 -----------
 
-Release branch (spl/zfs-\*-release)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 | **Maintainer:** `Ned Bass <https://github.com/nedbass>`__
 | **Download:**
   `pgp.mit.edu <http://pgp.mit.edu/pks/lookup?op=vindex&search=0xB97467AAC77B9667&fingerprint=on>`__
 | **Key ID:** C77B9667
 | **Fingerprint:** 29D5 610E AE29 41E3 55A2 FE8A B974 67AA C77B 9667
+
+&nbsp;
 
 | **Maintainer:** `Tony Hutter <https://github.com/tonyhutter>`__
 | **Download:**
@@ -25,8 +24,7 @@ Release branch (spl/zfs-\*-release)
 | **Key ID:** D4598027
 | **Fingerprint:** 4F3B A9AB 6D1F 8D68 3DC2 DFB5 6AD8 60EE D459 8027
 
-Master branch (master)
-~~~~~~~~~~~~~~~~~~~~~~
+&nbsp;
 
 | **Maintainer:** `Brian Behlendorf <https://github.com/behlendorf>`__
 | **Download:**
