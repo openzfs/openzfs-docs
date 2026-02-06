@@ -953,6 +953,7 @@ Step 6: First Boot
 
      mount | grep -v zfs | tac | awk '/\/mnt/ {print $3}' | \
          xargs -i{} umount -lf {}
+     systemctl stop udev
      zpool export -a
 
 #. If this fails for rpool, mounting it on boot will fail and you will need to
