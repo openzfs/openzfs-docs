@@ -75,18 +75,52 @@ see below.
 
     dnf update --exclude=kernel*
 
-Testing Repo
---------------------
+Latest Repositories (Fedora 41+)
+--------------------------------
 
-Testing repository, which is disabled by default, contains
-the latest version of OpenZFS which is under active development.
-These packages
-**should not** be used on production systems.
+*zfs-latest* repository contains the latest released version of OpenZFS which
+is under active development. It will contain the newest features, and is
+considered stable, but will have less real-world testing use than
+*zfs-legacy*. 
+This repository is equivalent to the default *zfs* repository for Fedora.
+Packages from the latest repository can be installed as follows.
 
-::
+For Fedora 41 and newer run::
 
-   dnf config-manager --enable zfs-testing
-   dnf install zfs
+ dnf config-manager --enable zfs-latest
+ dnf install kernel-devel zfs
+
+Legacy Repositories (Fedora 41+)
+--------------------------------
+
+*zfs-legacy* repository contains the previous released version of OpenZFS which
+is still being actively updated.
+Typically, this repository provides same packages as primary *zfs* repository
+for RHEL- and CentOS-based distribution.
+Packages from the legacy repository can be installed as follows.
+
+For Fedora 41 and newer run::
+
+ dnf config-manager --enable zfs-legacy
+ dnf install kernel-devel zfs
+
+Version Specific Repositories (Fedora 41+)
+------------------------------------------
+
+Version specific repositories are provided for users who wants to run a specific
+branch (e.g. `2.3.x`) of ZFS.
+Packages from the version specific repository can be installed as follows.
+
+For Fedora 41 and newer, to enable version specific repository for ZFS branch x.y, run::
+
+ dnf config-manager --enable zfs-x.y
+ dnf install kernel-devel zfs
+
+Testing Repository (DEPRECATED)
+-------------------------------
+
+*zfs-testing* repository is DEPRECATED in favor of 'zfs-latest'.
+
 
 Root on ZFS
 -----------
