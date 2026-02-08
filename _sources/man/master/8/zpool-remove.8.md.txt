@@ -1,0 +1,162 @@
+ZPOOL-REMOVE(8) - System Manager's Manual
+
+# NAME
+
+**zpool-remove** - remove devices from ZFS storage pool
+
+# SYNOPSIS
+
+**zpool**
+**remove**
+\[**-npw**]
+*pool*&nbsp;*device*&#8230;  
+**zpool**
+**remove**
+**-s**
+*pool*
+
+# DESCRIPTION
+
+**zpool**
+**remove**
+\[**-npw**]
+*pool* *device*&#8230;
+
+> Removes the specified device from the pool.
+> This command supports removing hot spare, cache, log, and both mirrored and
+> non-redundant primary top-level vdevs, including dedup and special vdevs.
+
+> Top-level vdevs can only be removed if the primary pool storage does not contain
+> a top-level raidz or draid vdev, all top-level vdevs have the same ashift size,
+> and the keys for all encrypted datasets are loaded.
+
+> Removing a top-level vdev reduces the total amount of space in the storage pool.
+> The specified device will be evacuated by copying all allocated space from it to
+> the other devices in the pool.
+> In this case, the
+> **zpool** **remove**
+> command initiates the removal and returns, while the evacuation continues in
+> the background.
+> The removal progress can be monitored with
+> **zpool** **status**.
+> If an I/O error is encountered during the removal process it will be canceled.
+> The
+> **device\_removal**
+> feature flag must be enabled to remove a top-level vdev, see
+> zpool-features(7).
+
+> A mirrored top-level device (log or data) can be removed by specifying the top-
+> level mirror for the
+> same.
+> Non-log devices or data devices that are part of a mirrored configuration can be
+> removed using
+> the
+> **zpool** **detach**
+> command.
+
+> **-n**
+
+> > Do not actually perform the removal
+> > ("No-op").
+> > Instead, print the estimated amount of memory that will be used by the
+> > mapping table after the removal completes.
+> > This is nonzero only for top-level vdevs.
+
+> **-p**
+
+> > Used in conjunction with the
+> > **-n**
+> > flag, displays numbers as parsable (exact) values.
+
+> **-w**
+
+> > Waits until the removal has completed before returning.
+
+**zpool**
+**remove**
+**-s**
+*pool*
+
+> Stops and cancels an in-progress removal of a top-level vdev.
+
+# EXAMPLES
+
+## Example 1: Removing a Mirrored top-level (Log or Data) Device
+
+The following commands remove the mirrored log device
+**mirror-2**
+and mirrored top-level data device
+**mirror-1**.
+
+Given this configuration:
+
+	  pool: tank
+	 state: ONLINE
+	 scrub: none requested
+	config:
+	
+	         NAME        STATE     READ WRITE CKSUM
+	         tank        ONLINE       0     0     0
+	           mirror-0  ONLINE       0     0     0
+	             sda     ONLINE       0     0     0
+	             sdb     ONLINE       0     0     0
+	           mirror-1  ONLINE       0     0     0
+	             sdc     ONLINE       0     0     0
+	             sdd     ONLINE       0     0     0
+	         logs
+	           mirror-2  ONLINE       0     0     0
+	             sde     ONLINE       0     0     0
+	             sdf     ONLINE       0     0     0
+
+The command to remove the mirrored log
+*mirror-2* is:
+
+	# **zpool** **remove** *tank mirror-2*
+
+At this point, the log device no longer exists
+(both sides of the mirror have been removed):
+
+	  pool: tank
+	 state: ONLINE
+	  scan: none requested
+	config:
+	
+	        NAME        STATE     READ WRITE CKSUM
+	        tank        ONLINE       0     0     0
+	          mirror-0  ONLINE       0     0     0
+	            sda     ONLINE       0     0     0
+	            sdb     ONLINE       0     0     0
+	          mirror-1  ONLINE       0     0     0
+	            sdc     ONLINE       0     0     0
+	            sdd     ONLINE       0     0     0
+
+The command to remove the mirrored data
+*mirror-1* is:
+
+	# **zpool** **remove** *tank mirror-1*
+
+After
+*mirror-1* has been evacuated, the pool remains redundant, but
+the total amount of space is reduced:
+
+	  pool: tank
+	 state: ONLINE
+	  scan: none requested
+	config:
+	
+	        NAME        STATE     READ WRITE CKSUM
+	        tank        ONLINE       0     0     0
+	          mirror-0  ONLINE       0     0     0
+	            sda     ONLINE       0     0     0
+	            sdb     ONLINE       0     0     0
+
+# SEE ALSO
+
+zpool-add(8),
+zpool-detach(8),
+zpool-labelclear(8),
+zpool-offline(8),
+zpool-replace(8),
+zpool-split(8)
+
+Debian - November 19, 2024
