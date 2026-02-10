@@ -60,7 +60,7 @@ The following dependencies should be installed to build the latest ZFS
 
 .. code:: sh
 
-   pkg install autoconf automake autotools git gmake python devel/py-sysctl sudo
+   pkg install autoconf automake autotools gettext git gmake python devel/py-sysctl sudo
     
 Build Options
 ~~~~~~~~~~~~~
