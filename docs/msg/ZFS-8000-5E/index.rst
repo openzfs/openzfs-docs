@@ -55,7 +55,7 @@ experienced a failure:
    # zpool status -x
      pool: test
     state: FAULTED
-   status: One or more devices could not be used because the the label is missing
+   status: One or more devices could not be used because the label is missing
            or invalid.  There are insufficient replicas for the pool to continue
            functioning.
    action: Destroy and re-create the pool from a backup source.
