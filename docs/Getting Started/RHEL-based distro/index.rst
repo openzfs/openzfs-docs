@@ -116,11 +116,11 @@ time you can create such configuration in ``/etc/modules-load.d``::
 Previous minor EL releases
 --------------------------
 
-The current release package uses `"${releasever}"` rather than specify a particular
-minor release as previous release packages did.  Typically `"${releasever}"` will
+The current release package uses ``"${releasever}"`` rather than specify a particular
+minor release as previous release packages did.  Typically ``"${releasever}"`` will
 resolve to just the major version (e.g. `8`), and the resulting repository URL
 will be aliased to the current minor version (e.g. `8.7`), but you can specify
-`--releasever` to use previous repositories. ::
+``--releasever`` to use previous repositories. ::
 
   [vagrant@localhost ~]$ dnf list available --showduplicates kmod-zfs
   Last metadata expiration check: 0:00:08 ago on tor 31 jan 2023 17:50:05 UTC.
