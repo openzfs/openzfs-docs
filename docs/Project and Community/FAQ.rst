@@ -357,7 +357,7 @@ The /etc/zfs/zpool.cache file
 -----------------------------
 
 Whenever a pool is imported on the system it will be added to the
-``/etc/zfs/zpool.cache file``. This file stores pool configuration
+``/etc/zfs/zpool.cache`` file. This file stores pool configuration
 information, such as the device names and pool state. If this file
 exists when running the ``zpool import`` command then it will be used to
 determine the list of pools available for import. When a pool is not
