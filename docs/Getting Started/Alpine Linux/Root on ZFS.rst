@@ -30,6 +30,12 @@ follow instructions on this page if you plan to use ZBM,
 as the layouts are not compatible.  Refer
 to their site for installation details.
 
+**Alpinebox**
+
+`Alpinebox <https://github.com/psy0rz/alpinebox>`__ is an automated Alpine installer that implements the guide below and more. It also included ZFSBootMenu.
+
+Use it as an alternative to these instructions.
+
 **Customization**
 
 Unless stated otherwise, it is not recommended to customize system
