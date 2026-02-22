@@ -1,0 +1,37 @@
+ZPOOL-LABELCLEAR(8) - System Manager's Manual
+
+# NAME
+
+**zpool-labelclear** - remove ZFS label information from device
+
+# SYNOPSIS
+
+**zpool**
+**labelclear**
+\[**-f**]
+*device*
+
+# DESCRIPTION
+
+Removes ZFS label information from the specified
+*device*.
+If the
+*device*
+is a cache device, it also removes the L2ARC header
+(persistent L2ARC).
+The
+*device*
+must not be part of an active pool configuration.
+
+**-f**
+
+> Treat exported or foreign devices as inactive.
+
+# SEE ALSO
+
+zpool-destroy(8),
+zpool-detach(8),
+zpool-remove(8),
+zpool-replace(8)
+
+Debian - July 11, 2022

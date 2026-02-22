@@ -1,0 +1,123 @@
+ZPOOL-ATTACH(8) - System Manager's Manual
+
+# NAME
+
+**zpool-attach** - attach new device to existing ZFS vdev
+
+# SYNOPSIS
+
+**zpool**
+**attach**
+\[**-fsw**]
+\[**-o**&nbsp;*property*=*value*]
+*pool&nbsp;vdev&nbsp;new\_device*
+
+# DESCRIPTION
+
+Attaches
+*new\_device*
+to the existing
+*vdev*.
+The behavior differs depending on if the existing
+*vdev*
+is a RAID-Z device, or a mirror/plain device.
+
+If the existing vdev is a mirror or plain device
+(e.g. specified as "`sda`" or "`mirror-7`"),
+the new device will be mirrored with the existing vdev, a resilver will be
+initiated, and the new device will contribute to additional redundancy once the
+resilver completes.
+If
+*vdev*
+is not currently part of a mirrored configuration,
+*device*
+automatically transforms into a two-way mirror of
+*device*
+and
+*new\_device*.
+If
+*vdev*
+is part of a two-way mirror, attaching
+*new\_device*
+creates a three-way mirror, and so on.
+In either case,
+*new\_device*
+begins to resilver immediately and any running scrub is canceled.
+
+If the existing vdev is a RAID-Z device
+(e.g. specified as "*raidz2-0*"),
+the new device will become part of that RAID-Z group.
+A "raidz expansion" will be initiated, and once the expansion completes,
+the new device will contribute additional space to the RAID-Z group.
+The expansion entails reading all allocated space from existing disks in the
+RAID-Z group, and rewriting it to the new disks in the RAID-Z group (including
+the newly added
+*device*).
+Its progress can be monitored with
+**zpool** **status**.
+
+Data redundancy is maintained during and after the expansion.
+If a disk fails while the expansion is in progress, the expansion pauses until
+the health of the RAID-Z vdev is restored (e.g. by replacing the failed disk
+and waiting for reconstruction to complete).
+Expansion does not change the number of failures that can be tolerated
+without data loss (e.g. a RAID-Z2 is still a RAID-Z2 even after expansion).
+A RAID-Z vdev can be expanded multiple times.
+
+After the expansion completes, old blocks retain their old data-to-parity
+ratio
+(e.g. 5-wide RAID-Z2 has 3 data and 2 parity)
+but distributed among the larger set of disks.
+New blocks will be written with the new data-to-parity ratio (e.g. a 5-wide
+RAID-Z2 which has been expanded once to 6-wide, has 4 data and 2 parity).
+However, the vdev's assumed parity ratio does not change, so slightly less
+space than is expected may be reported for newly-written blocks, according to
+**zfs** **list**,
+**df**,
+**ls** **-s**,
+and similar tools.
+
+A pool-wide scrub is initiated at the end of the expansion in order to verify
+the checksums of all blocks which have been copied during the expansion.
+
+**-f**
+
+> Forces use of
+> *new\_device*,
+> even if it appears to be in use.
+> Not all vdevs can be overridden in this manner.
+
+**-o** *property*=*value*
+
+> Sets the given pool properties.
+> See the
+> zpoolprops(7)
+> manual page for a list of valid properties that can be set.
+> The only property supported at the moment is
+> **ashift**.
+
+**-s**
+
+> When attaching to a mirror or plain vdev, the
+> *new\_device*
+> is reconstructed sequentially to restore redundancy as quickly as possible.
+> Checksums are not verified during sequential reconstruction so a scrub is
+> started when the resilver completes.
+
+**-w**
+
+> Waits until
+> *new\_device*
+> has finished resilvering or expanding before returning.
+
+# SEE ALSO
+
+zpool-add(8),
+zpool-detach(8),
+zpool-import(8),
+zpool-initialize(8),
+zpool-online(8),
+zpool-replace(8),
+zpool-resilver(8)
+
+Debian - November 8, 2023

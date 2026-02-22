@@ -1,0 +1,34 @@
+ZPOOL-PREFETCH(8) - System Manager's Manual
+
+# NAME
+
+**zpool-prefetch** - Prefetches pool metadata into ARC
+
+# SYNOPSIS
+
+**zpool**
+**prefetch**
+\[**-t**&nbsp;*type*]
+*pool*
+
+# DESCRIPTION
+
+Massively prefetch metadata of a specific type for the given pool into the ARC
+to reduce latency of some operations later.
+If no type is specified, all types are prefetched.
+
+The following types are supported:
+
+**brt**
+
+> Prefetch the BRT (block reference table).
+> This may improve performance for block cloning operations,
+> and frees for earlier cloned blocks.
+
+**ddt**
+
+> Prefetch the DDT (deduplication table).
+> This may improve performance of writes when deduplication is enabled,
+> and frees for earlier deduplicated blocks.
+
+Debian - February 14, 2024

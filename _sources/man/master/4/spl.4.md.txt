@@ -1,0 +1,181 @@
+SPL(4) - Device Drivers Manual
+
+# NAME
+
+**spl** - parameters of the SPL kernel module
+
+# DESCRIPTION
+
+**spl\_kmem\_cache\_kmem\_threads**=**4** (uint)
+
+> The number of threads created for the spl\_kmem\_cache task queue.
+> This task queue is responsible for allocating new slabs
+> for use by the kmem caches.
+> For the majority of systems and workloads only a small number of threads are
+> required.
+
+**spl\_kmem\_cache\_obj\_per\_slab**=**8** (uint)
+
+> The preferred number of objects per slab in the cache.
+> In general, a larger value will increase the caches memory footprint
+> while decreasing the time required to perform an allocation.
+> Conversely, a smaller value will minimize the footprint
+> and improve cache reclaim time but individual allocations may take longer.
+
+**spl\_kmem\_cache\_max\_size**=**32** (64-bit) or **4** (32-bit) (uint)
+
+> The maximum size of a kmem cache slab in MiB.
+> This effectively limits the maximum cache object size to
+> **spl\_kmem\_cache\_max\_size**/**spl\_kmem\_cache\_obj\_per\_slab**.
+
+> Caches may not be created with
+> object sized larger than this limit.
+
+**spl\_kmem\_cache\_slab\_limit**=**16384** (uint)
+
+> For small objects the Linux slab allocator should be used to make the most
+> efficient use of the memory.
+> However, large objects are not supported by
+> the Linux slab and therefore the SPL implementation is preferred.
+> This value is used to determine the cutoff between a small and large object.
+
+> Objects of size
+> **spl\_kmem\_cache\_slab\_limit**
+> or smaller will be allocated using the Linux slab allocator,
+> large objects use the SPL allocator.
+> A cutoff of 16K was determined to be optimal for architectures using 4K pages.
+
+**spl\_kmem\_alloc\_warn**=**32768** (uint)
+
+> As a general rule
+> **kmem\_alloc**()
+> allocations should be small,
+> preferably just a few pages, since they must by physically contiguous.
+> Therefore, a rate limited warning will be printed to the console for any
+> **kmem\_alloc**()
+> which exceeds a reasonable threshold.
+
+> The default warning threshold is set to eight pages but capped at 32K to
+> accommodate systems using large pages.
+> This value was selected to be small enough to ensure
+> the largest allocations are quickly noticed and fixed.
+> But large enough to avoid logging any warnings when a allocation size is
+> larger than optimal but not a serious concern.
+> Since this value is tunable, developers are encouraged to set it lower
+> when testing so any new largish allocations are quickly caught.
+> These warnings may be disabled by setting the threshold to zero.
+
+**spl\_kmem\_alloc\_max**=**KMALLOC\_MAX\_SIZE**/**4** (uint)
+
+> Large
+> **kmem\_alloc**()
+> allocations will fail if they exceed
+> **KMALLOC\_MAX\_SIZE**.
+> Allocations which are marginally smaller than this limit may succeed but
+> should still be avoided due to the expense of locating a contiguous range
+> of free pages.
+> Therefore, a maximum kmem size with reasonable safely margin of 4x is set.
+> **kmem\_alloc**()
+> allocations larger than this maximum will quickly fail.
+> **vmem\_alloc**()
+> allocations less than or equal to this value will use
+> **kmalloc**(),
+> but shift to
+> **vmalloc**()
+> when exceeding this value.
+
+**spl\_kmem\_cache\_magazine\_size**=**0** (uint)
+
+> Cache magazines are an optimization designed to minimize the cost of
+> allocating memory.
+> They do this by keeping a per-CPU cache of recently
+> freed objects, which can then be reallocated without taking a lock.
+> This can improve performance on highly contended caches.
+> However, because objects in magazines will prevent otherwise empty slabs
+> from being immediately released this may not be ideal for low memory machines.
+
+> For this reason,
+> **spl\_kmem\_cache\_magazine\_size**
+> can be used to set a maximum magazine size.
+> When this value is set to 0 the magazine size will
+> be automatically determined based on the object size.
+> Otherwise magazines will be limited to 2-256 objects per magazine (i.e. per
+> CPU). Magazines may never be entirely disabled in this implementation.
+
+**spl\_hostid**=**0** (ulong)
+
+> The system hostid, when set this can be used to uniquely identify a system.
+> By default this value is set to zero which indicates the hostid is disabled.
+> It can be explicitly enabled by placing a unique non-zero value in
+> */etc/hostid*.
+
+**spl\_hostid\_path**=*/etc/hostid* (charp)
+
+> The expected path to locate the system hostid when specified.
+> This value may be overridden for non-standard configurations.
+
+**spl\_panic\_halt**=**0** (uint)
+
+> Cause a kernel panic on assertion failures.
+> When not enabled, the thread is halted to facilitate further debugging.
+
+> Set to a non-zero value to enable.
+
+**spl\_taskq\_kick**=**0** (uint)
+
+> Kick stuck taskq to spawn threads.
+> When writing a non-zero value to it, it will scan all the taskqs.
+> If any of them have a pending task more than 5 seconds old,
+> it will kick it to spawn more threads.
+> This can be used if you find a rare
+> deadlock occurs because one or more taskqs didn't spawn a thread when it should.
+
+**spl\_taskq\_thread\_bind**=**0** (int)
+
+> Bind taskq threads to specific CPUs.
+> When enabled all taskq threads will be distributed evenly
+> across the available CPUs.
+> By default, this behavior is disabled to allow the Linux scheduler
+> the maximum flexibility to determine where a thread should run.
+
+**spl\_taskq\_thread\_dynamic**=**1** (int)
+
+> Allow dynamic taskqs.
+> When enabled taskqs which set the
+> **TASKQ\_DYNAMIC**
+> flag will by default create only a single thread.
+> New threads will be created on demand up to a maximum allowed number
+> to facilitate the completion of outstanding tasks.
+> Threads which are no longer needed will be promptly destroyed.
+> By default this behavior is enabled but it can be disabled to
+> aid performance analysis or troubleshooting.
+
+**spl\_taskq\_thread\_priority**=**1** (int)
+
+> Allow newly created taskq threads to set a non-default scheduler priority.
+> When enabled, the priority specified when a taskq is created will be applied
+> to all threads created by that taskq.
+> When disabled all threads will use the default Linux kernel thread priority.
+> By default, this behavior is enabled.
+
+**spl\_taskq\_thread\_sequential**=**4** (int)
+
+> The number of items a taskq worker thread must handle without interruption
+> before requesting a new worker thread be spawned.
+> This is used to control
+> how quickly taskqs ramp up the number of threads processing the queue.
+> Because Linux thread creation and destruction are relatively inexpensive a
+> small default value has been selected.
+> This means that normally threads will be created aggressively which is
+> desirable.
+> Increasing this value will
+> result in a slower thread creation rate which may be preferable for some
+> configurations.
+
+**spl\_taskq\_thread\_timeout\_ms**=**5000** (uint)
+
+> Minimum idle threads exit interval for dynamic taskqs.
+> Smaller values allow idle threads exit more often and potentially be
+> respawned again on demand, causing more churn.
+
+Debian - May 7, 2025

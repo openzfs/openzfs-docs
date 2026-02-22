@@ -1,0 +1,110 @@
+ZFS-JAIL(8) - System Manager's Manual
+
+# NAME
+
+**zfs-jail** - attach or detach ZFS filesystem from FreeBSD jail
+
+# SYNOPSIS
+
+**zfs&nbsp;**jail**&zwnj;**
+*jailid*|*jailname*
+*filesystem*  
+**zfs&nbsp;**unjail**&zwnj;**
+*jailid*|*jailname*
+*filesystem*
+
+# DESCRIPTION
+
+The
+**zfs-jail**
+functionality can be used to assign a dataset onto a running
+FreeBSD
+system
+jail(4),
+allowing
+zfs(8)
+management utilities to be run inside of the
+jail(4).
+
+To allow management of the dataset from within a jail, the
+**jailed**
+property should be set and the required
+devfs.conf(5)
+entries to expose
+*/dev/zfs*
+device within the jail must be present.
+The
+**quota**
+property cannot be changed from within a jail.
+
+To use this functionality, the jail needs the
+**allow.mount**
+and
+**allow.mount.zfs**
+parameters set to
+**1**
+and the
+**enforce\_statfs**
+parameter set to a value lower than
+**2**.
+
+The subcommands are as follows:
+
+**jail**
+*jailid*|*jailname*
+*filesystem*
+
+> Attach the specified
+> *filesystem*
+> to the jail identified by JID
+> *jailid*
+> or name
+> *jailname*.
+> From now on this file system tree can be managed from within a jail if the
+> **jailed**
+> property has been set.
+
+> You cannot attach a jailed dataset's children to another jail.
+> You can also not attach the root file system
+> of the jail or any dataset which needs to be mounted before the zfs rc script
+> is run inside the jail, as it would be attached unmounted until it is
+> mounted from the rc script inside the jail.
+
+> After a dataset is attached to a jail and the
+> **jailed**
+> property is set, a jailed file system cannot be mounted outside the jail,
+> since the jail administrator might have set the mount point to an unacceptable
+> value.
+
+**unjail**
+*jailid*|*jailname*
+*filesystem*
+
+> Detaches the specified
+> *filesystem*
+> from the jail identified by JID
+> *jailid*
+> or name
+> *jailname*.
+
+# SEE ALSO
+
+devfs.conf(5),
+zfsprops(7),
+jail(8)
+
+# CAVEATS
+
+The root directory of jail can not be delegated to the jail with this
+utility because the jail must be running with a valid root directory.
+
+Jails are a
+FreeBSD
+feature and are not relevant on other platforms.
+See
+jail(8)
+for more information on managing jails, or
+zfs-zone(8)
+for the equivelant functionality on Linux.
+
+Debian - November 4, 2025

@@ -1,0 +1,81 @@
+ZPOOL-REPLACE(8) - System Manager's Manual
+
+# NAME
+
+**zpool-replace** - replace one device with another in ZFS storage pool
+
+# SYNOPSIS
+
+**zpool**
+**replace**
+\[**-fsw**]
+\[**-o**&nbsp;*property*=*value*]
+*pool*&nbsp;*device*&nbsp;\[*new-device*]
+
+# DESCRIPTION
+
+Replaces
+*device*
+with
+*new-device*.
+This is equivalent to attaching
+*new-device*,
+waiting for it to resilver, and then detaching
+*device*.
+Any in progress scrub will be canceled.
+
+The size of
+*new-device*
+must be greater than or equal to the minimum size of all the devices in a mirror
+or raidz configuration.
+
+*new-device*
+is required if the pool is not redundant.
+If
+*new-device*
+is not specified, it defaults to
+*device*.
+This form of replacement is useful after an existing disk has failed and has
+been physically replaced.
+In this case, the new disk may have the same
+*/dev*
+path as the old device, even though it is actually a different disk.
+ZFS recognizes this.
+
+**-f**
+
+> Forces use of
+> *new-device*,
+> even if it appears to be in use.
+> Not all devices can be overridden in this manner.
+
+**-o** *property*=*value*
+
+> Sets the given pool properties.
+> See the
+> zpoolprops(7)
+> manual page for a list of valid properties that can be set.
+> The only property supported at the moment is
+> **ashift**.
+
+**-s**
+
+> The
+> *new-device*
+> is reconstructed sequentially to restore redundancy as quickly as possible.
+> Checksums are not verified during sequential reconstruction so a scrub is
+> started when the resilver completes.
+> Sequential reconstruction is not supported for raidz configurations.
+
+**-w**
+
+> Waits until the replacement has completed before returning.
+
+# SEE ALSO
+
+zpool-detach(8),
+zpool-initialize(8),
+zpool-online(8),
+zpool-resilver(8)
+
+Debian - July 11, 2022

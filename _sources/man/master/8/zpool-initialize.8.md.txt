@@ -1,0 +1,69 @@
+ZPOOL-INITIALIZE(8) - System Manager's Manual
+
+# NAME
+
+**zpool-initialize** - write to unallocated regions of ZFS storage pool
+
+# SYNOPSIS
+
+**zpool**
+**initialize**
+\[**-c**|**-s**&nbsp;|**-u**]
+\[**-w**]
+**-a**|*pool*
+\[*device*]&#8230;
+
+# DESCRIPTION
+
+Begins initializing by writing to all unallocated regions on the specified
+devices, or all eligible devices in the pool if no individual devices are
+specified.
+Only leaf data or log devices may be initialized.
+
+**-a**, **--all**
+
+> Begin, cancel, suspend initializing on
+> all
+> pools.
+
+**-c**, **--cancel**
+
+> Cancel initializing on the specified devices, or all eligible devices if none
+> are specified.
+> If one or more target devices are invalid or are not currently being
+> initialized, the command will fail and no cancellation will occur on any device.
+
+**-s**, **--suspend**
+
+> Suspend initializing on the specified devices, or all eligible devices if none
+> are specified.
+> If one or more target devices are invalid or are not currently being
+> initialized, the command will fail and no suspension will occur on any device.
+> Initializing can then be resumed by running
+> **zpool** **initialize**
+> with no flags on the relevant target devices.
+
+**-u**, **--uninit**
+
+> Clears the initialization state on the specified devices, or all eligible
+> devices if none are specified.
+> If the devices are being actively initialized the command will fail.
+> After being cleared
+> **zpool** **initialize**
+> with no flags can be used to re-initialize all unallocated regions on
+> the relevant target devices.
+
+**-w**, **--wait**
+
+> Wait until the devices have finished initializing before returning.
+
+# SEE ALSO
+
+zpool-add(8),
+zpool-attach(8),
+zpool-create(8),
+zpool-online(8),
+zpool-replace(8),
+zpool-trim(8)
+
+Debian - July 30, 2025

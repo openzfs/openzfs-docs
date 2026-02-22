@@ -1,0 +1,113 @@
+ZPOOL-WAIT(8) - System Manager's Manual
+
+# NAME
+
+**zpool-wait** - wait for activity to stop in a ZFS storage pool
+
+# SYNOPSIS
+
+**zpool**
+**wait**
+\[**-Hp**]
+\[**-T**&nbsp;**u**|**d**]
+\[**-t**&nbsp;*activity*\[,*activity*]&#8230;]
+*pool*
+\[*interval*]
+
+# DESCRIPTION
+
+Waits until all background activity of the given types has ceased in the given
+pool.
+The activity could cease because it has completed, or because it has been
+paused or canceled by a user, or because the pool has been exported or
+destroyed.
+If no activities are specified, the command waits until background activity of
+every type listed below has ceased.
+If there is no activity of the given types in progress, the command returns
+immediately.
+
+These are the possible values for
+*activity*,
+along with what each one waits for:
+
+**discard**
+
+> Checkpoint to be discarded
+
+**free**
+
+> **freeing**
+> property to become
+> **0**
+
+**initialize**
+
+> All initializations to cease
+
+**replace**
+
+> All device replacements to cease
+
+**remove**
+
+> Device removal to cease
+
+**resilver**
+
+> Resilver to cease
+
+**scrub**
+
+> Scrub to cease
+
+**trim**
+
+> Manual trim to cease
+
+**raidz\_expand**
+
+> Attaching to a RAID-Z vdev to complete
+
+If an
+*interval*
+is provided, the amount of work remaining, in bytes, for each activity is
+printed every
+*interval*
+seconds.
+
+**-H**
+
+> Scripted mode.
+> Do not display headers, and separate fields by a single tab instead of arbitrary
+> space.
+
+**-p**
+
+> Display numbers in parsable (exact) values.
+
+**-T** **u**|**d**
+
+> Display a time stamp.
+> Specify
+> **u**
+> for a printed representation of the internal representation of time.
+> See
+> time(1).
+> Specify
+> **d**
+> for standard date format.
+> See
+> date(1).
+
+# SEE ALSO
+
+zpool-checkpoint(8),
+zpool-initialize(8),
+zpool-remove(8),
+zpool-replace(8),
+zpool-resilver(8),
+zpool-scrub(8),
+zpool-status(8),
+zpool-trim(8)
+
+Debian - January 29, 2024

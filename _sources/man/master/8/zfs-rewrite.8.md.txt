@@ -1,0 +1,119 @@
+ZFS-REWRITE(8) - System Manager's Manual
+
+# NAME
+
+**zfs-rewrite** - rewrite specified files without modification
+
+# SYNOPSIS
+
+**zfs**
+**rewrite**
+\[**-CPSrvx**]
+\[**-l**&nbsp;*length*]
+\[**-o**&nbsp;*offset*]
+*file*|*directory*&#8230;
+
+# DESCRIPTION
+
+Rewrite blocks of specified
+*file*
+as is without modification at a new location and possibly with new properties,
+as if they were atomically read and written back.
+See *NOTES*.
+for more information about property changes that may be applied during rewrite.
+
+**-C**
+
+> Skip blocks that are shared via block cloning (BRT).
+> Cloned blocks are referenced by multiple files or datasets.
+> Rewriting these blocks would create separate copies and increase space usage.
+> This flag prevents such expansion by skipping cloned blocks.
+
+**-P**
+
+> Perform physical rewrite, preserving logical birth time of blocks.
+> By default, rewrite updates logical birth times, making blocks appear
+> as modified in snapshots and incremental send streams.
+> Physical rewrite preserves logical birth times, avoiding unnecessary
+> inclusion in incremental streams.
+> Physical rewrite requires the
+> **physical\_rewrite**
+> feature to be enabled on the pool.
+
+**-S**
+
+> Skip blocks that are shared with snapshots.
+> Blocks created before the most recent snapshot are shared with that snapshot.
+> Rewriting these blocks would create new copies, leaving the old copies for
+> the snapshot and increasing space usage.
+> This flag prevents such expansion by skipping snapshot-shared blocks.
+
+**-l** *length*
+
+> Rewrite at most this number of bytes.
+
+**-o** *offset*
+
+> Start at this offset in bytes.
+
+**-r**
+
+> Recurse into directories.
+
+**-v**
+
+> Print names of all successfully rewritten files.
+
+**-x**
+
+> Don't cross file system mount points when recursing.
+
+# NOTES
+
+Rewrite works by replacing an existing block with a new block of the same
+logical size.
+Changed dataset properties that operate on the data or metadata without
+changing the logical size will be applied.
+These include
+**checksum**,
+**compression**,
+**dedup**
+and
+**copies**.
+Changes to properties that affect the size of a logical block, like
+**recordsize**,
+will have no effect.
+
+Rewrite of cloned blocks and blocks that are part of any snapshots,
+same as some property changes may increase pool space usage.
+Use the
+**-C**
+and
+**-S**
+flags to skip cloned and snapshot-shared blocks respectively to prevent
+this expansion.
+Holes that were never written or were previously zero-compressed are
+not rewritten and will remain holes even if compression is disabled.
+
+If a
+**-l**
+or
+**-o**
+value request a rewrite to regions past the end of the file, then those
+regions are silently ignored, and no error is reported.
+
+By default, rewritten blocks update their logical birth time,
+meaning they will be included in incremental
+**zfs** **send**
+streams as modified data.
+When the
+**-P**
+flag is used, rewritten blocks preserve their logical birth time, since
+there are no user data changes.
+
+# SEE ALSO
+
+zfsprops(7),
+zpool-features(7)
+
+Debian - November 5, 2025

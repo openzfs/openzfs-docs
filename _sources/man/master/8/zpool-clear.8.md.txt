@@ -1,0 +1,47 @@
+ZPOOL-CLEAR(8) - System Manager's Manual
+
+# NAME
+
+**zpool-clear** - clear device errors in ZFS storage pool
+
+# SYNOPSIS
+
+**zpool**
+**clear**
+\[**--power**]
+*pool*
+\[*device*]&#8230;
+
+# DESCRIPTION
+
+Clears device errors in a pool.
+If no arguments are specified, all device errors within the pool are cleared.
+If one or more devices is specified, only those errors associated with the
+specified device or devices are cleared.
+
+If the pool was suspended it will be brought back online provided the
+devices can be accessed.
+Pools with
+**multihost**
+enabled which have been suspended cannot be resumed when there is evidence
+that the pool was imported by another host.
+The same checks performed during an import will be applied before the clear
+proceeds.
+
+**--power**
+
+> Power on the devices's slot in the storage enclosure and wait for the device
+> to show up before attempting to clear errors.
+> This is done on all the devices specified.
+> Alternatively, you can set the
+> **ZPOOL\_AUTO\_POWER\_ON\_SLOT**
+> environment variable to always enable this behavior.
+> Note: This flag currently works on Linux only.
+
+# SEE ALSO
+
+zdb(8),
+zpool-reopen(8),
+zpool-status(8)
+
+Debian - April 29, 2024

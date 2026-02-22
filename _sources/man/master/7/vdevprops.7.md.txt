@@ -1,0 +1,283 @@
+VDEVPROPS(7) - Miscellaneous Information Manual
+
+# NAME
+
+**vdevprops** - native and user-defined properties of ZFS vdevs
+
+# DESCRIPTION
+
+Properties are divided into two types, native properties and user-defined
+(or "user")
+properties.
+Native properties either export internal statistics or control ZFS behavior.
+In addition, native properties are either editable or read-only.
+User properties have no effect on ZFS behavior, but you can use them to annotate
+vdevs in a way that is meaningful in your environment.
+For more information about user properties, see the
+*User Properties*
+section, below.
+
+## Native Properties
+
+Every vdev has a set of properties that export statistics about the vdev
+as well as control various behaviors.
+Properties are not inherited from top-level vdevs, with the exception of
+checksum\_n, checksum\_t, io\_n, io\_t, slow\_io\_events, slow\_io\_n, and slow\_io\_t.
+
+The values of numeric properties can be specified using human-readable suffixes
+(for example,
+**k**, **KB**, **M**, **Gb**,
+and so forth, up to
+**Z**
+for zettabyte)
+.
+The following are all valid
+(and equal)
+specifications:
+`1536M`, `1.5g`, `1.50GB`.
+
+The values of non-numeric properties are case sensitive and must be lowercase.
+
+The following native properties consist of read-only statistics about the
+vdev.
+These properties can not be changed.
+
+**capacity**
+
+> Percentage of vdev space used
+
+**state**
+
+> state of this vdev such as online, faulted, or offline
+
+**guid**
+
+> globally unique id of this vdev
+
+**asize**
+
+> The allocatable size of this vdev
+
+**psize**
+
+> The physical size of this vdev
+
+**ashift**
+
+> The physical sector size of this vdev expressed as the power of two
+
+**size**
+
+> The total size of this vdev
+
+**free**
+
+> The amount of remaining free space on this vdev
+
+**allocated**
+
+> The amount of allocated space on this vdev
+
+**expandsize**
+
+> How much this vdev can expand by
+
+**fragmentation**
+
+> Percent of fragmentation in this vdev
+
+**parity**
+
+> The level of parity for this vdev
+
+**devid**
+
+> The device id for this vdev
+
+**physpath**
+
+> The physical path to the device
+
+**encpath**
+
+> The enclosure path to the device
+
+**fru**
+
+> Field Replaceable Unit, usually a model number
+
+**parent**
+
+> Parent of this vdev
+
+**children**
+
+> Comma separated list of children of this vdev
+
+**numchildren**
+
+> The number of children belonging to this vdev
+
+**read\_errors**, **write\_errors**, **checksum\_errors**, **initialize\_errors**, **trim\_errors**
+
+> The number of errors of each type encountered by this vdev
+
+**slow\_ios**
+
+> This indicates the number of slow I/O operations encountered by this vdev.
+> A slow I/O is defined as an operation that did not complete within the
+> **zio\_slow\_io\_ms**
+> threshold in milliseconds
+> (**30000** by default).
+> For
+> **RAIDZ**
+> and
+> **DRAID**
+> configurations, this value also represents the number of times the vdev was
+> identified as an outlier and excluded from participating in read I/O operations.
+
+**null\_ops**, **read\_ops**, **write\_ops**, **free\_ops**, **claim\_ops**, **trim\_ops**
+
+> The number of I/O operations of each type performed by this vdev
+
+**null\_bytes**, **read\_bytes**, **write\_bytes**, **free\_bytes**, **claim\_bytes**,
+**trim\_bytes**
+
+> The cumulative size of all operations of each type performed by this vdev
+
+**removing**
+
+> If this device is currently being removed from the pool
+
+**trim\_support**
+
+> Indicates if a leaf device supports trim operations.
+
+The following native properties can be used to change the behavior of a vdev.
+
+**checksum\_n**, **checksum\_t**, **io\_n**, **io\_t**, **slow\_io\_n**, **slow\_io\_t**
+
+> Tune the fault management daemon by specifying checksum/io thresholds of &lt;N&gt;
+> errors in &lt;T&gt; seconds, respectively.
+> These properties can be set on leaf and top-level vdevs.
+> When the property is set on the leaf and top-level vdev, the value of the leaf
+> vdev will be used.
+> If the property is only set on the top-level vdev, this value will be used.
+> The value of these properties do not persist across vdev replacement.
+> For this reason, it is advisable to set the property on the top-level vdev -
+> not on the leaf vdev itself.
+> The default values for
+> **OpenZFS on Linux**
+> are 10 errors in 600 seconds.
+> For
+> **OpenZFS on FreeBSD**
+> defaults see
+> zfsd(8).
+> The
+
+**slow\_io\_events**
+
+> property controls whether slow I/O events are generated.
+> Even when disabled, slow I/Os will be included in the
+> **zpool** **status** **-s**
+> output.
+
+**comment**
+
+> A text comment up to 8192 characters long
+
+**bootsize**
+
+> The amount of space to reserve for the EFI system partition
+
+**failfast**
+
+> If this device should propagate BIO errors back to ZFS, used to disable
+> failfast.
+
+**sit\_out**
+
+> Only valid for
+> **RAIDZ**
+> and
+> **DRAID**
+> vdevs.
+> True when a slow disk outlier was detected and the vdev is currently in a sit
+> out state.
+> This property can be manually set to cause vdevs to sit out.
+> It will also be automatically set by the
+> **autosit**
+> logic if that is enabled.
+> While sitting out, the vdev will not participate in normal reads, instead its
+> data will be reconstructed as needed from parity.
+
+**autosit**
+
+> Only valid for
+> **RAIDZ**
+> and
+> **DRAID**
+> vdevs.
+> If set, this enables the kernel-level slow disk detection logic.
+> This logic automatically causes any vdevs that are significant negative
+> performance outliers to sit out, as described in the
+> **sit\_out**
+> property.
+
+**path**
+
+> The path to the device for this vdev
+
+**allocating**
+
+> If this device should perform new allocations, used to disable a device
+> when it is scheduled for later removal.
+> See
+> zpool-remove(8).
+
+## User Properties
+
+In addition to the standard native properties, ZFS supports arbitrary user
+properties.
+User properties have no effect on ZFS behavior, but applications or
+administrators can use them to annotate vdevs.
+
+User property names must contain a colon
+("**:**")
+character to distinguish them from native properties.
+They may contain lowercase letters, numbers, and the following punctuation
+characters: colon
+("**:**"),
+dash
+("**-**"),
+period
+("**.**"),
+and underscore
+("**\_**").
+The expected convention is that the property name is divided into two portions
+such as
+*module*:*property*,
+but this namespace is not enforced by ZFS.
+User property names can be at most 256 characters, and cannot begin with a dash
+("**-**").
+
+When making programmatic use of user properties, it is strongly suggested to use
+a reversed DNS domain name for the
+*module*
+component of property names to reduce the chance that two
+independently-developed packages use the same property name for different
+purposes.
+
+The values of user properties are arbitrary strings and
+are never validated.
+Use the
+**zpool** **set**
+command with a blank value to clear a user property.
+Property values are limited to 8192 bytes.
+
+# SEE ALSO
+
+zpoolprops(7),
+zpool-set(8)
+
+Debian - July 23, 2024
