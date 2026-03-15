@@ -1204,7 +1204,9 @@ expressed as a multiplier of `l2arc_write_max <#l2arc-write-max>`__
 |                   | l2arc_headroom can increase L2ARC efficiency.   |
 |                   | Setting the value too large can cause the L2ARC |
 |                   | feed thread to consume more CPU time looking    |
-|                   | for data to feed.                               |
+|                   | for data to feed. Setting to 0 disables the     |
+|                   | headroom limit, allowing the full length of ARC |
+|                   | lists to be searched for cacheable content.     |
 +-------------------+-------------------------------------------------+
 | Data Type         | uint64                                          |
 +-------------------+-------------------------------------------------+
@@ -1212,7 +1214,7 @@ expressed as a multiplier of `l2arc_write_max <#l2arc-write-max>`__
 +-------------------+-------------------------------------------------+
 | Range             | 0 to UINT64_MAX                                 |
 +-------------------+-------------------------------------------------+
-| Default           | 2                                               |
+| Default           | 8                                               |
 +-------------------+-------------------------------------------------+
 | Change            | Dynamic                                         |
 +-------------------+-------------------------------------------------+
