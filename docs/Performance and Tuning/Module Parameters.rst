@@ -138,6 +138,7 @@ ARC
 -  `zfs_arc_p_min_shift <#zfs-arc-p-min-shift>`__
 -  `zfs_arc_pc_percent <#zfs-arc-pc-percent>`__
 -  `zfs_arc_shrink_shift <#zfs-arc-shrink-shift>`__
+-  `zfs_arc_free_target <#zfs-arc-free-target>`__
 -  `zfs_arc_sys_free <#zfs-arc-sys-free>`__
 -  `dbuf_cache_max_bytes <#dbuf-cache-max-bytes>`__
 -  `dbuf_cache_shift <#dbuf-cache-shift>`__
@@ -370,6 +371,7 @@ memory
 -  `zfs_arc_max <#zfs-arc-max>`__
 -  `zfs_arc_pc_percent <#zfs-arc-pc-percent>`__
 -  `zfs_arc_shrink_shift <#zfs-arc-shrink-shift>`__
+-  `zfs_arc_free_target <#zfs-arc-free-target>`__
 -  `zfs_arc_sys_free <#zfs-arc-sys-free>`__
 -  `zfs_dedup_prefetch <#zfs-dedup-prefetch>`__
 -  `zfs_max_recordsize <#zfs-max-recordsize>`__
@@ -790,6 +792,7 @@ Index
 -  `zfs_arc_p_min_shift <#zfs-arc-p-min-shift>`__
 -  `zfs_arc_pc_percent <#zfs-arc-pc-percent>`__
 -  `zfs_arc_shrink_shift <#zfs-arc-shrink-shift>`__
+-  `zfs_arc_free_target <#zfs-arc-free-target>`__
 -  `zfs_arc_sys_free <#zfs-arc-sys-free>`__
 -  `zfs_async_block_max_blocks <#zfs-async-block-max-blocks>`__
 -  `zfs_autoimport_disable <#zfs-autoimport-disable>`__
@@ -2899,6 +2902,36 @@ during memory pressure/reclaim.
 +--------------------+------------------------------------------------+
 | Versions Affected  | v0.7.0 and later                               |
 +--------------------+------------------------------------------------+
+
+zfs_arc_free_target
+~~~~~~~~~~~~~~~~~~~
+
+``zfs_arc_free_target`` is the desired number of free pages below which
+the ARC triggers reclaim. Initialized at boot to the kernel's
+``vm.v_free_target`` value. This parameter is FreeBSD-specific and uses
+pages as its unit, unlike ``zfs_arc_sys_free`` which is measured in
+bytes.
+
++---------------------+-----------------------------------------------+
+| zfs_arc_free_target | Notes                                         |
++=====================+===============================================+
+| Tags                | `ARC <#arc>`__, `memory <#memory>`__          |
++---------------------+-----------------------------------------------+
+| When to change      | When the ARC is not releasing memory fast      |
+|                     | enough to keep up with other system demands   |
++---------------------+-----------------------------------------------+
+| Data Type           | uint                                          |
++---------------------+-----------------------------------------------+
+| Units               | pages                                         |
++---------------------+-----------------------------------------------+
+| Range               | 0 to UINT_MAX                                 |
++---------------------+-----------------------------------------------+
+| Default             | vm.v_free_target (set at boot)                |
++---------------------+-----------------------------------------------+
+| Change              | Dynamic                                       |
++---------------------+-----------------------------------------------+
+| Versions Affected   | FreeBSD only                                  |
++---------------------+-----------------------------------------------+
 
 zfs_arc_sys_free
 ~~~~~~~~~~~~~~~~
