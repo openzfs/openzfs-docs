@@ -42,7 +42,7 @@ The ZFS kernel modules use an internal log buffer for detailed logging
 information. This log information is available in the pseudo file
 ``/proc/spl/kstat/zfs/dbgmsg`` for ZFS builds where ZFS module parameter
 `zfs_dbgmsg_enable =
-1 <https://github.com/zfsonlinux/zfs/wiki/ZFS-on-Linux-Module-Parameters#zfs_dbgmsg_enable>`__
+1 <https://github.com/openzfs/zfs/wiki/ZFS-on-Linux-Module-Parameters#zfs_dbgmsg_enable>`__
 
 --------------
 
@@ -60,7 +60,7 @@ Log files of interest: `Generic Kernel Log <#generic-kernel-log>`__,
 Important information: if a kernel thread is stuck, then a backtrace of
 the stuck thread can be in the logs. In some cases, the stuck thread is
 not logged until the deadman timer expires. See also `debug
-tunables <https://github.com/zfsonlinux/zfs/wiki/ZFS-on-Linux-Module-Parameters#debug>`__
+tunables <https://github.com/openzfs/zfs/wiki/ZFS-on-Linux-Module-Parameters#debug>`__
 
 --------------
 
@@ -80,7 +80,7 @@ A history of events is also available via the ``zpool events`` command.
 This history begins at ZFS kernel module load and includes events from
 any pool. These events are stored in RAM and limited in count to a value
 determined by the kernel tunable
-`zfs_event_len_max <https://github.com/zfsonlinux/zfs/wiki/ZFS-on-Linux-Module-Parameters#zfs_zevent_len_max>`__.
+`zfs_event_len_max <https://github.com/openzfs/zfs/wiki/ZFS-on-Linux-Module-Parameters#zfs_zevent_len_max>`__.
 ``zed`` has an internal throttling mechanism to prevent overconsumption
 of system resources processing ZFS events.
 

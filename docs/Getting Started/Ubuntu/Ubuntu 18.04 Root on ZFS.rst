@@ -284,7 +284,7 @@ Choose one of the following options:
   documentation <https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/power_management_guide/relatime>`__
   for further information.
 - Setting ``xattr=sa`` `vastly improves the performance of extended
-  attributes <https://github.com/zfsonlinux/zfs/commit/82a37189aac955c81a59a5ecc3400475adb56355>`__.
+  attributes <https://github.com/openzfs/zfs/commit/82a37189aac955c81a59a5ecc3400475adb56355>`__.
   Inside ZFS, extended attributes are used to implement POSIX ACLs.
   Extended attributes can also be used by user-space applications.
   `They are used by some desktop GUI
@@ -680,10 +680,10 @@ mirror or raidz topology, the additional disks will be handled later.
 5.7 Fix filesystem mount ordering:
 
 `Until ZFS gains a systemd mount
-generator <https://github.com/zfsonlinux/zfs/issues/4898>`__, there are
+generator <https://github.com/openzfs/zfs/issues/4898>`__, there are
 races between mounting filesystems and starting certain daemons. In
 practice, the issues (e.g.
-`#5754 <https://github.com/zfsonlinux/zfs/issues/5754>`__) seem to be
+`#5754 <https://github.com/openzfs/zfs/issues/5754>`__) seem to be
 with certain filesystems in ``/var``, specifically ``/var/log`` and
 ``/var/tmp``. Setting these to use ``legacy`` mounting, and listing them
 in ``/etc/fstab`` makes systemd aware that these are separate
@@ -795,7 +795,7 @@ Step 7: (Optional) Configure Swap
 **Caution**: On systems with extremely high memory pressure, using a
 zvol for swap can result in lockup, regardless of how much swap is still
 available. This issue is currently being investigated in:
-`https://github.com/zfsonlinux/zfs/issues/7734 <https://github.com/zfsonlinux/zfs/issues/7734>`__
+`https://github.com/openzfs/zfs/issues/7734 <https://github.com/openzfs/zfs/issues/7734>`__
 
 7.1 Create a volume dataset (zvol) for use as a swap device::
 
@@ -980,7 +980,7 @@ OEM-branded cards that have been flashed to the reference LSI firmware.
 The basic problem is that disks on these controllers are not visible to
 the Linux kernel until after the regular system is started, and ZoL does
 not hotplug pool members. See
-`https://github.com/zfsonlinux/zfs/issues/330 <https://github.com/zfsonlinux/zfs/issues/330>`__.
+`https://github.com/openzfs/zfs/issues/330 <https://github.com/openzfs/zfs/issues/330>`__.
 
 Most LSI cards are perfectly compatible with ZoL. If your card has this
 glitch, try setting ``ZFS_INITRD_PRE_MOUNTROOT_SLEEP=X`` in
