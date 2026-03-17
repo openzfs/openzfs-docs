@@ -23,7 +23,7 @@ the fingerprint listed here.
 
 | **Key location:** /etc/pki/rpm-gpg/RPM-GPG-KEY-openzfs (previously -zfsonlinux)
 | **Current release packages:** `EL7`_, `EL8`_, `EL9`_, `EL10`_
-| **Archived release packages:** `see repo page <https://github.com/zfsonlinux/zfsonlinux.github.com/tree/master/epel>`__
+| **Archived release packages:** `see repo page <https://github.com/openzfs/zfsonlinux.github.com/tree/master/epel>`__
 
 | **Signing key1 (EL8 and older, Fedora 36 and older)**
   `pgp.mit.edu <https://pgp.mit.edu/pks/lookup?search=0xF14AB620&op=index&fingerprint=on>`__ /

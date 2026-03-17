@@ -413,7 +413,7 @@ when they are received. Raw encrypted send/recvs automatically imply the
 ``--large-block`` flag and are therefore unaffected.
 
 For more details, see `issue
-6224 <https://github.com/zfsonlinux/zfs/issues/6224>`__.
+6224 <https://github.com/openzfs/zfs/issues/6224>`__.
 
 CEPH/ZFS
 --------
@@ -588,7 +588,7 @@ appropriately.
 
 **CAUTION:** for now swap on zvol may lead to deadlock, in this case
 please send your logs
-`here <https://github.com/zfsonlinux/zfs/issues/7734>`__.
+`here <https://github.com/openzfs/zfs/issues/7734>`__.
 
 -  Set the volume block size to match your systems page size. This
    tuning prevents ZFS from having to perform read-modify-write options
@@ -626,7 +626,7 @@ There are few caveats:
 
 -  Disable Xen's auto-ballooning in ``/etc/xen/xl.conf``
 -  Watch out for any Xen bugs, such as `this
-   one <https://github.com/zfsonlinux/zfs/issues/1067>`__ related to
+   one <https://github.com/openzfs/zfs/issues/1067>`__ related to
    ballooning
 
 udisks2 creating /dev/mapper/ entries for zvol (Linux)
@@ -650,7 +650,7 @@ Reporting a problem
 -------------------
 
 You can open a new issue and search existing issues using the public
-`issue tracker <https://github.com/zfsonlinux/zfs/issues>`__. The issue
+`issue tracker <https://github.com/openzfs/zfs/issues>`__. The issue
 tracker is used to organize outstanding bug reports, feature requests,
 and other development tasks. Anyone may post comments after signing up
 for a github account.

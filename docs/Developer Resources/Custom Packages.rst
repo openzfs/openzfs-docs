@@ -2,9 +2,9 @@ Custom Packages
 ===============
 
 The following instructions assume you are building from an official
-`release tarball <https://github.com/zfsonlinux/zfs/releases/latest>`__
+`release tarball <https://github.com/openzfs/zfs/releases/latest>`__
 (version 0.8.0 or newer) or directly from the `git
-repository <https://github.com/zfsonlinux/zfs>`__. Most users should not
+repository <https://github.com/openzfs/zfs>`__. Most users should not
 need to do this and should preferentially use the distribution packages.
 As a general rule the distribution packages will be more tightly
 integrated, widely tested, and better supported. However, if your
@@ -318,7 +318,7 @@ version, you can clone it from Github and prepare the source like this.
 
 .. code:: sh
 
-   $ git clone https://github.com/zfsonlinux/zfs.git
+   $ git clone https://github.com/openzfs/zfs.git
    $ cd zfs
    $ ./autogen.sh
 

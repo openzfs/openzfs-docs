@@ -5,7 +5,7 @@ This is a very basic rundown of how to use Git and GitHub to make
 changes.
 
 Recommended reading: `ZFS on Linux
-CONTRIBUTING.md <https://github.com/zfsonlinux/zfs/blob/master/.github/CONTRIBUTING.md>`__
+CONTRIBUTING.md <https://github.com/openzfs/zfs/blob/master/.github/CONTRIBUTING.md>`__
 
 First time setup
 ----------------
@@ -37,7 +37,7 @@ upstream repository as another remote (man git-remote):
 ::
 
    cd zfs
-   git remote add upstream https://github.com/zfsonlinux/zfs.git
+   git remote add upstream https://github.com/openzfs/zfs.git
 
 Preparing and making changes
 ----------------------------
@@ -56,7 +56,7 @@ From here you can make your changes and move on to the next step.
 Recommended reading: `C Style and Coding Standards for
 SunOS <https://www.cis.upenn.edu/~lee/06cse480/data/cstyle.ms.pdf>`__,
 `ZFS on Linux Developer
-Resources <https://github.com/zfsonlinux/zfs/wiki/Developer-Resources>`__,
+Resources <https://github.com/openzfs/zfs/wiki/Developer-Resources>`__,
 `OpenZFS Developer
 Resources <https://openzfs.org/wiki/Developer_resources>`__
 
@@ -80,9 +80,9 @@ correctly.
    make checkstyle
 
 Recommended reading: `Building
-ZFS <https://github.com/zfsonlinux/zfs/wiki/Building-ZFS>`__, `ZFS Test
+ZFS <https://github.com/openzfs/zfs/wiki/Building-ZFS>`__, `ZFS Test
 Suite
-README <https://github.com/zfsonlinux/zfs/blob/master/tests/README.md>`__
+README <https://github.com/openzfs/zfs/blob/master/tests/README.md>`__
 
 Committing your changes to be pushed
 ------------------------------------
