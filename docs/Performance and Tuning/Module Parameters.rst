@@ -123,6 +123,7 @@ ARC
 -  `zfs_arc_grow_retry <#zfs-arc-grow-retry>`__
 -  `zfs_arc_lotsfree_percent <#zfs-arc-lotsfree-percent>`__
 -  `zfs_arc_max <#zfs-arc-max>`__
+-  `zfs_arc_meta_balance <#zfs-arc-meta-balance>`__
 -  `zfs_arc_meta_adjust_restarts <#zfs-arc-meta-adjust-restarts>`__
 -  `zfs_arc_meta_limit <#zfs-arc-meta-limit>`__
 -  `zfs_arc_meta_limit_percent <#zfs-arc-meta-limit-percent>`__
@@ -775,6 +776,7 @@ Index
 -  `zfs_arc_grow_retry <#zfs-arc-grow-retry>`__
 -  `zfs_arc_lotsfree_percent <#zfs-arc-lotsfree-percent>`__
 -  `zfs_arc_max <#zfs-arc-max>`__
+-  `zfs_arc_meta_balance <#zfs-arc-meta-balance>`__
 -  `zfs_arc_meta_adjust_restarts <#zfs-arc-meta-adjust-restarts>`__
 -  `zfs_arc_meta_limit <#zfs-arc-meta-limit>`__
 -  `zfs_arc_meta_limit_percent <#zfs-arc-meta-limit-percent>`__
@@ -2432,8 +2434,50 @@ shrinking.
 | Versions Affected | all                                             |
 +-------------------+-------------------------------------------------+
 
+zfs_arc_meta_balance
+~~~~~~~~~~~~~~~~~~~~
+
+``zfs_arc_meta_balance`` controls how the ARC balances metadata and data
+caching. When evicted metadata is re-requested (a "ghost hit"), the ARC
+shifts its target to cache more metadata. This parameter scales the
+strength of that shift relative to data ghost hits.
+
+Higher values give more preference to metadata. The default of 500 means
+metadata ghost hits have 5x the effect of data ghost hits. A value of
+100 weights them equally.
+
+This parameter replaced the manual metadata limit tunables
+(``zfs_arc_meta_limit``, ``zfs_arc_meta_min``, etc.) that were removed
+in v2.2.0.
+
++----------------------+----------------------------------------------+
+| zfs_arc_meta_balance | Notes                                        |
++======================+==============================================+
+| Tags                 | `ARC <#arc>`__                               |
++----------------------+----------------------------------------------+
+| When to change       | When the ARC is not caching enough metadata  |
+|                      | (or too much) for your workload              |
++----------------------+----------------------------------------------+
+| Data Type            | uint                                         |
++----------------------+----------------------------------------------+
+| Units                | weight (relative to 100)                     |
++----------------------+----------------------------------------------+
+| Range                | 0 to UINT_MAX                                |
++----------------------+----------------------------------------------+
+| Default              | 500                                          |
++----------------------+----------------------------------------------+
+| Change               | Dynamic                                      |
++----------------------+----------------------------------------------+
+| Versions Affected    | v2.2.0 and later                             |
++----------------------+----------------------------------------------+
+
 zfs_arc_meta_adjust_restarts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. note::
+   Removed in v2.2.0 by commit a8d83e2a ("More adaptive ARC eviction").
+   Replaced by adaptive eviction with
+   `zfs_arc_meta_balance <#zfs-arc-meta-balance>`__.
 
 The number of restart passes to make while scanning the ARC attempting
 the free buffers in order to stay below the
@@ -2449,11 +2493,16 @@ Units                        restarts
 Range                        0 to INT_MAX
 Default                      4,096
 Change                       Dynamic
-Versions Affected            v0.6.5 and later
+Versions Affected            v0.6.5 to v2.1.x (removed in v2.2.0)
 ============================ =======================================
 
 zfs_arc_meta_limit
 ~~~~~~~~~~~~~~~~~~
+
+.. note::
+   Removed in v2.2.0 by commit a8d83e2a ("More adaptive ARC eviction").
+   Replaced by adaptive eviction with
+   `zfs_arc_meta_balance <#zfs-arc-meta-balance>`__.
 
 Sets the maximum allowed size metadata buffers in the ARC. When
 `zfs_arc_meta_limit <#zfs-arc-meta-limit>`__ is reached metadata buffers
@@ -2486,11 +2535,16 @@ In version v0.7.0, with a default value = 0,
 | Verification       | ``/proc/spl/kstat/zfs/arcstats`` entry         |
 |                    | ``arc_meta_limit``                             |
 +--------------------+------------------------------------------------+
-| Versions Affected  | all                                            |
+| Versions Affected  | v0.6.5 to v2.1.x (removed in v2.2.0)          |
 +--------------------+------------------------------------------------+
 
 zfs_arc_meta_limit_percent
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. note::
+   Removed in v2.2.0 by commit a8d83e2a ("More adaptive ARC eviction").
+   Replaced by adaptive eviction with
+   `zfs_arc_meta_balance <#zfs-arc-meta-balance>`__.
 
 Sets the limit to ARC metadata, ``arc_meta_limit``, as a percentage of
 the maximum size target of the ARC, ``c_max``
@@ -2522,11 +2576,16 @@ convenient interface for setting the limit.
 | Verification               | ``/proc/spl/kstat/zfs/arcstats`` entry |
 |                            | ``arc_meta_limit``                     |
 +----------------------------+----------------------------------------+
-| Versions Affected          | v0.7.0 and later                       |
+| Versions Affected          | v0.7.0 to v2.1.x (removed in v2.2.0)  |
 +----------------------------+----------------------------------------+
 
 zfs_arc_meta_min
 ~~~~~~~~~~~~~~~~
+
+.. note::
+   Removed in v2.2.0 by commit a8d83e2a ("More adaptive ARC eviction").
+   Replaced by adaptive eviction with
+   `zfs_arc_meta_balance <#zfs-arc-meta-balance>`__.
 
 The minimum allowed size in bytes that metadata buffers may consume in
 the ARC. This value defaults to 0 which disables a floor on the amount
@@ -2554,11 +2613,16 @@ When evicting data from the ARC, if the ``metadata_size`` is less than
 +-------------------+---------------------------------------------------------+
 | Verification      | ``/proc/spl/kstat/zfs/arcstats`` entry ``arc_meta_min`` |
 +-------------------+---------------------------------------------------------+
-| Versions Affected | all                                                     |
+| Versions Affected | v0.6.5 to v2.1.x (removed in v2.2.0)                   |
 +-------------------+---------------------------------------------------------+
 
 zfs_arc_meta_prune
 ~~~~~~~~~~~~~~~~~~
+
+.. note::
+   Removed in v2.2.0 by commit a8d83e2a ("More adaptive ARC eviction").
+   Replaced by adaptive eviction with
+   `zfs_arc_meta_balance <#zfs-arc-meta-balance>`__.
 
 ``zfs_arc_meta_prune`` sets the number of dentries and znodes to be
 scanned looking for entries which can be dropped. This provides a
@@ -2590,11 +2654,16 @@ active. Setting ``zfs_arc_meta_prune`` to 0 will disable pruning.
 |                    | ``/proc/spl/kstat/zfs/arcstats`` entry         |
 |                    | ``arc_prune``                                  |
 +--------------------+------------------------------------------------+
-| Versions Affected  | v0.6.5 and later                               |
+| Versions Affected  | v0.6.5 to v2.1.x (removed in v2.2.0)          |
 +--------------------+------------------------------------------------+
 
 zfs_arc_meta_strategy
 ~~~~~~~~~~~~~~~~~~~~~
+
+.. note::
+   Removed in v2.2.0 by commit a8d83e2a ("More adaptive ARC eviction").
+   Replaced by adaptive eviction with
+   `zfs_arc_meta_balance <#zfs-arc-meta-balance>`__.
 
 Defines the strategy for ARC metadata eviction (meta reclaim strategy).
 A value of 0 (META_ONLY) will evict only the ARC metadata. A value of 1
@@ -2620,7 +2689,7 @@ order to evict the requested amount of metadata.
 +-----------------------+---------------------------------------------+
 | Change                | Dynamic                                     |
 +-----------------------+---------------------------------------------+
-| Versions Affected     | v0.6.5 and later                            |
+| Versions Affected     | v0.6.5 to v2.1.x (removed in v2.2.0)       |
 +-----------------------+---------------------------------------------+
 
 zfs_arc_min
@@ -2772,6 +2841,11 @@ Versions Affected      v0.6.5 and later
 zfs_arc_p_min_shift
 ~~~~~~~~~~~~~~~~~~~
 
+.. note::
+   Removed in v2.2.0 by commit a8d83e2a ("More adaptive ARC eviction").
+   Replaced by adaptive eviction with
+   `zfs_arc_meta_balance <#zfs-arc-meta-balance>`__.
+
 arc_p_min_shift is used to shift of ARC target size
 (``/proc/spl/kstat/zfs/arcstats`` entry ``c``) for calculating both
 minimum and maximum most recently used (MRU) target size
@@ -2801,11 +2875,16 @@ will not return to the default.
 | Verification        | Observe changes to                            |
 |                     | ``/proc/spl/kstat/zfs/arcstats`` entry ``p``  |
 +---------------------+-----------------------------------------------+
-| Versions Affected   | all                                           |
+| Versions Affected   | v0.6.5 to v2.1.x (removed in v2.2.0)         |
 +---------------------+-----------------------------------------------+
 
 zfs_arc_p_dampener_disable
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. note::
+   Removed in v2.2.0 by commit a8d83e2a ("More adaptive ARC eviction").
+   Replaced by adaptive eviction with
+   `zfs_arc_meta_balance <#zfs-arc-meta-balance>`__.
 
 When data is being added to the ghost lists, the MRU target size is
 adjusted. The amount of adjustment is based on the ratio of the MRU/MFU
@@ -2828,7 +2907,7 @@ adjustments.
 +----------------------------+----------------------------------------+
 | Change                     | Dynamic                                |
 +----------------------------+----------------------------------------+
-| Versions Affected          | v0.6.4 and later                       |
+| Versions Affected          | v0.6.4 to v2.1.x (removed in v2.2.0)  |
 +----------------------------+----------------------------------------+
 
 zfs_arc_shrink_shift
