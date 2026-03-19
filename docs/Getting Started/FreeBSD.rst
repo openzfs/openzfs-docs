@@ -8,8 +8,8 @@ Installation on FreeBSD
 
 OpenZFS is available pre-packaged as:
 
-- the zfs-2.0-release branch, in the FreeBSD base system from FreeBSD 13.0-CURRENT forward
-- the master branch, in the FreeBSD ports tree as sysutils/openzfs and sysutils/openzfs-kmod from FreeBSD 12.1 forward
+- the FreeBSD base system, which includes ZFS from FreeBSD 13.0 onward (currently FreeBSD 14.x and 15.x stable, 16.0-CURRENT)
+- the FreeBSD ports tree as sysutils/openzfs and sysutils/openzfs-kmod
 
 The rest of this document describes the use of OpenZFS either from ports/pkg or built manually from sources for development.
 
@@ -33,12 +33,17 @@ The following dependencies are required to build OpenZFS on FreeBSD:
    If you don't have the sources installed you can install them with
    git.
 
-   Install source For FreeBSD 12:
+   Install source for FreeBSD 14.x stable:
    ::
 
-     git clone -b stable/12 https://git.FreeBSD.org/src.git /usr/src
+     git clone -b stable/14 https://git.FreeBSD.org/src.git /usr/src
 
-   Install source for FreeBSD Current:
+   Install source for FreeBSD 15.x stable:
+   ::
+
+     git clone -b stable/15 https://git.FreeBSD.org/src.git /usr/src
+
+   Install source for FreeBSD CURRENT:
    ::
 
      git clone https://git.FreeBSD.org/src.git /usr/src
