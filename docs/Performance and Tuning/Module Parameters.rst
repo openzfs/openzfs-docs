@@ -2535,7 +2535,7 @@ In version v0.7.0, with a default value = 0,
 | Verification       | ``/proc/spl/kstat/zfs/arcstats`` entry         |
 |                    | ``arc_meta_limit``                             |
 +--------------------+------------------------------------------------+
-| Versions Affected  | v0.6.5 to v2.1.x (removed in v2.2.0)          |
+| Versions Affected  | v0.6.5 to v2.1.x (removed in v2.2.0)           |
 +--------------------+------------------------------------------------+
 
 zfs_arc_meta_limit_percent
@@ -2576,7 +2576,7 @@ convenient interface for setting the limit.
 | Verification               | ``/proc/spl/kstat/zfs/arcstats`` entry |
 |                            | ``arc_meta_limit``                     |
 +----------------------------+----------------------------------------+
-| Versions Affected          | v0.7.0 to v2.1.x (removed in v2.2.0)  |
+| Versions Affected          | v0.7.0 to v2.1.x (removed in v2.2.0)   |
 +----------------------------+----------------------------------------+
 
 zfs_arc_meta_min
@@ -2613,7 +2613,7 @@ When evicting data from the ARC, if the ``metadata_size`` is less than
 +-------------------+---------------------------------------------------------+
 | Verification      | ``/proc/spl/kstat/zfs/arcstats`` entry ``arc_meta_min`` |
 +-------------------+---------------------------------------------------------+
-| Versions Affected | v0.6.5 to v2.1.x (removed in v2.2.0)                   |
+| Versions Affected | v0.6.5 to v2.1.x (removed in v2.2.0)                    |
 +-------------------+---------------------------------------------------------+
 
 zfs_arc_meta_prune
@@ -2654,7 +2654,7 @@ active. Setting ``zfs_arc_meta_prune`` to 0 will disable pruning.
 |                    | ``/proc/spl/kstat/zfs/arcstats`` entry         |
 |                    | ``arc_prune``                                  |
 +--------------------+------------------------------------------------+
-| Versions Affected  | v0.6.5 to v2.1.x (removed in v2.2.0)          |
+| Versions Affected  | v0.6.5 to v2.1.x (removed in v2.2.0)           |
 +--------------------+------------------------------------------------+
 
 zfs_arc_meta_strategy
@@ -2689,7 +2689,7 @@ order to evict the requested amount of metadata.
 +-----------------------+---------------------------------------------+
 | Change                | Dynamic                                     |
 +-----------------------+---------------------------------------------+
-| Versions Affected     | v0.6.5 to v2.1.x (removed in v2.2.0)       |
+| Versions Affected     | v0.6.5 to v2.1.x (removed in v2.2.0)        |
 +-----------------------+---------------------------------------------+
 
 zfs_arc_min
@@ -2875,7 +2875,7 @@ will not return to the default.
 | Verification        | Observe changes to                            |
 |                     | ``/proc/spl/kstat/zfs/arcstats`` entry ``p``  |
 +---------------------+-----------------------------------------------+
-| Versions Affected   | v0.6.5 to v2.1.x (removed in v2.2.0)         |
+| Versions Affected   | v0.6.5 to v2.1.x (removed in v2.2.0)          |
 +---------------------+-----------------------------------------------+
 
 zfs_arc_p_dampener_disable
@@ -2907,7 +2907,7 @@ adjustments.
 +----------------------------+----------------------------------------+
 | Change                     | Dynamic                                |
 +----------------------------+----------------------------------------+
-| Versions Affected          | v0.6.4 to v2.1.x (removed in v2.2.0)  |
+| Versions Affected          | v0.6.4 to v2.1.x (removed in v2.2.0)   |
 +----------------------------+----------------------------------------+
 
 zfs_arc_shrink_shift
