@@ -1258,6 +1258,12 @@ contents are being successfully compressed before writing.
 l2arc_nocompress
 ~~~~~~~~~~~~~~~~
 
+.. note::
+   Removed in v0.7.0 by commit d3c2ae1c0
+   ("OpenZFS 6950 - ARC should cache compressed data").
+   The ARC now always caches compressed data, making this
+   toggle unnecessary. No replacement parameter.
+
 Disable writing compressed data to cache devices. Disabling allows the
 legacy behavior of writing decompressed data to cache devices.
 
@@ -1277,8 +1283,7 @@ legacy behavior of writing decompressed data to cache devices.
 +-------------------+-------------------------------------------------+
 | Change            | Dynamic                                         |
 +-------------------+-------------------------------------------------+
-| Versions Affected | deprecated in v0.7.0 by new compressed ARC      |
-|                   | design                                          |
+| Versions Affected | v0.6.5 to v0.6.5.11 (removed in v0.7.0)         |
 +-------------------+-------------------------------------------------+
 
 l2arc_meta_percent
@@ -4166,6 +4171,12 @@ Versions Affected      v2.0.0 and later
 zfs_disable_dup_eviction
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
+.. note::
+   Removed in v0.7.0 by commit d3c2ae1c0
+   ("OpenZFS 6950 - ARC should cache compressed data").
+   Duplicate buffer handling was reworked as part of the
+   compressed ARC changes. No replacement parameter.
+
 Disable duplicate buffer eviction from ARC.
 
 +--------------------------+------------------------------------------+
@@ -4184,7 +4195,7 @@ Disable duplicate buffer eviction from ARC.
 +--------------------------+------------------------------------------+
 | Change                   | Dynamic                                  |
 +--------------------------+------------------------------------------+
-| Versions Affected        | v0.6.5, deprecated in v0.7.0             |
+| Versions Affected        | v0.6.5 to v0.6.5.11 (removed in v0.7.0)  |
 +--------------------------+------------------------------------------+
 
 zfs_expire_snapshot
@@ -7171,6 +7182,14 @@ zfs receive queue.
 zfs_arc_min_prefetch_lifespan
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+.. note::
+   Removed in v0.8.0 by commit d4a72f238
+   ("Sequential scrub and resilvers").
+   Prefetch lifetime logic was reworked as part of the
+   sequential scan changes. Replaced by
+   ``zfs_arc_min_prefetch_ms`` and
+   ``zfs_arc_min_prescient_prefetch_ms``.
+
 ``arc_min_prefetch_lifespan`` is the minimum time for a prefetched block
 to remain in ARC before it is eligible for eviction.
 
@@ -7184,7 +7203,7 @@ Units                         clock ticks
 Range                         0 = use default value
 Default                       1 second (as expressed in clock ticks)
 Change                        Dynamic
-Versions Affected             v0.7.0
+Versions Affected             v0.7.0 to v0.7.13 (removed in v0.8.0)
 ============================= ======================================
 
 zfs_scan_ignore_errors
