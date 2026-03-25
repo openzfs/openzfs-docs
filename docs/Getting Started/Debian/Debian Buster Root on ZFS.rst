@@ -29,7 +29,7 @@ System Requirements
 - `64-bit Debian GNU/Linux Buster Live CD w/ GUI (e.g. gnome iso)
   <https://cdimage.debian.org/mirror/cdimage/release/current-live/amd64/iso-hybrid/>`__
 - `A 64-bit kernel is strongly encouraged.
-  <https://github.com/openzfs/zfs/wiki/FAQ#32-bit-vs-64-bit-systems>`__
+  <https://openzfs.github.io/openzfs-docs/Project%20and%20Community/FAQ.html#bit-vs-64-bit-systems>`__
 - Installing on a drive which presents 4 KiB logical sectors (a “4Kn” drive)
   only works with UEFI booting. This not unique to ZFS. `GRUB does not and
   will not work on 4Kn with legacy (BIOS) booting.
