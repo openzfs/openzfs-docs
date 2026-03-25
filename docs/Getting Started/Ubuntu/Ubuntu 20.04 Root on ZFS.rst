@@ -46,14 +46,14 @@ to 20.04, so it is now back to being ``bpool/grub``.
     update-grub
 
     grub-install --target=x86_64-efi --efi-directory=/boot/efi \
-        --bootloader-id=ubuntu --recheck --no-floppy
+        --bootloader-id=ubuntu --recheck
 
   Run this for the additional disk(s), incrementing the “2” to “3” and so on
   for both ``/boot/efi2`` and ``ubuntu-2``::
 
     cp -a /boot/efi/EFI /boot/efi2
     grub-install --target=x86_64-efi --efi-directory=/boot/efi2 \
-        --bootloader-id=ubuntu-2 --recheck --no-floppy
+        --bootloader-id=ubuntu-2 --recheck
 
   Check that these have ``set prefix=($root)'/grub@'``::
 
@@ -1005,7 +1005,7 @@ Step 5: GRUB Installation
    - For UEFI booting, install GRUB to the ESP::
 
        grub-install --target=x86_64-efi --efi-directory=/boot/efi \
-           --bootloader-id=ubuntu --recheck --no-floppy
+           --bootloader-id=ubuntu --recheck
 
 #. Disable grub-initrd-fallback.service
 

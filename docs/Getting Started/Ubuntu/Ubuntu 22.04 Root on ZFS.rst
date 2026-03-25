@@ -928,7 +928,7 @@ Step 5: GRUB Installation
    - For UEFI booting, install GRUB to the ESP::
 
        grub-install --target=x86_64-efi --efi-directory=/boot/efi \
-           --bootloader-id=ubuntu --recheck --no-floppy
+           --bootloader-id=ubuntu --recheck
 
 #. Disable grub-initrd-fallback.service
 
