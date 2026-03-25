@@ -34,21 +34,21 @@ headers for the currently running kernel aren't installed, the modules
 won't compile properly.
 
 The following dependencies should be installed to build the latest ZFS
-2.1 release.
+2.4 release.
 
--  **RHEL/CentOS 7**:
-
-.. code:: sh
-
-   sudo yum install epel-release gcc make autoconf automake libtool rpm-build libtirpc-devel libblkid-devel libuuid-devel libudev-devel openssl-devel zlib-devel libaio-devel libattr-devel elfutils-libelf-devel kernel-devel-$(uname -r) python python2-devel python-setuptools python-cffi libffi-devel git ncompress libcurl-devel
-   sudo yum install --enablerepo=epel python-packaging dkms
-
--  **RHEL/CentOS 8, Fedora**:
+-  **RHEL/CentOS Stream/AlmaLinux 8**:
 
 .. code:: sh
 
-   sudo dnf install --skip-broken epel-release gcc make autoconf automake libtool rpm-build libtirpc-devel libblkid-devel libuuid-devel libudev-devel openssl-devel zlib-devel libaio-devel libattr-devel elfutils-libelf-devel kernel-devel-$(uname -r) python3 python3-devel python3-setuptools python3-cffi libffi-devel git ncompress libcurl-devel
-   sudo dnf install --skip-broken --enablerepo=epel --enablerepo=powertools python3-packaging dkms
+   sudo dnf install epel-release gcc make autoconf automake libtool rpm-build libtirpc-devel libblkid-devel libuuid-devel libudev-devel openssl-devel zlib-devel libaio-devel libattr-devel elfutils-libelf-devel kernel-devel-$(uname -r) python3 python3-devel python3-setuptools python3-cffi libffi-devel git ncompress libcurl-devel
+   sudo dnf install --enablerepo=epel --enablerepo=powertools python3-packaging dkms
+
+-  **RHEL/CentOS Stream/AlmaLinux 9, 10, Fedora**:
+
+.. code:: sh
+
+   sudo dnf install epel-release gcc make autoconf automake libtool rpm-build libtirpc-devel libblkid-devel libuuid-devel libudev-devel openssl-devel zlib-devel libaio-devel libattr-devel elfutils-libelf-devel kernel-devel-$(uname -r) python3 python3-devel python3-setuptools python3-cffi libffi-devel git ncompress libcurl-devel
+   sudo dnf install --enablerepo=epel --enablerepo=crb python3-packaging dkms
 
 -  **Debian, Ubuntu**:
 
@@ -175,19 +175,19 @@ Running zloop.sh and zfs-tests.sh
 If you wish to run the ZFS Test Suite (ZTS), then ``ksh`` and a few
 additional utilities must be installed.
 
--  **RHEL/CentOS 7:**
+-  **RHEL/CentOS Stream/AlmaLinux 8:**
 
 .. code:: sh
 
-   sudo yum install ksh bc bzip2 fio acl sysstat mdadm lsscsi parted attr nfs-utils samba rng-tools pax perf
-   sudo yum install --enablerepo=epel dbench
+   sudo dnf install ksh bc bzip2 fio acl sysstat mdadm lsscsi parted attr nfs-utils samba rng-tools pax perf
+   sudo dnf install --enablerepo=epel dbench
 
--  **RHEL/CentOS 8, Fedora:**
+-  **RHEL/CentOS Stream/AlmaLinux 9, 10, Fedora:**
 
 .. code:: sh
 
-   sudo dnf install --skip-broken ksh bc bzip2 fio acl sysstat mdadm lsscsi parted attr nfs-utils samba rng-tools pax perf
-   sudo dnf install --skip-broken --enablerepo=epel dbench
+   sudo dnf install ksh bc bzip2 fio acl sysstat mdadm lsscsi parted attr nfs-utils samba rng-tools pax perf
+   sudo dnf install --enablerepo=epel dbench
 
 -  **Debian:**
 
