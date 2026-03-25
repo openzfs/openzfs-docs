@@ -56,7 +56,7 @@ From here you can make your changes and move on to the next step.
 Recommended reading: `C Style and Coding Standards for
 SunOS <https://www.cis.upenn.edu/~lee/06cse480/data/cstyle.ms.pdf>`__,
 `ZFS on Linux Developer
-Resources <https://github.com/openzfs/zfs/wiki/Developer-Resources>`__,
+Resources <https://openzfs.github.io/openzfs-docs/Developer%20Resources/>`__,
 `OpenZFS Developer
 Resources <https://openzfs.org/wiki/Developer_resources>`__
 
@@ -80,7 +80,7 @@ correctly.
    make checkstyle
 
 Recommended reading: `Building
-ZFS <https://github.com/openzfs/zfs/wiki/Building-ZFS>`__, `ZFS Test
+ZFS <https://openzfs.github.io/openzfs-docs/Developer%20Resources/Building%20ZFS.html>`__, `ZFS Test
 Suite
 README <https://github.com/openzfs/zfs/blob/master/tests/README.md>`__
 
