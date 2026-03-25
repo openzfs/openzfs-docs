@@ -18,8 +18,8 @@ Reach out to the community using the :ref:`mailing_lists` or IRC at
 <https://libera.chat/>`__.
 
 If you have a bug report or feature request
-related to this HOWTO, please `file a new issue and mention @ne9z
-<https://github.com/openzfs/openzfs-docs/issues/new?body=@ne9z,%20I%20have%20the%20following%20issue%20with%20the%20Nix%20ZFS%20HOWTO:>`__.
+related to this HOWTO, please `file a new issue
+<https://github.com/openzfs/openzfs-docs/issues/new>`__.
 
 Installation
 ------------
@@ -67,20 +67,16 @@ Contribute
 You can contribute to this documentation.  Fork this repo, edit the
 documentation, then opening a pull request.
 
-#. To test your changes locally, use the devShell in this repo::
+#. To test your changes locally, clone the repo and build the docs::
 
-    git clone https://github.com/ne9z/nixos-live openzfs-docs-dev
-    cd openzfs-docs-dev
-    nix develop ./openzfs-docs-dev/#docs
+    git clone https://github.com/openzfs/openzfs-docs
+    cd openzfs-docs
+    make html
 
-#. Inside the openzfs-docs repo, build pages::
-
-     make html
-
-#. Look for errors and warnings in the make output. If there is no
+#. Look for errors and warnings in the make output. If there are no
    errors::
 
      xdg-open _build/html/index.html
 
 #. ``git commit --signoff`` to a branch, ``git push``, and create a
-   pull request. Mention @ne9z.
+   pull request.
