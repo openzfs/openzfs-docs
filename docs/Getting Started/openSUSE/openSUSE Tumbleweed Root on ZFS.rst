@@ -880,7 +880,7 @@ Step 7: Grub2 Installation
    #. For UEFI booting, install GRUB to the ESP::
 
         grub2-install --target=x86_64-efi --efi-directory=/boot/efi \
-            --bootloader-id=opensuse --recheck --no-floppy
+            --bootloader-id=opensuse --recheck
 
       It is not necessary to specify the disk here. If you are creating a
       mirror or raidz topology, the additional disks will be handled later.

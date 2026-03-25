@@ -672,7 +672,7 @@ If you are creating a mirror or raidz topology, repeat the
 5.6b For UEFI booting, install GRUB::
 
   grub-install --target=x86_64-efi --efi-directory=/boot/efi \
-      --bootloader-id=ubuntu --recheck --no-floppy
+      --bootloader-id=ubuntu --recheck
 
 It is not necessary to specify the disk here. If you are creating a
 mirror or raidz topology, the additional disks will be handled later.
