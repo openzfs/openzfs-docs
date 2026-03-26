@@ -65,8 +65,8 @@ which pool has experienced a failure:
            NAME                  STATE     READ WRITE CKSUM
            test                  DEGRADED     0     0     0
              mirror              DEGRADED     0     0     0
-               c0t0d0            ONLINE       0     0     0
-               c0t0d1            FAULTED      0     0     0  cannot open
+               sda               ONLINE       0     0     0
+               sdb               FAULTED      0     0     0  cannot open
 
    errors: No known data errors
 
@@ -77,14 +77,14 @@ online with ``zpool online``:
 
 ::
 
-   # zpool online test c0t0d1
+   # zpool online test sdb
 
 If the device is no longer available, the device can be replaced
 using the ``zpool replace`` command:
 
 ::
 
-   # zpool replace test c0t0d1 c0t0d2
+   # zpool replace test sdb sdc
 
 If the device has been replaced by another disk in the same physical
 slot, then the device can be replaced using a single argument to the
@@ -92,7 +92,7 @@ slot, then the device can be replaced using a single argument to the
 
 ::
 
-   # zpool replace test c0t0d1
+   # zpool replace test sdb
 
 Existing data will be resilvered to the new device.  Once the
 resilvering completes, the device will be removed from the pool.
@@ -116,8 +116,8 @@ one of the devices is not attached to the system:
 
            test              DEGRADED
              mirror          DEGRADED
-               c0t0d0        ONLINE
-               c0t0d1        FAULTED   cannot open
+               sda           ONLINE
+               sdb           FAULTED   cannot open
 
 Unlike when the pool is active on the system, the device cannot be
 replaced while the pool is exported.  If the device can be attached to

@@ -60,8 +60,8 @@ Run ``zpool status -x`` to determine which pool is damaged:
 
            NAME                  STATE     READ WRITE CKSUM
            test                  ONLINE       0     0     2
-             c0t0d0              ONLINE       0     0     2
-             c0t0d1              ONLINE       0     0     0
+             sda                 ONLINE       0     0     2
+             sdb                 ONLINE       0     0     0
 
    errors: 1 data errors, use '-v' for a list
 
@@ -88,8 +88,8 @@ The list of affected files can be retrieved by using the ``-v`` option to
 
            NAME                  STATE     READ WRITE CKSUM
            test                  ONLINE       0     0     2
-             c0t0d0              ONLINE       0     0     2
-             c0t0d1              ONLINE       0     0     0
+             sda                 ONLINE       0     0     2
+             sdb                 ONLINE       0     0     0
 
    errors: Permanent errors have been detected in the following files:
 

@@ -66,8 +66,8 @@ which pool has experienced a failure:
            NAME                  STATE     READ WRITE CKSUM
            test                  DEGRADED     0     0     0
              mirror              DEGRADED     0     0     0
-               c0t0d0            ONLINE       0     0     0
-               c0t0d1            FAULTED      0     0     0  corrupted data
+               sda               ONLINE       0     0     0
+               sdb               FAULTED      0     0     0  corrupted data
 
    errors: No known data errors
 
@@ -81,7 +81,7 @@ replace``:
 
 ::
 
-   # zpool replace test c0t0d1 c0t0d2
+   # zpool replace test sdb sdc
 
 If the device has been replaced by another disk in the same physical
 slot, then the device can be replaced using a single argument to the
@@ -89,7 +89,7 @@ slot, then the device can be replaced using a single argument to the
 
 ::
 
-   # zpool replace test c0t0d1
+   # zpool replace test sdb
 
 ZFS will begin migrating data to the new device as soon as the
 replace is issued.  Once the resilvering completes, the original
@@ -115,8 +115,8 @@ can be still be imported despite the failure:
 
            test              DEGRADED
              mirror          DEGRADED
-               c0t0d0        ONLINE
-               c0t0d1        FAULTED   corrupted data
+               sda           ONLINE
+               sdb           FAULTED   corrupted data
 
 To import the pool, run ``zpool import``:
 
