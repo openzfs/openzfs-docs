@@ -63,8 +63,8 @@ Run ``zpool status -x`` to determine which pool has experienced errors:
            NAME                  STATE     READ WRITE CKSUM
            test                  ONLINE       0     0     0
              mirror              ONLINE       0     0     0
-               c0t0d0            ONLINE       0     0     2
-               c0t0d1            ONLINE       0     0     0
+               sda               ONLINE       0     0     2
+               sdb               ONLINE       0     0     0
 
    errors: No known data errors
 
@@ -95,7 +95,7 @@ cleared using ``zpool clear``:
 
 ::
 
-   # zpool clear test c0t0d0
+   # zpool clear test sda
 
 On the other hand, errors may very well indicate that the device has
 failed or is about to fail.  If there are continual I/O errors to a
@@ -107,7 +107,7 @@ then the ``zpool replace`` command should be used:
 
 ::
 
-   # zpool replace test c0t0d0 c0t0d2
+   # zpool replace test sda sdc
 
 This will attach the new device to the pool and begin resilvering
 data to it.  Once the resilvering process is complete, the old device
@@ -119,9 +119,9 @@ a different form of ``zpool replace`` can be used:
 
 ::
 
-   # zpool replace test c0t0d0
+   # zpool replace test sda
 
-This assumes that the original device at 'c0t0d0' has been replaced
+This assumes that the original device at 'sda' has been replaced
 with a new device under the same path, and will be replaced
 appropriately.
 
@@ -143,15 +143,13 @@ the ``zpool status -x`` command:
            test                  ONLINE       0     0     0
              mirror              ONLINE       0     0     0
                replacing         ONLINE       0     0     0
-                 c0t0d0          ONLINE       0     0     3           
-                 c0t0d2          ONLINE       0     0     0  58.5K resilvered
-               c0t0d1            ONLINE       0     0     0
+                 sda             ONLINE       0     0     3
+                 sdc             ONLINE       0     0     0  58.5K resilvered
+               sdb               ONLINE       0     0     0
 
    errors: No known data errors
 
 .. rubric:: Details
 
 The Message ID: ``ZFS-8000-9P`` indicates a device has exceeded the
-acceptable limit of errors allowed by the system.  See document
-`203768 <http://web.archive.org/web/20090409151209/http://sunsolve.sun.com/search/document.do?assetkey=1-61-203768-1&searchclause=203768/>`__
-for additional information.
+acceptable limit of errors allowed by the system.

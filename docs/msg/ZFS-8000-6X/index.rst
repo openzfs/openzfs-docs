@@ -56,7 +56,7 @@ Run ``zpool import`` to list which pool cannot be imported:
    config:
 
            test              FAULTED   missing device
-             c0t0d0          ONLINE
+             sda             ONLINE
 
    Additional devices are known to be part of this pool, though their
    exact configuration cannot be determined.

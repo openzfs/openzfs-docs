@@ -63,8 +63,8 @@ which pool has experienced a failure:
 
            NAME                  STATE     READ WRITE CKSUM
            test                  FAULTED      0     0     0  insufficient replicas
-             c0t0d0              ONLINE       0     0     0
-             c0t0d1              FAULTED      0     0     0  cannot open
+             sda                 ONLINE       0     0     0
+             sdb                 FAULTED      0     0     0  cannot open
 
    errors: No known data errors
 
@@ -95,8 +95,8 @@ one of the devices is not attached to the system:
    config:
 
            test              FAULTED   insufficient replicas
-             c0t0d0          ONLINE
-             c0t0d1          FAULTED   cannot open
+             sda             ONLINE
+             sdb             FAULTED   cannot open
 
 The pool cannot be imported until the missing device is attached to
 the system.  If the device has been made available in an alternate

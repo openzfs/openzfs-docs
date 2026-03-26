@@ -65,8 +65,8 @@ experienced a failure:
 
            NAME        STATE     READ WRITE CKSUM
            test        FAULTED      0     0     0  insufficient replicas
-             c0t0d0    FAULTED      0     0     0  corrupted data
-             c0t0d1    ONLINE       0     0     0
+             sda       FAULTED      0     0     0  corrupted data
+             sdb       ONLINE       0     0     0
 
    errors: No known data errors
 

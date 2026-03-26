@@ -74,8 +74,8 @@ faulted and if a recovery option is available:
 
            NAME                  STATE     READ WRITE CKSUM
            test                  FAULTED      0     0     2  corrupted data
-               c0t0d0            ONLINE       0     0     2
-               c0t0d1            ONLINE       0     0     2
+               sda               ONLINE       0     0     2
+               sdb               ONLINE       0     0     2
 
 If recovery is unavailable, the recommended action will be: Destroy the pool and restore from backup.
 

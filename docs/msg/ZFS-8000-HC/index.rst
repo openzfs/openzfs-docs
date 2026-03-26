@@ -63,8 +63,8 @@ You can see which devices are affected by running ``zpool status -x``:
 
            NAME        STATE     READ WRITE CKSUM
            test        FAULTED      0    13     0  insufficient replicas
-             c0t0d0    FAULTED      0     7     0  experienced I/O failures
-             c0t1d0    ONLINE       0     0     0
+             sda       FAULTED      0     7     0  experienced I/O failures
+             sdb       ONLINE       0     0     0
 
    errors: 1 data errors, use '-v' for a list
 

@@ -61,7 +61,7 @@ import`` command:
    config:
 
            test              ONLINE
-             c0t0d0          ONLINE
+             sda             ONLINE
 
    # zpool import test
    cannot import 'test': pool may be in use from other system, it was last
