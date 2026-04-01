@@ -49,7 +49,7 @@ Run ``zpool status -x`` to determine which pool has experienced errors:
 
 ::
 
-   # zpool status
+   # zpool status -x
      pool: test
     state: ONLINE
    status: One or more devices has experienced an unrecoverable error.  An
