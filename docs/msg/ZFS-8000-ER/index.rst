@@ -281,7 +281,7 @@ the restrictions on raw sends.
            any existing encrypted datasets to new encrypted datasets and
            destroy the old ones. If this pool does not contain any
            encrypted datasets, simply enable the bookmark_v2 feature.
-      see: http://openzfs.github.io/openzfs-docs/msg/ZFS-8000-ER
+      see: https://openzfs.github.io/openzfs-docs/msg/ZFS-8000-ER
      scan: none requested
    config:
 

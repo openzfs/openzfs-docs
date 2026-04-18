@@ -304,7 +304,7 @@ then use the following commands to fetch and prepare the source.
 
 .. code:: sh
 
-   $ wget http://archive.zfsonlinux.org/downloads/zfsonlinux/zfs/zfs-x.y.z.tar.gz
+   $ wget https://github.com/openzfs/zfs/releases/download/zfs-x.y.z/zfs-x.y.z.tar.gz
    $ tar -xzf zfs-x.y.z.tar.gz
 
 Git Master Branch
