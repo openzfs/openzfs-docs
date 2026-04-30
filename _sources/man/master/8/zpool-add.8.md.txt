@@ -1,0 +1,134 @@
+ZPOOL-ADD(8) - System Manager's Manual
+
+# NAME
+
+**zpool-add** - add vdevs to ZFS storage pool
+
+# SYNOPSIS
+
+**zpool**
+**add**
+\[**-fgLnP**]
+\[**--allow-in-use**&nbsp;**--allow-replication-mismatch**&nbsp;**--allow-ashift-mismatch**]
+\[**-o**&nbsp;*property*=*value*]
+*pool&nbsp;vdev*&#8230;
+
+# DESCRIPTION
+
+Adds the specified virtual devices to the given pool.
+The
+*vdev*
+specification is described in the
+*Virtual Devices*
+section of
+zpoolconcepts(7).
+The behavior of the
+**-f**
+option, and the device checks performed are described in the
+**zpool** **create**
+subcommand.
+
+**-f**
+
+> Forces use of
+> *vdev*s,
+> even if they appear in use, have conflicting ashift values, or specify
+> a conflicting replication level.
+> Not all devices can be overridden in this manner.
+
+**-g**
+
+> Display
+> *vdev*,
+> GUIDs instead of the normal device names.
+> These GUIDs can be used in place of
+> device names for the zpool detach/offline/remove/replace commands.
+
+**-L**
+
+> Display real paths for
+> *vdev*s
+> resolving all symbolic links.
+> This can be used to look up the current block
+> device name regardless of the
+> */dev/disk*
+> path used to open it.
+
+**-n**
+
+> Displays the configuration that would be used without actually adding the
+> *vdev*s.
+> The actual pool creation can still fail due to insufficient privileges or
+> device sharing.
+
+**-P**
+
+> Display real paths for
+> *vdev*s
+> instead of only the last component of the path.
+> This can be used in conjunction with the
+> **-L**
+> flag.
+
+**-o** *property*=*value*
+
+> Sets the given pool properties.
+> See the
+> zpoolprops(7)
+> manual page for a list of valid properties that can be set.
+> The only property supported at the moment is
+> **ashift**.
+
+**--allow-ashift-mismatch**
+
+> Disable the ashift validation which allows mismatched ashift values in the
+> pool.
+> Adding top-level
+> *vdev*s
+> with different sector sizes will prohibit future device removal operations, see
+> zpool-remove(8).
+
+**--allow-in-use**
+
+> Allow vdevs to be added even if they might be in use in another pool.
+
+**--allow-replication-mismatch**
+
+> Allow vdevs with conflicting replication levels to be added to the pool.
+
+# EXAMPLES
+
+## Example 1: Adding a Mirror to a ZFS Storage Pool
+
+The following command adds two mirrored disks to the pool
+*tank*,
+assuming the pool is already made up of two-way mirrors.
+The additional space is immediately available to any datasets within the pool.
+
+	# **zpool** **add** *tank* **mirror** *sda sdb*
+
+## Example 2: Adding Cache Devices to a ZFS Pool
+
+The following command adds two disks for use as cache devices to a ZFS storage
+pool:
+
+	# **zpool** **add** *pool* **cache** *sdc sdd*
+
+Once added, the cache devices gradually fill with content from main memory.
+Depending on the size of your cache devices, it could take over an hour for
+them to fill.
+Capacity and reads can be monitored using the
+**iostat**
+subcommand as follows:
+
+	# **zpool** **iostat** **-v** *pool 5*
+
+# SEE ALSO
+
+zpool-attach(8),
+zpool-import(8),
+zpool-initialize(8),
+zpool-online(8),
+zpool-remove(8)
+
+Debian - March 8, 2024

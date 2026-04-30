@@ -1,0 +1,396 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>dbufstat.1 &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://openzfs.github.io/openzfs-docs/man/master/1/dbufstat.1.html" />
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/js/redirect.js?v=2a1712f3"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="raidz_test.1" href="raidz_test.1.html" />
+    <link rel="prev" title="cstyle.1" href="cstyle.1.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Basic%20Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Man Pages</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">master</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">User Commands (1)</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="cstyle.1.html">cstyle.1</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">dbufstat.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="raidz_test.1.html">raidz_test.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="test-runner.1.html">test-runner.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zarcstat.1.html">zarcstat.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zarcsummary.1.html">zarcsummary.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zhack.1.html">zhack.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zilstat.1.html">zilstat.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ztest.1.html">ztest.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zvol_wait.1.html">zvol_wait.1</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../4/index.html">Devices and Special Files (4)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../5/index.html">File Formats and Conventions (5)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../7/index.html">Miscellaneous (7)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../8/index.html">System Administration Commands (8)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.4/index.html">v2.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.3/index.html">v2.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.2/index.html">v2.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.1/index.html">v2.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.0/index.html">v2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.8/index.html">v0.8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.7/index.html">v0.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.6/index.html">v0.6</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Man Pages</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">master</a></li>
+          <li class="breadcrumb-item"><a href="index.html">User Commands (1)</a></li>
+      <li class="breadcrumb-item active">dbufstat.1</li>
+      <li class="wy-breadcrumbs-aside">
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/openzfs/zfs/blob/master/man/man1/dbufstat.1" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="dbufstat-1">
+<h1>dbufstat.1<a class="headerlink" href="#dbufstat-1" title="Link to this heading"></a></h1>
+<div class="man_container"><table class="head">
+  <tr>
+    <td class="head-ltitle">DBUFSTAT(1)</td>
+    <td class="head-vol">General Commands Manual</td>
+    <td class="head-rtitle">DBUFSTAT(1)</td>
+  </tr>
+</table>
+<div class="manual-text">
+<section class="Sh">
+<h1 class="Sh" id="NAME"><a class="permalink" href="#NAME">NAME</a></h1>
+<p class="Pp"><code class="Nm">dbufstat</code> &#x2014; <span class="Nd">display
+    statistics for DMU buffer cache</span></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SYNOPSIS"><a class="permalink" href="#SYNOPSIS">SYNOPSIS</a></h1>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">dbufstat</code></td>
+    <td>[<code class="Fl">-bdhnrtvx</code>] [<code class="Fl">-f</code>
+      <var class="Ar">field</var>[,<var class="Ar">field</var>&#x2026;]]
+      [<code class="Fl">-F</code>
+      <var class="Ar">field</var>=<var class="Ar">value</var>[,&#x2026;]]
+      [<code class="Fl">-i</code> <var class="Ar">file</var>]
+      [<code class="Fl">-o</code> <var class="Ar">file</var>]
+      [<code class="Fl">-s</code> <var class="Ar">separator</var>]</td>
+  </tr>
+</table>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h1>
+<p class="Pp"><code class="Nm">dbufstat</code> displays statistics about the DMU
+    (Data Management Unit) buffer cache, also known as the dbuf cache. This
+    information is read from the <b class="Sy">dbufs</b> kstat
+    (<span class="Pa">/proc/spl/kstat/zfs/dbufs</span> on Linux and
+    <a class="permalink" href="#kstat.zfs.misc.dbufs"><b class="Sy" id="kstat.zfs.misc.dbufs">kstat.zfs.misc.dbufs</b></a>
+    on FreeBSD).</p>
+<p class="Pp"><code class="Nm">dbufstat</code> can display data in three
+  modes:</p>
+<dl class="Bl-tag">
+  <dt id="b"><a class="permalink" href="#b"><code class="Fl">-b</code></a></dt>
+  <dd>Display a table of information for each individual dbuf (buffer). This is
+      the most detailed view.</dd>
+  <dt id="d"><a class="permalink" href="#d"><code class="Fl">-d</code></a></dt>
+  <dd>Display a table of information for each dnode (the default mode). Multiple
+      dbufs belonging to the same dnode are aggregated.</dd>
+  <dt id="t"><a class="permalink" href="#t"><code class="Fl">-t</code></a></dt>
+  <dd>Display a table of information for each dnode type. Multiple dnodes of the
+      same type are aggregated.</dd>
+</dl>
+<p class="Pp">The following fields are available for display. Not all fields are
+    compatible with all modes; use <code class="Fl">-v</code> to see which
+    fields are incompatible with each mode.</p>
+<div class="Bd-indent">
+<dl class="Bl-tag Bl-compact">
+  <dt id="pool"><a class="permalink" href="#pool"><b class="Sy">pool</b></a></dt>
+  <dd>Pool name.</dd>
+  <dt id="objset"><a class="permalink" href="#objset"><b class="Sy">objset</b></a></dt>
+  <dd>Dataset identification number.</dd>
+  <dt id="object"><a class="permalink" href="#object"><b class="Sy">object</b></a></dt>
+  <dd>Object number.</dd>
+  <dt id="level"><a class="permalink" href="#level"><b class="Sy">level</b></a></dt>
+  <dd>Indirection level of buffer.</dd>
+  <dt id="blkid"><a class="permalink" href="#blkid"><b class="Sy">blkid</b></a></dt>
+  <dd>Block number of buffer.</dd>
+  <dt id="offset"><a class="permalink" href="#offset"><b class="Sy">offset</b></a></dt>
+  <dd>Offset in object of buffer.</dd>
+  <dt id="dbsize"><a class="permalink" href="#dbsize"><b class="Sy">dbsize</b></a></dt>
+  <dd>Size of buffer.</dd>
+  <dt id="usize"><a class="permalink" href="#usize"><b class="Sy">usize</b></a></dt>
+  <dd>Size of attached user data.</dd>
+  <dt id="meta"><a class="permalink" href="#meta"><b class="Sy">meta</b></a></dt>
+  <dd>Whether this buffer is metadata.</dd>
+  <dt id="state"><a class="permalink" href="#state"><b class="Sy">state</b></a></dt>
+  <dd>State of buffer (read, cached, etc).</dd>
+  <dt id="dbholds"><a class="permalink" href="#dbholds"><b class="Sy">dbholds</b></a></dt>
+  <dd>Number of holds on buffer.</dd>
+  <dt id="dbc"><a class="permalink" href="#dbc"><b class="Sy">dbc</b></a></dt>
+  <dd>Whether this buffer is in the dbuf cache.</dd>
+  <dt id="list"><a class="permalink" href="#list"><b class="Sy">list</b></a></dt>
+  <dd>Which ARC list contains this buffer.</dd>
+  <dt id="atype"><a class="permalink" href="#atype"><b class="Sy">atype</b></a></dt>
+  <dd>ARC header type (data or metadata).</dd>
+  <dt id="flags"><a class="permalink" href="#flags"><b class="Sy">flags</b></a></dt>
+  <dd>ARC read flags.</dd>
+  <dt id="count"><a class="permalink" href="#count"><b class="Sy">count</b></a></dt>
+  <dd>ARC data count.</dd>
+  <dt id="asize"><a class="permalink" href="#asize"><b class="Sy">asize</b></a></dt>
+  <dd>Size of this ARC buffer.</dd>
+  <dt id="access"><a class="permalink" href="#access"><b class="Sy">access</b></a></dt>
+  <dd>Time this ARC buffer was last accessed.</dd>
+  <dt id="mru"><a class="permalink" href="#mru"><b class="Sy">mru</b></a></dt>
+  <dd>Hits while on the ARC's MRU list.</dd>
+  <dt id="gmru"><a class="permalink" href="#gmru"><b class="Sy">gmru</b></a></dt>
+  <dd>Hits while on the ARC's MRU ghost list.</dd>
+  <dt id="mfu"><a class="permalink" href="#mfu"><b class="Sy">mfu</b></a></dt>
+  <dd>Hits while on the ARC's MFU list.</dd>
+  <dt id="gmfu"><a class="permalink" href="#gmfu"><b class="Sy">gmfu</b></a></dt>
+  <dd>Hits while on the ARC's MFU ghost list.</dd>
+  <dt id="l2"><a class="permalink" href="#l2"><b class="Sy">l2</b></a></dt>
+  <dd>Hits while on the L2ARC.</dd>
+  <dt id="l2_dattr"><a class="permalink" href="#l2_dattr"><b class="Sy">l2_dattr</b></a></dt>
+  <dd>L2ARC disk address/offset.</dd>
+  <dt id="l2_asize"><a class="permalink" href="#l2_asize"><b class="Sy">l2_asize</b></a></dt>
+  <dd>L2ARC allocated size (depends on compression).</dd>
+  <dt id="l2_comp"><a class="permalink" href="#l2_comp"><b class="Sy">l2_comp</b></a></dt>
+  <dd>L2ARC compression algorithm for buffer.</dd>
+  <dt id="aholds"><a class="permalink" href="#aholds"><b class="Sy">aholds</b></a></dt>
+  <dd>Number of holds on this ARC buffer.</dd>
+  <dt id="dtype"><a class="permalink" href="#dtype"><b class="Sy">dtype</b></a></dt>
+  <dd>Dnode type.</dd>
+  <dt id="btype"><a class="permalink" href="#btype"><b class="Sy">btype</b></a></dt>
+  <dd>Bonus buffer type.</dd>
+  <dt id="data_bs"><a class="permalink" href="#data_bs"><b class="Sy">data_bs</b></a></dt>
+  <dd>Data block size.</dd>
+  <dt id="meta_bs"><a class="permalink" href="#meta_bs"><b class="Sy">meta_bs</b></a></dt>
+  <dd>Metadata block size.</dd>
+  <dt id="bsize"><a class="permalink" href="#bsize"><b class="Sy">bsize</b></a></dt>
+  <dd>Bonus buffer size.</dd>
+  <dt id="lvls"><a class="permalink" href="#lvls"><b class="Sy">lvls</b></a></dt>
+  <dd>Number of indirection levels.</dd>
+  <dt id="dholds"><a class="permalink" href="#dholds"><b class="Sy">dholds</b></a></dt>
+  <dd>Number of holds on dnode.</dd>
+  <dt id="blocks"><a class="permalink" href="#blocks"><b class="Sy">blocks</b></a></dt>
+  <dd>Number of allocated blocks.</dd>
+  <dt id="dsize"><a class="permalink" href="#dsize"><b class="Sy">dsize</b></a></dt>
+  <dd>Size of dnode.</dd>
+  <dt id="cached"><a class="permalink" href="#cached"><b class="Sy">cached</b></a></dt>
+  <dd>Bytes cached for all blocks.</dd>
+  <dt id="direct"><a class="permalink" href="#direct"><b class="Sy">direct</b></a></dt>
+  <dd>Bytes cached for direct blocks.</dd>
+  <dt id="indirect"><a class="permalink" href="#indirect"><b class="Sy">indirect</b></a></dt>
+  <dd>Bytes cached for indirect blocks.</dd>
+  <dt id="bonus"><a class="permalink" href="#bonus"><b class="Sy">bonus</b></a></dt>
+  <dd>Bytes cached for bonus buffer.</dd>
+  <dt id="spill"><a class="permalink" href="#spill"><b class="Sy">spill</b></a></dt>
+  <dd>Bytes cached for spill block.</dd>
+</dl>
+</div>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="OPTIONS"><a class="permalink" href="#OPTIONS">OPTIONS</a></h1>
+<dl class="Bl-tag">
+  <dt id="b~2"><a class="permalink" href="#b~2"><code class="Fl">-b</code></a></dt>
+  <dd>Display information for each individual dbuf.</dd>
+  <dt id="d~2"><a class="permalink" href="#d~2"><code class="Fl">-d</code></a></dt>
+  <dd>Display information for each dnode (default).</dd>
+  <dt id="f"><a class="permalink" href="#f"><code class="Fl">-f</code></a>
+    <var class="Ar">field</var>[,<var class="Ar">field</var>&#x2026;]</dt>
+  <dd>Display only the specified fields.</dd>
+  <dt id="F"><a class="permalink" href="#F"><code class="Fl">-F</code></a>
+    <var class="Ar">field</var>=<var class="Ar">value</var>[,&#x2026;]</dt>
+  <dd>Filter output by field value or regular expression. Multiple filters may
+      be specified as a comma-separated list.</dd>
+  <dt id="h"><a class="permalink" href="#h"><code class="Fl">-h</code></a></dt>
+  <dd>Display a help message.</dd>
+  <dt id="i"><a class="permalink" href="#i"><code class="Fl">-i</code></a>
+    <var class="Ar">file</var></dt>
+  <dd>Redirect input from the specified file instead of the
+      <b class="Sy">dbufs</b> kstat.</dd>
+  <dt id="n"><a class="permalink" href="#n"><code class="Fl">-n</code></a></dt>
+  <dd>Exclude the header from output.</dd>
+  <dt id="o"><a class="permalink" href="#o"><code class="Fl">-o</code></a>
+    <var class="Ar">file</var></dt>
+  <dd>Redirect output to the specified file instead of standard output.</dd>
+  <dt id="r"><a class="permalink" href="#r"><code class="Fl">-r</code></a></dt>
+  <dd>Display raw values. Specify twice to also display numeric type and
+      compression identifiers instead of names.</dd>
+  <dt id="s"><a class="permalink" href="#s"><code class="Fl">-s</code></a>
+    <var class="Ar">separator</var></dt>
+  <dd>Override the default field separator (two spaces) with a custom character
+      or string.</dd>
+  <dt id="t~2"><a class="permalink" href="#t~2"><code class="Fl">-t</code></a></dt>
+  <dd>Display information for each dnode type.</dd>
+  <dt id="v"><a class="permalink" href="#v"><code class="Fl">-v</code></a></dt>
+  <dd>List all possible field headers, definitions, and incompatibilities for
+      each mode.</dd>
+  <dt id="x"><a class="permalink" href="#x"><code class="Fl">-x</code></a></dt>
+  <dd>Display extended statistics.</dd>
+</dl>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="EXAMPLES"><a class="permalink" href="#EXAMPLES">EXAMPLES</a></h1>
+<p class="Pp">Display per-dnode statistics (default mode):</p>
+<div class="Bd Bd-indent Li">
+<pre># dbufstat -d
+       pool  objset  object                      dtype  cached
+      zroot      30   34466  DMU_OT_DIRECTORY_CONTENTS    240K
+      zroot      30       0               DMU_OT_DNODE     14M
+      zroot      30   36343  DMU_OT_DIRECTORY_CONTENTS    1024
+      zroot      30   32921 DMU_OT_PLAIN_FILE_CONTENTS    2.5K</pre>
+</div>
+<p class="Pp">Display per-type statistics:</p>
+<div class="Bd Bd-indent Li">
+<pre># dbufstat -t
+       pool  objset                      dtype  cached
+      zroot      30  DMU_OT_DIRECTORY_CONTENTS    1.9M
+      zroot      30               DMU_OT_DNODE     14M
+      zroot      30 DMU_OT_PLAIN_FILE_CONTENTS    8.4M
+      zroot       0           DMU_OT_DSL_PROPS    2.6M</pre>
+</div>
+<p class="Pp">Display per-buffer statistics:</p>
+<div class="Bd Bd-indent Li">
+<pre># dbufstat -b
+       pool  objset  object  level  blkid  offset  dbsize
+      zroot      30   34466      1      0       0    128K
+      zroot      30       0      0    292    4.6M     16K
+      zroot      30   34466      0      8    128K     16K
+      zroot       0       4      0      0       0    128K</pre>
+</div>
+<p class="Pp">Display specific fields per dnode:</p>
+<div class="Bd Bd-indent"><code class="Li"># <code class="Nm">dbufstat</code>
+  <code class="Fl">-d</code> <code class="Fl">-f</code>
+  <var class="Ar">pool,object,objset,dsize,cached</var></code></div>
+<p class="Pp">Display per-type statistics with comma-separated output:</p>
+<div class="Bd Bd-indent"><code class="Li"># <code class="Nm">dbufstat</code>
+  <code class="Fl">-t</code> <code class="Fl">-s</code>
+  &quot;&quot;</code></div>
+,
+<p class="Pp">Display extended per-buffer statistics with filters:</p>
+<div class="Bd Bd-indent"><code class="Li"># <code class="Nm">dbufstat</code>
+  <code class="Fl">-bx</code> <code class="Fl">-F</code>
+  <var class="Ar">dbc=1,pool=zroot</var></code></div>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SEE_ALSO"><a class="permalink" href="#SEE_ALSO">SEE
+  ALSO</a></h1>
+<p class="Pp"><a href="../1/zarcstat.1.html" class="Xr">zarcstat(1)</a>, <a href="../8/zfs.8.html" class="Xr">zfs(8)</a>,
+    <a href="../8/zpool-iostat.8.html" class="Xr">zpool-iostat(8)</a></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="AUTHORS"><a class="permalink" href="#AUTHORS">AUTHORS</a></h1>
+<p class="Pp">This man page was written by <span class="An">Christos
+    Longros</span>
+    &lt;<a class="Mt" href="mailto:chris.longros@gmail.com">chris.longros@gmail.com</a>&gt;.</p>
+</section>
+</div>
+<table class="foot">
+  <tr>
+    <td class="foot-date">March 19, 2026</td>
+    <td class="foot-os">Debian</td>
+  </tr>
+</table>
+</div></section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="cstyle.1.html" class="btn btn-neutral float-left" title="cstyle.1" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="raidz_test.1.html" class="btn btn-neutral float-right" title="raidz_test.1" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, OpenZFS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

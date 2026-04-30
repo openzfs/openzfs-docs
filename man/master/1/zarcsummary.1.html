@@ -1,0 +1,321 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>zarcsummary.1 &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://openzfs.github.io/openzfs-docs/man/master/1/zarcsummary.1.html" />
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/js/redirect.js?v=2a1712f3"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="zhack.1" href="zhack.1.html" />
+    <link rel="prev" title="zarcstat.1" href="zarcstat.1.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Basic%20Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Man Pages</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">master</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">User Commands (1)</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="cstyle.1.html">cstyle.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dbufstat.1.html">dbufstat.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="raidz_test.1.html">raidz_test.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="test-runner.1.html">test-runner.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zarcstat.1.html">zarcstat.1</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">zarcsummary.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zhack.1.html">zhack.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zilstat.1.html">zilstat.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ztest.1.html">ztest.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zvol_wait.1.html">zvol_wait.1</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../4/index.html">Devices and Special Files (4)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../5/index.html">File Formats and Conventions (5)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../7/index.html">Miscellaneous (7)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../8/index.html">System Administration Commands (8)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.4/index.html">v2.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.3/index.html">v2.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.2/index.html">v2.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.1/index.html">v2.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.0/index.html">v2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.8/index.html">v0.8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.7/index.html">v0.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.6/index.html">v0.6</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Man Pages</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">master</a></li>
+          <li class="breadcrumb-item"><a href="index.html">User Commands (1)</a></li>
+      <li class="breadcrumb-item active">zarcsummary.1</li>
+      <li class="wy-breadcrumbs-aside">
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/openzfs/zfs/blob/master/man/man1/zarcsummary.1" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="zarcsummary-1">
+<h1>zarcsummary.1<a class="headerlink" href="#zarcsummary-1" title="Link to this heading"></a></h1>
+<div class="man_container"><table class="head">
+  <tr>
+    <td class="head-ltitle">ZARCSUMMARY(1)</td>
+    <td class="head-vol">General Commands Manual</td>
+    <td class="head-rtitle">ZARCSUMMARY(1)</td>
+  </tr>
+</table>
+<div class="manual-text">
+<section class="Sh">
+<h1 class="Sh" id="NAME"><a class="permalink" href="#NAME">NAME</a></h1>
+<p class="Pp"><code class="Nm">zarcsummary</code> &#x2014;
+    <span class="Nd">print ZFS ARC and subsystem statistics</span></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SYNOPSIS"><a class="permalink" href="#SYNOPSIS">SYNOPSIS</a></h1>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zarcsummary</code></td>
+    <td>[<code class="Fl">-adghr</code>] [<code class="Fl">-p</code>
+      <var class="Ar">page</var>] [<code class="Fl">-s</code>
+      <var class="Ar">section</var>]</td>
+  </tr>
+</table>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h1>
+<p class="Pp"><code class="Nm">zarcsummary</code> collects statistics from the
+    running kernel and prints a human-readable report on the state of the ZFS
+    Adaptive Replacement Cache (ARC) and several related subsystems. The output
+    is a snapshot; for periodic sampling, use <a href="../1/zarcstat.1.html" class="Xr">zarcstat(1)</a>
+    instead.</p>
+<p class="Pp">When invoked without arguments,
+    <code class="Nm">zarcsummary</code> prints all sections in sequence. A
+    single section may be selected with the <code class="Fl">-s</code>
+  option.</p>
+<p class="Pp">The report is organized into the following sections:</p>
+<div class="Bd-indent">
+<dl class="Bl-tag">
+  <dt id="arc"><a class="permalink" href="#arc"><b class="Sy">arc</b></a></dt>
+  <dd>Current and target ARC sizes, the split between the Most Recently Used
+      (MRU) and Most Frequently Used (MFU) lists, overall hit and miss ratios,
+      compression savings, and whether the ARC is experiencing memory
+    pressure.</dd>
+  <dt id="archits"><a class="permalink" href="#archits"><b class="Sy">archits</b></a></dt>
+  <dd>Breakdown of ARC hits and misses by demand reads versus prefetches and
+      data versus metadata.</dd>
+  <dt id="dmu"><a class="permalink" href="#dmu"><b class="Sy">dmu</b></a></dt>
+  <dd>Data Management Unit predictive prefetcher statistics, including stream
+      hits, misses, and I/O issued ahead of and behind the current stream.</dd>
+  <dt id="l2arc"><a class="permalink" href="#l2arc"><b class="Sy">l2arc</b></a></dt>
+  <dd>Level-2 ARC statistics for any cache devices attached to imported pools.
+      This section only appears when an L2ARC device is present and covers bytes
+      read and written, hit rates, and eviction activity.</dd>
+  <dt id="spl"><a class="permalink" href="#spl"><b class="Sy">spl</b></a></dt>
+  <dd>Solaris Porting Layer memory allocator statistics. This section is only
+      available on Linux.</dd>
+  <dt id="tunables"><a class="permalink" href="#tunables"><b class="Sy">tunables</b></a></dt>
+  <dd>Current values of kernel tunables that govern ARC behavior, including
+      <var class="Va">zfs_arc_max</var> and <var class="Va">zfs_arc_min</var>.
+      Combining this section with <code class="Fl">-d</code> adds a brief
+      explanation of each tunable.</dd>
+  <dt id="zil"><a class="permalink" href="#zil"><b class="Sy">zil</b></a></dt>
+  <dd>ZFS Intent Log statistics: committed transaction counts, flush requests to
+      stable storage, and the byte-level split between normal vdevs and any
+      separate log (SLOG) device.</dd>
+</dl>
+</div>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="OPTIONS"><a class="permalink" href="#OPTIONS">OPTIONS</a></h1>
+<dl class="Bl-tag">
+  <dt id="a"><a class="permalink" href="#a"><code class="Fl">-a</code></a>,
+    <code class="Fl">--alternate</code></dt>
+  <dd>Use an alternate layout for the tunables and SPL sections.</dd>
+  <dt id="d"><a class="permalink" href="#d"><code class="Fl">-d</code></a>,
+    <code class="Fl">--description</code></dt>
+  <dd>Print a short description next to each tunable and SPL entry.</dd>
+  <dt id="h"><a class="permalink" href="#h"><code class="Fl">-h</code></a>,
+    <code class="Fl">--help</code></dt>
+  <dd>Display a help message.</dd>
+  <dt id="g"><a class="permalink" href="#g"><code class="Fl">-g</code></a>,
+    <code class="Fl">--graph</code></dt>
+  <dd>Print an ASCII graph of current ARC use and exit.</dd>
+  <dt id="p"><a class="permalink" href="#p"><code class="Fl">-p</code></a>
+    <var class="Ar">page</var>, <code class="Fl">--page</code>
+    <var class="Ar">page</var></dt>
+  <dd>Print a section by its legacy page number.
+      <a class="permalink" href="#Deprecated"><b class="Sy" id="Deprecated">Deprecated</b></a>;
+      use <code class="Fl">-s</code> instead.</dd>
+  <dt id="r"><a class="permalink" href="#r"><code class="Fl">-r</code></a>,
+    <code class="Fl">--raw</code></dt>
+  <dd>Dump all available data with minimal formatting.</dd>
+  <dt id="s"><a class="permalink" href="#s"><code class="Fl">-s</code></a>
+    <var class="Ar">section</var>, <code class="Fl">--section</code>
+    <var class="Ar">section</var></dt>
+  <dd>Print only the named section. See
+      <a class="Sx" href="#DESCRIPTION">DESCRIPTION</a> for the list of valid
+      section names.</dd>
+</dl>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="ENVIRONMENT"><a class="permalink" href="#ENVIRONMENT">ENVIRONMENT</a></h1>
+<dl class="Bl-tag">
+  <dt id="Linux"><a class="permalink" href="#Linux"><b class="Sy">Linux</b></a></dt>
+  <dd>Statistics are read from
+    <span class="Pa">/proc/spl/kstat/zfs/</span>.</dd>
+  <dt><span class="Ux">FreeBSD</span></dt>
+  <dd>Statistics are read via <a class="Xr">sysctl(3)</a> from the
+      <var class="Va">vfs.zfs</var> and <var class="Va">kstat.zfs.misc</var>
+      trees. The <span class="Pa">py-sysctl</span> package must be installed for
+      <code class="Nm">zarcsummary</code> to function.</dd>
+</dl>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="EXIT_STATUS"><a class="permalink" href="#EXIT_STATUS">EXIT
+  STATUS</a></h1>
+<p class="Pp">The <code class="Nm">zarcsummary</code> utility exits&#x00A0;0 on
+    success, and&#x00A0;&gt;0 if an error occurs.</p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="EXAMPLES"><a class="permalink" href="#EXAMPLES">EXAMPLES</a></h1>
+<p class="Pp">Print the full report:</p>
+<div class="Bd Bd-indent"><code class="Li"># zarcsummary</code></div>
+<p class="Pp">Display only ARC size and hit rate information:</p>
+<div class="Bd Bd-indent"><code class="Li"># zarcsummary -s arc</code></div>
+<p class="Pp">Show a visual overview of ARC health:</p>
+<div class="Bd Bd-indent"><code class="Li"># zarcsummary -g</code></div>
+<p class="Pp">Search for all statistics containing &#x201C;hit&#x201D;:</p>
+<div class="Bd Bd-indent"><code class="Li"># zarcsummary -r | grep
+  hit</code></div>
+<p class="Pp">Review all tunables with their descriptions:</p>
+<div class="Bd Bd-indent"><code class="Li"># zarcsummary -d -s
+  tunables</code></div>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SEE_ALSO"><a class="permalink" href="#SEE_ALSO">SEE
+  ALSO</a></h1>
+<p class="Pp"><a href="../1/zarcstat.1.html" class="Xr">zarcstat(1)</a>,
+  <a href="../8/zpool-status.8.html" class="Xr">zpool-status(8)</a></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="HISTORY"><a class="permalink" href="#HISTORY">HISTORY</a></h1>
+<p class="Pp"><code class="Nm">zarcsummary</code> originated as a Perl script
+    called <code class="Nm">arc_summary</code>, written by <span class="An">Ben
+    Rockwood</span> in 2008 for Solaris. <span class="An">Martin Matuska</span>
+    ported it to <span class="Ux">FreeBSD</span> in 2010, and
+    <span class="An">Jason J. Hellenthal</span> took over maintenance.
+    <span class="An">Scot W. Stevenson</span> contributed a full rewrite in
+    Python 3 in 2017, introducing the <code class="Fl">-g</code>,
+    <code class="Fl">-r</code>, and <code class="Fl">-s</code> options along
+    with the section-based output layout. The tool was renamed from
+    <code class="Nm">arc_summary</code> to <code class="Nm">zarcsummary</code>
+    in 2025 to align with the OpenZFS command naming convention.</p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="AUTHORS"><a class="permalink" href="#AUTHORS">AUTHORS</a></h1>
+<p class="Pp">This manual page was written by <span class="An">Christos
+    Longros</span>
+    &lt;<a class="Mt" href="mailto:chris.longros@gmail.com">chris.longros@gmail.com</a>&gt;.</p>
+</section>
+</div>
+<table class="foot">
+  <tr>
+    <td class="foot-date">March 14, 2026</td>
+    <td class="foot-os">Debian</td>
+  </tr>
+</table>
+</div></section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="zarcstat.1.html" class="btn btn-neutral float-left" title="zarcstat.1" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="zhack.1.html" class="btn btn-neutral float-right" title="zhack.1" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, OpenZFS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
