@@ -1,0 +1,343 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>zilstat.1 &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://openzfs.github.io/openzfs-docs/man/master/1/zilstat.1.html" />
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/js/redirect.js?v=2a1712f3"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="ztest.1" href="ztest.1.html" />
+    <link rel="prev" title="zhack.1" href="zhack.1.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../../index.html">
+            
+              <img src="../../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Basic%20Concepts/index.html">Basic Concepts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Man Pages</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">master</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">User Commands (1)</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="cstyle.1.html">cstyle.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dbufstat.1.html">dbufstat.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="raidz_test.1.html">raidz_test.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="test-runner.1.html">test-runner.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zarcstat.1.html">zarcstat.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zarcsummary.1.html">zarcsummary.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zhack.1.html">zhack.1</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">zilstat.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ztest.1.html">ztest.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zvol_wait.1.html">zvol_wait.1</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../4/index.html">Devices and Special Files (4)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../5/index.html">File Formats and Conventions (5)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../7/index.html">Miscellaneous (7)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../8/index.html">System Administration Commands (8)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.4/index.html">v2.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.3/index.html">v2.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.2/index.html">v2.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.1/index.html">v2.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v2.0/index.html">v2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.8/index.html">v0.8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.7/index.html">v0.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v0.6/index.html">v0.6</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Man Pages</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">master</a></li>
+          <li class="breadcrumb-item"><a href="index.html">User Commands (1)</a></li>
+      <li class="breadcrumb-item active">zilstat.1</li>
+      <li class="wy-breadcrumbs-aside">
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/openzfs/zfs/blob/master/man/man1/zilstat.1" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="zilstat-1">
+<h1>zilstat.1<a class="headerlink" href="#zilstat-1" title="Link to this heading"></a></h1>
+<div class="man_container"><table class="head">
+  <tr>
+    <td class="head-ltitle">ZILSTAT(1)</td>
+    <td class="head-vol">General Commands Manual</td>
+    <td class="head-rtitle">ZILSTAT(1)</td>
+  </tr>
+</table>
+<div class="manual-text">
+<section class="Sh">
+<h1 class="Sh" id="NAME"><a class="permalink" href="#NAME">NAME</a></h1>
+<p class="Pp"><code class="Nm">zilstat</code> &#x2014; <span class="Nd">report
+    ZFS Intent Log statistics</span></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SYNOPSIS"><a class="permalink" href="#SYNOPSIS">SYNOPSIS</a></h1>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">zilstat</code></td>
+    <td>[<code class="Fl">-v</code>]
+      [<code class="Fl">-a</code>|<code class="Fl">-p</code>
+      <var class="Ar">pool</var>|<code class="Fl">-d</code>
+      <var class="Ar">dataset</var>[,<var class="Ar">dataset</var>&#x2026;]]
+      [<code class="Fl">-f</code>
+      <var class="Ar">field</var>[,<var class="Ar">field</var>&#x2026;]]
+      [<code class="Fl">-s</code> <var class="Ar">separator</var>]
+      [<code class="Fl">-i</code> <var class="Ar">interval</var>]</td>
+  </tr>
+</table>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h1>
+<p class="Pp"><code class="Nm">zilstat</code> prints statistics about the ZFS
+    Intent Log (ZIL). The ZIL is used to log synchronous write operations and is
+    replayed on pool import if the system crashes before those writes are
+    committed to the main pool.</p>
+<p class="Pp">By default, global ZIL statistics are displayed. When a pool or
+    dataset is specified, per-dataset statistics are shown instead.</p>
+<p class="Pp">If an <var class="Ar">interval</var> is specified, the output is
+    repeated every <var class="Ar">interval</var> seconds showing the change in
+    values since the previous sample. Without an interval, cumulative values are
+    displayed.</p>
+<p class="Pp">The following fields are available:</p>
+<div class="Bd-indent">
+<dl class="Bl-tag Bl-compact">
+  <dt id="time"><a class="permalink" href="#time"><b class="Sy">time</b></a></dt>
+  <dd>Current time</dd>
+  <dt id="pool"><a class="permalink" href="#pool"><b class="Sy">pool</b></a></dt>
+  <dd>Pool name</dd>
+  <dt id="ds"><a class="permalink" href="#ds"><b class="Sy">ds</b></a></dt>
+  <dd>Dataset name</dd>
+  <dt id="obj"><a class="permalink" href="#obj"><b class="Sy">obj</b></a></dt>
+  <dd>Objset ID</dd>
+  <dt id="cc"><a class="permalink" href="#cc"><b class="Sy">cc</b></a></dt>
+  <dd>Commit count</dd>
+  <dt id="cwc"><a class="permalink" href="#cwc"><b class="Sy">cwc</b></a></dt>
+  <dd>Commit writer count</dd>
+  <dt id="cec"><a class="permalink" href="#cec"><b class="Sy">cec</b></a></dt>
+  <dd>Commit error count</dd>
+  <dt id="csc"><a class="permalink" href="#csc"><b class="Sy">csc</b></a></dt>
+  <dd>Commit stall count</dd>
+  <dt id="cSc"><a class="permalink" href="#cSc"><b class="Sy">cSc</b></a></dt>
+  <dd>Commit suspend count</dd>
+  <dt id="cCc"><a class="permalink" href="#cCc"><b class="Sy">cCc</b></a></dt>
+  <dd>Commit crash count</dd>
+  <dt id="ic"><a class="permalink" href="#ic"><b class="Sy">ic</b></a></dt>
+  <dd>In-transaction count</dd>
+  <dt id="iic"><a class="permalink" href="#iic"><b class="Sy">iic</b></a></dt>
+  <dd>Indirect in-transaction count</dd>
+  <dt id="iib"><a class="permalink" href="#iib"><b class="Sy">iib</b></a></dt>
+  <dd>Indirect in-transaction bytes</dd>
+  <dt id="icc"><a class="permalink" href="#icc"><b class="Sy">icc</b></a></dt>
+  <dd>Copied in-transaction count</dd>
+  <dt id="icb"><a class="permalink" href="#icb"><b class="Sy">icb</b></a></dt>
+  <dd>Copied in-transaction bytes</dd>
+  <dt id="inc"><a class="permalink" href="#inc"><b class="Sy">inc</b></a></dt>
+  <dd>Needcopy in-transaction count</dd>
+  <dt id="inb"><a class="permalink" href="#inb"><b class="Sy">inb</b></a></dt>
+  <dd>Needcopy in-transaction bytes</dd>
+  <dt id="idc"><a class="permalink" href="#idc"><b class="Sy">idc</b></a></dt>
+  <dd>Direct (copied + needcopy) count</dd>
+  <dt id="idb"><a class="permalink" href="#idb"><b class="Sy">idb</b></a></dt>
+  <dd>Direct (copied + needcopy) bytes</dd>
+  <dt id="iwc"><a class="permalink" href="#iwc"><b class="Sy">iwc</b></a></dt>
+  <dd>Total write (indirect + direct) count</dd>
+  <dt id="iwb"><a class="permalink" href="#iwb"><b class="Sy">iwb</b></a></dt>
+  <dd>Total write (indirect + direct) bytes</dd>
+  <dt id="imnc"><a class="permalink" href="#imnc"><b class="Sy">imnc</b></a></dt>
+  <dd>Normal metaslab count</dd>
+  <dt id="imnb"><a class="permalink" href="#imnb"><b class="Sy">imnb</b></a></dt>
+  <dd>Normal metaslab bytes</dd>
+  <dt id="imnw"><a class="permalink" href="#imnw"><b class="Sy">imnw</b></a></dt>
+  <dd>Normal metaslab write bytes</dd>
+  <dt id="imna"><a class="permalink" href="#imna"><b class="Sy">imna</b></a></dt>
+  <dd>Normal metaslab alloc bytes</dd>
+  <dt id="imsc"><a class="permalink" href="#imsc"><b class="Sy">imsc</b></a></dt>
+  <dd>SLOG metaslab count</dd>
+  <dt id="imsb"><a class="permalink" href="#imsb"><b class="Sy">imsb</b></a></dt>
+  <dd>SLOG metaslab bytes</dd>
+  <dt id="imsw"><a class="permalink" href="#imsw"><b class="Sy">imsw</b></a></dt>
+  <dd>SLOG metaslab write bytes</dd>
+  <dt id="imsa"><a class="permalink" href="#imsa"><b class="Sy">imsa</b></a></dt>
+  <dd>SLOG metaslab alloc bytes</dd>
+  <dt id="imc"><a class="permalink" href="#imc"><b class="Sy">imc</b></a></dt>
+  <dd>Total metaslab (normal + SLOG) count</dd>
+  <dt id="imb"><a class="permalink" href="#imb"><b class="Sy">imb</b></a></dt>
+  <dd>Total metaslab (normal + SLOG) bytes</dd>
+  <dt id="imw"><a class="permalink" href="#imw"><b class="Sy">imw</b></a></dt>
+  <dd>Total metaslab (normal + SLOG) write bytes</dd>
+  <dt id="ima"><a class="permalink" href="#ima"><b class="Sy">ima</b></a></dt>
+  <dd>Total metaslab (normal + SLOG) alloc bytes</dd>
+  <dt id="se_"><a class="permalink" href="#se_"><b class="Sy">se%</b></a></dt>
+  <dd>Space efficiency percentage (bytes / alloc)</dd>
+  <dt id="sen_"><a class="permalink" href="#sen_"><b class="Sy">sen%</b></a></dt>
+  <dd>Normal space efficiency percentage</dd>
+  <dt id="ses_"><a class="permalink" href="#ses_"><b class="Sy">ses%</b></a></dt>
+  <dd>SLOG space efficiency percentage</dd>
+  <dt id="te_"><a class="permalink" href="#te_"><b class="Sy">te%</b></a></dt>
+  <dd>Total efficiency percentage (bytes / write)</dd>
+  <dt id="ten_"><a class="permalink" href="#ten_"><b class="Sy">ten%</b></a></dt>
+  <dd>Normal total efficiency percentage</dd>
+  <dt id="tes_"><a class="permalink" href="#tes_"><b class="Sy">tes%</b></a></dt>
+  <dd>SLOG total efficiency percentage</dd>
+</dl>
+</div>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="OPTIONS"><a class="permalink" href="#OPTIONS">OPTIONS</a></h1>
+<dl class="Bl-tag">
+  <dt id="h"><a class="permalink" href="#h"><code class="Fl">-h</code></a></dt>
+  <dd>Display a help message.</dd>
+  <dt id="a"><a class="permalink" href="#a"><code class="Fl">-a</code></a></dt>
+  <dd>Print statistics for all datasets across all pools.</dd>
+  <dt id="d"><a class="permalink" href="#d"><code class="Fl">-d</code></a>
+    <var class="Ar">dataset</var></dt>
+  <dd>Print statistics for the specified dataset(s). Multiple datasets may be
+      given as a comma-separated list.</dd>
+  <dt id="f"><a class="permalink" href="#f"><code class="Fl">-f</code></a>
+    <var class="Ar">field</var></dt>
+  <dd>Display only the specified fields. Multiple fields may be given as a
+      comma-separated list. See
+      <a class="Sx" href="#DESCRIPTION">DESCRIPTION</a> for available
+    fields.</dd>
+  <dt id="i"><a class="permalink" href="#i"><code class="Fl">-i</code></a>
+    <var class="Ar">interval</var></dt>
+  <dd>Print statistics every <var class="Ar">interval</var> seconds. Values are
+      reported as rates per second.</dd>
+  <dt id="p"><a class="permalink" href="#p"><code class="Fl">-p</code></a>
+    <var class="Ar">pool</var></dt>
+  <dd>Print statistics for all datasets in the specified pool.</dd>
+  <dt id="s"><a class="permalink" href="#s"><code class="Fl">-s</code></a>
+    <var class="Ar">separator</var></dt>
+  <dd>Override the default field separator (two spaces) with a custom
+    string.</dd>
+  <dt id="v"><a class="permalink" href="#v"><code class="Fl">-v</code></a></dt>
+  <dd>List all available field headers and their definitions.</dd>
+</dl>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="ENVIRONMENT"><a class="permalink" href="#ENVIRONMENT">ENVIRONMENT</a></h1>
+<dl class="Bl-tag">
+  <dt id="Linux"><a class="permalink" href="#Linux"><b class="Sy">Linux</b></a></dt>
+  <dd>Statistics are read from <span class="Pa">/proc/spl/kstat/zfs/zil</span>
+      for global stats and from per-pool objset files under
+      <span class="Pa">/proc/spl/kstat/zfs/</span><var class="Ar">pool</var><span class="Pa">/</span>.</dd>
+  <dt id="FreeBSD"><a class="permalink" href="#FreeBSD"><b class="Sy">FreeBSD</b></a></dt>
+  <dd>Statistics are read via <a class="Xr">sysctl(8)</a> from the
+      <a class="permalink" href="#kstat.zfs"><b class="Sy" id="kstat.zfs">kstat.zfs</b></a>
+      tree.</dd>
+</dl>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SEE_ALSO"><a class="permalink" href="#SEE_ALSO">SEE
+  ALSO</a></h1>
+<p class="Pp"><a href="../1/zarcstat.1.html" class="Xr">zarcstat(1)</a>,
+  <a href="../8/zpool-status.8.html" class="Xr">zpool-status(8)</a></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="AUTHORS"><a class="permalink" href="#AUTHORS">AUTHORS</a></h1>
+<p class="Pp">This manual page was written by <span class="An">Christos
+    Longros</span>
+    &lt;<a class="Mt" href="mailto:chris.longros@gmail.com">chris.longros@gmail.com</a>&gt;.</p>
+</section>
+</div>
+<table class="foot">
+  <tr>
+    <td class="foot-date">March 9, 2026</td>
+    <td class="foot-os">Debian</td>
+  </tr>
+</table>
+</div></section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="zhack.1.html" class="btn btn-neutral float-left" title="zhack.1" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ztest.1.html" class="btn btn-neutral float-right" title="ztest.1" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, OpenZFS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
