@@ -28,6 +28,7 @@ booted in UEFI mode.
 Preparation
 ---------------------------
 
+#. Disable Secure Boot. ZFS modules can not be loaded if Secure Boot is enabled.
 #. Download `NixOS Live Image
    <https://nixos.org/download.html#nixos-iso>`__ and boot from it.
 
