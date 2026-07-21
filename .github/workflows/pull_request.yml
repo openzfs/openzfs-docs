@@ -30,6 +30,8 @@ jobs:
       run: make man
     - name: Gen_feature_matrix
       run: make feature_matrix
+    - name: Gen_module_params
+      run: make module_params
     # Warnings are errors here: broken references and malformed markup must
     # not reach master. --keep-going reports every problem in one run.
     - name: Gen_sphinx
