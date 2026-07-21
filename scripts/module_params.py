@@ -324,7 +324,8 @@ def render(params, order, overlay, intro_include):
                 'representation. Each parameter is tagged with keywords for',
                 'frequent searches.', '']
         for tag in sorted(tags, key=str.lower):
-            out += [tag, '~' * len(tag), '', '.. raw:: html', '', '   <ul>']
+            out += ['.. rst-class:: zfs-tag', '',
+                    tag, '~' * len(tag), '', '.. raw:: html', '', '   <ul>']
             for name in sorted(tags[tag]):
                 classes = ' '.join(
                     ['zfs-param'] +

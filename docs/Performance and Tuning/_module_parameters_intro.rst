@@ -66,6 +66,7 @@ and adds the information that the man pages do not carry: which versions
 a parameter exists in, and the accumulated advice of ZFS developers and
 practitioners about when to change it.
 
-Use the version selector above to restrict the page to the parameters
-that exist in a particular OpenZFS release, or leave it at *All versions*
-to search the full history.
+Use the selector above to restrict the page to the parameters that exist
+in a particular OpenZFS release, and the box next to it to narrow the
+list down by name. Leave the selector at *All versions* to search the
+full history, including parameters that have since been removed.
