@@ -268,7 +268,10 @@ for old, new in redirect_folders.items():
             oldpath = str(newpath).replace(new, old, 1)
             rediraffe_redirects[oldpath] = str(newpath)
 
-llms_txt_exclude = ["search", "genindex", "404", "_TableOfContents", "man/v*", "man/*index"]
+llms_txt_exclude = ["search", "genindex", "404", "_TableOfContents", "man/v*", "man/*index",
+                    # generated, and too large to be worth inlining; the same
+                    # content is in the man pages already
+                    "Performance and Tuning/Module Parameters"]
 
 # -- Options for linkcheck ---------------------------------------------------
 

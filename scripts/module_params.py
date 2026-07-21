@@ -35,6 +35,7 @@ BUILD_DIR = '_build'
 ZFS_GIT_REPO = 'https://github.com/openzfs/zfs.git'
 ZFS_GIT_DIR = os.path.join(BUILD_DIR, 'zfs')
 
+DOCS_REPO_URL = 'https://github.com/openzfs/openzfs-docs/'
 OVERLAY_NAME = 'module_parameters.yaml'
 PAGE_PATH = os.path.join('Performance and Tuning', 'Module Parameters.rst')
 INTRO_NAME = '_module_parameters_intro.rst'
@@ -297,6 +298,10 @@ def render(params, order, overlay, intro_include):
         '.. from the OpenZFS sources.',
         '',
         ':llms-txt-ignore: true',
+        # the page itself is not in the repository, send "Edit on GitHub" to
+        # the file a reader would actually want to change
+        ':github_url: {}blob/master/docs/{}'.format(DOCS_REPO_URL,
+                                                    OVERLAY_NAME),
         '',
         'Module Parameters',
         '=================',
