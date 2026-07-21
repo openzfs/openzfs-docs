@@ -3006,7 +3006,7 @@ bytes.
 +=====================+===============================================+
 | Tags                | `ARC <#arc>`__, `memory <#memory>`__          |
 +---------------------+-----------------------------------------------+
-| When to change      | When the ARC is not releasing memory fast      |
+| When to change      | When the ARC is not releasing memory fast     |
 |                     | enough to keep up with other system demands   |
 +---------------------+-----------------------------------------------+
 | Data Type           | uint                                          |
@@ -3911,7 +3911,7 @@ are queued in the intervening device driver layers.
 | Tags                | `vdev <#vdev>`__,                             |
 |                     | `ZIO_scheduler <#zio-scheduler>`__            |
 +---------------------+-----------------------------------------------+
-| When to change      | See `ZFS I/O Scheduler <#zio-scheduler>`__ |
+| When to change      | See `ZFS I/O Scheduler <#zio-scheduler>`__    |
 +---------------------+-----------------------------------------------+
 | Data Type           | uint32                                        |
 +---------------------+-----------------------------------------------+
@@ -3940,7 +3940,8 @@ active to each device.
 |                           | `scrub <#scrub>`__,                     |
 |                           | `resilver <#resilver>`__                |
 +---------------------------+-----------------------------------------+
-| When to change            | See `ZFS I/O Scheduler <#zio-scheduler>`__ |
+| When to change            | See `ZFS I/O Scheduler                  |
+|                           | <#zio-scheduler>`__                     |
 +---------------------------+-----------------------------------------+
 | Data Type                 | uint32                                  |
 +---------------------------+-----------------------------------------+
@@ -3971,7 +3972,8 @@ active to each device.
 |                           | `scrub <#scrub>`__,                     |
 |                           | `resilver <#resilver>`__                |
 +---------------------------+-----------------------------------------+
-| When to change            | See `ZFS I/O Scheduler <#zio-scheduler>`__ |
+| When to change            | See `ZFS I/O Scheduler                  |
+|                           | <#zio-scheduler>`__                     |
 +---------------------------+-----------------------------------------+
 | Data Type                 | uint32                                  |
 +---------------------------+-----------------------------------------+
@@ -4134,7 +4136,8 @@ See also `zio_dva_throttle_enabled <#zio-dva-throttle-enabled>`__
 | Tags                     | `vdev <#vdev>`__,                        |
 |                          | `ZIO_scheduler <#zio-scheduler>`__       |
 +--------------------------+------------------------------------------+
-| When to change           | See `ZFS I/O Scheduler <#zio-scheduler>`__ |
+| When to change           | See `ZFS I/O Scheduler                   |
+|                          | <#zio-scheduler>`__                      |
 +--------------------------+------------------------------------------+
 | Data Type                | uint32                                   |
 +--------------------------+------------------------------------------+
@@ -5666,7 +5669,7 @@ See also `zfs_dirty_data_sync <#zfs-dirty-data-sync>`__ and
 +-------------------+-------------------------------------------------+
 | When to change    | To optimize the work done by txg commit         |
 |                   | relative to the pool requirements. See also     |
-|                   | section `ZFS I/O Scheduler <#zio-scheduler>`__ |
+|                   | section `ZFS I/O Scheduler <#zio-scheduler>`__  |
 +-------------------+-------------------------------------------------+
 | Data Type         | int                                             |
 +-------------------+-------------------------------------------------+
@@ -6360,7 +6363,7 @@ by a single active ZIL writer.
 +===================+=================================================+
 | Tags              | `ZIL <#zil>`__                                  |
 +-------------------+-------------------------------------------------+
-| When to change    | See `ZFS I/O Scheduler <#zio-scheduler>`__ |
+| When to change    | See `ZFS I/O Scheduler <#zio-scheduler>`__      |
 +-------------------+-------------------------------------------------+
 | Data Type         | ulong                                           |
 +-------------------+-------------------------------------------------+
@@ -8094,7 +8097,8 @@ I/Os active to each device.
 | Tags                        | `vdev <#vdev>`__,                     |
 |                             | `ZIO_scheduler <#zio-scheduler>`__    |
 +-----------------------------+---------------------------------------+
-| When to change              | See `ZFS I/O Scheduler <#zio-scheduler>`__ |
+| When to change              | See `ZFS I/O Scheduler                |
+|                             | <#zio-scheduler>`__                   |
 +-----------------------------+---------------------------------------+
 | Data Type                   | uint32                                |
 +-----------------------------+---------------------------------------+
@@ -8123,7 +8127,8 @@ I/Os active to each device.
 | Tags                        | `vdev <#vdev>`__,                     |
 |                             | `ZIO_scheduler <#zio-scheduler>`__    |
 +-----------------------------+---------------------------------------+
-| When to change              | See `ZFS I/O Scheduler <#zio-scheduler>`__ |
+| When to change              | See `ZFS I/O Scheduler                |
+|                             | <#zio-scheduler>`__                   |
 +-----------------------------+---------------------------------------+
 | Data Type                   | uint32                                |
 +-----------------------------+---------------------------------------+
@@ -8152,7 +8157,8 @@ device.
 | Tags                     | `vdev <#vdev>`__,                        |
 |                          | `ZIO_scheduler <#zio-scheduler>`__       |
 +--------------------------+------------------------------------------+
-| When to change           | See `ZFS I/O Scheduler <#zio-scheduler>`__ |
+| When to change           | See `ZFS I/O Scheduler                   |
+|                          | <#zio-scheduler>`__                      |
 +--------------------------+------------------------------------------+
 | Data Type                | uint32                                   |
 +--------------------------+------------------------------------------+
@@ -8181,7 +8187,8 @@ device.
 | Tags                     | `vdev <#vdev>`__,                        |
 |                          | `ZIO_scheduler <#zio-scheduler>`__       |
 +--------------------------+------------------------------------------+
-| When to change           | See `ZFS I/O Scheduler <#zio-scheduler>`__ |
+| When to change           | See `ZFS I/O Scheduler                   |
+|                          | <#zio-scheduler>`__                      |
 +--------------------------+------------------------------------------+
 | Data Type                | uint32                                   |
 +--------------------------+------------------------------------------+
