@@ -266,3 +266,17 @@ for old, new in redirect_folders.items():
             rediraffe_redirects[oldpath] = str(newpath)
 
 llms_txt_exclude = ["search", "genindex", "404", "_TableOfContents", "man/v*", "man/*index"]
+
+# -- Options for linkcheck ---------------------------------------------------
+
+# Anchors of generated man pages and of third-party sites produce too many
+# false positives to be useful.
+linkcheck_anchors = False
+linkcheck_retries = 2
+linkcheck_timeout = 30
+linkcheck_ignore = [
+    # requires a search query to be executed, always reported as broken
+    r'https://pgp\.mit\.edu/.*',
+    # blocks non-browser clients
+    r'https://www\.linkedin\.com/.*',
+]
