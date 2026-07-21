@@ -60,6 +60,16 @@ LEGACY_DESC = re.compile(
     r'\s*;', re.DOTALL)
 # .It Sy zfs_arc_min Ns = Ns Sy 0 Ns B Pq u64
 MAN_ENTRY = re.compile(r'^\.It Sy (?P<name>[a-z][a-z0-9_]*)\b(?P<rest>.*)$')
+# Before 2.1 the parameters were documented in man5 with plain roff:
+#   \fBzfs_arc_min\fR (ulong)
+#   Default value: \fB0\fR.
+OLD_MAN_PAGES = ('man/man5/zfs-module-parameters.5',
+                 'man/man5/spl-module-parameters.5')
+OLD_MAN_ENTRY = re.compile(
+    r'^\\fB(?P<name>[a-z][a-z0-9_]*)\\fR\s*\((?P<type>[a-z0-9_ ]+)\)\s*$')
+OLD_MAN_DEFAULT = re.compile(
+    r'^Default value:\s*(?P<default>.*?)\s*\.?\s*$')
+ROFF_MARKUP = re.compile(r'\\f[BRI]')
 
 PERM_LABEL = {
     'ZMOD_RW': 'Dynamic',
@@ -189,9 +199,32 @@ def read(repo, tag, path):
         return ''
 
 
+def parse_old_man(repo, tag):
+    """Defaults as documented before the man pages moved to mdoc in 2.1."""
+    defaults = {}
+    for man in OLD_MAN_PAGES:
+        current = None
+        for line in read(repo, tag, man).split('\n'):
+            entry = OLD_MAN_ENTRY.match(line)
+            if entry:
+                current = entry.group('name')
+                defaults[current] = {
+                    'default': '',
+                    'units': '',
+                    'man_type': entry.group('type').strip(),
+                    'in_man': True,
+                }
+                continue
+            value = OLD_MAN_DEFAULT.match(line)
+            if value and current and not defaults[current]['default']:
+                text = ROFF_MARKUP.sub('', value.group('default')).strip()
+                defaults[current]['default'] = text.rstrip('.')
+    return defaults
+
+
 def parse_man(repo, tag):
     """Defaults and units as documented in the man pages."""
-    defaults = {}
+    defaults = parse_old_man(repo, tag)
     for man in ('man/man4/zfs.4', 'man/man4/spl.4'):
         for line in read(repo, tag, man).split('\n'):
             match = MAN_ENTRY.match(line)
@@ -208,6 +241,33 @@ def parse_man(repo, tag):
                 'in_man': True,
             }
     return defaults
+
+
+SIZE_UNITS = {'b': 1, 'kb': 1024, 'kib': 1024, 'mb': 1024 ** 2,
+              'mib': 1024 ** 2, 'gb': 1024 ** 3, 'gib': 1024 ** 3,
+              'tb': 1024 ** 4, 'tib': 1024 ** 4}
+NUMBER = re.compile(r'^(?P<value>\d+)\s*(?P<unit>[a-zA-Z%]*)$')
+
+
+def normalize_default(value, units=''):
+    """Compare defaults by what they mean, not by how they are written.
+
+    The man pages changed notation in 2.1: "134,217,728 (128MB)" became
+    "134217728", percentages lost their sign and sizes moved their unit
+    into a separate field. Without folding that away every second
+    parameter would look like its default had changed.
+    """
+    text = re.sub(r'\(.*?\)', '', value).replace('\\', '')
+    text = text.strip().replace(',', '')
+    match = NUMBER.match(text)
+    if not match:
+        # "10 at the time of this writing", "32  or 4" - the old pages
+        # explained themselves in the value
+        prose = re.match(r'^(\d+)\s*(?:[a-zA-Z%]*)\s+\S', text)
+        return prose.group(1) if prose else text
+    number = int(match.group('value'))
+    unit = (match.group('unit') or units).lower()
+    return str(number * SIZE_UNITS.get(unit, 1))
 
 
 def extract_legacy(text, path):
@@ -295,12 +355,43 @@ def collect(repo):
     order = list(versions)
     for version in order:
         for name, meta in per_version[version].items():
-            entry = params.setdefault(name, {'versions': []})
+            entry = params.setdefault(name, {'versions': [], 'defaults': {}})
             entry['versions'].append(version)
             # newest version wins, so the page describes current behaviour
             entry.update(meta)
-            entry.update(mans[version].get(name, {}))
+            documented = mans[version].get(name, {})
+            entry.update(documented)
+            if documented.get('default'):
+                entry['defaults'][version] = (
+                    documented['default'],
+                    normalize_default(documented['default'],
+                                      documented.get('units', '')))
     return params, order
+
+
+def default_runs(meta, order):
+    """Group the versions by the default they document, oldest run first."""
+    history = meta.get('defaults', {})
+    runs = []
+    for version in order:
+        if version not in history:
+            continue
+        shown, compared = history[version]
+        if runs and runs[-1][0] == compared:
+            runs[-1][2].append(version)
+        else:
+            runs.append([compared, shown, [version]])
+    return runs
+
+
+def default_field(meta, order):
+    """One default, or the history of it when upstream changed it."""
+    runs = default_runs(meta, order)
+    if len(runs) < 2:
+        return '``{}``'.format(meta['default']) if meta.get('default') else ''
+    return ', '.join(
+        '``{}`` in {}'.format(shown, version_range(versions, order))
+        for _, shown, versions in reversed(runs))
 
 
 def version_class(version):
@@ -426,6 +517,15 @@ def render(params, order, overlay, intro_include, tags_of):
         'Module Parameters',
         '=================',
         '',
+        '.. note::',
+        '   Most of this page is generated from the OpenZFS sources: the list',
+        '   of parameters, their types, defaults and one-line descriptions',
+        '   come from the code and the man pages of each release. The tuning',
+        '   advice is written by hand in ``docs/{}``.'.format(OVERLAY_NAME),
+        '',
+        '   If anything here is wrong, outdated or missing, please',
+        '   `report it <{}issues>`__.'.format(DOCS_REPO_URL),
+        '',
         '.. raw:: html',
         '',
         '   <div id="zfs-param-filter"></div>',
@@ -474,8 +574,7 @@ def render(params, order, overlay, intro_include, tags_of):
             ('Platforms', ', '.join(meta['platforms'])),
             ('Type', '``{}``'.format(meta['type'] or meta.get('man_type', ''))
              if (meta['type'] or meta.get('man_type')) else ''),
-            ('Default', '``{}``'.format(meta['default'])
-             if meta.get('default') else ''),
+            ('Default', default_field(meta, order)),
             ('Units', meta.get('units', '')),
             ('Range', curated.get('range', '')),
             ('Change', PERM_LABEL.get(meta['perm'], '')),
