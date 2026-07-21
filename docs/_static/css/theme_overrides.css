@@ -77,6 +77,19 @@
     display: none;
 }
 
+/* Following a link to #some-parameter scrolls it to the very top of the
+   viewport, where the sticky filter block would cover it. Keep that much
+   room above every anchor of the page. */
+body.zfs-param-page section[id] {
+    scroll-margin-top: 5rem;
+}
+
+@media screen and (max-width: 600px) {
+    body.zfs-param-page section[id] {
+        scroll-margin-top: 7rem;
+    }
+}
+
 /* the per-value tables of the Default and Range fields are part of a
    field list, not standalone tables: no frame, no full width */
 table.zfs-field-table,
