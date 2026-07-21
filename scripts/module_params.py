@@ -147,6 +147,7 @@ def parse_man(repo, tag):
                 'default': value.group('default') if value else '',
                 'units': units.group('units') if units else '',
                 'man_type': kind.group('type') if kind else '',
+                'in_man': True,
             }
     return defaults
 
@@ -180,7 +181,10 @@ def extract_params(repo, tag):
         if not path.startswith('module/'):
             continue
         params.update(extract_legacy(read(repo, tag, path), path))
-    for path in files_with(repo, tag, 'ZFS_MODULE_PARAM', '*.c', '*.h'):
+    for path in files_with(repo, tag, 'ZFS_MODULE_PARAM', '*.c'):
+        # headers only define the macros, they declare no parameters
+        if not path.startswith('module/'):
+            continue
         text = read(repo, tag, path)
         for match in PARAM_MACRO.finditer(text):
             args = split_args(match.group('args'))
@@ -370,6 +374,75 @@ def render(params, order, overlay, intro_include):
     return '\n'.join(out) + '\n'
 
 
+def coverage(params, overlay, order):
+    """Parameters that exist in the code but are missing from the docs.
+
+    "undocumented" ones have nothing at all: no description in the sources,
+    no man page entry and no curated notes, so the page can only show their
+    name. "uncurated" ones are described upstream but carry none of the
+    advice this page exists for, grouped by the version that introduced
+    them.
+    """
+    current = order[-1]
+    undocumented, uncurated = [], defaultdict(list)
+    for name, meta in sorted(params.items()):
+        if current not in meta['versions']:
+            continue  # removed upstream, nothing to document
+        if name in overlay:
+            continue
+        if not meta['desc'] and not meta.get('in_man'):
+            undocumented.append(name)
+        else:
+            uncurated[meta['versions'][0]].append(name)
+    return undocumented, uncurated
+
+
+def report_coverage(params, overlay, order, report_path=None):
+    """Complain about undocumented parameters, loudly."""
+    undocumented, uncurated = coverage(params, overlay, order)
+    missing = sum(len(names) for names in uncurated.values())
+    total = sum(1 for meta in params.values() if order[-1] in meta['versions'])
+
+    for name in undocumented:
+        LOG.error('%s exists in the sources but is documented nowhere: '
+                  'no description upstream and no entry in %s',
+                  name, OVERLAY_NAME)
+    LOG.warning('%d of %d parameters have no curated notes in %s',
+                missing, total, OVERLAY_NAME)
+    for version in sorted(uncurated, key=lambda v: order.index(v),
+                          reverse=True)[:2]:
+        LOG.warning('  new in %s, still undocumented: %s',
+                    version, ', '.join(uncurated[version]))
+
+    if report_path:
+        write_report(report_path, undocumented, uncurated, missing, total)
+    return not undocumented
+
+
+def write_report(path, undocumented, uncurated, missing, total):
+    """Markdown summary, meant for $GITHUB_STEP_SUMMARY."""
+    lines = ['## OpenZFS module parameter coverage', '',
+             '{} of {} parameters have no curated notes in `{}`.'.format(
+                 missing, total, OVERLAY_NAME), '']
+    if undocumented:
+        lines += ['### Documented nowhere', '',
+                  'These have no upstream description either, so the page '
+                  'can only show their name:', '']
+        lines += ['- `{}`'.format(name) for name in undocumented] + ['']
+    if uncurated:
+        lines += ['### Missing tuning notes, by the version that added them',
+                  '', '| Version | Count | Parameters |', '|---|---|---|']
+        for version in sorted(uncurated, reverse=True):
+            names = uncurated[version]
+            lines.append('| {} | {} | {} |'.format(
+                version, len(names),
+                ' '.join('`{}`'.format(n) for n in names)))
+        lines.append('')
+    with open(path, 'a') as handle:
+        handle.write('\n'.join(lines) + '\n')
+    LOG.info('Wrote coverage report to %s', path)
+
+
 def check_overlay(repo, params, overlay):
     """Fail on curated entries for parameters that never existed."""
     unknown = sorted(set(overlay) - set(params))
@@ -413,7 +486,10 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('out_dir', help='Sphinx docs dir')
     parser.add_argument('--check', action='store_true',
-                        help='only validate the overlay, write nothing')
+                        help='validate the overlay and the coverage of the '
+                             'current parameters, write no page')
+    parser.add_argument('--report', metavar='PATH',
+                        help='append a markdown coverage report to PATH')
     args = parser.parse_args()
 
     repo = prepare_repo(args.out_dir)
@@ -424,11 +500,15 @@ def main():
     with open(overlay_path) as handle:
         overlay = yaml.safe_load(handle) or {}
 
+    documented = report_coverage(params, overlay, order, args.report)
     if not check_overlay(repo, params, overlay):
         LOG.error('Remove the entries above from %s, or fix their names',
                   overlay_path)
         return 1
     if args.check:
+        if not documented:
+            LOG.error('Describe the parameters above in %s', overlay_path)
+            return 1
         return 0
 
     page = os.path.join(args.out_dir, PAGE_PATH)

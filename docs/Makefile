@@ -43,7 +43,8 @@ feature_matrix:
 module_params:
 	../scripts/module_params.py ./
 
-# Validate the curated overlay without regenerating the page
+# Validate the curated overlay and report parameters that the sources have
+# but the docs do not. Pass REPORT=<file> to also get a markdown summary.
 .PHONY: module_params_check
 module_params_check:
-	../scripts/module_params.py --check ./
+	../scripts/module_params.py --check $(if $(REPORT),--report "$(REPORT)") ./

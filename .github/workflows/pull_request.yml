@@ -32,6 +32,10 @@ jobs:
       run: make feature_matrix
     - name: Gen_module_params
       run: make module_params
+    # Reports parameters that exist in the OpenZFS sources but not in the
+    # docs; fails only when a parameter is documented nowhere at all
+    - name: Check_module_params_coverage
+      run: make module_params_check REPORT="$GITHUB_STEP_SUMMARY"
     # Warnings are errors here: broken references and malformed markup must
     # not reach master. --keep-going reports every problem in one run.
     - name: Gen_sphinx
