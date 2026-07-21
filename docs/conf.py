@@ -82,7 +82,9 @@ language = 'en'
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = [u'_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = [u'_build', 'Thumbs.db', '.DS_Store',
+                    # included by the generated Module Parameters page
+                    '**/_module_parameters_intro.rst']
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = None
@@ -138,6 +140,7 @@ html_context = {
 
 html_js_files = [
     'js/redirect.js',
+    'js/module_params_filter.js',
 ]
 
 # Custom sidebar templates, must be a dictionary that maps document names

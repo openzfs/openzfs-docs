@@ -15,3 +15,29 @@
         max-width: 1500px !important;
     }
  }
+
+/* version filter of the generated Module Parameters page */
+#zfs-param-filter {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    margin: 1em 0;
+    padding: 0.6em 0.8em;
+    background: #f3f6f6;
+    border: 1px solid #e1e4e5;
+    border-radius: 3px;
+}
+
+#zfs-param-filter select {
+    margin: 0 0.6em;
+    padding: 0.2em;
+}
+
+.zfs-param-count {
+    color: #666;
+    font-size: 90%;
+}
+
+.zfs-param-hidden {
+    display: none;
+}
