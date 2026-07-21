@@ -77,6 +77,36 @@
     display: none;
 }
 
+/* the per-value tables of the Default and Range fields are part of a
+   field list, not standalone tables: no frame, no full width */
+table.zfs-field-table,
+table.zfs-field-table td {
+    border: none !important;
+    background: transparent !important;
+}
+
+table.zfs-field-table {
+    width: auto !important;
+    margin: 0 !important;
+}
+
+/* the theme wraps every table in a scrolling div with a bottom margin,
+   which would space the field list out */
+.field-list .wy-table-responsive {
+    margin-bottom: 0 !important;
+    overflow: visible !important;
+}
+
+table.zfs-field-table td {
+    padding: 0.1em 1.2em 0.1em 0 !important;
+    vertical-align: top;
+    white-space: normal !important;
+}
+
+table.zfs-field-table td:first-child {
+    white-space: nowrap !important;
+}
+
 /* on a narrow screen the controls speak for themselves: the version is
    spelled out in the selector and the box carries a placeholder, so drop
    the prose and keep the block to one or two rows */
