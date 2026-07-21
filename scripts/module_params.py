@@ -252,6 +252,8 @@ RANGE_BOUNDS = re.compile(r'^\s*(?P<low>\S+)\s+to\s+(?P<high>.+?)\s*$')
 # What an entry of the curated overlay may hold
 OVERLAY_KEYS = {'tags', 'range', 'when_to_change', 'verification', 'notes'}
 TAG_PATTERN = re.compile(r'^[A-Za-z][A-Za-z0-9_+.-]+$')
+# a table flattened into one line by the migration from the old page
+TABLE_LEFTOVER = re.compile(r'={4,}\s|\+-{3,}\+')
 # a version named in the curated text; "3.2%" is a share of a pool, not one
 VERSION_MENTION = re.compile(r'\bv?(?P<version>\d+\.\d+)(?:\.\d+)?\b(?!\s*%)')
 
@@ -785,6 +787,12 @@ def check_entry(name, entry, vocabulary=frozenset()):
                 key, type(value).__name__))
         elif not value.strip():
             problems.append('{} is empty'.format(key))
+        elif TABLE_LEFTOVER.search(value):
+            # every field is rendered as one paragraph, so a table pasted
+            # into it comes out as a line of "===== ==== value volmode ..."
+            problems.append(
+                '{} holds the remains of a table; describe the values in '
+                '"range" instead, which is rendered as one'.format(key))
     return problems
 
 
