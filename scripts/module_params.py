@@ -257,6 +257,10 @@ TABLE_LEFTOVER = re.compile(r'={4,}\s|\+-{3,}\+')
 # text escaped for reStructuredText, which the generator does by itself
 PRE_ESCAPED = re.compile(r'\\[*|_`]')
 PLACEHOLDERS = frozenset({'TBD', 'TODO', 'N/A', 'FIXME', '?'})
+# "the default of 32 threads", "defaults to 16"
+DEFAULT_MENTION = re.compile(
+    r'(?<!internal )default(?:s)?(?:\s+value)?(?:\s+(?:of|is|to|was))?\s+'
+    r'(?:is\s+)?`{0,2}(?P<value>[0-9][0-9,_]*)`{0,2}', re.I)
 # a version named in the curated text; "3.2%" is a share of a pool, not one
 VERSION_MENTION = re.compile(r'\bv?(?P<version>\d+\.\d+)(?:\.\d+)?\b(?!\s*%)')
 
@@ -860,6 +864,30 @@ def check_range(name, entry, meta):
     return None
 
 
+def check_stale_default(entry, meta):
+    """Curated text quoting a default that upstream has since changed."""
+    current = normalize_default(meta.get('default', ''), meta.get('units', ''))
+    history = {version: value
+               for version, (_, value) in meta.get('defaults', {}).items()}
+    stale = []
+    for key in ('notes', 'when_to_change', 'range', 'verification'):
+        value = entry.get(key)
+        if not isinstance(value, str):
+            continue
+        for match in DEFAULT_MENTION.finditer(value):
+            number = match.group('value').replace(',', '').replace('_', '')
+            if number == current:
+                continue
+            older = sorted(version for version, was in history.items()
+                           if was == number)
+            if older:
+                stale.append(
+                    '{} says "{}", which was the default in {}; it is {} '
+                    'now'.format(key, ' '.join(match.group(0).split()),
+                                 ', '.join(older), current))
+    return stale
+
+
 def check_versions(entry, order):
     """Releases named in the curated text that OpenZFS never had."""
     known = set(order)
@@ -902,6 +930,8 @@ def check_overlay(repo, params, overlay, order):
             mismatch = check_range(name, entry, meta)
             if mismatch:
                 LOG.warning('%s: %s', name, mismatch)
+            for outdated in check_stale_default(entry, meta):
+                LOG.warning('%s: %s', name, outdated)
         for version in check_versions(entry, order):
             LOG.warning('%s: mentions OpenZFS %s, which is not a release '
                         'this page knows about', name, version)

@@ -613,8 +613,8 @@ spl_kmem_cache_kmem_limit:
     for small and large objects allows us to handle a wide range of object sizes.
     The ``spl_kmem_cache_kmem_limit`` value is used to determine this cutoff size.
     One quarter of the kernel's compiled PAGE_SIZE is used as the default value
-    because spl_kmem_cache_obj_per_slab defaults to 16. With these default values,
-    at most four contiguous pages are allocated.
+    because ``spl_kmem_cache_obj_per_slab`` defaults to 8. With these default
+    values, at most two contiguous pages are allocated.
   tags:
   - memory
 spl_kmem_cache_kmem_threads:
@@ -2879,9 +2879,9 @@ zio_taskq_batch_pct:
     compression and checksum calculations. Each block is handled by one worker
     thread, so maximum overall worker thread throughput is function of the number
     of concurrent blocks being processed, the number of worker threads, and the
-    algorithms used. The default value of 75% is chosen to avoid using all CPUs
-    which can result in latency issues and inconsistent application performance,
-    especially when high compression is enabled. The taskq batch processes are:'
+    algorithms used. The default is chosen to avoid using all CPUs which can result
+    in latency issues and inconsistent application performance, especially when
+    high compression is enabled. The taskq batch processes are:'
   range: 1 to 100, fractional number of CPUs are rounded down
   tags:
   - ZIO_scheduler
@@ -2941,12 +2941,13 @@ zvol_request_sync:
   - volume
   when_to_change: Testing concurrent volume requests
 zvol_threads:
-  notes: zvol_threads controls the maximum number of threads handling concurrent
-    volume I/O requests. The default of 32 threads behaves similarly to a disk
-    with a 32-entry command queue. The actual number of threads required can vary
-    widely by workload and available CPUs. If lock analysis shows high contention
-    in the zvol taskq threads, then reducing the number of zvol_threads or workload
-    queue depth can improve overall throughput. See also zvol_request_sync
+  notes: '``zvol_threads`` controls the maximum number of threads handling concurrent
+    volume I/O requests. Since v2.2.0 the default of 0 means one thread per active
+    CPU; before that it was 32, which behaves similarly to a disk with a 32-entry
+    command queue. The actual number of threads required can vary widely by workload
+    and available CPUs. If lock analysis shows high contention in the zvol taskq
+    threads, then reducing the number of ``zvol_threads`` or workload queue depth
+    can improve overall throughput. See also ``zvol_request_sync``.'
   range: 1 to UINT_MAX
   tags:
   - volume
