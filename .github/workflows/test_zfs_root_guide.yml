@@ -9,7 +9,7 @@ on:
       - 'docs/Getting Started/Alpine Linux/Root on ZFS.rst'
       - 'docs/Getting Started/Arch Linux/Root on ZFS.rst'
       - 'docs/Getting Started/Fedora/Root on ZFS.rst'
-      - 'docs/Getting Started/zfs_root_maintenance.rst'
+      - 'scripts/zfs_root_guide_test.sh'
 
   pull_request:
     paths:
@@ -18,7 +18,7 @@ on:
       - 'docs/Getting Started/Alpine Linux/Root on ZFS.rst'
       - 'docs/Getting Started/Arch Linux/Root on ZFS.rst'
       - 'docs/Getting Started/Fedora/Root on ZFS.rst'
-      - 'docs/Getting Started/zfs_root_maintenance.rst'
+      - 'scripts/zfs_root_guide_test.sh'
 
   workflow_dispatch:
 
