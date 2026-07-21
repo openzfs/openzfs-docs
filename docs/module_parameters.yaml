@@ -10,8 +10,20 @@
 #   verification    how to check the setting took effect
 #   notes           any further explanation
 #
-# Keys must be real parameter names: the build fails on entries for
-# parameters that exist in no released version of OpenZFS.
+# "make module_params_check" validates this file and fails on:
+#
+#   - a key that is not a real parameter name, in any released version
+#   - a field other than the five above, an empty one, or one of the
+#     wrong type
+#   - a malformed or duplicated tag, or two tags that join into a third
+#     one, which is what a tag torn across two lines looks like
+#
+# and warns about a default that contradicts the range documented here,
+# a release named in the text that OpenZFS never had, and parameters
+# that carry no notes at all yet.
+#
+# "range" may either name the bounds, "1 to 100", or explain each value,
+# "0=disabled, 1=enabled"; the latter is rendered as a table.
 
 dbuf_cache_hiwater_pct:
   notes: The ``dbuf_cache_hiwater_pct`` and dbuf_cache_lowater_pct define the

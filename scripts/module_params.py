@@ -246,6 +246,14 @@ def parse_man(repo, tag):
 # "0=disabled, 1=enabled" - a curated range that explains every value
 RANGE_ITEM = re.compile(
     r'(?:^|[,;]\s*)(?P<value>[A-Za-z0-9_.\-]{1,20})\s*=\s*')
+# "33,554,432 to ``c_max``"
+RANGE_BOUNDS = re.compile(r'^\s*(?P<low>\S+)\s+to\s+(?P<high>.+?)\s*$')
+
+# What an entry of the curated overlay may hold
+OVERLAY_KEYS = {'tags', 'range', 'when_to_change', 'verification', 'notes'}
+TAG_PATTERN = re.compile(r'^[A-Za-z][A-Za-z0-9_+.-]+$')
+# a version named in the curated text; "3.2%" is a share of a pool, not one
+VERSION_MENTION = re.compile(r'\bv?(?P<version>\d+\.\d+)(?:\.\d+)?\b(?!\s*%)')
 
 SIZE_UNITS = {'b': 1, 'kb': 1024, 'kib': 1024, 'mb': 1024 ** 2,
               'mib': 1024 ** 2, 'gb': 1024 ** 3, 'gib': 1024 ** 3,
@@ -718,12 +726,149 @@ def write_report(path, undocumented, uncurated, untagged, missing, total):
     LOG.info('Wrote coverage report to %s', path)
 
 
-def check_overlay(repo, params, overlay):
+class StrictLoader(yaml.SafeLoader):
+    """A loader that refuses duplicate keys.
+
+    PyYAML keeps the last of them, so a parameter or a field written twice
+    would silently lose whatever was said the first time.
+    """
+
+    def construct_mapping(self, node, deep=False):
+        seen = set()
+        for key_node, _ in node.value:
+            key = self.construct_object(key_node, deep=deep)
+            if key in seen:
+                raise yaml.constructor.ConstructorError(
+                    None, None, 'duplicate key {!r}'.format(key),
+                    key_node.start_mark)
+            seen.add(key)
+        return super().construct_mapping(node, deep)
+
+
+def plain_number(text):
+    """The integer a curated bound or value spells, if it spells one."""
+    text = re.sub(r'[`,_]', '', str(text)).strip()
+    return int(text) if re.fullmatch(r'\d+', text) else None
+
+
+def check_entry(name, entry, vocabulary=frozenset()):
+    """Everything that is wrong with one curated entry."""
+    problems = []
+    for key in sorted(set(entry) - OVERLAY_KEYS):
+        problems.append('unknown key {!r}, expected one of {}'.format(
+            key, ', '.join(sorted(OVERLAY_KEYS))))
+    for key, value in sorted(entry.items()):
+        if key not in OVERLAY_KEYS:
+            continue
+        if key == 'tags':
+            if not isinstance(value, list):
+                problems.append('tags must be a list, got {}'.format(
+                    type(value).__name__))
+                continue
+            if len(value) != len(set(value)):
+                problems.append('duplicate tags: {}'.format(value))
+            for tag in value:
+                if not isinstance(tag, str) or not TAG_PATTERN.match(tag):
+                    problems.append('malformed tag {!r}'.format(tag))
+            # "ZIO_scheduler" once arrived here as "Z" plus "IO_scheduler",
+            # a tag that a line break had torn in two
+            for first in value:
+                for second in value:
+                    if (first is not second and isinstance(first, str)
+                            and isinstance(second, str)
+                            and first + second in vocabulary):
+                        problems.append(
+                            'tags {!r} and {!r} join into {!r}, a tag torn '
+                            'in two?'.format(first, second, first + second))
+        elif not isinstance(value, str):
+            problems.append('{} must be text, got {}'.format(
+                key, type(value).__name__))
+        elif not value.strip():
+            problems.append('{} is empty'.format(key))
+    return problems
+
+
+def check_range(name, entry, meta):
+    """A curated range that disagrees with the documented default."""
+    curated = entry.get('range')
+    if not curated or not isinstance(curated, str) or not meta.get('default'):
+        return None
+    default = plain_number(normalize_default(meta['default'],
+                                             meta.get('units', '')))
+    if default is None:
+        return None
+
+    items = list(RANGE_ITEM.finditer(curated))
+    if len(items) > 1:
+        values = [plain_number(item.group('value')) for item in items]
+        if None not in values and default not in values:
+            return 'default {} is not one of the documented values {}'.format(
+                default, values)
+        return None
+
+    bounds = RANGE_BOUNDS.match(curated)
+    if not bounds:
+        return None
+    low = plain_number(bounds.group('low'))
+    high = plain_number(bounds.group('high'))
+    # 0 is the usual "pick a value yourself" default and is rarely part of
+    # the range a user may set
+    if default == 0 and low is not None and low > 0:
+        return None
+    if low is not None and default < low:
+        return 'default {} is below the documented range "{}"'.format(
+            default, curated)
+    if high is not None and default > high:
+        return 'default {} is above the documented range "{}"'.format(
+            default, curated)
+    return None
+
+
+def check_versions(entry, order):
+    """Releases named in the curated text that OpenZFS never had."""
+    known = set(order)
+    unknown = set()
+    for key in ('notes', 'when_to_change', 'verification', 'range'):
+        value = entry.get(key)
+        if not isinstance(value, str):
+            continue
+        for match in VERSION_MENTION.finditer(value):
+            if match.group('version') not in known:
+                unknown.add(match.group('version'))
+    return sorted(unknown)
+
+
+def check_overlay(repo, params, overlay, order):
     """Fail on curated entries for parameters that never existed."""
     unknown = sorted(set(overlay) - set(params))
     if unknown:
         LOG.error('Overlay describes %d unknown parameters: %s',
                   len(unknown), ', '.join(unknown))
+
+    vocabulary = {tag for entry in overlay.values()
+                  if isinstance(entry, dict)
+                  for tag in entry.get('tags', [])
+                  if isinstance(tag, str)}
+
+    broken = False
+    for name in sorted(overlay):
+        entry = overlay[name]
+        if not isinstance(entry, dict):
+            LOG.error('%s: entry must be a mapping, got %s',
+                      name, type(entry).__name__)
+            broken = True
+            continue
+        for problem in check_entry(name, entry, vocabulary):
+            LOG.error('%s: %s', name, problem)
+            broken = True
+        meta = params.get(name)
+        if meta:
+            mismatch = check_range(name, entry, meta)
+            if mismatch:
+                LOG.warning('%s: %s', name, mismatch)
+        for version in check_versions(entry, order):
+            LOG.warning('%s: mentions OpenZFS %s, which is not a release '
+                        'this page knows about', name, version)
 
     # Identifiers mentioned in the curated text that are neither a parameter
     # nor anything else in the current sources are almost certainly leftovers
@@ -739,7 +884,7 @@ def check_overlay(repo, params, overlay):
             continue  # still exists in the sources, just not as a parameter
         LOG.warning('Overlay of %s mentions %s, which no longer exists',
                     ', '.join(sorted(mentioned[token])), token)
-    return not unknown
+    return not unknown and not broken
 
 
 def prepare_repo(out_dir):
@@ -772,13 +917,17 @@ def main():
     LOG.info('%d parameters over %d versions', len(params), len(order))
 
     overlay_path = os.path.join(args.out_dir, OVERLAY_NAME)
-    with open(overlay_path) as handle:
-        overlay = yaml.safe_load(handle) or {}
+    try:
+        with open(overlay_path) as handle:
+            overlay = yaml.load(handle, StrictLoader) or {}
+    except yaml.YAMLError as error:
+        LOG.error('Cannot read %s: %s', overlay_path, error)
+        return 1
 
     tags_of = merge_tags(params, overlay)
     documented = report_coverage(params, overlay, order, tags_of,
                                  args.report)
-    if not check_overlay(repo, params, overlay):
+    if not check_overlay(repo, params, overlay, order):
         LOG.error('Remove the entries above from %s, or fix their names',
                   overlay_path)
         return 1
