@@ -464,8 +464,13 @@ def escape_plain(text):
     return TRAILING_UNDERSCORE.sub(r'\\_', text)
 
 
+def version_label(version):
+    """A release reads as a release, not as a bare number."""
+    return version if version == 'master' else 'v' + version
+
+
 def version_range(present, order):
-    """'0.8 - master' or '2.1, 2.3 - master' for parameters that came back."""
+    """'v0.8 - master' or 'v2.1, v2.3 - master' for ones that came back."""
     index = {v: i for i, v in enumerate(order)}
     runs, start, prev = [], None, None
     for version in sorted(present, key=lambda v: index[v]):
@@ -479,7 +484,10 @@ def version_range(present, order):
         start = prev = version
     if start is not None:
         runs.append((start, prev))
-    return ', '.join(a if a == b else '{} - {}'.format(a, b) for a, b in runs)
+    return ', '.join(
+        version_label(a) if a == b
+        else '{} - {}'.format(version_label(a), version_label(b))
+        for a, b in runs)
 
 
 def merge_tags(params, overlay):
