@@ -829,7 +829,7 @@ Step 4: System Configuration
 
 #. Optional (but kindly requested): Install popcon
 
-   The ``popularity-contest`` package reports the list of packages install
+   The ``popularity-contest`` package reports the list of packages installed
    on your system. Showing that ZFS is popular may be helpful in terms of
    long-term attention from the distro.
 
