@@ -66,6 +66,8 @@
     if (!host || !params.length) {
       return;
     }
+    // lets the stylesheet keep anchor targets clear of the sticky block
+    document.body.classList.add("zfs-param-page");
 
     var seen = {};
     params.forEach(function (node) {
