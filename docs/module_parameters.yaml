@@ -134,9 +134,9 @@ icp_gcm_impl:
   - encryption
   when_to_change: debugging ZFS encryption on hardware
 ignore_hole_birth:
-  notes: '.. note:: Renamed to send_holes_without_birth_time in v2.4.0 (commit
-    284580c87). When set, the hole_birth optimization will not be used and all
-    holes will always be sent by ``zfs send``.'
+  notes: Renamed to send_holes_without_birth_time in v2.4.0 (commit 284580c87).
+    When set, the hole_birth optimization will not be used and all holes will
+    always be sent by ``zfs send``.
   range: 0=disabled, 1=enabled
   tags:
   - send
@@ -226,11 +226,11 @@ l2arc_mfuonly:
   - L2ARC
   when_to_change: When accessing a large amount of data only once.
 l2arc_nocompress:
-  notes: '.. note:: Removed in v0.7.0 by commit d3c2ae1c0 ("OpenZFS 6950 - ARC
-    should cache compressed data"). The ARC now always caches compressed data,
-    making this toggle unnecessary. No replacement parameter. Disable writing
-    compressed data to cache devices. Disabling allows the legacy behavior of
-    writing decompressed data to cache devices.'
+  notes: Removed in v0.7.0 by commit d3c2ae1c0 ("OpenZFS 6950 - ARC should cache
+    compressed data"). The ARC now always caches compressed data, making this
+    toggle unnecessary. No replacement parameter. Disable writing compressed data
+    to cache devices. Disabling allows the legacy behavior of writing decompressed
+    data to cache devices.
   range: 0=store compressed blocks in cache device, 1=store uncompressed blocks
     in cache device
   tags:
@@ -297,9 +297,10 @@ l2arc_write_boost:
   when_to_change: To fill the cache devices more aggressively after pool import.
 l2arc_write_max:
   notes: Maximum number of bytes to be written to each cache device for each L2ARC
-    feed thread interval (see l2arc_feed_secs). The actual limit can be adjusted
-    by l2arc_write_boost. By default l2arc_feed_secs is 1 second, delivering a
-    maximum write workload to cache devices of 8 MiB/sec.
+    feed thread interval (see l2arc_feed_secs). Until v2.4 the limit could be
+    raised during warmup by ``l2arc_write_boost``, which has since been removed.
+    By default l2arc_feed_secs is 1 second, delivering a maximum write workload
+    to cache devices of 32 MiB/sec.
   range: 1 to UINT64_MAX
   tags:
   - ARC
@@ -423,7 +424,7 @@ metaslabs_per_vdev:
   - vdev
   when_to_change: When testing metaslab allocation
 send_holes_without_birth_time:
-  notes: Alias for ignore_hole_birth
+  notes: Renamed from ``ignore_hole_birth`` in v2.4.0.
 spa_asize_inflation:
   notes: Multiplication factor used to estimate actual disk consumption from the
     size of data being written. The default value is a worst case estimate, but
@@ -451,7 +452,7 @@ spa_config_path:
     then the devices do not have to be scanned to determine if they are pool members.
     The path to the cache file is spa_config_path. For more information on ``zpool
     import`` and the ``-o cachefile`` and ``-d`` options, see the man page for
-    zpool(8) See also zfs_autoimport_disable
+    zpool(8) See also ``zfs_autoimport_disable`` (removed after v2.3)
   tags:
   - import
   when_to_change: If creating a non-standard distribution and the cachefile property
@@ -505,9 +506,10 @@ spa_load_verify_shift:
     The ARC target size is shifted to the right. Thus a value of ''2'' results
     in the fraction = 1/4, while a value of ''4'' results in the fraction = 1/8.
     For large memory machines, pool import can consume large amounts of ARC: much
-    larger than the value of maxinflight. This can result in spa_load_verify_maxinflight
-    having a value of 0 causing the system to hang. Setting ``spa_load_verify_shift``
-    can reduce this limit and allow importing without hanging.'
+    larger than the value of maxinflight. This can result in ``spa_load_verify_maxinflight``
+    (removed after v0.7) having a value of 0 causing the system to hang. Setting
+    ``spa_load_verify_shift`` can reduce this limit and allow importing without
+    hanging.'
   range: 1 to MAX_INT
   tags:
   - ARC
@@ -532,9 +534,9 @@ spa_slop_shift:
   when_to_change: For large pools, when 3.2% may be too conservative and more
     usable space is desired, consider increasing ``spa_slop_shift``
 spl_hostid:
-  notes: '| ``spl_hostid`` is a unique system id number. It originated in Sun''s
+  notes: '``spl_hostid`` is a unique system id number. It originated in Sun''s
     products where most systems had a unique id assigned at the factory. This
-    assignment does not exist in modern hardware. | In ZFS, the hostid is stored
+    assignment does not exist in modern hardware. In ZFS, the hostid is stored
     in the vdev label and can be used to determine if another system had imported
     the pool. When set ``spl_hostid`` can be used to uniquely identify a system.
     By default this value is set to zero which indicates the hostid is disabled.
@@ -735,10 +737,10 @@ spl_taskq_thread_dynamic:
   - taskq
   when_to_change: disable for performance analysis or troubleshooting
 spl_taskq_thread_priority:
-  notes: '| ``spl_taskq_thread_priority`` allows newly created taskq threads to
+  notes: '``spl_taskq_thread_priority`` allows newly created taskq threads to
     set a non-default scheduler priority. When enabled the priority specified
     when a taskq is created will be applied to all threads created by that taskq.
-    | When disabled all threads will use the default Linux kernel thread priority.'
+    When disabled all threads will use the default Linux kernel thread priority.'
   range: 0=taskq threads use the default Linux kernel thread priority, 1=
   tags:
   - CPU
@@ -873,9 +875,7 @@ zfs_arc_dnode_limit:
   notes: When the number of bytes consumed by dnodes in the ARC exceeds ``zfs_arc_dnode_limit``
     bytes, demand for new metadata can take from the space consumed by dnodes.
     The default value 0, indicates that a percent which is based on zfs_arc_dnode_limit_percent
-    of the ARC meta buffers that may be used for dnodes. ``zfs_arc_dnode_limit``
-    is similar to zfs_arc_meta_prune which serves a similar purpose for metadata.
-  range: 0 to MAX_UINT64
+    of the ARC meta buffers that may be used for dnodes.
   tags:
   - ARC
   when_to_change: Consider increasing if ``arc_prune`` is using excessive system
@@ -920,7 +920,7 @@ zfs_arc_grow_retry:
     ARC for ``zfs_arc_grow_retry`` seconds. This operates as a damper to prevent
     oscillating grow/shrink cycles when there is memory pressure. If ``zfs_arc_grow_retry``
     = 0, the internal default of 5 seconds is used.
-  range: 1 to MAX_INT
+  range: 0=use the built-in default of 5 seconds, otherwise 1 to INT_MAX
   tags:
   - ARC
   - memory
@@ -951,10 +951,10 @@ zfs_arc_max:
   when_to_change: Reduce if ARC competes too much with other applications, increase
     if ZFS is the primary application and can use more RAM
 zfs_arc_meta_adjust_restarts:
-  notes: '.. note:: Removed in v2.2.0 by commit a8d83e2a ("More adaptive ARC eviction").
+  notes: Removed in v2.2.0 by commit a8d83e2a ("More adaptive ARC eviction").
     Replaced by adaptive eviction with zfs_arc_meta_balance. The number of restart
     passes to make while scanning the ARC attempting the free buffers in order
-    to stay below the zfs_arc_meta_limit.'
+    to stay below the zfs_arc_meta_limit.
   range: 0 to INT_MAX
   tags:
   - ARC
@@ -973,12 +973,12 @@ zfs_arc_meta_balance:
   when_to_change: When the ARC is not caching enough metadata (or too much) for
     your workload
 zfs_arc_meta_limit:
-  notes: '.. note:: Removed in v2.2.0 by commit a8d83e2a ("More adaptive ARC eviction").
+  notes: Removed in v2.2.0 by commit a8d83e2a ("More adaptive ARC eviction").
     Replaced by adaptive eviction with zfs_arc_meta_balance. Sets the maximum
     allowed size metadata buffers in the ARC. When zfs_arc_meta_limit is reached
     metadata buffers are reclaimed, even if the overall ``c_max`` has not been
     reached. In version v0.7.0, with a default value = 0, ``zfs_arc_meta_limit_percent``
-    is used to set ``arc_meta_limit``'
+    is used to set ``arc_meta_limit``
   range: 0 to ``c_max``
   tags:
   - ARC
@@ -986,12 +986,12 @@ zfs_arc_meta_limit:
   when_to_change: For workloads where the metadata to data ratio in the ARC can
     be changed to improve ARC hit rates
 zfs_arc_meta_limit_percent:
-  notes: '.. note:: Removed in v2.2.0 by commit a8d83e2a ("More adaptive ARC eviction").
+  notes: Removed in v2.2.0 by commit a8d83e2a ("More adaptive ARC eviction").
     Replaced by adaptive eviction with zfs_arc_meta_balance. Sets the limit to
     ARC metadata, ``arc_meta_limit``, as a percentage of the maximum size target
     of the ARC, ``c_max`` Prior to version v0.7.0, the zfs_arc_meta_limit was
     used to set the limit as a fixed size. ``zfs_arc_meta_limit_percent`` provides
-    a more convenient interface for setting the limit.'
+    a more convenient interface for setting the limit.
   range: 0 to 100
   tags:
   - ARC
@@ -999,18 +999,18 @@ zfs_arc_meta_limit_percent:
   when_to_change: For workloads where the metadata to data ratio in the ARC can
     be changed to improve ARC hit rates
 zfs_arc_meta_min:
-  notes: '.. note:: Removed in v2.2.0 by commit a8d83e2a ("More adaptive ARC eviction").
+  notes: Removed in v2.2.0 by commit a8d83e2a ("More adaptive ARC eviction").
     Replaced by adaptive eviction with zfs_arc_meta_balance. The minimum allowed
     size in bytes that metadata buffers may consume in the ARC. This value defaults
     to 0 which disables a floor on the amount of the ARC devoted meta data. When
     evicting data from the ARC, if the ``metadata_size`` is less than ``arc_meta_min``
-    then data is evicted instead of metadata.'
+    then data is evicted instead of metadata.
   range: 16,777,216 to ``c_max``
   tags:
   - ARC
   verification: '``/proc/spl/kstat/zfs/arcstats`` entry ``arc_meta_min``'
 zfs_arc_meta_prune:
-  notes: '.. note:: Removed in v2.2.0 by commit a8d83e2a ("More adaptive ARC eviction").
+  notes: Removed in v2.2.0 by commit a8d83e2a ("More adaptive ARC eviction").
     Replaced by adaptive eviction with zfs_arc_meta_balance. ``zfs_arc_meta_prune``
     sets the number of dentries and znodes to be scanned looking for entries which
     can be dropped. This provides a mechanism to ensure the ARC can honor the
@@ -1018,17 +1018,17 @@ zfs_arc_meta_prune:
     required when the ARC size drops to ``arc_meta_limit`` because dentries and
     znodes can pin buffers in the ARC. Increasing this value will cause to dentry
     and znode caches to be pruned more aggressively and the arc_prune thread becomes
-    more active. Setting ``zfs_arc_meta_prune`` to 0 will disable pruning.'
+    more active. Setting ``zfs_arc_meta_prune`` to 0 will disable pruning.
   range: 0 to INT_MAX
   tags:
   - ARC
 zfs_arc_meta_strategy:
-  notes: '.. note:: Removed in v2.2.0 by commit a8d83e2a ("More adaptive ARC eviction").
+  notes: Removed in v2.2.0 by commit a8d83e2a ("More adaptive ARC eviction").
     Replaced by adaptive eviction with zfs_arc_meta_balance. Defines the strategy
     for ARC metadata eviction (meta reclaim strategy). A value of 0 (META_ONLY)
     will evict only the ARC metadata. A value of 1 (BALANCED) indicates that additional
     data may be evicted if required in order to evict the requested amount of
-    metadata.'
+    metadata.
   range: 0=evict metadata only, 1=also evict data buffers if they can free metadata
     buffers for eviction
   tags:
@@ -1044,11 +1044,11 @@ zfs_arc_min:
   when_to_change: If the primary focus of the system is ZFS, then increasing can
     ensure the ARC gets a minimum amount of RAM
 zfs_arc_min_prefetch_lifespan:
-  notes: '.. note:: Removed in v0.8.0 by commit d4a72f238 ("Sequential scrub and
-    resilvers"). Prefetch lifetime logic was reworked as part of the sequential
-    scan changes. Replaced by ``zfs_arc_min_prefetch_ms`` and ``zfs_arc_min_prescient_prefetch_ms``.
+  notes: Removed in v0.8.0 by commit d4a72f238 ("Sequential scrub and resilvers").
+    Prefetch lifetime logic was reworked as part of the sequential scan changes.
+    Replaced by ``zfs_arc_min_prefetch_ms`` and ``zfs_arc_min_prescient_prefetch_ms``.
     ``arc_min_prefetch_lifespan`` is the minimum time for a prefetched block to
-    remain in ARC before it is eligible for eviction.'
+    remain in ARC before it is eligible for eviction.
   range: 0 = use default value
   tags:
   - ARC
@@ -1056,7 +1056,7 @@ zfs_arc_min_prefetch_ms:
   notes: Minimum time prefetched blocks are locked in the ARC. A value of 0 represents
     the default of 1 second. However, once changed, dynamically setting to 0 will
     not return to the default.
-  range: 1 to INT_MAX
+  range: 0=use the built-in default of 1 second, otherwise 1 to INT_MAX
   tags:
   - ARC
   - prefetch
@@ -1065,29 +1065,29 @@ zfs_arc_min_prescient_prefetch_ms:
     blocks are meant to be prefetched fairly aggressively ahead of the code that
     may use them. A value of 0 represents the default of 6 seconds. However, once
     changed, dynamically setting to 0 will not return to the default.
-  range: 1 to INT_MAX
+  range: 0=use the built-in default of 6 seconds, otherwise 1 to INT_MAX
   tags:
   - ARC
   - prefetch
 zfs_arc_p_dampener_disable:
-  notes: '.. note:: Removed in v2.2.0 by commit a8d83e2a ("More adaptive ARC eviction").
+  notes: Removed in v2.2.0 by commit a8d83e2a ("More adaptive ARC eviction").
     Replaced by adaptive eviction with zfs_arc_meta_balance. When data is being
     added to the ghost lists, the MRU target size is adjusted. The amount of adjustment
     is based on the ratio of the MRU/MFU sizes. When enabled, the ratio is capped
-    to 10, avoiding large adjustments.'
+    to 10, avoiding large adjustments.
   range: 0=avoid large adjustments, 1=permit large adjustments
   tags:
   - ARC
   when_to_change: Testing ARC ghost list behaviour
 zfs_arc_p_min_shift:
-  notes: '.. note:: Removed in v2.2.0 by commit a8d83e2a ("More adaptive ARC eviction").
+  notes: Removed in v2.2.0 by commit a8d83e2a ("More adaptive ARC eviction").
     Replaced by adaptive eviction with zfs_arc_meta_balance. arc_p_min_shift is
     used to shift of ARC target size (``/proc/spl/kstat/zfs/arcstats`` entry ``c``)
     for calculating both minimum and maximum most recently used (MRU) target size
     (``/proc/spl/kstat/zfs/arcstats`` entry ``p``) A value of 0 represents the
     default setting of ``arc_p_min_shift`` = 4. However, once changed, dynamically
-    setting ``zfs_arc_p_min_shift`` to 0 will not return to the default.'
-  range: 1 to INT_MAX
+    setting ``zfs_arc_p_min_shift`` to 0 will not return to the default.
+  range: 0=use the built-in default of 4, otherwise 1 to INT_MAX
   tags:
   - ARC
   verification: Observe changes to ``/proc/spl/kstat/zfs/arcstats`` entry ``p``
@@ -1112,7 +1112,7 @@ zfs_arc_shrink_shift:
     value of 7, this reduces the target by approximately 0.8%. A value of 0 represents
     the default setting of arc_shrink_shift = 7. However, once changed, dynamically
     setting arc_shrink_shift to 0 will not return to the default.'
-  range: 1 to INT_MAX
+  range: 0=use the built-in default of 7, otherwise 1 to INT_MAX
   tags:
   - ARC
   - memory
@@ -1122,9 +1122,8 @@ zfs_arc_sys_free:
   notes: '``zfs_arc_sys_free`` is the target number of bytes the ARC should leave
     as free memory on the system. Defaults to the larger of 1/64 of physical memory
     or 512K. Setting this option to a non-zero value will override the default.
-    A value of 0 represents the default setting of larger of 1/64 of physical
-    memory or 512 KiB. However, once changed, dynamically setting zfs_arc_sys_free
-    to 0 will not return to the default.'
+    However, once changed, dynamically setting zfs_arc_sys_free to 0 will not
+    return to the default.'
   range: 0 to ULONG_MAX
   tags:
   - ARC
@@ -1157,14 +1156,13 @@ zfs_checksum_events_per_second:
   tags:
   - vdev
 zfs_checksums_per_second:
-  notes: '.. note:: Renamed to zfs_checksum_events_per_second in v0.8.0 (commit
-    ad796b8a3). The ZFS Event Daemon (zed) processes events from ZFS. However,
-    it can be overwhelmed by high rates of error reports which can be generated
-    by failing, high-performance devices. ``zfs_checksums_per_second`` limits
-    the rate of checksum events reported to zed. Note: do not set this value lower
-    than the SERD limit for ``checksum`` in zed. By default, ``checksum_N`` =
-    10 and ``checksum_T`` = 10 minutes, resulting in a practical lower limit of
-    1.'
+  notes: 'Renamed to zfs_checksum_events_per_second in v0.8.0 (commit ad796b8a3).
+    The ZFS Event Daemon (zed) processes events from ZFS. However, it can be overwhelmed
+    by high rates of error reports which can be generated by failing, high-performance
+    devices. ``zfs_checksums_per_second`` limits the rate of checksum events reported
+    to zed. Note: do not set this value lower than the SERD limit for ``checksum``
+    in zed. By default, ``checksum_N`` = 10 and ``checksum_T`` = 10 minutes, resulting
+    in a practical lower limit of 1.'
   tags:
   - checksum
   - zed
@@ -1229,9 +1227,9 @@ zfs_condense_min_mapping_bytes:
   - vdev_removal
   when_to_change: do not change
 zfs_dbgmsg_enable:
-  notes: '| Internally ZFS keeps a small log to facilitate debugging. The contents
-    of the log are in the ``/proc/spl/kstat/zfs/dbgmsg`` file. | Writing 0 to
-    ``/proc/spl/kstat/zfs/dbgmsg`` file clears the log. See also zfs_dbgmsg_maxsize'
+  notes: Internally ZFS keeps a small log to facilitate debugging. The contents
+    of the log are in the ``/proc/spl/kstat/zfs/dbgmsg`` file. Writing 0 to ``/proc/spl/kstat/zfs/dbgmsg``
+    file clears the log. See also zfs_dbgmsg_maxsize
   range: 0=do not log debug messages, 1=log debug messages
   tags:
   - debug
@@ -1277,11 +1275,10 @@ zfs_deadman_enabled:
   - debug
   when_to_change: To disable logging of slow I/O
 zfs_deadman_failmode:
-  notes: 'zfs_deadman_failmode controls the behavior of the I/O deadman timer
-    when it detects a "hung" I/O. Valid values are: - wait - Wait for the "hung"
-    I/O (default) - continue - Attempt to recover from a "hung" I/O - panic -
-    Panic the system'
-  range: '*wait*, *continue*, or *panic*'
+  notes: zfs_deadman_failmode controls the behavior of the I/O deadman timer when
+    it detects a "hung" I/O..
+  range: wait=wait for the "hung" I/O (default), continue=attempt to recover from
+    the "hung" I/O, panic=panic the system
   tags:
   - debug
   when_to_change: In some cluster cases, panic can be appropriate
@@ -1335,11 +1332,11 @@ zfs_delay_scale:
   - write_throttle
   when_to_change: See :doc:`ZFS Transaction Delay <./ZFS Transaction Delay>`
 zfs_delays_per_second:
-  notes: '.. note:: Renamed to zfs_slow_io_events_per_second in v0.8.0 (commit
-    ad796b8a3). The ZFS Event Daemon (zed) processes events from ZFS. However,
-    it can be overwhelmed by high rates of error reports which can be generated
-    by failing, high-performance devices. ``zfs_delays_per_second`` limits the
-    rate of delay events reported to zed.'
+  notes: Renamed to zfs_slow_io_events_per_second in v0.8.0 (commit ad796b8a3).
+    The ZFS Event Daemon (zed) processes events from ZFS. However, it can be overwhelmed
+    by high rates of error reports which can be generated by failing, high-performance
+    devices. ``zfs_delays_per_second`` limits the rate of delay events reported
+    to zed.
   tags:
   - delay
   - zed
@@ -1410,10 +1407,10 @@ zfs_dirty_data_sync_percent:
   - ZIO_scheduler
   - write_throttle
 zfs_disable_dup_eviction:
-  notes: '.. note:: Removed in v0.7.0 by commit d3c2ae1c0 ("OpenZFS 6950 - ARC
-    should cache compressed data"). Duplicate buffer handling was reworked as
-    part of the compressed ARC changes. No replacement parameter. Disable duplicate
-    buffer eviction from ARC.'
+  notes: Removed in v0.7.0 by commit d3c2ae1c0 ("OpenZFS 6950 - ARC should cache
+    compressed data"). Duplicate buffer handling was reworked as part of the compressed
+    ARC changes. No replacement parameter. Disable duplicate buffer eviction from
+    ARC.
   range: 0=duplicate buffers can be evicted, 1=do not evict duplicate buffers
   tags:
   - ARC
@@ -1624,7 +1621,7 @@ zfs_metaslab_fragmentation_threshold:
     fragmentation is used to calculate the overall pool ``fragmentation`` property
     value. However, individual metaslab fragmentation levels are observable using
     the ``zdb`` with the ``-mm`` option. ``zfs_metaslab_fragmentation_threshold``
-    works at the metaslab level and each top-level vdev has approximately metaslabs_per_vdev
+    works at the metaslab level and each top-level vdev has approximately ``zfs_vdev_default_ms_count``
     metaslabs. See also zfs_mg_fragmentation_threshold
   range: 1 to 100
   tags:
@@ -1690,11 +1687,11 @@ zfs_multihost_fail_intervals:
     write failures are detected in the multihost multimodifier protection (MMP)
     subsystem. If ``zfs_multihost_fail_intervals = 0`` then multihost write failures
     are ignored. The write failures are reported to the ZFS event daemon (``zed``)
-    which can take action such as suspending the pool or offlining a device. |
-    If ``zfs_multihost_fail_intervals > 0`` then sequential multihost write failures
+    which can take action such as suspending the pool or offlining a device. If
+    ``zfs_multihost_fail_intervals > 0`` then sequential multihost write failures
     will cause the pool to be suspended. This occurs when (``zfs_multihost_fail_intervals``
     * zfs_multihost_interval) milliseconds have passed since the last successful
-    multihost write. | This guarantees the activity test will see multihost writes
+    multihost write. This guarantees the activity test will see multihost writes
     if the pool is attempted to be imported by another system.'
   tags:
   - MMP
@@ -1996,7 +1993,8 @@ zfs_resilver_min_time_ms:
     the ``zfs_resilver_min_time_ms`` is 3 seconds. However, many variables contribute
     to changing the actual txg times. The measured txg interval is observed as
     the ``otime`` column (in nanoseconds) in the ``/proc/spl/kstat/zfs/POOL_NAME/txgs``
-    file. See also zfs_txg_timeout and zfs_scan_min_time_ms
+    file. See also zfs_txg_timeout and ``zfs_scan_min_time_ms`` (removed after
+    v0.7)
   range: 1 to zfs_txg_timeout converted to milliseconds
   tags:
   - resilver
@@ -2264,10 +2262,10 @@ zfs_trim_extent_bytes_min:
   when_to_change: when trim is in use and device performance suffers from trimming
     small allocations
 zfs_trim_metaslab_skip:
-  notes: '| ``zfs_trim_metaslab_skip`` enables uninitialized metaslabs to be skipped
+  notes: '``zfs_trim_metaslab_skip`` enables uninitialized metaslabs to be skipped
     during the trim (aka discard, scsi unmap) process. ``zfs_trim_metaslab_skip``
     can be useful for pools constructed from large thinly-provisioned devices
-    where trim operations perform slowly. | As a pool ages an increasing fraction
+    where trim operations perform slowly. As a pool ages an increasing fraction
     of the pool''s metaslabs are initialized, progressively degrading the usefulness
     of this option. This setting is stored when starting a manual trim and persists
     for the duration of the requested trim. Use ``zpool iostat -w`` to observe
@@ -2313,10 +2311,10 @@ zfs_txg_timeout:
     limits reached, or the free space is critically low. Many variables contribute
     to changing the actual txg times. txg commits can also take longer than ``zfs_txg_timeout``
     if the ZFS write throttle is not properly tuned or the time to sync is otherwise
-    delayed (eg slow device). Shorter txg commit intervals can occur due to zfs_dirty_data_sync
+    delayed (eg slow device). Shorter txg commit intervals can occur due to ``zfs_dirty_data_sync_percent``
     for write-intensive workloads. The measured txg interval is observed as the
     ``otime`` column (in nanoseconds) in the ``/proc/spl/kstat/zfs/POOL_NAME/txgs``
-    file. See also zfs_dirty_data_sync and zfs_txg_history
+    file. See also ``zfs_dirty_data_sync_percent`` and zfs_txg_history
   range: 1 to INT_MAX
   tags:
   - SPA
@@ -2850,7 +2848,8 @@ zio_delay_max:
 zio_dva_throttle_enabled:
   notes: '``zio_dva_throttle_enabled`` controls throttling of block allocations
     in the ZFS I/O (ZIO) pipeline. When enabled, the maximum number of pending
-    allocations per top-level vdev is limited by zfs_vdev_queue_depth_pct'
+    allocations per top-level vdev is limited by ``zfs_vdev_queue_depth_pct``
+    (removed after v2.3)'
   range: 0=do not throttle ZIO block allocations, 1=throttle ZIO block allocations
   tags:
   - ZIO_scheduler
@@ -2948,7 +2947,7 @@ zvol_threads:
     and available CPUs. If lock analysis shows high contention in the zvol taskq
     threads, then reducing the number of ``zvol_threads`` or workload queue depth
     can improve overall throughput. See also ``zvol_request_sync``.'
-  range: 1 to UINT_MAX
+  range: 0=one thread per active CPU, otherwise 1 to UINT_MAX
   tags:
   - volume
   verification: '``iostat`` using ``avgqu-sz`` or ``aqu-sz`` results'
