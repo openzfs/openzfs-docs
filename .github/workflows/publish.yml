@@ -25,6 +25,8 @@ jobs:
       run: make man
     - name: Gen_feature_matrix
       run: make feature_matrix
+    - name: Gen_module_params
+      run: make module_params
     - name: Gen_sphinx
       run: make html
     - name: Deploy
