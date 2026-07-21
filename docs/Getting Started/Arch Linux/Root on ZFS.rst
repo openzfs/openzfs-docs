@@ -326,17 +326,18 @@ System Configuration
      apk add curl
 
      curl --fail-early --fail -L \
-     https://archive.archlinux.org/iso/2024.01.01/archlinux-bootstrap-x86_64.tar.gz \
-     -o rootfs.tar.gz
+     https://archive.archlinux.org/iso/2026.07.01/archlinux-bootstrap-x86_64.tar.zst \
+     -o rootfs.tar.zst
      curl --fail-early --fail -L \
-     https://archive.archlinux.org/iso/2024.01.01/archlinux-bootstrap-x86_64.tar.gz.sig \
-     -o rootfs.tar.gz.sig
+     https://archive.archlinux.org/iso/2026.07.01/archlinux-bootstrap-x86_64.tar.zst.sig \
+     -o rootfs.tar.zst.sig
 
      apk add gnupg
-     gpg --auto-key-retrieve --keyserver hkps://keyserver.ubuntu.com --verify rootfs.tar.gz.sig
+     gpg --auto-key-retrieve --keyserver hkps://keyserver.ubuntu.com --verify rootfs.tar.zst.sig
 
+     apk add zstd
      ln -s "${MNT}" "${MNT}"/root.x86_64
-     tar x  -C "${MNT}" -af rootfs.tar.gz root.x86_64
+     zstd -d -c rootfs.tar.zst | tar x -C "${MNT}" root.x86_64
 
 #. Enable community repo
 
@@ -417,6 +418,10 @@ System Configuration
 #. Install base packages::
 
      pacman -Sy
+     # the keyring of the bootstrap image is as old as the image, and the
+     # packages being installed are current, so refresh it before anything
+     # else - otherwise their signatures are "unknown trust"
+     pacman -S --noconfirm archlinux-keyring
      pacman -S --noconfirm mg mandoc efibootmgr mkinitcpio
 
      kernel_compatible_with_zfs="$(pacman -Si zfs-linux \
