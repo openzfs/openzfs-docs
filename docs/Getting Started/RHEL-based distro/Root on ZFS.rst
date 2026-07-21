@@ -485,7 +485,6 @@ Bootloader
 
 #. Unmount filesystems and create initial system snapshot
    You can later create a boot environment from this snapshot.
-   See `Root on ZFS maintenance page <../zfs_root_maintenance.html>`__.
    ::
 
     umount -Rl "${MNT}"
