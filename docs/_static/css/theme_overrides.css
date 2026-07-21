@@ -21,6 +21,10 @@
     position: sticky;
     top: 0;
     z-index: 5;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.4em;
     margin: 1em 0;
     padding: 0.6em 0.8em;
     background: #f3f6f6;
@@ -28,9 +32,22 @@
     border-radius: 3px;
 }
 
-#zfs-param-filter select {
-    margin: 0 0.6em;
+/* the theme makes every label a block, which breaks the row */
+#zfs-param-filter label {
+    display: inline;
+    margin: 0;
+    font-weight: normal;
+}
+
+#zfs-param-filter select,
+#zfs-param-filter input {
+    margin: 0;
     padding: 0.2em;
+}
+
+#zfs-param-filter input {
+    font-family: monospace;
+    min-width: 12em;
 }
 
 .zfs-param-count {

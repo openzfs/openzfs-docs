@@ -22,6 +22,20 @@
     return found;
   }
 
+  function normalize(text) {
+    return text.trim().toLowerCase().replace(/-/g, "_");
+  }
+
+  function nameOf(node) {
+    if (node.dataset.zfsName === undefined) {
+      // sections carry the name as their id, tag index entries as their text
+      node.dataset.zfsName = normalize(
+        node.tagName === "SECTION" ? node.id : node.textContent
+      );
+    }
+    return node.dataset.zfsName;
+  }
+
   function label(cls) {
     var name = cls.slice(2).replace(/-/g, ".");
     return name === "master" ? "master" : "OpenZFS " + name;
@@ -79,32 +93,55 @@
     caption.htmlFor = select.id;
     caption.textContent = "Show parameters of ";
 
+    var search = document.createElement("input");
+    search.id = "zfs-param-search";
+    search.type = "search";
+    search.placeholder = "arc_max";
+    search.autocomplete = "off";
+    search.spellcheck = false;
+
+    var searchCaption = document.createElement("label");
+    searchCaption.htmlFor = search.id;
+    searchCaption.textContent = " whose name contains ";
+
     var count = document.createElement("span");
     count.className = "zfs-param-count";
 
     host.appendChild(caption);
     host.appendChild(select);
+    host.appendChild(searchCaption);
+    host.appendChild(search);
     host.appendChild(count);
 
-    function apply(value) {
+    var total = document.querySelectorAll("section.zfs-param").length;
+    var tags = document.querySelectorAll("section.zfs-tag");
+
+    function apply() {
+      var value = select.value;
+      // "-" and "_" are interchangeable: the names use "_", the anchors "-"
+      var query = normalize(search.value);
       var shown = 0;
+
       params.forEach(function (node) {
-        var visible = value === ALL || node.classList.contains(value);
+        var visible =
+          (value === ALL || node.classList.contains(value)) &&
+          (!query || nameOf(node).indexOf(query) !== -1);
         node.classList.toggle("zfs-param-hidden", !visible);
-        if (visible) {
+        if (visible && node.tagName === "SECTION") {
           shown += 1;
         }
       });
-      // parameter sections are counted twice: once in the tag index, once
-      // in the parameter list itself
-      var total = document.querySelectorAll("section.zfs-param").length;
-      var visibleSections = document.querySelectorAll(
-        "section.zfs-param:not(.zfs-param-hidden)"
-      ).length;
+
+      // a tag with nothing left under it is just a stray heading
+      tags.forEach(function (node) {
+        var empty = !node.querySelector("li.zfs-param:not(.zfs-param-hidden)");
+        node.classList.toggle("zfs-param-hidden", empty);
+      });
+
       count.textContent =
-        value === ALL
+        value === ALL && !query
           ? total + " parameters"
-          : visibleSections + " of " + total + " parameters";
+          : shown + " of " + total + " parameters";
       try {
         window.localStorage.setItem(STORAGE_KEY, value);
       } catch (err) {
@@ -112,8 +149,13 @@
       }
     }
 
-    select.addEventListener("change", function () {
-      apply(select.value);
+    select.addEventListener("change", apply);
+    search.addEventListener("input", apply);
+    search.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") {
+        search.value = "";
+        apply();
+      }
     });
 
     var stored = ALL;
@@ -126,7 +168,7 @@
       stored = ALL;
     }
     select.value = stored;
-    apply(stored);
+    apply();
   }
 
   if (document.readyState === "loading") {
