@@ -380,38 +380,25 @@ System Configuration
        pacman-key --refresh-keys
        pacman-key --populate
 
-       curl --fail-early --fail -L https://archzfs.com/archzfs.gpg \
-       |  pacman-key -a - --gpgdir /etc/pacman.d/gnupg
+       # See https://github.com/archzfs/archzfs/wiki: since 2025-06-19 the
+       # repository is published as a GitHub release and the archzfs.com
+       # one is legacy
 
+       pacman-key --recv-keys 3A9917BF0DED5C13F69AC68FABEC0A1208037BE9
        pacman-key \
        --lsign-key \
        --gpgdir /etc/pacman.d/gnupg \
-       DDF7DB817396A49B2A2723F7403BD972F75D9D76
-
-       tee -a /etc/pacman.d/mirrorlist-archzfs <<- 'EOF'
-       ## See https://github.com/archzfs/archzfs/wiki
-       ## France
-       #,Server = https://archzfs.com/$repo/$arch
-
-       ## Germany
-       #,Server = https://mirror.sum7.eu/archlinux/archzfs/$repo/$arch
-
-       ## United States
-       #,Server = https://zxcvfdsa.com/archzfs/$repo/$arch
-       EOF
+       3A9917BF0DED5C13F69AC68FABEC0A1208037BE9
 
        tee -a /etc/pacman.conf <<- 'EOF'
 
-       #[archzfs-testing]
-       #Include = /etc/pacman.d/mirrorlist-archzfs
-
        #,[archzfs]
-       #,Include = /etc/pacman.d/mirrorlist-archzfs
+       #,SigLevel = Required
+       #,Server = https://github.com/archzfs/archzfs/releases/download/experimental
        EOF
 
        # this #, prefix is a workaround for ci/cd tests
        # remove them
-       sed -i 's|#,||' /etc/pacman.d/mirrorlist-archzfs
        sed -i 's|#,||' /etc/pacman.conf
        sed -i 's|^#||' /etc/pacman.d/mirrorlist
 
