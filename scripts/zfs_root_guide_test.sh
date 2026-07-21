@@ -6,7 +6,7 @@ distro="${1}"
 
 # clean up previous tests
 find /dev/mapper/ -name '*-part[0-9]' -print0 \
-     | xargs -t -0I'{}' sh -vxc "swapoff '{}' && cryptsetup close '{}'"
+     | xargs -t -0I'{}' sh -vxc "swapoff '{}' || true; cryptsetup close '{}' || true"
 
 find . -mindepth 1 -maxdepth 1 -type d -name 'rootfs-*' \
     | while read -r dir; do
