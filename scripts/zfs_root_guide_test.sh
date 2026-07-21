@@ -5,7 +5,7 @@ set -vxuef
 distro="${1}"
 
 # clean up previous tests
-find /dev/mapper/ -name '*-part4' -print0 \
+find /dev/mapper/ -name '*-part[0-9]' -print0 \
      | xargs -t -0I'{}' sh -vxc "swapoff '{}' && cryptsetup close '{}'"
 
 find . -mindepth 1 -maxdepth 1 -type d -name 'rootfs-*' \
