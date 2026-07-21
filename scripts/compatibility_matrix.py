@@ -36,18 +36,22 @@ def openzfs():
     versions.append("0.6.5.11")
     for ver in set(versions):
         ver_split = ver.split(".")
-        if (int(ver_split[0]) >= 3 or
-            (int(ver_split[0]) == 2 and int(ver_split[1]) >= 1)):
-            sources[ver] = ('https://raw.githubusercontent.com/openzfs/zfs/'
-                        'zfs-{}/man/man7/zpool-features.7'.format(ver))
+        if (int(ver_split[0]) >= 3
+                or (int(ver_split[0]) == 2 and int(ver_split[1]) >= 1)):
+            sources[ver] = (
+                'https://raw.githubusercontent.com/openzfs/zfs/'
+                'zfs-{}/man/man7/zpool-features.7'.format(ver))
         else:
-            sources[ver] = ('https://raw.githubusercontent.com/openzfs/zfs/'
-                        'zfs-{}/man/man5/zpool-features.5'.format(ver))
+            sources[ver] = (
+                'https://raw.githubusercontent.com/openzfs/zfs/'
+                'zfs-{}/man/man5/zpool-features.5'.format(ver))
     return sources
 
 
 def openzfsonosx():
-    with urlopen('https://api.github.com/repos/openzfsonosx/openzfs-fork/branches?per_page=100') as web:
+    branches_url = ('https://api.github.com/repos/openzfsonosx/openzfs-fork/'
+                    'branches?per_page=100')
+    with urlopen(branches_url) as web:
         try:
             def is_date(date_str):
                 try:
@@ -56,21 +60,25 @@ def openzfsonosx():
                 except ValueError:
                     return False
             branches = dejson(web.read().decode('utf-8', 'ignore'))
-            branches = [x['name'].lstrip('macOS_') for x in branches if 'macOS_' in x['name']]
+            branches = [x['name'].lstrip('macOS_') for x in branches
+                        if 'macOS_' in x['name']]
             branches = [x for x in branches if is_date(x)]
-            sources = {'main':('https://raw.githubusercontent.com/openzfsonosx/openzfs-fork/'
-                        'macOS_{}/man/man7/zpool-features.7'.format(max(branches)))}
+            sources = {'main': (
+                'https://raw.githubusercontent.com/openzfsonosx/openzfs-fork/'
+                'macOS_{}/man/man7/zpool-features.7'.format(max(branches)))}
         except Exception:
             sources = {}
     with urlopen('https://api.github.com/repos/openzfsonosx/openzfs-fork/tags') as web:
         try:
             tags = dejson(web.read().decode('utf-8', 'ignore'))
-            tags = [x['name'].lstrip('zfs-macOS-') for x in tags if 'zfs-macOS-' in x['name']]
+            tags = [x['name'].lstrip('zfs-macOS-') for x in tags
+                    if 'zfs-macOS-' in x['name']]
             tags = [tag for tag in tags if '.99' not in tag]
+
             def version_key(tag):
                 if 'rc' in tag:
                     # fix inconsistent versioning
-                    tag = tag.replace('-','')
+                    tag = tag.replace('-', '')
                     version, rc = tag.split('rc')
                     return (version, int(rc))
                 else:
@@ -183,7 +191,8 @@ sources = {
                       'master/usr/src/man/man7/zpool-features.7',
             },
         # 'OpenZFS on Windows': {
-        #    'master': 'https://raw.githubusercontent.com/openzfsonwindows/ZFSin/master/ZFSin/zfs/man/man5/zpool-features.5',
+        #    'master': 'https://raw.githubusercontent.com/openzfsonwindows/'
+        #              'ZFSin/master/ZFSin/zfs/man/man5/zpool-features.5',
         #    },
         }
 
@@ -324,7 +333,8 @@ th {
 
 html.write('<table>\n')
 html.write('<tr><th scope="col" class="feature_col" rowspan="2">Feature Flag</th>')
-html.write('<th class="rotate rocol" scole="col" rowspan="2"><span>Read-Only<br />Compatible</span></th>')
+html.write('<th class="rotate rocol" scole="col" rowspan="2">'
+           '<span>Read-Only<br />Compatible</span></th>')
 
 for name, vers in header:
     html.write('<th class="name" scope="col" colspan="' + str(len(vers)) + '">'
@@ -337,7 +347,9 @@ html.write('</tr>\n')
 
 for (feature, domain), names in sorted(features.items()):
     guid = domain + ':' + feature
-    html.write(f'<tr class="line"><th scope="row"><span class="l">{domain}:</span><span class="r">{feature}</span></th>')
+    html.write(f'<tr class="line"><th scope="row">'
+               f'<span class="l">{domain}:</span>'
+               f'<span class="r">{feature}</span></th>')
     if readonly[guid]:
         html.write('<td class="yes">yes</td>')
     else:
@@ -359,11 +371,24 @@ html.write('</table>\n')
 html.write('<div>\n')
 html.write('<h3>Notes:</h3>\n')
 html.write('<ol>\n')
-html.write('<li id="note_1"><a href="https://github.com/openzfs/zfs/pull/12735">Edonr support was not enabled in FreeBSD with OpenZFS up to 2.1 release included</a></li>\n')
-html.write('<li id="note_2"><a href="https://illumos.topicbox.com/groups/discuss/Ta2162fbb2358fa0e">While Illumos have nearly same encryption logic, it\'s format is not 100% compatible with OpenZFS encryption format, so you may have problems with cross-platform encryption.</a></li>\n')
+html.write('<li id="note_1">'
+           '<a href="https://github.com/openzfs/zfs/pull/12735">'
+           'Edonr support was not enabled in FreeBSD with OpenZFS up to '
+           '2.1 release included</a></li>\n')
+html.write('<li id="note_2">'
+           '<a href="https://illumos.topicbox.com/groups/discuss/'
+           'Ta2162fbb2358fa0e">'
+           'While Illumos have nearly same encryption logic, it\'s format '
+           'is not 100% compatible with OpenZFS encryption format, so you '
+           'may have problems with cross-platform encryption.</a></li>\n')
 html.write('</ol>\n')
 html.write('</div>\n')
 now = datetime.now().isoformat() + 'Z'
-html.write('<p>Table generates by parsing manpages for feature flags, and is entirely dependent on good, accurate documentation.<br />Last updated on ' + now + ' using <a href="https://github.com/openzfs/openzfs-docs/tree/master/scripts/compatibility_matrix.py">compatibility_matrix.py</a>.</p>\n')
+html.write('<p>Table generates by parsing manpages for feature flags, and is '
+           'entirely dependent on good, accurate documentation.<br />'
+           'Last updated on ' + now + ' using '
+           '<a href="https://github.com/openzfs/openzfs-docs/tree/master/'
+           'scripts/compatibility_matrix.py">compatibility_matrix.py</a>.'
+           '</p>\n')
 
 html.close()
