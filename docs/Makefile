@@ -37,3 +37,13 @@ man:
 .PHONY: feature_matrix
 feature_matrix:
 	../scripts/compatibility_matrix.py ./_build/
+
+# Reuses the clone made by the "man" target
+.PHONY: module_params
+module_params:
+	../scripts/module_params.py ./
+
+# Validate the curated overlay without regenerating the page
+.PHONY: module_params_check
+module_params_check:
+	../scripts/module_params.py --check ./
