@@ -29,10 +29,9 @@ dbuf_cache_hiwater_pct:
   notes: The ``dbuf_cache_hiwater_pct`` and dbuf_cache_lowater_pct define the
     operating range for dbuf cache evict thread. The hiwater and lowater are percentages
     of the dbuf_cache_max_bytes value. When the dbuf cache grows above ((100%
-    + ``dbuf_cache_hiwater_pct``) \* dbuf_cache_max_bytes) then the dbuf cache
+    + ``dbuf_cache_hiwater_pct``) * dbuf_cache_max_bytes) then the dbuf cache
     thread begins evicting. When the dbug cache falls below ((100% - dbuf_cache_lowater_pct)
-    \* dbuf_cache_max_bytes) then the dbuf cache thread stops evicting.
-  range: 0 to UINT_MAX
+    * dbuf_cache_max_bytes) then the dbuf cache thread stops evicting.
   tags:
   - dbuf_cache
   when_to_change: Testing dbuf cache algorithms
@@ -40,10 +39,9 @@ dbuf_cache_lowater_pct:
   notes: The dbuf_cache_hiwater_pct and dbuf_cache_lowater_pct define the operating
     range for dbuf cache evict thread. The hiwater and lowater are percentages
     of the dbuf_cache_max_bytes value. When the dbuf cache grows above ((100%
-    + dbuf_cache_hiwater_pct) \* dbuf_cache_max_bytes) then the dbuf cache thread
+    + dbuf_cache_hiwater_pct) * dbuf_cache_max_bytes) then the dbuf cache thread
     begins evicting. When the dbug cache falls below ((100% - ``dbuf_cache_lowater_pct``)
-    \* dbuf_cache_max_bytes) then the dbuf cache thread stops evicting.
-  range: 0 to UINT_MAX
+    * dbuf_cache_max_bytes) then the dbuf cache thread stops evicting.
   tags:
   - dbuf_cache
   when_to_change: Testing dbuf cache algorithms
@@ -145,8 +143,6 @@ ignore_hole_birth:
   when_to_change: Enable if you suspect your datasets are affected by a bug in
     hole_birth during ``zfs send`` operations
 l2arc_exclude_special:
-  notes: Controls whether buffers present on special vdevs are eligible for caching
-    into L2ARC.
   range: 0=disabled, 1=enabled
   tags:
   - ARC
@@ -168,7 +164,7 @@ l2arc_feed_min_ms:
     thread wakes up once per second (see l2arc_feed_secs) to look for data to
     feed into the L2ARC. ``l2arc_feed_min_ms`` only affects the turbo L2ARC cache
     warm-up and allows the aggressiveness to be adjusted.
-  range: 0 to (1000 \* l2arc_feed_secs)
+  range: 0 to (1000 * l2arc_feed_secs)
   tags:
   - ARC
   - L2ARC
@@ -178,7 +174,7 @@ l2arc_feed_min_ms:
 l2arc_feed_secs:
   notes: Seconds between waking the L2ARC feed thread. One feed thread works for
     all cache devices in turn. If the pool that owns a cache device is imported
-    readonly, then the feed thread is delayed 5 \* l2arc_feed_secs before moving
+    readonly, then the feed thread is delayed 5 * l2arc_feed_secs before moving
     onto the next cache device. If multiple pools are imported with cache devices
     and one pool with cache is imported readonly, the L2ARC feed rate to all caches
     can be slowed.
@@ -190,7 +186,6 @@ l2arc_feed_secs:
 l2arc_headroom:
   notes: How far through the ARC lists to search for L2ARC cacheable content,
     expressed as a multiplier of l2arc_write_max
-  range: 0 to UINT64_MAX
   tags:
   - ARC
   - L2ARC
@@ -243,7 +238,6 @@ l2arc_nocompress:
   - L2ARC
   when_to_change: When testing compressed L2ARC feature
 l2arc_noprefetch:
-  notes: Disables writing prefetched, but unused, buffers to cache devices.
   range: 0=write prefetched but unused buffers to cache devices, 1=do not write
     prefetched but unused buffers to cache devices
   tags:
@@ -269,13 +263,11 @@ l2arc_rebuild_blocks_min_l2size:
     the persistent L2ARC. For L2ARC devices less than 1GB the overhead involved
     offsets most of benefit so log blocks are not written for cache devices smaller
     than this.
-  range: 0 to UINT64_MAX
   tags:
   - ARC
   - L2ARC
   when_to_change: The cache device is small and the pool is frequently imported.
 l2arc_rebuild_enabled:
-  notes: Rebuild the persistent L2ARC when importing a pool.
   range: 0=disable persistent L2ARC rebuild, 1=enable persistent L2ARC rebuild
   tags:
   - ARC
@@ -299,7 +291,6 @@ l2arc_trim_ahead:
 l2arc_write_boost:
   notes: Until the ARC fills, increases the L2ARC fill rate l2arc_write_max by
     ``l2arc_write_boost``.
-  range: 0 to UINT64_MAX
   tags:
   - ARC
   - L2ARC
@@ -327,7 +318,6 @@ metaslab_aliquot:
     can help. For modern devices, it is unlikely that decreasing ``metaslab_aliquot``
     from the default will help. If there is only one top-level vdev, this tunable
     is not used.
-  range: 0 to UINT64_MAX
   tags:
   - allocation
   - metaslab
@@ -426,8 +416,6 @@ metaslab_preload_enabled:
   - metaslab
   when_to_change: When testing metaslab allocation
 metaslabs_per_vdev:
-  notes: When a vdev is added, it will be divided into approximately, but no more
-    than, this number of metaslabs.
   range: 16 to UINT64_MAX
   tags:
   - allocation
@@ -576,10 +564,8 @@ spl_kmem_alloc_max:
     than this maximum will quickly fail. ``vmem_alloc()`` allocations less than
     or equal to this value will use ``kmalloc()``, but shift to ``vmalloc()``
     when exceeding this value.
-  range: TBD
   tags:
   - memory
-  when_to_change: TBD
 spl_kmem_alloc_warn:
   notes: As a general rule ``kmem_alloc()`` allocations should be small, preferably
     just a few pages since they must by physically contiguous. Therefore, a rate
@@ -612,7 +598,6 @@ spl_kmem_cache_expire:
   range: 0x01 - Aging (illumos), 0x02 - Low memory (Linux)
   tags:
   - memory
-  when_to_change: TBD
 spl_kmem_cache_kmem_limit:
   notes: Depending on the size of a memory cache object it may be backed by ``kmalloc()``
     or ``vmalloc()`` memory. This is because the size of the required allocation
@@ -630,10 +615,8 @@ spl_kmem_cache_kmem_limit:
     One quarter of the kernel's compiled PAGE_SIZE is used as the default value
     because spl_kmem_cache_obj_per_slab defaults to 16. With these default values,
     at most four contiguous pages are allocated.
-  range: TBD
   tags:
   - memory
-  when_to_change: TBD
 spl_kmem_cache_kmem_threads:
   notes: '``spl_kmem_cache_kmem_threads`` shows the current number of ``spl_kmem_cache``
     threads. This task queue is responsible for allocating new slabs for use by
@@ -665,26 +648,21 @@ spl_kmem_cache_max_size:
     in MiB. This effectively limits the maximum cache object size to ``spl_kmem_cache_max_size``
     / spl_kmem_cache_obj_per_slab Kmem caches may not be created with object sized
     larger than this limit.'
-  range: TBD
   tags:
   - memory
-  when_to_change: TBD
 spl_kmem_cache_obj_per_slab:
   notes: '``spl_kmem_cache_obj_per_slab`` is the preferred number of objects per
     slab in the kmem cache. In general, a larger value will increase the caches
     memory footprint while decreasing the time required to perform an allocation.
     Conversely, a smaller value will minimize the footprint and improve cache
     reclaim time but individual allocations may take longer.'
-  range: TBD
   tags:
   - memory
-  when_to_change: TBD
 spl_kmem_cache_obj_per_slab_min:
   notes: '``spl_kmem_cache_obj_per_slab_min`` is the minimum number of objects
     allowed per slab. Normally slabs will contain spl_kmem_cache_obj_per_slab
     objects but for caches that contain very large objects it''s desirable to
     only have a few, or even just one, object per slab.'
-  range: TBD
   tags:
   - memory
   when_to_change: debugging kmem cache operations
@@ -698,7 +676,6 @@ spl_kmem_cache_reclaim:
     reclaim from kmem caches
   tags:
   - memory
-  when_to_change: TBD
 spl_kmem_cache_slab_limit:
   notes: For small objects the Linux slab allocator should be used to make the
     most efficient use of the memory. However, large objects are not supported
@@ -708,20 +685,17 @@ spl_kmem_cache_slab_limit:
     be allocated using the Linux slab allocator, large objects use the SPL allocator.
     A cutoff of 16 KiB was determined to be optimal for architectures using 4
     KiB pages.
-  range: TBD
   tags:
   - memory
-  when_to_change: TBD
 spl_max_show_tasks:
   notes: '``spl_max_show_tasks`` is the limit of tasks per pending list in each
     taskq shown in ``/proc/spl/taskq`` and ``/proc/spl/taskq-all``. Reading the
     ProcFS files walks the lists with lock held and it could cause a lock up if
     the list grow too large. If the list is larger than the limit, the string
-    \``"(truncated)" is printed.'
+    ``"(truncated)"`` is printed.'
   range: 0 disables the limit, 1 to MAX_UINT
   tags:
   - taskq
-  when_to_change: TBD
 spl_panic_halt:
   notes: '``spl_panic_halt`` enables kernel panic upon assertion failures. When
     not enabled, the asserting thread is halted to facilitate further debugging.'
@@ -783,7 +757,6 @@ spl_taskq_thread_sequential:
   tags:
   - CPU
   - taskq
-  when_to_change: TBD
 vdev_removal_max_span:
   notes: During top-level vdev removal, chunks of data are copied from the vdev
     which may include free space in order to trade bandwidth for IOPS. ``vdev_removal_max_span``
@@ -792,7 +765,6 @@ vdev_removal_max_span:
   range: 0 to MAX_INT
   tags:
   - vdev_removal
-  when_to_change: TBD
 vdev_validate_skip:
   notes: '``vdev_validate_skip`` disables label validation steps during pool import.
     Changing is not recommended unless you know what you are doing and are recovering
@@ -810,8 +782,6 @@ zfetch_array_rd_sz:
   - prefetch
   when_to_change: To allow prefetching when using large block sizes
 zfetch_max_distance:
-  notes: Limits the maximum number of bytes to prefetch per stream.
-  range: 0 to UINT_MAX
   tags:
   - prefetch
   when_to_change: Consider increasing read workloads that use large blocks and
@@ -889,7 +859,6 @@ zfs_admin_snapshot:
   tags:
   - filesystem
   - snapshot
-  when_to_change: TBD
 zfs_arc_average_blocksize:
   notes: The ARC's buffer hash table is sized based on the assumption of an average
     block size of ``zfs_arc_average_blocksize``. The default of 8 KiB uses approximately
@@ -941,7 +910,6 @@ zfs_arc_free_target:
     the ARC triggers reclaim. Initialized at boot to the kernel''s ``vm.v_free_target``
     value. This parameter is FreeBSD-specific and uses pages as its unit, unlike
     ``zfs_arc_sys_free`` which is measured in bytes.'
-  range: 0 to UINT_MAX
   tags:
   - ARC
   - memory
@@ -956,7 +924,6 @@ zfs_arc_grow_retry:
   tags:
   - ARC
   - memory
-  when_to_change: TBD
 zfs_arc_lotsfree_percent:
   notes: Throttle ARC memory consumption, effectively throttling I/O, when free
     system memory drops below this percentage of total system memory. Setting
@@ -966,16 +933,15 @@ zfs_arc_lotsfree_percent:
   tags:
   - ARC
   - memory
-  when_to_change: TBD
 zfs_arc_max:
-  notes: 'Maximum size of ARC in bytes. If set to 0 then the maximum size of ARC
-    is determined by the amount of system memory installed: * **Linux** and **FreeBSD**:
-    the larger of ``all_system_memory - 1GB`` and ``5/8 × all_system_memory``
-    *prior to v2.3.0* * **Linux**: 1/2 of system memory * **FreeBSD**: the larger
-    of ``all_system_memory - 1GB`` and ``5/8 × all_system_memory`` ``zfs_arc_max``
-    can be changed dynamically with some caveats. It cannot be set back to 0 while
-    running and reducing it below the current ARC size will not cause the ARC
-    to shrink without memory pressure to induce shrinking.'
+  notes: "If set to 0, the limit is derived from the amount of memory installed.\n\
+    Since v2.3.0 every platform uses the larger of\n``all_system_memory - 1 GiB``\
+    \ and ``5/8 x all_system_memory``. Before\nthat the platforms differed:\n\n\
+    * **Linux**: half of system memory\n* **FreeBSD**: the larger of ``all_system_memory\
+    \ - 1 GiB`` and\n  ``5/8 x all_system_memory``\n\n``zfs_arc_max`` can be changed\
+    \ dynamically, with some caveats. It cannot\nbe set back to 0 while running,\
+    \ and reducing it below the current ARC\nsize will not cause the ARC to shrink\
+    \ without memory pressure to induce\nshrinking."
   range: 67,108,864 to RAM size in bytes
   tags:
   - ARC
@@ -1002,7 +968,6 @@ zfs_arc_meta_balance:
     of data ghost hits. A value of 100 weights them equally. This parameter replaced
     the manual metadata limit tunables (``zfs_arc_meta_limit``, ``zfs_arc_meta_min``,
     etc.) that were removed in v2.2.0.'
-  range: 0 to UINT_MAX
   tags:
   - ARC
   when_to_change: When the ARC is not caching enough metadata (or too much) for
@@ -1057,7 +1022,6 @@ zfs_arc_meta_prune:
   range: 0 to INT_MAX
   tags:
   - ARC
-  when_to_change: TBD
 zfs_arc_meta_strategy:
   notes: '.. note:: Removed in v2.2.0 by commit a8d83e2a ("More adaptive ARC eviction").
     Replaced by adaptive eviction with zfs_arc_meta_balance. Defines the strategy
@@ -1088,7 +1052,6 @@ zfs_arc_min_prefetch_lifespan:
   range: 0 = use default value
   tags:
   - ARC
-  when_to_change: TBD
 zfs_arc_min_prefetch_ms:
   notes: Minimum time prefetched blocks are locked in the ARC. A value of 0 represents
     the default of 1 second. However, once changed, dynamically setting to 0 will
@@ -1097,7 +1060,6 @@ zfs_arc_min_prefetch_ms:
   tags:
   - ARC
   - prefetch
-  when_to_change: TBD
 zfs_arc_min_prescient_prefetch_ms:
   notes: Minimum time "prescient prefetched" blocks are locked in the ARC. These
     blocks are meant to be prefetched fairly aggressively ahead of the code that
@@ -1107,7 +1069,6 @@ zfs_arc_min_prescient_prefetch_ms:
   tags:
   - ARC
   - prefetch
-  when_to_change: TBD
 zfs_arc_p_dampener_disable:
   notes: '.. note:: Removed in v2.2.0 by commit a8d83e2a ("More adaptive ARC eviction").
     Replaced by adaptive eviction with zfs_arc_meta_balance. When data is being
@@ -1130,7 +1091,6 @@ zfs_arc_p_min_shift:
   tags:
   - ARC
   verification: Observe changes to ``/proc/spl/kstat/zfs/arcstats`` entry ``p``
-  when_to_change: TBD
 zfs_arc_pc_percent:
   notes: '``zfs_arc_pc_percent`` allows ZFS arc to play more nicely with the kernel''s
     LRU pagecache. It can guarantee that the arc size won''t collapse under scanning
@@ -1181,7 +1141,6 @@ zfs_async_block_max_blocks:
   tags:
   - DMU
   - delete
-  when_to_change: TBD
 zfs_autoimport_disable:
   notes: Disable reading zpool.cache file (see spa_config_path) when loading the
     zfs module.
@@ -1197,7 +1156,6 @@ zfs_checksum_events_per_second:
   range: '``zed`` threshold to MAX_UINT'
   tags:
   - vdev
-  when_to_change: TBD
 zfs_checksums_per_second:
   notes: '.. note:: Renamed to zfs_checksum_events_per_second in v0.8.0 (commit
     ad796b8a3). The ZFS Event Daemon (zed) processes events from ZFS. However,
@@ -1207,7 +1165,6 @@ zfs_checksums_per_second:
     than the SERD limit for ``checksum`` in zed. By default, ``checksum_N`` =
     10 and ``checksum_T`` = 10 minutes, resulting in a practical lower limit of
     1.'
-  range: 0 to UINT_MAX
   tags:
   - checksum
   - zed
@@ -1221,7 +1178,6 @@ zfs_commit_timeout_pct:
   range: 1 to 100
   tags:
   - ZIL
-  when_to_change: TBD
 zfs_compressed_arc_enabled:
   notes: When compression is enabled for a dataset, later reads of the data can
     store the blocks in ARC in their on-disk, compressed state. This can increase
@@ -1253,7 +1209,6 @@ zfs_condense_indirect_vdevs_enable:
     after vdev removal
   tags:
   - vdev_removal
-  when_to_change: TBD
 zfs_condense_max_obsolete_bytes:
   notes: After vdev removal, ``zfs_condense_max_obsolete_bytes`` sets the limit
     for beginning the condensing process. Condensing begins if the obsolete space
@@ -1287,11 +1242,9 @@ zfs_dbgmsg_maxsize:
   range: 0 to INT_MAX
   tags:
   - debug
-  when_to_change: TBD
 zfs_dbuf_state_index:
   notes: The ``zfs_dbuf_state_index`` feature is currently unused. It is normally
     used for controlling values in the ``/proc/spl/kstat/zfs/dbufs`` file.
-  range: TBD
   tags:
   - debug
   when_to_change: Do not change
@@ -1369,25 +1322,24 @@ zfs_delay_min_dirty_percent:
   range: 0 to 100
   tags:
   - write_throttle
-  when_to_change: See section "ZFS TRANSACTION DELAY"
+  when_to_change: See :doc:`ZFS Transaction Delay <./ZFS Transaction Delay>`
 zfs_delay_scale:
   notes: '``zfs_delay_scale`` controls how quickly the ZFS write throttle transaction
     delay approaches infinity. Larger values cause longer delays for a given amount
     of dirty data. For the smoothest delay, this value should be about 1 billion
     divided by the maximum number of write operations per second the pool can
     sustain. The throttle will smoothly handle between 10x and 1/10th ``zfs_delay_scale``.
-    Note: ``zfs_delay_scale`` \* zfs_dirty_data_max must be < 2^64.'
+    Note: ``zfs_delay_scale`` * zfs_dirty_data_max must be < 2^64.'
   range: 0 to ULONG_MAX
   tags:
   - write_throttle
-  when_to_change: See section "ZFS TRANSACTION DELAY"
+  when_to_change: See :doc:`ZFS Transaction Delay <./ZFS Transaction Delay>`
 zfs_delays_per_second:
   notes: '.. note:: Renamed to zfs_slow_io_events_per_second in v0.8.0 (commit
     ad796b8a3). The ZFS Event Daemon (zed) processes events from ZFS. However,
     it can be overwhelmed by high rates of error reports which can be generated
     by failing, high-performance devices. ``zfs_delays_per_second`` limits the
     rate of delay events reported to zed.'
-  range: 0 to UINT_MAX
   tags:
   - delay
   - zed
@@ -1414,14 +1366,14 @@ zfs_dirty_data_max:
   range: 1 to zfs_dirty_data_max_max
   tags:
   - write_throttle
-  when_to_change: See section "ZFS TRANSACTION DELAY"
+  when_to_change: See :doc:`ZFS Transaction Delay <./ZFS Transaction Delay>`
 zfs_dirty_data_max_max:
   notes: '``zfs_dirty_data_max_max`` is the maximum allowable value of zfs_dirty_data_max.
     ``zfs_dirty_data_max_max`` takes precedence over zfs_dirty_data_max_max_percent.'
   range: 1 to physical RAM size
   tags:
   - write_throttle
-  when_to_change: See section "ZFS TRANSACTION DELAY"
+  when_to_change: See :doc:`ZFS Transaction Delay <./ZFS Transaction Delay>`
 zfs_dirty_data_max_max_percent:
   notes: '``zfs_dirty_data_max_max_percent`` an alternative to zfs_dirty_data_max_max
     for setting the maximum allowable value of zfs_dirty_data_max zfs_dirty_data_max_max
@@ -1429,7 +1381,7 @@ zfs_dirty_data_max_max_percent:
   range: 1 to 100
   tags:
   - write_throttle
-  when_to_change: See section "ZFS TRANSACTION DELAY"
+  when_to_change: See :doc:`ZFS Transaction Delay <./ZFS Transaction Delay>`
 zfs_dirty_data_max_percent:
   notes: '``zfs_dirty_data_max_percent`` is an alternative method of specifying
     zfs_dirty_data_max, the ZFS write throttle dirty space limit. Once this limit
@@ -1438,7 +1390,7 @@ zfs_dirty_data_max_percent:
   range: 1 to 100
   tags:
   - write_throttle
-  when_to_change: See section "ZFS TRANSACTION DELAY"
+  when_to_change: See :doc:`ZFS Transaction Delay <./ZFS Transaction Delay>`
 zfs_dirty_data_sync:
   notes: When there is at least ``zfs_dirty_data_sync`` dirty data, a transaction
     group sync is started. This allows a transaction group sync to occur more
@@ -1448,7 +1400,6 @@ zfs_dirty_data_sync:
   tags:
   - ZIO_scheduler
   - write_throttle
-  when_to_change: TBD
 zfs_dirty_data_sync_percent:
   notes: When there is at least ``zfs_dirty_data_sync_percent`` of zfs_dirty_data_max
     dirty data, a transaction group sync is started. This allows a transaction
@@ -1458,7 +1409,6 @@ zfs_dirty_data_sync_percent:
   tags:
   - ZIO_scheduler
   - write_throttle
-  when_to_change: TBD
 zfs_disable_dup_eviction:
   notes: '.. note:: Removed in v0.7.0 by commit d3c2ae1c0 ("OpenZFS 6950 - ARC
     should cache compressed data"). Duplicate buffer handling was reworked as
@@ -1468,7 +1418,6 @@ zfs_disable_dup_eviction:
   tags:
   - ARC
   - dedup
-  when_to_change: TBD
 zfs_disable_ivset_guid_check:
   notes: '``zfs_disable_ivset_guid_check`` disables requirement for IVset guids
     to be present and match when doing a raw receive of encrypted datasets. Intended
@@ -1500,9 +1449,7 @@ zfs_expire_snapshot:
   tags:
   - filesystem
   - snapshot
-  when_to_change: TBD
 zfs_flags:
-  notes: Set additional debugging flags (see zfs_dbgmsg_enable)
   tags:
   - debug
   when_to_change: When debugging ZFS
@@ -1524,7 +1471,6 @@ zfs_fletcher_4_impl:
   - checksum
   when_to_change: Testing Fletcher-4 algorithms
 zfs_free_bpobj_enabled:
-  notes: The processing of the free_bpobj object can be enabled by ``zfs_free_bpobj_enabled``
   range: 0=do not process free_bpobj objects, 1=process free_bpobj objects
   tags:
   - delete
@@ -1572,10 +1518,9 @@ zfs_free_min_time_ms:
   notes: During a ``zfs destroy`` operation using ``feature@async_destroy`` a
     minimum of ``zfs_free_min_time_ms`` time will be spent working on freeing
     blocks per txg commit.
-  range: 1 to (zfs_txg_timeout \* 1000)
+  range: 1 to (zfs_txg_timeout * 1000)
   tags:
   - delete
-  when_to_change: TBD
 zfs_immediate_write_sz:
   notes: 'If a pool does not have a log device, data blocks equal to or larger
     than ``zfs_immediate_write_sz`` are treated as if the dataset being written
@@ -1588,7 +1533,6 @@ zfs_immediate_write_sz:
   verification: Data blocks that exceed ``zfs_immediate_write_sz`` or are written
     as ``logbias=throughput`` increment the ``zil_itx_indirect_count`` entry in
     ``/proc/spl/kstat/zfs/zil``
-  when_to_change: TBD
 zfs_initialize_value:
   notes: When initializing a vdev, ZFS writes patterns of ``zfs_initialize_value``
     bytes to the device.
@@ -1605,15 +1549,11 @@ zfs_key_max_salt_uses:
   - encryption
   when_to_change: Testing encryption features
 zfs_lua_max_instrlimit:
-  notes: '``zfs_lua_max_instrlimit`` limits the maximum time for a ZFS channel
-    program to run.'
   range: 0 to MAX_ULONG
   tags:
   - channel_programs
   when_to_change: to enforce a CPU usage limit on ZFS channel programs
 zfs_lua_max_memlimit:
-  notes: '''zfs_lua_max_memlimit'' is the maximum memory limit for a ZFS channel
-    program.'
   range: 0 to MAX_ULONG
   tags:
   - channel_programs
@@ -1671,7 +1611,6 @@ zfs_max_recordsize:
   - volume
   when_to_change: To create datasets with larger volblocksize or recordsize
 zfs_mdcomp_disable:
-  notes: '``zfs_mdcomp_disable`` allows metadata compression to be disabled.'
   range: 0=compress metadata, 1=do not compress metadata
   tags:
   - CPU
@@ -1754,14 +1693,12 @@ zfs_multihost_fail_intervals:
     which can take action such as suspending the pool or offlining a device. |
     If ``zfs_multihost_fail_intervals > 0`` then sequential multihost write failures
     will cause the pool to be suspended. This occurs when (``zfs_multihost_fail_intervals``
-    \* zfs_multihost_interval) milliseconds have passed since the last successful
+    * zfs_multihost_interval) milliseconds have passed since the last successful
     multihost write. | This guarantees the activity test will see multihost writes
     if the pool is attempted to be imported by another system.'
-  range: 0 to UINT_MAX
   tags:
   - MMP
   - import
-  when_to_change: TBD
 zfs_multihost_history:
   notes: The pool ``multihost`` multimodifier protection (MMP) subsystem can record
     historical updates in the ``/proc/spl/kstat/zfs/POOL_NAME/multihost`` file
@@ -1775,7 +1712,7 @@ zfs_multihost_import_intervals:
   notes: '``zfs_multihost_import_intervals`` controls the duration of the activity
     test on pool import for the multihost multimodifier protection (MMP) subsystem.
     The activity test can be expected to take a minimum time of (``zfs_multihost_import_interval``\
-    s \* zfs_multihost_interval \* ``random(25%)``) milliseconds. The random period
+    s * zfs_multihost_interval * ``random(25%)``) milliseconds. The random period
     of up to 25% improves simultaneous import detection. For example, if two hosts
     are rebooted at the same time and automatically attempt to import the pool,
     then is is highly probable that one host will win. Smaller values of ``zfs_multihost_import_intervals``
@@ -1787,7 +1724,6 @@ zfs_multihost_import_intervals:
   tags:
   - MMP
   - import
-  when_to_change: TBD
 zfs_multihost_interval:
   notes: '``zfs_multihost_interval`` controls the frequency of multihost writes
     performed by the pool multihost multimodifier protection (MMP) subsystem.
@@ -1796,7 +1732,7 @@ zfs_multihost_interval:
     vdev every ``zfs_multihost_interval`` milliseconds. In practice, the observed
     period can vary with the I/O load and this observed value is the delay which
     is stored in the uberblock. On import the multihost activity check waits a
-    minimum amount of time determined by (``zfs_multihost_interval`` \* zfs_multihost_import_intervals)
+    minimum amount of time determined by (``zfs_multihost_interval`` * zfs_multihost_import_intervals)
     with a lower bound of 1 second. The activity check time may be further extended
     if the value of mmp delay found in the best uberblock indicates actual multihost
     updates happened at longer intervals than ``zfs_multihost_interval`` Note:
@@ -1817,7 +1753,6 @@ zfs_multilist_num_sublists:
   range: 1 to INT_MAX
   tags:
   - ARC
-  when_to_change: TBD
 zfs_no_scrub_io:
   notes: When ``zfs_no_scrub_io = 1`` scrubs do not actually scrub data and simply
     doing a metadata crawl of the pool instead.
@@ -1852,7 +1787,6 @@ zfs_nopwrite_enabled:
   tags:
   - checksum
   - debug
-  when_to_change: TBD
 zfs_object_mutex_size:
   notes: '``zfs_object_mutex_size`` facilitates resizing the the per-dataset znode
     mutex array for testing deadlocks therein.'
@@ -1868,7 +1802,6 @@ zfs_obsolete_min_time_ms:
   tags:
   - delete
   - remove
-  when_to_change: TBD
 zfs_override_estimate_recordsize:
   notes: '``zfs_override_estimate_recordsize`` overrides the default logic for
     estimating block sizes when doing a zfs send. The default heuristic is that
@@ -1887,7 +1820,6 @@ zfs_pd_bytes_max:
   tags:
   - prefetch
   - send
-  when_to_change: TBD
 zfs_per_txg_dirty_frees_percent:
   notes: '``zfs_per_txg_dirty_frees_percent`` as a percentage of zfs_dirty_data_max
     controls the percentage of dirtied blocks from frees in one txg. After the
@@ -1907,7 +1839,7 @@ zfs_per_txg_dirty_frees_percent:
   tags:
   - delete
   when_to_change: For ``zfs receive`` workloads, consider increasing or disabling.
-    See section ZFS I/O S cheduler
+    See :doc:`ZFS I/O (ZIO) Scheduler <./ZIO Scheduler>`
 zfs_prefetch_disable:
   notes: '``zfs_prefetch_disable`` controls the predictive prefetcher. Note that
     it leaves "prescient" prefetch (eg prefetch for ``zfs send``) intact (see
@@ -1965,7 +1897,6 @@ zfs_read_chunk_size:
   range: 512 to ULONG_MAX
   tags:
   - filesystem
-  when_to_change: TBD
 zfs_read_history:
   notes: Historical statistics for the last ``zfs_read_history`` reads are available
     in ``/proc/spl/kstat/zfs/POOL_NAME/reads``
@@ -1991,7 +1922,6 @@ zfs_reconstruct_indirect_combinations_max:
   range: 0=do not limit attempts, 1 to MAX_INT = limit for attempts
   tags:
   - vdev_removal
-  when_to_change: TBD
 zfs_recover:
   notes: '``zfs_recover`` can be set to true (1) to attempt to recover from otherwise-fatal
     errors, typically caused by on-disk corruption. When set, calls to ``zfs_panic_recover()``
@@ -2003,8 +1933,6 @@ zfs_recover:
   when_to_change: zfs_recover should only be used as a last resort, as it typically
     results in leaked space, or worse
 zfs_recv_queue_length:
-  notes: '``zfs_recv_queue_length`` is the maximum number of bytes allowed in
-    the zfs receive queue.'
   range: Must be at least twice the maximum recordsize or volblocksize in use
   tags:
   - receive
@@ -2082,7 +2010,6 @@ zfs_scan_checkpoint_intval:
   tags:
   - resilver
   - scrub
-  when_to_change: TBD
 zfs_scan_fill_weight:
   notes: This tunable affects how scrub and resilver I/O segments are ordered.
     A higher number indicates that we care more about how filled in a segment
@@ -2124,7 +2051,6 @@ zfs_scan_issue_strategy:
   tags:
   - resilver
   - scrub
-  when_to_change: TBD
 zfs_scan_legacy:
   notes: Setting ``zfs_scan_legacy = 1`` enables the legacy scan and scrub behavior
     instead of the newer sequential behavior.
@@ -2144,7 +2070,6 @@ zfs_scan_max_ext_gap:
   tags:
   - resilver
   - scrub
-  when_to_change: TBD
 zfs_scan_mem_lim_fact:
   notes: '``zfs_scan_mem_lim_fact`` limits the maximum fraction of RAM used for
     I/O sorting by sequential scan algorithm. When the limit is reached scanning
@@ -2153,12 +2078,10 @@ zfs_scan_mem_lim_fact:
     Memory used by the sequential scan algorithm can be observed as the kmem sio_cache.
     This is visible from procfs as ``grep sio_cache /proc/slabinfo`` and can be
     monitored using slab-monitoring tools such as ``slabtop``'
-  range: TBD
   tags:
   - memory
   - resilver
   - scrub
-  when_to_change: TBD
 zfs_scan_mem_lim_soft_fact:
   notes: '``zfs_scan_mem_lim_soft_fact`` sets the fraction of the hard limit,
     zfs_scan_mem_lim_fact, used to determined the RAM soft limit for I/O sorting
@@ -2168,7 +2091,6 @@ zfs_scan_mem_lim_soft_fact:
   tags:
   - resilver
   - scrub
-  when_to_change: TBD
 zfs_scan_min_time_ms:
   notes: Scrubs are processed by the sync thread in syncing context. While scrubbing,
     ZFS spends at least ``zfs_scan_min_time_ms`` time working on a scrub between
@@ -2209,7 +2131,6 @@ zfs_scan_vdev_limit:
   - resilver
   - scrub
   - vdev
-  when_to_change: TBD
 zfs_scrub_delay:
   notes: '``zfs_scrub_delay`` sets a time-based delay for scrub I/Os. This delay
     is in addition to the ZIO scheduler''s treatment of scrub workloads. See also
@@ -2251,7 +2172,6 @@ zfs_send_unmodified_spill_blocks:
   range: 0=do not send unmodified spill blocks, 1=send unmodified spill blocks
   tags:
   - send
-  when_to_change: TBD
 zfs_slow_io_events_per_second:
   notes: '``zfs_slow_io_events_per_second`` is a rate limit for slow I/O events.
     Note that this should not be set below the ``zed`` thresholds (currently 10
@@ -2259,15 +2179,10 @@ zfs_slow_io_events_per_second:
   range: '``zed`` threshold to MAX_UINT'
   tags:
   - vdev
-  when_to_change: TBD
 zfs_spa_discard_memory_limit:
-  notes: '``zfs_spa_discard_memory_limit`` sets the limit for maximum memory used
-    for prefetching a pool''s checkpoint space map on each vdev while discarding
-    a pool checkpoint.'
   range: 0 to MAX_INT
   tags:
   - checkpoint
-  when_to_change: TBD
 zfs_special_class_metadata_reserve_pct:
   notes: '``zfs_special_class_metadata_reserve_pct`` sets a threshold for space
     in special vdevs to be reserved exclusively for metadata. This prevents small
@@ -2275,7 +2190,6 @@ zfs_special_class_metadata_reserve_pct:
   range: 0 to 100
   tags:
   - special_vdev
-  when_to_change: TBD
 zfs_sync_pass_deferred_free:
   notes: The SPA sync process is performed in multiple passes. Once the pass number
     reaches ``zfs_sync_pass_deferred_free``, frees are no long processed and must
@@ -2344,7 +2258,7 @@ zfs_trim_extent_bytes_min:
     so using a larger ``zfs_trim_extent_bytes_min`` can reduce the total amount
     of space trimmed. Use ``zpool iostat -w`` to observe the latency of trim commands.'
   range: 0=trim all unallocated space, otherwise minimum physical block size to
-    MAX\_
+    UINT_MAX
   tags:
   - trim
   when_to_change: when trim is in use and device performance suffers from trimming
@@ -2383,7 +2297,6 @@ zfs_trim_txg_batch:
   range: 1 to MAX_UINT
   tags:
   - trim
-  when_to_change: TBD
 zfs_txg_history:
   notes: Historical statistics for the last ``zfs_txg_history`` txg commits are
     available in ``/proc/spl/kstat/zfs/POOL_NAME/txgs`` The work required to measure
@@ -2472,14 +2385,12 @@ zfs_vdev_aggregation_limit_non_rotating:
   - vdev
   when_to_change: see zfs_vdev_aggregation_limit
 zfs_vdev_async_read_max_active:
-  notes: Maximum asynchronous read I/Os active to each device.
   range: 1 to zfs_vdev_max_active
   tags:
   - ZIO_scheduler
   - vdev
   when_to_change: See ZFS I/O Scheduler
 zfs_vdev_async_read_min_active:
-  notes: Minimum asynchronous read I/Os active to each device.
   range: 1 to ( zfs_vdev_async_read_max_active - 1)
   tags:
   - ZIO_scheduler
@@ -2507,8 +2418,6 @@ zfs_vdev_async_write_active_min_dirty_percent:
   - vdev
   when_to_change: See ZFS I/O Sch eduler
 zfs_vdev_async_write_max_active:
-  notes: '``zfs_vdev_async_write_max_active`` sets the maximum asynchronous write
-    I/Os active to each device.'
   range: 1 to zfs_vdev_max_active
   tags:
   - ZIO_scheduler
@@ -2561,23 +2470,17 @@ zfs_vdev_cache_size:
     file
   when_to_change: Do not change
 zfs_vdev_default_ms_count:
-  notes: When adding a top-level vdev, ``zfs_vdev_default_ms_count`` is the target
-    number of metaslabs.
   range: 16 to MAX_INT
   tags:
   - allocation
   when_to_change: for development testing purposes only
 zfs_vdev_initializing_max_active:
-  notes: '``zfs_vdev_initializing_max_active`` sets the maximum initializing I/Os
-    active to each device.'
   range: 1 to zfs_vdev_max_active
   tags:
   - ZIO_scheduler
   - vdev
   when_to_change: See ZFS I/O Sch eduler
 zfs_vdev_initializing_min_active:
-  notes: '``zfs_vdev_initializing_min_active`` sets the minimum initializing I/Os
-    active to each device.'
   range: 1 to zfs_vdev_initializing_max_active
   tags:
   - ZIO_scheduler
@@ -2596,13 +2499,10 @@ zfs_vdev_max_active:
   - vdev
   when_to_change: See ZFS I/O Scheduler
 zfs_vdev_min_ms_count:
-  notes: '``zfs_vdev_min_ms_count`` is the minimum number of metaslabs to create
-    in a top-level vdev.'
   range: 16 to zfs_vdev_ms_count_limit
   tags:
   - metaslab
   - vdev
-  when_to_change: TBD
 zfs_vdev_mirror_non_rotating_inc:
   notes: The mirror read algorithm uses current load and an incremental weighting
     value to determine the vdev to service a read operation. Lower values determine
@@ -2615,7 +2515,6 @@ zfs_vdev_mirror_non_rotating_inc:
   - SSD
   - mirror
   - vdev
-  when_to_change: TBD
 zfs_vdev_mirror_non_rotating_seek_inc:
   notes: For nonrotating media in a mirror, a seek penalty is applied as sequential
     I/O's can be aggregated into fewer operations, avoiding unnecessary per-command
@@ -2626,7 +2525,6 @@ zfs_vdev_mirror_non_rotating_seek_inc:
   - SSD
   - mirror
   - vdev
-  when_to_change: TBD
 zfs_vdev_mirror_rotating_inc:
   notes: The mirror read algorithm uses current load and an incremental weighting
     value to determine the vdev to service a read operation. Lower values determine
@@ -2652,7 +2550,6 @@ zfs_vdev_mirror_rotating_seek_inc:
   - HDD
   - mirror
   - vdev
-  when_to_change: TBD
 zfs_vdev_mirror_rotating_seek_offset:
   notes: For rotating media in a mirror, if the next I/O offset is within ``zfs_vdev_mirror_rotating_seek_offset``
     then the weighting factor is incremented by (zfs_vdev_mirror_rotating_seek_inc\
@@ -2664,15 +2561,11 @@ zfs_vdev_mirror_rotating_seek_offset:
   - HDD
   - mirror
   - vdev
-  when_to_change: TBD
 zfs_vdev_ms_count_limit:
-  notes: '``zfs_vdev_ms_count_limit`` is the practical upper limit for the number
-    of metaslabs per top-level vdev.'
   range: zfs_vdev_min_ms_count to 131,072
   tags:
   - metaslab
   - vdev
-  when_to_change: TBD
 zfs_vdev_nia_credit:
   notes: Some HDDs tend to prioritize sequential I/O so strongly, that concurrent
     random I/O latency reaches several seconds. On some HDDs this happens even
@@ -2709,7 +2602,7 @@ zfs_vdev_queue_depth_pct:
     more blocks to those devices. It also allows for dynamic allocation distribution
     when devices are imbalanced as fuller devices will tend to be slower than
     empty devices. Once the queue depth reaches (``zfs_vdev_queue_depth_pct``
-    \* zfs_vdev_async_write_max_active / 100) then allocator will stop allocating
+    * zfs_vdev_async_write_max_active / 100) then allocator will stop allocating
     blocks on that top-level device and switch to the next. See also zio_dva_throttle_enabled
   range: 1 to UINT32_MAX
   tags:
@@ -2744,18 +2637,13 @@ zfs_vdev_read_gap_limit:
   tags:
   - ZIO_scheduler
   - vdev
-  when_to_change: TBD
 zfs_vdev_removal_max_active:
-  notes: '``zfs_vdev_removal_max_active`` sets the maximum top-level vdev removal
-    I/Os active to each device.'
   range: 1 to zfs_vdev_max_active
   tags:
   - ZIO_scheduler
   - vdev
   when_to_change: See ZFS I/O Scheduler
 zfs_vdev_removal_min_active:
-  notes: '``zfs_vdev_removal_min_active`` sets the minimum top-level vdev removal
-    I/Os active to each device.'
   range: 1 to zfs_vdev_removal_max_active
   tags:
   - ZIO_scheduler
@@ -2801,31 +2689,24 @@ zfs_vdev_scrub_min_active:
   - vdev
   when_to_change: See ZFS I/O Scheduler
 zfs_vdev_sync_read_max_active:
-  notes: Maximum synchronous read I/Os active to each device.
   range: 1 to zfs_vdev_max_active
   tags:
   - ZIO_scheduler
   - vdev
   when_to_change: See ZFS I/O Scheduler
 zfs_vdev_sync_read_min_active:
-  notes: '``zfs_vdev_sync_read_min_active`` sets the minimum synchronous read
-    I/Os active to each device.'
   range: 1 to zfs_vdev_sync_read_max_active
   tags:
   - ZIO_scheduler
   - vdev
   when_to_change: See ZFS I/O Scheduler
 zfs_vdev_sync_write_max_active:
-  notes: '``zfs_vdev_sync_write_max_active`` sets the maximum synchronous write
-    I/Os active to each device.'
   range: 1 to zfs_vdev_max_active
   tags:
   - ZIO_scheduler
   - vdev
   when_to_change: See ZFS I/O Scheduler
 zfs_vdev_sync_write_min_active:
-  notes: '``zfs_vdev_sync_write_min_active`` sets the minimum synchronous write
-    I/Os active to each device.'
   range: 1 to zfs_vdev_sync_write_max_active
   tags:
   - ZIO_scheduler
@@ -2855,7 +2736,6 @@ zfs_vdev_write_gap_limit:
   tags:
   - ZIO_scheduler
   - vdev
-  when_to_change: TBD
 zfs_zevent_cols:
   notes: '``zfs_zevent_cols`` is a soft wrap limit in columns (characters) for
     ZFS events logged to the console.'
@@ -2872,7 +2752,7 @@ zfs_zevent_console:
   when_to_change: to log ZFS events to the console
 zfs_zevent_len_max:
   notes: '``zfs_zevent_len_max`` is the maximum ZFS event queue length. A value
-    of 0 results in a calculated value (16 \* number of CPUs) with a minimum of
+    of 0 results in a calculated value (16 * number of CPUs) with a minimum of
     64. Events in the queue can be viewed with the ``zpool events`` command.'
   range: 0 to INT_MAX
   tags:
@@ -2905,7 +2785,6 @@ zfs_zil_clean_taskq_minalloc:
   range: 1 to zfs_zil_clean_taskq_maxalloc
   tags:
   - ZIL
-  when_to_change: TBD
 zfs_zil_clean_taskq_nthr_pct:
   notes: '``zfs_zil_clean_taskq_nthr_pct`` controls the number of threads used
     by the DSL pool ZIL clean taskq (``dp_zil_clean_taskq``). The default value
@@ -3020,7 +2899,6 @@ zvol_inhibit_dev:
   when_to_change: Inhibiting can slightly improve startup time on systems with
     a very large number of volumes
 zvol_major:
-  notes: '``zvol_major`` is the default major number for volume devices.'
   tags:
   - volume
   when_to_change: Do not change
@@ -3040,7 +2918,6 @@ zvol_max_discard_blocks:
     the amount of discard workload request by setting the ``discard_max_bytes``
     and ``discard_max_hw_bytes`` for the volume's block device in SysFS. This
     value is readable by volume device consumers.
-  range: 0 to ULONG_MAX
   tags:
   - discard
   - volume
@@ -3051,11 +2928,9 @@ zvol_prefetch_bytes:
     are prefetch from the start and end of the volume. Prefetching these regions
     of the volume is desirable because they are likely to be accessed immediately
     by ``blkid(8)`` or by the kernel scanning for a partition table.
-  range: 0 to UINT_MAX
   tags:
   - prefetch
   - volume
-  when_to_change: TBD
 zvol_request_sync:
   notes: When processing I/O requests for a volume submit them synchronously.
     This effectively limits the queue depth to 1 for each I/O submitter. When
@@ -3086,4 +2961,3 @@ zvol_volmode:
     on volume block devices, 3=none, not exposing volumes outside ZFS
   tags:
   - volume
-  when_to_change: TBD
