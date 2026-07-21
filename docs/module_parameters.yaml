@@ -2113,18 +2113,14 @@ zfs_scan_ignore_errors:
   when_to_change: See description above
 zfs_scan_issue_strategy:
   notes: '``zfs_scan_issue_strategy`` controls the order of data verification
-    while scrubbing or resilvering. +-------+-------------------------------------------------------------+
-    | value | description | +=======+=============================================================+
-    | 0 | fs will use strategy 1 during normal verification and | | | strategy
-    2 while taking a checkpoint | +-------+-------------------------------------------------------------+
-    | 1 | data is verified as sequentially as possible, given the | | | amount
-    of memory reserved for scrubbing (see | | | zfs_scan_mem_lim_fact). This |
-    | | can improve scrub performance if the pool''s data is heavily | | | fragmented.
-    | +-------+-------------------------------------------------------------+
-    | 2 | the largest mostly-contiguous chunk of found data is | | | verified
-    first. By deferring scrubbing of small segments, | | | we may later find adjacent
-    data to coalesce and increase | | | the segment size. | +-------+-------------------------------------------------------------+'
-  range: 0 to 2
+    while scrubbing or resilvering.'
+  range: 0=fs will use strategy 1 during normal verification and strategy 2 while
+    taking a checkpoint, 1=data is verified as sequentially as possible, given
+    the amount of memory reserved for scrubbing (see ``zfs_scan_mem_lim_fact``).
+    This can improve scrub performance if the pool's data is heavily fragmented,
+    2=the largest mostly-contiguous chunk of found data is verified first. By
+    deferring scrubbing of small segments, we may later find adjacent data to
+    coalesce and increase the segment size
   tags:
   - resilver
   - scrub
@@ -2727,22 +2723,14 @@ zfs_vdev_raidz_impl:
     content of ``/sys/module/zfs/parameters/zfs_vdev_raidz_impl`` shows available
     options with the currently selected enclosed in ``[]``. Details of the results
     of the microbenchmark are observable in the ``/proc/spl/kstat/zfs/vdev_raidz_bench``
-    file. +----------------+----------------------+-------------------------+
-    | algorithm | architecture | description | +================+======================+=========================+
-    | fastest | all | fastest implementation | | | | selected by | | | | microbenchmark
-    | +----------------+----------------------+-------------------------+ | original
-    | all | original raidz | | | | implementation | +----------------+----------------------+-------------------------+
-    | scalar | all | scalar raidz | | | | implementation | +----------------+----------------------+-------------------------+
-    | sse2 | 64-bit x86 | uses SSE2 instruction | | | | set | +----------------+----------------------+-------------------------+
-    | ssse3 | 64-bit x86 | uses SSSE3 instruction | | | | set | +----------------+----------------------+-------------------------+
-    | avx2 | 64-bit x86 | uses AVX2 instruction | | | | set | +----------------+----------------------+-------------------------+
-    | avx512f | 64-bit x86 | uses AVX512F | | | | instruction set | +----------------+----------------------+-------------------------+
-    | avx512bw | 64-bit x86 | uses AVX512F & AVX512BW | | | | instruction sets
-    | +----------------+----------------------+-------------------------+ | aarch64_neon
-    | aarch64/64 bit ARMv8 | uses NEON | +----------------+----------------------+-------------------------+
-    | aarch64_neonx2 | aarch64/64 bit ARMv8 | uses NEON with more | | | | unrolling
-    | +----------------+----------------------+-------------------------+'
-  range: see table above
+    file.'
+  range: fastest=fastest implementation selected by microbenchmark, original=original
+    raidz implementation, scalar=scalar raidz implementation, sse2=uses the SSE2
+    instruction set, 64-bit x86, ssse3=uses the SSSE3 instruction set, 64-bit
+    x86, avx2=uses the AVX2 instruction set, 64-bit x86, avx512f=uses the AVX512F
+    instruction set, 64-bit x86, avx512bw=uses the AVX512F and AVX512BW instruction
+    sets, 64-bit x86, aarch64_neon=uses NEON, aarch64/64 bit ARMv8, aarch64_neonx2=uses
+    NEON with more unrolling, aarch64/64 bit ARMv8
   tags:
   - CPU
   - raidz
@@ -3092,13 +3080,10 @@ zvol_threads:
     requirements can improve concurrency
 zvol_volmode:
   notes: '``zvol_volmode`` defines volume block devices behaviour when the ``volmode``
-    property is set to ``default`` Note: to maintain compatibility with ZFS on
-    BSD, "geom" is synonymous with "full" ===== ======= ===========================================
-    value volmode Description ===== ======= ===========================================
-    1 full legacy fully functional behaviour (default) 2 dev hide partitions on
-    volume block devices 3 none not exposing volumes outside ZFS ===== =======
-    ==========================================='
-  range: 1, 2, or 3
+    property is set to ``default``. To maintain compatibility with ZFS on BSD,
+    "geom" is synonymous with "full".'
+  range: 1=full, legacy fully functional behaviour (default), 2=dev, hide partitions
+    on volume block devices, 3=none, not exposing volumes outside ZFS
   tags:
   - volume
   when_to_change: TBD
