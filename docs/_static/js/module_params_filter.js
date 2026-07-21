@@ -77,6 +77,7 @@
 
     var select = document.createElement("select");
     select.id = "zfs-param-version";
+    select.setAttribute("aria-label", "Show parameters of OpenZFS version");
     var options = [[ALL, "All versions"]].concat(
       versions.map(function (cls) {
         return [cls, label(cls)];
@@ -96,7 +97,8 @@
     var search = document.createElement("input");
     search.id = "zfs-param-search";
     search.type = "search";
-    search.placeholder = "arc_max";
+    search.placeholder = "name, e.g. arc_max";
+    search.setAttribute("aria-label", "Filter parameters by name");
     search.autocomplete = "off";
     search.spellcheck = false;
 
@@ -115,6 +117,20 @@
 
     var total = document.querySelectorAll("section.zfs-param").length;
     var tags = document.querySelectorAll("section.zfs-tag");
+    var tagIndex = document.getElementById("tags");
+
+    // Changing the filter deep in the page would otherwise leave the reader
+    // staring at whatever happens to be under the block; put the top of the
+    // results right below it instead.
+    function showResults() {
+      var anchor = tagIndex && tagIndex.offsetParent ? tagIndex : host;
+      var top =
+        anchor.getBoundingClientRect().top +
+        window.pageYOffset -
+        host.getBoundingClientRect().height -
+        12;
+      window.scrollTo({ top: Math.max(top, 0), behavior: "smooth" });
+    }
 
     function apply() {
       var value = select.value;
@@ -133,10 +149,17 @@
       });
 
       // a tag with nothing left under it is just a stray heading
+      var visibleTags = 0;
       tags.forEach(function (node) {
         var empty = !node.querySelector("li.zfs-param:not(.zfs-param-hidden)");
         node.classList.toggle("zfs-param-hidden", empty);
+        if (!empty) {
+          visibleTags += 1;
+        }
       });
+      if (tagIndex) {
+        tagIndex.classList.toggle("zfs-param-hidden", visibleTags === 0);
+      }
 
       count.textContent =
         value === ALL && !query
@@ -149,12 +172,17 @@
       }
     }
 
-    select.addEventListener("change", apply);
-    search.addEventListener("input", apply);
+    function refine() {
+      apply();
+      showResults();
+    }
+
+    select.addEventListener("change", refine);
+    search.addEventListener("input", refine);
     search.addEventListener("keydown", function (event) {
       if (event.key === "Escape") {
         search.value = "";
-        apply();
+        refine();
       }
     });
 
