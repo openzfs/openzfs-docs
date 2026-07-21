@@ -13,8 +13,11 @@ build:
 # Build documentation in the "docs/" directory with Sphinx
 sphinx:
   configuration: docs/conf.py
-  # Fail on all warnings to avoid broken references
-  # fail_on_warning: true
+  # fail_on_warning is intentionally not enabled here: this build does not run
+  # "make man"/"make feature_matrix", so the generated man pages and the
+  # feature matrix are missing and Sphinx warns about them.  Warnings are
+  # treated as errors in the GitHub Actions build instead, see
+  # .github/workflows/pull_request.yml
 
 # Optionally build docs in additional formats such as PDF and ePub
 # formats:

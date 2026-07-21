@@ -3,6 +3,18 @@ name: Pull Request Docs Check
 on: [pull_request]
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+    - name: Install flake8
+      run: pip install flake8
+    - name: Lint python sources
+      run: flake8
+
   build:
     runs-on: ubuntu-latest
     steps:
@@ -18,8 +30,10 @@ jobs:
       run: make man
     - name: Gen_feature_matrix
       run: make feature_matrix
+    # Warnings are errors here: broken references and malformed markup must
+    # not reach master. --keep-going reports every problem in one run.
     - name: Gen_sphinx
-      run: make html
+      run: make html SPHINXOPTS="-W --keep-going"
     - uses: actions/upload-artifact@v4
       with:
         name: DocumentationHTML
