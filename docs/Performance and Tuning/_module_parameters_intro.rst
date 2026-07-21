@@ -63,8 +63,9 @@ and are shipped with the version of OpenZFS you run.
 
 This page is generated from the same sources for every supported release,
 and adds the information that the man pages do not carry: which versions
-a parameter exists in, and the accumulated advice of ZFS developers and
-practitioners about when to change it.
+a parameter exists in, how its default changed between them, and the
+accumulated advice of ZFS developers and practitioners about when to
+change it.
 
 Use the selector above to restrict the page to the parameters that exist
 in a particular OpenZFS release, and the box next to it to narrow the
