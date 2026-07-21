@@ -635,7 +635,7 @@ Step 4: System Configuration
    Although this step is not necessary for ZFS, it is useful for internet
    browsing where local clock drift can cause login failures::
 
-     apt install systemd-timesyncd
+     apt install --yes systemd-timesyncd
 
 #. Install GRUB
 
@@ -648,7 +648,7 @@ Step 4: System Configuration
 
    - Install GRUB for UEFI booting::
 
-        apt install dosfstools
+        apt install --yes dosfstools
 
         mkdosfs -F 32 -s 1 -n EFI ${DISK}-part2
         mkdir /boot/efi
@@ -771,7 +771,7 @@ Step 4: System Configuration
 
 #. Optional (but kindly requested): Install popcon
 
-   The ``popularity-contest`` package reports the list of packages install
+   The ``popularity-contest`` package reports the list of packages installed
    on your system. Showing that ZFS is popular may be helpful in terms of
    long-term attention from the distro.
 
@@ -1005,7 +1005,7 @@ Step 8: Full Software Installation
 
 #. Install a regular set of software::
 
-     apt install tasksel
+     apt install --yes tasksel
      tasksel --new-install
 
    **Note:** This will check "Debian desktop environment" and "print server"
