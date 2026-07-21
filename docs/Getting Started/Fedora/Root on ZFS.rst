@@ -333,30 +333,31 @@ System Configuration
 
 #. Download and extract minimal Fedora root filesystem::
 
-     apk add curl
+     apk add curl jq
      curl --fail-early --fail -L \
-     https://dl.fedoraproject.org/pub/fedora/linux/releases/39/Container/x86_64/images/Fedora-Container-Base-39-1.5.x86_64.tar.xz \
-     -o rootfs.tar.gz
+     https://dl.fedoraproject.org/pub/fedora/linux/releases/44/Container/x86_64/images/Fedora-Container-Base-Generic-44-1.7.x86_64.oci.tar.xz \
+     -o rootfs.oci.tar.xz
      curl --fail-early --fail -L \
-     https://dl.fedoraproject.org/pub/fedora/linux/releases/39/Container/x86_64/images/Fedora-Container-39-1.5-x86_64-CHECKSUM \
+     https://dl.fedoraproject.org/pub/fedora/linux/releases/44/Container/x86_64/images/Fedora-Container-44-1.7-x86_64-CHECKSUM \
      -o checksum
 
      # BusyBox sha256sum treats all lines in the checksum file
      # as checksums and requires two spaces "  "
      # between filename and checksum
 
-     grep 'Container-Base' checksum \
+     grep 'Container-Base-Generic-44' checksum \
      | grep '^SHA256' \
-     | sed -E 's|.*= ([a-z0-9]*)$|\1  rootfs.tar.gz|' > ./sha256checksum
+     | sed -E 's|.*= ([a-z0-9]*)$|\1  rootfs.oci.tar.xz|' > ./sha256checksum
 
      sha256sum -c ./sha256checksum
 
-     rootfs_tar=$(tar t -af rootfs.tar.gz | grep layer.tar)
-     rootfs_tar_dir=$(dirname "${rootfs_tar}")
-     tar x -af rootfs.tar.gz "${rootfs_tar}"
-     ln -s "${MNT}" "${MNT}"/"${rootfs_tar_dir}"
-     tar x  -C "${MNT}" -af "${rootfs_tar}"
-     unlink "${MNT}"/"${rootfs_tar_dir}"
+     # the image is an OCI archive: its index names a manifest, which names
+     # the layer that holds the root filesystem
+     mkdir oci
+     tar x -af rootfs.oci.tar.xz -C oci
+     manifest="oci/blobs/sha256/$(jq -r '.manifests[0].digest' oci/index.json | cut -d: -f2)"
+     layer="oci/blobs/sha256/$(jq -r '.layers[0].digest' "${manifest}" | cut -d: -f2)"
+     tar x -C "${MNT}" -af "${layer}"
 
 #. Enable community repo
 
@@ -410,7 +411,7 @@ System Configuration
    .. code-block:: sh
 
     dnf -y install \
-    https://zfsonlinux.org/fedora/zfs-release-2-4"$(rpm --eval "%{dist}"||true)".noarch.rpm
+    https://zfsonlinux.org/fedora/zfs-release-3-1"$(rpm --eval "%{dist}"||true)".noarch.rpm
 
     dnf -y install zfs zfs-dracut
 
@@ -420,7 +421,7 @@ System Configuration
     # no need to test building in chroot
 
     dnf -y install \
-    https://zfsonlinux.org/fedora/zfs-release-2-4"$(rpm --eval "%{dist}"||true)".noarch.rpm
+    https://zfsonlinux.org/fedora/zfs-release-3-1"$(rpm --eval "%{dist}"||true)".noarch.rpm
 
 #. Check whether ZFS modules are successfully built
 
