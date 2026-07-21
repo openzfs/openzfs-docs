@@ -243,6 +243,10 @@ def parse_man(repo, tag):
     return defaults
 
 
+# "0=disabled, 1=enabled" - a curated range that explains every value
+RANGE_ITEM = re.compile(
+    r'(?:^|[,;]\s*)(?P<value>[A-Za-z0-9_.\-]{1,20})\s*=\s*')
+
 SIZE_UNITS = {'b': 1, 'kb': 1024, 'kib': 1024, 'mb': 1024 ** 2,
               'mib': 1024 ** 2, 'gb': 1024 ** 3, 'gib': 1024 ** 3,
               'tb': 1024 ** 4, 'tib': 1024 ** 4}
@@ -384,14 +388,42 @@ def default_runs(meta, order):
     return runs
 
 
+def field_table(rows):
+    """A two column table to be indented under a field name."""
+    lines = ['.. list-table::',
+             '   :widths: auto',
+             '   :class: zfs-field-table',
+             '']
+    for left, right in rows:
+        lines += ['   * - {}'.format(left), '     - {}'.format(right)]
+    return lines
+
+
 def default_field(meta, order):
-    """One default, or the history of it when upstream changed it."""
+    """One default, or a table of them when upstream changed it."""
     runs = default_runs(meta, order)
     if len(runs) < 2:
         return '``{}``'.format(meta['default']) if meta.get('default') else ''
-    return ', '.join(
-        '``{}`` in {}'.format(shown, version_range(versions, order))
+    return field_table(
+        (version_range(versions, order), '``{}``'.format(shown))
         for _, shown, versions in reversed(runs))
+
+
+def range_field(text):
+    """A range, or a table when the curated text explains every value."""
+    if not text:
+        return ''
+    starts = list(RANGE_ITEM.finditer(text))
+    if len(starts) < 2:
+        return rst_escape(text)
+    rows = []
+    for index, match in enumerate(starts):
+        end = (starts[index + 1].start() if index + 1 < len(starts)
+               else len(text))
+        meaning = text[match.end():end].strip().rstrip(',;')
+        rows.append(('``{}``'.format(match.group('value')),
+                     rst_escape(meaning)))
+    return field_table(rows)
 
 
 def version_class(version):
@@ -576,7 +608,7 @@ def render(params, order, overlay, intro_include, tags_of):
              if (meta['type'] or meta.get('man_type')) else ''),
             ('Default', default_field(meta, order)),
             ('Units', meta.get('units', '')),
-            ('Range', curated.get('range', '')),
+            ('Range', range_field(curated.get('range', ''))),
             ('Change', PERM_LABEL.get(meta['perm'], '')),
             ('Tags', ', '.join(
                 '`{tag} <#{anchor}>`__'.format(
@@ -584,8 +616,14 @@ def render(params, order, overlay, intro_include, tags_of):
                 for tag in tags_of[name])),
         ]
         for label, value in fields:
-            if value:
+            if not value:
+                continue
+            if isinstance(value, str):
                 out.append(':{}: {}'.format(label, value))
+            else:  # a table, which has to start on its own line
+                out.append(':{}:'.format(label))
+                out += ['   ' + line if line else '' for line in value]
+                out.append('')
         out.append('')
         if meta['desc']:
             out += [rst_escape(meta['desc']), '']
