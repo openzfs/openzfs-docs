@@ -326,10 +326,10 @@ System Configuration
      apk add curl
 
      curl --fail-early --fail -L \
-     https://america.archive.pkgbuild.com/iso/2024.01.01/archlinux-bootstrap-x86_64.tar.gz \
+     https://archive.archlinux.org/iso/2024.01.01/archlinux-bootstrap-x86_64.tar.gz \
      -o rootfs.tar.gz
      curl --fail-early --fail -L \
-     https://america.archive.pkgbuild.com/iso/2024.01.01/archlinux-bootstrap-x86_64.tar.gz.sig \
+     https://archive.archlinux.org/iso/2024.01.01/archlinux-bootstrap-x86_64.tar.gz.sig \
      -o rootfs.tar.gz.sig
 
      apk add gnupg
@@ -394,10 +394,6 @@ System Configuration
 
        ## Germany
        #,Server = https://mirror.sum7.eu/archlinux/archzfs/$repo/$arch
-       #,Server = https://mirror.biocrafting.net/archlinux/archzfs/$repo/$arch
-
-       ## India
-       #,Server = https://mirror.in.themindsmaze.com/archzfs/$repo/$arch
 
        ## United States
        #,Server = https://zxcvfdsa.com/archzfs/$repo/$arch
@@ -427,7 +423,7 @@ System Configuration
      | grep 'Depends On' \
      | sed "s|.*linux=||" \
      | awk '{ print $1 }')"
-     pacman -U --noconfirm https://america.archive.pkgbuild.com/packages/l/linux/linux-"${kernel_compatible_with_zfs}"-x86_64.pkg.tar.zst
+     pacman -U --noconfirm https://archive.archlinux.org/packages/l/linux/linux-"${kernel_compatible_with_zfs}"-x86_64.pkg.tar.zst
 
 #. Install zfs packages::
 
