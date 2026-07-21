@@ -1677,9 +1677,8 @@ zfs_metaslab_fragmentation_threshold:
     metaslabs. See also zfs_mg_fragmentation_threshold
   range: 1 to 100
   tags:
-  - agmentation
   - allocation
-  - fr
+  - fragmentation
   - vdev
   when_to_change: Testing metaslab allocation
 zfs_metaslab_segment_weight_enabled:
@@ -2461,8 +2460,7 @@ zfs_vdev_aggregation_limit_non_rotating:
     and are expected to be SSDs.'
   range: 0 to MAX_INT
   tags:
-  - IO_scheduler
-  - Z
+  - ZIO_scheduler
   - vdev
   when_to_change: see zfs_vdev_aggregation_limit
 zfs_vdev_async_read_max_active:
@@ -2487,8 +2485,7 @@ zfs_vdev_async_write_active_max_dirty_percent:
     is linearly interpolated between zfs_vdev_async_write_min_active and zfs_vdev_async_write_max_active
   range: 0 to 100
   tags:
-  - IO_scheduler
-  - Z
+  - ZIO_scheduler
   - vdev
   when_to_change: See ZFS I/O Sch eduler
 zfs_vdev_async_write_active_min_dirty_percent:
@@ -2498,8 +2495,7 @@ zfs_vdev_async_write_active_min_dirty_percent:
     and zfs_vdev_async_write_max_active
   range: 0 to (zfs_vdev_async_write_active_max_dirty_percent - 1)
   tags:
-  - IO_scheduler
-  - Z
+  - ZIO_scheduler
   - vdev
   when_to_change: See ZFS I/O Sch eduler
 zfs_vdev_async_write_max_active:
@@ -2568,8 +2564,7 @@ zfs_vdev_initializing_max_active:
     active to each device.'
   range: 1 to zfs_vdev_max_active
   tags:
-  - IO_scheduler
-  - Z
+  - ZIO_scheduler
   - vdev
   when_to_change: See ZFS I/O Sch eduler
 zfs_vdev_initializing_min_active:
@@ -2577,8 +2572,7 @@ zfs_vdev_initializing_min_active:
     active to each device.'
   range: 1 to zfs_vdev_initializing_max_active
   tags:
-  - IO_scheduler
-  - Z
+  - ZIO_scheduler
   - vdev
   when_to_change: See ZFS I/O Sch eduler
 zfs_vdev_max_active:
@@ -2988,8 +2982,7 @@ zio_requeue_io_start_cut_in_line:
     ZFS I/O (ZIO) in the ZIO pipeline by the ZIO taskq.'
   range: 0=don't prioritize re-queued I/Os, 1=prioritize re-queued I/Os
   tags:
-  - IO_scheduler
-  - Z
+  - ZIO_scheduler
   when_to_change: Do not change
 zio_slow_io_ms:
   notes: An I/O operation taking more than ``zio_slow_io_ms`` milliseconds to

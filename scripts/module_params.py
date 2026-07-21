@@ -64,6 +64,31 @@ PERM_LABEL = {
     'ZMOD_RD': 'Prior to module load',
 }
 
+# Scopes and file names that mean the same thing as a tag already in use
+TAG_ALIASES = {
+    'mg': 'metaslab',
+    'recv': 'receive',
+    'vol': 'zvol',
+    'vdev_raidz': 'raidz',
+    'zevent': 'zed',
+}
+
+# Tags derived from the sources are spelled the way the curated ones are;
+# these are the ones the overlay does not already spell for us.
+TAG_SPELLING = {
+    'brt': 'BRT',
+    'ddt': 'DDT',
+    'dmu': 'DMU',
+    'dsl': 'DSL',
+    'icp': 'ICP',
+    'spl': 'SPL',
+    'txg': 'TXG',
+    'zap': 'ZAP',
+    'zed': 'ZED',
+    'zio': 'ZIO',
+    'zvol': 'ZVOL',
+}
+
 
 def split_args(text):
     """Split macro arguments on top-level commas, keeping strings intact."""
@@ -105,6 +130,37 @@ def join_string_literals(args):
         return ''
     parts = re.findall(r'"((?:[^"\\]|\\.)*)"', literals[-1])
     return ''.join(parts).replace('\\"', '"').replace('\\n', ' ').strip()
+
+
+def source_tags(scope, path, name):
+    """Group a parameter by what the sources say it belongs to.
+
+    The first argument of ZFS_MODULE_PARAM is the subsystem the parameter
+    belongs to - it is what FreeBSD builds its sysctl node from - so use
+    it, and fall back to the file for the parameters declared with the
+    plain Linux macros, which carry no such argument. Nested scopes also
+    yield their parent, so that "vdev" lists the mirror and disk
+    parameters too.
+    """
+    tags = set()
+    scope = scope[len('zfs_'):] if scope.startswith('zfs_') else scope
+    if scope and scope != 'zfs':
+        tags.add(scope)
+        tags.add(scope.split('_')[0])
+
+    stem = os.path.basename(path).rsplit('.', 1)[0].replace('-', '_')
+    for prefix in ('zfs_', 'zpl_', 'spl_'):
+        stem = stem[len(prefix):] if stem.startswith(prefix) else stem
+    for suffix in ('_os', '_impl', '_misc'):
+        stem = stem[:-len(suffix)] if stem.endswith(suffix) else stem
+    if stem:
+        tags.add(stem)
+        tags.add(stem.split('_')[0])
+    # the SPL and ICP parameters live in their own modules, say so
+    for module in ('spl', 'icp'):
+        if name.startswith(module + '_'):
+            tags.add(module)
+    return {t for t in tags if len(t) > 1}
 
 
 def platform_of(path):
@@ -170,6 +226,7 @@ def extract_legacy(text, path):
                     else 'ZMOD_RD',
             'desc': descs.get(name, ''),
             'platforms': platform_of(path),
+            'tags': source_tags('', path, name),
         }
     return params
 
@@ -200,6 +257,7 @@ def extract_params(repo, tag):
                 'perm': perm,
                 'desc': join_string_literals(args),
                 'platforms': platform_of(path),
+                'tags': source_tags(args[0].strip(), path, name),
             }
     return params
 
@@ -287,10 +345,64 @@ def version_range(present, order):
     return ', '.join(a if a == b else '{} - {}'.format(a, b) for a, b in runs)
 
 
-def render(params, order, overlay, intro_include):
-    tags = defaultdict(list)
+def merge_tags(params, overlay):
+    """Tags of every parameter: curated ones plus the ones the sources give.
+
+    Without this only the parameters somebody wrote notes for would appear
+    in the tag index. The curated spelling wins where both exist, so that
+    the source-derived "arc" joins the curated "ARC" instead of starting a
+    section of its own.
+    """
+    spelling = dict(TAG_SPELLING)
+    for entry in overlay.values():
+        for tag in entry.get('tags', []):
+            spelling[tag.lower()] = tag
+
+    def canonical(tag):
+        tag = TAG_ALIASES.get(tag.lower(), tag)
+        return spelling.get(tag.lower(), tag)
+
+    # The curated tags are the vocabulary somebody chose on purpose, so let
+    # a parameter into them when its own name says it belongs there:
+    # zfs_scrub_partial_writes lands under "scrub" without anyone writing
+    # notes for it.
+    vocabulary = {tag.lower(): tag for entry in overlay.values()
+                  for tag in entry.get('tags', [])}
+
+    def name_tags(name):
+        padded = '_{}_'.format(name)
+        return {display for word, display in vocabulary.items()
+                if '_{}_'.format(word) in padded}
+
+    curated, derived = {}, {}
     for name, meta in params.items():
-        for tag in overlay.get(name, {}).get('tags', []):
+        curated[name] = {canonical(tag)
+                         for tag in overlay.get(name, {}).get('tags', [])}
+        derived[name] = ({canonical(tag) for tag in meta.get('tags', set())}
+                         | name_tags(name)) - curated[name]
+
+    # a source tag that groups a single parameter is just a file name, keep
+    # it only when it is all that parameter has
+    common = defaultdict(int)
+    for tags in derived.values():
+        for tag in tags:
+            common[tag] += 1
+
+    tags_of = {}
+    for name in params:
+        useful = {tag for tag in derived[name] if common[tag] > 1}
+        tags = curated[name] | useful
+        if not tags:
+            tags = derived[name]
+        tags_of[name] = sorted(tags, key=str.lower)
+    return tags_of
+
+
+def render(params, order, overlay, intro_include):
+    tags_of = merge_tags(params, overlay)
+    tags = defaultdict(list)
+    for name in params:
+        for tag in tags_of[name]:
             tags[tag].append(name)
 
     out = [
@@ -358,7 +470,10 @@ def render(params, order, overlay, intro_include):
             ('Units', meta.get('units', '')),
             ('Range', curated.get('range', '')),
             ('Change', PERM_LABEL.get(meta['perm'], '')),
-            ('Tags', ', '.join(curated.get('tags', []))),
+            ('Tags', ', '.join(
+                '`{tag} <#{anchor}>`__'.format(
+                    tag=tag, anchor=tag.lower().replace('_', '-'))
+                for tag in tags_of[name])),
         ]
         for label, value in fields:
             if value:
