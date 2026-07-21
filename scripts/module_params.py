@@ -254,6 +254,9 @@ OVERLAY_KEYS = {'tags', 'range', 'when_to_change', 'verification', 'notes'}
 TAG_PATTERN = re.compile(r'^[A-Za-z][A-Za-z0-9_+.-]+$')
 # a table flattened into one line by the migration from the old page
 TABLE_LEFTOVER = re.compile(r'={4,}\s|\+-{3,}\+')
+# text escaped for reStructuredText, which the generator does by itself
+PRE_ESCAPED = re.compile(r'\\[*|_`]')
+PLACEHOLDERS = frozenset({'TBD', 'TODO', 'N/A', 'FIXME', '?'})
 # a version named in the curated text; "3.2%" is a share of a pool, not one
 VERSION_MENTION = re.compile(r'\bv?(?P<version>\d+\.\d+)(?:\.\d+)?\b(?!\s*%)')
 
@@ -425,14 +428,13 @@ def range_field(text):
         return ''
     starts = list(RANGE_ITEM.finditer(text))
     if len(starts) < 2:
-        return rst_escape(text)
+        return text
     rows = []
     for index, match in enumerate(starts):
         end = (starts[index + 1].start() if index + 1 < len(starts)
                else len(text))
         meaning = text[match.end():end].strip().rstrip(',;')
-        rows.append(('``{}``'.format(match.group('value')),
-                     rst_escape(meaning)))
+        rows.append(('``{}``'.format(match.group('value')), meaning))
     return field_table(rows)
 
 
@@ -640,9 +642,16 @@ def render(params, order, overlay, intro_include, tags_of):
         for label, key in (('When to change', 'when_to_change'),
                            ('Verification', 'verification'),
                            ('Notes', 'notes')):
-            if curated.get(key):
-                out += ['**{}:** {}'.format(label, rst_escape(curated[key])),
-                        '']
+            text = (curated.get(key) or '').rstrip()
+            if not text:
+                continue
+            # the overlay is written in reStructuredText, so it goes in as
+            # it stands; only what comes from the sources is escaped
+            lines = text.split('\n')
+            if len(lines) == 1:
+                out += ['**{}:** {}'.format(label, lines[0]), '']
+            else:
+                out += ['**{}:**'.format(label), ''] + lines + ['']
     return '\n'.join(out) + '\n'
 
 
@@ -660,7 +669,10 @@ def coverage(params, overlay, order):
     for name, meta in sorted(params.items()):
         if current not in meta['versions']:
             continue  # removed upstream, nothing to document
-        if name in overlay:
+        # tags alone are navigation, not advice: such a parameter still
+        # waits for somebody to write about it
+        if any(key in overlay.get(name, {})
+               for key in ('notes', 'when_to_change', 'verification')):
             continue
         if not meta['desc'] and not meta.get('in_man'):
             undocumented.append(name)
@@ -793,6 +805,14 @@ def check_entry(name, entry, vocabulary=frozenset()):
             problems.append(
                 '{} holds the remains of a table; describe the values in '
                 '"range" instead, which is rendered as one'.format(key))
+        elif value.strip().upper() in PLACEHOLDERS:
+            problems.append(
+                '{} is a placeholder; leave the field out instead, so that '
+                'the parameter is counted as undocumented'.format(key))
+        elif PRE_ESCAPED.search(value):
+            problems.append(
+                '{} is escaped for reStructuredText; write the text plainly, '
+                'the generator escapes what needs it'.format(key))
     return problems
 
 
