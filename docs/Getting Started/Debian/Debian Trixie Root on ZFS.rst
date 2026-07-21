@@ -597,7 +597,11 @@ Step 4: System Configuration
    and tools to configure the radio. Install some additional packages to
    cover that need::
 
-     apt install --yes firmware-linux wireless-tools
+     apt install --yes firmware-linux iw wpasupplicant
+
+   ``wpasupplicant`` is required to join WPA-protected networks. If you
+   install a desktop environment later, NetworkManager will take over the
+   configuration of the radio.
 
 #. Install ZFS in the chroot environment for the new system::
 
