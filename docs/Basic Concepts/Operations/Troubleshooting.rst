@@ -139,6 +139,24 @@ See
 :doc:`Changing Pool Layout </Basic Concepts/Pool Structure/Changing Pool Layout>`
 for checkpoints.
 
+A pool that was **destroyed** is not immediately gone. ``zpool import -D``
+lists destroyed pools, and importing with ``-D`` brings one back, as long as
+its devices have not been reused:
+
+.. code:: bash
+
+   zpool import -D                 # what can still be recovered
+   zpool import -D pool
+
+Importing somewhere unusual — a rescue environment, or a pool whose mount
+points would collide with the running system — is what ``-R`` is for. It sets
+``altroot``, so every mount point is prefixed, and ``cachefile=none`` so the
+import is not remembered:
+
+.. code:: bash
+
+   zpool import -R /mnt -N pool
+
 Device names that changed between boots are a common cause of a pool that
 "disappeared" — import with ``-d /dev/disk/by-id`` and see the
 :doc:`FAQ </Project and Community/FAQ>` on selecting ``/dev/`` names.
@@ -203,6 +221,17 @@ only once the deadman timer expires.
 is 1. This is frequently what developers ask for.
 
 **Per-pool I/O statistics.** ``/proc/spl/kstat/zfs/<pool>/`` on Linux.
+
+**What was done to this pool.** ``zpool history`` replays the administrative
+commands the pool has seen — stored in the pool itself, so it survives
+reboots and moves with the pool to another host. Frequently the fastest way
+to answer "what changed?".
+
+.. code:: bash
+
+   zpool history pool
+   zpool history -l pool           # who, from which host
+   zpool history -i pool           # include internally logged events
 
 Logging infrastructure — elasticsearch, fluentd, influxdb, splunk — makes
 correlating these with system events considerably easier.
