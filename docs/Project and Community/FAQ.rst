@@ -52,8 +52,8 @@ Installation
 ------------
 
 OpenZFS is available for FreeBSD and all major Linux distributions. Refer to
-the :doc:`getting started <../Getting Started/index>` section of the wiki for
-links to installations instructions. If your distribution/OS isn't
+the :doc:`getting started <../Getting Started/index>` section for
+links to installation instructions. If your distribution/OS isn't
 listed you can always build OpenZFS from the latest official
 `tarball <https://github.com/openzfs/zfs/releases>`__.
 
@@ -69,9 +69,14 @@ Supported Linux Kernels
 The `notes <https://github.com/openzfs/zfs/releases>`__ for a given
 OpenZFS release will include a range of supported kernels. Point
 releases will be tagged as needed in order to support the *stable*
-kernel available from `kernel.org <https://www.kernel.org/>`__. The
-oldest supported kernel is 2.6.32 due to its prominence in Enterprise
-Linux distributions.
+kernel available from `kernel.org <https://www.kernel.org/>`__.
+
+The authoritative range for any given branch is the ``Linux-Minimum`` and
+``Linux-Maximum`` pair in the
+`META <https://github.com/openzfs/zfs/blob/master/META>`__ file of that
+branch. Older kernels are dropped as enterprise distributions retire them —
+the minimum has risen well past the 2.6.32 that early ZFS on Linux releases
+supported.
 
 .. _32-bit-vs-64-bit-systems:
 
@@ -100,12 +105,9 @@ increase the virtual address size with the boot option ``vmalloc=512M``.
    vmap allocation for size 4198400 failed: use vmalloc=<size> to increase size.
 
 However, even after making this change your system will likely not be
-entirely stable. Proper support for 32-bit systems is contingent upon
-the OpenZFS code being weaned off its dependence on virtual memory. This
-will take some time to do correctly but it is planned for OpenZFS. This
-change is also expected to improve how efficiently OpenZFS manages the
-ARC cache and allow for tighter integration with the standard Linux page
-cache.
+entirely stable. Proper support for 32-bit systems would require weaning the
+OpenZFS code off its dependence on virtual memory, which has not happened.
+32-bit systems should be treated as unsupported in practice.
 
 Booting from ZFS
 ----------------
@@ -390,6 +392,10 @@ be explicitly imported by the failover software.
 Sending and Receiving Streams
 -----------------------------
 
+For how ``zfs send`` and ``zfs receive`` work in general, see
+:doc:`Send and Receive </Basic Concepts/Operations/Send and Receive>`. The entries
+below cover known caveats.
+
 hole_birth Bugs
 ~~~~~~~~~~~~~~~
 
@@ -500,7 +506,9 @@ Performance Considerations
 --------------------------
 
 To achieve good performance with your pool there are some easy best
-practices you should follow.
+practices you should follow. See also
+:doc:`Workload Tuning <../Performance and Tuning/Workload Tuning>` and
+:doc:`Caching and Auxiliary Devices </Basic Concepts/Pool Structure/Caching>`.
 
 -  **Evenly balance your disks across controllers:** Often the limiting
    factor for performance is not the disks but the controller. By
@@ -644,7 +652,7 @@ the following contents:
 Licensing
 ---------
 
-License information can be found `here <https://openzfs.github.io/openzfs-docs/License.html>`__.
+License information can be found on the :doc:`License <../License>` page.
 
 Reporting a problem
 -------------------
@@ -663,7 +671,8 @@ When opening a new issue include this information at the top of the
 issue:
 
 -  What distribution you're using and the version.
--  What spl/zfs packages you're using and the version.
+-  What OpenZFS packages you're using and the version, as reported by
+   ``zfs version``.
 -  Describe the problem you're observing.
 -  Describe how to reproduce the problem.
 -  Including any warning/errors/backtraces from the system logs.
@@ -683,7 +692,7 @@ to get it resolved. They may ask for information like:
    -  Whether your system has ECC memory.
    -  Whether it is running under a VMM/Hypervisor.
    -  Kernel version.
-   -  Values of the spl/zfs module parameters.
+   -  Values of the OpenZFS module parameters.
 
 -  Stack traces which may be logged to ``dmesg``.
 
