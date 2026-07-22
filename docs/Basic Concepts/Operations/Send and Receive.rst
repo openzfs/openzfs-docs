@@ -207,8 +207,14 @@ usually helps.
 ``-w`` need the corresponding features on the receiving pool.
 
 Doing the snapshot, retention, hold and resume-token bookkeeping by hand gets
-tedious — dedicated replication tools built on ``zfs send``/``receive`` handle
-it. See the :doc:`FAQ </Project and Community/FAQ>` for stream caveats such as
+tedious. Several third-party tools build on ``zfs send``/``receive`` to handle
+it — ``sanoid``/``syncoid``, ``zrepl`` and ``zfstools`` are among the
+established ones, and the `OpenZFS wiki
+<https://openzfs.org/wiki/System_Administration#Third_party_tools>`__ keeps a
+broader list. None of them are part of OpenZFS; evaluate them as you would any
+other dependency in the path of your backups.
+
+See the :doc:`FAQ </Project and Community/FAQ>` for stream caveats such as
 ``hole_birth``.
 
 Further reading
