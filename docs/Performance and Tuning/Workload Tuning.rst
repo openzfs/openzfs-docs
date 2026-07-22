@@ -19,6 +19,10 @@ performance follow.
 Adaptive Replacement Cache
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+See :doc:`Caching and Auxiliary Devices </Basic Concepts/Pool Structure/Caching>` for how
+the ARC relates to L2ARC, SLOG and special vdevs, and when each is worth
+adding.
+
 For decades, operating systems have used RAM as a cache to avoid the
 necessity of waiting on disk IO, which is extremely slow. This concept
 is called page replacement. Until ZFS, virtually all filesystems used
@@ -267,6 +271,10 @@ needs to be changed to favor one or the other:
 Deduplication
 ~~~~~~~~~~~~~
 
+See :doc:`Deduplication </Basic Concepts/Data Storage/Deduplication>` for the
+operational side, including the ``dedup_table_quota`` and ``zpool ddtprune``
+mechanisms for keeping the table bounded, and dedicated dedup vdevs.
+
 Deduplication uses an on-disk hash table, using `extensible
 hashing <http://en.wikipedia.org/wiki/Extensible_hashing>`__ as
 implemented in the ZAP (ZFS Attribute Processor). Each cached entry uses
@@ -294,8 +302,11 @@ metadata and therefore can be cached if the ``primarycache`` or
 deduplication table will compete with other metadata for metadata
 storage, which can have a negative effect on performance. Simulation of
 the number of deduplication table entries needed for a given pool can be
-done using the -D option to zdb. Then a simple multiplication by
-320-bytes can be done to get the approximate memory requirements.
+done using the ``-S`` option to zdb, which constructs a DDT for the data
+already in the pool and reports the ratio you would have obtained. (``-D``
+displays the DDT that already exists, if dedup is enabled.) Then a simple
+multiplication by 320-bytes can be done to get the approximate memory
+requirements.
 Alternatively, you can estimate an upper bound on the number of unique
 blocks by dividing the amount of storage you plan to use on each dataset
 (taking into account that partial records each count as a full
@@ -446,7 +457,7 @@ reduces IOPS, especially as more metaslabs reach the 4% threshold.
 The recommendation is 10% rather than 5% because metaslabs selection
 considers both location and free space unless the global
 metaslab_lba_weighting_enabled tunable is set to 0. When that tunable is
-0, ZFS will consider only free space, so the the expense of the best-fit
+0, ZFS will consider only free space, so the expense of the best-fit
 allocator can be avoided by keeping free space above 5%. That setting
 should only be used on systems with pools that consist of solid state
 drives because it will reduce sequential IO performance on mechanical
@@ -457,8 +468,12 @@ disks.
 LZ4 compression
 ~~~~~~~~~~~~~~~
 
-Set compression=lz4 on your pools' root datasets so that all datasets
-inherit it unless you have a reason not to enable it. Userland tests of
+Since OpenZFS 2.2.0 ``compression`` defaults to ``on``, which selects LZ4 on
+any pool with the ``lz4_compress`` feature enabled, so there is usually
+nothing to do. On pools created under older releases, or where compression
+was explicitly disabled, set compression=lz4 (or ``on``) on the pools' root
+datasets so that all datasets inherit it unless you have a reason not to
+enable it. Userland tests of
 LZ4 compression of incompressible data in a single thread has shown that
 it can process 10GB/sec, so it is unlikely to be a bottleneck even on
 incompressible data. Furthermore, incompressible data will be stored
@@ -495,9 +510,9 @@ Synchronous I/O
 If your workload involves fsync or O_SYNC and your pool is backed by
 mechanical storage, consider adding one or more SLOG devices. Pools that
 have multiple SLOG devices will distribute ZIL operations across them.
-The best choice for SLOG device(s) are likely Optane / 3D XPoint SSDs.
-See :ref:`optane_3d_xpoint_ssds`
-for a description of them. If an Optane / 3D XPoint SSD is an option,
+Optane / 3D XPoint SSDs remain the best SLOG devices, but they are no
+longer manufactured — see :ref:`optane_3d_xpoint_ssds`.
+If an Optane / 3D XPoint SSD is an option,
 the rest of this section on synchronous I/O need not be read. If Optane
 / 3D XPoint SSDs is not an option, see
 :ref:`nand_flash_ssds` for suggestions
