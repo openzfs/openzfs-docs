@@ -139,6 +139,29 @@ The ``snapshots_changed`` property records when a snapshot of the dataset was
 last created or destroyed, which lets monitoring and backup tooling skip
 datasets that cannot have changed without walking the whole snapshot list.
 
+.. _snapshot-scheduling:
+
+Taking them on a schedule
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+ZFS creates snapshots but does not schedule or expire them. Something has to
+decide when to take one and when to destroy it, or a pool quietly fills with
+years of hourlies.
+
+A timer calling ``zfs snapshot -r`` and a second one destroying anything older
+than *N* is enough for simple cases. Beyond that, third-party tools handle
+retention policies, and the same ones usually handle replication —
+``sanoid``/``syncoid``, ``zrepl`` and ``zfstools`` are among the established
+ones. None are part of OpenZFS, so treat them as you would any other
+dependency holding your backups.
+
+Some tools key off the ``com.sun:auto-snapshot`` user property to decide which
+datasets to include, which is why it appears in examples such as the swap zvol
+in :doc:`ZVOLs </Basic Concepts/Datasets/ZVOLs>`.
+
+See :doc:`Send and Receive </Basic Concepts/Operations/Send and Receive>` for
+the replication side.
+
 Clones
 ~~~~~~
 
