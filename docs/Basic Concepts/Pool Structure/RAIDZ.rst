@@ -43,7 +43,7 @@ Actual used space for a block in RAIDZ is based on several points:
   2 blocks of parity
 
 Due to these inputs, if ``recordsize`` is less or equal to sector size,
-then RAIDZ's parity size will be effictively equal to mirror with same redundancy.
+then RAIDZ's parity size will be effectively equal to mirror with same redundancy.
 For example, for raidz1 of 3 disks with ``ashift=12`` and ``recordsize=4K``
 we will allocate on disk:
 
@@ -87,3 +87,62 @@ Write
 
 A stripe spans across all drives in the array. A one block write will write the stripe part onto each disk.
 A RAIDZ vdev has a write IOPS of the slowest disk in the array in the worst case because the write operation of all stripe parts must be completed on each disk.
+
+Read
+^^^^
+
+A read touches only the columns the block actually occupies, not the whole
+group. A block of ``N`` sectors that does not fill a complete stripe row is
+laid out across ``N`` data columns; the rest of the group is untouched.
+Parity is not read at all on a healthy read — it is fetched only when data is
+missing, or during a scrub or resilver.
+
+So the width of the vdev is not what decides read behavior — the ratio between
+block size and stripe width is:
+
+* When a block spans **all** data columns — the usual case, since the default
+  ``recordsize`` of 128 KiB fills any realistic group — every read costs one
+  I/O on every data disk. Random-read IOPS then works out roughly the same as
+  a single disk's, however wide the group.
+* When blocks are **small** relative to the group — a database with
+  ``recordsize=8K`` or ``16K`` on a wide vdev — each read lands on only a few
+  disks, and concurrent reads to different blocks proceed in parallel. IOPS
+  does scale in that regime, at the cost of the poor space efficiency small
+  records have on RAIDZ (see above).
+
+Streaming bandwidth scales with the number of data disks in both cases.
+
+The rule of thumb "RAIDZ gives you the IOPS of one disk" is therefore about
+the default large-record configuration, not a property of RAIDZ itself. It is
+still the right assumption for general-purpose pools, and mirrors remain the
+better choice when random-read IOPS is the binding constraint.
+
+One slow disk
+"""""""""""""
+
+Because a read completes only when every column it spans has returned, its
+latency is that of the slowest disk involved. A single sick drive can
+therefore drag down a whole group
+(`#9375 <https://github.com/openzfs/zfs/issues/9375>`__).
+
+Since OpenZFS 2.4 this is detected and worked around: a persistently slow
+child is put in a *sit out* state, during which reads skip it and reconstruct
+its data from parity. Writes still go to it, so redundancy is maintained, and
+scrubs always read it. Up to ``nparity`` disks may sit out at once. The period
+is set by ``vdev_read_sit_out_secs`` (default 600 s; ``0`` disables detection
+entirely). Each sit-out bumps the vdev's ``slow_ios`` counter and posts an
+``ereport.fs.zfs.delay`` event.
+
+Expansion
+~~~~~~~~~
+
+A raidz vdev can be widened by attaching another device to it:
+
+.. code:: bash
+
+   zpool attach pool raidz2-0 sdX
+
+Fault tolerance is unchanged — a RAID-Z2 stays a RAID-Z2 — and blocks written
+before the expansion keep their original data-to-parity ratio, just spread
+over more disks. Only newly written blocks use the wider ratio. See
+:doc:`Changing Pool Layout </Basic Concepts/Pool Structure/Changing Pool Layout>`.

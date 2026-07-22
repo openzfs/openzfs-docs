@@ -139,4 +139,4 @@ Disabling Checksums
 
 While it may be tempting to disable checksums to improve CPU
 performance, it is widely considered by the ZFS community to be an
-extrodinarily bad idea. Don't disable checksums.
+extraordinarily bad idea. Don't disable checksums.
