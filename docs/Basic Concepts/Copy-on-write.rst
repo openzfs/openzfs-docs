@@ -32,7 +32,8 @@ Modifying a block in the middle of the tree cannot happen in place, so ZFS:
 
 .. raw:: html
 
-   <div style="overflow-x:auto;margin:1.75em 0">
+   <div style="margin:1.75em 0">
+   <div style="overflow-x:auto">
    <svg id="cow-diagram" viewBox="0 0 600 400" width="100%"
         style="max-width:600px;height:auto" role="img"
         aria-label="A ZFS block tree being updated. Modifying data block D4
@@ -43,7 +44,6 @@ Modifying a block in the middle of the tree cannot happen in place, so ZFS:
      <style>
        #cow-diagram {
          --cow-new: #1f7a4d;
-         --cow-dur: 9s;
        }
        @media (prefers-color-scheme: dark) {
          #cow-diagram { --cow-new: #56c98d; }
@@ -67,23 +67,21 @@ Modifying a block in the middle of the tree cannot happen in place, so ZFS:
        #cow-diagram .cow-key { fill: currentColor;
          font-family: ui-monospace,SFMono-Regular,Menlo,monospace;
          font-size: 11px; }
-       #cow-diagram .cow-step {
-         animation: cow-fade var(--cow-dur) ease-in-out infinite;
-         transform-box: fill-box; transform-origin: center; }
-       #cow-diagram .cow-s1 { animation-delay: 0s; }
-       #cow-diagram .cow-s2 { animation-delay: .9s; }
-       #cow-diagram .cow-s3 { animation-delay: 1.8s; }
-       #cow-diagram .cow-s4 { animation-delay: 2.7s; }
-       #cow-diagram .cow-s5 { animation-delay: 3.6s; }
-       @keyframes cow-fade {
-         0%      { opacity: 0; transform: translateY(7px) scale(.94); }
-         8%      { opacity: 1; transform: none; }
-         88%     { opacity: 1; transform: none; }
-         96%,100%{ opacity: 0; transform: none; }
-       }
+       /* Without JS no element ever gets .cow-hidden, so the figure simply
+          shows the finished state, which is what it should say anyway. */
+       #cow-diagram .cow-step { transition: opacity .45s ease,
+         transform .45s ease; transform-box: fill-box;
+         transform-origin: center; }
+       #cow-diagram .cow-step.cow-hidden { opacity: 0;
+         transform: translateY(8px) scale(.94); }
        @media (prefers-reduced-motion: reduce) {
-         #cow-diagram .cow-step { animation: none; opacity: 1; }
+         #cow-diagram .cow-step { transition: none; }
        }
+       .cow-play { font: inherit; font-size: .85em; cursor: pointer;
+         margin-top: .5em; padding: .35em .9em; border-radius: 4px;
+         border: 1px solid currentColor; background: transparent;
+         color: inherit; opacity: .75; }
+       .cow-play:hover, .cow-play:focus-visible { opacity: 1; }
      </style>
      <defs>
        <marker id="cow-a" viewBox="0 0 10 10" refX="9" refY="5"
@@ -92,7 +90,7 @@ Modifying a block in the middle of the tree cannot happen in place, so ZFS:
        </marker>
        <marker id="cow-b" viewBox="0 0 10 10" refX="9" refY="5"
                markerWidth="5" markerHeight="5" orient="auto-start-reverse">
-         <path d="M0 0 L10 5 L0 10 z" fill="var(--cow-new)"/>
+         <path d="M0 0 L10 5 L0 10 z" fill="#1f7a4d"/>
        </marker>
      </defs>
 
@@ -125,26 +123,26 @@ Modifying a block in the middle of the tree cannot happen in place, so ZFS:
      </g>
 
      <g class="cow-new">
-       <g class="cow-step cow-s1">
+       <g class="cow-step">
          <rect class="cow-box" x="470" y="290" width="76" height="30" rx="6"/>
          <text class="cow-lbl" x="508" y="310">D4'</text>
        </g>
-       <g class="cow-step cow-s2">
+       <g class="cow-step">
          <rect class="cow-box" x="470" y="205" width="86" height="32" rx="6"/>
          <text class="cow-lbl" x="513" y="226">ind 2'</text>
          <path class="cow-edge" d="M513 237 V284" marker-end="url(#cow-b)"/>
        </g>
-       <g class="cow-step cow-s3">
+       <g class="cow-step">
          <rect class="cow-box" x="470" y="120" width="86" height="32" rx="6"/>
          <text class="cow-lbl" x="513" y="141">root'</text>
          <path class="cow-edge" d="M513 152 V199" marker-end="url(#cow-b)"/>
        </g>
-       <g class="cow-step cow-s4">
+       <g class="cow-step">
          <rect class="cow-box" x="458" y="35" width="110" height="32" rx="6"/>
          <text class="cow-lbl" x="513" y="56">uberblock'</text>
          <path class="cow-edge" d="M513 67 V114" marker-end="url(#cow-b)"/>
        </g>
-       <g class="cow-step cow-s5">
+       <g class="cow-step">
          <path class="cow-share" d="M470 140 L166 213" marker-end="url(#cow-b)"/>
          <path class="cow-share" d="M470 225 L296 295" marker-end="url(#cow-b)"/>
        </g>
@@ -164,6 +162,43 @@ Modifying a block in the middle of the tree cannot happen in place, so ZFS:
        <text x="42" y="397" opacity=".85">shared by reference, not copied</text>
      </g>
    </svg>
+   </div>
+   <button type="button" id="cow-play" class="cow-play" hidden>
+     Replay the write</button>
+   <script>
+   (function () {
+     var svg = document.getElementById('cow-diagram');
+     var btn = document.getElementById('cow-play');
+     if (!svg || !btn) { return; }
+     var steps = Array.prototype.slice.call(svg.querySelectorAll('.cow-step'));
+     if (!steps.length) { return; }
+     var calm = window.matchMedia &&
+       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+     var timers = [];
+     function play() {
+       timers.forEach(clearTimeout);
+       timers = [];
+       steps.forEach(function (g) { g.classList.add('cow-hidden'); });
+       svg.getBoundingClientRect();
+       steps.forEach(function (g, i) {
+         timers.push(setTimeout(function () {
+           g.classList.remove('cow-hidden');
+         }, 300 + i * (calm ? 260 : 750)));
+       });
+     }
+     btn.hidden = false;
+     btn.addEventListener('click', play);
+     if (!calm && 'IntersectionObserver' in window) {
+       var seen = false;
+       var io = new IntersectionObserver(function (entries) {
+         entries.forEach(function (e) {
+           if (e.isIntersecting && !seen) { seen = true; play(); io.disconnect(); }
+         });
+       }, { threshold: 0.4 });
+       io.observe(svg);
+     }
+   })();
+   </script>
    </div>
 
 In the diagram, only ``D4`` was modified. That forced new copies of ``D4``,
