@@ -42,9 +42,9 @@ Modifying a block in the middle of the tree cannot happen in place, so ZFS:
         four old blocks are superseded; every other block is referenced by
         the new tree rather than copied.">
      <style>
-       #cow-diagram { --cow-new: #1f7a4d; }
+       #cow-diagram { --cow-new: #1f7a4d; --cow-sup: #c2410c; }
        @media (prefers-color-scheme: dark) {
-         #cow-diagram { --cow-new: #56c98d; }
+         #cow-diagram { --cow-new: #56c98d; --cow-sup: #fb923c; }
        }
        #cow-diagram .cow-box { fill: currentColor; fill-opacity: .05;
          stroke: currentColor; stroke-width: 1.25; }
@@ -61,10 +61,10 @@ Modifying a block in the middle of the tree cannot happen in place, so ZFS:
        #cow-diagram .cow-new .cow-lbl { fill: var(--cow-new);
          font-weight: 600; }
        /* The old blocks on the path from the change to the root. They were
-          not written -- they were replaced -- so they get the accent colour
-          without the weight of a new block. */
-       #cow-diagram .cow-sup .cow-box { stroke: var(--cow-new);
-         stroke-width: 1.5; fill: none; }
+          not written by this transaction, they were replaced by it, so they
+          are marked in their own colour rather than the one for new data. */
+       #cow-diagram .cow-sup .cow-box { stroke: var(--cow-sup);
+         stroke-width: 1.5; fill: var(--cow-sup); fill-opacity: .08; }
        #cow-diagram .cow-sup .cow-lbl { fill: currentColor; opacity: .75; }
        #cow-diagram .cow-share { stroke: var(--cow-new); stroke-width: 1.75;
          stroke-dasharray: 5 4; fill: none; }
@@ -176,8 +176,9 @@ Modifying a block in the middle of the tree cannot happen in place, so ZFS:
              fill-opacity=".05" stroke="currentColor" opacity=".38"/>
        <text x="42" y="340" opacity=".7">untouched &#8212; still whole, still
          consistent</text>
-       <rect x="10" y="349" width="22" height="11" rx="3" fill="none"
-             stroke="var(--cow-new)" stroke-width="1.5"/>
+       <rect x="10" y="349" width="22" height="11" rx="3"
+             fill="var(--cow-sup)" fill-opacity=".08"
+             stroke="var(--cow-sup)" stroke-width="1.5"/>
        <text x="42" y="359" opacity=".85">superseded &#8212; freed, unless a
          snapshot holds it</text>
        <rect x="10" y="368" width="22" height="11" rx="3"
