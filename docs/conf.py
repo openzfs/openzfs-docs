@@ -250,6 +250,19 @@ notfound_urls_prefix = '/openzfs-docs/'
 # Redirects
 rediraffe_redirects = {
     "Performance and Tuning/Async Write.rst": "Performance and Tuning/ZIO Scheduler.rst",
+    # Basic Concepts grew past twenty flat pages and was split into subsections.
+    "Basic Concepts/VDEVs.rst":
+        "Basic Concepts/Pool Structure/VDEVs.rst",
+    "Basic Concepts/RAIDZ.rst":
+        "Basic Concepts/Pool Structure/RAIDZ.rst",
+    "Basic Concepts/dRAID Howto.rst":
+        "Basic Concepts/Pool Structure/dRAID Howto.rst",
+    "Basic Concepts/Feature Flags.rst":
+        "Basic Concepts/Pool Structure/Feature Flags.rst",
+    "Basic Concepts/Checksums.rst":
+        "Basic Concepts/Data Storage/Checksums.rst",
+    "Basic Concepts/Troubleshooting.rst":
+        "Basic Concepts/Operations/Troubleshooting.rst",
 }
 
 # Old man pages location -> to new master branch location

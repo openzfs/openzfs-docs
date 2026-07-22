@@ -1,7 +1,7 @@
 ZFS I/O (ZIO) Scheduler
 =======================
 
-ZFS issues I/O operations to leaf `vdevs <https://openzfs.github.io/openzfs-docs/Basic%20Concepts/VDEVs.html>`_
+ZFS issues I/O operations to leaf :doc:`vdevs </Basic Concepts/Pool Structure/VDEVs>`
 (usually devices) to satisfy and complete I/Os. The ZIO scheduler determines when and in what order those
 operations are issued. Operations are divided into nine I/O classes
 prioritized in the following order:
