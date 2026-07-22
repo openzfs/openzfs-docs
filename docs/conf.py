@@ -263,6 +263,9 @@ rediraffe_redirects = {
         "Basic Concepts/Data Storage/Checksums.rst",
     "Basic Concepts/Troubleshooting.rst":
         "Basic Concepts/Operations/Troubleshooting.rst",
+    # Was three external links, two of them to material that predates most
+    # of what Basic Concepts now documents.
+    "Project and Community/Admin Documentation.rst": "Basic Concepts/index.rst",
 }
 
 # Old man pages location -> to new master branch location
