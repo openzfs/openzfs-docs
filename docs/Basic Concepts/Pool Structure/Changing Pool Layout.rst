@@ -93,8 +93,43 @@ Replacing a failed device
 
 ``autoreplace=on`` makes ZFS format and replace any new device appearing in
 the physical location of one that previously belonged to the pool; the default
-is ``off``. See :doc:`Scrub and Resilver </Basic Concepts/Operations/Scrub and Resilver>` for what
-happens next, and keep a ``spare`` vdev if unattended replacement matters.
+is ``off``. See
+:doc:`Scrub and Resilver </Basic Concepts/Operations/Scrub and Resilver>` for
+what happens next.
+
+Hot spares
+~~~~~~~~~~
+
+A ``spare`` vdev sits idle until an active device fails, then takes its place
+automatically.
+
+.. code:: bash
+
+   zpool create pool mirror sda sdb spare sdc
+   zpool add pool spare sdd
+   zpool remove pool sdd
+
+Once a spare steps in, a new ``spare`` vdev appears in the configuration and
+stays there until the original device is replaced for real — at which point
+the spare goes back to being available. So a spare is a stopgap that buys
+time, not a replacement: the failed disk still has to be swapped.
+
+.. code:: bash
+
+   zpool replace pool sda sdNEW    # then the spare frees itself
+   zpool detach pool sdc           # cancel an in-progress spare replacement
+
+Detaching the *original faulted device* instead makes the spare assume its
+place permanently, and removes it from the spare list of every pool using it.
+
+Spares can be shared between pools, and that carries real risk: a pool
+currently using a shared spare cannot be exported, and if two pools are
+imported on different hosts and both lose a device at once, both may claim
+the same spare — which is not detected and can corrupt data. Share spares
+only within one host.
+
+dRAID has its own integrated distributed spare capacity, which resilvers far
+faster; see :doc:`dRAID <dRAID Howto>`.
 
 Removing devices
 ~~~~~~~~~~~~~~~~

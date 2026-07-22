@@ -144,6 +144,23 @@ enabled" is informational. On a root or boot pool in particular, check what
 your bootloader supports first — see the
 :doc:`Root on ZFS guides </Getting Started/index>`.
 
+``zfs upgrade`` is a different thing
+------------------------------------
+
+Datasets carry their own on-disk version, independent of the pool's features.
+
+.. code:: bash
+
+   zfs upgrade                     # file systems not at the latest version
+   zfs upgrade -v                  # versions this build supports
+   zfs upgrade -r pool/data        # upgrade a subtree
+   zfs upgrade -a                  # everything
+
+The same one-way warning applies, with an extra consequence: after upgrading,
+``zfs send`` streams generated from *new* snapshots of those file systems
+cannot be received by older ZFS versions either. If you replicate to an older
+system, that will break the replication, not just the local mount.
+
 Reference materials
 -------------------
 
