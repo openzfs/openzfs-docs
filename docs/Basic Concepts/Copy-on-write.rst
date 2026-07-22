@@ -34,17 +34,15 @@ Modifying a block in the middle of the tree cannot happen in place, so ZFS:
 
    <div style="margin:1.75em 0">
    <div style="overflow-x:auto">
-   <svg id="cow-diagram" viewBox="0 0 600 400" width="100%"
+   <svg id="cow-diagram" viewBox="0 0 600 410" width="100%"
         style="max-width:600px;height:auto" role="img"
         aria-label="A ZFS block tree being updated. Modifying data block D4
         causes a new copy of D4 to be written, then a new copy of its parent
-        indirect block, then a new root block, then a new uberblock. Blocks
-        that were not modified are referenced by the new tree rather than
-        copied.">
+        indirect block, then a new root block, then a new uberblock. Those
+        four old blocks are superseded; every other block is referenced by
+        the new tree rather than copied.">
      <style>
-       #cow-diagram {
-         --cow-new: #1f7a4d;
-       }
+       #cow-diagram { --cow-new: #1f7a4d; }
        @media (prefers-color-scheme: dark) {
          #cow-diagram { --cow-new: #56c98d; }
        }
@@ -62,15 +60,21 @@ Modifying a block in the middle of the tree cannot happen in place, so ZFS:
          stroke-width: 2; }
        #cow-diagram .cow-new .cow-lbl { fill: var(--cow-new);
          font-weight: 600; }
+       /* The old blocks on the path from the change to the root. They were
+          not written -- they were replaced -- so they get the accent colour
+          without the weight of a new block. */
+       #cow-diagram .cow-sup .cow-box { stroke: var(--cow-new);
+         stroke-width: 1.5; fill: none; }
+       #cow-diagram .cow-sup .cow-lbl { fill: currentColor; opacity: .75; }
        #cow-diagram .cow-share { stroke: var(--cow-new); stroke-width: 1.75;
          stroke-dasharray: 5 4; fill: none; }
        #cow-diagram .cow-key { fill: currentColor;
          font-family: ui-monospace,SFMono-Regular,Menlo,monospace;
          font-size: 11px; }
-       /* Without JS no element ever gets .cow-hidden, so the figure simply
-          shows the finished state, which is what it should say anyway. */
-       #cow-diagram .cow-step { transition: opacity .45s ease,
-         transform .45s ease; transform-box: fill-box;
+       /* Without JS nothing is ever given .cow-hidden, so the figure shows
+          the finished state -- which is what it should say anyway. */
+       #cow-diagram .cow-step { transition: opacity .5s ease,
+         transform .5s ease; transform-box: fill-box;
          transform-origin: center; }
        #cow-diagram .cow-step.cow-hidden { opacity: 0;
          transform: translateY(8px) scale(.94); }
@@ -122,44 +126,67 @@ Modifying a block in the middle of the tree cannot happen in place, so ZFS:
        <text class="cow-lbl" x="345" y="310">D4</text>
      </g>
 
+     <g class="cow-sup">
+       <g class="cow-step" data-step="1">
+         <rect class="cow-box" x="310" y="290" width="70" height="30" rx="6"/>
+         <text class="cow-lbl" x="345" y="310">D4</text>
+       </g>
+       <g class="cow-step" data-step="2">
+         <rect class="cow-box" x="260" y="205" width="80" height="32" rx="6"/>
+         <text class="cow-lbl" x="300" y="226">ind 2</text>
+       </g>
+       <g class="cow-step" data-step="3">
+         <rect class="cow-box" x="170" y="120" width="80" height="32" rx="6"/>
+         <text class="cow-lbl" x="210" y="141">root</text>
+       </g>
+       <g class="cow-step" data-step="4">
+         <rect class="cow-box" x="160" y="35" width="100" height="32" rx="6"/>
+         <text class="cow-lbl" x="210" y="56">uberblock</text>
+       </g>
+     </g>
+
      <g class="cow-new">
-       <g class="cow-step">
+       <g class="cow-step" data-step="1">
          <rect class="cow-box" x="470" y="290" width="76" height="30" rx="6"/>
          <text class="cow-lbl" x="508" y="310">D4'</text>
        </g>
-       <g class="cow-step">
+       <g class="cow-step" data-step="2">
          <rect class="cow-box" x="470" y="205" width="86" height="32" rx="6"/>
          <text class="cow-lbl" x="513" y="226">ind 2'</text>
          <path class="cow-edge" d="M513 237 V284" marker-end="url(#cow-b)"/>
        </g>
-       <g class="cow-step">
+       <g class="cow-step" data-step="3">
          <rect class="cow-box" x="470" y="120" width="86" height="32" rx="6"/>
          <text class="cow-lbl" x="513" y="141">root'</text>
          <path class="cow-edge" d="M513 152 V199" marker-end="url(#cow-b)"/>
        </g>
-       <g class="cow-step">
+       <g class="cow-step" data-step="4">
          <rect class="cow-box" x="458" y="35" width="110" height="32" rx="6"/>
          <text class="cow-lbl" x="513" y="56">uberblock'</text>
          <path class="cow-edge" d="M513 67 V114" marker-end="url(#cow-b)"/>
        </g>
-       <g class="cow-step">
+       <g class="cow-step" data-step="5">
          <path class="cow-share" d="M470 140 L166 213" marker-end="url(#cow-b)"/>
          <path class="cow-share" d="M470 225 L296 295" marker-end="url(#cow-b)"/>
        </g>
      </g>
 
      <g class="cow-key">
-       <rect x="10" y="349" width="22" height="11" rx="3" fill="currentColor"
+       <rect x="10" y="330" width="22" height="11" rx="3" fill="currentColor"
              fill-opacity=".05" stroke="currentColor" opacity=".38"/>
-       <text x="42" y="359" opacity=".7">the previous tree &#8212; still whole,
-         still consistent</text>
-       <rect x="10" y="369" width="22" height="11" rx="3"
+       <text x="42" y="340" opacity=".7">untouched &#8212; still whole, still
+         consistent</text>
+       <rect x="10" y="349" width="22" height="11" rx="3" fill="none"
+             stroke="var(--cow-new)" stroke-width="1.5"/>
+       <text x="42" y="359" opacity=".85">superseded &#8212; freed, unless a
+         snapshot holds it</text>
+       <rect x="10" y="368" width="22" height="11" rx="3"
              fill="var(--cow-new)" fill-opacity=".1" stroke="var(--cow-new)"
              stroke-width="2"/>
-       <text x="42" y="379" opacity=".85">written by this transaction</text>
-       <path d="M11 393 H31" stroke="var(--cow-new)" stroke-width="1.75"
+       <text x="42" y="378" opacity=".85">written by this transaction</text>
+       <path d="M11 391 H31" stroke="var(--cow-new)" stroke-width="1.75"
              stroke-dasharray="5 4"/>
-       <text x="42" y="397" opacity=".85">shared by reference, not copied</text>
+       <text x="42" y="395" opacity=".85">shared by reference, not copied</text>
      </g>
    </svg>
    </div>
@@ -170,33 +197,35 @@ Modifying a block in the middle of the tree cannot happen in place, so ZFS:
      var svg = document.getElementById('cow-diagram');
      var btn = document.getElementById('cow-play');
      if (!svg || !btn) { return; }
-     var steps = Array.prototype.slice.call(svg.querySelectorAll('.cow-step'));
-     if (!steps.length) { return; }
+     var groups = Array.prototype.slice.call(svg.querySelectorAll('.cow-step'));
+     if (!groups.length) { return; }
      var calm = window.matchMedia &&
        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+     var last = 0;
+     groups.forEach(function (g) {
+       last = Math.max(last, parseInt(g.getAttribute('data-step'), 10) || 0);
+     });
      var timers = [];
      function play() {
        timers.forEach(clearTimeout);
        timers = [];
-       steps.forEach(function (g) { g.classList.add('cow-hidden'); });
+       groups.forEach(function (g) { g.classList.add('cow-hidden'); });
        svg.getBoundingClientRect();
-       steps.forEach(function (g, i) {
-         timers.push(setTimeout(function () {
-           g.classList.remove('cow-hidden');
-         }, 300 + i * (calm ? 260 : 750)));
-       });
+       for (var s = 1; s <= last; s++) {
+         (function (step) {
+           timers.push(setTimeout(function () {
+             groups.forEach(function (g) {
+               if (parseInt(g.getAttribute('data-step'), 10) === step) {
+                 g.classList.remove('cow-hidden');
+               }
+             });
+           }, 500 + (step - 1) * (calm ? 320 : 1150)));
+         })(s);
+       }
      }
      btn.hidden = false;
      btn.addEventListener('click', play);
-     if (!calm && 'IntersectionObserver' in window) {
-       var seen = false;
-       var io = new IntersectionObserver(function (entries) {
-         entries.forEach(function (e) {
-           if (e.isIntersecting && !seen) { seen = true; play(); io.disconnect(); }
-         });
-       }, { threshold: 0.4 });
-       io.observe(svg);
-     }
+     if (!calm) { play(); }
    })();
    </script>
    </div>
