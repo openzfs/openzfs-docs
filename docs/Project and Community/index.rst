@@ -17,11 +17,9 @@ ongoing efforts toward improving open-source variants of ZFS, and
 ensuring consistent reliability, functionality and performance of all
 distributions of ZFS.
 
-Administration is covered by :doc:`Basic Concepts </Basic Concepts/index>` and
-the `man pages <../man/index.html>`__. For material maintained outside this
-site — third-party tools, per-platform documentation and historical
-references — see `System Administration
-<https://openzfs.org/wiki/System_Administration>`__ on the OpenZFS wiki.
+Administration is covered by :doc:`Basic Concepts </Basic Concepts/index>`,
+:doc:`Performance and Tuning </Performance and Tuning/index>` and the
+`man pages <../man/index.html>`__.
 
 .. toctree::
    :maxdepth: 2
