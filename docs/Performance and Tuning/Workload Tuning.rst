@@ -103,8 +103,7 @@ different workarounds. The platform-specific methods are as follows:
    on FreeBSD; see for example `FreeBSD on 4K sector
    drives <http://web.archive.org/web/20151022020605/http://ivoras.sharanet.org/blog/tree/2011-01-01.freebsd-on-4k-sector-drives.html>`__
    (2011-01-01)
--  `ashift= <https://openzfs.github.io/openzfs-docs/Project%20and%20Community/FAQ.html#advanced-format-disks>`__
-   on ZFS on Linux
+-  :ref:`ashift= <advanced-format-disks>` on ZFS on Linux
 -  -o ashift= also works with both MacZFS (pool version 8) and ZFS-OSX
    (pool version 5000).
 

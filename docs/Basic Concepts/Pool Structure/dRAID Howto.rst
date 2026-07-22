@@ -245,4 +245,4 @@ state.
 .. |draid-resilver| image:: /_static/img/draid-resilver-hours.png
 .. _dRAID: https://docs.google.com/presentation/d/1uo0nBfY84HIhEqGWEx-Tbm8fPbJKtIP3ICo4toOPcJo/edit
 .. _sequential resilver: https://docs.google.com/presentation/d/1vLsgQ1MaHlifw40C9R2sPsSiHiQpxglxMbK2SMthu0Q/edit#slide=id.g995720a6cf_1_39
-.. _custom packages: https://openzfs.github.io/openzfs-docs/Developer%20Resources/Custom%20Packages.html#
+.. _custom packages: ../../Developer Resources/Custom Packages.html

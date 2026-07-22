@@ -25,8 +25,7 @@ System Requirements
 
 - `64-bit Debian GNU/Linux Stretch Live
   CD <http://cdimage.debian.org/debian-cd/current-live/amd64/iso-hybrid/>`__
-- `A 64-bit kernel is strongly
-  encouraged. <https://openzfs.github.io/openzfs-docs/Project%20and%20Community/FAQ.html#bit-vs-64-bit-systems>`__
+- :ref:`A 64-bit kernel is strongly encouraged. <32-bit-vs-64-bit-systems>`
 - Installing on a drive which presents 4KiB logical sectors (a “4Kn”
   drive) only works with UEFI booting. This not unique to ZFS. `GRUB
   does not and will not work on 4Kn with legacy (BIOS)
