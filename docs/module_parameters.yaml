@@ -946,8 +946,8 @@ zfs_arc_max:
   tags:
   - ARC
   - memory
-  verification: '``c`` column in ``arcstats.py`` or ``/proc/spl/kstat/zfs/arcstats``
-    entry ``c_max``'
+  verification: '``c`` column of ``zarcstat`` (``arcstat`` before 2.4.0) or
+    ``/proc/spl/kstat/zfs/arcstats`` entry ``c_max``'
   when_to_change: Reduce if ARC competes too much with other applications, increase
     if ZFS is the primary application and can use more RAM
 zfs_arc_meta_adjust_restarts:
@@ -1186,7 +1186,7 @@ zfs_compressed_arc_enabled:
   - ABD
   - compression
   verification: raw ARC statistics are observable in ``/proc/spl/kstat/zfs/arcstats``
-    and ARC hit ratios can be observed using ``arcstat``
+    and ARC hit ratios can be observed using ``zarcstat`` (``arcstat`` before 2.4.0)
   when_to_change: Testing ARC compression feature
 zfs_condense_indirect_commit_entry_delay_ms:
   notes: During vdev removal, the vdev indirection layer sleeps for ``zfs_condense_indirect_commit_entry_delay_ms``
@@ -1844,8 +1844,9 @@ zfs_prefetch_disable:
   range: 0=prefetch enabled, 1=prefetch disabled
   tags:
   - prefetch
-  verification: prefetch efficacy is observed by ``arcstat``, ``arc_summary``,
-    and the relevant entries in ``/proc/spl/kstat/zfs/arcstats``
+  verification: prefetch efficacy is observed by ``zarcstat`` and ``zarcsummary``
+    (``arcstat`` and ``arc_summary`` before 2.4.0), and the relevant entries in
+    ``/proc/spl/kstat/zfs/arcstats``
   when_to_change: In some case where the workload is completely random reads,
     overall performance can be better if prefetch is disabled
 zfs_qat_checksum_disable:

@@ -62,7 +62,8 @@ The following dependencies are required to build OpenZFS on FreeBSD:
    ::
 
       pkg install python
-      pkg install devel/py-sysctl # needed for arcstat, arc_summary, dbufstat
+      pkg install devel/py-sysctl # needed for zarcstat, zarcsummary, dbufstat
+                                  # (arcstat, arc_summary before OpenZFS 2.4.0)
 
 -  Packages for checks and tests:
    ::
