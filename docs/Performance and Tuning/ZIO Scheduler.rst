@@ -31,16 +31,16 @@ prioritized in the following order:
 +-----------+--------------+-------------------------------------------+-----------------+
 
 For interactive I/Os each queue defines the minimum and maximum number of concurrent
-operations issued to the device. Each device also respects an aggregate maximum - `zfs_vdev_max_active <https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/Module%20Parameters.html#zfs-vdev-max-active>`_.
+operations issued to the device. Each device also respects an aggregate maximum - `zfs_vdev_max_active <../Performance and Tuning/Module Parameters.html#zfs-vdev-max-active>`_.
 Note that the sum of the per-queue minimums must not exceed the aggregate maximum.
 If the sum of the per-queue maximums exceeds the aggregate maximum, then the number of
-active I/Os may reach `zfs_vdev_max_active <https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/Module%20Parameters.html#zfs-vdev-max-active>`_,
+active I/Os may reach `zfs_vdev_max_active <../Performance and Tuning/Module Parameters.html#zfs-vdev-max-active>`_,
 in which case no further I/Os are issued regardless of whether all per-queue minimums have been met.
 
 For non-interactive I/O (scrub, resilver, removal, initializing, and rebuild),
 the number of concurrently-active I/Os is limited to _min_active, unless
 the vdev is "idle". When there are no interactive I/Os active (sync or
-async), and `zfs_vdev_nia_delay <https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/Module%20Parameters.html#zfs-vdev-nia-delay>`_
+async), and `zfs_vdev_nia_delay <../Performance and Tuning/Module Parameters.html#zfs-vdev-nia-delay>`_
 I/Os have completed since the last interactive I/O, then the vdev is considered to be "idle", and the number
 of concurrently-active non-interactive I/Os is increased to _max_active.
 
@@ -148,7 +148,7 @@ part of the function between zfs_vdev_async_write_active_min_dirty_percent
 and zfs_vdev_async_write_active_max_dirty_percent. If it exceeds the
 maximum percentage, this indicates that the rate of incoming data is
 greater than the rate that the backend storage can handle. In this case, we
-must further throttle incoming writes. See `ZIO Transaction Delay <https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/ZFS%20Transaction%20Delay.html>`_ for details.
+must further throttle incoming writes. See :doc:`ZFS Transaction Delay </Performance and Tuning/ZFS Transaction Delay>` for details.
 
 
 

@@ -217,7 +217,7 @@ only once the deadman timer expires.
 
 **ZFS debug messages.** The modules keep an internal log buffer, readable at
 ``/proc/spl/kstat/zfs/dbgmsg``, when the module parameter
-`zfs_dbgmsg_enable <https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/Module%20Parameters.html#zfs-dbgmsg-enable>`__
+`zfs_dbgmsg_enable <../../Performance and Tuning/Module Parameters.html#zfs-dbgmsg-enable>`__
 is 1. This is frequently what developers ask for.
 
 **Per-pool I/O statistics.** ``/proc/spl/kstat/zfs/<pool>/`` on Linux.
@@ -252,7 +252,7 @@ and take action. The script usually installed at
    zpool events -f                 # follow
 
 The history lives in RAM and is capped by
-`zfs_zevent_len_max <https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/Module%20Parameters.html#zfs-zevent-len-max>`__.
+`zfs_zevent_len_max <../../Performance and Tuning/Module Parameters.html#zfs-zevent-len-max>`__.
 ``zed`` throttles internally so a failing device cannot exhaust the system.
 
 Each event carries a class used for filtering:

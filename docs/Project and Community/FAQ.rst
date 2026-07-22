@@ -529,6 +529,8 @@ practices you should follow. See also
    the pool. This tuning parameter can result in a decrease of capacity
    for RAIDZ configurations.
 
+.. _advanced-format-disks:
+
 Advanced Format Disks
 ---------------------
 
