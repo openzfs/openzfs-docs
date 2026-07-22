@@ -12,4 +12,5 @@ clients, and handing out administrative rights.
    TRIM
    Sharing
    Delegated Administration
+   Boot Process
    Troubleshooting
