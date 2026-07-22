@@ -699,8 +699,15 @@ flash SSDs. They are byte addressable, such that ashift=9 is fine for
 use on them. Unlike NAND flash SSDs, they do not require any special
 power failure protection circuitry for reliability. There is also no
 need to run TRIM on them. However, they cost more per GB than NAND flash
-(as of 2020). The enterprise models make excellent SLOG devices. Here is
-a list of models that are known to perform well:
+(as of 2020). The enterprise models make excellent SLOG devices.
+
+Note that Intel wound down the Optane business in 2022, so these are no
+longer manufactured. They remain excellent if you already own them or can
+source them, but for new builds the practical alternative is an enterprise
+NAND flash SSD with power failure protection — see
+:ref:`nand_flash_ssds`.
+
+Here is a list of models that are known to perform well:
 
 -  `Intel DC
    P4800X <https://www.servethehome.com/intel-optane-hands-on-real-world-benchmark-and-test-results/>`__   
