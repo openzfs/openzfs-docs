@@ -32,82 +32,136 @@ Modifying a block in the middle of the tree cannot happen in place, so ZFS:
 
 .. raw:: html
 
-   <div style="overflow-x:auto; margin:1.5em 0;">
-   <svg viewBox="0 0 760 400" width="100%" style="max-width:760px; height:auto;
-        color:inherit;" role="img"
-        aria-label="A ZFS block tree before and after a copy-on-write update.
-        Modifying one data block causes new copies of that block, its parent
-        indirect block, the root block and the uberblock to be written, while
-        every unmodified block is shared by reference.">
+   <div style="overflow-x:auto;margin:1.75em 0">
+   <svg id="cow-diagram" viewBox="0 0 600 400" width="100%"
+        style="max-width:600px;height:auto" role="img"
+        aria-label="A ZFS block tree being updated. Modifying data block D4
+        causes a new copy of D4 to be written, then a new copy of its parent
+        indirect block, then a new root block, then a new uberblock. Blocks
+        that were not modified are referenced by the new tree rather than
+        copied.">
+     <style>
+       #cow-diagram {
+         --cow-new: #1f7a4d;
+         --cow-dur: 9s;
+       }
+       @media (prefers-color-scheme: dark) {
+         #cow-diagram { --cow-new: #56c98d; }
+       }
+       #cow-diagram .cow-box { fill: currentColor; fill-opacity: .05;
+         stroke: currentColor; stroke-width: 1.25; }
+       #cow-diagram .cow-edge { fill: none; stroke: currentColor;
+         stroke-width: 1.25; }
+       #cow-diagram .cow-lbl { fill: currentColor;
+         font-family: ui-monospace,SFMono-Regular,Menlo,monospace;
+         font-size: 12px; text-anchor: middle; }
+       #cow-diagram .cow-old { opacity: .38; }
+       #cow-diagram .cow-new .cow-box { stroke: var(--cow-new);
+         fill: var(--cow-new); fill-opacity: .1; stroke-width: 2; }
+       #cow-diagram .cow-new .cow-edge { stroke: var(--cow-new);
+         stroke-width: 2; }
+       #cow-diagram .cow-new .cow-lbl { fill: var(--cow-new);
+         font-weight: 600; }
+       #cow-diagram .cow-share { stroke: var(--cow-new); stroke-width: 1.75;
+         stroke-dasharray: 5 4; fill: none; }
+       #cow-diagram .cow-key { fill: currentColor;
+         font-family: ui-monospace,SFMono-Regular,Menlo,monospace;
+         font-size: 11px; }
+       #cow-diagram .cow-step {
+         animation: cow-fade var(--cow-dur) ease-in-out infinite;
+         transform-box: fill-box; transform-origin: center; }
+       #cow-diagram .cow-s1 { animation-delay: 0s; }
+       #cow-diagram .cow-s2 { animation-delay: .9s; }
+       #cow-diagram .cow-s3 { animation-delay: 1.8s; }
+       #cow-diagram .cow-s4 { animation-delay: 2.7s; }
+       #cow-diagram .cow-s5 { animation-delay: 3.6s; }
+       @keyframes cow-fade {
+         0%      { opacity: 0; transform: translateY(7px) scale(.94); }
+         8%      { opacity: 1; transform: none; }
+         88%     { opacity: 1; transform: none; }
+         96%,100%{ opacity: 0; transform: none; }
+       }
+       @media (prefers-reduced-motion: reduce) {
+         #cow-diagram .cow-step { animation: none; opacity: 1; }
+       }
+     </style>
      <defs>
-       <marker id="cowarrow" viewBox="0 0 10 10" refX="9" refY="5"
-               markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-         <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/>
+       <marker id="cow-a" viewBox="0 0 10 10" refX="9" refY="5"
+               markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+         <path d="M0 0 L10 5 L0 10 z" fill="currentColor"/>
+       </marker>
+       <marker id="cow-b" viewBox="0 0 10 10" refX="9" refY="5"
+               markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+         <path d="M0 0 L10 5 L0 10 z" fill="var(--cow-new)"/>
        </marker>
      </defs>
-     <g fill="none" stroke="currentColor" marker-end="url(#cowarrow)">
-       <g opacity="0.45" stroke-width="1">
-         <path d="M151 60 V110"/>
-         <path d="M145 140 L74 195"/>
-         <path d="M158 140 L242 195"/>
-         <path d="M62 225 L39 285"/>
-         <path d="M76 225 L99 285"/>
-         <path d="M242 225 L199 285"/>
-         <path d="M254 225 L269 285"/>
+
+     <g class="cow-old">
+       <g marker-end="url(#cow-a)">
+         <path class="cow-edge" d="M210 67 V120"/>
+         <path class="cow-edge" d="M195 152 L127 205"/>
+         <path class="cow-edge" d="M225 152 L293 205"/>
+         <path class="cow-edge" d="M104 237 L79 290"/>
+         <path class="cow-edge" d="M136 237 L161 290"/>
+         <path class="cow-edge" d="M284 237 L259 290"/>
+         <path class="cow-edge" d="M316 237 L341 290"/>
        </g>
-       <g stroke-width="2.2">
-         <path d="M523 60 V110"/>
-         <path d="M519 140 L521 195"/>
-         <path d="M521 225 L517 285"/>
+       <rect class="cow-box" x="160" y="35" width="100" height="32" rx="6"/>
+       <rect class="cow-box" x="170" y="120" width="80" height="32" rx="6"/>
+       <rect class="cow-box" x="80" y="205" width="80" height="32" rx="6"/>
+       <rect class="cow-box" x="260" y="205" width="80" height="32" rx="6"/>
+       <rect class="cow-box" x="40" y="290" width="70" height="30" rx="6"/>
+       <rect class="cow-box" x="130" y="290" width="70" height="30" rx="6"/>
+       <rect class="cow-box" x="220" y="290" width="70" height="30" rx="6"/>
+       <rect class="cow-box" x="310" y="290" width="70" height="30" rx="6"/>
+       <text class="cow-lbl" x="210" y="56">uberblock</text>
+       <text class="cow-lbl" x="210" y="141">root</text>
+       <text class="cow-lbl" x="120" y="226">ind 1</text>
+       <text class="cow-lbl" x="300" y="226">ind 2</text>
+       <text class="cow-lbl" x="75" y="310">D1</text>
+       <text class="cow-lbl" x="165" y="310">D2</text>
+       <text class="cow-lbl" x="255" y="310">D3</text>
+       <text class="cow-lbl" x="345" y="310">D4</text>
+     </g>
+
+     <g class="cow-new">
+       <g class="cow-step cow-s1">
+         <rect class="cow-box" x="470" y="290" width="76" height="30" rx="6"/>
+         <text class="cow-lbl" x="508" y="310">D4'</text>
        </g>
-       <g stroke-width="2.2" stroke-dasharray="6 4">
-         <path d="M490 128 C 380 150, 200 168, 99 197"/>
-         <path d="M490 214 C 400 244, 300 258, 218 286"/>
+       <g class="cow-step cow-s2">
+         <rect class="cow-box" x="470" y="205" width="86" height="32" rx="6"/>
+         <text class="cow-lbl" x="513" y="226">ind 2'</text>
+         <path class="cow-edge" d="M513 237 V284" marker-end="url(#cow-b)"/>
+       </g>
+       <g class="cow-step cow-s3">
+         <rect class="cow-box" x="470" y="120" width="86" height="32" rx="6"/>
+         <text class="cow-lbl" x="513" y="141">root'</text>
+         <path class="cow-edge" d="M513 152 V199" marker-end="url(#cow-b)"/>
+       </g>
+       <g class="cow-step cow-s4">
+         <rect class="cow-box" x="458" y="35" width="110" height="32" rx="6"/>
+         <text class="cow-lbl" x="513" y="56">uberblock'</text>
+         <path class="cow-edge" d="M513 67 V114" marker-end="url(#cow-b)"/>
+       </g>
+       <g class="cow-step cow-s5">
+         <path class="cow-share" d="M470 140 L166 213" marker-end="url(#cow-b)"/>
+         <path class="cow-share" d="M470 225 L296 295" marker-end="url(#cow-b)"/>
        </g>
      </g>
-     <g fill="none" stroke="currentColor">
-       <g opacity="0.45" stroke-width="1">
-         <rect x="120" y="30" width="62" height="30" rx="4"/>
-         <rect x="120" y="110" width="62" height="30" rx="4"/>
-         <rect x="40" y="195" width="56" height="30" rx="4"/>
-         <rect x="220" y="195" width="56" height="30" rx="4"/>
-         <rect x="10" y="285" width="46" height="28" rx="4"/>
-         <rect x="80" y="285" width="46" height="28" rx="4"/>
-         <rect x="250" y="285" width="46" height="28" rx="4"/>
-       </g>
-       <rect x="170" y="285" width="46" height="28" rx="4" stroke-width="2.2"/>
-       <rect x="40" y="195" width="56" height="30" rx="4" stroke-width="2.2"/>
-       <g stroke-width="2.2">
-         <rect x="490" y="30" width="66" height="30" rx="4"/>
-         <rect x="490" y="110" width="66" height="30" rx="4"/>
-         <rect x="490" y="195" width="62" height="30" rx="4"/>
-         <rect x="490" y="285" width="54" height="28" rx="4"/>
-       </g>
-     </g>
-     <g fill="currentColor" font-family="monospace" font-size="13"
-        text-anchor="middle">
-       <g opacity="0.55">
-         <text x="151" y="50">uberblock</text>
-         <text x="151" y="130">root</text>
-         <text x="68" y="215">ind 1</text>
-         <text x="248" y="215">ind 2</text>
-         <text x="33" y="304">D1</text>
-         <text x="103" y="304">D2</text>
-         <text x="273" y="304">D4</text>
-       </g>
-       <text x="193" y="304">D3</text>
-       <text x="68" y="215">ind 1</text>
-       <text x="523" y="50">uberblock'</text>
-       <text x="523" y="130">root'</text>
-       <text x="521" y="215">ind 2'</text>
-       <text x="517" y="304">D4'</text>
-     </g>
-     <g fill="currentColor" font-family="sans-serif" font-size="12">
-       <text x="10" y="352" opacity="0.55">faded: the previous tree, still
-         intact and still consistent</text>
-       <text x="10" y="372">solid: newly written blocks</text>
-       <text x="10" y="392" font-style="italic">dashed: references to
-         unmodified blocks &#8212; shared, not copied</text>
+
+     <g class="cow-key">
+       <rect x="10" y="349" width="22" height="11" rx="3" fill="currentColor"
+             fill-opacity=".05" stroke="currentColor" opacity=".38"/>
+       <text x="42" y="359" opacity=".7">the previous tree &#8212; still whole,
+         still consistent</text>
+       <rect x="10" y="369" width="22" height="11" rx="3"
+             fill="var(--cow-new)" fill-opacity=".1" stroke="var(--cow-new)"
+             stroke-width="2"/>
+       <text x="42" y="379" opacity=".85">written by this transaction</text>
+       <path d="M11 393 H31" stroke="var(--cow-new)" stroke-width="1.75"
+             stroke-dasharray="5 4"/>
+       <text x="42" y="397" opacity=".85">shared by reference, not copied</text>
      </g>
    </svg>
    </div>
