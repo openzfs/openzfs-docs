@@ -8,6 +8,7 @@ their point-in-time copies, and the limits placed on them.
    :maxdepth: 1
 
    Datasets and Properties
+   ZVOLs
    Snapshots and Clones
    Quotas and Reservations
    ACLs
