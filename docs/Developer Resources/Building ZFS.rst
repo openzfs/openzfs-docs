@@ -107,8 +107,8 @@ Configure and Build
 
 For developers working on a change always create a new topic branch
 based off of master. This will make it easy to open a pull request with
-your change latter. The master branch is kept stable with extensive
-`regression testing <http://build.zfsonlinux.org/>`__ of every pull
+your change later. The master branch is kept stable with extensive
+`regression testing <https://github.com/openzfs/zfs/actions>`__ of every pull
 request before and after it's merged. Every effort is made to catch
 defects as early as possible and to keep them out of the tree.
 Developers should be comfortable frequently rebasing their work against
