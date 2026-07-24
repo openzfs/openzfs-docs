@@ -1,0 +1,27 @@
+ZPOOL-REOPEN(8) - System Manager's Manual
+
+# NAME
+
+**zpool-reopen** - reopen vdevs associated with ZFS storage pools
+
+# SYNOPSIS
+
+**zpool**
+**reopen**
+\[**-n**]
+\[*pool*]&#8230;
+
+# DESCRIPTION
+
+Reopen all vdevs associated with the specified pools,
+or all pools if none specified.
+
+# OPTIONS
+
+**-n**
+
+> Do not restart an in-progress scrub operation.
+> This is not recommended and can
+> result in partially resilvered devices unless a second scrub is performed.
+
+Debian - July 11, 2022

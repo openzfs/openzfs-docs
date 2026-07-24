@@ -1,0 +1,259 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <meta property="article:modified_time" content="2026-07-22T11:05:18+00:00" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deduplication &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://openzfs.github.io/openzfs-docs/Basic%20Concepts/Data%20Storage/Deduplication.html" />
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/js/redirect.js?v=2a1712f3"></script>
+      <script src="../../_static/js/module_params_filter.js?v=9a1b680c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Block Cloning" href="Block%20Cloning.html" />
+    <link rel="prev" title="Compression" href="Compression.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Basic Concepts</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Copy-on-write.html">Copy-on-Write</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Pool%20Structure/index.html">Pool Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Datasets/index.html">Datasets</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Data Storage</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Checksums.html">Checksums and Their Use in ZFS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Compression.html">Compression</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Deduplication</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#the-cost">The cost</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enabling-it">Enabling it</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#watching-the-table">Watching the table</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#keeping-the-table-bounded">Keeping the table bounded</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#interaction-with-encryption">Interaction with encryption</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#turning-it-off">Turning it off</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#further-reading">Further reading</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Block%20Cloning.html">Block Cloning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Encryption.html">Native Encryption</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Operations/index.html">Operations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../man/index.html">Man Pages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Basic Concepts</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Data Storage</a></li>
+      <li class="breadcrumb-item active">Deduplication</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/Basic Concepts/Data Storage/Deduplication.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="deduplication">
+<h1>Deduplication<a class="headerlink" href="#deduplication" title="Link to this heading"></a></h1>
+<p>Deduplication removes redundant data at the block level: identical blocks are
+stored once and shared between files. It is synchronous — every write is
+looked up in the dedup table (DDT) before it lands.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Unless you have a specific reason, do not enable dedup. It is the most
+resource-intensive feature in ZFS, and enabling it on an
+improperly-sized system causes slow I/O, slow administrative operations,
+and in the worst case a pool that cannot be imported because the DDT does
+not fit in memory. Try <code class="docutils literal notranslate"><span class="pre">compression</span></code> first —
+see <a class="reference internal" href="Compression.html"><span class="doc">Compression</span></a>.</p>
+</div>
+<section id="the-cost">
+<h2>The cost<a class="headerlink" href="#the-cost" title="Link to this heading"></a></h2>
+<p>Every unique block gets a DDT entry. Lookups happen on every write, and the
+DDT must be consulted on every free as well. Plan for at least <strong>1.25 GiB of
+RAM per 1 TiB of stored data</strong>; the real figure depends on block sizes and how
+much of the data is actually duplicated.</p>
+<p>Dedup only pays off when the duplication is real and substantial — VM images
+from a common base, backup targets receiving many similar systems. For general
+file storage, compression usually gives most of the benefit at a fraction of
+the cost. Note also that clones and <code class="docutils literal notranslate"><span class="pre">zfs</span> <span class="pre">send</span></code>-based workflows already share
+blocks without dedup, as does block cloning (<code class="docutils literal notranslate"><span class="pre">copy_file_range</span></code>).</p>
+</section>
+<section id="enabling-it">
+<h2>Enabling it<a class="headerlink" href="#enabling-it" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">dedup</span></code> is a dataset property, so it can be limited to the datasets that
+benefit. It defaults to <code class="docutils literal notranslate"><span class="pre">off</span></code>, and changing it affects only newly-written
+data.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zfs<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="nv">dedup</span><span class="o">=</span>on<span class="w"> </span>pool/vmimages
+zfs<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="nv">dedup</span><span class="o">=</span>blake3,verify<span class="w"> </span>pool/vmimages
+</pre></div>
+</div>
+<p>Values are <code class="docutils literal notranslate"><span class="pre">off</span></code>, <code class="docutils literal notranslate"><span class="pre">on</span></code>, <code class="docutils literal notranslate"><span class="pre">verify</span></code>, or an explicit checksum —
+<code class="docutils literal notranslate"><span class="pre">sha256</span></code>, <code class="docutils literal notranslate"><span class="pre">sha512</span></code>, <code class="docutils literal notranslate"><span class="pre">skein</span></code>, <code class="docutils literal notranslate"><span class="pre">edonr</span></code> or <code class="docutils literal notranslate"><span class="pre">blake3</span></code> — each optionally
+with <code class="docutils literal notranslate"><span class="pre">,verify</span></code>. The default dedup checksum is <code class="docutils literal notranslate"><span class="pre">sha256</span></code>. When dedup is
+enabled, this checksum overrides the <code class="docutils literal notranslate"><span class="pre">checksum</span></code> property.</p>
+<p><code class="docutils literal notranslate"><span class="pre">verify</span></code> makes ZFS do a byte-for-byte comparison whenever two blocks have
+the same signature, at the cost of a read per match. <code class="docutils literal notranslate"><span class="pre">verify</span></code> alone means
+<code class="docutils literal notranslate"><span class="pre">sha256,verify</span></code>, and it is mandatory with <code class="docutils literal notranslate"><span class="pre">edonr</span></code>.</p>
+</section>
+<section id="watching-the-table">
+<h2>Watching the table<a class="headerlink" href="#watching-the-table" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zpool<span class="w"> </span>status<span class="w"> </span>-D<span class="w"> </span>pool
+zpool<span class="w"> </span>get<span class="w"> </span>dedupratio,dedup_table_size,dedupused,dedupsaved<span class="w"> </span>pool
+zdb<span class="w"> </span>-DD<span class="w"> </span>pool<span class="w">          </span><span class="c1"># detailed DDT histogram</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">dedupratio</span></code> is the ratio of storage that would be needed without dedup to
+what is actually used; <code class="docutils literal notranslate"><span class="pre">dedupsaved</span></code> is the same thing in bytes.</p>
+<p>Before turning dedup on, <code class="docutils literal notranslate"><span class="pre">zdb</span> <span class="pre">-S</span> <span class="pre">pool</span></code> simulates the DDT for the data
+already in the pool and prints the ratio you would have gotten. If it is not
+comfortably above 2x, dedup is not worth it.</p>
+</section>
+<section id="keeping-the-table-bounded">
+<h2>Keeping the table bounded<a class="headerlink" href="#keeping-the-table-bounded" title="Link to this heading"></a></h2>
+<p>The failure mode of dedup is an unbounded DDT. Two mechanisms address it:</p>
+<p><strong>Quota.</strong> The pool property <code class="docutils literal notranslate"><span class="pre">dedup_table_quota</span></code> caps the on-disk size of
+the DDT. Once reached, no new entries are added — existing entries still have
+their reference counts updated. The default is <code class="docutils literal notranslate"><span class="pre">auto</span></code>, which sizes the limit
+from a dedicated dedup vdev if one exists; <code class="docutils literal notranslate"><span class="pre">none</span></code> disables the limit. The
+enforced size may land slightly above or below the requested value. It applies
+to both legacy and fast dedup tables.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zpool<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="nv">dedup_table_quota</span><span class="o">=</span>100G<span class="w"> </span>pool
+</pre></div>
+</div>
+<p><strong>Pruning.</strong> <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">ddtprune</span></code> removes older <em>unique</em> (non-duplicate) entries
+to make room for newer duplicate ones, either by a target percentage of unique
+entries or by age in days.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zpool<span class="w"> </span>ddtprune<span class="w"> </span>-d<span class="w"> </span><span class="m">30</span><span class="w"> </span>pool<span class="w">     </span><span class="c1"># entries older than 30 days</span>
+zpool<span class="w"> </span>ddtprune<span class="w"> </span>-p<span class="w"> </span><span class="m">25</span><span class="w"> </span>pool<span class="w">     </span><span class="c1"># 25% of unique entries</span>
+</pre></div>
+</div>
+<p><strong>Fast dedup</strong> (the <code class="docutils literal notranslate"><span class="pre">fast_dedup</span></code> pool feature) enables the more advanced
+dedup table format that these mechanisms are built around. It becomes
+<code class="docutils literal notranslate"><span class="pre">active</span></code> when the first deduplicated block is written to a new dedup table,
+and returns to <code class="docutils literal notranslate"><span class="pre">enabled</span></code> once all such blocks are freed. Existing pools keep
+their legacy tables; a new table is created on pool creation, or when a
+dataset with dedup enabled starts using a new checksum.</p>
+<p>A <strong>dedicated dedup vdev</strong> (<code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">add</span> <span class="pre">pool</span> <span class="pre">dedup</span> <span class="pre">&lt;device&gt;</span></code>) moves the DDT
+onto fast storage, which is what makes dedup practical on larger pools. It
+should be redundant — losing it loses the pool.</p>
+</section>
+<section id="interaction-with-encryption">
+<h2>Interaction with encryption<a class="headerlink" href="#interaction-with-encryption" title="Link to this heading"></a></h2>
+<p>Dedup works on encrypted datasets, but for security a dataset deduplicates
+only against itself, its snapshots and its clones. It also leaks which blocks
+within a dataset are identical, and adds CPU cost per written block. See
+<a class="reference internal" href="Encryption.html"><span class="doc">Native Encryption</span></a>.</p>
+</section>
+<section id="turning-it-off">
+<h2>Turning it off<a class="headerlink" href="#turning-it-off" title="Link to this heading"></a></h2>
+<p>Setting <code class="docutils literal notranslate"><span class="pre">dedup=off</span></code> stops new blocks from being deduplicated, but does not
+undo anything: existing blocks stay deduplicated and the DDT stays until they
+are all freed. Getting rid of it entirely means rewriting the data — for
+example by copying it to a fresh dataset and destroying the old one.</p>
+</section>
+<section id="further-reading">
+<h2>Further reading<a class="headerlink" href="#further-reading" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/7/zfsconcepts.7.html">zfsconcepts(7)</a> —
+<code class="docutils literal notranslate"><span class="pre">Deduplication</span></code></p></li>
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/7/zfsprops.7.html">zfsprops(7)</a> —
+<code class="docutils literal notranslate"><span class="pre">dedup</span></code></p></li>
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/7/zpoolprops.7.html">zpoolprops(7)</a> —
+<code class="docutils literal notranslate"><span class="pre">dedup_table_quota</span></code>, <code class="docutils literal notranslate"><span class="pre">dedup_table_size</span></code>, <code class="docutils literal notranslate"><span class="pre">dedupratio</span></code></p></li>
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zpool-ddtprune.8.html">zpool-ddtprune(8)</a></p></li>
+<li><p><a class="reference internal" href="../../Performance%20and%20Tuning/Workload%20Tuning.html"><span class="doc">Workload Tuning</span></a></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Compression.html" class="btn btn-neutral float-left" title="Compression" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Block%20Cloning.html" class="btn btn-neutral float-right" title="Block Cloning" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, OpenZFS.
+      <span class="lastupdated">Last updated on Jul 22, 2026.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

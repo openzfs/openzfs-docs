@@ -1,0 +1,94 @@
+ZPOOL-UPGRADE(8) - System Manager's Manual
+
+# NAME
+
+**zpool-upgrade** - manage version and feature flags of ZFS storage pools
+
+# SYNOPSIS
+
+**zpool**
+**upgrade**  
+**zpool**
+**upgrade**
+**-v**  
+**zpool**
+**upgrade**
+\[**-V**&nbsp;*version*]
+**-a**|*pool*&#8230;
+
+# DESCRIPTION
+
+**zpool**
+**upgrade**
+
+> Displays pools which do not have all supported features enabled and pools
+> formatted using a legacy ZFS version number.
+> These pools can continue to be used, but some features may not be available.
+> Use
+> **zpool** **upgrade** **-a**
+> to enable all features on all pools (subject to the
+> **-o** **compatibility**
+> property).
+
+**zpool**
+**upgrade**
+**-v**
+
+> Displays legacy ZFS versions supported by this version of ZFS.
+> See
+> zpool-features(7)
+> for a description of features supported by this version of ZFS.
+
+**zpool**
+**upgrade**
+\[**-V** *version*]
+**-a**|*pool*&#8230;
+
+> Enables all supported features on the given pool.
+
+> If the pool has specified compatibility feature sets using the
+> **-o** **compatibility**
+> property, only the features present in all requested compatibility sets will be
+> enabled.
+> If this property is set to
+> *legacy*
+> then no upgrade will take place.
+
+> Once this is done, the pool will no longer be accessible on systems that do not
+> support feature flags.
+> See
+> zpool-features(7)
+> for details on compatibility with systems that support feature flags, but do not
+> support all features enabled on the pool.
+
+> **-a**
+
+> > Enables all supported features (from specified compatibility sets, if any) on
+> > all
+> > pools.
+
+> **-V** *version*
+
+> > Upgrade to the specified legacy version.
+> > If specified, no features will be enabled on the pool.
+> > This option can only be used to increase the version number up to the last
+> > supported legacy version number.
+
+# EXAMPLES
+
+## Example 1: Upgrading All ZFS Storage Pools to the Current Version
+
+The following command upgrades all ZFS Storage pools to the current version of
+the software:
+
+	# **zpool** **upgrade** **-a**
+	This system is currently running ZFS version 2.
+
+# SEE ALSO
+
+zpool-features(7),
+zpoolconcepts(7),
+zpoolprops(7),
+zpool-history(8)
+
+Debian - July 11, 2022

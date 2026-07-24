@@ -1,0 +1,88 @@
+ZPOOL\_INFLUXDB(8) - System Manager's Manual
+
+# NAME
+
+**zpool\_influxdb** - collect ZFS pool statistics in InfluxDB line protocol format
+
+# SYNOPSIS
+
+**zpool\_influxdb**
+\[**-e**|**--execd**]
+\[**-n**|**--no-histogram**]
+\[**-s**|**--sum-histogram-buckets**]
+\[**-t**|**--tags**&nbsp;*key*=*value*\[,*key*=*value*]&#8230;]
+\[*pool*]
+
+# DESCRIPTION
+
+**zpool\_influxdb**
+produces InfluxDB-line-protocol-compatible metrics from zpools.
+Like the
+**zpool**
+command,
+**zpool\_influxdb**
+reads the current pool status and statistics.
+Unlike the
+**zpool**
+command which is intended for humans,
+**zpool\_influxdb**
+formats the output in the InfluxDB line protocol.
+The expected use is as a plugin to a
+metrics collector or aggregator, such as Telegraf.
+
+By default,
+**zpool\_influxdb**
+prints pool metrics and status in the InfluxDB line protocol format.
+All pools are printed, similar to the
+**zpool** **status**
+command.
+Providing a pool name restricts the output to the named pool.
+
+# OPTIONS
+
+**-e**, **--execd**
+
+> Run in daemon mode compatible with Telegraf's
+> **execd**
+> plugin.
+> In this mode, the pools are sampled every time a
+> newline appears on the standard input.
+
+**-n**, **--no-histogram**
+
+> Do not print latency and I/O size histograms.
+> This can reduce the total
+> amount of data, but one should consider the value brought by the insights
+> that latency and I/O size distributions provide.
+> The resulting values
+> are suitable for graphing with Grafana's heatmap plugin.
+
+**-s**, **--sum-histogram-buckets**
+
+> Accumulates bucket values.
+> By default, the values are not accumulated and the raw data appears as shown by
+> **zpool** **iostat**.
+> This works well for Grafana's heatmap plugin.
+> Summing the buckets produces output similar to Prometheus histograms.
+
+**-t**, **--tags** *key*=*value*\[,*key*=*value*]&#8230;
+
+> Adds specified tags to the tag set.
+> No sanity checking is performed.
+> See the InfluxDB Line Protocol format documentation for details on escaping
+> special characters used in tags.
+
+**-h**, **--help**
+
+> Print a usage summary.
+
+# SEE ALSO
+
+zpool-iostat(8),
+zpool-status(8),
+[InfluxDB](https://github.com/influxdata/influxdb),
+[Telegraf](https://github.com/influxdata/telegraf),
+[Grafana](https://grafana.com),
+[Prometheus](https://prometheus.io)
+
+Debian - May 26, 2021

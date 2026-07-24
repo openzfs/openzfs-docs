@@ -1,0 +1,269 @@
+VDEV\_ID.CONF(5) - File Formats Manual
+
+# NAME
+
+**vdev\_id.conf** - configuration file for vdev\_id(8)
+
+# DESCRIPTION
+
+**vdev\_id.conf**
+is the configuration file for
+vdev\_id(8).
+It controls the default behavior of
+vdev\_id(8)
+while it is mapping a disk device name to an alias.
+
+The
+**vdev\_id.conf**
+file uses a simple format consisting of a keyword followed by one or
+more values on a single line.
+Any line not beginning with a recognized keyword is ignored.
+Comments may optionally begin with a hash character.
+
+The following keywords and values are used.
+
+**alias** *name* *devlink*
+
+> Maps a device link in the
+> */dev*
+> directory hierarchy to a new device name.
+> The udev rule defining the device link must have run prior to
+> vdev\_id(8).
+> A defined alias takes precedence over a topology-derived name, but the
+> two naming methods can otherwise coexist.
+> For example, one might name drives in a JBOD with the
+> **sas\_direct**
+> topology while naming an internal L2ARC device with an alias.
+
+> *name*
+> is the name of the link to the device that will by created under
+> */dev/disk/by-vdev*.
+
+> *devlink*
+> is the name of the device link that has already been
+> defined by udev.
+> This may be an absolute path or the base filename.
+
+**channel** \[*pci\_slot*] *port* *name*
+
+> Maps a physical path to a channel name (typically representing a single
+> disk enclosure).
+
+**enclosure\_symlinks** **yes**|**no**
+
+> Additionally create
+> */dev/by-enclosure*
+> symlinks to the disk enclosure
+> *sg*
+> devices using the naming scheme from
+> *vdev\_id.conf*.
+> **enclosure\_symlinks**
+> is only allowed for
+> **sas\_direct**
+> mode.
+
+**enclosure\_symlinks\_prefix** *prefix*
+
+> Specify the prefix for the enclosure symlinks in the form
+> */dev/by-enclosure/*&lt;*prefix*&gt;-&lt;*channel*&gt;&lt;*num*&gt;
+
+> Defaults to
+> "*enc*".
+
+**slot** *prefix* *new* \[*channel*]
+
+> Maps a disk slot number as reported by the operating system to an
+> alternative slot number.
+> If the
+> *channel*
+> parameter is specified
+> then the mapping is only applied to slots in the named channel,
+> otherwise the mapping is applied to all channels.
+> The first-specified
+> *slot*
+> rule that can match a slot takes precedence.
+> Therefore a channel-specific mapping for a given slot should generally appear
+> before a generic mapping for the same slot.
+> In this way a custom mapping may be applied to a particular channel
+> and a default mapping applied to the others.
+
+**zpad\_slot** *digits*
+
+> Pad slot numbers with zeros to make them
+> *digits*
+> long, which can help to make disk names a consistent length and easier to sort.
+
+**multipath** **yes**|**no**
+
+> Specifies whether
+> vdev\_id(8)
+> will handle only dm-multipath devices.
+> If set to
+> **yes**
+> then
+> vdev\_id(8)
+> will examine the first running component disk of a dm-multipath
+> device as provided by the driver command to determine the physical path.
+
+**topology** **sas\_direct**|**sas\_switch**|**scsi**
+
+> Identifies a physical topology that governs how physical paths are
+> mapped to channels:
+
+> **sas\_direct** and **scsi**
+
+> > channels are uniquely identified by a PCI slot and HBA port number
+
+> **sas\_switch**
+
+> > channels are uniquely identified by a SAS switch port number
+
+**phys\_per\_port** *num*
+
+> Specifies the number of PHY devices associated with a SAS HBA port or SAS
+> switch port.
+> vdev\_id(8)
+> internally uses this value to determine which HBA or switch port a
+> device is connected to.
+> The default is
+> **4**.
+
+**slot** **bay**|**phy**|**port**|**id**|**lun**|**bay\_lun**|**ses**
+
+> Specifies from which element of a SAS identifier the slot number is
+> taken.
+> The default is
+> **bay**:
+
+> **bay**
+
+> > read the slot number from the bay identifier.
+
+> **phy**
+
+> > read the slot number from the phy identifier.
+
+> **port**
+
+> > use the SAS port as the slot number.
+
+> **id**
+
+> > use the scsi id as the slot number.
+
+> **lun**
+
+> > use the scsi lun as the slot number.
+
+> **bay\_lun**
+
+> > read the slot number from the bay identifier and append the lun number.
+> > Useful for multi-lun multi-actuator hard drives.
+
+> **ses**
+
+> > use the SCSI Enclosure Services (SES) enclosure device slot number,
+> > as reported by
+> > sg\_ses(8).
+> > Intended for use only on systems where
+> > **bay**
+> > is unsupported,
+> > noting that
+> > **port**
+> > and
+> > **id**
+> > may be unstable across disk replacement.
+
+# FILES
+
+*/etc/zfs/vdev\_id.conf*
+
+> The configuration file for
+> vdev\_id(8).
+
+# EXAMPLES
+
+A non-multipath configuration with direct-attached SAS enclosures and an
+arbitrary slot re-mapping:
+
+	multipath     no
+	topology      sas_direct
+	phys_per_port 4
+	slot          bay
+	
+	#       PCI_SLOT HBA PORT  CHANNEL NAME
+	channel 85:00.0  1         A
+	channel 85:00.0  0         B
+	channel 86:00.0  1         C
+	channel 86:00.0  0         D
+	
+	# Custom mapping for Channel A
+	
+	#    Linux      Mapped
+	#    Slot       Slot      Channel
+	slot 1          7         A
+	slot 2          10        A
+	slot 3          3         A
+	slot 4          6         A
+	
+	# Default mapping for B, C, and D
+	
+	slot 1          4
+	slot 2          2
+	slot 3          1
+	slot 4          3
+
+A SAS-switch topology.
+Note, that the
+*channel*
+keyword takes only two arguments in this example:
+
+	topology      sas_switch
+	
+	#       SWITCH PORT  CHANNEL NAME
+	channel 1            A
+	channel 2            B
+	channel 3            C
+	channel 4            D
+
+A multipath configuration.
+Note that channel names have multiple definitions - one per physical path:
+
+	multipath yes
+	
+	#       PCI_SLOT HBA PORT  CHANNEL NAME
+	channel 85:00.0  1         A
+	channel 85:00.0  0         B
+	channel 86:00.0  1         A
+	channel 86:00.0  0         B
+
+A configuration with enclosure\_symlinks enabled:
+
+	multipath yes
+	enclosure_symlinks yes
+	
+	#          PCI_ID      HBA PORT     CHANNEL NAME
+	channel    05:00.0     1            U
+	channel    05:00.0     0            L
+	channel    06:00.0     1            U
+	channel    06:00.0     0            L
+
+In addition to the disks symlinks, this configuration will create:
+
+	/dev/by-enclosure/enc-L0
+	/dev/by-enclosure/enc-L1
+	/dev/by-enclosure/enc-U0
+	/dev/by-enclosure/enc-U1
+
+A configuration using device link aliases:
+
+	#     by-vdev
+	#     name     fully qualified or base name of device link
+	alias d1       /dev/disk/by-id/wwn-0x5000c5002de3b9ca
+	alias d2       wwn-0x5000c5002def789e
+
+# SEE ALSO
+
+vdev\_id(8)
+
+Debian - October 8, 2024

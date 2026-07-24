@@ -1,0 +1,141 @@
+/* override table width restrictions */
+@media screen and (min-width: 767px) {
+
+    .wy-table-responsive table td {
+       /* !important prevents the common CSS stylesheets from overriding
+          this as on RTD they are loaded after this stylesheet */
+       white-space: normal !important;
+    }
+
+    .wy-table-responsive {
+       overflow: visible !important;
+    }
+
+    .wy-nav-content {
+        max-width: 1500px !important;
+    }
+ }
+
+/* version filter of the generated Module Parameters page */
+#zfs-param-filter {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5em;
+    margin: 0 0 1.5em;
+    padding: 0.65em 0.9em;
+    background: #fcfcfc;
+    border: 1px solid #e1e4e5;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+    font-size: 95%;
+}
+
+/* the theme makes every label a block, which breaks the row */
+#zfs-param-filter label {
+    display: inline;
+    margin: 0;
+    color: #555;
+    font-weight: normal;
+}
+
+#zfs-param-filter select,
+#zfs-param-filter input {
+    margin: 0;
+    padding: 0.25em 0.4em;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    color: #404040;
+    font-size: inherit;
+    line-height: 1.4;
+}
+
+#zfs-param-filter select:focus,
+#zfs-param-filter input:focus {
+    border-color: #2980b9;
+    outline: none;
+}
+
+#zfs-param-filter input {
+    flex: 1 1 10em;
+    max-width: 18em;
+    font-family: monospace;
+}
+
+.zfs-param-count {
+    margin-left: auto;
+    color: #777;
+    font-size: 90%;
+    white-space: nowrap;
+}
+
+.zfs-param-hidden {
+    display: none;
+}
+
+/* Following a link to #some-parameter scrolls it to the very top of the
+   viewport, where the sticky filter block would cover it. Keep that much
+   room above every anchor of the page. */
+body.zfs-param-page section[id] {
+    scroll-margin-top: 5rem;
+}
+
+@media screen and (max-width: 600px) {
+    body.zfs-param-page section[id] {
+        scroll-margin-top: 7rem;
+    }
+}
+
+/* the per-value tables of the Default and Range fields are part of a
+   field list, not standalone tables: no frame, no full width */
+table.zfs-field-table,
+table.zfs-field-table td {
+    border: none !important;
+    background: transparent !important;
+}
+
+table.zfs-field-table {
+    width: auto !important;
+    margin: 0 !important;
+}
+
+/* the theme wraps every table in a scrolling div with a bottom margin,
+   which would space the field list out */
+.field-list .wy-table-responsive {
+    margin-bottom: 0 !important;
+    overflow: visible !important;
+}
+
+table.zfs-field-table td {
+    padding: 0.1em 1.2em 0.1em 0 !important;
+    vertical-align: top;
+    white-space: normal !important;
+}
+
+table.zfs-field-table td:first-child {
+    white-space: nowrap !important;
+}
+
+/* on a narrow screen the controls speak for themselves: the version is
+   spelled out in the selector and the box carries a placeholder, so drop
+   the prose and keep the block to one or two rows */
+@media screen and (max-width: 600px) {
+    #zfs-param-filter label {
+        display: none;
+    }
+
+    /* let the box shrink past the width an input asks for by default, so
+       that it shares a row with the selector */
+    #zfs-param-filter input {
+        min-width: 0;
+        flex-basis: 8em;
+    }
+
+    .zfs-param-count {
+        margin-left: 0;
+    }
+}

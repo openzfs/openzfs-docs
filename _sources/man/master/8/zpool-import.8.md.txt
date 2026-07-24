@@ -1,0 +1,471 @@
+ZPOOL-IMPORT(8) - System Manager's Manual
+
+# NAME
+
+**zpool-import** - import ZFS storage pools or list available pools
+
+# SYNOPSIS
+
+**zpool**
+**import**
+\[**-D**]
+\[**-d**&nbsp;*dir*|*device*]&#8230;  
+**zpool**
+**import**
+**-a**
+\[**-DflmN**]
+\[**-F**&nbsp;\[**-nTX**]]
+\[**--rewind-to-checkpoint**]
+\[**-c**&nbsp;*cachefile*|**-d**&nbsp;*dir*|*device*]
+\[**-o**&nbsp;*mntopts*]
+\[**-o**&nbsp;*property*=*value*]&#8230;
+\[**-R**&nbsp;*root*]  
+**zpool**
+**import**
+\[**-Dflmt**]
+\[**-F**&nbsp;\[**-nTX**]]
+\[**--rewind-to-checkpoint**]
+\[**-c**&nbsp;*cachefile*|**-d**&nbsp;*dir*|*device*]
+\[**-o**&nbsp;*mntopts*]
+\[**-o**&nbsp;*property*=*value*]&#8230;
+\[**-R**&nbsp;*root*]
+\[**-s**]
+*pool*|*id*
+\[*newpool*]
+
+# DESCRIPTION
+
+**zpool**
+**import**
+\[**-D**]
+\[**-d** *dir*|*device*]&#8230;
+
+> Lists pools available to import.
+> If the
+> **-d**
+> or
+> **-c**
+> options are not specified, this command searches for devices using libblkid
+> on Linux and geom on
+> FreeBSD.
+> The
+> **-d**
+> option can be specified multiple times, and all directories are searched.
+> If the device appears to be part of an exported pool, this command displays a
+> summary of the pool with the name of the pool, a numeric identifier, as well as
+> the vdev layout and current health of the device for each device or file.
+> Destroyed pools, pools that were previously destroyed with the
+> **zpool** **destroy**
+> command, are not listed unless the
+> **-D**
+> option is specified.
+
+> The numeric identifier is unique, and can be used instead of the pool name when
+> multiple exported pools of the same name are available.
+
+> **-c** *cachefile*
+
+> > Reads configuration from the given
+> > *cachefile*
+> > that was created with the
+> > **cachefile**
+> > pool property.
+> > This
+> > *cachefile*
+> > is used instead of searching for devices.
+
+> **-d** *dir*|*device*
+
+> > Uses
+> > *device*
+> > or searches for devices or files in
+> > *dir*.
+> > The
+> > **-d**
+> > option can be specified multiple times.
+
+> **-D**
+
+> > Lists destroyed pools only.
+
+**zpool**
+**import**
+**-a**
+\[**-DflmN**]
+\[**-F** \[**-nTX**]]
+\[**-c** *cachefile*|**-d** *dir*|*device*]
+\[**-o** *mntopts*]
+\[**-o** *property*=*value*]&#8230;
+\[**-R** *root*]
+\[**-s**]
+
+> Imports all pools found in the search directories.
+> Identical to the previous command, except that all pools with a sufficient
+> number of devices available are imported.
+> Destroyed pools, pools that were previously destroyed with the
+> **zpool** **destroy**
+> command, will not be imported unless the
+> **-D**
+> option is specified.
+
+> **-a**
+
+> > Searches for and imports all pools found.
+
+> **-c** *cachefile*
+
+> > Reads configuration from the given
+> > *cachefile*
+> > that was created with the
+> > **cachefile**
+> > pool property.
+> > This
+> > *cachefile*
+> > is used instead of searching for devices.
+
+> **-d** *dir*|*device*
+
+> > Uses
+> > *device*
+> > or searches for devices or files in
+> > *dir*.
+> > The
+> > **-d**
+> > option can be specified multiple times.
+> > This option is incompatible with the
+> > **-c**
+> > option.
+
+> **-D**
+
+> > Imports destroyed pools only.
+> > The
+> > **-f**
+> > option is also required.
+
+> **-f**
+
+> > Forces import, even if the pool appears to be potentially active.
+
+> **-F**
+
+> > Recovery mode for a non-importable pool.
+> > Attempt to return the pool to an importable state by discarding the last few
+> > transactions.
+> > Not all damaged pools can be recovered by using this option.
+> > If successful, the data from the discarded transactions is irretrievably lost.
+> > This option is ignored if the pool is importable or already imported.
+
+> **-l**
+
+> > Indicates that this command will request encryption keys for all encrypted
+> > datasets it attempts to mount as it is bringing the pool online.
+> > Note that if any datasets have a
+> > **keylocation**
+> > of
+> > **prompt**
+> > this command will block waiting for the keys to be entered.
+> > Without this flag
+> > encrypted datasets will be left unavailable until the keys are loaded.
+
+> **-m**
+
+> > Allows a pool to import when there is a missing log device.
+> > Recent transactions can be lost because the log device will be discarded.
+
+> **-n**
+
+> > Used with the
+> > **-F**
+> > recovery option.
+> > Determines whether a non-importable pool can be made importable again, but does
+> > not actually perform the pool recovery.
+> > For more details about pool recovery mode, see the
+> > **-F**
+> > option, above.
+
+> **-N**
+
+> > Import the pool without mounting any file systems.
+
+> **-o** *mntopts*
+
+> > Comma-separated list of mount options to use when mounting datasets within the
+> > pool.
+> > See
+> > zfs(8)
+> > for a description of dataset properties and mount options.
+
+> **-o** *property*=*value*
+
+> > Sets the specified property on the imported pool.
+> > See the
+> > zpoolprops(7)
+> > manual page for more information on the available pool properties.
+
+> **-R** *root*
+
+> > Sets the
+> > **cachefile**
+> > property to
+> > **none**
+> > and the
+> > **altroot**
+> > property to
+> > *root*.
+
+> **--rewind-to-checkpoint**
+
+> > Rewinds pool to the checkpointed state.
+> > Once the pool is imported with this flag there is no way to undo the rewind.
+> > All changes and data that were written after the checkpoint are lost!
+> > The only exception is when the
+> > **readonly**
+> > mounting option is enabled.
+> > In this case, the checkpointed state of the pool is opened and an
+> > administrator can see how the pool would look like if they were
+> > to fully rewind.
+
+> **-s**
+
+> > Scan using the default search path, the libblkid cache will not be
+> > consulted.
+> > A custom search path may be specified by setting the
+> > **ZPOOL\_IMPORT\_PATH**
+> > environment variable.
+
+> **-X**
+
+> > Used with the
+> > **-F**
+> > recovery option.
+> > Determines whether extreme measures to find a valid txg should take place.
+> > This allows the pool to
+> > be rolled back to a txg which is no longer guaranteed to be consistent.
+> > Pools imported at an inconsistent txg may contain uncorrectable checksum errors.
+> > For more details about pool recovery mode, see the
+> > **-F**
+> > option, above.
+> > WARNING: This option can be extremely hazardous to the
+> > health of your pool and should only be used as a last resort.
+
+> **-T**
+
+> > Specify the txg to use for rollback.
+> > Implies
+> > **-FX**.
+> > For more details
+> > about pool recovery mode, see the
+> > **-X**
+> > option, above.
+> > WARNING: This option can be extremely hazardous to the
+> > health of your pool and should only be used as a last resort.
+
+**zpool**
+**import**
+\[**-Dflmt**]
+\[**-F** \[**-nTX**]]
+\[**-c** *cachefile*|**-d** *dir*|*device*]
+\[**-o** *mntopts*]
+\[**-o** *property*=*value*]&#8230;
+\[**-R** *root*]
+\[**-s**]
+*pool*|*id*
+\[*newpool*]
+
+> Imports a specific pool.
+> A pool can be identified by its name or the numeric identifier.
+> If
+> *newpool*
+> is specified, the pool is imported using the name
+> *newpool*.
+> Otherwise, it is imported with the same name as its exported name.
+
+> If a device is removed from a system without running
+> **zpool** **export**
+> first, the device appears as potentially active.
+> It cannot be determined if this was a failed export, or whether the device is
+> really in use from another host.
+> To import a pool in this state, the
+> **-f**
+> option is required.
+
+> **-c** *cachefile*
+
+> > Reads configuration from the given
+> > *cachefile*
+> > that was created with the
+> > **cachefile**
+> > pool property.
+> > This
+> > *cachefile*
+> > is used instead of searching for devices.
+
+> **-d** *dir*|*device*
+
+> > Uses
+> > *device*
+> > or searches for devices or files in
+> > *dir*.
+> > The
+> > **-d**
+> > option can be specified multiple times.
+> > This option is incompatible with the
+> > **-c**
+> > option.
+
+> **-D**
+
+> > Imports destroyed pool.
+> > The
+> > **-f**
+> > option is also required.
+
+> **-f**
+
+> > Forces import, even if the pool appears to be potentially active.
+
+> **-F**
+
+> > Recovery mode for a non-importable pool.
+> > Attempt to return the pool to an importable state by discarding the last few
+> > transactions.
+> > Not all damaged pools can be recovered by using this option.
+> > If successful, the data from the discarded transactions is irretrievably lost.
+> > This option is ignored if the pool is importable or already imported.
+
+> **-l**
+
+> > Indicates that this command will request encryption keys for all encrypted
+> > datasets it attempts to mount as it is bringing the pool online.
+> > Note that if any datasets have a
+> > **keylocation**
+> > of
+> > **prompt**
+> > this command will block waiting for the keys to be entered.
+> > Without this flag
+> > encrypted datasets will be left unavailable until the keys are loaded.
+
+> **-m**
+
+> > Allows a pool to import when there is a missing log device.
+> > Recent transactions can be lost because the log device will be discarded.
+
+> **-n**
+
+> > Used with the
+> > **-F**
+> > recovery option.
+> > Determines whether a non-importable pool can be made importable again, but does
+> > not actually perform the pool recovery.
+> > For more details about pool recovery mode, see the
+> > **-F**
+> > option, above.
+
+> **-o** *mntopts*
+
+> > Comma-separated list of mount options to use when mounting datasets within the
+> > pool.
+> > See
+> > zfs(8)
+> > for a description of dataset properties and mount options.
+
+> **-o** *property*=*value*
+
+> > Sets the specified property on the imported pool.
+> > See the
+> > zpoolprops(7)
+> > manual page for more information on the available pool properties.
+
+> **-R** *root*
+
+> > Sets the
+> > **cachefile**
+> > property to
+> > **none**
+> > and the
+> > **altroot**
+> > property to
+> > *root*.
+
+> **-s**
+
+> > Scan using the default search path, the libblkid cache will not be
+> > consulted.
+> > A custom search path may be specified by setting the
+> > **ZPOOL\_IMPORT\_PATH**
+> > environment variable.
+
+> **-X**
+
+> > Used with the
+> > **-F**
+> > recovery option.
+> > Determines whether extreme measures to find a valid txg should take place.
+> > This allows the pool to
+> > be rolled back to a txg which is no longer guaranteed to be consistent.
+> > Pools imported at an inconsistent txg may contain uncorrectable
+> > checksum errors.
+> > For more details about pool recovery mode, see the
+> > **-F**
+> > option, above.
+> > WARNING: This option can be extremely hazardous to the
+> > health of your pool and should only be used as a last resort.
+
+> **-T**
+
+> > Specify the txg to use for rollback.
+> > Implies
+> > **-FX**.
+> > For more details
+> > about pool recovery mode, see the
+> > **-X**
+> > option, above.
+> > *WARNING*:
+> > This option can be extremely hazardous to the
+> > health of your pool and should only be used as a last resort.
+
+> **-t**
+
+> > Used with
+> > *newpool*.
+> > Specifies that
+> > *newpool*
+> > is temporary.
+> > Temporary pool names last until export.
+> > Ensures that the original pool name will be used
+> > in all label updates and therefore is retained upon export.
+> > Will also set
+> > **-o** **cachefile**=**none**
+> > when not explicitly specified.
+
+# EXAMPLES
+
+## Example 9: Importing a ZFS Storage Pool
+
+The following command displays available pools, and then imports the pool
+*tank*
+for use on the system.
+The results from this command are similar to the following:
+
+	# **zpool** **import**
+	  pool: tank
+	    id: 15451357997522795478
+	 state: ONLINE
+	action: The pool can be imported using its name or numeric identifier.
+	config:
+	
+	        tank        ONLINE
+	          mirror    ONLINE
+	            sda     ONLINE
+	            sdb     ONLINE
+	
+	# **zpool** **import** *tank*
+
+# SEE ALSO
+
+zpool-export(8),
+zpool-list(8),
+zpool-status(8)
+
+Debian - July 11, 2022
