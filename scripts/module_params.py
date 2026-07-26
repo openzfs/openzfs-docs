@@ -707,7 +707,7 @@ def report_coverage(params, overlay, order, tags_of, report_path=None):
                 missing, total, OVERLAY_NAME)
     for version in sorted(uncurated, key=lambda v: order.index(v),
                           reverse=True)[:2]:
-        LOG.warning('  new in %s, still undocumented: %s',
+        LOG.warning('  new in %s, still without tuning notes: %s',
                     version, ', '.join(uncurated[version]))
 
     untagged = sorted(name for name, tags in tags_of.items() if not tags)
