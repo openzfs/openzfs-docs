@@ -879,7 +879,7 @@ zfs_arc_dnode_limit:
   tags:
   - ARC
   when_to_change: Consider increasing if ``arc_prune`` is using excessive system
-    time and ``/proc/spl/kstat/zfs/arcstats`` shows ``arc_dnode_size`` is near
+    time and ``/proc/spl/kstat/zfs/arcstats`` shows ``dnode_size`` is near
     or over ``arc_dnode_limit``
 zfs_arc_dnode_limit_percent:
   notes: Percentage of ARC metadata space that can be used for dnodes. The value
@@ -888,7 +888,7 @@ zfs_arc_dnode_limit_percent:
   tags:
   - ARC
   when_to_change: Consider increasing if ``arc_prune`` is using excessive system
-    time and ``/proc/spl/kstat/zfs/arcstats`` shows ``arc_dnode_size`` is near
+    time and ``/proc/spl/kstat/zfs/arcstats`` shows ``dnode_size`` is near
     or over ``arc_dnode_limit``
 zfs_arc_dnode_reduce_percent:
   notes: Percentage of ARC dnodes to try to evict in response to demand for non-metadata
@@ -1708,8 +1708,9 @@ zfs_multihost_history:
 zfs_multihost_import_intervals:
   notes: '``zfs_multihost_import_intervals`` controls the duration of the activity
     test on pool import for the multihost multimodifier protection (MMP) subsystem.
-    The activity test can be expected to take a minimum time of (``zfs_multihost_import_interval``\
-    s * zfs_multihost_interval * ``random(25%)``) milliseconds. The random period
+    The activity test can be expected to take a minimum time of
+    (``zfs_multihost_import_intervals`` * ``zfs_multihost_interval`` *
+    ``random(25%)``) milliseconds. The random period
     of up to 25% improves simultaneous import detection. For example, if two hosts
     are rebooted at the same time and automatically attempt to import the pool,
     then is is highly probable that one host will win. Smaller values of ``zfs_multihost_import_intervals``
