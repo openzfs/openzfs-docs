@@ -257,6 +257,18 @@ TABLE_LEFTOVER = re.compile(r'={4,}\s|\+-{3,}\+')
 # text escaped for reStructuredText, which the generator does by itself
 PRE_ESCAPED = re.compile(r'\\[*|_`]')
 PLACEHOLDERS = frozenset({'TBD', 'TODO', 'N/A', 'FIXME', '?'})
+# a lowercase identifier of at least three parts: zfs_arc_max, arc_meta_limit
+IDENTIFIER = re.compile(r'\b[a-z][a-z0-9]*(?:_[a-z0-9]+){2,}\b')
+# wording that places a reference in the past, so that a note about a
+# parameter upstream has taken away is not read as a stale reference
+PAST_TENSE = re.compile(r'remov|renam|until|before|prior|no longer|replaced',
+                        re.I)
+# Names that belong to somebody else - the Linux block layer, here - and are
+# named for good reason; they will never appear in the OpenZFS sources.
+FOREIGN_IDENTIFIERS = frozenset({
+    'discard_max_bytes',     # /sys/block/*/queue/, set by the kernel
+    'discard_max_hw_bytes',
+})
 # "the default of 32 threads", "defaults to 16"
 DEFAULT_MENTION = re.compile(
     r'(?<!internal )(?<!built-in )default(?:s)?(?:\s+value)?(?:\s+(?:of|is|to|was))?\s+'
@@ -901,13 +913,11 @@ def check_removed_references(name, entry, params, order):
     text = ' '.join(str(entry.get(key, ''))
                     for key in ('notes', 'when_to_change', 'verification'))
     stale = []
-    for token in sorted(set(re.findall(
-            r'\b[a-z][a-z0-9]*(?:_[a-z0-9]+){2,}\b', text))):
+    for token in sorted(set(IDENTIFIER.findall(text))):
         meta = params.get(token)
         if not meta or token == name or current in meta['versions']:
             continue
-        if re.search(r'remov|renam|until|before|prior|no longer|replaced',
-                     text, re.I):
+        if PAST_TENSE.search(text):
             continue  # the text already places it in the past
         stale.append('mentions {}, which upstream removed after {}'.format(
             token, version_label(meta['versions'][-1])))
@@ -966,17 +976,29 @@ def check_overlay(repo, params, overlay, order):
                         'this page knows about', name, version)
 
     # Identifiers mentioned in the curated text that are neither a parameter
-    # nor anything else in the current sources are almost certainly leftovers
-    # from a tunable that has been removed upstream.
+    # nor anything else upstream still names are almost certainly leftovers
+    # from a tunable that has been removed. As in check_removed_references(),
+    # an entry for a parameter that is itself history is left alone: it
+    # describes a state of affairs that is over, and may well name the rest
+    # of it.
+    current = order[-1]
     mentioned = defaultdict(set)
     for name, entry in overlay.items():
+        if not isinstance(entry, dict):
+            continue
+        if current not in params.get(name, {}).get('versions', []):
+            continue
         text = ' '.join(str(v) for key, v in entry.items() if key != 'tags')
-        for token in re.findall(r'\b[a-z][a-z0-9]*(?:_[a-z0-9]+){2,}\b', text):
-            if token not in params and token != name:
+        for token in IDENTIFIER.findall(text):
+            if (token not in params and token != name
+                    and token not in FOREIGN_IDENTIFIERS):
                 mentioned[token].add(name)
     for token in sorted(mentioned):
-        if files_with(repo, 'master', r'\b{}\b'.format(token), '*.c', '*.h'):
-            continue  # still exists in the sources, just not as a parameter
+        # the man pages count too: they name concepts, such as
+        # all_system_memory, that no line of C ever spells
+        if files_with(repo, 'master', r'\b{}\b'.format(token),
+                      '*.c', '*.h', 'man/*'):
+            continue  # still exists upstream, just not as a parameter
         LOG.warning('Overlay of %s mentions %s, which no longer exists',
                     ', '.join(sorted(mentioned[token])), token)
     return not unknown and not broken
