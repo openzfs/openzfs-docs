@@ -624,8 +624,6 @@ Step 4: System Configuration
 
      apt install --yes zfs-initramfs
 
-     echo REMAKE_INITRD=yes > /etc/dkms/zfs.conf
-
    **Note:** Ignore any error messages saying ``ERROR: Couldn't resolve
    device`` and ``WARNING: Couldn't determine root device``.  `cryptsetup does
    not support ZFS
