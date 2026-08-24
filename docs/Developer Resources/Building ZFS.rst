@@ -154,7 +154,9 @@ the ZFS and SPL source in the traditional autotools fashion.
 Install
 ^^^^^^^
 
-You can run ``zfs-tests.sh`` without installing ZFS, see below. If you
+You can run ``zfs-tests.sh`` without installing ZFS, see
+:ref:`below <running-zloopsh-and-zfs-testssh>` - but read the warning there
+first, as the test suite is destructive. If you
 have reason to install ZFS after building it, pay attention to how your
 distribution handles kernel modules. On Ubuntu, for example, the modules
 from this repository install in the ``extra`` kernel module path, which
@@ -171,6 +173,13 @@ the kernel modules with ``sudo make -C modules/ install``.
 
 Running zloop.sh and zfs-tests.sh
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. danger::
+   These are developer tools for validating changes to OpenZFS, not a way
+   for end users to check an installation. They are destructive: they
+   create and destroy pools, load and unload the kernel modules, add users
+   and groups, and write to ``/var/tmp``. Run them only on a dedicated test
+   machine or VM, never on a system holding data you care about.
 
 If you wish to run the ZFS Test Suite (ZTS), then ``ksh`` and a few
 additional utilities must be installed.
@@ -250,7 +259,15 @@ directory designed to aid developers working with in-tree builds.
 
 ::
 
-    ./scripts/zfs-tests.sh -vx
+    ./scripts/zfs-tests.sh -v
+
+.. danger::
+   The **-x** option cleans up leftovers from a previous run by removing
+   test pools, device-mapper and loopback devices, and files. It cannot
+   always tell those apart from resources that have nothing to do with
+   testing, so it can destroy an unrelated pool - an exported one, or one
+   with no mounted datasets. Only use it on a machine dedicated to running
+   the test suite.
 
 **tip:** The **delegate** tests will be skipped unless group read
 permission is set on the zfs directory and its parents.
