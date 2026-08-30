@@ -96,6 +96,7 @@ encrypted once per disk.
 Step 1: Prepare The Install Environment
 ---------------------------------------
 
+#. Disable Secure Boot. ZFS modules can not be loaded if Secure Boot is enabled.
 #. Boot the Debian GNU/Linux Live CD. If prompted, login with the username
    ``user`` and password ``live``. Connect your system to the Internet as
    appropriate (e.g. join your WiFi network). Open a terminal.
