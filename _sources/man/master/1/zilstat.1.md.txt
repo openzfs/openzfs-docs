@@ -1,0 +1,264 @@
+ZILSTAT(1) - General Commands Manual
+
+# NAME
+
+**zilstat** - report ZFS Intent Log statistics
+
+# SYNOPSIS
+
+**zilstat**
+\[**-v**]
+\[**-a**|**-p**&nbsp;*pool*|**-d**&nbsp;*dataset*\[,*dataset*&#8230;]]
+\[**-f**&nbsp;*field*\[,*field*&#8230;]]
+\[**-s**&nbsp;*separator*]
+\[**-i**&nbsp;*interval*]
+
+# DESCRIPTION
+
+**zilstat**
+prints statistics about the ZFS Intent Log (ZIL).
+The ZIL is used to log synchronous write operations and is replayed on
+pool import if the system crashes before those writes are committed to
+the main pool.
+
+By default, global ZIL statistics are displayed.
+When a pool or dataset is specified, per-dataset statistics are shown
+instead.
+
+If an
+*interval*
+is specified, the output is repeated every
+*interval*
+seconds showing the change in values since the previous sample.
+Without an interval, cumulative values are displayed.
+
+The following fields are available:
+
+**time**
+
+> Current time
+
+**pool**
+
+> Pool name
+
+**ds**
+
+> Dataset name
+
+**obj**
+
+> Objset ID
+
+**cc**
+
+> Commit count
+
+**cwc**
+
+> Commit writer count
+
+**cec**
+
+> Commit error count
+
+**csc**
+
+> Commit stall count
+
+**cSc**
+
+> Commit suspend count
+
+**cCc**
+
+> Commit crash count
+
+**ic**
+
+> In-transaction count
+
+**iic**
+
+> Indirect in-transaction count
+
+**iib**
+
+> Indirect in-transaction bytes
+
+**icc**
+
+> Copied in-transaction count
+
+**icb**
+
+> Copied in-transaction bytes
+
+**inc**
+
+> Needcopy in-transaction count
+
+**inb**
+
+> Needcopy in-transaction bytes
+
+**idc**
+
+> Direct (copied + needcopy) count
+
+**idb**
+
+> Direct (copied + needcopy) bytes
+
+**iwc**
+
+> Total write (indirect + direct) count
+
+**iwb**
+
+> Total write (indirect + direct) bytes
+
+**imnc**
+
+> Normal metaslab count
+
+**imnb**
+
+> Normal metaslab bytes
+
+**imnw**
+
+> Normal metaslab write bytes
+
+**imna**
+
+> Normal metaslab alloc bytes
+
+**imsc**
+
+> SLOG metaslab count
+
+**imsb**
+
+> SLOG metaslab bytes
+
+**imsw**
+
+> SLOG metaslab write bytes
+
+**imsa**
+
+> SLOG metaslab alloc bytes
+
+**imc**
+
+> Total metaslab (normal + SLOG) count
+
+**imb**
+
+> Total metaslab (normal + SLOG) bytes
+
+**imw**
+
+> Total metaslab (normal + SLOG) write bytes
+
+**ima**
+
+> Total metaslab (normal + SLOG) alloc bytes
+
+**se%**
+
+> Space efficiency percentage (bytes / alloc)
+
+**sen%**
+
+> Normal space efficiency percentage
+
+**ses%**
+
+> SLOG space efficiency percentage
+
+**te%**
+
+> Total efficiency percentage (bytes / write)
+
+**ten%**
+
+> Normal total efficiency percentage
+
+**tes%**
+
+> SLOG total efficiency percentage
+
+# OPTIONS
+
+**-h**
+
+> Display a help message.
+
+**-a**
+
+> Print statistics for all datasets across all pools.
+
+**-d** *dataset*
+
+> Print statistics for the specified dataset(s).
+> Multiple datasets may be given as a comma-separated list.
+
+**-f** *field*
+
+> Display only the specified fields.
+> Multiple fields may be given as a comma-separated list.
+> See
+> *DESCRIPTION*
+> for available fields.
+
+**-i** *interval*
+
+> Print statistics every
+> *interval*
+> seconds.
+> Values are reported as rates per second.
+
+**-p** *pool*
+
+> Print statistics for all datasets in the specified pool.
+
+**-s** *separator*
+
+> Override the default field separator
+> (two spaces)
+> with a custom string.
+
+**-v**
+
+> List all available field headers and their definitions.
+
+# ENVIRONMENT
+
+**Linux**
+
+> Statistics are read from
+> */proc/spl/kstat/zfs/zil*
+> for global stats and from per-pool objset files under
+> */proc/spl/kstat/zfs/*&zwnj;*pool*&zwnj;*/*.
+
+**FreeBSD**
+
+> Statistics are read via
+> sysctl(8)
+> from the
+> **kstat.zfs**
+> tree.
+
+# SEE ALSO
+
+zarcstat(1),
+zpool-status(8)
+
+# AUTHORS
+
+This manual page was written by
+Christos Longros &lt;[chris.longros@gmail.com](mailto:chris.longros@gmail.com)&gt;.
+
+Debian - March 9, 2026

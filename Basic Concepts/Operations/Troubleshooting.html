@@ -1,0 +1,415 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <meta property="article:modified_time" content="2026-07-22T12:41:49+00:00" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Troubleshooting &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://openzfs.github.io/openzfs-docs/Basic%20Concepts/Operations/Troubleshooting.html" />
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/js/redirect.js?v=2a1712f3"></script>
+      <script src="../../_static/js/module_params_filter.js?v=9a1b680c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Project and Community" href="../../Project%20and%20Community/index.html" />
+    <link rel="prev" title="Pools at Boot" href="Boot%20Process.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Basic Concepts</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Copy-on-write.html">Copy-on-Write</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Pool%20Structure/index.html">Pool Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Datasets/index.html">Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Data%20Storage/index.html">Data Storage</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Operations</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Send%20and%20Receive.html">Send and Receive</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Scrub%20and%20Resilver.html">Scrub and Resilver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="TRIM.html">TRIM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Sharing.html">Sharing Datasets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Delegated%20Administration.html">Delegated Administration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Boot%20Process.html">Pools at Boot</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Troubleshooting</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#first-look">First look</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#reading-zpool-status">Reading <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">status</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#permanent-errors">Permanent errors</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#a-pool-that-will-not-import">A pool that will not import</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#a-suspended-pool">A suspended pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hung-processes-and-slow-i-o">Hung processes and slow I/O</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#log-files">Log files</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#zfs-events">ZFS events</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#reporting-a-problem">Reporting a problem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#further-reading">Further reading</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../man/index.html">Man Pages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Basic Concepts</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Operations</a></li>
+      <li class="breadcrumb-item active">Troubleshooting</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/Basic Concepts/Operations/Troubleshooting.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="troubleshooting">
+<h1>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h1>
+<p>Where to look when a pool misbehaves, how to read what ZFS tells you, and what
+to collect before filing a bug.</p>
+<section id="first-look">
+<h2>First look<a class="headerlink" href="#first-look" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zpool<span class="w"> </span>status<span class="w"> </span>-v<span class="w">                 </span><span class="c1"># health, and the list of damaged files</span>
+zpool<span class="w"> </span>status<span class="w"> </span>-x<span class="w">                 </span><span class="c1"># only pools with problems</span>
+zpool<span class="w"> </span>status<span class="w"> </span>-es<span class="w">                </span><span class="c1"># unhealthy vdevs only, with slow-I/O counts</span>
+zpool<span class="w"> </span>events<span class="w"> </span>-v<span class="w">                 </span><span class="c1"># the event history, most detail</span>
+dmesg<span class="w"> </span>-T<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>zfs<span class="w">          </span><span class="c1"># kernel-level errors</span>
+zfs<span class="w"> </span>version
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">status</span> <span class="pre">-x</span></code> printing <code class="docutils literal notranslate"><span class="pre">all</span> <span class="pre">pools</span> <span class="pre">are</span> <span class="pre">healthy</span></code> rules out most of what
+follows.</p>
+</section>
+<section id="reading-zpool-status">
+<h2>Reading <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">status</span></code><a class="headerlink" href="#reading-zpool-status" title="Link to this heading"></a></h2>
+<p>Pool health is one of three states: <strong>ONLINE</strong> (everything normal),
+<strong>DEGRADED</strong> (a device failed but redundancy is covering it), or <strong>FAULTED</strong>
+(corrupted metadata, or too few replicas left to function).</p>
+<p>Individual vdevs report more detail:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">ONLINE</span></code></dt><dd><p>Working.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DEGRADED</span></code></dt><dd><p>Checksum errors, slow I/Os, or I/O errors exceed acceptable levels. ZFS
+keeps using the device, flagging that something may be wrong.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">FAULTED</span></code></dt><dd><p>The device opened but its contents did not match expectations, or its
+error count is high enough that ZFS stopped using it.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">OFFLINE</span></code></dt><dd><p>Taken offline deliberately with <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">offline</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">REMOVED</span></code></dt><dd><p>Physically pulled while running. Detection is hardware-dependent.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">UNAVAIL</span></code></dt><dd><p>Could not be opened at all. If the pool was imported while the device was
+missing, it shows a GUID rather than a path — the path was never valid.</p>
+</dd>
+</dl>
+<p>The three counter columns mean different things, and the distinction matters:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">READ</span></code> / <code class="docutils literal notranslate"><span class="pre">WRITE</span></code></dt><dd><p>I/O errors reported by the device itself.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CKSUM</span></code></dt><dd><p>The device returned data that failed its checksum — silent corruption.</p>
+</dd>
+</dl>
+<p>A damaged block that ZFS could reconstruct is charged to the disk that held the
+bad copy. A block it could <strong>not</strong> reconstruct — three damaged disks in a
+raidz2, say — cannot be attributed, so the checksum error is reported against
+<em>every</em> disk holding that block. A row of disks all showing CKSUM errors is
+therefore usually one unrecoverable block, not simultaneous failure of the
+whole row.</p>
+<p>Non-zero CKSUM on a disk that reports no I/O errors more often indicates
+cabling, an HBA, or memory than the disk.</p>
+<p><code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">clear</span> <span class="pre">pool</span></code> resets the counters. It does not repair anything — fix
+the cause first, then clear, then watch whether the counters come back.</p>
+</section>
+<section id="permanent-errors">
+<h2>Permanent errors<a class="headerlink" href="#permanent-errors" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">status</span> <span class="pre">-v</span></code> lists files with unrepairable errors. That data is gone:
+restore those files from a backup or a snapshot. If the listing shows a hex
+object number instead of a path, the file has already been deleted, or the
+dataset is not mounted.</p>
+<p>Entries persist until a scrub confirms they are gone, so run a scrub after
+restoring. See
+<a class="reference internal" href="Scrub%20and%20Resilver.html"><span class="doc">Scrub and Resilver</span></a>.</p>
+<p>Errors in metadata rather than a file, or the <code class="docutils literal notranslate"><span class="pre">&lt;metadata&gt;</span></code> marker, are more
+serious — that is the case redundancy exists for, and without it the pool may
+not be fully recoverable.</p>
+</section>
+<section id="a-pool-that-will-not-import">
+<h2>A pool that will not import<a class="headerlink" href="#a-pool-that-will-not-import" title="Link to this heading"></a></h2>
+<p>Work up this ladder, least destructive first. <strong>The options marked below
+destroy data</strong> — read the next section before using any of them.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zpool<span class="w"> </span>import<span class="w">                              </span><span class="c1"># what is visible at all</span>
+zpool<span class="w"> </span>import<span class="w"> </span>-d<span class="w"> </span>/dev/disk/by-id<span class="w">           </span><span class="c1"># scan a specific path</span>
+zpool<span class="w"> </span>import<span class="w"> </span>-o<span class="w"> </span><span class="nv">readonly</span><span class="o">=</span>on<span class="w"> </span>-N<span class="w"> </span>pool<span class="w">       </span><span class="c1"># look without changing anything</span>
+zpool<span class="w"> </span>import<span class="w"> </span>-f<span class="w"> </span>pool<span class="w">                      </span><span class="c1"># last used by another system</span>
+zpool<span class="w"> </span>import<span class="w"> </span>-m<span class="w"> </span>pool<span class="w">                      </span><span class="c1"># LOSES DATA: discards a missing log</span>
+zpool<span class="w"> </span>import<span class="w"> </span>-F<span class="w"> </span>-n<span class="w"> </span>pool<span class="w">                   </span><span class="c1"># dry run: is rewind possible?</span>
+zpool<span class="w"> </span>import<span class="w"> </span>-F<span class="w"> </span>pool<span class="w">                      </span><span class="c1"># LOSES DATA: discards transactions</span>
+zpool<span class="w"> </span>import<span class="w"> </span>-FX<span class="w"> </span>pool<span class="w">                     </span><span class="c1"># LOSES MORE DATA: extended rewind</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">import</span></code> with no arguments and <code class="docutils literal notranslate"><span class="pre">-d</span></code> are safe — they only scan.
+<code class="docutils literal notranslate"><span class="pre">-f</span></code> overrides the “pool was last used by another system” guard; it does
+not itself discard anything, but importing a pool that is genuinely still
+active on another host will corrupt it.</p>
+<p><code class="docutils literal notranslate"><span class="pre">-o</span> <span class="pre">readonly=on</span> <span class="pre">-N</span></code> is the right first move on a pool you care about: it
+imports without mounting and without writing, so you can look before deciding.</p>
+<section id="what-each-destructive-option-actually-costs">
+<h3>What each destructive option actually costs<a class="headerlink" href="#what-each-destructive-option-actually-costs" title="Link to this heading"></a></h3>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">-m</span></code> — <strong>discards the intent log.</strong></dt><dd><p>This is data loss, and it is easy to miss because the flag reads like a
+convenience. A missing or dead SLOG holds synchronous writes that were
+acknowledged to applications but not yet written to the pool. Importing
+with <code class="docutils literal notranslate"><span class="pre">-m</span></code> throws them away: the pool comes up consistent, but recent
+transactions the application was told were durable are gone. For a
+database or an NFS server that is silent corruption at the application
+level, not at the ZFS level — ZFS will report the pool as healthy.</p>
+<p>Before reaching for <code class="docutils literal notranslate"><span class="pre">-m</span></code>, try to make the log device readable again.
+This is also the argument for mirroring a SLOG.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">-F</span></code> — <strong>discards the last few transaction groups.</strong></dt><dd><p>Rewinds the pool to an earlier consistent state. Everything written after
+that point is irretrievably lost, and not every damaged pool can be
+recovered this way. Always run <code class="docutils literal notranslate"><span class="pre">-F</span> <span class="pre">-n</span></code> first: it reports whether the
+rewind would succeed without performing it.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">-X</span></code> — <strong>extended rewind.</strong></dt><dd><p>Searches further back in time, so it can lose correspondingly more. Use
+only after <code class="docutils literal notranslate"><span class="pre">-F</span></code> has failed.</p>
+</dd>
+</dl>
+<p>If the pool has a checkpoint, <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">import</span> <span class="pre">--rewind-to-checkpoint</span></code> is a
+cleaner and better-defined undo than <code class="docutils literal notranslate"><span class="pre">-F</span></code>, because you chose the point it
+returns to. Note that it too is irreversible once imported without
+<code class="docutils literal notranslate"><span class="pre">readonly</span></code>.</p>
+<p>See
+<a class="reference internal" href="../Pool%20Structure/Changing%20Pool%20Layout.html"><span class="doc">Changing Pool Layout</span></a>
+for checkpoints.</p>
+<p>A pool that was <strong>destroyed</strong> is not immediately gone. <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">import</span> <span class="pre">-D</span></code>
+lists destroyed pools, and importing with <code class="docutils literal notranslate"><span class="pre">-D</span></code> brings one back, as long as
+its devices have not been reused:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zpool<span class="w"> </span>import<span class="w"> </span>-D<span class="w">                 </span><span class="c1"># what can still be recovered</span>
+zpool<span class="w"> </span>import<span class="w"> </span>-D<span class="w"> </span>pool
+</pre></div>
+</div>
+<p>Importing somewhere unusual — a rescue environment, or a pool whose mount
+points would collide with the running system — is what <code class="docutils literal notranslate"><span class="pre">-R</span></code> is for. It sets
+<code class="docutils literal notranslate"><span class="pre">altroot</span></code>, so every mount point is prefixed, and <code class="docutils literal notranslate"><span class="pre">cachefile=none</span></code> so the
+import is not remembered:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zpool<span class="w"> </span>import<span class="w"> </span>-R<span class="w"> </span>/mnt<span class="w"> </span>-N<span class="w"> </span>pool
+</pre></div>
+</div>
+<p>Device names that changed between boots are a common cause of a pool that
+“disappeared” — import with <code class="docutils literal notranslate"><span class="pre">-d</span> <span class="pre">/dev/disk/by-id</span></code> and see the
+<a class="reference internal" href="../../Project%20and%20Community/FAQ.html"><span class="doc">FAQ</span></a> on selecting <code class="docutils literal notranslate"><span class="pre">/dev/</span></code> names.</p>
+</section>
+</section>
+<section id="a-suspended-pool">
+<h2>A suspended pool<a class="headerlink" href="#a-suspended-pool" title="Link to this heading"></a></h2>
+<p>When connectivity to the underlying devices is lost, the pool is suspended and
+the <code class="docutils literal notranslate"><span class="pre">failmode</span></code> property decides what happens:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">wait</span></code></dt><dd><p>The default. Blocks all I/O until connectivity returns and the errors are
+cleared with <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">clear</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">continue</span></code></dt><dd><p>Returns <code class="docutils literal notranslate"><span class="pre">EIO</span></code> to new writes but still serves reads from healthy devices.
+Uncommitted writes stay blocked.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">panic</span></code></dt><dd><p>Prints a message and crashes the system, generating a dump.</p>
+</dd>
+</dl>
+<p>A suspended pool with <code class="docutils literal notranslate"><span class="pre">failmode=wait</span></code> looks exactly like a hang: commands
+touching it block forever and are unkillable. Check <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">status</span></code> for
+another pool, and <code class="docutils literal notranslate"><span class="pre">dmesg</span></code>, before concluding ZFS has deadlocked.</p>
+</section>
+<section id="hung-processes-and-slow-i-o">
+<h2>Hung processes and slow I/O<a class="headerlink" href="#hung-processes-and-slow-i-o" title="Link to this heading"></a></h2>
+<p><em>Symptom:</em> a <code class="docutils literal notranslate"><span class="pre">zfs</span></code> or <code class="docutils literal notranslate"><span class="pre">zpool</span></code> command never returns and cannot be killed.</p>
+<p><em>Usual cause:</em> a stuck kernel thread, a suspended pool, or genuinely slow
+hardware.</p>
+<p>ZFS has a <em>deadman</em> timer for this. A pool sync taking longer than
+<code class="docutils literal notranslate"><span class="pre">zfs_deadman_synctime_ms</span></code>, or a single I/O longer than
+<code class="docutils literal notranslate"><span class="pre">zfs_deadman_ziotime_ms</span></code>, is declared hung. With the default
+<code class="docutils literal notranslate"><span class="pre">zfs_deadman_failmode=wait</span></code> this is only <em>logged</em> — so the evidence is in
+the logs, not on your terminal. The deadman is disabled automatically once a
+pool is suspended.</p>
+<p>Slow but not hung storage is easier to see directly:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zpool<span class="w"> </span>status<span class="w"> </span>-s<span class="w">                 </span><span class="c1"># slow I/O count per leaf vdev</span>
+zpool<span class="w"> </span>iostat<span class="w"> </span>-l<span class="w"> </span><span class="m">1</span><span class="w">               </span><span class="c1"># latency breakdown</span>
+zpool<span class="w"> </span>iostat<span class="w"> </span>-w<span class="w">                 </span><span class="c1"># latency histograms</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">-s</span></code> counts I/Os that took longer than <code class="docutils literal notranslate"><span class="pre">zio_slow_io_ms</span></code> (30 s by default).
+They did not necessarily fail — but a single disk accumulating them is the
+classic signature of a drive about to go, and on RAIDZ it drags the whole
+group down (see <a class="reference internal" href="../Pool%20Structure/RAIDZ.html"><span class="doc">RAIDZ</span></a>).</p>
+</section>
+<section id="log-files">
+<h2>Log files<a class="headerlink" href="#log-files" title="Link to this heading"></a></h2>
+<p><strong>Kernel log.</strong> <code class="docutils literal notranslate"><span class="pre">dmesg</span> <span class="pre">-T</span></code>, <code class="docutils literal notranslate"><span class="pre">/var/log/syslog</span></code>, or wherever <code class="docutils literal notranslate"><span class="pre">rsyslogd</span></code>
+sends kernel messages. Stack traces from stuck threads land here — sometimes
+only once the deadman timer expires.</p>
+<p><strong>ZFS debug messages.</strong> The modules keep an internal log buffer, readable at
+<code class="docutils literal notranslate"><span class="pre">/proc/spl/kstat/zfs/dbgmsg</span></code>, when the module parameter
+<a class="reference external" href="../../PerformanceandTuning/ModuleParameters.html#zfs-dbgmsg-enable">zfs_dbgmsg_enable</a>
+is 1. This is frequently what developers ask for.</p>
+<p><strong>Per-pool I/O statistics.</strong> <code class="docutils literal notranslate"><span class="pre">/proc/spl/kstat/zfs/&lt;pool&gt;/</span></code> on Linux.</p>
+<p><strong>What was done to this pool.</strong> <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">history</span></code> replays the administrative
+commands the pool has seen — stored in the pool itself, so it survives
+reboots and moves with the pool to another host. Frequently the fastest way
+to answer “what changed?”.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zpool<span class="w"> </span><span class="nb">history</span><span class="w"> </span>pool
+zpool<span class="w"> </span><span class="nb">history</span><span class="w"> </span>-l<span class="w"> </span>pool<span class="w">           </span><span class="c1"># who, from which host</span>
+zpool<span class="w"> </span><span class="nb">history</span><span class="w"> </span>-i<span class="w"> </span>pool<span class="w">           </span><span class="c1"># include internally logged events</span>
+</pre></div>
+</div>
+<p>Logging infrastructure — elasticsearch, fluentd, influxdb, splunk — makes
+correlating these with system events considerably easier.</p>
+</section>
+<section id="zfs-events">
+<h2>ZFS events<a class="headerlink" href="#zfs-events" title="Link to this heading"></a></h2>
+<p>ZFS reports notable events through an event channel. The ZFS Event Daemon
+(<code class="docutils literal notranslate"><span class="pre">zed</span></code>) listens and acts on them; it is extensible, so scripts can subscribe
+and take action. The script usually installed at
+<code class="docutils literal notranslate"><span class="pre">/etc/zfs/zed.d/all-syslog.sh</span></code> writes a formatted message to syslog. See
+<code class="docutils literal notranslate"><span class="pre">zed(8)</span></code>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zpool<span class="w"> </span>events<span class="w">                    </span><span class="c1"># history since module load, all pools</span>
+zpool<span class="w"> </span>events<span class="w"> </span>-v<span class="w">                 </span><span class="c1"># full detail per event</span>
+zpool<span class="w"> </span>events<span class="w"> </span>-f<span class="w">                 </span><span class="c1"># follow</span>
+</pre></div>
+</div>
+<p>The history lives in RAM and is capped by
+<a class="reference external" href="../../PerformanceandTuning/ModuleParameters.html#zfs-zevent-len-max">zfs_zevent_len_max</a>.
+<code class="docutils literal notranslate"><span class="pre">zed</span></code> throttles internally so a failing device cannot exhaust the system.</p>
+<p>Each event carries a class used for filtering:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">sysevent.fs.zfs.*</span></code></dt><dd><p>Pool management — import, export, configuration updates, <code class="docutils literal notranslate"><span class="pre">zpool</span>
+<span class="pre">history</span></code> entries.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ereport.*</span></code></dt><dd><p>Errors. One fault often produces several, as each layer reports it: a
+failing disk can raise an <code class="docutils literal notranslate"><span class="pre">ereport.io</span></code> on the read and an
+<code class="docutils literal notranslate"><span class="pre">ereport.fs.zfs.checksum</span></code> at the pool level. These correspond to the
+counters in <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">status</span></code> — if you see errors there, matching ereports
+exist here.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ereport.fs.zfs.delay</span></code></dt><dd><p>A slow I/O, including a RAIDZ child being put in sit-out.</p>
+</dd>
+</dl>
+<p>The exact contents of verbose events change between versions; treat them as
+diagnostic detail, not a stable interface.</p>
+</section>
+<section id="reporting-a-problem">
+<h2>Reporting a problem<a class="headerlink" href="#reporting-a-problem" title="Link to this heading"></a></h2>
+<p>Before opening an issue, confirm it is a bug rather than a support question —
+the <a class="reference internal" href="../../Project%20and%20Community/Mailing%20Lists.html"><span class="doc">mailing lists</span></a> are the place
+for the latter. Then collect:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">zfs</span> <span class="pre">version</span></code> and the distribution and kernel version</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">status</span> <span class="pre">-v</span></code> and <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">get</span> <span class="pre">all</span> <span class="pre">&lt;pool&gt;</span></code></p></li>
+<li><p>the relevant part of <code class="docutils literal notranslate"><span class="pre">dmesg</span></code> and of <code class="docutils literal notranslate"><span class="pre">/proc/spl/kstat/zfs/dbgmsg</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">events</span> <span class="pre">-v</span></code> around the failure</p></li>
+<li><p>non-default module parameters</p></li>
+<li><p>whether the system uses ECC memory, and whether it is virtualised</p></li>
+<li><p>a reproducer, if you have one — this matters more than anything else above</p></li>
+</ul>
+<p>The <a class="reference internal" href="../../Project%20and%20Community/FAQ.html"><span class="doc">FAQ</span></a> has the full list and the issue
+tracker link.</p>
+</section>
+<section id="further-reading">
+<h2>Further reading<a class="headerlink" href="#further-reading" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zpool-status.8.html">zpool-status(8)</a>,
+<a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zpool-events.8.html">zpool-events(8)</a>,
+<a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zpool-import.8.html">zpool-import(8)</a></p></li>
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/7/zpoolconcepts.7.html">zpoolconcepts(7)</a> —
+<code class="docutils literal notranslate"><span class="pre">Device</span> <span class="pre">Failure</span> <span class="pre">and</span> <span class="pre">Recovery</span></code></p></li>
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zed.8.html">zed(8)</a></p></li>
+<li><p><a class="reference internal" href="../../msg/index.html"><span class="doc">ZFS Messages</span></a> — the <code class="docutils literal notranslate"><span class="pre">ZFS-8000-*</span></code> codes from
+<code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">status</span></code></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Boot%20Process.html" class="btn btn-neutral float-left" title="Pools at Boot" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../Project%20and%20Community/index.html" class="btn btn-neutral float-right" title="Project and Community" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, OpenZFS.
+      <span class="lastupdated">Last updated on Jul 22, 2026.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

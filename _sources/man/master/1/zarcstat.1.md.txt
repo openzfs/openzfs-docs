@@ -1,0 +1,774 @@
+ZARCSTAT(1) - General Commands Manual
+
+# NAME
+
+**zarcstat** - report ZFS ARC and L2ARC statistics
+
+# SYNOPSIS
+
+**zarcstat**
+\[**-havxp**]
+\[**-f**&nbsp;*field*\[,*field*&#8230;]]
+\[**-o**&nbsp;*file*]
+\[**-s**&nbsp;*string*]
+\[*interval*]
+\[*count*]
+
+# DESCRIPTION
+
+**zarcstat**
+prints various ZFS ARC and L2ARC statistics in vmstat-like fashion:
+
+**c**
+
+> ARC target size
+
+**dh%**
+
+> Demand hit percentage
+
+**di%**
+
+> Demand I/O hit percentage
+
+**dm%**
+
+> Demand miss percentage
+
+**ddh%**
+
+> Demand data hit percentage
+
+**ddi%**
+
+> Demand data I/O hit percentage
+
+**ddm%**
+
+> Demand data miss percentage
+
+**dmh%**
+
+> Demand metadata hit percentage
+
+**dmi%**
+
+> Demand metadata I/O hit percentage
+
+**dmm%**
+
+> Demand metadata miss percentage
+
+**mfu**
+
+> MFU list hits per second
+
+**mh%**
+
+> Metadata hit percentage
+
+**mi%**
+
+> Metadata I/O hit percentage
+
+**mm%**
+
+> Metadata miss percentage
+
+**mru**
+
+> MRU list hits per second
+
+**ph%**
+
+> Prefetch hits percentage
+
+**pi%**
+
+> Prefetch I/O hits percentage
+
+**pm%**
+
+> Prefetch miss percentage
+
+**pdh%**
+
+> Prefetch data hits percentage
+
+**pdi%**
+
+> Prefetch data I/O hits percentage
+
+**pdm%**
+
+> Prefetch data miss percentage
+
+**pmh%**
+
+> Prefetch metadata hits percentage
+
+**pmi%**
+
+> Prefetch metadata I/O hits percentage
+
+**pmm%**
+
+> Prefetch metadata miss percentage
+
+**dhit**
+
+> Demand hits per second
+
+**dioh**
+
+> Demand I/O hits per second
+
+**dmis**
+
+> Demand misses per second
+
+**ddhit**
+
+> Demand data hits per second
+
+**ddioh**
+
+> Demand data I/O hits per second
+
+**ddmis**
+
+> Demand data misses per second
+
+**dmhit**
+
+> Demand metadata hits per second
+
+**dmioh**
+
+> Demand metadata I/O hits per second
+
+**dmmis**
+
+> Demand metadata misses per second
+
+**hit%**
+
+> ARC hit percentage
+
+**hits**
+
+> ARC hits per second
+
+**ioh%**
+
+> ARC I/O hits percentage
+
+**iohs**
+
+> ARC I/O hits per second
+
+**mfug**
+
+> MFU ghost list hits per second
+
+**mhit**
+
+> Metadata hits per second
+
+**mioh**
+
+> Metadata I/O hits per second
+
+**miss**
+
+> ARC misses per second
+
+**mmis**
+
+> Metadata misses per second
+
+**mrug**
+
+> MRU ghost list hits per second
+
+**phit**
+
+> Prefetch hits per second
+
+**pioh**
+
+> Prefetch I/O hits per second
+
+**pmis**
+
+> Prefetch misses per second
+
+**pdhit**
+
+> Prefetch data hits per second
+
+**pdioh**
+
+> Prefetch data I/O hits per second
+
+**pdmis**
+
+> Prefetch data misses per second
+
+**pmhit**
+
+> Prefetch metadata hits per second
+
+**pmioh**
+
+> Prefetch metadata I/O hits per second
+
+**pmmis**
+
+> Prefetch metadata misses per second
+
+**read**
+
+> Total ARC accesses per second
+
+**time**
+
+> Current time
+
+**size**
+
+> ARC size
+
+**arcsz**
+
+> Alias for
+> **size**
+
+**unc**
+
+> Uncached list hits per second
+
+**dread**
+
+> Demand accesses per second
+
+**ddread**
+
+> Demand data accesses per second
+
+**dmread**
+
+> Demand metadata accesses per second
+
+**eskip**
+
+> evict\_skip per second
+
+**miss%**
+
+> ARC miss percentage
+
+**mread**
+
+> Metadata accesses per second
+
+**pread**
+
+> Prefetch accesses per second
+
+**pdread**
+
+> Prefetch data accesses per second
+
+**pmread**
+
+> Prefetch metadata accesses per second
+
+**l2hit%**
+
+> L2ARC access hit percentage
+
+**l2hits**
+
+> L2ARC hits per second
+
+**l2miss**
+
+> L2ARC misses per second
+
+**l2read**
+
+> Total L2ARC accesses per second
+
+**l2pref**
+
+> L2ARC prefetch allocated size per second
+
+**l2pref%**
+
+> L2ARC prefetch allocated size percentage
+
+**l2mfu**
+
+> L2ARC MFU allocated size per second
+
+**l2mfu%**
+
+> L2ARC MFU allocated size percentage
+
+**l2mru**
+
+> L2ARC MRU allocated size per second
+
+**l2mru%**
+
+> L2ARC MRU allocated size percentage
+
+**l2data**
+
+> L2ARC data (buf content) allocated size per second
+
+**l2data%**
+
+> L2ARC data (buf content) allocated size percentage
+
+**l2meta**
+
+> L2ARC metadata (buf content) allocated size per second
+
+**l2meta%**
+
+> L2ARC metadata (buf content) allocated size percentage
+
+**l2size**
+
+> Size of the L2ARC
+
+**mtxmis**
+
+> mutex\_miss per second
+
+**l2bytes**
+
+> Bytes read per second from the L2ARC
+
+**l2wbytes**
+
+> Bytes written per second to the L2ARC
+
+**l2miss%**
+
+> L2ARC access miss percentage
+
+**l2asize**
+
+> Actual (compressed) size of the L2ARC
+
+**cmpsz**
+
+> Compressed size
+
+**cmpsz%**
+
+> Compressed size percentage
+
+**ovhsz**
+
+> Overhead size
+
+**ovhsz%**
+
+> Overhead size percentage
+
+**bonsz**
+
+> Bonus size
+
+**bonsz%**
+
+> Bonus size percentage
+
+**dnosz**
+
+> Dnode size
+
+**dnosz%**
+
+> Dnode size percentage
+
+**dbusz**
+
+> Dbuf size
+
+**dbusz%**
+
+> Dbuf size percentage
+
+**hdrsz**
+
+> Header size
+
+**hdrsz%**
+
+> Header size percentage
+
+**l2hsz**
+
+> L2 header size
+
+**l2hsz%**
+
+> L2 header size percentage
+
+**abdsz**
+
+> ABD chunk waste size
+
+**abdsz%**
+
+> ABD chunk waste size percentage
+
+**datatg**
+
+> ARC data target
+
+**datatg%**
+
+> ARC data target percentage
+
+**datasz**
+
+> ARC data size
+
+**datasz%**
+
+> ARC data size percentage
+
+**metatg**
+
+> ARC metadata target
+
+**metatg%**
+
+> ARC metadata target percentage
+
+**metasz**
+
+> ARC metadata size
+
+**metasz%**
+
+> ARC metadata size percentage
+
+**anosz**
+
+> Anonymous size
+
+**anosz%**
+
+> Anonymous size percentage
+
+**anoda**
+
+> Anonymous data size
+
+**anoda%**
+
+> Anonymous data size percentage
+
+**anome**
+
+> Anonymous metadata size
+
+**anome%**
+
+> Anonymous metadata size percentage
+
+**anoed**
+
+> Anonymous evictable data size
+
+**anoed%**
+
+> Anonymous evictable data size percentage
+
+**anoem**
+
+> Anonymous evictable metadata size
+
+**anoem%**
+
+> Anonymous evictable metadata size percentage
+
+**mfutg**
+
+> MFU target
+
+**mfutg%**
+
+> MFU target percentage
+
+**mfudt**
+
+> MFU data target
+
+**mfudt%**
+
+> MFU data target percentage
+
+**mfumt**
+
+> MFU metadata target
+
+**mfumt%**
+
+> MFU metadata target percentage
+
+**mfusz**
+
+> MFU size
+
+**mfusz%**
+
+> MFU size percentage
+
+**mfuda**
+
+> MFU data size
+
+**mfuda%**
+
+> MFU data size percentage
+
+**mfume**
+
+> MFU metadata size
+
+**mfume%**
+
+> MFU metadata size percentage
+
+**mfued**
+
+> MFU evictable data size
+
+**mfued%**
+
+> MFU evictable data size percentage
+
+**mfuem**
+
+> MFU evictable metadata size
+
+**mfuem%**
+
+> MFU evictable metadata size percentage
+
+**mfugsz**
+
+> MFU ghost size
+
+**mfugd**
+
+> MFU ghost data size
+
+**mfugm**
+
+> MFU ghost metadata size
+
+**mrutg**
+
+> MRU target
+
+**mrutg%**
+
+> MRU target percentage
+
+**mrudt**
+
+> MRU data target
+
+**mrudt%**
+
+> MRU data target percentage
+
+**mrumt**
+
+> MRU metadata target
+
+**mrumt%**
+
+> MRU metadata target percentage
+
+**mrusz**
+
+> MRU size
+
+**mrusz%**
+
+> MRU size percentage
+
+**mruda**
+
+> MRU data size
+
+**mruda%**
+
+> MRU data size percentage
+
+**mrume**
+
+> MRU metadata size
+
+**mrume%**
+
+> MRU metadata size percentage
+
+**mrued**
+
+> MRU evictable data size
+
+**mrued%**
+
+> MRU evictable data size percentage
+
+**mruem**
+
+> MRU evictable metadata size
+
+**mruem%**
+
+> MRU evictable metadata size percentage
+
+**mrugsz**
+
+> MRU ghost size
+
+**mrugd**
+
+> MRU ghost data size
+
+**mrugm**
+
+> MRU ghost metadata size
+
+**uncsz**
+
+> Uncached size
+
+**uncsz%**
+
+> Uncached size percentage
+
+**uncda**
+
+> Uncached data size
+
+**uncda%**
+
+> Uncached data size percentage
+
+**uncme**
+
+> Uncached metadata size
+
+**uncme%**
+
+> Uncached metadata size percentage
+
+**unced**
+
+> Uncached evictable data size
+
+**unced%**
+
+> Uncached evictable data size percentage
+
+**uncem**
+
+> Uncached evictable metadata size
+
+**uncem%**
+
+> Uncached evictable metadata size percentage
+
+**grow**
+
+> ARC grow disabled
+
+**need**
+
+> ARC reclaim needed
+
+**free**
+
+> The ARC's idea of how much free memory there is, which includes evictable memory
+> in the page cache.
+> Since the ARC tries to keep
+> **avail**
+> above zero,
+> **avail**
+> is usually more instructive to observe than
+> **free**.
+
+**avail**
+
+> The ARC's idea of how much free memory is available to it, which is a bit less
+> than
+> **free**.
+> May temporarily be negative, in which case the ARC will reduce the target size
+> **c**.
+
+# OPTIONS
+
+**-a**
+
+> Print all possible stats.
+
+**-f**
+
+> Display only specific fields.
+> See
+> *DESCRIPTION*
+> for supported statistics.
+
+**-h**
+
+> Display help message.
+
+**-o**
+
+> Report statistics to a file instead of the standard output.
+
+**-p**
+
+> Disable auto-scaling of numerical fields (for raw, machine-parsable values).
+
+**-s**
+
+> Display data with a specified separator (default: 2 spaces).
+
+**-x**
+
+> Print extended stats
+> (same as **-f** **time**,**mfu**,**mru**,**mfug**,**mrug**,**eskip**,**mtxmis**,**dread**,**pread**,**read**).
+
+**-v**
+
+> Show field headers and definitions
+
+# OPERANDS
+
+The following operands are supported:
+
+*interval*
+
+> Specify the sampling interval in seconds.
+
+*count*
+
+> Display only
+> *count*
+> reports.
+
+Debian - September 19, 2024

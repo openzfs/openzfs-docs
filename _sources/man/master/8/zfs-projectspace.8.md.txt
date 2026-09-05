@@ -1,0 +1,172 @@
+ZFS-USERSPACE(8) - System Manager's Manual
+
+# NAME
+
+**zfs-userspace** - display space and quotas of ZFS dataset
+
+# SYNOPSIS
+
+**zfs**
+**userspace**
+\[**-Hinp**]
+\[**-o**&nbsp;*field*\[,*field*]&#8230;]
+\[**-s**&nbsp;*field*]&#8230;
+\[**-S**&nbsp;*field*]&#8230;
+\[**-t**&nbsp;*type*\[,*type*]&#8230;]
+*filesystem*|*snapshot*|*path*  
+**zfs**
+**groupspace**
+\[**-Hinp**]
+\[**-o**&nbsp;*field*\[,*field*]&#8230;]
+\[**-s**&nbsp;*field*]&#8230;
+\[**-S**&nbsp;*field*]&#8230;
+\[**-t**&nbsp;*type*\[,*type*]&#8230;]
+*filesystem*|*snapshot*|*path*  
+**zfs**
+**projectspace**
+\[**-Hp**]
+\[**-o**&nbsp;*field*\[,*field*]&#8230;]
+\[**-s**&nbsp;*field*]&#8230;
+\[**-S**&nbsp;*field*]&#8230;
+*filesystem*|*snapshot*|*path*
+
+# DESCRIPTION
+
+**zfs**
+**userspace**
+\[**-Hinp**]
+\[**-o** *field*\[,*field*]&#8230;]
+\[**-s** *field*]&#8230;
+\[**-S** *field*]&#8230;
+\[**-t** *type*\[,*type*]&#8230;]
+*filesystem*|*snapshot*|*path*
+
+> Displays space consumed by, and quotas on, each user in the specified
+> filesystem,
+> snapshot, or path.
+> If a path is given, the filesystem that contains that path will be used.
+> This corresponds to the
+> **userused@**&zwnj;*user*,
+> **userobjused@**&zwnj;*user*,
+> **userquota@**&zwnj;*user*,
+> and
+> **userobjquota@**&zwnj;*user*
+> properties.
+
+> **-H**
+
+> > Do not print headers, use tab-delimited output.
+
+> **-S** *field*
+
+> > Sort by this field in reverse order.
+> > See
+> > **-s**.
+
+> **-i**
+
+> > Translate SID to POSIX ID.
+> > The POSIX ID may be ephemeral if no mapping exists.
+> > Normal POSIX interfaces
+> > (like stat(2), **ls** **-l**)
+> > perform this translation, so the
+> > **-i**
+> > option allows the output from
+> > **zfs** **userspace**
+> > to be compared directly with those utilities.
+> > However,
+> > **-i**
+> > may lead to confusion if some files were created by an SMB user before a
+> > SMB-to-POSIX name mapping was established.
+> > In such a case, some files will be owned by the SMB entity and some by the POSIX
+> > entity.
+> > However, the
+> > **-i**
+> > option will report that the POSIX entity has the total usage and quota for both.
+
+> **-n**
+
+> > Print numeric ID instead of user/group name.
+
+> **-o** *field*\[,*field*]&#8230;
+
+> > Display only the specified fields from the following set:
+> > **type**,
+> > **name**,
+> > **used**,
+> > **quota**.
+> > The default is to display all fields.
+
+> **-p**
+
+> > Use exact
+> > (parsable)
+> > numeric output.
+
+> **-s** *field*
+
+> > Sort output by this field.
+> > The
+> > **-s**
+> > and
+> > **-S**
+> > flags may be specified multiple times to sort first by one field, then by
+> > another.
+> > The default is
+> > **-s** **type** **-s** **name**.
+
+> **-t** *type*\[,*type*]&#8230;
+
+> > Print only the specified types from the following set:
+> > **all**,
+> > **posixuser**,
+> > **smbuser**,
+> > **posixgroup**,
+> > **smbgroup**.
+> > The default is
+> > **-t** **posixuser**,**smbuser**.
+> > The default can be changed to include group types.
+
+**zfs**
+**groupspace**
+\[**-Hinp**]
+\[**-o** *field*\[,*field*]&#8230;]
+\[**-s** *field*]&#8230;
+\[**-S** *field*]&#8230;
+\[**-t** *type*\[,*type*]&#8230;]
+*filesystem*|*snapshot*
+
+> Displays space consumed by, and quotas on, each group in the specified
+> filesystem or snapshot.
+> This subcommand is identical to
+> **userspace**,
+> except that the default types to display are
+> **-t** **posixgroup**,**smbgroup**.
+
+**zfs**
+**projectspace**
+\[**-Hp**]
+\[**-o** *field*\[,*field*]&#8230;]
+\[**-s** *field*]&#8230;
+\[**-S** *field*]&#8230;
+*filesystem*|*snapshot*|*path*
+
+> Displays space consumed by, and quotas on, each project in the specified
+> filesystem or snapshot.
+> This subcommand is identical to
+> **userspace**,
+> except that the project identifier is a numeral, not a name.
+> So need neither the option
+> **-i**
+> for SID to POSIX ID nor
+> **-n**
+> for numeric ID, nor
+> **-t**
+> for types.
+
+# SEE ALSO
+
+zfsprops(7),
+zfs-set(8)
+
+Debian - July 11, 2022

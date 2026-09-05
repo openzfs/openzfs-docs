@@ -1,0 +1,243 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <meta property="article:modified_time" content="2026-07-22T11:05:18+00:00" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Delegated Administration &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://openzfs.github.io/openzfs-docs/Basic%20Concepts/Operations/Delegated%20Administration.html" />
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/js/redirect.js?v=2a1712f3"></script>
+      <script src="../../_static/js/module_params_filter.js?v=9a1b680c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Pools at Boot" href="Boot%20Process.html" />
+    <link rel="prev" title="Sharing Datasets" href="Sharing.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Basic Concepts</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Copy-on-write.html">Copy-on-Write</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Pool%20Structure/index.html">Pool Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Datasets/index.html">Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Data%20Storage/index.html">Data Storage</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Operations</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Send%20and%20Receive.html">Send and Receive</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Scrub%20and%20Resilver.html">Scrub and Resilver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="TRIM.html">TRIM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Sharing.html">Sharing Datasets</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Delegated Administration</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#granting-and-revoking">Granting and revoking</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#what-can-be-delegated">What can be delegated</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#permission-sets">Permission sets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#create-time-permissions">Create-time permissions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#further-reading">Further reading</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Boot%20Process.html">Pools at Boot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Troubleshooting.html">Troubleshooting</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../man/index.html">Man Pages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Basic Concepts</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Operations</a></li>
+      <li class="breadcrumb-item active">Delegated Administration</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/Basic Concepts/Operations/Delegated Administration.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="delegated-administration">
+<h1>Delegated Administration<a class="headerlink" href="#delegated-administration" title="Link to this heading"></a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">zfs</span> <span class="pre">allow</span></code> lets non-privileged users run ZFS operations on specific
+datasets — take their own snapshots, set their own properties, receive their
+own replication streams — without handing out root.</p>
+<p>Delegation is controlled by the pool property <code class="docutils literal notranslate"><span class="pre">delegation</span></code>, which is <code class="docutils literal notranslate"><span class="pre">on</span></code>
+by default:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zpool<span class="w"> </span>get<span class="w"> </span>delegation<span class="w"> </span>pool
+</pre></div>
+</div>
+<section id="granting-and-revoking">
+<h2>Granting and revoking<a class="headerlink" href="#granting-and-revoking" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zfs<span class="w"> </span>allow<span class="w"> </span>alice<span class="w"> </span>snapshot,destroy,mount<span class="w"> </span>pool/home/alice
+zfs<span class="w"> </span>allow<span class="w"> </span>-g<span class="w"> </span>devs<span class="w"> </span>create,mount,snapshot<span class="w"> </span>pool/scratch
+zfs<span class="w"> </span>allow<span class="w"> </span>pool/home/alice<span class="w">              </span><span class="c1"># show what is delegated</span>
+zfs<span class="w"> </span>unallow<span class="w"> </span>alice<span class="w"> </span>snapshot<span class="w"> </span>pool/home/alice
+</pre></div>
+</div>
+<p>Who:</p>
+<ul class="simple">
+<li><p>a bare name is interpreted as <code class="docutils literal notranslate"><span class="pre">everyone</span></code>, then a user, then a group —
+use <code class="docutils literal notranslate"><span class="pre">-u</span></code> or <code class="docutils literal notranslate"><span class="pre">-g</span></code> to be explicit;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-e</span></code> (or the literal <code class="docutils literal notranslate"><span class="pre">everyone</span></code>) grants to all users.</p></li>
+</ul>
+<p>Where:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-l</span></code> — this dataset only (“locally”);</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-d</span></code> — descendants only;</p></li>
+<li><p>neither or both — the dataset and all its descendants (the default).</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">zfs</span> <span class="pre">unallow</span></code> takes the same selectors, plus <code class="docutils literal notranslate"><span class="pre">-r</span></code> to remove the delegation
+recursively.</p>
+</section>
+<section id="what-can-be-delegated">
+<h2>What can be delegated<a class="headerlink" href="#what-can-be-delegated" title="Link to this heading"></a></h2>
+<p>Permission names are just ZFS subcommand and property names: <code class="docutils literal notranslate"><span class="pre">snapshot</span></code>,
+<code class="docutils literal notranslate"><span class="pre">clone</span></code>, <code class="docutils literal notranslate"><span class="pre">send</span></code>, <code class="docutils literal notranslate"><span class="pre">receive</span></code>, <code class="docutils literal notranslate"><span class="pre">rollback</span></code>, <code class="docutils literal notranslate"><span class="pre">destroy</span></code>, <code class="docutils literal notranslate"><span class="pre">hold</span></code>,
+<code class="docutils literal notranslate"><span class="pre">load-key</span></code>, <code class="docutils literal notranslate"><span class="pre">compression</span></code>, <code class="docutils literal notranslate"><span class="pre">quota</span></code>, <code class="docutils literal notranslate"><span class="pre">recordsize</span></code>, and so on. <code class="docutils literal notranslate"><span class="pre">zfs</span>
+<span class="pre">allow</span></code> with no arguments on a dataset prints the current grants.</p>
+<p>Several permissions imply others, and this is the usual source of confusion:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">create</span></code> also needs <code class="docutils literal notranslate"><span class="pre">mount</span></code> (and <code class="docutils literal notranslate"><span class="pre">refreservation</span></code> for non-sparse
+volumes);</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">destroy</span></code>, <code class="docutils literal notranslate"><span class="pre">rollback</span></code> and <code class="docutils literal notranslate"><span class="pre">snapshot</span></code> also need <code class="docutils literal notranslate"><span class="pre">mount</span></code>;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">clone</span></code> needs <code class="docutils literal notranslate"><span class="pre">create</span></code> plus <code class="docutils literal notranslate"><span class="pre">mount</span></code> in the origin file system;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rename</span></code> needs <code class="docutils literal notranslate"><span class="pre">mount</span></code> and <code class="docutils literal notranslate"><span class="pre">create</span></code> in the new parent;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">receive</span></code> needs <code class="docutils literal notranslate"><span class="pre">mount</span></code> and <code class="docutils literal notranslate"><span class="pre">create</span></code>, and is what allows <code class="docutils literal notranslate"><span class="pre">zfs</span>
+<span class="pre">receive</span> <span class="pre">-F</span></code> — use <code class="docutils literal notranslate"><span class="pre">receive:append</span></code> for a receive permission that cannot
+force a rollback;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">allow</span></code> lets a user delegate onward, but only permissions they hold
+themselves.</p></li>
+</ul>
+<p>Narrower send variants exist for encrypted data: <code class="docutils literal notranslate"><span class="pre">send:raw</span></code> permits only raw
+streams, and <code class="docutils literal notranslate"><span class="pre">send:encrypted</span></code> permits raw streams of encrypted datasets only
+— both prevent an encrypted dataset from being sent in decrypted form. See
+<a class="reference internal" href="../Data%20Storage/Encryption.html"><span class="doc">Native Encryption</span></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>On Linux the <code class="docutils literal notranslate"><span class="pre">mount</span></code>, <code class="docutils literal notranslate"><span class="pre">unmount</span></code>, <code class="docutils literal notranslate"><span class="pre">mountpoint</span></code>, <code class="docutils literal notranslate"><span class="pre">canmount</span></code>,
+<code class="docutils literal notranslate"><span class="pre">rename</span></code> and <code class="docutils literal notranslate"><span class="pre">share</span></code> permissions cannot be delegated, because
+<code class="docutils literal notranslate"><span class="pre">mount(8)</span></code> restricts changes to the global namespace to root. Since
+<code class="docutils literal notranslate"><span class="pre">create</span></code>, <code class="docutils literal notranslate"><span class="pre">destroy</span></code>, <code class="docutils literal notranslate"><span class="pre">snapshot</span></code> and friends require <code class="docutils literal notranslate"><span class="pre">mount</span></code>, a
+fully self-service setup on Linux still needs help from root or from a
+setuid helper.</p>
+</div>
+</section>
+<section id="permission-sets">
+<h2>Permission sets<a class="headerlink" href="#permission-sets" title="Link to this heading"></a></h2>
+<p>A named set groups permissions so they can be granted as a unit and changed
+later in one place. Set names begin with <code class="docutils literal notranslate"><span class="pre">&#64;</span></code>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zfs<span class="w"> </span>allow<span class="w"> </span>-s<span class="w"> </span>@backup<span class="w"> </span>send,snapshot,hold,destroy<span class="w"> </span>pool/data
+zfs<span class="w"> </span>allow<span class="w"> </span>backupuser<span class="w"> </span>@backup<span class="w"> </span>pool/data
+zfs<span class="w"> </span>unallow<span class="w"> </span>-s<span class="w"> </span>@backup<span class="w"> </span>pool/data
+</pre></div>
+</div>
+</section>
+<section id="create-time-permissions">
+<h2>Create-time permissions<a class="headerlink" href="#create-time-permissions" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">zfs</span> <span class="pre">allow</span> <span class="pre">-c</span></code> sets create-time permissions: they are granted locally to
+whoever creates a new descendant file system. This is how a user who is
+allowed to create datasets automatically becomes able to administer the ones
+they created.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zfs<span class="w"> </span>allow<span class="w"> </span>-c<span class="w"> </span>snapshot,destroy,mount<span class="w"> </span>pool/scratch
+</pre></div>
+</div>
+</section>
+<section id="further-reading">
+<h2>Further reading<a class="headerlink" href="#further-reading" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zfs-allow.8.html">zfs-allow(8)</a> —
+the full permission table</p></li>
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zfs-unallow.8.html">zfs-unallow(8)</a></p></li>
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/7/zpoolprops.7.html">zpoolprops(7)</a> —
+<code class="docutils literal notranslate"><span class="pre">delegation</span></code></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Sharing.html" class="btn btn-neutral float-left" title="Sharing Datasets" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Boot%20Process.html" class="btn btn-neutral float-right" title="Pools at Boot" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, OpenZFS.
+      <span class="lastupdated">Last updated on Jul 22, 2026.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

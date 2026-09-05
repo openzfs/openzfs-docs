@@ -1,0 +1,107 @@
+RAIDZ\_TEST(1) - General Commands Manual
+
+# NAME
+
+**raidz\_test** - raidz implementation verification and benchmarking tool
+
+# SYNOPSIS
+
+**raidz\_test**
+\[**-StBevTD**]
+\[**-a**&nbsp;*ashift*]
+\[**-o**&nbsp;*zio\_off\_shift*]
+\[**-d**&nbsp;*raidz\_data\_disks*]
+\[**-s**&nbsp;*zio\_size\_shift*]
+\[**-r**&nbsp;*reflow\_offset*]
+
+# DESCRIPTION
+
+The purpose of this tool is to run all supported raidz implementation and verify
+the results of all methods.
+It also contains a parameter sweep option where all
+parameters affecting a RAID-Z block are verified (like ashift size, data offset,
+data size, etc.).
+The tool also supports a benchmarking mode using the
+**-B**
+option.
+
+# OPTION
+
+**-h**
+
+> Print a help summary.
+
+**-a** *ashift* (default: **9**)
+
+> Ashift value.
+
+**-o** *zio\_off\_shift* (default: **0**)
+
+> ZIO offset for each raidz block.
+> The offset's value is
+> *2^zio\_off\_shift*.
+
+**-d** *raidz\_data\_disks* (default: **8**)
+
+> Number of raidz data disks to use.
+> Additional disks will be used for parity.
+
+**-s** *zio\_size\_shift* (default: **19**)
+
+> Size of data for raidz block.
+> The real size is
+> *2^zio\_size\_shift*.
+
+**-r** *reflow\_offset* (default: **uint max**)
+
+> Set raidz expansion offset.
+> The expanded raidz map allocation function will
+> produce different map configurations depending on this value.
+
+**-S**(weep)
+
+> Sweep parameter space while verifying the raidz implementations.
+> This option
+> will exhaust all most of valid values for the
+> **-aods**
+> options.
+> Runtime using this option will be long.
+
+**-t**(imeout)
+
+> Wall time for sweep test in seconds.
+> The actual runtime could be longer.
+
+**-B**(enchmark)
+
+> All implementations are benchmarked using increasing per disk data size.
+> Results are given as throughput per disk, measured in MiB/s.
+
+**-e**(xpansion)
+
+> Use expanded raidz map allocation function.
+
+**-v**(erbose)
+
+> Increase verbosity.
+
+**-T**(est the test)
+
+> Debugging option: fail all tests.
+> This is to check if tests would properly verify bit-exactness.
+
+**-D**(ebug)
+
+> Debugging option: attach
+> gdb(1)
+> when
+> **SIGSEGV**
+> or
+> **SIGABRT**
+> are received.
+
+# SEE ALSO
+
+ztest(1)
+
+Debian - May 26, 2021
