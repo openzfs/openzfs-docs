@@ -1,0 +1,226 @@
+PAM\_ZFS\_KEY(8) - System Manager's Manual
+
+# NAME
+
+**pam\_zfs\_key** - PAM module for ZFS encryption key management
+
+# SYNOPSIS
+
+**pam\_zfs\_key.so**
+\[*options*]
+
+# DESCRIPTION
+
+**pam\_zfs\_key**
+is a PAM module that automatically manages encryption keys for ZFS
+datasets during user authentication and session management.
+When a user logs in, the module uses their password to unlock their encrypted
+home directory.
+When the last session closes, the module unmounts the dataset and unloads
+the key.
+
+The module tracks active sessions using reference counting to support multiple
+simultaneous logins from the same user.
+
+## Multiple Home Prefixes
+
+When configured with multiple home prefixes, the module attempts operations
+on all matching datasets.
+Operations that succeed are not rolled back if others fail.
+The module returns success only if all operations succeed.
+
+For example, with datasets 1, 2, 3 where dataset 2 fails:
+
+*	Auth/session: datasets 1 and 3 are unlocked and mounted, dataset 2 is not.
+*	Password change: datasets 1 and 3 have the new password,
+	dataset 2 retains the old.
+
+With
+**required**,
+login fails even though datasets 1 and 3 succeeded.
+With
+**optional**,
+login proceeds.
+For password changes, datasets 1 and 3 are updated while dataset 2
+retains the old password.
+With
+**required**,
+the user sees an error.
+With
+**optional**,
+the user sees success and may not notice the inconsistency.
+Either way, passwords are left out of sync.
+
+Errors are logged to syslog.
+Use
+zfs-change-key(8)
+to resync passwords after partial failure.
+
+# OPTIONS
+
+**homes**=*path*\[,*path2*...]
+
+> Comma-separated list of dataset prefixes where user home directories
+> are located.
+> The module constructs the full dataset path as
+> *prefix*/*username*.
+> Default:
+> **zroot/home**
+> on
+> FreeBSD,
+> **rpool/home**
+> on Linux.
+
+**runstatedir**=*path*
+
+> Directory for storing session reference counts.
+> Default:
+> */var/run/pam\_zfs\_key*.
+
+**uid\_min**=*uid*
+
+> Minimum user ID for which the module will operate.
+> Default: 1000.
+
+**uid\_max**=*uid*
+
+> Maximum user ID for which the module will operate.
+> Default: MAXUID.
+
+**nounmount**
+
+> Do not unmount datasets or unload encryption keys when sessions close.
+> Datasets remain mounted and keys remain loaded.
+
+**forceunmount**
+
+> Force unmount datasets even if busy
+> (`MS_FORCE`).
+
+**recursive\_homes**
+
+> Recursively search for encrypted datasets under the homes prefix.
+
+**mount\_recursively**
+
+> Mount and unmount child datasets recursively.
+
+**prop\_mountpoint**
+
+> Find the user's dataset by matching the dataset's
+> **mountpoint**
+> property to the user's home directory from
+> */etc/passwd*,
+> instead of constructing the dataset name as
+> *prefix*/*username*.
+
+# FILES
+
+*/var/run/pam\_zfs\_key/*&zwnj;*uid*
+
+> Session reference count files tracking active logins per user.
+
+# EXAMPLES
+
+## Example 1: Basic Configuration
+
+Add to
+*/etc/pam.d/system-auth*:
+
+	auth     optional  pam_zfs_key.so
+	password optional  pam_zfs_key.so
+	session  optional  pam_zfs_key.so
+
+This configuration uses default settings.
+User home datasets are expected at
+**zroot/home/**&zwnj;*username*
+on
+FreeBSD
+or
+**rpool/home/**&zwnj;*username*
+on Linux.
+
+## Example 2: Custom Home Directory Prefix
+
+	auth     optional  pam_zfs_key.so homes=tank/users
+	password optional  pam_zfs_key.so homes=tank/users
+	session  optional  pam_zfs_key.so homes=tank/users
+
+Looks for user datasets at
+**tank/users/**&zwnj;*username*.
+
+## Example 3: Multiple Dataset Prefixes
+
+	session  optional  pam_zfs_key.so homes=rpool/home,tank/users
+
+Searches for user datasets in both
+**rpool/home**
+and
+**tank/users**.
+
+## Example 4: Keep Datasets Mounted
+
+	session  optional  pam_zfs_key.so nounmount
+
+Leaves datasets mounted and keys loaded when sessions close.
+Useful for systems with background processes accessing the home directory.
+
+## Example 5: Recursive Mounting
+
+	session  optional  pam_zfs_key.so mount_recursively
+
+Mounts child datasets recursively, useful when user data is organized
+hierarchically like
+**rpool/home/alice/documents**
+and
+**rpool/home/alice/photos**.
+
+## Example 6: Creating an Encrypted Home Dataset
+
+	# zfs create -o encryption=on \
+	    -o keyformat=passphrase \
+	    -o keylocation=prompt \
+	    -o canmount=on \
+	    -o mountpoint=/home/alice \
+	    rpool/home/alice
+
+The user's login password must match the dataset passphrase for automatic
+unlocking to work.
+The dataset must have a ZFS-managed mountpoint (not legacy) and
+**canmount**=**on**
+for automatic mounting.
+
+## Example 7: Multiple Homes with Password Sync Check
+
+	auth     optional  pam_zfs_key.so homes=rpool/home,tank/home
+	password required  pam_zfs_key.so homes=rpool/home,tank/home
+	session  optional  pam_zfs_key.so homes=rpool/home,tank/home
+
+Login proceeds even if some datasets are unavailable.
+Password changes fail if any dataset cannot be updated, ensuring
+the user is notified of sync issues.
+See
+*Multiple Home Prefixes*
+for failure behavior.
+
+# SEE ALSO
+
+pam(8),
+zfs-change-key(8),
+zfs-load-key(8),
+zfs-mount(8)
+
+# NOTES
+
+*	Only works with datasets using
+	**keyformat**=**passphrase**.
+*	Datasets must have
+	**keylocation**=**prompt**.
+*	Datasets with
+	**mountpoint**=**legacy**,
+	**canmount**=**off**,
+	or
+	**canmount**=**noauto**
+	will have keys loaded but not be automatically mounted.
+
+Debian - December 24, 2025

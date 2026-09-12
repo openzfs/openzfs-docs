@@ -1,0 +1,63 @@
+FSCK.ZFS(8) - System Manager's Manual
+
+# NAME
+
+**fsck.zfs** - dummy ZFS filesystem checker
+
+# SYNOPSIS
+
+**fsck.zfs**
+\[*options*]
+*dataset*&#8230;
+
+# DESCRIPTION
+
+**fsck.zfs**
+is a thin shell wrapper that at most checks the status of a dataset's container
+pool.
+It is installed by OpenZFS because some Linux
+distributions expect a fsck helper for all filesystems.
+
+If more than one
+*dataset*
+is specified, each is checked in turn and the results binary-ored.
+
+# OPTIONS
+
+Ignored.
+
+# NOTES
+
+ZFS datasets are checked by running
+**zpool** **scrub**
+on the containing pool.
+An individual ZFS dataset is never checked independently of its pool,
+which is unlike a regular filesystem.
+
+However, the
+fsck(8)
+interface still allows it to communicate some errors: if the
+*dataset*
+is in a degraded pool, then
+**fsck.zfs**
+will return exit code
+**4**
+to indicate an uncorrected filesystem error.
+
+Similarly, if the
+*dataset*
+is in a faulted pool and has a legacy
+*/etc/fstab*
+record, then
+**fsck.zfs**
+will return exit code
+**8**
+to indicate a fatal operational error.
+
+# SEE ALSO
+
+fstab(5),
+fsck(8),
+zpool-scrub(8)
+
+Debian - May 26, 2021

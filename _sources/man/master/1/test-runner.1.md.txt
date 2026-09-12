@@ -1,0 +1,339 @@
+RUN(1) - General Commands Manual
+
+# NAME
+
+**run** - find, execute, and log the results of tests
+
+# SYNOPSIS
+
+**run**
+\[**-dgq**]
+\[**-o**&nbsp;*outputdir*]
+\[**-pP**&nbsp;*script*]
+\[**-t**&nbsp;**-seconds**]
+\[**-uxX**&nbsp;*username*]
+*pathname*&#8230;
+
+**run**
+**-w**&nbsp;*runfile*
+\[**-gq**]
+\[**-o**&nbsp;*outputdir*]
+\[**-pP**&nbsp;*script*]
+\[**-t**&nbsp;**-seconds**]
+\[**-uxX**&nbsp;*username*]
+*pathname*&#8230;
+
+**run**
+**-c**&nbsp;*runfile*
+\[**-dq**]
+
+**run**
+\[**-h**]
+
+# DESCRIPTION
+
+**run**
+command has three basic modes of operation.
+With neither
+**-c**
+nor
+**-w**,
+**run**
+processes the arguments provided on
+the command line, adding them to the list for this run.
+If a specified
+*pathname*
+is an executable file, it is added as a test.
+If a specified
+*pathname*
+is a directory, the behavior depends upon the presence of
+**-g**.
+If
+**-g**
+is specified, the directory is treated as a test group.
+See the section on
+**Test Groups**
+below.
+Without
+**-g**,
+**run**
+simply descends into the directory looking for executable files.
+The tests are then executed, and the results are logged.
+
+With
+**-w**,
+**run**
+finds tests in the manner described above.
+Rather than executing the tests and logging the results, the test configuration
+is stored in a
+*runfile*,
+which can be used in future invocations, or edited
+to modify which tests are executed and which options are applied.
+Options included on the command line with
+**-w**
+become defaults in the
+*runfile*.
+
+With
+**-c**,
+**run**
+parses a
+*runfile*,
+which can specify a series of tests and test groups to be executed.
+The tests are then executed, and the results are logged.
+
+## Test Groups
+
+A test group is comprised of a set of executable files, all of which exist in
+one directory.
+The options specified on the command line or in a
+*runfile*
+apply to individual tests in the group.
+The exception is options pertaining to pre and post scripts, which act on all
+tests as a group.
+Rather than running before and after each test,
+these scripts are run only once each at the start and end of the test group.
+
+## Test Execution
+
+The specified tests run serially, and are typically assigned results according
+to exit values.
+Tests that exit zero and non-zero are marked
+**PASS**
+and
+**FAIL**,
+respectively.
+When a pre script fails for a test group, only the post script is executed,
+and the remaining tests are marked
+**SKIPPED**.
+Any test that exceeds
+its
+*timeout*
+is terminated, and marked
+**KILLED**.
+
+By default, tests are executed with the credentials of the
+**run**
+script.
+Executing tests with other credentials is done via
+sudo(1m),
+which must
+be configured to allow execution without prompting for a password.
+Environment variables from the calling shell are available to individual tests.
+During test execution, the working directory is changed to
+*outputdir*.
+
+## Output Logging
+
+By default,
+**run**
+will print one line on standard output at the conclusion
+of each test indicating the test name, result and elapsed time.
+Additionally, for each invocation of
+**run**,
+a directory is created using the ISO 8601 date format.
+Within this directory is a file named
+**log**
+containing all the
+test output with timestamps, and a directory for each test.
+Within the test directories, there is one file each for standard output,
+standard error and merged output.
+The default location for the
+*outputdir*
+is
+*/var/tmp/test\_results*.
+
+## Runfiles
+
+The
+*runfile*
+is an INI-style configuration file that describes a test run.
+The file has one section named
+**DEFAULT**,
+which contains configuration option
+names and their values in
+**name** = *value*
+format.
+The values in this section apply to all the subsequent sections,
+unless they are also specified there, in which case the default is overridden.
+The remaining section names are the absolute pathnames of files and directories,
+describing tests and test groups respectively.
+The legal option names are:
+
+**outputdir** = *pathname*
+
+> The name of the directory that holds test logs.
+
+**pre** = *script*
+
+> Run
+> *script*
+> prior to the test or test group.
+
+**pre\_user** = *username*
+
+> Execute the pre script as
+> *username*.
+
+**post** = *script*
+
+> Run
+> *script*
+> after the test or test group.
+
+**post\_user** = *username*
+
+> Execute the post script as
+> *username*.
+
+**quiet** = **True**|**False**
+
+> If
+> **True**,
+> only the results summary is printed to standard out.
+
+**tests** = \[*'filename'*, &#8230;]
+
+> Specify a list of
+> *filenames*
+> for this test group.
+> Only the basename of the absolute path is required.
+> This option is only valid for test groups, and each
+> *filename*
+> must be single quoted.
+
+**timeout** = *n*
+
+> A timeout value of
+> *n*
+> seconds.
+
+**user** = *username*
+
+> Execute the test or test group as
+> *username*.
+
+# OPTIONS
+
+**-c** *runfile*
+
+> Specify a
+> *runfile*
+> to be consumed by the run command.
+
+**-d**
+
+> Dry run mode.
+> Execute no tests, but print a description of each test that would have been run.
+
+**-m**
+
+> Enable kmemleak reporting (Linux only)
+
+**-g**
+
+> Create test groups from any directories found while searching for tests.
+
+**-o** *outputdir*
+
+> Specify the directory in which to write test results.
+
+**-p** *script*
+
+> Run
+> *script*
+> prior to any test or test group.
+
+**-P** *script*
+
+> Run
+> *script*
+> after any test or test group.
+
+**-q**
+
+> Print only the results summary to the standard output.
+
+**-s** *script*
+
+> Run
+> *script*
+> as a failsafe after any test is killed.
+
+**-S** *username*
+
+> Execute the failsafe script as
+> *username*.
+
+**-t** *n*
+
+> Specify a timeout value of
+> *n*
+> seconds per test.
+
+**-u** *username*
+
+> Execute tests or test groups as
+> *username*.
+
+**-w** *runfile*
+
+> Specify the name of the
+> *runfile*
+> to create.
+
+**-x** *username*
+
+> Execute the pre script as
+> *username*.
+
+**-X** *username*
+
+> Execute the post script as
+> *username*.
+
+# EXAMPLES
+
+**Example 1**: Running ad-hoc tests.
+
+> This example demonstrates the simplest invocation of
+> **run**.
+
+> > % **run** *my-tests*
+> > Test: /home/jkennedy/my-tests/test-01                    \[00:02] \[PASS]
+> > Test: /home/jkennedy/my-tests/test-02                    \[00:04] \[PASS]
+> > Test: /home/jkennedy/my-tests/test-03                    \[00:01] \[PASS]
+> > 
+> > Results Summary
+> > PASS       3
+> > 
+> > Running Time:   00:00:07
+> > Percent passed: 100.0%
+> > Log directory:  /var/tmp/test\_results/20120923T180654
+
+**Example 2**: Creating a *runfile* for future use.
+
+> This example demonstrates creating a
+> *runfile*
+> with non-default options.
+
+> > % **run** **-p** *setup* **-x** *root* **-g** **-w** *new-tests.run* *new-tests*
+> > % **cat** *new-tests.run*
+> > \[DEFAULT]
+> > pre = setup
+> > post\_user =
+> > quiet = False
+> > user =
+> > timeout = 60
+> > post =
+> > pre\_user = root
+> > outputdir = /var/tmp/test\_results
+> > 
+> > \[/home/jkennedy/new-tests]
+> > tests = \['test-01', 'test-02', 'test-03']
+
+# SEE ALSO
+
+sudo(1m)
+
+Debian - May 26, 2021

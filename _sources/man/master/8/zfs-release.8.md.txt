@@ -1,0 +1,88 @@
+ZFS-HOLD(8) - System Manager's Manual
+
+# NAME
+
+**zfs-hold** - hold ZFS snapshots to prevent their removal
+
+# SYNOPSIS
+
+**zfs**
+**hold**
+\[**-r**]
+*tag*&nbsp;*snapshot*&#8230;  
+**zfs**
+**holds**
+\[**-rHp**]
+*snapshot*&#8230;  
+**zfs**
+**release**
+\[**-r**]
+*tag*&nbsp;*snapshot*&#8230;
+
+# DESCRIPTION
+
+**zfs**
+**hold**
+\[**-r**]
+*tag* *snapshot*&#8230;
+
+> Adds a single reference, named with the
+> *tag*
+> argument, to the specified snapshots.
+> Each snapshot has its own tag namespace, and tags must be unique within that
+> space.
+
+> If a hold exists on a snapshot, attempts to destroy that snapshot by using the
+> **zfs** **destroy**
+> command return
+> **EBUSY**.
+
+> **-r**
+
+> > Specifies that a hold with the given tag is applied recursively to the snapshots
+> > of all descendent file systems.
+
+**zfs**
+**holds**
+\[**-rHp**]
+*snapshot*&#8230;
+
+> Lists all existing user references for the given snapshot or snapshots.
+
+> **-r**
+
+> > Lists the holds that are set on the named descendent snapshots, in addition to
+> > listing the holds on the named snapshot.
+
+> **-H**
+
+> > Do not print headers, use tab-delimited output.
+
+> **-p**
+
+> > Prints holds timestamps as Unix epoch timestamps.
+
+**zfs**
+**release**
+\[**-r**]
+*tag* *snapshot*&#8230;
+
+> Removes a single reference, named with the
+> *tag*
+> argument, from the specified snapshot or snapshots.
+> The tag must already exist for each snapshot.
+> If a hold exists on a snapshot, attempts to destroy that snapshot by using the
+> **zfs** **destroy**
+> command return
+> **EBUSY**.
+
+> **-r**
+
+> > Recursively releases a hold with the given tag on the snapshots of all
+> > descendent file systems.
+
+# SEE ALSO
+
+zfs-destroy(8)
+
+Debian - November 8, 2022

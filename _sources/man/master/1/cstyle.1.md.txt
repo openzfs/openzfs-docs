@@ -1,0 +1,140 @@
+CSTYLE(1) - General Commands Manual
+
+# NAME
+
+**cstyle** - check for some common stylistic errors in C source files
+
+# SYNOPSIS
+
+**cstyle**
+\[**-chpvCP**]
+\[*file*]&#8230;
+
+# DESCRIPTION
+
+**cstyle**
+inspects C source files (\*.c and \*.h) for common stylistic errors.
+It attempts to check for the cstyle documented in
+[http://www.cis.upenn.edu/~lee/06cse480/data/cstyle.ms.pdf](http://www.cis.upenn.edu/~lee/06cse480/data/cstyle.ms.pdf).
+Note that there is much in that document that
+*cannot*
+be checked for; just because your code is
+**cstyle**-clean
+does not mean that you've followed Sun's C style.
+*Caveat emptor*.
+
+# OPTIONS
+
+**-c**
+
+> Check continuation line indentation inside of functions.
+> Sun's C style
+> states that all statements must be indented to an appropriate tab stop,
+> and any continuation lines after them must be indented
+> *exactly*
+> four spaces from the start line.
+> This option enables a series of checks designed to find
+> continuation line problems within functions only.
+> The checks have some limitations; see
+> **CONTINUATION CHECKING**,
+> below.
+
+**-p**
+
+> Performs some of the more picky checks.
+> Includes ANSI
+> **#else**
+> and
+> **#endif**
+> rules, and tries to detect spaces after casts.
+> Used as part of the putback checks.
+
+**-v**
+
+> Verbose output; includes the text of the line of error, and, for
+> **-c**,
+> the first statement in the current continuation block.
+
+**-P**
+
+> Check for use of non-POSIX types.
+> Historically, types like
+> **u\_int**
+> and
+> **u\_long**
+> were used, but they are now deprecated in favor of the POSIX
+> types
+> **uint\_t**,
+> **ulong\_t**,
+> etc.
+> This detects any use of the deprecated types.
+> Used as part of the putback checks.
+
+**-g**
+
+> Also print GitHub-Actions-style
+> `::error`
+> output.
+
+# ENVIRONMENT
+
+`CI`
+
+> If set and nonempty, equivalent to
+> **-g**.
+
+# CONTINUATION CHECKING
+
+The continuation checker is a reasonably simple state machine that knows
+something about how C is laid out, and can match parenthesis, etc. over
+multiple lines.
+It does have some limitations:
+
+1.	Preprocessor macros which cause unmatched parenthesis will confuse the
+	checker for that line.
+	To fix this, you'll need to make sure that each branch of the
+	**#if**
+	statement has balanced parenthesis.
+
+2.	Some
+	cpp(1)
+	macros do not require
+	**;**s after them.
+	Any such macros
+	*must*
+	be ALL\_CAPS; any lower case letters will cause bad output.
+
+	The bad output will generally be corrected after the next
+	**;**, **{**, or **}**.
+
+Some continuation error messages deserve some additional explanation:
+
+**multiple statements continued over multiple lines**
+
+> A multi-line statement which is not broken at statement boundaries.
+> For example:
+
+> > if (this\_is\_a\_long\_variable == another\_variable) a =
+> >     b + c;
+
+> Will trigger this error.
+> Instead, do:
+
+> > if (this\_is\_a\_long\_variable == another\_variable)
+> >     a = b + c;
+
+**empty if/for/while body not on its own line**
+
+> For visibility, empty bodies for if, for, and while statements should be
+> on their own line.
+> For example:
+
+> > while (do\_something(&x) == 0);
+
+> Will trigger this error.
+> Instead, do:
+
+> > while (do\_something(&x) == 0)
+> >     ;
+
+Debian - April 4, 2022
