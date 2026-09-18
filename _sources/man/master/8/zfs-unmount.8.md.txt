@@ -1,0 +1,135 @@
+ZFS-MOUNT(8) - System Manager's Manual
+
+# NAME
+
+**zfs-mount** - manage mount state of ZFS filesystems
+
+# SYNOPSIS
+
+**zfs**
+**mount**
+\[**-j**]  
+**zfs**
+**mount**
+\[**-Oflv**]
+\[**-o**&nbsp;*options*]
+**-a**|**-R**&nbsp;*filesystem*|*filesystem*  
+**zfs**
+**unmount**
+\[**-fu**]
+**-a**|*filesystem*|*mountpoint*
+
+# DESCRIPTION
+
+**zfs**
+**mount**
+\[**-j**]
+
+> Displays all ZFS file systems currently mounted.
+
+> **-j**, **--json**
+
+> > Displays all mounted file systems in JSON format.
+
+**zfs**
+**mount**
+\[**-Oflv**]
+\[**-o** *options*]
+**-a**|**-R** *filesystem*|*filesystem*
+
+> Mount ZFS filesystem on a path described by its
+> **mountpoint**
+> property, if the path exists and is empty.
+> If
+> **mountpoint**
+> is set to
+> *legacy*,
+> the filesystem should be instead mounted using
+> mount(8).
+
+> **-O**
+
+> > Perform an overlay mount.
+> > Allows mounting in non-empty
+> > **mountpoint**.
+> > See
+> > mount(8)
+> > for more information.
+
+> **-a**
+
+> > Mount all available ZFS file systems.
+> > Invoked automatically as part of the boot process if configured.
+
+> **-R**
+
+> > Mount the specified filesystems along with all their children.
+
+> *filesystem*
+
+> > Mount the specified filesystem.
+
+> **-o** *options*
+
+> > An optional, comma-separated list of mount options to use temporarily for the
+> > duration of the mount.
+> > See the
+> > *Temporary Mount Point Properties*
+> > section of
+> > zfsprops(7)
+> > for details.
+
+> **-l**
+
+> > Load keys for encrypted filesystems as they are being mounted.
+> > This is equivalent to executing
+> > **zfs** **load-key**
+> > on each encryption root before mounting it.
+> > Note that if a filesystem has
+> > **keylocation**=**prompt**,
+> > this will cause the terminal to interactively block after asking for the key.
+> > On systems with PAM support,
+> > pam\_zfs\_key(8)
+> > can automate this process during user login.
+
+> **-v**
+
+> > Report mount progress.
+
+> **-f**
+
+> > Attempt to force mounting of all filesystems, even those that couldn't normally
+> > be mounted (e.g. redacted datasets).
+
+**zfs**
+**unmount**
+\[**-fu**]
+**-a**|*filesystem*|*mountpoint*
+
+> Unmounts currently mounted ZFS file systems.
+
+> **-a**
+
+> > Unmount all available ZFS file systems.
+> > Invoked automatically as part of the shutdown process.
+
+> **-f**
+
+> > Forcefully unmount the file system, even if it is currently in use.
+> > This option is not supported on Linux.
+
+> **-u**
+
+> > Unload keys for any encryption roots unmounted by this command.
+
+> *filesystem*|*mountpoint*
+
+> > Unmount the specified filesystem.
+> > The command can also be given a path to a ZFS file system mount point on the
+> > system.
+
+# SEE ALSO
+
+pam\_zfs\_key(8)
+
+Debian - October 12, 2024

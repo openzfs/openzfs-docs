@@ -1,0 +1,272 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <meta property="article:modified_time" content="2026-07-22T11:13:19+00:00" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ZVOLs &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://openzfs.github.io/openzfs-docs/Basic%20Concepts/Datasets/ZVOLs.html" />
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/js/redirect.js?v=2a1712f3"></script>
+      <script src="../../_static/js/module_params_filter.js?v=9a1b680c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Snapshots, Clones and Bookmarks" href="Snapshots%20and%20Clones.html" />
+    <link rel="prev" title="Datasets and Properties" href="Datasets%20and%20Properties.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Basic Concepts</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Copy-on-write.html">Copy-on-Write</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Pool%20Structure/index.html">Pool Structure</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Datasets</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Datasets%20and%20Properties.html">Datasets and Properties</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">ZVOLs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sizing-volsize-and-volblocksize">Sizing: <code class="docutils literal notranslate"><span class="pre">volsize</span></code> and <code class="docutils literal notranslate"><span class="pre">volblocksize</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sparse-versus-thick">Sparse versus thick</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#how-the-device-appears">How the device appears</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#reservations-snapshots-and-space">Reservations, snapshots and space</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#swap-on-a-zvol">Swap on a zvol</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#further-reading">Further reading</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Snapshots%20and%20Clones.html">Snapshots, Clones and Bookmarks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Quotas%20and%20Reservations.html">Quotas and Reservations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ACLs.html">ACLs and Extended Attributes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Data%20Storage/index.html">Data Storage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Operations/index.html">Operations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../man/index.html">Man Pages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Basic Concepts</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Datasets</a></li>
+      <li class="breadcrumb-item active">ZVOLs</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/Basic Concepts/Datasets/ZVOLs.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="zvols">
+<h1>ZVOLs<a class="headerlink" href="#zvols" title="Link to this heading"></a></h1>
+<p>A zvol is a dataset exported as a block device instead of a file system. It
+gets everything else a dataset gets — checksums, compression, snapshots,
+clones, replication, encryption — while presenting a raw device to whatever
+consumes it: a virtual machine disk, an iSCSI LUN, a file system ZFS does not
+implement, or swap.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zfs<span class="w"> </span>create<span class="w"> </span>-V<span class="w"> </span>40G<span class="w"> </span>pool/vm/disk0
+ls<span class="w"> </span>-l<span class="w"> </span>/dev/zvol/pool/vm/disk0
+</pre></div>
+</div>
+<section id="sizing-volsize-and-volblocksize">
+<h2>Sizing: <code class="docutils literal notranslate"><span class="pre">volsize</span></code> and <code class="docutils literal notranslate"><span class="pre">volblocksize</span></code><a class="headerlink" href="#sizing-volsize-and-volblocksize" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">volsize</span></code></dt><dd><p>The logical size of the device. It must be a multiple of
+<code class="docutils literal notranslate"><span class="pre">volblocksize</span></code> and cannot be zero. It can be changed later, but
+shrinking it is as dangerous as shrinking any block device under a live
+file system.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">volblocksize</span></code></dt><dd><p>The fixed block size. <strong>Set at creation only</strong> — there is no changing it
+afterwards short of recreating the volume and copying the data. Valid
+values are powers of two from 512 B to 16 MiB; the default is 16 KiB.</p>
+</dd>
+</dl>
+<p>Unlike a file system’s <code class="docutils literal notranslate"><span class="pre">recordsize</span></code>, which is a maximum that ZFS varies per
+file, <code class="docutils literal notranslate"><span class="pre">volblocksize</span></code> is fixed for every block in the volume. That makes it
+the single most consequential zvol decision.</p>
+<p>The guiding rule is to match the consumer’s I/O size:</p>
+<ul class="simple">
+<li><p>too <strong>small</strong>, and each guest I/O costs more metadata, and RAIDZ space
+efficiency collapses — small blocks on RAIDZ approach mirror-level overhead
+(see <a class="reference internal" href="../Pool%20Structure/RAIDZ.html"><span class="doc">RAIDZ</span></a>);</p></li>
+<li><p>too <strong>large</strong>, and every small write becomes a read-modify-write of the
+whole block, and compression works on data the guest did not change.</p></li>
+</ul>
+<p>For a guest file system using 4 KiB blocks, values between 8 KiB and 64 KiB
+are the usual range; the default 16 KiB is a reasonable starting point. See
+<a class="reference internal" href="../../Performance%20and%20Tuning/Workload%20Tuning.html"><span class="doc">Workload Tuning</span></a> for
+per-workload advice.</p>
+</section>
+<section id="sparse-versus-thick">
+<h2>Sparse versus thick<a class="headerlink" href="#sparse-versus-thick" title="Link to this heading"></a></h2>
+<p>By default, creating a volume also establishes a <code class="docutils literal notranslate"><span class="pre">refreservation</span></code> equal to
+its size, so the space is guaranteed up front. The reservation is kept equal
+to the logical size deliberately: without it the volume can run out of space
+mid-write, which most consumers handle badly.</p>
+<p><code class="docutils literal notranslate"><span class="pre">zfs</span> <span class="pre">create</span> <span class="pre">-s</span></code> creates a <strong>sparse</strong> volume with no reservation:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zfs<span class="w"> </span>create<span class="w"> </span>-s<span class="w"> </span>-V<span class="w"> </span>100G<span class="w"> </span>pool/vm/thin<span class="w">      </span><span class="c1"># sparse</span>
+zfs<span class="w"> </span>create<span class="w"> </span>-V<span class="w"> </span>100G<span class="w"> </span>pool/vm/thick<span class="w">        </span><span class="c1"># reserved</span>
+
+zfs<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="nv">refreservation</span><span class="o">=</span>auto<span class="w"> </span>pool/vm/thin<span class="w">   </span><span class="c1"># make it thick afterwards</span>
+zfs<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="nv">refreservation</span><span class="o">=</span>none<span class="w"> </span>pool/vm/thick<span class="w">  </span><span class="c1"># make it sparse afterwards</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">refreservation=auto</span></code> is supported only on volumes and reserves enough for
+the whole <code class="docutils literal notranslate"><span class="pre">volsize</span></code> plus metadata.</p>
+<p>Sparse volumes let you overcommit, at the price that a write can fail with
+<code class="docutils literal notranslate"><span class="pre">ENOSPC</span></code> when the pool fills — and the guest will see that as a hardware
+error, not as a full disk. Overcommitting means you must monitor pool space.</p>
+<p>Note also that snapshots of a thick volume need room for the reservation, so
+<code class="docutils literal notranslate"><span class="pre">volsize</span></code> is not the whole cost. See
+<a class="reference internal" href="Quotas%20and%20Reservations.html"><span class="doc">Quotas and Reservations</span></a>.</p>
+</section>
+<section id="how-the-device-appears">
+<h2>How the device appears<a class="headerlink" href="#how-the-device-appears" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">volmode</span></code> controls what the OS sees:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">full</span></code> (alias <code class="docutils literal notranslate"><span class="pre">geom</span></code>)</dt><dd><p>A complete block device, partitions scanned and exposed.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">dev</span></code></dt><dd><p>The device without its partitions. Usually what you want for a VM disk or
+a LUN — the host has no business scanning the guest’s partition table.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">none</span></code></dt><dd><p>Not exposed outside ZFS at all. Still snapshottable, clonable and
+replicable, which suits a pure backup target.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">default</span></code></dt><dd><p>Follow the system-wide <code class="docutils literal notranslate"><span class="pre">zvol_volmode</span></code> tunable.</p>
+</dd>
+</dl>
+<p>Snapshot devices appear under <code class="docutils literal notranslate"><span class="pre">/dev/zvol/&lt;pool&gt;</span></code> only when <code class="docutils literal notranslate"><span class="pre">snapdev</span></code> is
+<code class="docutils literal notranslate"><span class="pre">visible</span></code>; the default is <code class="docutils literal notranslate"><span class="pre">hidden</span></code>. There is no <code class="docutils literal notranslate"><span class="pre">.zfs/snapshot</span></code>
+directory for volumes — to reach the contents of a volume snapshot, clone it
+and mount the clone.</p>
+</section>
+<section id="reservations-snapshots-and-space">
+<h2>Reservations, snapshots and space<a class="headerlink" href="#reservations-snapshots-and-space" title="Link to this heading"></a></h2>
+<p>A zvol’s <code class="docutils literal notranslate"><span class="pre">used</span></code> can exceed what the guest believes it is using, sometimes
+dramatically. The reason is that ZFS has no way to know a block has been
+freed inside the guest’s file system unless it is told: file systems tend to
+allocate into fresh blocks rather than reuse freed ones, so over time ZFS ends
+up referencing every block the guest ever touched.</p>
+<p>The fix is discard/TRIM from the consumer:</p>
+<ul class="simple">
+<li><p>mount the guest file system with <code class="docutils literal notranslate"><span class="pre">discard</span></code>, or run <code class="docutils literal notranslate"><span class="pre">fstrim</span></code>
+periodically;</p></li>
+<li><p>issue the trim <strong>before</strong> taking a snapshot, or the snapshot pins blocks
+the guest already considers free.</p></li>
+</ul>
+<p>See <a class="reference internal" href="../Operations/TRIM.html"><span class="doc">TRIM</span></a> and the
+<a class="reference internal" href="../../Project%20and%20Community/FAQ.html"><span class="doc">FAQ</span></a> entry on zvol space usage.</p>
+</section>
+<section id="swap-on-a-zvol">
+<h2>Swap on a zvol<a class="headerlink" href="#swap-on-a-zvol" title="Link to this heading"></a></h2>
+<p>Possible, but it needs care, and on Linux it can still deadlock under memory
+pressure — see <a class="reference external" href="https://github.com/openzfs/zfs/issues/7734">issue #7734</a>.
+If you do it:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zfs<span class="w"> </span>create<span class="w"> </span>-V<span class="w"> </span>4G<span class="w"> </span>-b<span class="w"> </span><span class="k">$(</span>getconf<span class="w"> </span>PAGESIZE<span class="k">)</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-o<span class="w"> </span><span class="nv">logbias</span><span class="o">=</span>throughput<span class="w"> </span>-o<span class="w"> </span><span class="nv">sync</span><span class="o">=</span>always<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-o<span class="w"> </span><span class="nv">primarycache</span><span class="o">=</span>metadata<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-o<span class="w"> </span>com.sun:auto-snapshot<span class="o">=</span><span class="nb">false</span><span class="w"> </span>rpool/swap
+</pre></div>
+</div>
+<p>Match <code class="docutils literal notranslate"><span class="pre">volblocksize</span></code> to the page size, keep swap data out of the ARC, and
+never snapshot a swap device.</p>
+</section>
+<section id="further-reading">
+<h2>Further reading<a class="headerlink" href="#further-reading" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/7/zfsprops.7.html">zfsprops(7)</a> —
+<code class="docutils literal notranslate"><span class="pre">volsize</span></code>, <code class="docutils literal notranslate"><span class="pre">volblocksize</span></code>, <code class="docutils literal notranslate"><span class="pre">volmode</span></code>, <code class="docutils literal notranslate"><span class="pre">refreservation</span></code>, <code class="docutils literal notranslate"><span class="pre">snapdev</span></code></p></li>
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zfs-create.8.html">zfs-create(8)</a></p></li>
+<li><p><a class="reference internal" href="Datasets%20and%20Properties.html"><span class="doc">Datasets and Properties</span></a>,
+<a class="reference internal" href="../Operations/Sharing.html"><span class="doc">Sharing Datasets</span></a></p></li>
+<li><p><a class="reference internal" href="../../Performance%20and%20Tuning/Workload%20Tuning.html"><span class="doc">Workload Tuning</span></a> —
+virtual machine and database sections</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Datasets%20and%20Properties.html" class="btn btn-neutral float-left" title="Datasets and Properties" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Snapshots%20and%20Clones.html" class="btn btn-neutral float-right" title="Snapshots, Clones and Bookmarks" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, OpenZFS.
+      <span class="lastupdated">Last updated on Jul 22, 2026.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

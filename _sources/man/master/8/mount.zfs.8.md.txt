@@ -1,0 +1,84 @@
+MOUNT.ZFS(8) - System Manager's Manual
+
+# NAME
+
+**mount.zfs** - mount ZFS filesystem
+
+# SYNOPSIS
+
+**mount.zfs**
+\[**-sfnvh**]
+\[**-o**&nbsp;*options*]
+*dataset*
+*mountpoint*
+
+# DESCRIPTION
+
+The
+**mount.zfs**
+helper is used by
+mount(8)
+to mount filesystem snapshots and
+**mountpoint=**&zwnj;*legacy*
+ZFS filesystems, as well as by
+zfs(8)
+when the
+**ZFS\_MOUNT\_HELPER**
+environment variable is not set.
+Users should should invoke either
+mount(8)
+or
+zfs(8)
+in most cases.
+
+*options*
+are handled according to the
+*Temporary Mount Point Properties*
+section in
+zfsprops(7),
+except for those described below.
+
+If
+*/etc/mtab*
+is a regular file and
+**-n**
+was not specified, it will be updated via libmount.
+
+# OPTIONS
+
+**-s**
+
+> Ignore unknown (sloppy) mount options.
+
+**-f**
+
+> Do everything except actually executing the system call.
+
+**-n**
+
+> Never update
+> */etc/mtab*.
+
+**-v**
+
+> Print resolved mount options and parser state.
+
+**-h**
+
+> Print the usage message.
+
+**-o** *zfsutil*
+
+> This private flag indicates that
+> mount(8)
+> is being called by the
+> zfs(8)
+> command.
+
+# SEE ALSO
+
+fstab(5),
+mount(8),
+zfs-mount(8)
+
+Debian - May 24, 2021

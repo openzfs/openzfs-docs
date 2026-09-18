@@ -1,0 +1,288 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <meta property="article:modified_time" content="2026-07-22T11:05:18+00:00" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Special vdev &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://openzfs.github.io/openzfs-docs/Basic%20Concepts/Pool%20Structure/Special%20vdev.html" />
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/js/redirect.js?v=2a1712f3"></script>
+      <script src="../../_static/js/module_params_filter.js?v=9a1b680c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Changing Pool Layout" href="Changing%20Pool%20Layout.html" />
+    <link rel="prev" title="Caching and Auxiliary Devices" href="Caching.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Basic Concepts</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Copy-on-write.html">Copy-on-Write</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Pool Structure</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="VDEVs.html">VDEVs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="RAIDZ.html">RAIDZ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dRAID%20Howto.html">dRAID</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Caching.html">Caching and Auxiliary Devices</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Special vdev</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#why-it-helps">Why it helps</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#adding-one">Adding one</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#what-actually-lands-there">What actually lands there</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#small-blocks-special-small-blocks">Small blocks: <code class="docutils literal notranslate"><span class="pre">special_small_blocks</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#when-it-fills-up">When it fills up</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#removing-one">Removing one</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#related-vdev-types">Related vdev types</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#further-reading">Further reading</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Changing%20Pool%20Layout.html">Changing Pool Layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Feature%20Flags.html">Feature Flags</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Datasets/index.html">Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Data%20Storage/index.html">Data Storage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Operations/index.html">Operations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../man/index.html">Man Pages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Basic Concepts</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Pool Structure</a></li>
+      <li class="breadcrumb-item active">Special vdev</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/Basic Concepts/Pool Structure/Special vdev.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="special-vdev">
+<h1>Special vdev<a class="headerlink" href="#special-vdev" title="Link to this heading"></a></h1>
+<p>A <code class="docutils literal notranslate"><span class="pre">special</span></code> vdev is a top-level vdev that holds a specific <em>allocation
+class</em> rather than general pool data: metadata, the indirect blocks of user
+data, deduplication tables, and — optionally, per dataset — small file blocks.</p>
+<p>It is not a cache. The blocks routed there exist <strong>only</strong> there. That single
+fact drives everything else on this page.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">special</span></code> vdev must be at least as redundant as the pool’s normal
+vdevs. Losing it loses the pool, exactly as losing any other top-level
+vdev would. Never add one as a single device to a redundant pool.</p>
+</div>
+<section id="why-it-helps">
+<h2>Why it helps<a class="headerlink" href="#why-it-helps" title="Link to this heading"></a></h2>
+<p>On a pool of spinning disks, metadata access is the dominant source of random
+I/O: directory traversal, <code class="docutils literal notranslate"><span class="pre">zfs</span> <span class="pre">list</span></code>, <code class="docutils literal notranslate"><span class="pre">find</span></code>, backup scans, and — most
+visibly — scrub and resilver, which must walk the whole block tree. Moving
+that class onto flash converts those random reads into something the pool can
+actually serve, without paying for an all-flash pool.</p>
+<p>This is usually a larger and more reliable win than adding an L2ARC, because
+it is a permanent placement rather than a cache that must warm up and that
+costs ARC headers. See
+<a class="reference internal" href="Caching.html"><span class="doc">Caching and Auxiliary Devices</span></a>.</p>
+</section>
+<section id="adding-one">
+<h2>Adding one<a class="headerlink" href="#adding-one" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zpool<span class="w"> </span>add<span class="w"> </span>pool<span class="w"> </span>special<span class="w"> </span>mirror<span class="w"> </span>nvme0n1<span class="w"> </span>nvme1n1
+zpool<span class="w"> </span>list<span class="w"> </span>-v<span class="w"> </span>pool<span class="w">                  </span><span class="c1"># per-vdev usage, special class included</span>
+</pre></div>
+</div>
+<p>A pool must already have at least one normal vdev before <code class="docutils literal notranslate"><span class="pre">special</span></code> or
+<code class="docutils literal notranslate"><span class="pre">dedup</span></code> devices can be assigned. Multiple special vdevs load-balance
+allocations between them.</p>
+</section>
+<section id="what-actually-lands-there">
+<h2>What actually lands there<a class="headerlink" href="#what-actually-lands-there" title="Link to this heading"></a></h2>
+<p>The selection happens per block, in this order:</p>
+<ol class="arabic simple">
+<li><p><strong>Deduplication tables</strong> go to a <code class="docutils literal notranslate"><span class="pre">dedup</span></code> vdev if the pool has one;
+otherwise to the special vdev. Setting the <code class="docutils literal notranslate"><span class="pre">zfs_ddt_data_is_special</span></code>
+module parameter to 0 keeps them out of the special class.</p></li>
+<li><p><strong>Metadata</strong> — every object type ZFS marks as metadata — goes to the
+special class.</p></li>
+<li><p><strong>Indirect blocks of user data</strong> (any block above level 0) go there too,
+controlled by <code class="docutils literal notranslate"><span class="pre">zfs_user_indirect_is_special</span></code> (default on). These are the
+block pointers, so this is much of what makes tree walks fast.</p></li>
+<li><p><strong>Small user data blocks</strong> go there only if the dataset opts in via
+<code class="docutils literal notranslate"><span class="pre">special_small_blocks</span></code> — and only while the class is below its
+metadata reserve, see below.</p></li>
+<li><p>Everything else goes to the normal class.</p></li>
+</ol>
+<p>The <strong>ZIL</strong> is a separate case. An intent log block is allocated from, in
+order: a dedicated <code class="docutils literal notranslate"><span class="pre">log</span></code> vdev, then log space reserved on the special vdev,
+then the special class proper, then log space reserved on normal vdevs, then
+the normal class. So a special vdev absorbs the ZIL when there is no SLOG,
+but a SLOG always wins.</p>
+</section>
+<section id="small-blocks-special-small-blocks">
+<h2>Small blocks: <code class="docutils literal notranslate"><span class="pre">special_small_blocks</span></code><a class="headerlink" href="#small-blocks-special-small-blocks" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zfs<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="nv">special_small_blocks</span><span class="o">=</span>32K<span class="w"> </span>pool/data
+</pre></div>
+</div>
+<p>Blocks whose size is less than or equal to this value — measured <strong>after
+compression and encryption</strong> — are placed in the special class. The default
+is 0, meaning the feature is off; the maximum is the maximum block size
+(16 MiB). It is a per-dataset property, so you can enable it only where it
+pays.</p>
+<p>Two things surprise people here:</p>
+<p><strong>It is compared against the physical size.</strong> A 128 KiB record that compresses
+to 20 KiB counts as a 20 KiB block. Setting the threshold near your
+<code class="docutils literal notranslate"><span class="pre">recordsize</span></code> will therefore pull far more onto the special vdev than
+expected — for a well-compressing dataset, potentially all of it.</p>
+<p><strong>There is a metadata reserve.</strong> Small blocks are only accepted while the
+special class is below <code class="docutils literal notranslate"><span class="pre">100</span> <span class="pre">-</span> <span class="pre">zfs_special_class_metadata_reserve_pct</span></code>
+percent full — 75% by default. The last quarter is kept for metadata alone.
+This is a floor for metadata, not a ceiling for the vdev: metadata itself may
+fill it completely.</p>
+</section>
+<section id="when-it-fills-up">
+<h2>When it fills up<a class="headerlink" href="#when-it-fills-up" title="Link to this heading"></a></h2>
+<p>Allocations that no longer fit spill back into the normal class. Nothing
+fails, and no data is lost — but the metadata written from that point on
+lands on the slow disks, and the benefit quietly degrades. Existing blocks are
+never migrated, in either direction.</p>
+<p>This makes monitoring the fill level worthwhile:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zpool<span class="w"> </span>list<span class="w"> </span>-v<span class="w"> </span>pool
+</pre></div>
+</div>
+<p>Sizing is workload-dependent and hard to predict from first principles. The
+honest approach is to measure the pool you actually have — <code class="docutils literal notranslate"><span class="pre">zdb</span> <span class="pre">-bbb</span> <span class="pre">pool</span></code>
+reports space usage broken down by block type, from which the metadata total
+can be read off — and then leave generous headroom, because the cost of
+guessing low is a vdev you cannot shrink.</p>
+</section>
+<section id="removing-one">
+<h2>Removing one<a class="headerlink" href="#removing-one" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zpool<span class="w"> </span>remove<span class="w"> </span>pool<span class="w"> </span>special-1
+</pre></div>
+</div>
+<p>This works only under the same constraints as any top-level vdev removal: the
+pool must contain <strong>no</strong> raidz or draid top-level vdev, all top-level vdevs
+must share the same <code class="docutils literal notranslate"><span class="pre">ashift</span></code>, keys for encrypted datasets must be loaded,
+and the <code class="docutils literal notranslate"><span class="pre">device_removal</span></code> feature must be enabled.</p>
+<p>The practical consequence is blunt: <strong>on a raidz pool, a special vdev can
+never be removed.</strong> Adding one is a permanent decision. See
+<a class="reference internal" href="Changing%20Pool%20Layout.html"><span class="doc">Changing Pool Layout</span></a>.</p>
+</section>
+<section id="related-vdev-types">
+<h2>Related vdev types<a class="headerlink" href="#related-vdev-types" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">dedup</span></code></dt><dd><p>The same idea restricted to deduplication tables. Use it when dedup is
+enabled and you want its table isolated from metadata. Same redundancy
+requirement, same removal constraints. See
+<a class="reference internal" href="../Data%20Storage/Deduplication.html"><span class="doc">Deduplication</span></a>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">log</span></code> (SLOG)</dt><dd><p>Not an allocation class in the same sense — it holds the intent log and
+is read only after a crash. Losing a modern SLOG costs at most the last
+few seconds of synchronous writes, not the pool.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">cache</span></code> (L2ARC)</dt><dd><p>A genuine cache: a second copy of data that also lives in the pool.
+Losing it is harmless.</p>
+</dd>
+</dl>
+</section>
+<section id="further-reading">
+<h2>Further reading<a class="headerlink" href="#further-reading" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/7/zpoolconcepts.7.html">zpoolconcepts(7)</a> —
+<code class="docutils literal notranslate"><span class="pre">Special</span> <span class="pre">Allocation</span> <span class="pre">Class</span></code></p></li>
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/7/zfsprops.7.html">zfsprops(7)</a> —
+<code class="docutils literal notranslate"><span class="pre">special_small_blocks</span></code></p></li>
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zpool-add.8.html">zpool-add(8)</a>,
+<a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zpool-remove.8.html">zpool-remove(8)</a></p></li>
+<li><p><a class="reference internal" href="VDEVs.html"><span class="doc">VDEVs</span></a>,
+<a class="reference internal" href="Caching.html"><span class="doc">Caching and Auxiliary Devices</span></a></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Caching.html" class="btn btn-neutral float-left" title="Caching and Auxiliary Devices" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Changing%20Pool%20Layout.html" class="btn btn-neutral float-right" title="Changing Pool Layout" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, OpenZFS.
+      <span class="lastupdated">Last updated on Jul 22, 2026.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

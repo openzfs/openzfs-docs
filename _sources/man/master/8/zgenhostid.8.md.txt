@@ -1,0 +1,96 @@
+ZGENHOSTID(8) - System Manager's Manual
+
+# NAME
+
+**zgenhostid** - generate host ID into /etc/hostid
+
+# SYNOPSIS
+
+**zgenhostid**
+\[**-f**]
+\[**-o**&nbsp;*filename*]
+\[*hostid*]
+
+# DESCRIPTION
+
+Creates
+*/etc/hostid*
+file and stores the host ID in it.
+If
+*hostid*
+was provided, validate and store that value.
+Otherwise, randomly generate an ID.
+
+# OPTIONS
+
+**-h**
+
+> Display a summary of the command-line options.
+
+**-f**
+
+> Allow output overwrite.
+
+**-o** *filename*
+
+> Write to
+> *filename*
+> instead of the default
+> */etc/hostid*.
+
+*hostid*
+
+> Specifies the value to be placed in
+> */etc/hostid*.
+> It should be a number with a value between 1 and 2^32-1.
+> If
+> **0**,
+> generate a random ID.
+> This value
+> *must*
+> be unique among your systems.
+> It
+> *must*
+> be an 8-digit-long hexadecimal number, optionally prefixed by
+> "0x".
+
+# FILES
+
+*/etc/hostid*
+
+# EXAMPLES
+
+Generate a random hostid and store it
+
+> > \# **zgenhostid**
+
+Record the libc-generated hostid in */etc/hostid*
+
+> > \# **zgenhostid** "$(**hostid**)"
+
+Record a custom hostid (*0xdeadbeef*) in */etc/hostid*
+
+> > \# **zgenhostid** *deadbeef*
+
+Record a custom hostid (*0x01234567*) in */tmp/hostid* and overwrite the file if it exists
+
+> > \# **zgenhostid** **-f** **-o** */tmp/hostid 0x01234567*
+
+# SEE ALSO
+
+genhostid(1),
+hostid(1),
+sethostid(3),
+spl(4)
+
+# HISTORY
+
+**zgenhostid**
+emulates the
+genhostid(1)
+utility and is provided for use on systems which
+do not include the utility or do not provide the
+sethostid(3)
+function.
+
+Debian - July 11, 2022
