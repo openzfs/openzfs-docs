@@ -1,0 +1,50 @@
+ZPOOL-CHECKPOINT(8) - System Manager's Manual
+
+# NAME
+
+**zpool-checkpoint** - check-point current ZFS storage pool state
+
+# SYNOPSIS
+
+**zpool**
+**checkpoint**
+\[**-d**&nbsp;\[**-w**]]
+*pool*
+
+# DESCRIPTION
+
+Checkpoints the current state of
+*pool*
+, which can be later restored by
+**zpool** **import --rewind-to-checkpoint**.
+The existence of a checkpoint in a pool prohibits the following
+**zpool**
+subcommands:
+**remove**, **attach**, **detach**, **split**, and **reguid**.
+In addition, it may break reservation boundaries if the pool lacks free
+space.
+The
+**zpool** **status**
+command indicates the existence of a checkpoint or the progress of discarding a
+checkpoint from a pool.
+**zpool** **list**
+can be used to check how much space the checkpoint takes from the pool.
+
+# OPTIONS
+
+**-d**, **--discard**
+
+> Discards an existing checkpoint from
+> *pool*.
+
+**-w**, **--wait**
+
+> Waits until the checkpoint has finished being discarded before returning.
+
+# SEE ALSO
+
+zfs-snapshot(8),
+zpool-import(8),
+zpool-status(8)
+
+Debian - July 11, 2022

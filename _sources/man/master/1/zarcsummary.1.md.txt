@@ -1,0 +1,205 @@
+ZARCSUMMARY(1) - General Commands Manual
+
+# NAME
+
+**zarcsummary** - print ZFS ARC and subsystem statistics
+
+# SYNOPSIS
+
+**zarcsummary**
+\[**-adghr**]
+\[**-p**&nbsp;*page*]
+\[**-s**&nbsp;*section*]
+
+# DESCRIPTION
+
+**zarcsummary**
+collects statistics from the running kernel and prints a human-readable
+report on the state of the ZFS Adaptive Replacement Cache
+(ARC)
+and several related subsystems.
+The output is a snapshot; for periodic sampling, use
+zarcstat(1)
+instead.
+
+When invoked without arguments,
+**zarcsummary**
+prints all sections in sequence.
+A single section may be selected with the
+**-s**
+option.
+
+The report is organized into the following sections:
+
+**arc**
+
+> Current and target ARC sizes, the split between the Most Recently Used
+> (MRU)
+> and Most Frequently Used
+> (MFU)
+> lists, overall hit and miss ratios, compression savings, and whether the
+> ARC is experiencing memory pressure.
+
+**archits**
+
+> Breakdown of ARC hits and misses by demand reads versus prefetches
+> and data versus metadata.
+
+**dmu**
+
+> Data Management Unit predictive prefetcher statistics, including stream
+> hits, misses, and I/O issued ahead of and behind the current stream.
+
+**l2arc**
+
+> Level-2 ARC statistics for any cache devices attached to imported pools.
+> This section only appears when an L2ARC device is present and covers
+> bytes read and written, hit rates, and eviction activity.
+
+**spl**
+
+> Solaris Porting Layer memory allocator statistics.
+> This section is only available on Linux.
+
+**tunables**
+
+> Current values of kernel tunables that govern ARC behavior, including
+> *zfs\_arc\_max*
+> and
+> *zfs\_arc\_min*.
+> Combining this section with
+> **-d**
+> adds a brief explanation of each tunable.
+
+**zil**
+
+> ZFS Intent Log statistics: committed transaction counts, flush requests
+> to stable storage, and the byte-level split between normal vdevs and
+> any separate log
+> (SLOG)
+> device.
+
+# OPTIONS
+
+**-a**, **--alternate**
+
+> Use an alternate layout for the tunables and SPL sections.
+
+**-d**, **--description**
+
+> Print a short description next to each tunable and SPL entry.
+
+**-h**, **--help**
+
+> Display a help message.
+
+**-g**, **--graph**
+
+> Print an ASCII graph of current ARC use and exit.
+
+**-p** *page*, **--page** *page*
+
+> Print a section by its legacy page number.
+> **Deprecated**;
+> use
+> **-s**
+> instead.
+
+**-r**, **--raw**
+
+> Dump all available data with minimal formatting.
+
+**-s** *section*, **--section** *section*
+
+> Print only the named section.
+> See
+> *DESCRIPTION*
+> for the list of valid section names.
+
+# ENVIRONMENT
+
+**Linux**
+
+> Statistics are read from
+> */proc/spl/kstat/zfs/*.
+
+FreeBSD
+
+> Statistics are read via
+> sysctl(3)
+> from the
+> *vfs.zfs*
+> and
+> *kstat.zfs.misc*
+> trees.
+> The
+> *py-sysctl*
+> package must be installed for
+> **zarcsummary**
+> to function.
+
+# EXIT STATUS
+
+The **zarcsummary** utility exits&#160;0 on success, and&#160;&gt;0 if an error occurs.
+
+# EXAMPLES
+
+Print the full report:
+
+	# zarcsummary
+
+Display only ARC size and hit rate information:
+
+	# zarcsummary -s arc
+
+Show a visual overview of ARC health:
+
+	# zarcsummary -g
+
+Search for all statistics containing
+"hit":
+
+	# zarcsummary -r | grep hit
+
+Review all tunables with their descriptions:
+
+	# zarcsummary -d -s tunables
+
+# SEE ALSO
+
+zarcstat(1),
+zpool-status(8)
+
+# HISTORY
+
+**zarcsummary**
+originated as a Perl script called
+**arc\_summary**,
+written by
+Ben Rockwood
+in 2008 for Solaris.
+Martin Matuska
+ported it to
+FreeBSD
+in 2010, and
+Jason J. Hellenthal
+took over maintenance.
+Scot W. Stevenson
+contributed a full rewrite in Python 3 in 2017, introducing the
+**-g**,
+**-r**,
+and
+**-s**
+options along with the section-based output layout.
+The tool was renamed from
+**arc\_summary**
+to
+**zarcsummary**
+in 2025 to align with the OpenZFS command naming convention.
+
+# AUTHORS
+
+This manual page was written by
+Christos Longros &lt;[chris.longros@gmail.com](mailto:chris.longros@gmail.com)&gt;.
+
+Debian - March 14, 2026

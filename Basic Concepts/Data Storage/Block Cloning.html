@@ -1,0 +1,246 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <meta property="article:modified_time" content="2026-07-22T11:05:18+00:00" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Block Cloning &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://openzfs.github.io/openzfs-docs/Basic%20Concepts/Data%20Storage/Block%20Cloning.html" />
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/js/redirect.js?v=2a1712f3"></script>
+      <script src="../../_static/js/module_params_filter.js?v=9a1b680c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Native Encryption" href="Encryption.html" />
+    <link rel="prev" title="Deduplication" href="Deduplication.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Basic Concepts</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Copy-on-write.html">Copy-on-Write</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Pool%20Structure/index.html">Pool Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Datasets/index.html">Datasets</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Data Storage</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Checksums.html">Checksums and Their Use in ZFS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Compression.html">Compression</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Deduplication.html">Deduplication</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Block Cloning</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#how-it-is-triggered">How it is triggered</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#limitations">Limitations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#block-cloning-vs-deduplication">Block cloning vs deduplication</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#checking-the-savings">Checking the savings</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#further-reading">Further reading</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Encryption.html">Native Encryption</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Operations/index.html">Operations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../man/index.html">Man Pages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Basic Concepts</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Data Storage</a></li>
+      <li class="breadcrumb-item active">Block Cloning</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/Basic Concepts/Data Storage/Block Cloning.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="block-cloning">
+<h1>Block Cloning<a class="headerlink" href="#block-cloning" title="Link to this heading"></a></h1>
+<p>Block cloning makes a shallow copy of a file, or part of one: the new file
+references the existing data blocks instead of copying them. A later write to
+either side takes a private copy of the affected block. This is what
+implements <em>reflinks</em>, or file-level copy-on-write.</p>
+<p>Copying a 50 GiB file becomes near-instant and consumes no additional space,
+because no data is read or written — only references are created.</p>
+<p>Block cloning requires the <code class="docutils literal notranslate"><span class="pre">block_cloning</span></code> pool feature, which becomes
+<code class="docutils literal notranslate"><span class="pre">active</span></code> when the first block is cloned and returns to <code class="docutils literal notranslate"><span class="pre">enabled</span></code> when the
+last cloned block is freed.</p>
+<section id="how-it-is-triggered">
+<h2>How it is triggered<a class="headerlink" href="#how-it-is-triggered" title="Link to this heading"></a></h2>
+<p>Unlike deduplication, cloning is never automatic — a program has to ask for
+it, normally via <code class="docutils literal notranslate"><span class="pre">copy_file_range(2)</span></code>. Many common tools already do:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cp<span class="w"> </span>--reflink<span class="o">=</span>auto<span class="w"> </span>bigfile<span class="w"> </span>copy<span class="w">       </span><span class="c1"># GNU coreutils</span>
+cp<span class="w"> </span>bigfile<span class="w"> </span>copy<span class="w">                      </span><span class="c1"># newer versions try this by default</span>
+</pre></div>
+</div>
+<p>Look for “clone”, “reflink” or “dedupe” in a tool’s documentation to find out
+whether it will attempt block cloning.</p>
+</section>
+<section id="limitations">
+<h2>Limitations<a class="headerlink" href="#limitations" title="Link to this heading"></a></h2>
+<p>Blocks cannot be cloned when:</p>
+<ul class="simple">
+<li><p>only part of a block would be cloned — cloning works on whole blocks;</p></li>
+<li><p>the data has not been written to disk yet;</p></li>
+<li><p>the source and destination <code class="docutils literal notranslate"><span class="pre">recordsize</span></code> differ;</p></li>
+<li><p>the datasets do not share the same master encryption key.</p></li>
+</ul>
+<p>ZFS does try to clone across datasets, including encrypted ones, but the OS
+adds its own restrictions — most versions of Linux will not allow clones
+across datasets at all. When cloning is not possible the copy silently falls
+back to reading and writing the data, so a <code class="docutils literal notranslate"><span class="pre">cp</span></code> that seems slow is usually a
+clone that did not happen.</p>
+</section>
+<section id="block-cloning-vs-deduplication">
+<h2>Block cloning vs deduplication<a class="headerlink" href="#block-cloning-vs-deduplication" title="Link to this heading"></a></h2>
+<p>Both end up with multiple references to one block, but they are not
+alternatives to each other:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>Block cloning</p></th>
+<th class="head"><p>Deduplication</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Triggered by</p></td>
+<td><p>an explicit request
+from a program</p></td>
+<td><p>every write, synchronously</p></td>
+</tr>
+<tr class="row-odd"><td><p>Bookkeeping</p></td>
+<td><p>Block Reference Table
+(BRT), minimal overhead</p></td>
+<td><p>dedup table (DDT)
+large, RAM-hungry</p></td>
+</tr>
+<tr class="row-even"><td><p>Safe to leave on</p></td>
+<td><p>yes</p></td>
+<td><p>only with careful sizing</p></td>
+</tr>
+<tr class="row-odd"><td><p>Finds duplicates</p></td>
+<td><p>no — only what it is
+told to clone</p></td>
+<td><p>yes, anywhere in the pool</p></td>
+</tr>
+</tbody>
+</table>
+<p>Because the BRT’s overhead is minimal, block cloning can reasonably stay
+enabled all the time — which is not true of
+<a class="reference internal" href="Deduplication.html"><span class="doc">deduplication</span></a>.</p>
+</section>
+<section id="checking-the-savings">
+<h2>Checking the savings<a class="headerlink" href="#checking-the-savings" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zpool<span class="w"> </span>get<span class="w"> </span>bcloneused,bclonesaved,bcloneratio<span class="w"> </span>pool
+zdb<span class="w"> </span>-T<span class="w"> </span>pool<span class="w">          </span><span class="c1"># BRT statistics</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">bcloneused</span></code> is the space occupied by cloned blocks, <code class="docutils literal notranslate"><span class="pre">bclonesaved</span></code> is what
+would have been needed without cloning, and <code class="docutils literal notranslate"><span class="pre">bcloneratio</span></code> expresses the same
+as a multiplier.</p>
+<p>A related feature, <code class="docutils literal notranslate"><span class="pre">block_cloning_endian</span></code>, corrects an endianness problem in
+how BRT entries were originally stored; it activates when the first BRT ZAP is
+created so that existing pools stay compatible.</p>
+</section>
+<section id="further-reading">
+<h2>Further reading<a class="headerlink" href="#further-reading" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/7/zfsconcepts.7.html">zfsconcepts(7)</a> —
+<code class="docutils literal notranslate"><span class="pre">Block</span> <span class="pre">cloning</span></code></p></li>
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/7/zpool-features.7.html">zpool-features(7)</a> —
+<code class="docutils literal notranslate"><span class="pre">block_cloning</span></code>, <code class="docutils literal notranslate"><span class="pre">block_cloning_endian</span></code></p></li>
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/7/zpoolprops.7.html">zpoolprops(7)</a> —
+<code class="docutils literal notranslate"><span class="pre">bcloneused</span></code>, <code class="docutils literal notranslate"><span class="pre">bclonesaved</span></code>, <code class="docutils literal notranslate"><span class="pre">bcloneratio</span></code></p></li>
+<li><p><a class="reference internal" href="Deduplication.html"><span class="doc">Deduplication</span></a>,
+<a class="reference internal" href="../Datasets/Snapshots%20and%20Clones.html"><span class="doc">Snapshots, Clones and Bookmarks</span></a></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Deduplication.html" class="btn btn-neutral float-left" title="Deduplication" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Encryption.html" class="btn btn-neutral float-right" title="Native Encryption" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, OpenZFS.
+      <span class="lastupdated">Last updated on Jul 22, 2026.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

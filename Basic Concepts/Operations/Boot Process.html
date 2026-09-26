@@ -1,0 +1,291 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <meta property="article:modified_time" content="2026-07-22T11:45:26+00:00" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pools at Boot &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://openzfs.github.io/openzfs-docs/Basic%20Concepts/Operations/Boot%20Process.html" />
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/js/redirect.js?v=2a1712f3"></script>
+      <script src="../../_static/js/module_params_filter.js?v=9a1b680c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Troubleshooting" href="Troubleshooting.html" />
+    <link rel="prev" title="Delegated Administration" href="Delegated%20Administration.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Basic Concepts</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Copy-on-write.html">Copy-on-Write</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Pool%20Structure/index.html">Pool Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Datasets/index.html">Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Data%20Storage/index.html">Data Storage</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Operations</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Send%20and%20Receive.html">Send and Receive</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Scrub%20and%20Resilver.html">Scrub and Resilver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="TRIM.html">TRIM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Sharing.html">Sharing Datasets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Delegated%20Administration.html">Delegated Administration</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Pools at Boot</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#the-order-of-events">The order of events</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#the-cache-file">The cache file</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hostid-and-importing-on-the-wrong-machine">hostid and importing on the wrong machine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#systemd">systemd</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#freebsd">FreeBSD</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#further-reading">Further reading</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Troubleshooting.html">Troubleshooting</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../man/index.html">Man Pages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Basic Concepts</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Operations</a></li>
+      <li class="breadcrumb-item active">Pools at Boot</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/Basic Concepts/Operations/Boot Process.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pools-at-boot">
+<h1>Pools at Boot<a class="headerlink" href="#pools-at-boot" title="Link to this heading"></a></h1>
+<p>Nothing about a ZFS pool is described in <code class="docutils literal notranslate"><span class="pre">/etc/fstab</span></code> by default. Pools are
+discovered, imported, mounted and shared by ZFS itself, which is convenient
+until something does not come up and there is no fstab line to look at. This
+page covers what happens between power-on and a mounted dataset.</p>
+<section id="the-order-of-events">
+<h2>The order of events<a class="headerlink" href="#the-order-of-events" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p><strong>Pools are imported.</strong> Either from the cache file, or by scanning
+devices.</p></li>
+<li><p><strong>Datasets are mounted</strong>, in mountpoint order, by <code class="docutils literal notranslate"><span class="pre">zfs</span> <span class="pre">mount</span> <span class="pre">-a</span></code> or by
+generated systemd mount units.</p></li>
+<li><p><strong>Shares are published</strong> by <code class="docutils literal notranslate"><span class="pre">zfs</span> <span class="pre">share</span> <span class="pre">-a</span></code> — see
+<a class="reference internal" href="Sharing.html"><span class="doc">Sharing Datasets</span></a>.</p></li>
+<li><p><strong>zvols appear</strong> under <code class="docutils literal notranslate"><span class="pre">/dev/zvol</span></code>; anything waiting on them has to wait
+for that.</p></li>
+<li><p><strong>zed starts</strong>, so events from this point on are acted upon.</p></li>
+</ol>
+<p>A root-on-ZFS system does step 1 earlier and differently: the root pool is
+imported from the initramfs (Linux) or by the loader (FreeBSD) before the
+real root can be mounted at all. The
+<a class="reference internal" href="../../Getting%20Started/index.html"><span class="doc">Root on ZFS guides</span></a> cover that case.</p>
+</section>
+<section id="the-cache-file">
+<h2>The cache file<a class="headerlink" href="#the-cache-file" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">/etc/zfs/zpool.cache</span></code> records which pools were imported, so the system can
+bring them back without scanning every block device. <strong>Every pool listed there
+is imported automatically at boot.</strong></p>
+<p>The pool property <code class="docutils literal notranslate"><span class="pre">cachefile</span></code> controls this:</p>
+<ul class="simple">
+<li><p>the default (empty string) uses the standard location;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">none</span></code> means the pool is never cached — it will <em>not</em> come back
+automatically, which is what you want for removable media, clustering and
+failover;</p></li>
+<li><p>an explicit path caches it elsewhere, to be imported later with
+<code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">import</span> <span class="pre">-c</span> <span class="pre">&lt;path&gt;</span></code>.</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zpool<span class="w"> </span>get<span class="w"> </span>cachefile<span class="w"> </span>pool
+zpool<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="nv">cachefile</span><span class="o">=</span>none<span class="w"> </span>pool<span class="w">          </span><span class="c1"># stop importing it at boot</span>
+zpool<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="nv">cachefile</span><span class="o">=</span><span class="w"> </span>pool<span class="w">              </span><span class="c1"># back to the default</span>
+</pre></div>
+</div>
+<p>The file is a binary nvlist; <code class="docutils literal notranslate"><span class="pre">zdb</span></code> with no arguments prints its contents. If
+it is stale or missing, a pool can still be found by scanning
+(<code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">import</span> <span class="pre">-d</span></code>), which is what the <code class="docutils literal notranslate"><span class="pre">zfs-import-scan</span></code> path does.</p>
+<p>Two common surprises: a pool you imported once keeps coming back after reboot
+because it is in the cache, and a pool imported with <code class="docutils literal notranslate"><span class="pre">-R</span></code> (which sets
+<code class="docutils literal notranslate"><span class="pre">cachefile=none</span></code>) does <em>not</em> come back, by design. See
+<a class="reference internal" href="Troubleshooting.html"><span class="doc">Troubleshooting</span></a>.</p>
+</section>
+<section id="hostid-and-importing-on-the-wrong-machine">
+<h2>hostid and importing on the wrong machine<a class="headerlink" href="#hostid-and-importing-on-the-wrong-machine" title="Link to this heading"></a></h2>
+<p>A pool records the <code class="docutils literal notranslate"><span class="pre">hostid</span></code> of the system that imported it. If another
+system sees a pool that a different host still has imported, it refuses to
+import it — this is the “pool was last accessed by another system” message,
+and <code class="docutils literal notranslate"><span class="pre">-f</span></code> overrides it.</p>
+<p>That guard is advisory. It compares a recorded id; it does not check whether
+the other host is still writing. Forcing an import of a pool that is genuinely
+active elsewhere will corrupt it.</p>
+<p>On Linux the id comes from <code class="docutils literal notranslate"><span class="pre">/etc/hostid</span></code>; generate one with
+<code class="docutils literal notranslate"><span class="pre">zgenhostid</span></code> if it is missing. A missing or duplicated hostid is a classic
+cause of pools that either refuse to import after a hostname change or fail to
+protect themselves in a cluster.</p>
+<p>For shared storage where two hosts really can reach the same devices, the
+<code class="docutils literal notranslate"><span class="pre">multihost</span></code> pool property turns the advisory check into an active one: hosts
+write periodic heartbeats, and an import is refused — <em>even with</em> <code class="docutils literal notranslate"><span class="pre">-f</span></code> —
+while the pool looks alive. Each host must have a unique hostid for it to
+work.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zgenhostid<span class="w">                       </span><span class="c1"># if /etc/hostid is missing</span>
+zpool<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="nv">multihost</span><span class="o">=</span>on<span class="w"> </span>pool
+</pre></div>
+</div>
+<p>Note what <code class="docutils literal notranslate"><span class="pre">multihost</span></code> does not do: it protects the pool at import time, not
+individual devices from being claimed by two different pools.</p>
+</section>
+<section id="systemd">
+<h2>systemd<a class="headerlink" href="#systemd" title="Link to this heading"></a></h2>
+<p>On Linux the sequence is a set of units, and knowing their names is most of
+the battle:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">zfs-import-cache.service</span></code></dt><dd><p>Imports the pools listed in <code class="docutils literal notranslate"><span class="pre">zpool.cache</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">zfs-import-scan.service</span></code></dt><dd><p>Imports by scanning devices instead. Normally the alternative to the
+cache service, not a companion to it.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">zfs-import.target</span></code></dt><dd><p>Reached once importing is done; things needing pools order after it.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">zfs-mount.service</span></code></dt><dd><p>Runs <code class="docutils literal notranslate"><span class="pre">zfs</span> <span class="pre">mount</span> <span class="pre">-a</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">zfs-share.service</span></code></dt><dd><p>Runs <code class="docutils literal notranslate"><span class="pre">zfs</span> <span class="pre">share</span> <span class="pre">-a</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">zfs-volume-wait.service</span></code> / <code class="docutils literal notranslate"><span class="pre">zfs-volumes.target</span></code></dt><dd><p>Waits until zvol device nodes exist.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">zfs-zed.service</span></code></dt><dd><p>The event daemon.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">zfs.target</span></code></dt><dd><p>The aggregate; enable or disable ZFS at boot here.</p>
+</dd>
+</dl>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>systemctl<span class="w"> </span>list-units<span class="w"> </span><span class="s1">&#39;zfs*&#39;</span>
+systemctl<span class="w"> </span>status<span class="w"> </span>zfs-import-cache.service
+journalctl<span class="w"> </span>-u<span class="w"> </span>zfs-import-cache.service<span class="w"> </span>-b
+</pre></div>
+</div>
+<p>There are also the periodic maintenance timers —
+<code class="docutils literal notranslate"><span class="pre">zfs-scrub-weekly&#64;&lt;pool&gt;.timer</span></code>, <code class="docutils literal notranslate"><span class="pre">zfs-scrub-monthly&#64;&lt;pool&gt;.timer</span></code> and the
+matching <code class="docutils literal notranslate"><span class="pre">zfs-trim-*</span></code> ones. See
+<a class="reference internal" href="Scrub%20and%20Resilver.html"><span class="doc">Scrub and Resilver</span></a> and
+<a class="reference internal" href="TRIM.html"><span class="doc">TRIM</span></a>.</p>
+<section id="zfs-mount-generator">
+<h3><code class="docutils literal notranslate"><span class="pre">zfs-mount-generator</span></code><a class="headerlink" href="#zfs-mount-generator" title="Link to this heading"></a></h3>
+<p>Mounting everything with one <code class="docutils literal notranslate"><span class="pre">zfs</span> <span class="pre">mount</span> <span class="pre">-a</span></code> late in boot means systemd knows
+nothing about the individual mounts, so units that need a particular dataset
+cannot order themselves against it.</p>
+<p><code class="docutils literal notranslate"><span class="pre">zfs-mount-generator</span></code> solves that by generating a native <code class="docutils literal notranslate"><span class="pre">.mount</span></code> unit per
+dataset at generator time, from a cached list of dataset properties. Datasets
+with <code class="docutils literal notranslate"><span class="pre">mountpoint=legacy</span></code> or <code class="docutils literal notranslate"><span class="pre">none</span></code> are skipped, as are those with
+<code class="docutils literal notranslate"><span class="pre">canmount=off</span></code>.</p>
+<p>This is what to reach for when a service starts before its data is mounted.
+It also lets an encrypted dataset’s key be requested through the normal
+systemd credential machinery rather than blocking a shell —
+see <a class="reference internal" href="../Data%20Storage/Encryption.html"><span class="doc">Native Encryption</span></a>.</p>
+</section>
+</section>
+<section id="freebsd">
+<h2>FreeBSD<a class="headerlink" href="#freebsd" title="Link to this heading"></a></h2>
+<p>The cache file lives at <code class="docutils literal notranslate"><span class="pre">/boot/zfs/zpool.cache</span></code>. Pools are imported by the
+<code class="docutils literal notranslate"><span class="pre">zfs</span></code> rc script, enabled with <code class="docutils literal notranslate"><span class="pre">zfs_enable=&quot;YES&quot;</span></code> in <code class="docutils literal notranslate"><span class="pre">/etc/rc.conf</span></code>, and
+the loader imports the root pool before the kernel starts. The concepts —
+cache file, hostid, mount then share — are the same.</p>
+</section>
+<section id="further-reading">
+<h2>Further reading<a class="headerlink" href="#further-reading" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/7/zpoolprops.7.html">zpoolprops(7)</a> —
+<code class="docutils literal notranslate"><span class="pre">cachefile</span></code>, <code class="docutils literal notranslate"><span class="pre">multihost</span></code></p></li>
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zfs-mount-generator.8.html">zfs-mount-generator(8)</a>,
+<a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zgenhostid.8.html">zgenhostid(8)</a></p></li>
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zpool-import.8.html">zpool-import(8)</a></p></li>
+<li><p><a class="reference internal" href="Troubleshooting.html"><span class="doc">Troubleshooting</span></a>,
+<a class="reference internal" href="../../Getting%20Started/index.html"><span class="doc">Root on ZFS guides</span></a></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Delegated%20Administration.html" class="btn btn-neutral float-left" title="Delegated Administration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Troubleshooting.html" class="btn btn-neutral float-right" title="Troubleshooting" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, OpenZFS.
+      <span class="lastupdated">Last updated on Jul 22, 2026.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
