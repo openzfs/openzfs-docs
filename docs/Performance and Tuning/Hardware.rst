@@ -347,6 +347,26 @@ script to set the error recovery time to a low value, such as 0.1
 seconds until ZFS is modified to control it. This must be done on every
 boot.
 
+.. _smr_vs_cmr:
+
+SMR vs CMR
+----------
+
+Shingled Magnetic Recording (SMR) drives overlap adjacent data tracks to
+increase areal density. Drive-managed SMR (DM-SMR) disks hide this behind the
+normal block interface, which can trigger severe write-amplification stalls
+during RAIDZ/mirror resilver, scrub, and ``zfs send``/``receive`` workloads.
+DM-SMR drives are therefore not recommended for ZFS pools. Conventional
+Magnetic Recording (CMR) drives do not have this problem and should be
+preferred for any redundant pool.
+
+The recording technology is frequently not stated in the model number, so
+verify before buying. Community-maintained references such as the
+`NAS CMR/SMR drive list <https://www.nasdisks.com/cmr-smr/>`_ track which
+models use which technology, and you can compare current price-per-terabyte
+across CMR models with
+`HDD Hunt's price-per-TB tracker <https://hddhunt.com/cheapest-hdd-per-tb/>`_.
+
 .. _rpm_speeds:
 
 RPM Speeds
