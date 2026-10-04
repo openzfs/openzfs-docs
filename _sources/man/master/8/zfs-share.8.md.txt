@@ -1,0 +1,76 @@
+ZFS-SHARE(8) - System Manager's Manual
+
+# NAME
+
+**zfs-share** - share and unshare ZFS filesystems
+
+# SYNOPSIS
+
+**zfs**
+**share**
+\[**-l**]
+**-a**|*filesystem*  
+**zfs**
+**unshare**
+**-a**|*filesystem*|*mountpoint*
+
+# DESCRIPTION
+
+**zfs**
+**share**
+\[**-l**]
+**-a**|*filesystem*
+
+> Shares available ZFS file systems.
+
+> **-l**
+
+> > Load keys for encrypted filesystems as they are being mounted.
+> > This is equivalent to executing
+> > **zfs** **load-key**
+> > on each encryption root before mounting it.
+> > Note that if a filesystem has
+> > **keylocation**=**prompt**,
+> > this will cause the terminal to interactively block after asking for the key.
+
+> **-a**
+
+> > Share all available ZFS file systems.
+> > Invoked automatically as part of the boot process.
+
+> *filesystem*
+
+> > Share the specified filesystem according to the
+> > **sharenfs**
+> > and
+> > **sharesmb**
+> > properties.
+> > File systems are shared when the
+> > **sharenfs**
+> > or
+> > **sharesmb**
+> > property is set.
+
+**zfs**
+**unshare**
+**-a**|*filesystem*|*mountpoint*
+
+> Unshares currently shared ZFS file systems.
+
+> **-a**
+
+> > Unshare all available ZFS file systems.
+> > Invoked automatically as part of the shutdown process.
+
+> *filesystem*|*mountpoint*
+
+> > Unshare the specified filesystem.
+> > The command can also be given a path to a ZFS file system shared on the system.
+
+# SEE ALSO
+
+exports(5),
+smb.conf(5),
+zfsprops(7)
+
+Debian - July 11, 2022

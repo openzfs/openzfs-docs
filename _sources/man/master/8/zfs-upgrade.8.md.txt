@@ -1,0 +1,80 @@
+ZFS-UPGRADE(8) - System Manager's Manual
+
+# NAME
+
+**zfs-upgrade** - manage on-disk version of ZFS filesystems
+
+# SYNOPSIS
+
+**zfs**
+**upgrade**  
+**zfs**
+**upgrade**
+**-v**  
+**zfs**
+**upgrade**
+\[**-r**]
+\[**-V**&nbsp;*version*]
+**-a**|*filesystem*
+
+# DESCRIPTION
+
+**zfs**
+**upgrade**
+
+> Displays a list of file systems that are not the most recent version.
+
+**zfs**
+**upgrade**
+**-v**
+
+> Displays a list of currently supported file system versions.
+
+**zfs**
+**upgrade**
+\[**-r**]
+\[**-V** *version*]
+**-a**|*filesystem*
+
+> Upgrades file systems to a new on-disk version.
+> Once this is done, the file systems will no longer be accessible on systems
+> running older versions of ZFS.
+> **zfs** **send**
+> streams generated from new snapshots of these file systems cannot be accessed on
+> systems running older versions of ZFS.
+
+> In general, the file system version is independent of the pool version.
+> See
+> zpool-features(7)
+> for information on features of ZFS storage pools.
+
+> In some cases, the file system version and the pool version are interrelated and
+> the pool version must be upgraded before the file system version can be
+> upgraded.
+
+> **-V** *version*
+
+> > Upgrade to
+> > *version*.
+> > If not specified, upgrade to the most recent version.
+> > This
+> > option can only be used to increase the version number, and only up to the most
+> > recent version supported by this version of ZFS.
+
+> **-a**
+
+> > Upgrade all file systems on all imported pools.
+
+> *filesystem*
+
+> > Upgrade the specified file system.
+
+> **-r**
+
+> > Upgrade the specified file system and all descendent file systems.
+
+# SEE ALSO
+
+zpool-upgrade(8)
+
+Debian - July 11, 2022

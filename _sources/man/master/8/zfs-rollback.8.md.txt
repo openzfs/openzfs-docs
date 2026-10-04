@@ -1,0 +1,64 @@
+ZFS-ROLLBACK(8) - System Manager's Manual
+
+# NAME
+
+**zfs-rollback** - roll ZFS dataset back to snapshot
+
+# SYNOPSIS
+
+**zfs**
+**rollback**
+\[**-Rfr**]
+*snapshot*
+
+# DESCRIPTION
+
+When a dataset is rolled back, all data that has changed since the snapshot is
+discarded, and the dataset reverts to the state at the time of the snapshot.
+By default, the command refuses to roll back to a snapshot other than the most
+recent one.
+In order to do so, all intermediate snapshots and bookmarks must be destroyed by
+specifying the
+**-r**
+option.
+
+The
+**-rR**
+options do not recursively destroy the child snapshots of a recursive snapshot.
+Only direct snapshots of the specified filesystem are destroyed by either of
+these options.
+To completely roll back a recursive snapshot, you must roll back the individual
+child snapshots.
+
+**-R**
+
+> Destroy any more recent snapshots and bookmarks, as well as any clones of those
+> snapshots.
+
+**-f**
+
+> Used with the
+> **-R**
+> option to force an unmount of any clone file systems that are to be destroyed.
+
+**-r**
+
+> Destroy any snapshots and bookmarks more recent than the one specified.
+
+# EXAMPLES
+
+## Example 1: Rolling Back a ZFS File System
+
+The following command reverts the contents of
+*pool/home/anne*
+to the snapshot named
+*yesterday*,
+deleting all intermediate snapshots:
+
+	# **zfs** **rollback** **-r** *pool/home/anne*@*yesterday*
+
+# SEE ALSO
+
+zfs-snapshot(8)
+
+Debian - April 28, 2025

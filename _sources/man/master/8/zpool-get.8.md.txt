@@ -1,0 +1,190 @@
+ZPOOL-GET(8) - System Manager's Manual
+
+# NAME
+
+**zpool-get** - retrieve properties of ZFS storage pools
+
+# SYNOPSIS
+
+**zpool**
+**get**
+\[**-Hp**]
+\[**-j**&nbsp;\[*--json-int,&nbsp;--json-pool-key-guid*]]
+\[**-o**&nbsp;*field*\[,*field*]&#8230;]
+**all**|*property*\[,*property*]&#8230;
+\[*pool*]&#8230;  
+**zpool**
+**get**
+\[**-Hp**]
+\[**-j**&nbsp;\[*--json-int*]]
+\[**-o**&nbsp;*field*\[,*field*]&#8230;]
+**all**|*property*\[,*property*]&#8230;
+*pool*
+\[**all-vdevs**|*vdev*]&#8230;  
+**zpool**
+**set**
+*property*=*value*
+*pool*  
+**zpool**
+**set**
+*property*=*value*
+*pool*
+*vdev*
+
+# DESCRIPTION
+
+**zpool**
+**get**
+\[**-Hp**]
+\[**-j** \[*--json-int, --json-pool-key-guid*]]
+\[**-o** *field*\[,*field*]&#8230;]
+**all**|*property*\[,*property*]&#8230;
+\[*pool*]&#8230;
+
+> Retrieves the given list of properties
+> (or all properties if
+> **all**
+> is used)
+> for the specified storage pool(s).
+> These properties are displayed with the following fields:
+
+> **name**
+
+> > Name of storage pool.
+
+> **property**
+
+> > Property name.
+
+> **value**
+
+> > Property value.
+
+> **source**
+
+> > Property source, either
+> > **default** or **local**.
+
+> See the
+> zpoolprops(7)
+> manual page for more information on the available pool properties.
+
+> **-j**, **--json** \[*--json-int, --json-pool-key-guid*]
+
+> > Display the list of properties in JSON format.
+> > Specify
+> > **--json-int**
+> > to display the numbers in integer format instead of strings in JSON output.
+> > Specify
+> > **--json-pool-key-guid**
+> > to set pool GUID as key for pool objects instead of pool name.
+
+> **-H**
+
+> > Scripted mode.
+> > Do not display headers, and separate fields by a single tab instead of arbitrary
+> > space.
+
+> **-o** *field*
+
+> > A comma-separated list of columns to display, defaults to
+> > **name**,**property**,**value**,**source**.
+
+> **-p**
+
+> > Display numbers in parsable (exact) values.
+
+**zpool**
+**get**
+\[**-j** \[*--json-int*]]
+\[**-Hp**]
+\[**-o** *field*\[,*field*]&#8230;]
+**all**|*property*\[,*property*]&#8230;
+*pool*
+\[**all-vdevs**|*vdev*]&#8230;
+
+> Retrieves the given list of properties
+> (or all properties if
+> **all**
+> is used)
+> for the specified vdevs
+> (or all vdevs if
+> **all-vdevs**
+> is used)
+> in the specified pool.
+> These properties are displayed with the following fields:
+
+> **name**
+
+> > Name of vdev.
+
+> **property**
+
+> > Property name.
+
+> **value**
+
+> > Property value.
+
+> **source**
+
+> > Property source, either
+> > **default** or **local**.
+
+> See the
+> vdevprops(7)
+> manual page for more information on the available pool properties.
+
+> **-j**, **--json** \[*--json-int*]
+
+> > Display the list of properties in JSON format.
+> > Specify
+> > **--json-int**
+> > to display the numbers in integer format instead of strings in JSON output.
+
+> **-H**
+
+> > Scripted mode.
+> > Do not display headers, and separate fields by a single tab instead of arbitrary
+> > space.
+
+> **-o** *field*
+
+> > A comma-separated list of columns to display, defaults to
+> > **name**,**property**,**value**,**source**.
+
+> **-p**
+
+> > Display numbers in parsable (exact) values.
+
+**zpool**
+**set**
+*property*=*value*
+*pool*
+
+> Sets the given property on the specified pool.
+> See the
+> zpoolprops(7)
+> manual page for more information on what properties can be set and acceptable
+> values.
+
+**zpool**
+**set**
+*property*=*value*
+*pool*
+*vdev*
+
+> Sets the given property on the specified vdev in the specified pool.
+> See the
+> vdevprops(7)
+> manual page for more information on what properties can be set and acceptable
+> values.
+
+# SEE ALSO
+
+vdevprops(7),
+zpool-features(7),
+zpoolprops(7),
+zpool-list(8)
+
+Debian - October 12, 2024
