@@ -8,7 +8,9 @@
 # The list of parameters, their types, permissions, defaults and one-line
 # descriptions are taken from the OpenZFS git repository: the
 # ZFS_MODULE_PARAM* macros for the "zfs" module, plain module_param() for
-# the Linux SPL module, and man/man4/zfs.4 for the defaults.  Every
+# the Linux SPL module, and man/man4/zfs.4 for the defaults.
+# Full descriptions come from the man pages, rendered with mandoc; the
+# one-line descriptions are a fallback for undocumented parameters. Every
 # release branch is parsed, so each parameter also carries the list of
 # versions it exists in.
 #
@@ -27,6 +29,8 @@ from collections import defaultdict
 
 import git
 import yaml
+
+from man_description import descriptions
 
 LOG = logging.getLogger()
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
@@ -60,6 +64,11 @@ LEGACY_DESC = re.compile(
     r'\s*;', re.DOTALL)
 # .It Sy zfs_arc_min Ns = Ns Sy 0 Ns B Pq u64
 MAN_ENTRY = re.compile(r'^\.It Sy (?P<name>[a-z][a-z0-9_]*)\b(?P<rest>.*)$')
+# A default followed by explicit alternatives, not a bound or a bitmask.
+MAN_NUMBER = r'[+-]?(?:0[xX][0-9a-fA-F]+|[0-9]+)'
+MAN_ENUM = re.compile(
+    r'\s*Ns = Ns (?P<values>(?:Sy )?' + MAN_NUMBER +
+    r'(?: Ns \| Ns (?:Sy )?' + MAN_NUMBER + r')+) Pq [a-z][a-z0-9_]*\s*')
 # Before 2.1 the parameters were documented in man5 with plain roff:
 #   \fBzfs_arc_min\fR (ulong)
 #   Default value: \fB0\fR.
@@ -223,10 +232,13 @@ def parse_old_man(repo, tag):
 
 
 def parse_man(repo, tag):
-    """Defaults and units as documented in the man pages."""
+    """Defaults, units and full descriptions documented in the man pages."""
     defaults = parse_old_man(repo, tag)
+    sources = [read(repo, tag, man) for man in OLD_MAN_PAGES]
     for man in ('man/man4/zfs.4', 'man/man4/spl.4'):
-        for line in read(repo, tag, man).split('\n'):
+        source = read(repo, tag, man)
+        sources.append(source)
+        for line in source.split('\n'):
             match = MAN_ENTRY.match(line)
             if not match:
                 continue
@@ -240,6 +252,14 @@ def parse_man(repo, tag):
                 'man_type': kind.group('type') if kind else '',
                 'in_man': True,
             }
+            enumeration = MAN_ENUM.fullmatch(rest)
+            if enumeration:
+                defaults[match.group('name')]['man_values'] = tuple(
+                    re.findall(MAN_NUMBER, enumeration.group('values')))
+    for source in sources:
+        if source:
+            for name, text in descriptions(source, defaults).items():
+                defaults[name]['man_desc'] = text
     return defaults
 
 
@@ -391,6 +411,8 @@ def collect(repo):
             entry = params.setdefault(name, {'versions': [], 'defaults': {}})
             entry['versions'].append(version)
             # newest version wins, so the page describes current behaviour
+            entry.pop('man_desc', None)
+            entry.pop('man_values', None)
             entry.update(meta)
             documented = mans[version].get(name, {})
             entry.update(documented)
@@ -438,10 +460,10 @@ def default_field(meta, order):
         for _, shown, versions in reversed(runs))
 
 
-def range_field(text):
-    """A range, or a table when the curated text explains every value."""
+def range_field(text, values=()):
+    """Prefer curated ranges; otherwise show explicit upstream alternatives."""
     if not text:
-        return ''
+        return r' \| '.join('``{}``'.format(value) for value in values)
     starts = list(RANGE_ITEM.finditer(text))
     if len(starts) < 2:
         return text
@@ -587,7 +609,7 @@ def render(params, order, overlay, intro_include, tags_of):
         '',
         '.. note::',
         '   Most of this page is generated from the OpenZFS sources: the list',
-        '   of parameters, their types, defaults and one-line descriptions',
+        '   of parameters, their types, defaults and descriptions',
         '   come from the code and the man pages of each release. The tuning',
         '   advice is written by hand in ``docs/{}``.'.format(OVERLAY_NAME),
         '',
@@ -644,7 +666,7 @@ def render(params, order, overlay, intro_include, tags_of):
              if (meta['type'] or meta.get('man_type')) else ''),
             ('Default', default_field(meta, order)),
             ('Units', meta.get('units', '')),
-            ('Range', range_field(curated.get('range', ''))),
+            ('Range', range_field(curated.get('range', ''), meta.get('man_values', ()))),
             ('Change', PERM_LABEL.get(meta['perm'], '')),
             ('Tags', ', '.join(
                 '`{tag} <#{anchor}>`__'.format(
@@ -661,7 +683,9 @@ def render(params, order, overlay, intro_include, tags_of):
                 out += ['   ' + line if line else '' for line in value]
                 out.append('')
         out.append('')
-        if meta['desc']:
+        if meta.get('man_desc'):
+            out += [meta['man_desc'], '']
+        elif meta['desc']:
             out += [rst_escape(meta['desc']), '']
         for label, key in (('When to change', 'when_to_change'),
                            ('Verification', 'verification'),

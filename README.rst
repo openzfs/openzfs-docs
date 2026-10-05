@@ -12,6 +12,9 @@ Building Locally
 Install Prerequisites
 ~~~~~~~~~~~~~~~~~~~~~
 
+Generating man pages and module parameter descriptions also requires
+``mandoc`` (installed by CI).
+
 The dependencies are available via pip::
 
    # For Debian based distros
@@ -52,7 +55,10 @@ need those pages locally; CI always does. Each one clones
    make module_params   # Module Parameters page
 
 The Module Parameters page is generated from the parameter declarations in
-the OpenZFS sources; the tuning advice on it is maintained by hand in
-``docs/module_parameters.yaml``. ``make module_params_check`` validates that
+the OpenZFS sources and full descriptions in the man pages (using ``mandoc``);
+the tuning advice on it is maintained by hand in
+``docs/module_parameters.yaml``. Explicit value alternatives in man page
+headings supply the Range field unless the YAML provides a curated range.
+``make module_params_check`` validates that
 file without rebuilding the page - it fails if an entry describes a
 parameter that no version of OpenZFS has.
