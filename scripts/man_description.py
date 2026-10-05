@@ -52,6 +52,8 @@ def plain(text):
     text = ' '.join(text.split())
     for char in ('\\', '`', '*', '|', '_'):
         text = text.replace(char, '\\' + char)
+    if text.startswith('..'):
+        text = '\\.' + text[1:]
     return text
 
 
