@@ -357,15 +357,14 @@ increase areal density. Drive-managed SMR (DM-SMR) disks hide this behind the
 normal block interface, which can trigger severe write-amplification stalls
 during RAIDZ/mirror resilver, scrub, and ``zfs send``/``receive`` workloads.
 DM-SMR drives are therefore not recommended for ZFS pools. Conventional
-Magnetic Recording (CMR) drives do not have this problem and should be
-preferred for any redundant pool.
+Magnetic Recording (CMR, often listed as PMR, non-shingled, or non-SMR)
+drives write tracks without overlap and should be preferred for any redundant
+pool.
 
 The recording technology is frequently not stated in the model number, so
-verify before buying. Community-maintained references such as the
-`NAS CMR/SMR drive list <https://www.nasdisks.com/cmr-smr/>`_ track which
-models use which technology, and you can compare current price-per-terabyte
-across CMR models with
-`HDD Hunt's price-per-TB tracker <https://hddhunt.com/cheapest-hdd-per-tb/>`_.
+verify the exact model with the manufacturer. If unspecified, search for its
+full model number with ``SMR``, ``DM-SMR``, ``CMR``, ``PMR``, ``non-shingled``,
+or ``non-SMR`` and confirm it using multiple independent sources.
 
 .. _rpm_speeds:
 
