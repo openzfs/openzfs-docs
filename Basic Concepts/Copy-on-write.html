@@ -1,0 +1,451 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <meta property="article:modified_time" content="2026-07-22T12:12:23+00:00" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Copy-on-Write &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="canonical" href="https://openzfs.github.io/openzfs-docs/Basic%20Concepts/Copy-on-write.html" />
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/js/redirect.js?v=2a1712f3"></script>
+      <script src="../_static/js/module_params_filter.js?v=9a1b680c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Pool Structure" href="Pool%20Structure/index.html" />
+    <link rel="prev" title="Basic Concepts" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../index.html">
+            
+              <img src="../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Basic Concepts</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Copy-on-Write</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#the-tree">The tree</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#writing-something">Writing something</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#transaction-groups">Transaction groups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#what-follows-from-it">What follows from it</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-costs">The costs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#further-reading">Further reading</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Pool%20Structure/index.html">Pool Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Datasets/index.html">Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Data%20Storage/index.html">Data Storage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Operations/index.html">Operations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../man/index.html">Man Pages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Basic Concepts</a></li>
+      <li class="breadcrumb-item active">Copy-on-Write</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/Basic Concepts/Copy-on-write.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="copy-on-write">
+<h1>Copy-on-Write<a class="headerlink" href="#copy-on-write" title="Link to this heading"></a></h1>
+<p>Almost everything distinctive about ZFS follows from one rule: <strong>a block that
+is in use is never overwritten.</strong> Changing data means writing it somewhere
+else and then switching over to the new version. Understanding that rule makes
+the rest of ZFS — snapshots, <code class="docutils literal notranslate"><span class="pre">zfs</span> <span class="pre">send</span></code>, self-healing, the absence of
+<code class="docutils literal notranslate"><span class="pre">fsck</span></code> — stop looking like separate features and start looking like
+consequences.</p>
+<section id="the-tree">
+<h2>The tree<a class="headerlink" href="#the-tree" title="Link to this heading"></a></h2>
+<p>A pool is one large tree. Leaves hold data; interior nodes hold <em>block
+pointers</em>, each of which records where a child lives, how big it is, and — the
+part that matters — its checksum. A block’s checksum is therefore stored in
+its parent, not next to the block itself, so a damaged block cannot vouch for
+itself.</p>
+<p>At the root sits the <strong>uberblock</strong>. Everything in the pool is reachable from
+it.</p>
+</section>
+<section id="writing-something">
+<h2>Writing something<a class="headerlink" href="#writing-something" title="Link to this heading"></a></h2>
+<p>Modifying a block in the middle of the tree cannot happen in place, so ZFS:</p>
+<ol class="arabic simple">
+<li><p>writes the new data to free space;</p></li>
+<li><p>writes a new version of the parent, pointing at the new block;</p></li>
+<li><p>repeats up the tree, since each parent’s checksum has now changed;</p></li>
+<li><p>finally writes a new uberblock.</p></li>
+</ol>
+<div style="margin:1.75em 0">
+<div style="overflow-x:auto">
+<svg id="cow-diagram" viewBox="0 0 600 410" width="100%"
+     style="max-width:600px;height:auto" role="img"
+     aria-label="A ZFS block tree being updated. Modifying data block D4
+     causes a new copy of D4 to be written, then a new copy of its parent
+     indirect block, then a new root block, then a new uberblock. Those
+     four old blocks are superseded; every other block is referenced by
+     the new tree rather than copied.">
+  <style>
+    #cow-diagram { --cow-new: #1f7a4d; --cow-sup: #c2410c; }
+    @media (prefers-color-scheme: dark) {
+      #cow-diagram { --cow-new: #56c98d; --cow-sup: #fb923c; }
+    }
+    #cow-diagram .cow-box { fill: currentColor; fill-opacity: .05;
+      stroke: currentColor; stroke-width: 1.25; }
+    #cow-diagram .cow-edge { fill: none; stroke: currentColor;
+      stroke-width: 1.25; }
+    #cow-diagram .cow-lbl { fill: currentColor;
+      font-family: ui-monospace,SFMono-Regular,Menlo,monospace;
+      font-size: 12px; text-anchor: middle; }
+    #cow-diagram .cow-old { opacity: .38; }
+    #cow-diagram .cow-new .cow-box { stroke: var(--cow-new);
+      fill: var(--cow-new); fill-opacity: .1; stroke-width: 2; }
+    #cow-diagram .cow-new .cow-edge { stroke: var(--cow-new);
+      stroke-width: 2; }
+    #cow-diagram .cow-new .cow-lbl { fill: var(--cow-new);
+      font-weight: 600; }
+    /* The old blocks on the path from the change to the root. They were
+       not written by this transaction, they were replaced by it, so they
+       are marked in their own colour rather than the one for new data. */
+    #cow-diagram .cow-sup .cow-box { stroke: var(--cow-sup);
+      stroke-width: 1.5; fill: var(--cow-sup); fill-opacity: .08; }
+    #cow-diagram .cow-sup .cow-lbl { fill: currentColor; opacity: .75; }
+    #cow-diagram .cow-share { stroke: var(--cow-new); stroke-width: 1.75;
+      stroke-dasharray: 5 4; fill: none; }
+    #cow-diagram .cow-key { fill: currentColor;
+      font-family: ui-monospace,SFMono-Regular,Menlo,monospace;
+      font-size: 11px; }
+    /* Without JS nothing is ever given .cow-hidden, so the figure shows
+       the finished state -- which is what it should say anyway. */
+    #cow-diagram .cow-step { transition: opacity .5s ease,
+      transform .5s ease; transform-box: fill-box;
+      transform-origin: center; }
+    #cow-diagram .cow-step.cow-hidden { opacity: 0;
+      transform: translateY(8px) scale(.94); }
+    @media (prefers-reduced-motion: reduce) {
+      #cow-diagram .cow-step { transition: none; }
+    }
+    .cow-play { font: inherit; font-size: .85em; cursor: pointer;
+      margin-top: .5em; padding: .35em .9em; border-radius: 4px;
+      border: 1px solid currentColor; background: transparent;
+      color: inherit; opacity: .75; }
+    .cow-play:hover, .cow-play:focus-visible { opacity: 1; }
+  </style>
+  <defs>
+    <marker id="cow-a" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="currentColor"/>
+    </marker>
+    <marker id="cow-b" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#1f7a4d"/>
+    </marker>
+  </defs>
+
+  <g class="cow-old">
+    <g marker-end="url(#cow-a)">
+      <path class="cow-edge" d="M210 67 V120"/>
+      <path class="cow-edge" d="M195 152 L127 205"/>
+      <path class="cow-edge" d="M225 152 L293 205"/>
+      <path class="cow-edge" d="M104 237 L79 290"/>
+      <path class="cow-edge" d="M136 237 L161 290"/>
+      <path class="cow-edge" d="M284 237 L259 290"/>
+      <path class="cow-edge" d="M316 237 L341 290"/>
+    </g>
+    <rect class="cow-box" x="160" y="35" width="100" height="32" rx="6"/>
+    <rect class="cow-box" x="170" y="120" width="80" height="32" rx="6"/>
+    <rect class="cow-box" x="80" y="205" width="80" height="32" rx="6"/>
+    <rect class="cow-box" x="260" y="205" width="80" height="32" rx="6"/>
+    <rect class="cow-box" x="40" y="290" width="70" height="30" rx="6"/>
+    <rect class="cow-box" x="130" y="290" width="70" height="30" rx="6"/>
+    <rect class="cow-box" x="220" y="290" width="70" height="30" rx="6"/>
+    <rect class="cow-box" x="310" y="290" width="70" height="30" rx="6"/>
+    <text class="cow-lbl" x="210" y="56">uberblock</text>
+    <text class="cow-lbl" x="210" y="141">root</text>
+    <text class="cow-lbl" x="120" y="226">ind 1</text>
+    <text class="cow-lbl" x="300" y="226">ind 2</text>
+    <text class="cow-lbl" x="75" y="310">D1</text>
+    <text class="cow-lbl" x="165" y="310">D2</text>
+    <text class="cow-lbl" x="255" y="310">D3</text>
+    <text class="cow-lbl" x="345" y="310">D4</text>
+  </g>
+
+  <g class="cow-sup">
+    <g class="cow-step" data-step="1">
+      <rect class="cow-box" x="310" y="290" width="70" height="30" rx="6"/>
+      <text class="cow-lbl" x="345" y="310">D4</text>
+    </g>
+    <g class="cow-step" data-step="2">
+      <rect class="cow-box" x="260" y="205" width="80" height="32" rx="6"/>
+      <text class="cow-lbl" x="300" y="226">ind 2</text>
+    </g>
+    <g class="cow-step" data-step="3">
+      <rect class="cow-box" x="170" y="120" width="80" height="32" rx="6"/>
+      <text class="cow-lbl" x="210" y="141">root</text>
+    </g>
+    <g class="cow-step" data-step="4">
+      <rect class="cow-box" x="160" y="35" width="100" height="32" rx="6"/>
+      <text class="cow-lbl" x="210" y="56">uberblock</text>
+    </g>
+  </g>
+
+  <g class="cow-new">
+    <g class="cow-step" data-step="1">
+      <rect class="cow-box" x="470" y="290" width="76" height="30" rx="6"/>
+      <text class="cow-lbl" x="508" y="310">D4'</text>
+    </g>
+    <g class="cow-step" data-step="2">
+      <rect class="cow-box" x="470" y="205" width="86" height="32" rx="6"/>
+      <text class="cow-lbl" x="513" y="226">ind 2'</text>
+      <path class="cow-edge" d="M513 237 V284" marker-end="url(#cow-b)"/>
+    </g>
+    <g class="cow-step" data-step="3">
+      <rect class="cow-box" x="470" y="120" width="86" height="32" rx="6"/>
+      <text class="cow-lbl" x="513" y="141">root'</text>
+      <path class="cow-edge" d="M513 152 V199" marker-end="url(#cow-b)"/>
+    </g>
+    <g class="cow-step" data-step="4">
+      <rect class="cow-box" x="458" y="35" width="110" height="32" rx="6"/>
+      <text class="cow-lbl" x="513" y="56">uberblock'</text>
+      <path class="cow-edge" d="M513 67 V114" marker-end="url(#cow-b)"/>
+    </g>
+    <g class="cow-step" data-step="5">
+      <path class="cow-share" d="M470 140 L166 213" marker-end="url(#cow-b)"/>
+      <path class="cow-share" d="M470 225 L296 295" marker-end="url(#cow-b)"/>
+    </g>
+  </g>
+
+  <g class="cow-key">
+    <rect x="10" y="330" width="22" height="11" rx="3" fill="currentColor"
+          fill-opacity=".05" stroke="currentColor" opacity=".38"/>
+    <text x="42" y="340" opacity=".7">untouched &#8212; still whole, still
+      consistent</text>
+    <rect x="10" y="349" width="22" height="11" rx="3"
+          fill="var(--cow-sup)" fill-opacity=".08"
+          stroke="var(--cow-sup)" stroke-width="1.5"/>
+    <text x="42" y="359" opacity=".85">superseded &#8212; freed, unless a
+      snapshot holds it</text>
+    <rect x="10" y="368" width="22" height="11" rx="3"
+          fill="var(--cow-new)" fill-opacity=".1" stroke="var(--cow-new)"
+          stroke-width="2"/>
+    <text x="42" y="378" opacity=".85">written by this transaction</text>
+    <path d="M11 391 H31" stroke="var(--cow-new)" stroke-width="1.75"
+          stroke-dasharray="5 4"/>
+    <text x="42" y="395" opacity=".85">shared by reference, not copied</text>
+  </g>
+</svg>
+</div>
+<button type="button" id="cow-play" class="cow-play" hidden>
+  Replay the write</button>
+<script>
+(function () {
+  var svg = document.getElementById('cow-diagram');
+  var btn = document.getElementById('cow-play');
+  if (!svg || !btn) { return; }
+  var groups = Array.prototype.slice.call(svg.querySelectorAll('.cow-step'));
+  if (!groups.length) { return; }
+  var calm = window.matchMedia &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var last = 0;
+  groups.forEach(function (g) {
+    last = Math.max(last, parseInt(g.getAttribute('data-step'), 10) || 0);
+  });
+  var timers = [];
+  function play() {
+    timers.forEach(clearTimeout);
+    timers = [];
+    groups.forEach(function (g) { g.classList.add('cow-hidden'); });
+    svg.getBoundingClientRect();
+    for (var s = 1; s <= last; s++) {
+      (function (step) {
+        timers.push(setTimeout(function () {
+          groups.forEach(function (g) {
+            if (parseInt(g.getAttribute('data-step'), 10) === step) {
+              g.classList.remove('cow-hidden');
+            }
+          });
+        }, 500 + (step - 1) * (calm ? 320 : 1150)));
+      })(s);
+    }
+  }
+  btn.hidden = false;
+  btn.addEventListener('click', play);
+  if (!calm) { play(); }
+})();
+</script>
+</div><p>In the diagram, only <code class="docutils literal notranslate"><span class="pre">D4</span></code> was modified. That forced new copies of <code class="docutils literal notranslate"><span class="pre">D4</span></code>,
+its parent <code class="docutils literal notranslate"><span class="pre">ind</span> <span class="pre">2</span></code>, the <code class="docutils literal notranslate"><span class="pre">root</span></code> block and finally the uberblock — the
+<em>path from the changed block to the root</em>, and nothing else. <code class="docutils literal notranslate"><span class="pre">D1</span></code>, <code class="docutils literal notranslate"><span class="pre">D2</span></code>,
+<code class="docutils literal notranslate"><span class="pre">D3</span></code> and <code class="docutils literal notranslate"><span class="pre">ind</span> <span class="pre">1</span></code> are referenced by the new tree, not duplicated.</p>
+<p>Until that last step, nothing has changed: the old uberblock still describes a
+complete, consistent pool. The switch to the new tree is a single atomic
+write. This is why a ZFS pool is always consistent on disk regardless of when
+power is lost — there is no window in which the pool is half-updated, and so
+no equivalent of the RAID-5 write hole and no need for a journal replay of
+metadata.</p>
+<p>The cost of a small write is therefore proportional to the <em>depth</em> of the
+tree, not its size — and the old tree is left whole, which is exactly what a
+snapshot needs.</p>
+<p>The uberblock is not overwritten either. Each device label carries a
+<strong>128 KiB uberblock ring</strong> written round-robin, and each device carries
+<strong>four copies of the label</strong> — two at the start, two at the end — so that
+losing either end of a disk, or a partition table rewrite, does not lose the
+root of the tree. On import ZFS picks the valid uberblock with the highest
+transaction number.</p>
+</section>
+<section id="transaction-groups">
+<h2>Transaction groups<a class="headerlink" href="#transaction-groups" title="Link to this heading"></a></h2>
+<p>Writes are not committed one at a time. They are batched into a <strong>transaction
+group</strong> (txg), and the whole group commits atomically or not at all.</p>
+<p>Three transaction groups are in flight at once: one <strong>open</strong> and accepting new
+writes, one <strong>quiescing</strong> (closed to new writes, waiting for stragglers), and
+one <strong>syncing</strong> to disk. A group closes when <code class="docutils literal notranslate"><span class="pre">zfs_txg_timeout</span></code> elapses —
+5 seconds by default — or when enough dirty data has accumulated.</p>
+<p>The practical consequence is that an asynchronous write returns as soon as it
+is in memory, and reaches disk up to a few seconds later. A crash loses the
+groups that had not finished syncing, and the pool comes back at the last
+committed one. It is consistent, just slightly older.</p>
+<p>That is unacceptable for applications that called <code class="docutils literal notranslate"><span class="pre">fsync()</span></code>, which is what
+the <a class="reference internal" href="Pool%20Structure/Caching.html"><span class="doc">ZFS Intent Log</span></a> exists for:
+it records synchronous writes immediately so they can be replayed if the
+system dies before the txg commits. The ZIL is never read otherwise.</p>
+</section>
+<section id="what-follows-from-it">
+<h2>What follows from it<a class="headerlink" href="#what-follows-from-it" title="Link to this heading"></a></h2>
+<p><strong>Snapshots are nearly free.</strong> The old tree is already intact and complete —
+a snapshot is just a reference that stops those blocks being freed. Nothing is
+copied. See
+<a class="reference internal" href="Datasets/Snapshots%20and%20Clones.html"><span class="doc">Snapshots, Clones and Bookmarks</span></a>.</p>
+<p><strong>Clones and block cloning are cheap</strong> for the same reason: multiple
+references to the same block are normal, so sharing costs a reference rather
+than a copy.</p>
+<p><strong>Incremental replication is exact.</strong> Because every block records the txg in
+which it was born, ZFS can find precisely the blocks that changed between two
+snapshots without scanning anything. See
+<a class="reference internal" href="Operations/Send%20and%20Receive.html"><span class="doc">Send and Receive</span></a>.</p>
+<p><strong>Corruption is detectable and often repairable.</strong> The checksum lives in the
+parent, so a block that comes back wrong is caught on read, and with
+redundancy a good copy is used and the bad one rewritten. See
+<a class="reference internal" href="Data%20Storage/Checksums.html"><span class="doc">Checksums</span></a> and
+<a class="reference internal" href="Operations/Scrub%20and%20Resilver.html"><span class="doc">Scrub and Resilver</span></a>.</p>
+<p><strong>There is no fsck.</strong> <code class="docutils literal notranslate"><span class="pre">fsck.zfs</span></code> exists only to satisfy the interface and
+does essentially nothing — its man page says so. Nothing needs to be checked
+for consistency at mount time, because the pool is never left inconsistent.
+Verifying <em>content</em> is a different job, and that is what
+<code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">scrub</span></code> does, online.</p>
+</section>
+<section id="the-costs">
+<h2>The costs<a class="headerlink" href="#the-costs" title="Link to this heading"></a></h2>
+<p>Copy-on-write is not free, and its costs explain several tuning topics:</p>
+<p><strong>Fragmentation.</strong> Rewriting a file scatters its new blocks wherever there was
+free space, so data that was written sequentially and then modified randomly
+does not stay sequential. This is why ZFS is sensitive to how full a pool is:
+finding contiguous free space gets harder, and the allocator has to work
+harder. See
+<a class="reference internal" href="../Performance%20and%20Tuning/Workload%20Tuning.html"><span class="doc">Workload Tuning</span></a>.</p>
+<p><strong>Free space is needed to write at all.</strong> Even deleting data requires
+allocating, which is why ZFS reserves slop space — see
+<a class="reference internal" href="Datasets/Quotas%20and%20Reservations.html"><span class="doc">Quotas and Reservations</span></a>.</p>
+<p><strong>Partial writes are expensive.</strong> Changing part of a record means reading the
+whole record, modifying it, and writing a new one. Matching <code class="docutils literal notranslate"><span class="pre">recordsize</span></code> to
+the application’s I/O size is the usual remedy, and the reason databases and
+VM images get their own settings.</p>
+</section>
+<section id="further-reading">
+<h2>Further reading<a class="headerlink" href="#further-reading" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/7/zfsconcepts.7.html">zfsconcepts(7)</a>,
+<a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/7/zpoolconcepts.7.html">zpoolconcepts(7)</a></p></li>
+<li><p><a class="reference internal" href="Data%20Storage/Checksums.html"><span class="doc">Checksums</span></a>,
+<a class="reference internal" href="Datasets/Snapshots%20and%20Clones.html"><span class="doc">Snapshots, Clones and Bookmarks</span></a></p></li>
+<li><p><a class="reference internal" href="../Performance%20and%20Tuning/ZFS%20Transaction%20Delay.html"><span class="doc">ZFS Transaction Delay</span></a>,
+<a class="reference internal" href="../Performance%20and%20Tuning/ZIO%20Scheduler.html"><span class="doc">ZIO Scheduler</span></a></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Basic Concepts" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Pool%20Structure/index.html" class="btn btn-neutral float-right" title="Pool Structure" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, OpenZFS.
+      <span class="lastupdated">Last updated on Jul 22, 2026.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

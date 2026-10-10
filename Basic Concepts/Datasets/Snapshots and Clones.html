@@ -1,0 +1,341 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <meta property="article:modified_time" content="2026-07-22T12:32:04+00:00" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Snapshots, Clones and Bookmarks &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://openzfs.github.io/openzfs-docs/Basic%20Concepts/Datasets/Snapshots%20and%20Clones.html" />
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/js/redirect.js?v=2a1712f3"></script>
+      <script src="../../_static/js/module_params_filter.js?v=9a1b680c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Quotas and Reservations" href="Quotas%20and%20Reservations.html" />
+    <link rel="prev" title="ZVOLs" href="ZVOLs.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Basic Concepts</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Copy-on-write.html">Copy-on-Write</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Pool%20Structure/index.html">Pool Structure</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Datasets</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Datasets%20and%20Properties.html">Datasets and Properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ZVOLs.html">ZVOLs</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Snapshots, Clones and Bookmarks</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#snapshots">Snapshots</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#clones">Clones</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#bookmarks">Bookmarks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#further-reading">Further reading</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Quotas%20and%20Reservations.html">Quotas and Reservations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ACLs.html">ACLs and Extended Attributes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Data%20Storage/index.html">Data Storage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Operations/index.html">Operations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../man/index.html">Man Pages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Basic Concepts</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Datasets</a></li>
+      <li class="breadcrumb-item active">Snapshots, Clones and Bookmarks</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/Basic Concepts/Datasets/Snapshots and Clones.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="snapshots-clones-and-bookmarks">
+<h1>Snapshots, Clones and Bookmarks<a class="headerlink" href="#snapshots-clones-and-bookmarks" title="Link to this heading"></a></h1>
+<p>Because ZFS never modifies a block in place, keeping an old version of a
+dataset costs nothing more than a reference to the blocks that were live at
+that moment. Snapshots, clones and bookmarks are all built on that.</p>
+<section id="snapshots">
+<h2>Snapshots<a class="headerlink" href="#snapshots" title="Link to this heading"></a></h2>
+<p>A snapshot is a read-only copy of a file system or volume at a point in time.
+Creating one is nearly instantaneous and initially consumes no additional
+space; it starts to account for space as the live dataset diverges and blocks
+only the snapshot references can no longer be freed.</p>
+<p>Snapshots are atomic — they include every system call that completed before
+that point in time. Snapshots created recursively with <code class="docutils literal notranslate"><span class="pre">-r</span></code> are all taken at
+the same instant, which makes a recursive snapshot usable as one consistent
+image across several datasets.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># snapshot a single dataset</span>
+zfs<span class="w"> </span>snapshot<span class="w"> </span>pool/home/user@monday
+
+<span class="c1"># snapshot a dataset and all of its descendants, atomically</span>
+zfs<span class="w"> </span>snapshot<span class="w"> </span>-r<span class="w"> </span>pool/home@monday
+
+<span class="c1"># list snapshots (they are hidden from plain &quot;zfs list&quot; by default)</span>
+zfs<span class="w"> </span>list<span class="w"> </span>-t<span class="w"> </span>snapshot<span class="w"> </span>-r<span class="w"> </span>pool/home
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">zfs</span> <span class="pre">list</span></code> omits snapshots unless <code class="docutils literal notranslate"><span class="pre">-t</span> <span class="pre">snapshot</span></code> is given; the pool property
+<code class="docutils literal notranslate"><span class="pre">listsnapshots</span></code> (default <code class="docutils literal notranslate"><span class="pre">off</span></code>) changes that default for a whole pool.</p>
+<section id="accessing-snapshot-contents">
+<h3>Accessing snapshot contents<a class="headerlink" href="#accessing-snapshot-contents" title="Link to this heading"></a></h3>
+<p>File system snapshots are reachable through the <code class="docutils literal notranslate"><span class="pre">.zfs/snapshot</span></code> directory in
+the root of the file system, without being mounted explicitly — they are
+mounted on demand and unmounted again after a while. This makes restoring a
+single file a plain <code class="docutils literal notranslate"><span class="pre">cp</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cp<span class="w"> </span>/home/user/.zfs/snapshot/monday/notes.txt<span class="w"> </span>/home/user/notes.txt
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">snapdir</span></code> property controls whether the <code class="docutils literal notranslate"><span class="pre">.zfs</span></code> directory is
+<code class="docutils literal notranslate"><span class="pre">disabled</span></code>, <code class="docutils literal notranslate"><span class="pre">hidden</span></code> (the default — it exists but does not show up in
+<code class="docutils literal notranslate"><span class="pre">ls</span></code>) or <code class="docutils literal notranslate"><span class="pre">visible</span></code>.</p>
+<p>For volumes there is no directory to browse. Snapshot device nodes appear
+under <code class="docutils literal notranslate"><span class="pre">/dev/zvol/&lt;pool&gt;</span></code> when the volume’s <code class="docutils literal notranslate"><span class="pre">snapdev</span></code> property is set to
+<code class="docutils literal notranslate"><span class="pre">visible</span></code>; the default is <code class="docutils literal notranslate"><span class="pre">hidden</span></code>.</p>
+</section>
+<section id="rolling-back">
+<h3>Rolling back<a class="headerlink" href="#rolling-back" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">zfs</span> <span class="pre">rollback</span></code> discards everything written since the snapshot and returns
+the dataset to that state. By default it refuses to roll back to anything but
+the most recent snapshot:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zfs<span class="w"> </span>rollback<span class="w"> </span>pool/home/user@monday<span class="w">          </span><span class="c1"># only if it is the newest snapshot</span>
+zfs<span class="w"> </span>rollback<span class="w"> </span>-r<span class="w"> </span>pool/home/user@monday<span class="w">       </span><span class="c1"># also destroy newer snapshots and bookmarks</span>
+zfs<span class="w"> </span>rollback<span class="w"> </span>-R<span class="w"> </span>pool/home/user@monday<span class="w">       </span><span class="c1"># additionally destroy clones of those snapshots</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">-r</span></code> and <code class="docutils literal notranslate"><span class="pre">-R</span></code> do not recurse into child datasets: only direct snapshots of
+the named file system are destroyed. Rolling a recursive snapshot back
+completely means rolling back each child dataset individually.</p>
+<p>The file system must be unmounted (or unmountable) for a rollback; <code class="docutils literal notranslate"><span class="pre">-f</span></code> used
+together with <code class="docutils literal notranslate"><span class="pre">-R</span></code> forces the unmount of clones that are about to be
+destroyed.</p>
+</section>
+<section id="space-accounting">
+<h3>Space accounting<a class="headerlink" href="#space-accounting" title="Link to this heading"></a></h3>
+<p>Two properties answer most “why is my pool full” questions:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">used</span></code> on a snapshot is the space that would be freed if <em>that snapshot
+alone</em> were destroyed — blocks referenced by no other snapshot and not by
+the live dataset.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">usedbysnapshots</span></code> on a dataset is the space that would be freed if <em>all</em>
+of its snapshots were destroyed. It is not the sum of the snapshots’ <code class="docutils literal notranslate"><span class="pre">used</span></code>
+values, because space can be shared between several snapshots.</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zfs<span class="w"> </span>list<span class="w"> </span>-o<span class="w"> </span>name,used,referenced,usedbysnapshots<span class="w"> </span>pool/home/user
+zfs<span class="w"> </span>list<span class="w"> </span>-t<span class="w"> </span>snapshot<span class="w"> </span>-o<span class="w"> </span>name,used,referenced,written<span class="w"> </span>-r<span class="w"> </span>pool/home/user
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">referenced</span></code> is how much data the snapshot (or dataset) can see, and
+<code class="docutils literal notranslate"><span class="pre">written</span></code> is how much data changed since the previous snapshot — useful for
+sizing incremental replication.</p>
+<p>A single old snapshot can pin an arbitrary amount of space: if a large file
+was deleted after the snapshot was taken, the space stays allocated until the
+snapshot goes away.</p>
+</section>
+<section id="holds-and-deferred-destruction">
+<h3>Holds and deferred destruction<a class="headerlink" href="#holds-and-deferred-destruction" title="Link to this heading"></a></h3>
+<p>A hold is a named reference that prevents a snapshot from being destroyed.
+Replication tools use holds so that the snapshot a stream is based on cannot
+disappear mid-transfer.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zfs<span class="w"> </span>hold<span class="w"> </span>keep<span class="w"> </span>pool/home/user@monday
+zfs<span class="w"> </span>holds<span class="w"> </span>pool/home/user@monday
+zfs<span class="w"> </span>release<span class="w"> </span>keep<span class="w"> </span>pool/home/user@monday
+</pre></div>
+</div>
+<p>While a hold exists, <code class="docutils literal notranslate"><span class="pre">zfs</span> <span class="pre">destroy</span></code> on that snapshot fails with <code class="docutils literal notranslate"><span class="pre">EBUSY</span></code>.
+<code class="docutils literal notranslate"><span class="pre">zfs</span> <span class="pre">destroy</span> <span class="pre">-d</span></code> marks such a snapshot for deferred destruction instead of
+failing: it disappears automatically once the last hold is released and it has
+no clones.</p>
+</section>
+<section id="comparing-snapshots">
+<h3>Comparing snapshots<a class="headerlink" href="#comparing-snapshots" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">zfs</span> <span class="pre">diff</span></code> reports what changed between a snapshot and a later snapshot (or
+the live file system):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zfs<span class="w"> </span>diff<span class="w"> </span>pool/home/user@monday<span class="w"> </span>pool/home/user@tuesday
+zfs<span class="w"> </span>diff<span class="w"> </span>pool/home/user@monday
+</pre></div>
+</div>
+</section>
+<section id="limiting-snapshot-counts">
+<h3>Limiting snapshot counts<a class="headerlink" href="#limiting-snapshot-counts" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">snapshot_limit</span></code> caps the number of snapshots that may exist on a dataset and
+its descendants, and <code class="docutils literal notranslate"><span class="pre">snapshot_count</span></code> reports the current number. A limit set
+on a descendant does not override an ancestor’s limit — it adds to it. The
+limit is not enforced against a user who is allowed to change it.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">snapshots_changed</span></code> property records when a snapshot of the dataset was
+last created or destroyed, which lets monitoring and backup tooling skip
+datasets that cannot have changed without walking the whole snapshot list.</p>
+</section>
+<section id="taking-them-on-a-schedule">
+<span id="snapshot-scheduling"></span><h3>Taking them on a schedule<a class="headerlink" href="#taking-them-on-a-schedule" title="Link to this heading"></a></h3>
+<p>ZFS creates snapshots but does not schedule or expire them. Something has to
+decide when to take one and when to destroy it, or a pool quietly fills with
+years of hourlies.</p>
+<p>A timer calling <code class="docutils literal notranslate"><span class="pre">zfs</span> <span class="pre">snapshot</span> <span class="pre">-r</span></code> and a second one destroying anything older
+than <em>N</em> is enough for simple cases. Beyond that, third-party tools handle
+retention policies, and the same ones usually handle replication —
+<code class="docutils literal notranslate"><span class="pre">sanoid</span></code>/<code class="docutils literal notranslate"><span class="pre">syncoid</span></code>, <code class="docutils literal notranslate"><span class="pre">zrepl</span></code> and <code class="docutils literal notranslate"><span class="pre">zfstools</span></code> are among the established
+ones. None are part of OpenZFS, so treat them as you would any other
+dependency holding your backups.</p>
+<p>Some tools key off the <code class="docutils literal notranslate"><span class="pre">com.sun:auto-snapshot</span></code> user property to decide which
+datasets to include, which is why it appears in examples such as the swap zvol
+in <a class="reference internal" href="ZVOLs.html"><span class="doc">ZVOLs</span></a>.</p>
+<p>See <a class="reference internal" href="../Operations/Send%20and%20Receive.html"><span class="doc">Send and Receive</span></a> for
+the replication side.</p>
+</section>
+</section>
+<section id="clones">
+<h2>Clones<a class="headerlink" href="#clones" title="Link to this heading"></a></h2>
+<p>A clone is a <em>writable</em> dataset whose initial contents are those of a
+snapshot. Like a snapshot it is created almost instantly and initially
+consumes no extra space; it then diverges from its origin as it is written to.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zfs<span class="w"> </span>snapshot<span class="w"> </span>pool/vm/base@golden
+zfs<span class="w"> </span>clone<span class="w"> </span>pool/vm/base@golden<span class="w"> </span>pool/vm/guest1
+zfs<span class="w"> </span>clone<span class="w"> </span>pool/vm/base@golden<span class="w"> </span>pool/vm/guest2
+</pre></div>
+</div>
+<p>Clones can only be created from a snapshot, and they create a dependency: the
+origin snapshot cannot be destroyed while a clone of it exists. The clone’s
+<code class="docutils literal notranslate"><span class="pre">origin</span></code> property names the snapshot it came from, and <code class="docutils literal notranslate"><span class="pre">zfs</span> <span class="pre">destroy</span></code> lists
+such dependencies when it refuses to remove a snapshot.</p>
+<section id="promoting-a-clone">
+<h3>Promoting a clone<a class="headerlink" href="#promoting-a-clone" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">zfs</span> <span class="pre">promote</span></code> reverses the parent/child relationship: the clone becomes the
+dataset that owns the shared snapshots, and the former origin becomes a clone
+of it. That is what makes it possible to retire the original dataset:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zfs<span class="w"> </span>promote<span class="w"> </span>pool/vm/guest1
+zfs<span class="w"> </span>destroy<span class="w"> </span>-r<span class="w"> </span>pool/vm/base<span class="w">       </span><span class="c1"># now possible</span>
+</pre></div>
+</div>
+<p>Typical uses of clones are virtual machine images from a common golden image,
+throwaway copies of a production dataset for testing, and recovering from a
+mistake without discarding the newer data a rollback would delete.</p>
+</section>
+</section>
+<section id="bookmarks">
+<h2>Bookmarks<a class="headerlink" href="#bookmarks" title="Link to this heading"></a></h2>
+<p>A bookmark is a read-only marker for the point in time a snapshot was taken.
+It is even cheaper than a snapshot — it consumes no additional space at all —
+but it also holds on to no data: it cannot be browsed, mounted, cloned or
+rolled back to.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zfs<span class="w"> </span>bookmark<span class="w"> </span>pool/home/user@monday<span class="w"> </span>pool/home/user#monday
+zfs<span class="w"> </span>list<span class="w"> </span>-t<span class="w"> </span>bookmark<span class="w"> </span>-r<span class="w"> </span>pool/home/user
+</pre></div>
+</div>
+<p>The point of a bookmark is incremental replication. To send an incremental
+stream, the sending side normally has to keep the previous snapshot around. If
+it keeps a bookmark instead, the snapshot itself — and the space it pins — can
+be destroyed, and <code class="docutils literal notranslate"><span class="pre">zfs</span> <span class="pre">send</span> <span class="pre">-i</span></code> can still produce the incremental stream:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zfs<span class="w"> </span>send<span class="w"> </span>-i<span class="w"> </span>pool/home/user#monday<span class="w"> </span>pool/home/user@tuesday<span class="w"> </span><span class="p">|</span><span class="w"> </span>...
+</pre></div>
+</div>
+<p>A bookmark is initially tied to a snapshot, but it survives the destruction of
+that snapshot. See <a class="reference internal" href="../Operations/Send%20and%20Receive.html"><span class="doc">Send and Receive</span></a> for how they fit
+into a replication workflow.</p>
+</section>
+<section id="further-reading">
+<h2>Further reading<a class="headerlink" href="#further-reading" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/7/zfsconcepts.7.html">zfsconcepts(7)</a></p></li>
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zfs-snapshot.8.html">zfs-snapshot(8)</a>,
+<a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zfs-rollback.8.html">zfs-rollback(8)</a>,
+<a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zfs-destroy.8.html">zfs-destroy(8)</a></p></li>
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zfs-clone.8.html">zfs-clone(8)</a>,
+<a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zfs-promote.8.html">zfs-promote(8)</a></p></li>
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zfs-bookmark.8.html">zfs-bookmark(8)</a></p></li>
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zfs-hold.8.html">zfs-hold(8)</a>,
+<a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zfs-diff.8.html">zfs-diff(8)</a></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ZVOLs.html" class="btn btn-neutral float-left" title="ZVOLs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Quotas%20and%20Reservations.html" class="btn btn-neutral float-right" title="Quotas and Reservations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, OpenZFS.
+      <span class="lastupdated">Last updated on Jul 22, 2026.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
