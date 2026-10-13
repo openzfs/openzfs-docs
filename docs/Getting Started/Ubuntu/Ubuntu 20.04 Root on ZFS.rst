@@ -232,6 +232,7 @@ encrypted once per disk.
 Step 1: Prepare The Install Environment
 ---------------------------------------
 
+#. Disable Secure Boot. ZFS modules can not be loaded if Secure Boot is enabled.
 #. Boot the Ubuntu Live CD. Select Try Ubuntu. Connect your system to the
    Internet as appropriate (e.g. join your WiFi network). Open a terminal
    (press Ctrl-Alt-T).
