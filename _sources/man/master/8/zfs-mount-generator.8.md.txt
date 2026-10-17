@@ -1,0 +1,198 @@
+ZFS-MOUNT-GENERATOR(8) - System Manager's Manual
+
+# NAME
+
+**zfs-mount-generator** - generate systemd mount units for ZFS filesystems
+
+# SYNOPSIS
+
+*@systemdgeneratordir@/zfs-mount-generator*
+
+# DESCRIPTION
+
+**zfs-mount-generator**
+is a
+systemd.generator(7)
+that generates native
+systemd.mount(5)
+units for configured ZFS datasets.
+
+## Properties
+
+**mountpoint**=
+
+> Skipped if **legacy** or **none**.
+
+**canmount**=
+
+> Skipped if **off**.
+> Skipped if only **noauto**
+> datasets exist for a given mountpoint and there's more than one.
+> Datasets with **yes** take precedence over ones with **noauto** for the same mountpoint.
+> Sets logical *noauto* flag if **noauto**.
+> Encryption roots always generate
+> **zfs-load-key@**&zwnj;*root*&zwnj;**.service**,
+> even if
+> **off**.
+
+**atime**=, **relatime**=, **devices**=, **exec**=, **readonly**=, **setuid**=, **nbmand**=
+
+> Used to generate mount options equivalent to
+> **zfs** **mount**.
+
+**encroot**=, **keylocation**=
+
+> If the dataset is an encryption root, its mount unit will bind to
+> **zfs-load-key@**&zwnj;*root*&zwnj;**.service**,
+> with additional dependencies as follows:
+
+> **keylocation**=**prompt**
+
+> > None, uses
+> > systemd-ask-password(1)
+
+> **keylocation**=**https://**&zwnj;*URL* (et al.)
+
+> > **Wants**=, **After**=: *network-online.target*
+
+> **keylocation**=**file://**&lt;*path*&gt;
+
+> > **RequiresMountsFor**=*path*
+
+> The service also uses the same
+> **Wants**=,
+> **After**=,
+> **Requires**=, and
+> **RequiresMountsFor**=,
+> as the mount unit.
+
+**org.openzfs.systemd:requires**=*path*\[ *path*]&#8230;
+
+> Sets **Requires**= for the mount- and key-loading unit.
+
+**org.openzfs.systemd:requires-mounts-for**=*path*\[ *path*]&#8230;
+
+> Sets **RequiresMountsFor**= for the mount- and key-loading unit.
+
+**org.openzfs.systemd:before**=*unit*\[ *unit*]&#8230;
+
+> Sets **Before**= for the mount unit.
+
+**org.openzfs.systemd:after**=*unit*\[ *unit*]&#8230;
+
+> Sets **After**= for the mount unit.
+
+**org.openzfs.systemd:wanted-by**=*unit*\[ *unit*]&#8230;
+
+> Sets logical *noauto* flag (see below).
+> If not **none**, sets **WantedBy**= for the mount unit.
+
+**org.openzfs.systemd:required-by**=*unit*\[ *unit*]&#8230;
+
+> Sets logical *noauto* flag (see below).
+> If not **none**, sets **RequiredBy**= for the mount unit.
+
+**org.openzfs.systemd:nofail**=(unset)|**on**|**off**
+
+> Waxes or wanes strength of default reverse dependencies of the mount unit, see
+> below.
+
+**org.openzfs.systemd:ignore**=**on**|**off**
+
+> Skip if **on**.
+> Defaults to **off**.
+
+## Unit Ordering And Dependencies
+
+Additionally, unless the pool the dataset resides on
+is imported at generation time, both units gain
+**Wants**=*zfs-import.target*
+and
+**After**=*zfs-import.target*.
+
+Additionally, unless the logical
+*noauto*
+flag is set, the mount unit gains a reverse-dependency for
+*local-fs.target*
+of strength
+
+(unset)
+
+> **WantedBy**= + **Before**=
+
+**on**
+
+> **WantedBy**=
+
+**off**
+
+> **RequiredBy**= + **Before**=
+
+## Cache File
+
+Because ZFS pools may not be available very early in the boot process,
+information on ZFS mountpoints must be stored separately.
+The output of
+
+	**zfs** **list** **-Ho** *name*,<every property above in order>
+
+for datasets that should be mounted by systemd should be kept at
+*@sysconfdir@/zfs/zfs-list.cache/*&zwnj;*poolname*,
+and, if writeable, will be kept synchronized for the entire pool by the
+*history\_event-zfs-list-cacher.sh*
+ZEDLET, if enabled
+(see zed(8)).
+
+# ENVIRONMENT
+
+If the
+**ZFS\_DEBUG**
+environment variable is nonzero
+(or unset and */proc/cmdline* contains "**debug**"),
+print summary accounting information at the end.
+
+# EXAMPLES
+
+To begin, enable tracking for the pool:
+
+	# **touch** *@sysconfdir@/zfs/zfs-list.cache/**poolname*
+
+Then enable the tracking ZEDLET:
+
+	# **ln** **-s** *@zfsexecdir@/zed.d/history_event-zfs-list-cacher.sh @sysconfdir@/zfs/zed.d*
+
+	# **systemctl** **enable** *zfs-zed.service*
+
+	# **systemctl** **restart** *zfs-zed.service*
+
+If no history event is in the queue,
+inject one to ensure the ZEDLET runs to refresh the cache file
+by setting a monitored property somewhere on the pool:
+
+	# **zfs** **set** **relatime**=**off** *poolname/dset*
+
+	# **zfs** **inherit** **relatime** *poolname/dset*
+
+To test the generator output:
+
+	$ **mkdir** */tmp/zfs-mount-generator*
+
+	$ **@systemdgeneratordir@/zfs-mount-generator** */tmp/zfs-mount-generator*
+
+If the generated units are satisfactory, instruct
+**systemd**
+to re-run all generators:
+
+	# **systemctl daemon-reload**
+
+# SEE ALSO
+
+systemd.mount(5),
+systemd.target(5),
+zfs(5),
+systemd.generator(7),
+systemd.special(7),
+zed(8),
+zpool-events(8)
+
+Debian - November 30, 2021

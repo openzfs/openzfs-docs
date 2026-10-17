@@ -1,0 +1,30 @@
+ZPOOL-DDTPRUNE(8) - System Manager's Manual
+
+# NAME
+
+**zpool-ddtprune** - Prunes the oldest entries from the single reference dedup table(s)
+
+# SYNOPSIS
+
+**zpool**
+**ddtprune**
+**-d**&nbsp;*days*&nbsp;|&nbsp;**-p**&nbsp;*percentage*
+*pool*
+
+# DESCRIPTION
+
+This command prunes older unique entries from the dedup table.
+As a complement to the dedup quota feature,
+**ddtprune**
+allows removal of older non-duplicate entries to make room for
+newer duplicate entries.
+
+The amount to prune can be based on a target percentage of the unique entries
+or based on the age (i.e., every unique entry older than N days).
+
+# SEE ALSO
+
+zdb(8),
+zpool-status(8)
+
+Debian - June 17, 2024
