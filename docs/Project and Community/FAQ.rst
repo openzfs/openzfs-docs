@@ -343,10 +343,38 @@ pool of mirrors with the following command:
 Changing /dev/ names on an existing pool
 ----------------------------------------
 
-Changing the /dev/ names on an existing pool can be done by simply
-exporting the pool and re-importing it with the -d option to specify
-which new names should be used. For example, to use the custom names in
-/dev/disk/by-vdev:
+Since OpenZFS 2.2, the ``path`` property of a leaf vdev can be changed
+without exporting the pool. The new path must begin with ``/dev/``.
+
+.. warning::
+
+   Before setting ``path``, ensure that the new path exists and refers to
+   the same device or partition as the old path. ``zpool set path=...``
+   does not check whether the path exists or identifies the same device.
+
+For example, to change an existing vdev from ``/dev/sda1`` to its persistent
+by-id alias::
+
+   zpool set path=/dev/disk/by-id/ata-DISK-part1 tank /dev/sda1
+   zpool status -P tank
+
+This saves the new path in the pool configuration, but I/O continues
+through the already open device. To reopen the pool's devices using their
+configured paths without exporting the pool, run::
+
+   zpool reopen tank
+
+The saved path also persists across export and import; ``reopen`` is not
+required before exporting. If using custom symlinks, ensure that they are
+available before the pool is imported, including during boot.
+
+See `vdevprops(7) <https://openzfs.github.io/openzfs-docs/man/master/7/vdevprops.7.html>`__
+and `zpool-reopen(8) <https://openzfs.github.io/openzfs-docs/man/master/8/zpool-reopen.8.html>`__.
+
+Alternatively, export the pool and re-import it with the ``-d`` option
+to specify which new names should be used. This also works on OpenZFS
+versions before 2.2. For example, to use the custom names in
+``/dev/disk/by-vdev``:
 
 ::
 
