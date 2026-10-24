@@ -1,0 +1,112 @@
+ZPOOL-REGUID(8) - System Manager's Manual
+
+# NAME
+
+**zpool-reguid** - generate new unique identifier for ZFS storage pool
+
+# SYNOPSIS
+
+**zpool**
+**reguid**
+\[**-g**&nbsp;*guid*]
+*pool*
+
+# DESCRIPTION
+
+Generates a new unique identifier for the pool.
+You must ensure that all devices in this pool are online and healthy before
+performing this action.
+
+**-g** *guid*
+
+> Set the pool GUID to the provided value.
+> The GUID can be any 64-bit value accepted by
+> strtoull(3)
+> in base 10.
+> **zpool-reguid**
+> will return an error if the provided GUID is already in use.
+
+## Filesystem UUIDs and Overlayfs
+
+On Linux, the pool GUID is the first half of the filesystem UUID that each
+mounted filesystem of the pool reports to the kernel; the
+**guid**
+property in
+zfsprops(7)
+describes the UUID.
+A change of the pool GUID shows in the UUID of a filesystem at the next
+mount of that filesystem.
+
+Linux overlayfs stores the UUID of an underlying filesystem in the file
+handles of its
+**index**
+and
+**nfs\_export**
+features, and in the origin file handles of the files that it copied up.
+A change of the UUID of an overlayfs layer makes these file handles stale:
+an overlay mount with
+**index=on**
+fails, with the kernel log message
+"failed to verify upper root origin";
+NFS clients of the overlay export get stale file handles; and the inode
+numbers of files that were copied up before the change can change.
+Do not change the GUID of a pool that holds overlayfs layers while these
+features are in use.
+An overlay whose layers are all on one filesystem can use the overlayfs
+mount option
+**uuid=off**
+(Linux 5.11 and later)
+from its first mount; it then stores null UUIDs in the file handles, which
+a GUID change does not affect.
+The overlayfs documentation of the kernel,
+*Documentation/filesystems/overlayfs.rst*,
+describes the file handles and the mount options.
+
+To recover after
+**zpool** **reguid**,
+unmount the affected overlays and their ZFS layers.
+The
+"guid change"
+record of
+**zpool** **history** **-i** *pool*
+shows the previous GUID.
+Restore it with
+**zpool** **reguid** **-g** *oldguid* *pool*,
+provided it is not in use by another pool.
+Then mount the ZFS layers and the overlays again with their previous
+options.
+This restores the previous filesystem UUID if the dataset GUID has not
+changed.
+Do not delete the
+*index*
+directory of the overlay to recover: it can hold the only upper link to
+the modified data of a copied-up file, and a mount with
+**index=off**
+can then show the original lower data instead.
+
+Earlier OpenZFS releases reported a null filesystem UUID, so the first
+mount after an upgrade has the same effect as a GUID change.
+The file handles of an overlay from before the upgrade hold null UUIDs,
+so the overlay mounts again with
+**uuid=off**
+if all of its layers are on one filesystem.
+Alternatively, the
+**zfs\_sb\_uuid**
+module parameter of
+zfs(4)
+restores the null UUID for the filesystems that are mounted after it is
+set to
+**0**.
+Set it before the first mount, on the kernel command line or in the
+initramfs, as
+zfs(4)
+describes.
+
+# SEE ALSO
+
+zfs(4),
+zfsprops(7),
+zpool-export(8),
+zpool-import(8)
+
+Debian - September 9, 2026

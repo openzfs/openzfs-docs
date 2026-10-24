@@ -1,0 +1,121 @@
+ZFS-DIFF(8) - System Manager's Manual
+
+# NAME
+
+**zfs-diff** - show difference between ZFS snapshots
+
+# SYNOPSIS
+
+**zfs**
+**diff**
+\[**-FHth**]
+*snapshot*&nbsp;*snapshot*|*filesystem*
+
+# DESCRIPTION
+
+Display the difference between a snapshot of a given filesystem and another
+snapshot of that filesystem from a later time or the current contents of the
+filesystem.
+The first column is a character indicating the type of change, the other columns
+indicate pathname, new pathname
+(in case of rename),
+change in link count, and optionally file type and/or change time.
+The types of change are:
+
+**-**
+
+> The path has been removed
+
+**+**
+
+> The path has been created
+
+**M**
+
+> The path has been modified
+
+**R**
+
+> The path has been renamed
+
+**-F**
+
+> Display an indication of the type of file, in a manner similar to the
+> **-F**
+> option of
+> ls(1).
+
+> **B**
+
+> > Block device
+
+> **C**
+
+> > Character device
+
+> **/**
+
+> > Directory
+
+> **&gt;**
+
+> > Door
+
+> **|**
+
+> > Named pipe
+
+> **@**
+
+> > Symbolic link
+
+> **P**
+
+> > Event port
+
+> **=**
+
+> > Socket
+
+> **F**
+
+> > Regular file
+
+**-H**
+
+> Give more parsable tab-separated output, without header lines and without
+> arrows.
+
+**-t**
+
+> Display the path's inode change time as the first column of output.
+
+**-h**
+
+> Do not
+> **&#92;0**&zwnj;*ooo*-escape
+> non-ASCII paths.
+
+# EXAMPLES
+
+## Example 1: Showing the differences between a snapshot and a ZFS Dataset
+
+The following example shows how to see what has changed between a prior
+snapshot of a ZFS dataset and its current state.
+The
+**-F**
+option is used to indicate type information for the files affected.
+
+	# **zfs** **diff** **-F** *tank/test@before tank/test*
+	M       /       /tank/test/
+	M       F       /tank/test/linked      (+1)
+	R       F       /tank/test/oldname -> /tank/test/newname
+	-       F       /tank/test/deleted
+	+       F       /tank/test/created
+	M       F       /tank/test/modified
+
+# SEE ALSO
+
+zfs-snapshot(8)
+
+Debian - July 11, 2022

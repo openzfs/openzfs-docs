@@ -1,0 +1,69 @@
+ZFS\_PREPARE\_DISK(8) - System Manager's Manual
+
+# NAME
+
+**zfs\_prepare\_disk** - special script that gets run before bringing a disk into a pool
+
+# DESCRIPTION
+
+**zfs\_prepare\_disk**
+is an optional script that gets called by libzfs before bringing a disk into a
+pool.
+It can be modified by the user to run whatever commands are necessary to prepare
+a disk for inclusion into the pool.
+For example, users can add lines to
+**zfs\_prepare\_disk**
+to do things like update the drive's firmware or check the drive's health.
+**zfs\_prepare\_disk**
+is optional and can be removed if not needed.
+libzfs will look for the script at @zfsexecdir@/zfs\_prepare\_disk.
+
+## Properties
+
+**zfs\_prepare\_disk**
+will be passed the following environment variables:
+
+**POOL\_NAME**
+
+> Name of the pool
+
+**VDEV\_PATH**
+
+> Path to the disk (like /dev/sda)
+
+**VDEV\_PREPARE**
+
+> Reason why the disk is being prepared for inclusion
+> ('create', 'add', 'replace', or 'autoreplace').
+> This can be useful if you only want the script to be run under certain actions.
+
+**VDEV\_UPATH**
+
+> Path to one of the underlying devices for the
+> disk.
+> For multipath this would return one of the /dev/sd\* paths to the disk.
+> If the device is not a device mapper device, then
+> **VDEV\_UPATH**
+> just returns the same value as
+> **VDEV\_PATH**
+
+**VDEV\_ENC\_SYSFS\_PATH**
+
+> Path to the disk's enclosure sysfs path, if available
+
+Note that some of these variables may have a blank value.
+**POOL\_NAME**
+is blank at pool creation time, for example.
+
+# ENVIRONMENT
+
+**zfs\_prepare\_disk**
+runs with a limited $PATH.
+
+# EXIT STATUS
+
+**zfs\_prepare\_disk**
+should return 0 on success, non-zero otherwise.
+If non-zero is returned, the disk will not be included in the pool.
+
+Debian - August 30, 2023

@@ -1,0 +1,78 @@
+ZPOOL-CONDENSE(8) - System Manager's Manual
+
+# NAME
+
+**zpool-condense** - Condense, flush, garbage collect or otherwise clean up pool metadata
+
+# SYNOPSIS
+
+**zpool**
+**condense**
+\[**-t**&nbsp;*type*]
+\[**-c**&nbsp;|&nbsp;**-w**]
+**-a**|*pool*&#8230;  
+**zpool**
+**condense**
+**--types**
+
+# DESCRIPTION
+
+Many internal pool metadata updates are performed in the background at a rate
+chosen to limit the performance impact to normal use of the pool.
+Sometimes it is desirable to accelerate these operations,
+even if it affects overall performance.
+**condense**
+allows an operator to request that a specific background operation be
+prioritised to complete as soon as possible.
+
+**-t**, **--type**
+
+> What to condense.
+> If not specified, all types will be condensed.
+> These are the possible values for
+> *type*:
+
+> **log\_spacemap**
+
+> > flushing log spacemap entries to their underlying metaslabs.
+
+**-a**, **--all**
+
+> Begin, cancel or wait on condense for all pools.
+
+**-c**, **--cancel**
+
+> Cancel a previous
+> **condense**.
+> This will return background updates to their normal rate.
+
+**-w**, **--wait**
+
+> Wait until the condense has completed before returning.
+
+**--types**
+
+> List condense types supported by this build of
+> **condense**.
+
+# EXAMPLES
+
+## Example 1
+
+Status of pool with
+**log\_spacemap**
+condense in progress:
+
+	# **zpool** **condense -t log_spacemap**
+	# **zpool** **status**
+	  pool: tank
+	  state: ONLINE
+	  condense: log_spacemap: condensing, 104/321 metaslabs done in 00:00:15
+	  ...
+
+# SEE ALSO
+
+zpool-status(8),
+zpool-wait(8)
+
+Debian - May 26, 2026
