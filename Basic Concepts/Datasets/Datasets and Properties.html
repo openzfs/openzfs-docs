@@ -1,0 +1,306 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <meta property="article:modified_time" content="2026-07-22T11:05:18+00:00" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Datasets and Properties &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://openzfs.github.io/openzfs-docs/Basic%20Concepts/Datasets/Datasets%20and%20Properties.html" />
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/js/redirect.js?v=2a1712f3"></script>
+      <script src="../../_static/js/module_params_filter.js?v=9a1b680c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="ZVOLs" href="ZVOLs.html" />
+    <link rel="prev" title="Datasets" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Basic Concepts</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Copy-on-write.html">Copy-on-Write</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Pool%20Structure/index.html">Pool Structure</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Datasets</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Datasets and Properties</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#dataset-types">Dataset types</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#properties">Properties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#properties-worth-knowing">Properties worth knowing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#user-properties">User properties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#further-reading">Further reading</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ZVOLs.html">ZVOLs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Snapshots%20and%20Clones.html">Snapshots, Clones and Bookmarks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Quotas%20and%20Reservations.html">Quotas and Reservations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ACLs.html">ACLs and Extended Attributes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Data%20Storage/index.html">Data Storage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Operations/index.html">Operations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../man/index.html">Man Pages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Basic Concepts</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Datasets</a></li>
+      <li class="breadcrumb-item active">Datasets and Properties</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/Basic Concepts/Datasets/Datasets and Properties.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="datasets-and-properties">
+<h1>Datasets and Properties<a class="headerlink" href="#datasets-and-properties" title="Link to this heading"></a></h1>
+<p>A pool is a pile of space; datasets are how it is carved up. Creating a
+dataset is cheap and does not preallocate anything, so the usual ZFS practice
+is to create many of them — one per workload, per user, per application —
+rather than one big file system with directories.</p>
+<section id="dataset-types">
+<h2>Dataset types<a class="headerlink" href="#dataset-types" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><strong>File system</strong></dt><dd><p>A POSIX file system, mounted somewhere. The default type.</p>
+</dd>
+<dt><strong>Volume (zvol)</strong></dt><dd><p>A block device exported under <code class="docutils literal notranslate"><span class="pre">/dev/zvol/&lt;pool&gt;/&lt;name&gt;</span></code>. Used for
+virtual machine disks, iSCSI targets, swap, or file systems ZFS does not
+implement.</p>
+</dd>
+<dt><strong>Snapshot</strong> and <strong>bookmark</strong></dt><dd><p>Read-only, covered in
+<a class="reference internal" href="Snapshots%20and%20Clones.html"><span class="doc">Snapshots, Clones and Bookmarks</span></a>.</p>
+</dd>
+</dl>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zfs<span class="w"> </span>create<span class="w"> </span>pool/home
+zfs<span class="w"> </span>create<span class="w"> </span>pool/home/alice
+zfs<span class="w"> </span>create<span class="w"> </span>-V<span class="w"> </span>40G<span class="w"> </span>pool/vm/disk0<span class="w">        </span><span class="c1"># a zvol</span>
+
+zfs<span class="w"> </span>list<span class="w">                               </span><span class="c1"># file systems and volumes</span>
+zfs<span class="w"> </span>list<span class="w"> </span>-t<span class="w"> </span>all<span class="w"> </span>-r<span class="w"> </span>pool<span class="w">                </span><span class="c1"># everything, recursively</span>
+zfs<span class="w"> </span>destroy<span class="w"> </span>pool/home/alice
+</pre></div>
+</div>
+<p>Datasets form a hierarchy that mirrors their names, and most properties are
+inherited down that hierarchy — which is the main reason to nest them
+deliberately.</p>
+</section>
+<section id="properties">
+<h2>Properties<a class="headerlink" href="#properties" title="Link to this heading"></a></h2>
+<p>Everything about a dataset’s behavior is a property: where it mounts, how it
+compresses, whether it is read-only, how much space it may use.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zfs<span class="w"> </span>get<span class="w"> </span>all<span class="w"> </span>pool/home/alice
+zfs<span class="w"> </span>get<span class="w"> </span>-r<span class="w"> </span>compression,recordsize<span class="w"> </span>pool
+zfs<span class="w"> </span>get<span class="w"> </span>-o<span class="w"> </span>name,property,value,source<span class="w"> </span>-s<span class="w"> </span><span class="nb">local</span><span class="w"> </span>all<span class="w"> </span>pool/home
+
+zfs<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="nv">compression</span><span class="o">=</span>zstd<span class="w"> </span>pool/home
+zfs<span class="w"> </span>inherit<span class="w"> </span>compression<span class="w"> </span>pool/home/alice<span class="w">     </span><span class="c1"># fall back to the parent&#39;s value</span>
+zfs<span class="w"> </span>inherit<span class="w"> </span>-S<span class="w"> </span>compression<span class="w"> </span>pool/home/alice<span class="w">  </span><span class="c1"># revert to the received value</span>
+</pre></div>
+</div>
+<p>Some properties are read-only (<code class="docutils literal notranslate"><span class="pre">used</span></code>, <code class="docutils literal notranslate"><span class="pre">available</span></code>, <code class="docutils literal notranslate"><span class="pre">creation</span></code>,
+<code class="docutils literal notranslate"><span class="pre">compressratio</span></code>), some can only be set at creation time (<code class="docutils literal notranslate"><span class="pre">casesensitivity</span></code>,
+<code class="docutils literal notranslate"><span class="pre">normalization</span></code>, <code class="docutils literal notranslate"><span class="pre">encryption</span></code>, <code class="docutils literal notranslate"><span class="pre">volblocksize</span></code>), and the rest can be
+changed at any time. Changes to properties that affect how data is written —
+<code class="docutils literal notranslate"><span class="pre">recordsize</span></code>, <code class="docutils literal notranslate"><span class="pre">compression</span></code>, <code class="docutils literal notranslate"><span class="pre">checksum</span></code>, <code class="docutils literal notranslate"><span class="pre">dedup</span></code>, <code class="docutils literal notranslate"><span class="pre">copies</span></code> — apply
+only to newly-written blocks.</p>
+<section id="property-sources">
+<h3>Property sources<a class="headerlink" href="#property-sources" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">zfs</span> <span class="pre">get</span></code> reports where each value came from:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">local</span></code></dt><dd><p>Set directly on this dataset.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">inherited</span> <span class="pre">from</span> <span class="pre">&lt;dataset&gt;</span></code></dt><dd><p>Set on an ancestor.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">default</span></code></dt><dd><p>Never set anywhere; the built-in default.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">temporary</span></code></dt><dd><p>Set for the current mount only, via a mount option.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">received</span></code></dt><dd><p>Carried in a <code class="docutils literal notranslate"><span class="pre">zfs</span> <span class="pre">receive</span></code> stream.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">none</span></code></dt><dd><p>Read-only property with no source.</p>
+</dd>
+</dl>
+<p>This is the first thing to check when a dataset does not behave as expected —
+a value inherited from three levels up is easy to miss.</p>
+</section>
+</section>
+<section id="properties-worth-knowing">
+<h2>Properties worth knowing<a class="headerlink" href="#properties-worth-knowing" title="Link to this heading"></a></h2>
+<p><strong>Layout and mounting</strong></p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">mountpoint</span></code></dt><dd><p>Where the file system mounts. <code class="docutils literal notranslate"><span class="pre">legacy</span></code> hands control to <code class="docutils literal notranslate"><span class="pre">/etc/fstab</span></code>
+or <code class="docutils literal notranslate"><span class="pre">mount</span></code>; <code class="docutils literal notranslate"><span class="pre">none</span></code> means it is not mounted. Inherited children extend
+the parent’s path automatically.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">canmount</span></code></dt><dd><p><code class="docutils literal notranslate"><span class="pre">on</span></code>, <code class="docutils literal notranslate"><span class="pre">off</span></code> or <code class="docutils literal notranslate"><span class="pre">noauto</span></code>. <code class="docutils literal notranslate"><span class="pre">off</span></code> makes a dataset a pure
+property-inheritance container that is never mounted, while still having
+an inheritable <code class="docutils literal notranslate"><span class="pre">mountpoint</span></code>. <code class="docutils literal notranslate"><span class="pre">noauto</span></code> means it mounts only when asked
+explicitly — the basis of boot environments.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">readonly</span></code></dt><dd><p>Blocks writes to the dataset. Standard on replication targets.</p>
+</dd>
+</dl>
+<p><strong>Data layout</strong></p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">recordsize</span></code></dt><dd><p>The maximum block size for a file system. Default 128 KiB; matching it to
+the application’s I/O size matters for databases and VM images.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">volblocksize</span></code></dt><dd><p>The fixed block size of a zvol. Set at creation only.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">compression</span></code>, <code class="docutils literal notranslate"><span class="pre">checksum</span></code>, <code class="docutils literal notranslate"><span class="pre">dedup</span></code>, <code class="docutils literal notranslate"><span class="pre">copies</span></code></dt><dd><p>See <a class="reference internal" href="../Data%20Storage/Compression.html"><span class="doc">Compression</span></a>,
+<a class="reference internal" href="../Data%20Storage/Checksums.html"><span class="doc">Checksums</span></a> and <a class="reference internal" href="../Data%20Storage/Deduplication.html"><span class="doc">Deduplication</span></a>.</p>
+</dd>
+</dl>
+<p><strong>Behavior</strong></p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">atime</span></code> / <code class="docutils literal notranslate"><span class="pre">relatime</span></code></dt><dd><p>Access-time updates. <code class="docutils literal notranslate"><span class="pre">atime=off</span></code> removes a write for every read;
+<code class="docutils literal notranslate"><span class="pre">relatime=on</span></code> is the usual compromise.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">sync</span></code></dt><dd><p><code class="docutils literal notranslate"><span class="pre">standard</span></code>, <code class="docutils literal notranslate"><span class="pre">always</span></code>, or <code class="docutils literal notranslate"><span class="pre">disabled</span></code>. <code class="docutils literal notranslate"><span class="pre">disabled</span></code> ignores fsync —
+it does not corrupt the pool, but it does lose recently written data on a
+crash.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">exec</span></code>, <code class="docutils literal notranslate"><span class="pre">setuid</span></code>, <code class="docutils literal notranslate"><span class="pre">devices</span></code></dt><dd><p>The usual mount-option semantics, as properties.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">sharenfs</span></code>, <code class="docutils literal notranslate"><span class="pre">sharesmb</span></code></dt><dd><p>Export the dataset; see <a class="reference internal" href="../Operations/Sharing.html"><span class="doc">Sharing datasets</span></a>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">quota</span></code>, <code class="docutils literal notranslate"><span class="pre">refquota</span></code>, <code class="docutils literal notranslate"><span class="pre">reservation</span></code>, <code class="docutils literal notranslate"><span class="pre">refreservation</span></code></dt><dd><p>See <a class="reference internal" href="Quotas%20and%20Reservations.html"><span class="doc">Quotas and Reservations</span></a>.</p>
+</dd>
+</dl>
+<p><strong>Space accounting</strong></p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">used</span></code></dt><dd><p>Space charged to this dataset and its descendants.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">referenced</span></code></dt><dd><p>Space reachable from this dataset alone — what a snapshot of it would
+reference.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">available</span></code></dt><dd><p>Space still usable, after quotas and reservations.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">logicalused</span></code> / <code class="docutils literal notranslate"><span class="pre">logicalreferenced</span></code></dt><dd><p>The same before compression.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">usedby*</span></code></dt><dd><p><code class="docutils literal notranslate"><span class="pre">usedbydataset</span></code>, <code class="docutils literal notranslate"><span class="pre">usedbysnapshots</span></code>, <code class="docutils literal notranslate"><span class="pre">usedbychildren</span></code> and
+<code class="docutils literal notranslate"><span class="pre">usedbyrefreservation</span></code> break <code class="docutils literal notranslate"><span class="pre">used</span></code> down — the fastest way to find
+where space went.</p>
+</dd>
+</dl>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zfs<span class="w"> </span>list<span class="w"> </span>-o<span class="w"> </span>name,used,usedbydataset,usedbysnapshots,usedbychildren<span class="w"> </span>-r<span class="w"> </span>pool
+</pre></div>
+</div>
+</section>
+<section id="user-properties">
+<h2>User properties<a class="headerlink" href="#user-properties" title="Link to this heading"></a></h2>
+<p>Arbitrary properties can be attached to datasets for use by tooling. They have
+no effect on ZFS itself. A user property name must contain a colon, which is
+what distinguishes it from a native one; the convention is
+<code class="docutils literal notranslate"><span class="pre">module:property</span></code>, with the module part typically a reversed domain name.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zfs<span class="w"> </span><span class="nb">set</span><span class="w"> </span>com.example:backup<span class="o">=</span>daily<span class="w"> </span>pool/home
+zfs<span class="w"> </span>get<span class="w"> </span>-r<span class="w"> </span>-o<span class="w"> </span>name,value<span class="w"> </span>com.example:backup<span class="w"> </span>pool
+</pre></div>
+</div>
+<p>Because they inherit like native properties, user properties are a convenient
+way to drive snapshot and replication policy from the dataset tree itself.</p>
+</section>
+<section id="further-reading">
+<h2>Further reading<a class="headerlink" href="#further-reading" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/7/zfsconcepts.7.html">zfsconcepts(7)</a></p></li>
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/7/zfsprops.7.html">zfsprops(7)</a> —
+the complete property reference</p></li>
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zfs-create.8.html">zfs-create(8)</a>,
+<a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zfs-get.8.html">zfs-get(8)</a>,
+<a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zfs-set.8.html">zfs-set(8)</a>,
+<a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zfs-inherit.8.html">zfs-inherit(8)</a></p></li>
+<li><p><a class="reference internal" href="../../Performance%20and%20Tuning/Workload%20Tuning.html"><span class="doc">Workload Tuning</span></a></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Datasets" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ZVOLs.html" class="btn btn-neutral float-right" title="ZVOLs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, OpenZFS.
+      <span class="lastupdated">Last updated on Jul 22, 2026.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

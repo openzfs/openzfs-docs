@@ -1,0 +1,304 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <meta property="article:modified_time" content="2026-07-22T11:05:18+00:00" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sharing Datasets &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://openzfs.github.io/openzfs-docs/Basic%20Concepts/Operations/Sharing.html" />
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/js/redirect.js?v=2a1712f3"></script>
+      <script src="../../_static/js/module_params_filter.js?v=9a1b680c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Delegated Administration" href="Delegated%20Administration.html" />
+    <link rel="prev" title="TRIM" href="TRIM.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Basic Concepts</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Copy-on-write.html">Copy-on-Write</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Pool%20Structure/index.html">Pool Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Datasets/index.html">Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Data%20Storage/index.html">Data Storage</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Operations</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Send%20and%20Receive.html">Send and Receive</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Scrub%20and%20Resilver.html">Scrub and Resilver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="TRIM.html">TRIM</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Sharing Datasets</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#it-is-only-a-wrapper">It is only a wrapper</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nfs">NFS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smb">SMB</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#applying-shares">Applying shares</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#iscsi-and-other-block-exports">iSCSI and other block exports</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#further-reading">Further reading</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Delegated%20Administration.html">Delegated Administration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Boot%20Process.html">Pools at Boot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Troubleshooting.html">Troubleshooting</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../man/index.html">Man Pages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Basic Concepts</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Operations</a></li>
+      <li class="breadcrumb-item active">Sharing Datasets</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/Basic Concepts/Operations/Sharing.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="sharing-datasets">
+<h1>Sharing Datasets<a class="headerlink" href="#sharing-datasets" title="Link to this heading"></a></h1>
+<p>ZFS can drive NFS and SMB exports from dataset properties, so a share follows
+the dataset instead of living in a separate config file that has to be kept in
+sync. Block-level export (iSCSI) works differently — it uses zvols and an
+external target framework.</p>
+<section id="it-is-only-a-wrapper">
+<h2>It is only a wrapper<a class="headerlink" href="#it-is-only-a-wrapper" title="Link to this heading"></a></h2>
+<p><strong>ZFS does not implement NFS or SMB.</strong> The <code class="docutils literal notranslate"><span class="pre">sharenfs</span></code> and <code class="docutils literal notranslate"><span class="pre">sharesmb</span></code>
+properties generate configuration for the platform’s normal server and then
+tell it to reload:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Platform</p></th>
+<th class="head"><p>ZFS writes</p></th>
+<th class="head"><p>ZFS then runs</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Linux
+(NFS)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/etc/exports.d/</span>
+<span class="pre">zfs.exports</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/usr/sbin/exportfs</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>FreeBSD
+(NFS)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/etc/zfs/exports</span></code></p></td>
+<td><p>signals <code class="docutils literal notranslate"><span class="pre">mountd</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Linux
+(SMB)</p></td>
+<td><p>a Samba <em>usershare</em></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">net</span> <span class="pre">usershare</span> <span class="pre">add</span></code>
+/ <code class="docutils literal notranslate"><span class="pre">delete</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p>Everything else — authentication, Kerberos, ACL semantics, performance,
+tuning — is the server’s job and is configured the server’s way. The
+convenience is real, but so are the consequences:</p>
+<p><strong>The server must already be installed and configured.</strong> ZFS checks whether
+<code class="docutils literal notranslate"><span class="pre">exportfs</span></code> exists and quietly does nothing if it does not. Setting
+<code class="docutils literal notranslate"><span class="pre">sharenfs</span></code> on a host without nfs-utils appears to succeed while exporting
+nothing. Likewise <code class="docutils literal notranslate"><span class="pre">sharesmb</span></code> needs Samba listening on <code class="docutils literal notranslate"><span class="pre">127.0.0.1</span></code> with
+usershares enabled (<code class="docutils literal notranslate"><span class="pre">usershare</span> <span class="pre">max</span> <span class="pre">shares</span></code>, <code class="docutils literal notranslate"><span class="pre">usershare</span> <span class="pre">owner</span> <span class="pre">only</span></code>)
+before it will work at all.</p>
+<p><strong>Two config files now describe your exports.</strong> ZFS owns
+<code class="docutils literal notranslate"><span class="pre">/etc/exports.d/zfs.exports</span></code>; anything you wrote by hand is still in
+<code class="docutils literal notranslate"><span class="pre">/etc/exports</span></code>. Both are live. When a share does not behave, look at both,
+and at <code class="docutils literal notranslate"><span class="pre">exportfs</span> <span class="pre">-v</span></code> for what the kernel actually has.</p>
+<p><strong>The option set is an allowlist, not passthrough.</strong> Despite appearances,
+<code class="docutils literal notranslate"><span class="pre">sharenfs</span></code> does not accept arbitrary <code class="docutils literal notranslate"><span class="pre">exports(5)</span></code> options. On Linux the
+accepted keys are <code class="docutils literal notranslate"><span class="pre">sec</span></code>, <code class="docutils literal notranslate"><span class="pre">ro</span></code>, <code class="docutils literal notranslate"><span class="pre">rw</span></code> plus: <code class="docutils literal notranslate"><span class="pre">all_squash</span></code>, <code class="docutils literal notranslate"><span class="pre">anongid</span></code>,
+<code class="docutils literal notranslate"><span class="pre">anonuid</span></code>, <code class="docutils literal notranslate"><span class="pre">async</span></code>, <code class="docutils literal notranslate"><span class="pre">auth_nlm</span></code>, <code class="docutils literal notranslate"><span class="pre">crossmnt</span></code>, <code class="docutils literal notranslate"><span class="pre">fsid</span></code>, <code class="docutils literal notranslate"><span class="pre">fsuid</span></code>,
+<code class="docutils literal notranslate"><span class="pre">hide</span></code>, <code class="docutils literal notranslate"><span class="pre">insecure</span></code>, <code class="docutils literal notranslate"><span class="pre">insecure_locks</span></code>, <code class="docutils literal notranslate"><span class="pre">mountpoint</span></code>, <code class="docutils literal notranslate"><span class="pre">mp</span></code>,
+<code class="docutils literal notranslate"><span class="pre">no_acl</span></code>, <code class="docutils literal notranslate"><span class="pre">no_all_squash</span></code>, <code class="docutils literal notranslate"><span class="pre">no_auth_nlm</span></code>, <code class="docutils literal notranslate"><span class="pre">no_root_squash</span></code>,
+<code class="docutils literal notranslate"><span class="pre">no_subtree_check</span></code>, <code class="docutils literal notranslate"><span class="pre">no_wdelay</span></code>, <code class="docutils literal notranslate"><span class="pre">nohide</span></code>, <code class="docutils literal notranslate"><span class="pre">refer</span></code>, <code class="docutils literal notranslate"><span class="pre">replicas</span></code>,
+<code class="docutils literal notranslate"><span class="pre">root_squash</span></code>, <code class="docutils literal notranslate"><span class="pre">secure</span></code>, <code class="docutils literal notranslate"><span class="pre">secure_locks</span></code>, <code class="docutils literal notranslate"><span class="pre">subtree_check</span></code>, <code class="docutils literal notranslate"><span class="pre">sync</span></code>,
+<code class="docutils literal notranslate"><span class="pre">wdelay</span></code>. Anything else is rejected as a syntax error.</p>
+<p><strong>When you outgrow it, turn it off.</strong> For per-share Samba tuning, Kerberos
+beyond <code class="docutils literal notranslate"><span class="pre">sec=</span></code>, or export options outside that list, set the property to
+<code class="docutils literal notranslate"><span class="pre">off</span></code> and manage the export natively. Mixing both for the same dataset is
+what produces shares that reappear after a reboot or refuse to go away.</p>
+</section>
+<section id="nfs">
+<h2>NFS<a class="headerlink" href="#nfs" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zfs<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="nv">sharenfs</span><span class="o">=</span>on<span class="w"> </span>pool/export
+zfs<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="nv">sharenfs</span><span class="o">=</span><span class="nv">rw</span><span class="o">=</span>@192.168.1.0/24,no_root_squash<span class="w"> </span>pool/export
+zfs<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="nv">sharenfs</span><span class="o">=</span>off<span class="w"> </span>pool/export
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">sharenfs=on</span></code> shares with the default options
+<code class="docutils literal notranslate"><span class="pre">sec=sys,rw,crossmnt,no_subtree_check</span></code>. Any other value is an option list,
+validated against the allowlist above and then translated into an
+<code class="docutils literal notranslate"><span class="pre">/etc/exports</span></code>-style entry.</p>
+<p>Note the syntax: options are <strong>comma-separated</strong>, unlike
+<a class="reference external" href="https://man7.org/linux/man-pages/man5/exports.5.html">exports(5)</a>. This
+avoids quoting and makes the property easy to generate from scripts. On
+FreeBSD several option sets may be given, separated by semicolons, each
+applying to different hosts or networks.</p>
+<p>With <code class="docutils literal notranslate"><span class="pre">sharenfs=off</span></code>, the dataset is not managed by ZFS at all — export it
+the traditional way through <code class="docutils literal notranslate"><span class="pre">/etc/exports</span></code> and <code class="docutils literal notranslate"><span class="pre">exportfs</span></code>.</p>
+<p>Because each dataset is its own file system, a client mounting a parent will
+not automatically see child datasets unless <code class="docutils literal notranslate"><span class="pre">crossmnt</span></code> is in effect (it is,
+with <code class="docutils literal notranslate"><span class="pre">sharenfs=on</span></code>).</p>
+</section>
+<section id="smb">
+<h2>SMB<a class="headerlink" href="#smb" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zfs<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="nv">sharesmb</span><span class="o">=</span>on<span class="w"> </span>pool/export
+</pre></div>
+</div>
+<p>On Linux this uses <strong>Samba usershares</strong>: ZFS invokes <code class="docutils literal notranslate"><span class="pre">net(8)</span></code> to create a
+USERSHARE. Samba must be configured to permit usershares before this works.</p>
+<p>Points to know:</p>
+<ul class="simple">
+<li><p>The share name is derived from the dataset name, with characters that are
+invalid in a resource name replaced by underscores.</p></li>
+<li><p>The share is created with the ACL <code class="docutils literal notranslate"><span class="pre">Everyone:F</span></code> and no guest access —
+Samba must be able to authenticate a real user. All finer-grained access
+control has to be done on the file system itself.</p></li>
+<li><p>Linux does not support the additional <code class="docutils literal notranslate"><span class="pre">sharesmb</span></code> options available on
+Solaris.</p></li>
+</ul>
+<p>See also the Samba section of
+<a class="reference internal" href="../../Performance%20and%20Tuning/Workload%20Tuning.html"><span class="doc">Workload Tuning</span></a>.</p>
+</section>
+<section id="applying-shares">
+<h2>Applying shares<a class="headerlink" href="#applying-shares" title="Link to this heading"></a></h2>
+<p>Datasets are shared and unshared automatically at boot and shutdown, and
+whenever the properties change:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zfs<span class="w"> </span>share<span class="w"> </span>-a<span class="w">                 </span><span class="c1"># share everything (part of the boot process)</span>
+zfs<span class="w"> </span>share<span class="w"> </span>pool/export
+zfs<span class="w"> </span>unshare<span class="w"> </span>pool/export
+zfs<span class="w"> </span>unshare<span class="w"> </span>-a
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">zfs</span> <span class="pre">share</span> <span class="pre">-l</span></code> loads keys for encrypted file systems as they are mounted;
+with <code class="docutils literal notranslate"><span class="pre">keylocation=prompt</span></code> that blocks on the terminal.</p>
+</section>
+<section id="iscsi-and-other-block-exports">
+<h2>iSCSI and other block exports<a class="headerlink" href="#iscsi-and-other-block-exports" title="Link to this heading"></a></h2>
+<p>There is no <code class="docutils literal notranslate"><span class="pre">shareiscsi</span></code> property in OpenZFS. Export a zvol instead, and
+point an iSCSI target framework (LIO/<code class="docutils literal notranslate"><span class="pre">targetcli</span></code>, SCST, or <code class="docutils literal notranslate"><span class="pre">ctld</span></code> on
+FreeBSD) at the resulting device:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zfs<span class="w"> </span>create<span class="w"> </span>-V<span class="w"> </span>100G<span class="w"> </span>pool/iscsi/lun0
+ls<span class="w"> </span>-l<span class="w"> </span>/dev/zvol/pool/iscsi/lun0
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">volmode</span></code> property controls how a zvol appears to the OS:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">full</span></code> (alias <code class="docutils literal notranslate"><span class="pre">geom</span></code>)</dt><dd><p>A fully-fledged block device, partitions included.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">dev</span></code></dt><dd><p>A block device with its partitions hidden — usually what you want for a
+LUN or a VM disk, since the host should not be scanning the guest’s
+partition table.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">none</span></code></dt><dd><p>Not exposed outside ZFS at all. Still snapshottable, clonable and
+replicable — useful for backup targets.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">default</span></code></dt><dd><p>Follow the system-wide <code class="docutils literal notranslate"><span class="pre">zvol_volmode</span></code> tunable.</p>
+</dd>
+</dl>
+<p>Set <code class="docutils literal notranslate"><span class="pre">volblocksize</span></code> at creation to match the consumer’s I/O size; see
+<a class="reference internal" href="../../Performance%20and%20Tuning/Workload%20Tuning.html"><span class="doc">Workload Tuning</span></a>.</p>
+</section>
+<section id="further-reading">
+<h2>Further reading<a class="headerlink" href="#further-reading" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/7/zfsprops.7.html">zfsprops(7)</a> —
+<code class="docutils literal notranslate"><span class="pre">sharenfs</span></code>, <code class="docutils literal notranslate"><span class="pre">sharesmb</span></code>, <code class="docutils literal notranslate"><span class="pre">volmode</span></code>, <code class="docutils literal notranslate"><span class="pre">volsize</span></code></p></li>
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zfs-share.8.html">zfs-share(8)</a> —
+documents both <code class="docutils literal notranslate"><span class="pre">zfs</span> <span class="pre">share</span></code> and <code class="docutils literal notranslate"><span class="pre">zfs</span> <span class="pre">unshare</span></code></p></li>
+<li><p><a class="reference internal" href="../Datasets/Datasets%20and%20Properties.html"><span class="doc">Datasets and Properties</span></a></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="TRIM.html" class="btn btn-neutral float-left" title="TRIM" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Delegated%20Administration.html" class="btn btn-neutral float-right" title="Delegated Administration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, OpenZFS.
+      <span class="lastupdated">Last updated on Jul 22, 2026.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

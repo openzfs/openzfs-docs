@@ -1,0 +1,339 @@
+ZFS-LIST(8) - System Manager's Manual
+
+# NAME
+
+**zfs-list** - list properties of ZFS datasets
+
+# SYNOPSIS
+
+**zfs**
+**list**
+\[**-r**|**-d**&nbsp;*depth*]
+\[**-Hp**]
+\[**-j**&nbsp;\[*--json-int*]]
+\[**-o**&nbsp;*property*\[,*property*]&#8230;]
+\[**-s**&nbsp;*property*]&#8230;
+\[**-S**&nbsp;*property*]&#8230;
+\[**-t**&nbsp;*type*\[,*type*]&#8230;]
+\[*filesystem*|*volume*|*snapshot*]&#8230;
+
+# DESCRIPTION
+
+By default, all file systems and volumes are displayed, with the following
+fields:
+**name**, **used**, **available**, **referenced**, **mountpoint**.
+Snapshots are displayed if the
+**listsnapshots**
+pool property is
+**on**
+(the default is
+**off**)
+or if the
+**-t** **snapshot**
+or
+**-t** **all**
+options are specified.
+
+**-H**
+
+> Used for scripting mode.
+> Do not print headers, and separate fields by a single tab instead of arbitrary
+> white space.
+
+**-j**, **--json** \[*--json-int*]
+
+> Print the output in JSON format.
+> Specify
+> **--json-int**
+> to print the numbers in integer format instead of strings in JSON output.
+
+**-d** *depth*
+
+> Recursively display any children of the dataset, limiting the recursion to
+> *depth*.
+> A
+> *depth*
+> of
+> **1**
+> will display only the dataset and its direct children.
+
+**-o** *property*
+
+> A comma-separated list of properties to display.
+> Each property must be:
+
+> *	One of the properties described in the
+> 	*Native Properties*
+> 	section of
+> 	zfsprops(7)
+> *	A user property
+> *	The value
+> 	**name**
+> 	to display the dataset name
+> *	The value
+> 	**space**
+> 	to display space usage properties on file systems and volumes.
+> 	This is a shortcut for specifying
+> 	**-o**&#160;**name**,**avail**,**used**,**usedsnap**,**usedds**,**usedrefreserv**,**usedchild**
+> 	**-t** **filesystem**,**volume**.
+
+**-p**
+
+> Display numbers in parsable
+> (exact)
+> values.
+
+**-r**
+
+> Recursively display any children of the dataset on the command line.
+
+**-s** *property*
+
+> A property for sorting the output by column in ascending order based on the
+> value of the property.
+> The property must be one of the properties described in the
+> *Properties*
+> section of
+> zfsprops(7)
+> or the value
+> **name**
+> to sort by the dataset name.
+> Multiple properties can be specified to operate together using multiple
+> **-s**
+> or
+> **-S**
+> options.
+> Multiple
+> **-s**
+> and
+> **-S**
+> options are evaluated from left to right to supply sort keys in
+> decreasing order of priority.
+> Property types operate as follows:
+
+> *	Numeric types sort in numeric order.
+> *	String types sort in alphabetical order.
+> *	Types inappropriate for a row sort that row to the literal bottom,
+> 	regardless of the specified ordering.
+
+> If no sort columns are specified, or if two lines of output would sort
+> equally across all specified columns, then datasets and bookmarks are
+> sorted by name, whereas snapshots are sorted first by the name of their
+> dataset and then by the time of their creation.
+> When no sort columns are specified but snapshots are listed, this
+> default behavior causes snapshots to be grouped under their datasets in
+> chronological order by creation time.
+
+**-S** *property*
+
+> Same as
+> **-s**,
+> but sorts by
+> *property*
+> in descending order.
+
+**-t** *type*
+
+> A comma-separated list of types to display, where
+> *type*
+> is one of
+> **filesystem**,
+> **snapshot**,
+> **volume**,
+> **bookmark**,
+> or
+> **all**.
+> For example, specifying
+> **-t** **snapshot**
+> displays only snapshots.
+> **fs**,
+> **snap**,
+> or
+> **vol**
+> can be used as aliases for
+> **filesystem**,
+> **snapshot**,
+> or
+> **volume**.
+
+# EXAMPLES
+
+## Example 1: Listing ZFS Datasets
+
+The following command lists all active file systems and volumes in the system.
+Snapshots are displayed if
+**listsnaps**=**on**.
+The default is
+**off**.
+See
+zpoolprops(7)
+for more information on pool properties.
+
+	# **zfs** **list**
+	NAME                      USED  AVAIL  REFER  MOUNTPOINT
+	pool                      450K   457G    18K  /pool
+	pool/home                 315K   457G    21K  /export/home
+	pool/home/anne             18K   457G    18K  /export/home/anne
+	pool/home/bob             276K   457G   276K  /export/home/bob
+
+## Example 2: Listing ZFS filesystems and snapshots in JSON format
+
+	# **zfs** **list** **-j** **-t** *filesystem,snapshot* | **jq**
+	{
+	  "output_version": {
+	    "command": "zfs list",
+	    "vers_major": 0,
+	    "vers_minor": 1
+	  },
+	  "datasets": {
+	    "pool": {
+	      "name": "pool",
+	      "type": "FILESYSTEM",
+	      "pool": "pool",
+	      "properties": {
+	        "used": {
+	          "value": "290K",
+	          "source": {
+	            "type": "NONE",
+	            "data": "-"
+	          }
+	        },
+	        "available": {
+	          "value": "30.5G",
+	          "source": {
+	            "type": "NONE",
+	            "data": "-"
+	          }
+	        },
+	        "referenced": {
+	          "value": "24K",
+	          "source": {
+	            "type": "NONE",
+	            "data": "-"
+	          }
+	        },
+	        "mountpoint": {
+	          "value": "/pool",
+	          "source": {
+	            "type": "DEFAULT",
+	            "data": "-"
+	          }
+	        }
+	      }
+	    },
+	    "pool/home": {
+	      "name": "pool/home",
+	      "type": "FILESYSTEM",
+	      "pool": "pool",
+	      "properties": {
+	        "used": {
+	          "value": "48K",
+	          "source": {
+	            "type": "NONE",
+	            "data": "-"
+	          }
+	        },
+	        "available": {
+	          "value": "30.5G",
+	          "source": {
+	            "type": "NONE",
+	            "data": "-"
+	          }
+	        },
+	        "referenced": {
+	          "value": "24K",
+	          "source": {
+	            "type": "NONE",
+	            "data": "-"
+	          }
+	        },
+	        "mountpoint": {
+	          "value": "/mnt/home",
+	          "source": {
+	            "type": "LOCAL",
+	            "data": "-"
+	          }
+	        }
+	      }
+	    },
+	    "pool/home/bob": {
+	      "name": "pool/home/bob",
+	      "type": "FILESYSTEM",
+	      "pool": "pool",
+	      "properties": {
+	        "used": {
+	          "value": "24K",
+	          "source": {
+	            "type": "NONE",
+	            "data": "-"
+	          }
+	        },
+	        "available": {
+	          "value": "30.5G",
+	          "source": {
+	            "type": "NONE",
+	            "data": "-"
+	          }
+	        },
+	        "referenced": {
+	          "value": "24K",
+	          "source": {
+	            "type": "NONE",
+	            "data": "-"
+	          }
+	        },
+	        "mountpoint": {
+	          "value": "/mnt/home/bob",
+	          "source": {
+	            "type": "INHERITED",
+	            "data": "pool/home"
+	          }
+	        }
+	      }
+	    },
+	    "pool/home/bob@v1": {
+	      "name": "pool/home/bob@v1",
+	      "type": "SNAPSHOT",
+	      "pool": "pool",
+	      "dataset": "pool/home/bob",
+	      "snapshot_name": "v1",
+	      "properties": {
+	        "used": {
+	          "value": "0B",
+	          "source": {
+	            "type": "NONE",
+	            "data": "-"
+	          }
+	        },
+	        "available": {
+	          "value": "-",
+	          "source": {
+	            "type": "NONE",
+	            "data": "-"
+	          }
+	        },
+	        "referenced": {
+	          "value": "24K",
+	          "source": {
+	            "type": "NONE",
+	            "data": "-"
+	          }
+	        },
+	        "mountpoint": {
+	          "value": "-",
+	          "source": {
+	            "type": "NONE",
+	            "data": "-"
+	          }
+	        }
+	      }
+	    }
+	  }
+	}
+
+# SEE ALSO
+
+zfsprops(7),
+zfs-get(8)
+
+Debian - August 25, 2025

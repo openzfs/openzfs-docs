@@ -1,0 +1,33 @@
+ZFS\_IDS\_TO\_PATH(8) - System Manager's Manual
+
+# NAME
+
+**zfs\_ids\_to\_path** - convert objset and object ids to names and paths
+
+# SYNOPSIS
+
+**zfs\_ids\_to\_path**
+\[**-v**]
+*pool*
+*objset-id*
+*object-id*
+
+# DESCRIPTION
+
+The
+**zfs\_ids\_to\_path**
+utility converts a provided objset and object ids
+into a path to the file they refer to.
+
+**-v**
+
+> Verbose.
+> Print the dataset name and the file path within the dataset separately.
+> This will work correctly even if the dataset is not mounted.
+
+# SEE ALSO
+
+zdb(8),
+zfs(8)
+
+Debian - July 11, 2022

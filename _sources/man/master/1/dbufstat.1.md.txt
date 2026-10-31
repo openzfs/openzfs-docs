@@ -1,0 +1,336 @@
+DBUFSTAT(1) - General Commands Manual
+
+# NAME
+
+**dbufstat** - display statistics for DMU buffer cache
+
+# SYNOPSIS
+
+**dbufstat**
+\[**-bdhnrtvx**]
+\[**-f**&nbsp;*field*\[,*field*&#8230;]]
+\[**-F**&nbsp;*field*=*value*\[,&#8230;]]
+\[**-i**&nbsp;*file*]
+\[**-o**&nbsp;*file*]
+\[**-s**&nbsp;*separator*]
+
+# DESCRIPTION
+
+**dbufstat**
+displays statistics about the DMU (Data Management Unit) buffer
+cache, also known as the dbuf cache.
+This information is read from the
+**dbufs**
+kstat
+(*/proc/spl/kstat/zfs/dbufs*
+on Linux and
+**kstat.zfs.misc.dbufs**
+on FreeBSD)
+.
+
+**dbufstat**
+can display data in three modes:
+
+**-b**
+
+> Display a table of information for each individual dbuf
+> (buffer).
+> This is the most detailed view.
+
+**-d**
+
+> Display a table of information for each dnode
+> (the default mode).
+> Multiple dbufs belonging to the same dnode are
+> aggregated.
+
+**-t**
+
+> Display a table of information for each dnode type.
+> Multiple dnodes of the same type are aggregated.
+
+The following fields are available for display.
+Not all fields are compatible with all modes; use
+**-v**
+to see which fields are incompatible with each mode.
+
+**pool**
+
+> Pool name.
+
+**objset**
+
+> Dataset identification number.
+
+**object**
+
+> Object number.
+
+**level**
+
+> Indirection level of buffer.
+
+**blkid**
+
+> Block number of buffer.
+
+**offset**
+
+> Offset in object of buffer.
+
+**dbsize**
+
+> Size of buffer.
+
+**usize**
+
+> Size of attached user data.
+
+**meta**
+
+> Whether this buffer is metadata.
+
+**state**
+
+> State of buffer (read, cached, etc).
+
+**dbholds**
+
+> Number of holds on buffer.
+
+**dbc**
+
+> Whether this buffer is in the dbuf cache.
+
+**list**
+
+> Which ARC list contains this buffer.
+
+**atype**
+
+> ARC header type (data or metadata).
+
+**flags**
+
+> ARC read flags.
+
+**count**
+
+> ARC data count.
+
+**asize**
+
+> Size of this ARC buffer.
+
+**access**
+
+> Time this ARC buffer was last accessed.
+
+**mru**
+
+> Hits while on the ARC's MRU list.
+
+**gmru**
+
+> Hits while on the ARC's MRU ghost list.
+
+**mfu**
+
+> Hits while on the ARC's MFU list.
+
+**gmfu**
+
+> Hits while on the ARC's MFU ghost list.
+
+**l2**
+
+> Hits while on the L2ARC.
+
+**l2\_dattr**
+
+> L2ARC disk address/offset.
+
+**l2\_asize**
+
+> L2ARC allocated size (depends on compression).
+
+**l2\_comp**
+
+> L2ARC compression algorithm for buffer.
+
+**aholds**
+
+> Number of holds on this ARC buffer.
+
+**dtype**
+
+> Dnode type.
+
+**btype**
+
+> Bonus buffer type.
+
+**data\_bs**
+
+> Data block size.
+
+**meta\_bs**
+
+> Metadata block size.
+
+**bsize**
+
+> Bonus buffer size.
+
+**lvls**
+
+> Number of indirection levels.
+
+**dholds**
+
+> Number of holds on dnode.
+
+**blocks**
+
+> Number of allocated blocks.
+
+**dsize**
+
+> Size of dnode.
+
+**cached**
+
+> Bytes cached for all blocks.
+
+**direct**
+
+> Bytes cached for direct blocks.
+
+**indirect**
+
+> Bytes cached for indirect blocks.
+
+**bonus**
+
+> Bytes cached for bonus buffer.
+
+**spill**
+
+> Bytes cached for spill block.
+
+# OPTIONS
+
+**-b**
+
+> Display information for each individual dbuf.
+
+**-d**
+
+> Display information for each dnode (default).
+
+**-f** *field*\[,*field*&#8230;]
+
+> Display only the specified fields.
+
+**-F** *field*=*value*\[,&#8230;]
+
+> Filter output by field value or regular expression.
+> Multiple filters may be specified as a comma-separated list.
+
+**-h**
+
+> Display a help message.
+
+**-i** *file*
+
+> Redirect input from the specified file instead of the
+> **dbufs**
+> kstat.
+
+**-n**
+
+> Exclude the header from output.
+
+**-o** *file*
+
+> Redirect output to the specified file instead of standard output.
+
+**-r**
+
+> Display raw values.
+> Specify twice to also display numeric type and compression
+> identifiers instead of names.
+
+**-s** *separator*
+
+> Override the default field separator (two spaces) with a
+> custom character or string.
+
+**-t**
+
+> Display information for each dnode type.
+
+**-v**
+
+> List all possible field headers, definitions, and
+> incompatibilities for each mode.
+
+**-x**
+
+> Display extended statistics.
+
+# EXAMPLES
+
+Display per-dnode statistics (default mode):
+
+	# dbufstat -d
+	       pool  objset  object                      dtype  cached
+	      zroot      30   34466  DMU_OT_DIRECTORY_CONTENTS    240K
+	      zroot      30       0               DMU_OT_DNODE     14M
+	      zroot      30   36343  DMU_OT_DIRECTORY_CONTENTS    1024
+	      zroot      30   32921 DMU_OT_PLAIN_FILE_CONTENTS    2.5K
+
+Display per-type statistics:
+
+	# dbufstat -t
+	       pool  objset                      dtype  cached
+	      zroot      30  DMU_OT_DIRECTORY_CONTENTS    1.9M
+	      zroot      30               DMU_OT_DNODE     14M
+	      zroot      30 DMU_OT_PLAIN_FILE_CONTENTS    8.4M
+	      zroot       0           DMU_OT_DSL_PROPS    2.6M
+
+Display per-buffer statistics:
+
+	# dbufstat -b
+	       pool  objset  object  level  blkid  offset  dbsize
+	      zroot      30   34466      1      0       0    128K
+	      zroot      30       0      0    292    4.6M     16K
+	      zroot      30   34466      0      8    128K     16K
+	      zroot       0       4      0      0       0    128K
+
+Display specific fields per dnode:
+
+	# **dbufstat** **-d** **-f** *pool,object,objset,dsize,cached*
+
+Display per-type statistics with comma-separated output:
+
+	# **dbufstat** **-t** **-s** ""
+
+,
+
+Display extended per-buffer statistics with filters:
+
+	# **dbufstat** **-bx** **-F** *dbc=1,pool=zroot*
+
+# SEE ALSO
+
+zarcstat(1),
+zfs(8),
+zpool-iostat(8)
+
+# AUTHORS
+
+This man page was written by
+Christos Longros &lt;[chris.longros@gmail.com](mailto:chris.longros@gmail.com)&gt;.
+
+Debian - March 19, 2026

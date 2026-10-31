@@ -1,0 +1,34 @@
+ZPOOL-DETACH(8) - System Manager's Manual
+
+# NAME
+
+**zpool-detach** - detach device from ZFS mirror
+
+# SYNOPSIS
+
+**zpool**
+**detach**
+*pool&nbsp;device*
+
+# DESCRIPTION
+
+Detaches
+*device*
+from a mirror.
+The operation is refused if there are no other valid replicas of the data.
+If
+*device*
+may be re-added to the pool later on then consider the
+**zpool** **offline**
+command instead.
+
+# SEE ALSO
+
+zpool-attach(8),
+zpool-labelclear(8),
+zpool-offline(8),
+zpool-remove(8),
+zpool-replace(8),
+zpool-split(8)
+
+Debian - July 11, 2022

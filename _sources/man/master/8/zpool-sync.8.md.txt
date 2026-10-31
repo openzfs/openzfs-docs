@@ -1,0 +1,29 @@
+ZPOOL-SYNC(8) - System Manager's Manual
+
+# NAME
+
+**zpool-sync** - flush data to primary storage of ZFS storage pools
+
+# SYNOPSIS
+
+**zpool**
+**sync**
+\[*pool*]&#8230;
+
+# DESCRIPTION
+
+This command forces all in-core dirty data to be written to the primary
+pool storage and not the ZIL.
+It will also update administrative information including quota reporting.
+Without arguments,
+**zpool** **sync**
+will sync all pools on the system.
+Otherwise, it will sync only the specified pools.
+
+# SEE ALSO
+
+zpoolconcepts(7),
+zpool-export(8),
+zpool-iostat(8)
+
+Debian - July 11, 2022
