@@ -1,0 +1,17 @@
+:orphan:
+
+404 Page not found.
+===================
+
+Please use left menu or search to find interested page.
+
+.. raw:: html
+
+   <script>
+
+.. raw:: html
+   :file: ./_static/js/redirect.js
+
+.. raw:: html
+
+   </script>

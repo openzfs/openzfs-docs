@@ -1,0 +1,339 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <meta property="article:modified_time" content="2026-07-22T12:32:04+00:00" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Send and Receive &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://openzfs.github.io/openzfs-docs/Basic%20Concepts/Operations/Send%20and%20Receive.html" />
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/js/redirect.js?v=2a1712f3"></script>
+      <script src="../../_static/js/module_params_filter.js?v=9a1b680c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Scrub and Resilver" href="Scrub%20and%20Resilver.html" />
+    <link rel="prev" title="Operations" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Basic Concepts</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Copy-on-write.html">Copy-on-Write</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Pool%20Structure/index.html">Pool Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Datasets/index.html">Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Data%20Storage/index.html">Data Storage</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Operations</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Send and Receive</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#a-full-stream">A full stream</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#incremental-streams">Incremental streams</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#replicating-a-whole-hierarchy">Replicating a whole hierarchy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#useful-send-options">Useful send options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#useful-receive-options">Useful receive options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#resuming-an-interrupted-transfer">Resuming an interrupted transfer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#practical-notes">Practical notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#further-reading">Further reading</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Scrub%20and%20Resilver.html">Scrub and Resilver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="TRIM.html">TRIM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Sharing.html">Sharing Datasets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Delegated%20Administration.html">Delegated Administration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Boot%20Process.html">Pools at Boot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Troubleshooting.html">Troubleshooting</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../man/index.html">Man Pages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Basic Concepts</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Operations</a></li>
+      <li class="breadcrumb-item active">Send and Receive</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/Basic Concepts/Operations/Send and Receive.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="send-and-receive">
+<h1>Send and Receive<a class="headerlink" href="#send-and-receive" title="Link to this heading"></a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">zfs</span> <span class="pre">send</span></code> serialises a snapshot into a byte stream, and <code class="docutils literal notranslate"><span class="pre">zfs</span> <span class="pre">receive</span></code>
+turns that stream back into a dataset. Together they are ZFS’ native
+replication and backup mechanism.</p>
+<p>Because the stream is produced from ZFS’ own block-level bookkeeping, an
+incremental send has to read only the blocks that actually changed between two
+snapshots — it never walks the directory tree looking for modified files. That
+makes replication cost proportional to the amount of changed data rather than
+to the size of the dataset, which is the main reason to prefer it over
+file-based tools such as <code class="docutils literal notranslate"><span class="pre">rsync</span></code> on ZFS.</p>
+<p>Streams are checksummed, so corruption introduced by the network or by
+intermediate storage is detected on receive.</p>
+<section id="a-full-stream">
+<h2>A full stream<a class="headerlink" href="#a-full-stream" title="Link to this heading"></a></h2>
+<p>Everything starts from a snapshot:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zfs<span class="w"> </span>snapshot<span class="w"> </span>pool/data@2026-07-21
+zfs<span class="w"> </span>send<span class="w"> </span>pool/data@2026-07-21<span class="w"> </span><span class="p">|</span><span class="w"> </span>ssh<span class="w"> </span>backup<span class="w"> </span>zfs<span class="w"> </span>receive<span class="w"> </span>tank/data
+</pre></div>
+</div>
+<p>The receiving side creates <code class="docutils literal notranslate"><span class="pre">tank/data</span></code> along with the snapshot
+<code class="docutils literal notranslate"><span class="pre">tank/data&#64;2026-07-21</span></code>. The target dataset must not already exist unless
+you are receiving an incremental stream into it.</p>
+<p>Streams are just bytes, so they can also be stored in a file or piped through
+anything:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zfs<span class="w"> </span>send<span class="w"> </span>pool/data@2026-07-21<span class="w"> </span><span class="p">|</span><span class="w"> </span>zstd<span class="w"> </span>-3<span class="w"> </span>&gt;<span class="w"> </span>/mnt/usb/data-full.zfs.zst
+</pre></div>
+</div>
+<p>Storing streams in files is fine for transport, but it is a poor archive
+format: a single damaged byte can render the whole stream unreceivable,
+whereas a received dataset is checksummed, scrubable and repairable. Prefer
+receiving into a real pool for anything you intend to keep.</p>
+</section>
+<section id="incremental-streams">
+<h2>Incremental streams<a class="headerlink" href="#incremental-streams" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">-i</span></code> sends the difference between two snapshots. The source snapshot must
+still exist on the receiving side.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zfs<span class="w"> </span>snapshot<span class="w"> </span>pool/data@2026-07-22
+zfs<span class="w"> </span>send<span class="w"> </span>-i<span class="w"> </span>pool/data@2026-07-21<span class="w"> </span>pool/data@2026-07-22<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>ssh<span class="w"> </span>backup<span class="w"> </span>zfs<span class="w"> </span>receive<span class="w"> </span>tank/data
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">-I</span></code> sends every intermediate snapshot between the two, so the receiving
+side ends up with the same snapshot history rather than just the endpoints:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zfs<span class="w"> </span>send<span class="w"> </span>-I<span class="w"> </span>pool/data@2026-07-21<span class="w"> </span>pool/data@2026-07-28<span class="w"> </span><span class="p">|</span><span class="w"> </span>...
+</pre></div>
+</div>
+<p>The incremental source may also be a bookmark, which lets the sending side
+free the space held by the old snapshot while still being able to compute the
+difference:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zfs<span class="w"> </span>bookmark<span class="w"> </span>pool/data@2026-07-21<span class="w"> </span>pool/data#2026-07-21
+zfs<span class="w"> </span>destroy<span class="w"> </span>pool/data@2026-07-21
+zfs<span class="w"> </span>send<span class="w"> </span>-i<span class="w"> </span>pool/data#2026-07-21<span class="w"> </span>pool/data@2026-07-22<span class="w"> </span><span class="p">|</span><span class="w"> </span>...
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="../Datasets/Snapshots%20and%20Clones.html"><span class="doc">Snapshots, Clones and Bookmarks</span></a> for what
+bookmarks are.</p>
+</section>
+<section id="replicating-a-whole-hierarchy">
+<h2>Replicating a whole hierarchy<a class="headerlink" href="#replicating-a-whole-hierarchy" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">-R</span></code> produces a replication stream package: the named dataset and all of its
+descendants, up to the named snapshot. On receive, properties, snapshots,
+descendant file systems and clones are preserved.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zfs<span class="w"> </span>snapshot<span class="w"> </span>-r<span class="w"> </span>pool/home@2026-07-21
+zfs<span class="w"> </span>send<span class="w"> </span>-R<span class="w"> </span>pool/home@2026-07-21<span class="w"> </span><span class="p">|</span><span class="w"> </span>ssh<span class="w"> </span>backup<span class="w"> </span>zfs<span class="w"> </span>receive<span class="w"> </span>-u<span class="w"> </span>tank/home
+</pre></div>
+</div>
+<p>Combined with <code class="docutils literal notranslate"><span class="pre">-i</span></code>/<code class="docutils literal notranslate"><span class="pre">-I</span></code> it becomes the usual “make the destination look
+exactly like the source” tool. On the receiving side, <code class="docutils literal notranslate"><span class="pre">-F</span></code> then also destroys
+snapshots and file systems that no longer exist on the sending side, and rolls
+the target back to its most recent snapshot before receiving:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zfs<span class="w"> </span>send<span class="w"> </span>-R<span class="w"> </span>-I<span class="w"> </span>pool/home@sunday<span class="w"> </span>pool/home@monday<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>ssh<span class="w"> </span>backup<span class="w"> </span>zfs<span class="w"> </span>receive<span class="w"> </span>-F<span class="w"> </span>-u<span class="w"> </span>tank/home
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">-F</span></code> discards data on the destination. Use <code class="docutils literal notranslate"><span class="pre">-n</span> <span class="pre">-v</span></code> first if you are not
+sure what a stream will do.</p>
+<p><code class="docutils literal notranslate"><span class="pre">-X</span></code> excludes named datasets from a recursive send, and <code class="docutils literal notranslate"><span class="pre">-s</span></code> lets a
+recursive send skip (with a warning) datasets whose snapshots are missing
+instead of aborting.</p>
+</section>
+<section id="useful-send-options">
+<h2>Useful send options<a class="headerlink" href="#useful-send-options" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">-c</span></code> (<code class="docutils literal notranslate"><span class="pre">--compressed</span></code>)</dt><dd><p>Send blocks that are compressed on disk in their compressed form. The
+stream is smaller and both sides do less work, since nothing has to be
+decompressed and recompressed. This is the usual default choice for
+datasets with compression enabled.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">-L</span></code> (<code class="docutils literal notranslate"><span class="pre">--large-block</span></code>)</dt><dd><p>Allow records larger than 128 KiB in the stream. Without it, a dataset
+with a larger <code class="docutils literal notranslate"><span class="pre">recordsize</span></code> is sent as smaller blocks, which is slower and
+changes the block layout on the receiving side. It has no effect if the
+<code class="docutils literal notranslate"><span class="pre">large_blocks</span></code> pool feature is disabled or <code class="docutils literal notranslate"><span class="pre">recordsize</span></code> was never set
+above 128 KiB.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">-e</span></code> (<code class="docutils literal notranslate"><span class="pre">--embed</span></code>)</dt><dd><p>Send blocks that use embedded data (very small blocks stored inside the
+block pointer) in that form. Requires the <code class="docutils literal notranslate"><span class="pre">embedded_data</span></code> feature on both
+sides.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">-p</span></code> (<code class="docutils literal notranslate"><span class="pre">--props</span></code>)</dt><dd><p>Include dataset properties in the stream. <code class="docutils literal notranslate"><span class="pre">-R</span></code> implies this.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">-w</span></code> (<code class="docutils literal notranslate"><span class="pre">--raw</span></code>)</dt><dd><p>Send the data exactly as it is on disk. For encrypted datasets this means
+the stream stays encrypted, so a backup can be taken without loading the
+keys, and the receiving machine never needs them. See
+<a class="reference internal" href="../Data%20Storage/Encryption.html"><span class="doc">Encryption</span></a>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">-h</span></code> (<code class="docutils literal notranslate"><span class="pre">--holds</span></code>)</dt><dd><p>Include user holds on the sent snapshots.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">-n</span> <span class="pre">-v</span></code> / <code class="docutils literal notranslate"><span class="pre">-P</span></code></dt><dd><p>Dry run with a size estimate; <code class="docutils literal notranslate"><span class="pre">-P</span></code> prints it in a machine-parsable form.
+Worth running before any large or destructive transfer.</p>
+</dd>
+</dl>
+</section>
+<section id="useful-receive-options">
+<h2>Useful receive options<a class="headerlink" href="#useful-receive-options" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">-u</span></code></dt><dd><p>Do not mount the received file system. On a backup server this is almost
+always what you want — the destination should not shadow local paths.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">-d</span></code> / <code class="docutils literal notranslate"><span class="pre">-e</span></code></dt><dd><p>Rewrite the target name: <code class="docutils literal notranslate"><span class="pre">-d</span></code> drops the first component of the source
+dataset name, <code class="docutils literal notranslate"><span class="pre">-e</span></code> keeps only the last one. Both are relative to the
+named target file system.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">-o</span> <span class="pre">property=value</span></code> / <code class="docutils literal notranslate"><span class="pre">-x</span> <span class="pre">property</span></code></dt><dd><p>Override a property carried in the stream, or exclude it so the local
+setting (or inheritance) wins. <code class="docutils literal notranslate"><span class="pre">-o</span> <span class="pre">readonly=on</span></code> on the destination
+prevents accidental writes that would force a rollback on the next
+incremental receive; <code class="docutils literal notranslate"><span class="pre">-x</span> <span class="pre">mountpoint</span></code> is a common way to keep a backup
+copy from claiming the source’s mount point.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">-F</span></code></dt><dd><p>Roll the destination back to its most recent snapshot first, and for
+incremental replication streams destroy datasets and snapshots that are
+gone on the sending side.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">-s</span></code></dt><dd><p>Save the partially received state if the transfer is interrupted, so it
+can be resumed instead of restarted. See below.</p>
+</dd>
+</dl>
+</section>
+<section id="resuming-an-interrupted-transfer">
+<h2>Resuming an interrupted transfer<a class="headerlink" href="#resuming-an-interrupted-transfer" title="Link to this heading"></a></h2>
+<p>A multi-terabyte initial replication over an unreliable link does not have to
+start over. When the receiving side used <code class="docutils literal notranslate"><span class="pre">-s</span></code>, the partially received state
+is kept and exposed as the <code class="docutils literal notranslate"><span class="pre">receive_resume_token</span></code> property of the target
+dataset:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># receiving side</span>
+zfs<span class="w"> </span>receive<span class="w"> </span>-s<span class="w"> </span>tank/data
+<span class="c1"># ... connection dies ...</span>
+zfs<span class="w"> </span>get<span class="w"> </span>-H<span class="w"> </span>-o<span class="w"> </span>value<span class="w"> </span>receive_resume_token<span class="w"> </span>tank/data
+
+<span class="c1"># sending side, with that token</span>
+zfs<span class="w"> </span>send<span class="w"> </span>-t<span class="w"> </span>&lt;token&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>ssh<span class="w"> </span>backup<span class="w"> </span>zfs<span class="w"> </span>receive<span class="w"> </span>-s<span class="w"> </span>tank/data
+</pre></div>
+</div>
+<p>This requires the <code class="docutils literal notranslate"><span class="pre">extensible_dataset</span></code> feature on the receiving pool. An
+abandoned partial receive can be cleaned up with <code class="docutils literal notranslate"><span class="pre">zfs</span> <span class="pre">receive</span> <span class="pre">-A</span></code>, which
+frees the space it holds.</p>
+</section>
+<section id="practical-notes">
+<h2>Practical notes<a class="headerlink" href="#practical-notes" title="Link to this heading"></a></h2>
+<p><strong>Keep a common snapshot.</strong> Retention on both sides must leave at least one
+snapshot (or bookmark on the sender) in common, otherwise the next incremental
+fails and a full resend is needed.</p>
+<p><strong>Do not modify the destination.</strong> Any write breaks the next incremental
+receive until the dataset is rolled back; <code class="docutils literal notranslate"><span class="pre">readonly=on</span></code> avoids it.</p>
+<p><strong>ssh is often the bottleneck.</strong> Both send and receive are bursty, so
+buffering the pipe on both sides (<code class="docutils literal notranslate"><span class="pre">mbuffer</span></code>, <code class="docutils literal notranslate"><span class="pre">dd</span></code> with a large block size)
+usually helps.</p>
+<p><strong>Feature options must match.</strong> Streams made with <code class="docutils literal notranslate"><span class="pre">-L</span></code>, <code class="docutils literal notranslate"><span class="pre">-c</span></code>, <code class="docutils literal notranslate"><span class="pre">-e</span></code> or
+<code class="docutils literal notranslate"><span class="pre">-w</span></code> need the corresponding features on the receiving pool.</p>
+<p>Doing the snapshot, retention, hold and resume-token bookkeeping by hand gets
+tedious. Third-party tools built on <code class="docutils literal notranslate"><span class="pre">zfs</span> <span class="pre">send</span></code>/<code class="docutils literal notranslate"><span class="pre">receive</span></code> handle it — see
+<a class="reference internal" href="../Datasets/Snapshots%20and%20Clones.html#snapshot-scheduling"><span class="std std-ref">scheduling snapshots</span></a>, since the same tools
+usually do both.</p>
+<p>See the <a class="reference internal" href="../../Project%20and%20Community/FAQ.html"><span class="doc">FAQ</span></a> for stream caveats such as
+<code class="docutils literal notranslate"><span class="pre">hole_birth</span></code>.</p>
+</section>
+<section id="further-reading">
+<h2>Further reading<a class="headerlink" href="#further-reading" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zfs-send.8.html">zfs-send(8)</a>,
+<a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zfs-receive.8.html">zfs-receive(8)</a></p></li>
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zfs-bookmark.8.html">zfs-bookmark(8)</a></p></li>
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zfs-redact.8.html">zfs-redact(8)</a> —
+sending a stream with selected data removed</p></li>
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zstream.8.html">zstream(8)</a> —
+inspecting and manipulating stream files</p></li>
+<li><p><a class="reference internal" href="../../Project%20and%20Community/FAQ.html"><span class="doc">FAQ: Sending and Receiving Streams</span></a></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Operations" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Scrub%20and%20Resilver.html" class="btn btn-neutral float-right" title="Scrub and Resilver" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, OpenZFS.
+      <span class="lastupdated">Last updated on Jul 22, 2026.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

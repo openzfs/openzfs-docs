@@ -1,0 +1,279 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <meta property="article:modified_time" content="2026-07-22T11:05:18+00:00" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ACLs and Extended Attributes &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://openzfs.github.io/openzfs-docs/Basic%20Concepts/Datasets/ACLs.html" />
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/js/redirect.js?v=2a1712f3"></script>
+      <script src="../../_static/js/module_params_filter.js?v=9a1b680c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Data Storage" href="../Data%20Storage/index.html" />
+    <link rel="prev" title="Quotas and Reservations" href="Quotas%20and%20Reservations.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Basic Concepts</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Copy-on-write.html">Copy-on-Write</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Pool%20Structure/index.html">Pool Structure</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Datasets</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Datasets%20and%20Properties.html">Datasets and Properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ZVOLs.html">ZVOLs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Snapshots%20and%20Clones.html">Snapshots, Clones and Bookmarks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Quotas%20and%20Reservations.html">Quotas and Reservations</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">ACLs and Extended Attributes</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#choosing-an-acl-type">Choosing an ACL type</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nfsv4-acl-behavior">NFSv4 ACL behavior</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#extended-attributes">Extended attributes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#further-reading">Further reading</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Data%20Storage/index.html">Data Storage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Operations/index.html">Operations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../man/index.html">Man Pages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Basic Concepts</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Datasets</a></li>
+      <li class="breadcrumb-item active">ACLs and Extended Attributes</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/Basic Concepts/Datasets/ACLs.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="acls-and-extended-attributes">
+<h1>ACLs and Extended Attributes<a class="headerlink" href="#acls-and-extended-attributes" title="Link to this heading"></a></h1>
+<p>ZFS supports two unrelated ACL models — NFSv4-style ACLs, which are part of
+ZFS itself, and POSIX ACLs, which are a Linux facility stored as extended
+attributes. Which one is available depends on the platform, and getting this
+wrong is a common source of “my permissions do not survive” surprises.</p>
+<section id="choosing-an-acl-type">
+<h2>Choosing an ACL type<a class="headerlink" href="#choosing-an-acl-type" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">acltype</span></code> property selects the model:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">off</span></code></dt><dd><p>ACLs disabled. <strong>The default on Linux.</strong> (<code class="docutils literal notranslate"><span class="pre">noacl</span></code> and <code class="docutils literal notranslate"><span class="pre">disabled</span></code> are
+accepted as aliases.)</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">posix</span></code></dt><dd><p>POSIX ACLs, Linux-only, stored as extended attributes. (<code class="docutils literal notranslate"><span class="pre">posixacl</span></code> is an
+alias.) Requires a kernel built with <code class="docutils literal notranslate"><span class="pre">CONFIG_FS_POSIX_ACL</span></code>; without it,
+ZFS falls back to <code class="docutils literal notranslate"><span class="pre">off</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">nfsv4</span></code></dt><dd><p>NFSv4-style ZFS ACLs, managed with <code class="docutils literal notranslate"><span class="pre">getfacl</span></code>/<code class="docutils literal notranslate"><span class="pre">setfacl</span></code>. <strong>The default
+on FreeBSD</strong>; not supported on Linux.</p>
+</dd>
+</dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Setting a type the platform does not support does <strong>not</strong> produce an error.
+On Linux, <code class="docutils literal notranslate"><span class="pre">acltype=nfsv4</span></code> is handled identically to <code class="docutils literal notranslate"><span class="pre">off</span></code> — but <code class="docutils literal notranslate"><span class="pre">zfs</span>
+<span class="pre">get</span> <span class="pre">acltype</span></code> still reports <code class="docutils literal notranslate"><span class="pre">nfsv4</span></code>. A dataset can therefore look as
+though it has ACLs enabled while silently having none.</p>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zfs<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="nv">acltype</span><span class="o">=</span>posix<span class="w"> </span>pool/home<span class="w">        </span><span class="c1"># Linux</span>
+zfs<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="nv">acltype</span><span class="o">=</span>nfsv4<span class="w"> </span>pool/data<span class="w">        </span><span class="c1"># FreeBSD</span>
+</pre></div>
+</div>
+<p>Because POSIX ACLs live in an extended attribute, they do not overwrite any
+NFSv4 ACLs that may already be set.</p>
+<p>On Linux, remember to set <code class="docutils literal notranslate"><span class="pre">xattr=sa</span></code> alongside <code class="docutils literal notranslate"><span class="pre">acltype=posix</span></code> — see
+below.</p>
+</section>
+<section id="nfsv4-acl-behavior">
+<h2>NFSv4 ACL behavior<a class="headerlink" href="#nfsv4-acl-behavior" title="Link to this heading"></a></h2>
+<p>Two properties govern how ZFS ACLs interact with the traditional Unix mode.
+Neither applies to POSIX ACLs.</p>
+<p><code class="docutils literal notranslate"><span class="pre">aclinherit</span></code> — how ACEs are inherited when files and directories are
+created:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">discard</span></code></dt><dd><p>Inherit nothing.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">noallow</span></code></dt><dd><p>Inherit only inheritable ACEs that specify <em>deny</em> permissions.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">restricted</span></code></dt><dd><p>The default. Strips <code class="docutils literal notranslate"><span class="pre">write_acl</span></code> and <code class="docutils literal notranslate"><span class="pre">write_owner</span></code> on inheritance.
+(<code class="docutils literal notranslate"><span class="pre">secure</span></code> is accepted as a legacy alias.)</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">passthrough</span></code></dt><dd><p>Inherit everything unmodified. Files are then created with a mode
+determined by the inheritable ACEs; if none affect the mode, the
+application’s requested mode is used.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">passthrough-x</span></code></dt><dd><p>Like <code class="docutils literal notranslate"><span class="pre">passthrough</span></code>, except <code class="docutils literal notranslate"><span class="pre">owner&#64;</span></code>, <code class="docutils literal notranslate"><span class="pre">group&#64;</span></code> and <code class="docutils literal notranslate"><span class="pre">everyone&#64;</span></code>
+inherit the execute bit only if the creation mode asked for it.</p>
+</dd>
+</dl>
+<p><code class="docutils literal notranslate"><span class="pre">aclmode</span></code> — what <code class="docutils literal notranslate"><span class="pre">chmod(2)</span></code> does to an existing ACL:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">discard</span></code></dt><dd><p>The default. Deletes every ACE except those representing the requested
+mode.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">groupmask</span></code></dt><dd><p>Reduces the permissions in all ALLOW entries so they do not exceed the
+group permissions given to <code class="docutils literal notranslate"><span class="pre">chmod</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">passthrough</span></code></dt><dd><p>Changes nothing beyond the entries needed to represent the new mode.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">restricted</span></code></dt><dd><p>Makes <code class="docutils literal notranslate"><span class="pre">chmod</span></code> fail on any file with a non-trivial ACL that cannot be
+represented as a mode.</p>
+</dd>
+</dl>
+<p>For a Samba or NFS server where clients manage ACLs, <code class="docutils literal notranslate"><span class="pre">aclinherit=passthrough</span></code>
+with <code class="docutils literal notranslate"><span class="pre">aclmode=passthrough</span></code> is the combination that stops a stray <code class="docutils literal notranslate"><span class="pre">chmod</span></code>
+from silently discarding the ACL. The defaults (<code class="docutils literal notranslate"><span class="pre">restricted</span></code> /<code class="docutils literal notranslate"><span class="pre">discard</span></code>)
+favour Unix mode semantics instead.</p>
+</section>
+<section id="extended-attributes">
+<h2>Extended attributes<a class="headerlink" href="#extended-attributes" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">xattr</span></code> property picks how extended attributes are stored:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">sa</span></code></dt><dd><p>System-attribute-based (<code class="docutils literal notranslate"><span class="pre">on</span></code> is an alias for it). Stored inline in the
+space reserved for system attributes, which significantly reduces disk
+I/O. Two limits apply: a single attribute may be at most <strong>32 KiB</strong>
+(<code class="docutils literal notranslate"><span class="pre">DXATTR_MAX_ENTRY_SIZE</span></code>), and all SA xattrs on one file at most
+<strong>64 KiB</strong> (<code class="docutils literal notranslate"><span class="pre">DXATTR_MAX_SA_SIZE</span></code>). Exceeding either is not an error —
+the attribute is transparently written as a directory-based xattr
+instead.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">dir</span></code></dt><dd><p>Directory-based: each file with xattrs gets a hidden directory holding
+them. No practical limit on size or count (though Linux’s
+<code class="docutils literal notranslate"><span class="pre">getxattr(2)</span></code>/<code class="docutils literal notranslate"><span class="pre">setxattr(2)</span></code> cap a single attribute at 64K). The most
+compatible style, supported by every ZFS implementation.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">off</span></code></dt><dd><p>Disabled.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>The default changed.</strong> <code class="docutils literal notranslate"><span class="pre">xattr</span></code> defaults to <code class="docutils literal notranslate"><span class="pre">sa</span></code> from OpenZFS 2.3.0
+onward; on 2.2.x and earlier the default was <code class="docutils literal notranslate"><span class="pre">dir</span></code>. Datasets created
+under an older release keep <code class="docutils literal notranslate"><span class="pre">dir</span></code> — check with <code class="docutils literal notranslate"><span class="pre">zfs</span> <span class="pre">get</span> <span class="pre">xattr</span></code> rather
+than assuming.</p>
+</div>
+<p>This matters for POSIX ACLs in particular, because on Linux they <em>are</em>
+extended attributes: ZFS stores them under the standard names
+<code class="docutils literal notranslate"><span class="pre">system.posix_acl_access</span></code> and <code class="docutils literal notranslate"><span class="pre">system.posix_acl_default</span></code>, through the same
+code path as any other xattr. With <code class="docutils literal notranslate"><span class="pre">xattr=dir</span></code> every ACL lookup means
+opening and reading that hidden directory; with <code class="docutils literal notranslate"><span class="pre">xattr=sa</span></code> the ACL comes
+along with the dnode. That is why <code class="docutils literal notranslate"><span class="pre">xattr=sa</span></code> is the standard pairing with
+<code class="docutils literal notranslate"><span class="pre">acltype=posix</span></code> on Linux.</p>
+<p>It also follows that <code class="docutils literal notranslate"><span class="pre">xattr=off</span></code> disables POSIX ACLs entirely, whatever
+<code class="docutils literal notranslate"><span class="pre">acltype</span></code> says.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zfs<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="nv">xattr</span><span class="o">=</span>sa<span class="w"> </span>pool/home
+zfs<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="nv">acltype</span><span class="o">=</span>posix<span class="w"> </span>pool/home
+</pre></div>
+</div>
+<p>Note that <code class="docutils literal notranslate"><span class="pre">sa</span></code>-based xattrs are not readable by ZFS implementations that
+predate the feature — relevant if the pool must be importable elsewhere.</p>
+<p>Since both properties only affect newly-written data and newly-created files,
+set them at dataset creation where possible:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zfs<span class="w"> </span>create<span class="w"> </span>-o<span class="w"> </span><span class="nv">xattr</span><span class="o">=</span>sa<span class="w"> </span>-o<span class="w"> </span><span class="nv">acltype</span><span class="o">=</span>posix<span class="w"> </span>pool/home/alice
+</pre></div>
+</div>
+</section>
+<section id="further-reading">
+<h2>Further reading<a class="headerlink" href="#further-reading" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/7/zfsprops.7.html">zfsprops(7)</a> —
+<code class="docutils literal notranslate"><span class="pre">acltype</span></code>, <code class="docutils literal notranslate"><span class="pre">aclinherit</span></code>, <code class="docutils literal notranslate"><span class="pre">aclmode</span></code>, <code class="docutils literal notranslate"><span class="pre">xattr</span></code>, <code class="docutils literal notranslate"><span class="pre">nbmand</span></code></p></li>
+<li><p><a class="reference internal" href="Datasets%20and%20Properties.html"><span class="doc">Datasets and Properties</span></a>,
+<a class="reference internal" href="../Operations/Sharing.html"><span class="doc">Sharing Datasets</span></a></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Quotas%20and%20Reservations.html" class="btn btn-neutral float-left" title="Quotas and Reservations" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../Data%20Storage/index.html" class="btn btn-neutral float-right" title="Data Storage" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, OpenZFS.
+      <span class="lastupdated">Last updated on Jul 22, 2026.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

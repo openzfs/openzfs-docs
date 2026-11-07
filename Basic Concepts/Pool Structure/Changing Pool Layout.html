@@ -1,0 +1,340 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <meta property="article:modified_time" content="2026-07-22T11:17:58+00:00" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Changing Pool Layout &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://openzfs.github.io/openzfs-docs/Basic%20Concepts/Pool%20Structure/Changing%20Pool%20Layout.html" />
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/js/redirect.js?v=2a1712f3"></script>
+      <script src="../../_static/js/module_params_filter.js?v=9a1b680c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Feature Flags" href="Feature%20Flags.html" />
+    <link rel="prev" title="Special vdev" href="Special%20vdev.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Basic Concepts</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Copy-on-write.html">Copy-on-Write</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Pool Structure</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="VDEVs.html">VDEVs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="RAIDZ.html">RAIDZ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dRAID%20Howto.html">dRAID</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Caching.html">Caching and Auxiliary Devices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Special%20vdev.html">Special vdev</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Changing Pool Layout</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#adding-capacity">Adding capacity</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#growing-existing-vdevs">Growing existing vdevs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mirrors">Mirrors</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#replacing-a-failed-device">Replacing a failed device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hot-spares">Hot spares</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#removing-devices">Removing devices</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#import-and-export">Import and export</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#checkpoints">Checkpoints</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#further-reading">Further reading</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Feature%20Flags.html">Feature Flags</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Datasets/index.html">Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Data%20Storage/index.html">Data Storage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Operations/index.html">Operations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../man/index.html">Man Pages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Basic Concepts</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Pool Structure</a></li>
+      <li class="breadcrumb-item active">Changing Pool Layout</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/Basic Concepts/Pool Structure/Changing Pool Layout.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="changing-pool-layout">
+<h1>Changing Pool Layout<a class="headerlink" href="#changing-pool-layout" title="Link to this heading"></a></h1>
+<p>Pools are not immutable, but the operations available differ sharply by vdev
+type — and some of them are one-way. This page collects what can be added,
+grown, replaced, and taken back out.</p>
+<p>See <a class="reference internal" href="VDEVs.html"><span class="doc">VDEVs</span></a> for the vocabulary and <a class="reference internal" href="RAIDZ.html"><span class="doc">RAIDZ</span></a> for
+raidz geometry.</p>
+<section id="adding-capacity">
+<h2>Adding capacity<a class="headerlink" href="#adding-capacity" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">add</span></code> appends a new top-level vdev. The pool stripes across all
+top-level vdevs, so the new one starts taking writes immediately, but existing
+data is not rebalanced.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zpool<span class="w"> </span>add<span class="w"> </span>pool<span class="w"> </span>mirror<span class="w"> </span>sdc<span class="w"> </span>sdd
+zpool<span class="w"> </span>add<span class="w"> </span>-n<span class="w"> </span>pool<span class="w"> </span>mirror<span class="w"> </span>sdc<span class="w"> </span>sdd<span class="w">     </span><span class="c1"># dry run — print the resulting layout</span>
+</pre></div>
+</div>
+<p>Match the new vdev’s redundancy to the existing ones. <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">add</span></code> will warn
+about a mismatch (adding a bare disk to a mirrored pool, say); overriding that
+warning with <code class="docutils literal notranslate"><span class="pre">-f</span></code> gives the pool a single point of failure that cannot be
+undone if raidz is involved.</p>
+</section>
+<section id="growing-existing-vdevs">
+<h2>Growing existing vdevs<a class="headerlink" href="#growing-existing-vdevs" title="Link to this heading"></a></h2>
+<p><strong>Bigger disks.</strong> Replace each device in a vdev with a larger one, one at a
+time, waiting for each resilver. Space becomes available only once <em>every</em>
+device in that mirror or raidz group has been replaced.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zpool<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="nv">autoexpand</span><span class="o">=</span>on<span class="w"> </span>pool<span class="w">          </span><span class="c1"># default is off</span>
+zpool<span class="w"> </span>replace<span class="w"> </span>pool<span class="w"> </span>sda<span class="w"> </span>sdX
+<span class="c1"># ...or, after growing a LUN underneath:</span>
+zpool<span class="w"> </span>online<span class="w"> </span>-e<span class="w"> </span>pool<span class="w"> </span>sda
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">autoexpand=on</span></code> resizes the pool automatically when a device grows;
+otherwise <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">online</span> <span class="pre">-e</span></code> does it explicitly.</p>
+<p><strong>RAIDZ expansion.</strong> A device can be attached to an existing raidz vdev to
+widen it:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zpool<span class="w"> </span>attach<span class="w"> </span>pool<span class="w"> </span>raidz2-0<span class="w"> </span>sdX
+</pre></div>
+</div>
+<p>This reads all allocated data and rewrites it across the wider group;
+<code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">status</span></code> shows the progress. Redundancy is maintained throughout, and
+the expansion pauses if a disk fails until the vdev is healthy again. Points
+to be clear about:</p>
+<ul class="simple">
+<li><p>Fault tolerance does not change — a RAID-Z2 stays a RAID-Z2.</p></li>
+<li><p>Old blocks keep their original data-to-parity ratio, just spread over more
+disks; only new blocks use the wider ratio. Reported free space may
+therefore be slightly pessimistic until old data is rewritten.</p></li>
+<li><p>A raidz vdev can be expanded more than once.</p></li>
+</ul>
+</section>
+<section id="mirrors">
+<h2>Mirrors<a class="headerlink" href="#mirrors" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">attach</span></code> on a mirror or a plain device adds another side: a single
+disk becomes a two-way mirror, a two-way becomes three-way. The new device
+resilvers immediately and any running scrub is cancelled. <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">detach</span></code>
+removes a side.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zpool<span class="w"> </span>attach<span class="w"> </span>pool<span class="w"> </span>sda<span class="w"> </span>sdb<span class="w">        </span><span class="c1"># sda becomes a two-way mirror</span>
+zpool<span class="w"> </span>attach<span class="w"> </span>-s<span class="w"> </span>pool<span class="w"> </span>sda<span class="w"> </span>sdb<span class="w">     </span><span class="c1"># sequential reconstruction, then auto-scrub</span>
+zpool<span class="w"> </span>detach<span class="w"> </span>pool<span class="w"> </span>sdb
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">split</span></code> peels one device off every mirror into a new pool — an
+instant, consistent copy of the whole pool. Every top-level vdev must be a
+mirror and no resilver may be in progress.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zpool<span class="w"> </span>split<span class="w"> </span>pool<span class="w"> </span>newpool
+</pre></div>
+</div>
+</section>
+<section id="replacing-a-failed-device">
+<h2>Replacing a failed device<a class="headerlink" href="#replacing-a-failed-device" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zpool<span class="w"> </span>replace<span class="w"> </span>pool<span class="w"> </span>sda<span class="w"> </span>sdX<span class="w">       </span><span class="c1"># new device in a different slot</span>
+zpool<span class="w"> </span>replace<span class="w"> </span>pool<span class="w"> </span>sda<span class="w">           </span><span class="c1"># same slot, device already swapped</span>
+zpool<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="nv">autoreplace</span><span class="o">=</span>on<span class="w"> </span>pool
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">autoreplace=on</span></code> makes ZFS format and replace any new device appearing in
+the physical location of one that previously belonged to the pool; the default
+is <code class="docutils literal notranslate"><span class="pre">off</span></code>. See
+<a class="reference internal" href="../Operations/Scrub%20and%20Resilver.html"><span class="doc">Scrub and Resilver</span></a> for
+what happens next.</p>
+</section>
+<section id="hot-spares">
+<h2>Hot spares<a class="headerlink" href="#hot-spares" title="Link to this heading"></a></h2>
+<p>A <code class="docutils literal notranslate"><span class="pre">spare</span></code> vdev sits idle until an active device fails, then takes its place
+automatically.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zpool<span class="w"> </span>create<span class="w"> </span>pool<span class="w"> </span>mirror<span class="w"> </span>sda<span class="w"> </span>sdb<span class="w"> </span>spare<span class="w"> </span>sdc
+zpool<span class="w"> </span>add<span class="w"> </span>pool<span class="w"> </span>spare<span class="w"> </span>sdd
+zpool<span class="w"> </span>remove<span class="w"> </span>pool<span class="w"> </span>sdd
+</pre></div>
+</div>
+<p>Once a spare steps in, a new <code class="docutils literal notranslate"><span class="pre">spare</span></code> vdev appears in the configuration and
+stays there until the original device is replaced for real — at which point
+the spare goes back to being available. So a spare is a stopgap that buys
+time, not a replacement: the failed disk still has to be swapped.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zpool<span class="w"> </span>replace<span class="w"> </span>pool<span class="w"> </span>sda<span class="w"> </span>sdNEW<span class="w">    </span><span class="c1"># then the spare frees itself</span>
+zpool<span class="w"> </span>detach<span class="w"> </span>pool<span class="w"> </span>sdc<span class="w">           </span><span class="c1"># cancel an in-progress spare replacement</span>
+</pre></div>
+</div>
+<p>Detaching the <em>original faulted device</em> instead makes the spare assume its
+place permanently, and removes it from the spare list of every pool using it.</p>
+<p>Spares can be shared between pools, and that carries real risk: a pool
+currently using a shared spare cannot be exported, and if two pools are
+imported on different hosts and both lose a device at once, both may claim
+the same spare — which is not detected and can corrupt data. Share spares
+only within one host.</p>
+<p>dRAID has its own integrated distributed spare capacity, which resilvers far
+faster; see <a class="reference internal" href="dRAID%20Howto.html"><span class="doc">dRAID</span></a>.</p>
+</section>
+<section id="removing-devices">
+<h2>Removing devices<a class="headerlink" href="#removing-devices" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">remove</span></code> handles hot spares, cache and log devices trivially. Removing
+a <strong>top-level data vdev</strong> is the constrained case: it evacuates the vdev by
+copying its allocated data elsewhere, in the background, and permanently
+shrinks the pool.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zpool<span class="w"> </span>remove<span class="w"> </span>pool<span class="w"> </span>mirror-1
+zpool<span class="w"> </span>remove<span class="w"> </span>-n<span class="w"> </span>-p<span class="w"> </span>pool<span class="w"> </span>mirror-1<span class="w">     </span><span class="c1"># estimate the mapping table cost first</span>
+zpool<span class="w"> </span>status<span class="w"> </span>pool<span class="w">                    </span><span class="c1"># follow the evacuation</span>
+</pre></div>
+</div>
+<p>It works only if all of these hold:</p>
+<ul class="simple">
+<li><p>the pool contains <strong>no</strong> top-level raidz or draid vdev,</p></li>
+<li><p>all top-level vdevs have the same <code class="docutils literal notranslate"><span class="pre">ashift</span></code>,</p></li>
+<li><p>keys for all encrypted datasets are loaded,</p></li>
+<li><p>the <code class="docutils literal notranslate"><span class="pre">device_removal</span></code> feature is enabled.</p></li>
+</ul>
+<p>Removal leaves behind an in-memory mapping table for the relocated blocks,
+which costs RAM for the life of the pool — <code class="docutils literal notranslate"><span class="pre">-n</span> <span class="pre">-p</span></code> reports how much. An I/O
+error during evacuation cancels the removal.</p>
+<p>To take a device out of a mirror, use <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">detach</span></code>, not <code class="docutils literal notranslate"><span class="pre">remove</span></code>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><strong>A raidz pool cannot shrink.</strong> If the pool has any raidz or draid
+top-level vdev, no top-level vdev can ever be removed — including a
+<code class="docutils literal notranslate"><span class="pre">special</span></code> or <code class="docutils literal notranslate"><span class="pre">dedup</span></code> vdev added later, and including a plain disk added
+by mistake. The only fix is to recreate the pool and restore the data.
+Always <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">add</span> <span class="pre">-n</span></code> first.</p>
+</div>
+</section>
+<section id="import-and-export">
+<h2>Import and export<a class="headerlink" href="#import-and-export" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zpool<span class="w"> </span><span class="nb">export</span><span class="w"> </span>pool
+zpool<span class="w"> </span>import<span class="w">                     </span><span class="c1"># list importable pools</span>
+zpool<span class="w"> </span>import<span class="w"> </span>pool
+zpool<span class="w"> </span>import<span class="w"> </span>-d<span class="w"> </span>/dev/disk/by-id<span class="w"> </span>pool
+zpool<span class="w"> </span>import<span class="w"> </span>-o<span class="w"> </span><span class="nv">readonly</span><span class="o">=</span>on<span class="w"> </span>-N<span class="w"> </span>pool
+</pre></div>
+</div>
+<p>Exporting flushes everything and marks the pool as cleanly detached, which is
+what makes moving it to another system safe. <code class="docutils literal notranslate"><span class="pre">-d</span></code> chooses which device paths
+to scan — using <code class="docutils literal notranslate"><span class="pre">/dev/disk/by-id</span></code> avoids the classic problem of <code class="docutils literal notranslate"><span class="pre">sdX</span></code>
+names shuffling between boots. See the FAQ on
+<a class="reference internal" href="../../Project%20and%20Community/FAQ.html"><span class="doc">selecting /dev/ names</span></a>.</p>
+</section>
+<section id="checkpoints">
+<h2>Checkpoints<a class="headerlink" href="#checkpoints" title="Link to this heading"></a></h2>
+<p>A pool checkpoint is a whole-pool undo point, intended for risky
+administrative operations such as an upgrade:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zpool<span class="w"> </span>checkpoint<span class="w"> </span>pool
+<span class="c1"># ...if it went badly:</span>
+zpool<span class="w"> </span><span class="nb">export</span><span class="w"> </span>pool
+zpool<span class="w"> </span>import<span class="w"> </span>--rewind-to-checkpoint<span class="w"> </span>pool
+<span class="c1"># ...if it went well:</span>
+zpool<span class="w"> </span>checkpoint<span class="w"> </span>-d<span class="w"> </span>pool
+</pre></div>
+</div>
+<p>While a checkpoint exists, <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">remove</span></code>, <code class="docutils literal notranslate"><span class="pre">attach</span></code>, <code class="docutils literal notranslate"><span class="pre">detach</span></code>, <code class="docutils literal notranslate"><span class="pre">split</span></code>
+and <code class="docutils literal notranslate"><span class="pre">reguid</span></code> are all prohibited, and the space it pins may break reservation
+boundaries on a pool short of free space. <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">status</span></code> shows that a
+checkpoint exists, and <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">list</span></code> shows how much space it holds. Discard
+it as soon as the operation is confirmed good.</p>
+</section>
+<section id="further-reading">
+<h2>Further reading<a class="headerlink" href="#further-reading" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zpool-add.8.html">zpool-add(8)</a>,
+<a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zpool-attach.8.html">zpool-attach(8)</a>,
+<a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zpool-detach.8.html">zpool-detach(8)</a></p></li>
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zpool-replace.8.html">zpool-replace(8)</a>,
+<a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zpool-remove.8.html">zpool-remove(8)</a>,
+<a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zpool-split.8.html">zpool-split(8)</a></p></li>
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zpool-import.8.html">zpool-import(8)</a>,
+<a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zpool-export.8.html">zpool-export(8)</a>,
+<a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zpool-checkpoint.8.html">zpool-checkpoint(8)</a></p></li>
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/7/zpoolprops.7.html">zpoolprops(7)</a> —
+<code class="docutils literal notranslate"><span class="pre">autoexpand</span></code>, <code class="docutils literal notranslate"><span class="pre">autoreplace</span></code></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Special%20vdev.html" class="btn btn-neutral float-left" title="Special vdev" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Feature%20Flags.html" class="btn btn-neutral float-right" title="Feature Flags" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, OpenZFS.
+      <span class="lastupdated">Last updated on Jul 22, 2026.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
