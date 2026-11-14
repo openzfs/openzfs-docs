@@ -1,0 +1,265 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <meta property="article:modified_time" content="2026-07-22T11:05:18+00:00" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scrub and Resilver &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://openzfs.github.io/openzfs-docs/Basic%20Concepts/Operations/Scrub%20and%20Resilver.html" />
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/js/redirect.js?v=2a1712f3"></script>
+      <script src="../../_static/js/module_params_filter.js?v=9a1b680c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="TRIM" href="TRIM.html" />
+    <link rel="prev" title="Send and Receive" href="Send%20and%20Receive.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Basic Concepts</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Copy-on-write.html">Copy-on-Write</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Pool%20Structure/index.html">Pool Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Datasets/index.html">Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Data%20Storage/index.html">Data Storage</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Operations</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Send%20and%20Receive.html">Send and Receive</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Scrub and Resilver</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#self-healing">Self-healing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scrub">Scrub</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#resilver">Resilver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#reading-zpool-status">Reading <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">status</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#further-reading">Further reading</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="TRIM.html">TRIM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Sharing.html">Sharing Datasets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Delegated%20Administration.html">Delegated Administration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Boot%20Process.html">Pools at Boot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Troubleshooting.html">Troubleshooting</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../man/index.html">Man Pages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Basic Concepts</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Operations</a></li>
+      <li class="breadcrumb-item active">Scrub and Resilver</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/Basic Concepts/Operations/Scrub and Resilver.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="scrub-and-resilver">
+<h1>Scrub and Resilver<a class="headerlink" href="#scrub-and-resilver" title="Link to this heading"></a></h1>
+<p>ZFS checksums every block, so it knows when data is wrong instead of
+guessing. Scrub and resilver are the two background operations that act on
+that knowledge: a scrub verifies everything, a resilver rebuilds what is known
+to be missing.</p>
+<section id="self-healing">
+<h2>Self-healing<a class="headerlink" href="#self-healing" title="Link to this heading"></a></h2>
+<p>Every read verifies the block’s checksum. On a mismatch, a pool with
+redundancy — mirror, raidz, draid, or <code class="docutils literal notranslate"><span class="pre">copies&gt;1</span></code> — fetches a good copy,
+returns it to the application, and rewrites the bad one. The error is counted
+in <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">status</span></code> even though nothing was lost.</p>
+<p>Without redundancy, ZFS can still detect the corruption and report exactly
+which file is affected, but it cannot repair it. This is the whole argument
+for redundant pools: checksums without a second copy only tell you what you
+have already lost.</p>
+</section>
+<section id="scrub">
+<h2>Scrub<a class="headerlink" href="#scrub" title="Link to this heading"></a></h2>
+<p>A scrub walks all data in the pool and verifies each block’s checksum,
+repairing damage where redundancy allows. It is how latent corruption — bit
+rot on media that nothing has read for a year — gets found while it is still
+repairable.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zpool<span class="w"> </span>scrub<span class="w"> </span>pool
+zpool<span class="w"> </span>scrub<span class="w"> </span>-p<span class="w"> </span>pool<span class="w">          </span><span class="c1"># pause</span>
+zpool<span class="w"> </span>scrub<span class="w"> </span>-s<span class="w"> </span>pool<span class="w">          </span><span class="c1"># stop</span>
+zpool<span class="w"> </span>scrub<span class="w"> </span>-w<span class="w"> </span>pool<span class="w">          </span><span class="c1"># wait for completion before returning</span>
+zpool<span class="w"> </span>status<span class="w"> </span>-v<span class="w"> </span>pool
+</pre></div>
+</div>
+<p>A paused scrub stays paused across export and import, and resumes from its
+last on-disk checkpoint when <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">scrub</span></code> is issued again.</p>
+<p>Useful variants:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">-t</span></code> (thorough)</dt><dd><p>Also decrypt and decompress each block, catching the rare corruption where
+the checksum matches but decryption or decompression fails. Encrypted
+datasets need their keys loaded; blocks whose keys are unavailable fall
+back to a normal scrub.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">-e</span></code> (error scrub)</dt><dd><p>Scrub only files already reported as damaged by <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">status</span> <span class="pre">-v</span></code>. The
+pool must have been scrubbed once with the <code class="docutils literal notranslate"><span class="pre">head_errlog</span></code> feature
+enabled.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">-C</span></code></dt><dd><p>Continue from the last saved txg (the <code class="docutils literal notranslate"><span class="pre">last_scrubbed_txg</span></code> pool
+property) instead of starting over.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">-S</span> <span class="pre">date</span></code> / <code class="docutils literal notranslate"><span class="pre">-E</span> <span class="pre">date</span></code></dt><dd><p>Scrub only blocks created in a date range, in <code class="docutils literal notranslate"><span class="pre">&quot;YYYY-MM-DD</span> <span class="pre">HH:MM&quot;</span></code>
+format.</p>
+</dd>
+</dl>
+<p>Notes:</p>
+<ul class="simple">
+<li><p>Scrubs are I/O-intensive; only one scrub or resilver runs at a time, and a
+scrub cannot start while a resilver is in progress.</p></li>
+<li><p>A scrub runs in two phases — metadata scanning, which sorts blocks into
+large sequential ranges, then the actual block reads.</p></li>
+<li><p>On a live pool, progress can exceed 100% because data keeps changing; no
+completion estimate is given during that period.</p></li>
+<li><p>Encryption keys are not needed for ordinary checksum verification, but
+without them an unrepairable error cannot be attributed to a file name in
+<code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">status</span> <span class="pre">-v</span></code>.</p></li>
+</ul>
+<p>How often? Monthly is a common baseline for consumer disks, quarterly for
+enterprise ones. Most distributions ship a systemd timer or cron job for it —
+check before adding your own.</p>
+</section>
+<section id="resilver">
+<h2>Resilver<a class="headerlink" href="#resilver" title="Link to this heading"></a></h2>
+<p>A resilver is the same machinery restricted to data ZFS knows to be out of
+date: after attaching a device to a mirror, replacing a failed one, or
+bringing a device back online after an outage.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zpool<span class="w"> </span>replace<span class="w"> </span>pool<span class="w"> </span>/dev/old<span class="w"> </span>/dev/new
+zpool<span class="w"> </span>attach<span class="w"> </span>pool<span class="w"> </span>/dev/existing<span class="w"> </span>/dev/new
+zpool<span class="w"> </span>status<span class="w"> </span>pool
+zpool<span class="w"> </span>resilver<span class="w"> </span>pool<span class="w">          </span><span class="c1"># restart a running resilver from the beginning</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">resilver</span></code> restarts a resilver from the beginning and picks up any
+drives scheduled for a deferred resilver; that requires the <code class="docutils literal notranslate"><span class="pre">resilver_defer</span></code>
+pool feature.</p>
+<section id="sequential-reconstruction">
+<h3>Sequential reconstruction<a class="headerlink" href="#sequential-reconstruction" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">replace</span> <span class="pre">-s</span></code> and <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">attach</span> <span class="pre">-s</span></code> rebuild the new device
+sequentially rather than by walking the block tree. This restores redundancy
+much faster, but checksums are not verified during the rebuild — so a scrub is
+started automatically when it finishes. Sequential reconstruction is not
+supported for raidz.</p>
+</section>
+</section>
+<section id="reading-zpool-status">
+<h2>Reading <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">status</span></code><a class="headerlink" href="#reading-zpool-status" title="Link to this heading"></a></h2>
+<p>The per-device error counters mean different things:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">READ</span></code> / <code class="docutils literal notranslate"><span class="pre">WRITE</span></code></dt><dd><p>I/O errors reported by the device itself.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CKSUM</span></code></dt><dd><p>The device returned data that did not match its checksum — silent
+corruption. Non-zero CKSUM on an otherwise healthy disk usually points at
+cabling, a controller, or memory rather than the disk.</p>
+</dd>
+</dl>
+<p><code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">status</span> <span class="pre">-v</span></code> lists files with unrepairable errors. <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">clear</span></code>
+resets the counters once the underlying cause is dealt with — it does not fix
+anything by itself.</p>
+<p>Persistent errors on a file mean the data is gone: restore that file from a
+backup or a snapshot. See <a class="reference internal" href="Troubleshooting.html"><span class="doc">Troubleshooting</span></a>.</p>
+</section>
+<section id="further-reading">
+<h2>Further reading<a class="headerlink" href="#further-reading" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zpool-scrub.8.html">zpool-scrub(8)</a>,
+<a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zpool-resilver.8.html">zpool-resilver(8)</a></p></li>
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zpool-replace.8.html">zpool-replace(8)</a>,
+<a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zpool-attach.8.html">zpool-attach(8)</a>,
+<a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zpool-status.8.html">zpool-status(8)</a></p></li>
+<li><p><a class="reference internal" href="../Data%20Storage/Checksums.html"><span class="doc">Checksums</span></a>, <a class="reference internal" href="../Pool%20Structure/VDEVs.html"><span class="doc">VDEVs</span></a>,
+<a class="reference internal" href="Troubleshooting.html"><span class="doc">Troubleshooting</span></a></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Send%20and%20Receive.html" class="btn btn-neutral float-left" title="Send and Receive" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="TRIM.html" class="btn btn-neutral float-right" title="TRIM" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, OpenZFS.
+      <span class="lastupdated">Last updated on Jul 22, 2026.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

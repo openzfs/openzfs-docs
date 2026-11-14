@@ -1,0 +1,334 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <meta property="article:modified_time" content="2026-07-22T11:05:18+00:00" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Native Encryption &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://openzfs.github.io/openzfs-docs/Basic%20Concepts/Data%20Storage/Encryption.html" />
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/js/redirect.js?v=2a1712f3"></script>
+      <script src="../../_static/js/module_params_filter.js?v=9a1b680c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Operations" href="../Operations/index.html" />
+    <link rel="prev" title="Block Cloning" href="Block%20Cloning.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Basic Concepts</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Copy-on-write.html">Copy-on-Write</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Pool%20Structure/index.html">Pool Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Datasets/index.html">Datasets</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Data Storage</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Checksums.html">Checksums and Their Use in ZFS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Compression.html">Compression</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Deduplication.html">Deduplication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Block%20Cloning.html">Block Cloning</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Native Encryption</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#what-is-and-is-not-encrypted">What is and is not encrypted</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#creating-an-encrypted-dataset">Creating an encrypted dataset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#encryption-roots-and-inheritance">Encryption roots and inheritance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#loading-and-unloading-keys">Loading and unloading keys</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#changing-the-key">Changing the key</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#raw-sends">Raw sends</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#interaction-with-other-features">Interaction with other features</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#further-reading">Further reading</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Operations/index.html">Operations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../man/index.html">Man Pages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Basic Concepts</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Data Storage</a></li>
+      <li class="breadcrumb-item active">Native Encryption</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/Basic Concepts/Data Storage/Encryption.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="native-encryption">
+<h1>Native Encryption<a class="headerlink" href="#native-encryption" title="Link to this heading"></a></h1>
+<p>ZFS can encrypt datasets itself, without a separate layer such as LUKS or
+GELI. Encryption is a per-dataset property, so a single pool can hold both
+encrypted and unencrypted datasets, each encrypted dataset can have its own
+key, and the pool stays fully manageable — importable, scrubbable,
+resilverable and replicable — while the keys are not loaded.</p>
+<p>Native encryption requires the <code class="docutils literal notranslate"><span class="pre">encryption</span></code> pool feature.</p>
+<section id="what-is-and-is-not-encrypted">
+<h2>What is and is not encrypted<a class="headerlink" href="#what-is-and-is-not-encrypted" title="Link to this heading"></a></h2>
+<p>Encrypted:</p>
+<ul class="simple">
+<li><p>file and volume data</p></li>
+<li><p>file attributes, ACLs and permission bits</p></li>
+<li><p>directory listings</p></li>
+<li><p>FUID mappings and <code class="docutils literal notranslate"><span class="pre">userused</span></code>/<code class="docutils literal notranslate"><span class="pre">groupused</span></code> accounting data</p></li>
+<li><p>the ZFS intent log (ZIL)</p></li>
+</ul>
+<p>Not encrypted:</p>
+<ul class="simple">
+<li><p>dataset and snapshot names</p></li>
+<li><p>the dataset hierarchy</p></li>
+<li><p>dataset properties</p></li>
+<li><p>file sizes and the location of holes in files</p></li>
+<li><p>deduplication tables (the deduplicated data itself is encrypted)</p></li>
+</ul>
+<p>The dividing line is per object type, and the reason the second list looks the
+way it does is the <strong>block tree</strong>. Only leaf blocks are encrypted; indirect
+blocks (level &gt; 0) are authenticated but left in the clear, carrying a MAC over
+the MACs below them. Block pointers therefore stay readable without keys —
+which is precisely what lets the pool be scrubbed, resilvered, freed and
+replicated with the keys unloaded, and equally what leaks how large each file
+is, where its holes are, and how much data a dataset holds.</p>
+<p>This is the trade-off that keeps the pool administrable without keys. If the
+existence and names of your datasets, or their sizes and change patterns, are
+themselves sensitive, native encryption is not the right layer for that — use
+full-disk encryption underneath ZFS instead, or in addition.</p>
+</section>
+<section id="creating-an-encrypted-dataset">
+<h2>Creating an encrypted dataset<a class="headerlink" href="#creating-an-encrypted-dataset" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">encryption</span></code> and <code class="docutils literal notranslate"><span class="pre">keyformat</span></code> must be given at creation time, optionally
+with <code class="docutils literal notranslate"><span class="pre">keylocation</span></code> and <code class="docutils literal notranslate"><span class="pre">pbkdf2iters</span></code>. The cipher suite cannot be changed
+afterwards.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># passphrase, entered interactively</span>
+zfs<span class="w"> </span>create<span class="w"> </span>-o<span class="w"> </span><span class="nv">encryption</span><span class="o">=</span>on<span class="w"> </span>-o<span class="w"> </span><span class="nv">keyformat</span><span class="o">=</span>passphrase<span class="w"> </span>pool/secret
+
+<span class="c1"># raw key from a file</span>
+dd<span class="w"> </span><span class="k">if</span><span class="o">=</span>/dev/urandom<span class="w"> </span><span class="nv">bs</span><span class="o">=</span><span class="m">32</span><span class="w"> </span><span class="nv">count</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">of</span><span class="o">=</span>/root/pool.key
+zfs<span class="w"> </span>create<span class="w"> </span>-o<span class="w"> </span><span class="nv">encryption</span><span class="o">=</span>on<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>-o<span class="w"> </span><span class="nv">keyformat</span><span class="o">=</span>raw<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>-o<span class="w"> </span><span class="nv">keylocation</span><span class="o">=</span>file:///root/pool.key<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>pool/secret
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">encryption=on</span></code> selects the current default suite, which is <code class="docutils literal notranslate"><span class="pre">aes-256-gcm</span></code>.
+The suites that can be named explicitly are <code class="docutils literal notranslate"><span class="pre">aes-128-ccm</span></code>, <code class="docutils literal notranslate"><span class="pre">aes-192-ccm</span></code>,
+<code class="docutils literal notranslate"><span class="pre">aes-256-ccm</span></code>, <code class="docutils literal notranslate"><span class="pre">aes-128-gcm</span></code>, <code class="docutils literal notranslate"><span class="pre">aes-192-gcm</span></code> and <code class="docutils literal notranslate"><span class="pre">aes-256-gcm</span></code>. The GCM
+modes are generally faster on hardware with AES acceleration.</p>
+<p><code class="docutils literal notranslate"><span class="pre">keyformat</span></code> is one of:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">passphrase</span></code></dt><dd><p>8 to 512 bytes, run through PBKDF2 before use. The iteration count is set
+by <code class="docutils literal notranslate"><span class="pre">pbkdf2iters</span></code> — currently 350000 by default, with a minimum of
+100000.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">raw</span></code></dt><dd><p>Exactly 32 bytes of random data, regardless of the chosen suite.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">hex</span></code></dt><dd><p>The same 32 bytes, written as hex.</p>
+</dd>
+</dl>
+<p><code class="docutils literal notranslate"><span class="pre">keylocation</span></code> is where the key is read from: <code class="docutils literal notranslate"><span class="pre">prompt</span></code> (the default —
+interactive), <code class="docutils literal notranslate"><span class="pre">file:///absolute/path</span></code>, or an <code class="docutils literal notranslate"><span class="pre">http://</span></code> / <code class="docutils literal notranslate"><span class="pre">https://</span></code>
+address, which is how a machine can fetch its key from a key server at boot.</p>
+</section>
+<section id="encryption-roots-and-inheritance">
+<h2>Encryption roots and inheritance<a class="headerlink" href="#encryption-roots-and-inheritance" title="Link to this heading"></a></h2>
+<p>The dataset you supply a key for becomes an <em>encryption root</em>. Descendants
+inherit its key by default, so loading, unloading or changing the key at the
+root does the same for everything under it. The read-only <code class="docutils literal notranslate"><span class="pre">encryptionroot</span></code>
+property shows which root a dataset currently uses.</p>
+<p>To break that relationship and give a child its own key, supply a
+<code class="docutils literal notranslate"><span class="pre">keyformat</span></code> when creating it, or run <code class="docutils literal notranslate"><span class="pre">zfs</span> <span class="pre">change-key</span></code> on it later. Note
+that:</p>
+<ul class="simple">
+<li><p>the child’s <code class="docutils literal notranslate"><span class="pre">keyformat</span></code> may be the same as the parent’s and it still
+becomes a separate encryption root;</p></li>
+<li><p>setting the <code class="docutils literal notranslate"><span class="pre">encryption</span></code> property alone does <em>not</em> create a new encryption
+root — it just uses a different cipher suite with the same key;</p></li>
+<li><p>clones always use their origin’s key.</p></li>
+</ul>
+<p>Because of that last exception, <code class="docutils literal notranslate"><span class="pre">keystatus</span></code>, <code class="docutils literal notranslate"><span class="pre">keyformat</span></code>, <code class="docutils literal notranslate"><span class="pre">keylocation</span></code>
+and <code class="docutils literal notranslate"><span class="pre">pbkdf2iters</span></code> do not inherit the way other ZFS properties do: their
+effective value comes from the encryption root.</p>
+</section>
+<section id="loading-and-unloading-keys">
+<h2>Loading and unloading keys<a class="headerlink" href="#loading-and-unloading-keys" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zfs<span class="w"> </span>load-key<span class="w"> </span>pool/secret<span class="w">          </span><span class="c1"># prompts, or reads keylocation</span>
+zfs<span class="w"> </span>load-key<span class="w"> </span>-a<span class="w">                   </span><span class="c1"># every encryption root in every imported pool</span>
+zfs<span class="w"> </span>load-key<span class="w"> </span>-r<span class="w"> </span>pool<span class="w">              </span><span class="c1"># recursively, all encryption roots below pool</span>
+zfs<span class="w"> </span>load-key<span class="w"> </span>-n<span class="w"> </span>pool/secret<span class="w">       </span><span class="c1"># dry run: just verify the key is correct</span>
+
+zfs<span class="w"> </span>mount<span class="w"> </span>pool/secret<span class="w">             </span><span class="c1"># loading a key does not mount</span>
+
+zfs<span class="w"> </span>unload-key<span class="w"> </span>pool/secret<span class="w">        </span><span class="c1"># dataset must not be open or mounted</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">zfs</span> <span class="pre">mount</span> <span class="pre">-l</span></code> asks for the key and mounts in one step. The <code class="docutils literal notranslate"><span class="pre">keystatus</span></code>
+property is <code class="docutils literal notranslate"><span class="pre">available</span></code> once the key is loaded and <code class="docutils literal notranslate"><span class="pre">unavailable</span></code> while it
+is not:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zfs<span class="w"> </span>get<span class="w"> </span>-r<span class="w"> </span>keystatus,encryptionroot<span class="w"> </span>pool
+</pre></div>
+</div>
+<p>On systems with PAM, <code class="docutils literal notranslate"><span class="pre">pam_zfs_key(8)</span></code> can load a user’s key and mount their
+encrypted home directory at login.</p>
+</section>
+<section id="changing-the-key">
+<h2>Changing the key<a class="headerlink" href="#changing-the-key" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">zfs</span> <span class="pre">change-key</span></code> rewraps the master key with a new user key. It does not
+re-encrypt the data, so it is instantaneous regardless of dataset size. The
+existing key must already be loaded (or use <code class="docutils literal notranslate"><span class="pre">-l</span></code> to load it first).</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zfs<span class="w"> </span>change-key<span class="w"> </span>pool/secret
+zfs<span class="w"> </span>change-key<span class="w"> </span>-o<span class="w"> </span><span class="nv">keyformat</span><span class="o">=</span>passphrase<span class="w"> </span>-o<span class="w"> </span><span class="nv">pbkdf2iters</span><span class="o">=</span><span class="m">500000</span><span class="w"> </span>pool/secret
+zfs<span class="w"> </span>change-key<span class="w"> </span>-i<span class="w"> </span>pool/secret/child<span class="w">      </span><span class="c1"># give up own key, inherit parent&#39;s</span>
+</pre></div>
+</div>
+<p>This is also the only way to change <code class="docutils literal notranslate"><span class="pre">keyformat</span></code> and <code class="docutils literal notranslate"><span class="pre">pbkdf2iters</span></code> after
+creation.</p>
+<p><strong>Changing the key does not undo a compromise.</strong> Newly written data keeps
+using the same master key as the existing data, so an attacker who obtained a
+user key <em>and</em> the corresponding wrapped master key can still read what is
+written later. The old wrapped master key is not overwritten on disk and may
+remain recoverable by forensic analysis for an indeterminate time.</p>
+<p>If the master key is compromised, the correct response is to securely erase
+the drives, create a new pool and copy the data back. This can be approximated
+in place by creating new datasets, copying the data into them (for example
+with <code class="docutils literal notranslate"><span class="pre">zfs</span> <span class="pre">send</span> <span class="pre">|</span> <span class="pre">zfs</span> <span class="pre">recv</span></code>), and then clearing the free space with
+<code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">trim</span> <span class="pre">--secure</span></code> if the hardware supports it, or <code class="docutils literal notranslate"><span class="pre">zpool</span> <span class="pre">initialize</span></code>
+otherwise.</p>
+</section>
+<section id="raw-sends">
+<h2>Raw sends<a class="headerlink" href="#raw-sends" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">zfs</span> <span class="pre">send</span> <span class="pre">-w</span></code> (<code class="docutils literal notranslate"><span class="pre">--raw</span></code>) sends the data exactly as it is on disk, still
+encrypted. This means:</p>
+<ul class="simple">
+<li><p>backups can be taken without loading any keys;</p></li>
+<li><p>the receiving machine need not be trusted — it cannot read the data, and it
+cannot alter it without that being detected on the next read;</p></li>
+<li><p>the received dataset keeps its encryption, and its key, from the source.</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zfs<span class="w"> </span>send<span class="w"> </span>-w<span class="w"> </span>pool/secret@daily<span class="w"> </span><span class="p">|</span><span class="w"> </span>ssh<span class="w"> </span>backup<span class="w"> </span>zfs<span class="w"> </span>receive<span class="w"> </span>-u<span class="w"> </span>tank/secret
+</pre></div>
+</div>
+<p>A non-raw send of an encrypted dataset requires the keys to be loaded and
+produces a plaintext stream, which is then encrypted (or not) according to the
+destination’s own properties. See <a class="reference internal" href="../Operations/Send%20and%20Receive.html"><span class="doc">Send and Receive</span></a>.</p>
+</section>
+<section id="interaction-with-other-features">
+<h2>Interaction with other features<a class="headerlink" href="#interaction-with-other-features" title="Link to this heading"></a></h2>
+<p><strong>Compression.</strong> Encryption is applied after compression, so compression
+ratios are preserved. The flip side is that a dataset can be vulnerable to a
+CRIME-like attack if the applications accessing it let an attacker influence
+what gets compressed alongside secret data.</p>
+<p><strong>Checksums.</strong> For encrypted data, the usual 256-bit checksum becomes 128 bits
+of the chosen checksum plus 128 bits of MAC from the cipher suite. The MAC is
+what gives protection against <em>maliciously</em> altered data, not just accidental
+corruption.</p>
+<p><strong>Deduplication</strong> still works, but for security a dataset deduplicates only
+against itself, its snapshots and its clones. Dedup with encryption leaks
+which blocks within a dataset are identical, and costs extra CPU per written
+block.</p>
+<p><strong>Embedded data.</strong> Encrypted data cannot use the <code class="docutils literal notranslate"><span class="pre">embedded_data</span></code> feature.</p>
+<p><strong>copies=3</strong> is not available on encrypted datasets — the implementation
+stores encryption metadata where the third copy would go.</p>
+</section>
+<section id="further-reading">
+<h2>Further reading<a class="headerlink" href="#further-reading" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zfs-load-key.8.html">zfs-load-key(8)</a> —
+including the full <code class="docutils literal notranslate"><span class="pre">Encryption</span></code> section</p></li>
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zfs-change-key.8.html">zfs-change-key(8)</a>,
+<a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/zfs-unload-key.8.html">zfs-unload-key(8)</a></p></li>
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/7/zfsprops.7.html">zfsprops(7)</a> —
+<code class="docutils literal notranslate"><span class="pre">encryption</span></code>, <code class="docutils literal notranslate"><span class="pre">keyformat</span></code>, <code class="docutils literal notranslate"><span class="pre">keylocation</span></code>, <code class="docutils literal notranslate"><span class="pre">pbkdf2iters</span></code>,
+<code class="docutils literal notranslate"><span class="pre">keystatus</span></code>, <code class="docutils literal notranslate"><span class="pre">encryptionroot</span></code></p></li>
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/8/pam_zfs_key.8.html">pam_zfs_key(8)</a></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Block%20Cloning.html" class="btn btn-neutral float-left" title="Block Cloning" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../Operations/index.html" class="btn btn-neutral float-right" title="Operations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, OpenZFS.
+      <span class="lastupdated">Last updated on Jul 22, 2026.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

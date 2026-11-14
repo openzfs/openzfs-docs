@@ -1,0 +1,286 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <meta property="article:modified_time" content="2026-07-22T11:05:18+00:00" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Caching and Auxiliary Devices &mdash; OpenZFS  documentation</title>
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme_overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/mandoc.css" type="text/css" />
+
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="canonical" href="https://openzfs.github.io/openzfs-docs/Basic%20Concepts/Pool%20Structure/Caching.html" />
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/js/redirect.js?v=2a1712f3"></script>
+      <script src="../../_static/js/module_params_filter.js?v=9a1b680c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Special vdev" href="Special%20vdev.html" />
+    <link rel="prev" title="dRAID" href="dRAID%20Howto.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #29667e" >
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/logo_main.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../Getting%20Started/index.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Basic Concepts</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Copy-on-write.html">Copy-on-Write</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Pool Structure</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="VDEVs.html">VDEVs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="RAIDZ.html">RAIDZ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dRAID%20Howto.html">dRAID</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Caching and Auxiliary Devices</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#arc">ARC</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#l2arc-cache-vdev">L2ARC (<code class="docutils literal notranslate"><span class="pre">cache</span></code> vdev)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#slog-log-vdev">SLOG (<code class="docutils literal notranslate"><span class="pre">log</span></code> vdev)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#special-vdev-special-allocation-class">Special vdev (<code class="docutils literal notranslate"><span class="pre">special</span></code> allocation class)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#choosing-between-them">Choosing between them</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#further-reading">Further reading</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Special%20vdev.html">Special vdev</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Changing%20Pool%20Layout.html">Changing Pool Layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Feature%20Flags.html">Feature Flags</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Datasets/index.html">Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Data%20Storage/index.html">Data Storage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Operations/index.html">Operations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../Project%20and%20Community/index.html">Project and Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Developer%20Resources/index.html">Developer Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Performance%20and%20Tuning/index.html">Performance and Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../man/index.html">Man Pages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../msg/index.html">ZFS Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../License.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #29667e" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">OpenZFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Basic Concepts</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Pool Structure</a></li>
+      <li class="breadcrumb-item active">Caching and Auxiliary Devices</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/openzfs/openzfs-docs/blob/master/docs/Basic Concepts/Pool Structure/Caching.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="caching-and-auxiliary-devices">
+<h1>Caching and Auxiliary Devices<a class="headerlink" href="#caching-and-auxiliary-devices" title="Link to this heading"></a></h1>
+<p>ZFS has one read cache in RAM (the ARC), an optional second read cache on
+disk (L2ARC), and two kinds of write-path device that are often mistaken for
+caches but are not: the separate intent log (SLOG) and the special allocation
+class.</p>
+<p>Adding devices is easy and undoing it is not, so it is worth knowing which
+problem each one actually solves.</p>
+<section id="arc">
+<h2>ARC<a class="headerlink" href="#arc" title="Link to this heading"></a></h2>
+<p>The Adaptive Replacement Cache is ZFS’ in-memory cache. It keeps both recently
+used and frequently used blocks, and adapts the balance between them, which is
+why it usually outperforms a simple LRU page cache.</p>
+<p>Per dataset, <code class="docutils literal notranslate"><span class="pre">primarycache</span></code> controls what may enter it: <code class="docutils literal notranslate"><span class="pre">all</span></code> (the
+default), <code class="docutils literal notranslate"><span class="pre">metadata</span></code>, or <code class="docutils literal notranslate"><span class="pre">none</span></code>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zfs<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="nv">primarycache</span><span class="o">=</span>metadata<span class="w"> </span>pool/bigsequentialdata
+zarcsummary<span class="w">                    </span><span class="c1"># arc_summary before OpenZFS 2.4.0</span>
+zarcstat<span class="w"> </span><span class="m">1</span><span class="w">                     </span><span class="c1"># arcstat before OpenZFS 2.4.0</span>
+cat<span class="w"> </span>/proc/spl/kstat/zfs/arcstats
+</pre></div>
+</div>
+<p>RAM is by far the most effective ZFS “tuning knob”. Before adding any cache
+device, check whether the ARC is simply too small — see
+<a class="reference internal" href="../../Performance%20and%20Tuning/Module%20Parameters.html"><span class="doc">Module Parameters</span></a> for
+<code class="docutils literal notranslate"><span class="pre">zfs_arc_max</span></code> and friends.</p>
+</section>
+<section id="l2arc-cache-vdev">
+<h2>L2ARC (<code class="docutils literal notranslate"><span class="pre">cache</span></code> vdev)<a class="headerlink" href="#l2arc-cache-vdev" title="Link to this heading"></a></h2>
+<p>A cache device is a second-level read cache between RAM and the pool. It helps
+when the working set is much larger than RAM and the workload is
+<strong>random reads of mostly static content</strong>. It does nothing for writes.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zpool<span class="w"> </span>add<span class="w"> </span>pool<span class="w"> </span>cache<span class="w"> </span>nvme0n1
+zfs<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="nv">secondarycache</span><span class="o">=</span>metadata<span class="w"> </span>pool/data<span class="w">      </span><span class="c1"># all | metadata | none</span>
+</pre></div>
+</div>
+<p>Properties of cache devices:</p>
+<ul class="simple">
+<li><p>They cannot be mirrored or part of a raidz group. A read error is simply
+reissued against the pool, so losing one is harmless.</p></li>
+<li><p>Their contents survive reboots (persistent L2ARC) and are restored
+asynchronously on import. This can be disabled with
+<code class="docutils literal notranslate"><span class="pre">l2arc_rebuild_enabled=0</span></code>. Devices smaller than 1 GiB do not get the
+metadata needed for a rebuild.</p></li>
+<li><p><strong>L2ARC costs RAM.</strong> Every cached block needs a header in the ARC, so an
+oversized L2ARC shrinks the cache that actually matters. On a
+RAM-constrained system an L2ARC can make things slower.</p></li>
+</ul>
+</section>
+<section id="slog-log-vdev">
+<h2>SLOG (<code class="docutils literal notranslate"><span class="pre">log</span></code> vdev)<a class="headerlink" href="#slog-log-vdev" title="Link to this heading"></a></h2>
+<p>The ZFS Intent Log satisfies POSIX durability requirements: <code class="docutils literal notranslate"><span class="pre">fsync()</span></code> and
+<code class="docutils literal notranslate"><span class="pre">O_SYNC</span></code> writes must be on stable storage before the call returns. The ZIL
+exists on every pool — by default it is allocated from blocks in the main
+pool. A <code class="docutils literal notranslate"><span class="pre">log</span></code> vdev just moves it to a dedicated device.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zpool<span class="w"> </span>add<span class="w"> </span>pool<span class="w"> </span>log<span class="w"> </span>mirror<span class="w"> </span>nvme0n1<span class="w"> </span>nvme1n1
+</pre></div>
+</div>
+<p>Consequences worth being precise about:</p>
+<ul class="simple">
+<li><p>A SLOG is <strong>not a write cache</strong>. Asynchronous writes never touch the ZIL;
+they are aggregated in memory and written out at the next transaction group.
+If your workload has no synchronous writes, a SLOG changes nothing.</p></li>
+<li><p>It is only ever <em>read</em> after a crash, to replay what had not yet been
+committed.</p></li>
+<li><p>It should be a low-latency device with power-loss protection. Consumer SSDs
+without it will happily report data as stable that a power cut then loses.</p></li>
+<li><p>Multiple log devices load-balance and can be mirrored; raidz is not
+supported for the intent log.</p></li>
+</ul>
+<p>Typical beneficiaries: NFS servers, databases, and VM hosts with sync-heavy
+guests. The <code class="docutils literal notranslate"><span class="pre">sync</span></code> and <code class="docutils literal notranslate"><span class="pre">logbias</span></code> dataset properties control the behavior —
+<code class="docutils literal notranslate"><span class="pre">logbias=throughput</span></code> bypasses the log devices for a dataset, and
+<code class="docutils literal notranslate"><span class="pre">sync=disabled</span></code> skips the ZIL entirely, trading recent-write durability for
+speed.</p>
+</section>
+<section id="special-vdev-special-allocation-class">
+<h2>Special vdev (<code class="docutils literal notranslate"><span class="pre">special</span></code> allocation class)<a class="headerlink" href="#special-vdev-special-allocation-class" title="Link to this heading"></a></h2>
+<p>A special vdev is not a cache either — it is storage that permanently holds a
+specific class of blocks: metadata, the indirect blocks of user data,
+deduplication tables, and optionally small file blocks.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zpool<span class="w"> </span>add<span class="w"> </span>pool<span class="w"> </span>special<span class="w"> </span>mirror<span class="w"> </span>nvme0n1<span class="w"> </span>nvme1n1
+</pre></div>
+</div>
+<p>Putting metadata on flash is usually the single biggest win available to a
+pool of spinning disks: directory traversal, <code class="docutils literal notranslate"><span class="pre">zfs</span> <span class="pre">list</span></code>, scrubs and
+resilvers all become dramatically faster. But because the blocks live <em>only</em>
+there, the vdev must be as redundant as the rest of the pool, and on a raidz
+pool it can never be removed again.</p>
+<p>It has enough sharp edges to deserve its own page —
+see <a class="reference internal" href="Special%20vdev.html"><span class="doc">Special vdev</span></a>.</p>
+</section>
+<section id="choosing-between-them">
+<h2>Choosing between them<a class="headerlink" href="#choosing-between-them" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Symptom</p></th>
+<th class="head"><p>What helps</p></th>
+<th class="head"><p>Removable later?</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Slow reads, ARC too
+small for working set</p></td>
+<td><p>More RAM, then L2ARC</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-odd"><td><p>Slow synchronous writes
+(NFS, databases, VMs)</p></td>
+<td><p>SLOG with power-loss
+protection</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-even"><td><p>Slow metadata operations
+on spinning disks</p></td>
+<td><p>special vdev (mirrored)</p></td>
+<td><p>only if the pool
+has no raidz</p></td>
+</tr>
+<tr class="row-odd"><td><p>Dedup table thrashing</p></td>
+<td><p>dedup vdev (mirrored)</p></td>
+<td><p>same as special</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="further-reading">
+<h2>Further reading<a class="headerlink" href="#further-reading" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/7/zpoolconcepts.7.html">zpoolconcepts(7)</a> —
+<code class="docutils literal notranslate"><span class="pre">Intent</span> <span class="pre">Log</span></code>, <code class="docutils literal notranslate"><span class="pre">Cache</span> <span class="pre">Devices</span></code>, <code class="docutils literal notranslate"><span class="pre">Special</span> <span class="pre">Allocation</span> <span class="pre">Class</span></code></p></li>
+<li><p><a class="reference external" href="https://openzfs.github.io/openzfs-docs/man/master/7/zfsprops.7.html">zfsprops(7)</a> —
+<code class="docutils literal notranslate"><span class="pre">primarycache</span></code>, <code class="docutils literal notranslate"><span class="pre">secondarycache</span></code>, <code class="docutils literal notranslate"><span class="pre">special_small_blocks</span></code>, <code class="docutils literal notranslate"><span class="pre">logbias</span></code>,
+<code class="docutils literal notranslate"><span class="pre">sync</span></code></p></li>
+<li><p><a class="reference internal" href="VDEVs.html"><span class="doc">VDEVs</span></a>,
+<a class="reference internal" href="../../Performance%20and%20Tuning/Workload%20Tuning.html"><span class="doc">Workload Tuning</span></a>,
+<a class="reference internal" href="../../Performance%20and%20Tuning/Module%20Parameters.html"><span class="doc">Module Parameters</span></a></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="dRAID%20Howto.html" class="btn btn-neutral float-left" title="dRAID" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Special%20vdev.html" class="btn btn-neutral float-right" title="Special vdev" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, OpenZFS.
+      <span class="lastupdated">Last updated on Jul 22, 2026.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
