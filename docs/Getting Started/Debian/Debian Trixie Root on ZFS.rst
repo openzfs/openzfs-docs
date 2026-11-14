@@ -1019,8 +1019,8 @@ Step 8: Full Software Installation
    out ``compress``, or use this loop (copy-and-paste highly recommended)::
 
      for file in /etc/logrotate.d/* ; do
-         if grep -Eq "(^|[^#y])compress" "$file" ; then
-             sed -i -r "s/(^|[^#y])(compress)/\1#\2/" "$file"
+         if grep -Eq "(^|[^#yo])compress" "$file" ; then
+             sed -i -r "s/(^|[^#yo])(compress)/\1#\2/" "$file"
          fi
      done
 
